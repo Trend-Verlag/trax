@@ -1,0 +1,54 @@
+// Copyright (c) 2013 - 2019 Marc-Michael Horstmann;
+// Copyright (c) 2020 - 2025 Trend Verlag;
+//
+//	trax track library
+//	AD 2019 
+//
+//  "the resolution of all the fruitless searches"
+//
+//								Peter Gabriel
+
+
+#pragma once
+
+#include <boost/property_tree/ptree.hpp>
+
+#include "dim/support/DimSupportStream.h"
+
+namespace dim{
+namespace ptreesupport{
+
+	/// \brief Reads a dimensionated value from pt and path, converting it correctly.
+	///
+	/// If the value in the property tree carries a unit, this will be respected. Otherwise
+	/// it will be interpreted as to be the default unit of trax, unless defaultUnits
+	/// specifies explicitly which unit it is to interpret as.
+	/// \param pt boost property tree base.
+	/// \param path path to the value relative to pt.
+	/// \param defaultValue The value to be returned if the path does not exist.
+	/// \param defaultUnits The units to be used if there is no unit specified.
+	template<int L,int M,int T>
+	Value<Dimension<L,M,T>> get( 
+		const boost::property_tree::ptree& pt, 
+		boost::property_tree::ptree::path_type path, 
+		Value<Dimension<L,M,T>> defaultValue = Value<Dimension<L,M,T>>{0}, 
+		Value<Dimension<L,M,T>> (*defaultUnits)( Real ) = DefaultUnit<L,M,T>::GetDefaultStreamInDimension() )
+	{
+		common::Resetter<typename DefaultUnit<L,M,T>::StreamInDimension> resetter{ DefaultUnit<L,M,T>::GetDefaultStreamInDimension(), defaultUnits };
+		if( auto result = pt.get_optional<Value<Dimension<L,M,T>>>( path ) )
+			return *result;
+		return defaultValue;
+	}
+
+	template<int L,int M,int T>
+	boost::optional<Value<Dimension<L,M,T>>> get_optional( 
+		const boost::property_tree::ptree& pt, 
+		boost::property_tree::ptree::path_type path, 
+		Value<Dimension<L,M,T>> (*defaultUnits)( Real ) )
+	{
+		common::Resetter<typename DefaultUnit<L,M,T>::StreamInDimension> resetter{ DefaultUnit<L,M,T>::GetDefaultStreamInDimension(), defaultUnits };
+		return pt.get_optional<Value<Dimension<L,M,T>>>( path );
+	}
+
+} // namespace ptreesupport
+} // namespace dim
