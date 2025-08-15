@@ -1,0 +1,113 @@
+// Copyright (c) 2013 - 2019 Marc-Michael Horstmann;
+// Copyright (c) 2020 - 2024 Trend Verlag;
+//
+//	trax track library
+//	AD 2014 
+//
+//  "the resolution of all the fruitless searches"
+//
+//								Peter Gabriel
+
+#include "trax/support/TraxSupportXML.h"
+
+#include "trax/Material.h"
+#include "trax/TrackJointLimits.h"
+#include "trax/TrackLocation.h"
+#include "trax/TractionForceCharacteristic.h"
+#include "trax/Wheelset.h"
+
+namespace trax{
+	using namespace dim;
+	using namespace dim::ptreesupport;
+	using namespace spat;
+	using namespace spat::ptreesupport;
+
+namespace ptreesupport{
+
+
+void ReadMaterial( const boost::property_tree::ptree& pt, Material& material ) noexcept{
+	material.type = MaterialType( pt.get( "<xmlattr>.type", "none" ) );
+	material.staticFriction = pt.get( "<xmlattr>.staticFriction", 0.6f );
+	material.dynamicFriction= pt.get( "<xmlattr>.dynamicFriction", 0.4f );
+	material.restitution	= pt.get( "<xmlattr>.restitution", 0.1f );
+}
+
+void ReadConnection( const boost::property_tree::ptree& pt, Track::End& trackend ) noexcept{
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "TrackEnd" )
+			ReadTrackEnd( pair.second, trackend );
+	}
+}
+
+void ReadTrackEnd( const boost::property_tree::ptree& pt, Track::End& trackend ) noexcept{
+	trackend.id		= pt.get( "<xmlattr>.refid", IDType{0} );
+	trackend.type	= ToEndType( pt.get( "<xmlattr>.type", "front" ) );
+}
+
+void ReadTrackJointLimits( const boost::property_tree::ptree& pt, TrackJointLimits& wfl ) noexcept{
+	const TrackJointLimits def;
+
+	wfl.NormalForceLimitMin		= get( pt, "<xmlattr>.NormalForceLimitMin", def.NormalForceLimitMin, _kN );
+	wfl.NormalForceLimitMax		= get( pt, "<xmlattr>.NormalForceLimitMax", def.NormalForceLimitMax, _kN );
+	wfl.BinormalForceLimitMin	= get( pt, "<xmlattr>.BinormalForceLimitMin", def.BinormalForceLimitMin, _kN );
+	wfl.BinormalForceLimitMax	= get( pt, "<xmlattr>.BinormalForceLimitMax", def.BinormalForceLimitMax, _kN );
+	wfl.NormalTorqueLimit		= get( pt, "<xmlattr>.NormalTorqueLimit", def.NormalTorqueLimit, _kNm );
+	wfl.TorqueLimit				= get( pt, "<xmlattr>.TorqueLimit", def.TorqueLimit, _kNm );
+	wfl.ThresholdPosition		= get( pt, "<xmlattr>.ThresholdPosition", def.ThresholdPosition, _m );
+	wfl.ThresholdTangent		= pt.get( "<xmlattr>.ThresholdTangent", def.ThresholdTangent );
+	wfl.ThresholdNormal			= pt.get( "<xmlattr>.ThresholdNormal", def.ThresholdNormal );
+	wfl.ThresholdBinormal		= pt.get( "<xmlattr>.ThresholdBinormal", def.ThresholdBinormal );
+	wfl.bTiltingEnabled			= pt.get( "<xmlattr>.bTiltingEnabled", def.bTiltingEnabled );
+}
+
+void ReadTrackLocation( const boost::property_tree::ptree& pt, TrackLocation& trackLocation ) noexcept{
+	trackLocation.parameter		= get( pt, "<xmlattr>.parameter", 0_m, _m );
+	trackLocation.orientation	= pt.get( "<xmlattr>.orientation", "para" ) == "anti" ? Orientation::Value::anti : Orientation::Value::para;
+}
+
+void ReadTrackLocationRef( const boost::property_tree::ptree& pt, TrackLocationRef& trackLocationRef ) noexcept{
+	ReadTrackLocation( pt, trackLocationRef.location );
+	trackLocationRef.refid = pt.get( "<xmlattr>.refid", IDType{0} );
+}
+
+void ReadTrackRange( const boost::property_tree::ptree& pt, TrackRange& trackRange ) noexcept{
+	trackRange.range.Near( get( pt, "<xmlattr>.near", 0_m, _m ) );
+	trackRange.range.Far( get( pt, "<xmlattr>.far", 0_m, _m ) );
+	trackRange.refid = pt.get( "<xmlattr>.refid", IDType{0} );
+}
+
+void ReadWheelset( const boost::property_tree::ptree& pt, Wheelset& wheelset ) noexcept{
+	const Wheelset def;
+	wheelset.Radius				= get( pt, "<xmlattr>.radius", def.Radius, _m );
+	wheelset.Gauge				= get( pt, "<xmlattr>.gauge", def.Gauge, _m );
+	wheelset.Flange				= get( pt, "<xmlattr>.flange", def.Flange, _m );
+	wheelset.WheelWidth			= get( pt, "<xmlattr>.wheel_width", def.WheelWidth, _m );
+	wheelset.AxleRadius			= get( pt, "<xmlattr>.axle_radius", def.AxleRadius, _m );
+	wheelset.TotalMass			= get( pt, "<xmlattr>.mass", def.TotalMass, _t );
+	wheelset.Rotation			= pt.get( "<xmlattr>.rotation", def.Rotation );
+	wheelset.Shift				= get( pt, "<xmlattr>.shift", def.Shift, _m );
+	wheelset.MaxMotorTorque		= get( pt, "<xmlattr>.motor_torque", def.MaxMotorTorque, _kNm );
+	wheelset.MaxBrakingTorque	= get( pt, "<xmlattr>.brake_torque", def.MaxBrakingTorque, _kNm );
+	wheelset.FrictionTorque		= get( pt, "<xmlattr>.friction_torque", def.FrictionTorque, _kNm );
+
+	std::for_each( pt.begin(), pt.end(),
+		[&wheelset]( const boost::property_tree::ptree::value_type& pair )
+	{
+		if( pair.first == "Position2D" )
+			ReadPosition2D( pair.second, wheelset.AxlePosition );
+	} );
+}
+
+void ReadTractionForceCharacteristic( const boost::property_tree::ptree& pt, TractionForceCharacteristic& TFC ) noexcept
+{
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "SpeedStep" )
+			TFC.AddSpeedStep( get(  pair.second, "<xmlattr>.velocity", 0_mIs, _mIs ),
+									pair.second.get( "<xmlattr>.value", 1.0f ) );
+	};
+}
+
+} // namespace ptreesupport
+} // namespace trax
