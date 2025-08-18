@@ -11,9 +11,8 @@
 //								Peter Gabriel
 //
 
-#if defined( WITH_DIM_BOOST_TESTS )
-#define BOOST_TEST_MODULE dimTests
-#define BOOST_TEST_MAIN
+#if defined( WITH_BOOST_TESTS )
+#define BOOST_TEST_MODULE TestsDim
 #include <boost/test/unit_test.hpp>
 #endif
 

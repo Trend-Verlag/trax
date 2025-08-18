@@ -14,9 +14,8 @@
 //
 
 
-#if defined( WITH_SPAT_BOOST_TESTS )
-#define BOOST_TEST_MODULE spatTests
-#define BOOST_TEST_MAIN
+#if defined( WITH_BOOST_TESTS )
+#define BOOST_TEST_MODULE TestsSpat
 #include <boost/test/unit_test.hpp>
 #endif
 
