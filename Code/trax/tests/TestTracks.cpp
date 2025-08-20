@@ -8,6 +8,7 @@
 //
 //								Jade Bird
 
+#if defined( WITH_BOOST_TESTS )
 
 #include <boost/test/unit_test.hpp>
 
@@ -2085,3 +2086,4 @@ BOOST_FIXTURE_TEST_CASE( switchShapeTest, SwichFixture ){
 
 BOOST_AUTO_TEST_SUITE_END() //Switch_tests
 BOOST_AUTO_TEST_SUITE_END() //trax_tests
+#endif

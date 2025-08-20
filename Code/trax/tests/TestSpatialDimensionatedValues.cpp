@@ -9,6 +9,7 @@
 //								Peter Gabriel
 
 
+#if defined( WITH_BOOST_TESTS )
 #include <boost/test/unit_test.hpp>
 
 #include "common/Interval.h"
@@ -456,3 +457,5 @@ BOOST_AUTO_TEST_CASE ( testDimensionatedValueAircraftPrincipalAxes )
 }
 
 BOOST_AUTO_TEST_SUITE_END() //DimensionatedSpatials
+
+#endif // WITH_BOOST_TESTS

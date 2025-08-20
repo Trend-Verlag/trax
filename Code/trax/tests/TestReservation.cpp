@@ -9,6 +9,7 @@
 //								Peter Gabriel
 
 
+#if defined( WITH_BOOST_TESTS )
 #include <boost/test/unit_test.hpp>
 
 #include "trax/Fixtures.h"
@@ -372,3 +373,5 @@ BOOST_FIXTURE_TEST_CASE( deleteReservationViaLocation, TrackCircle ){
 BOOST_AUTO_TEST_SUITE_END() //Reservation_tests
 
 }
+
+#endif // WITH_BOOST_TESTS

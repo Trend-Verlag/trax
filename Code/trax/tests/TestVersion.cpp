@@ -2,6 +2,7 @@
 // Copyright (c) 2020 - 2024 Trend Verlag;
 //
 
+#if defined( WITH_BOOST_TESTS )
 #include <boost/test/unit_test.hpp>
 #include "trax/Version.h"
 
@@ -35,3 +36,4 @@ BOOST_AUTO_TEST_CASE(traxVersion_CommonRuntime)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+#endif // WITH_BOOST_TESTS

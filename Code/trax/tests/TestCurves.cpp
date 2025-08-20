@@ -8,6 +8,7 @@
 //
 //								Peter Gabriel
 
+#if defined( WITH_BOOST_TESTS )
 #include <boost/test/unit_test.hpp>
 #include "trax/Curve.h"
 #include "trax/support/TraxSupportStream.h"
@@ -1583,6 +1584,6 @@ BOOST_AUTO_TEST_CASE( CreateArcCurve_StartPositionFixed_StartTangentFixed_EndInM
 BOOST_AUTO_TEST_SUITE_END() // CurveCreation
 BOOST_AUTO_TEST_SUITE_END() //Curve
 
-
+#endif 
 
 

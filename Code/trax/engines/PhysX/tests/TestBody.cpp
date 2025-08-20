@@ -9,6 +9,7 @@
 //								Peter Gabriel
 
 
+#if defined( WITH_BOOST_TESTS )
 #include <boost/test/unit_test.hpp>
 
 #include "trax/engines/PhysX/PhysX_Simulator.h"
@@ -79,3 +80,4 @@ BOOST_AUTO_TEST_CASE( testBodyExcentricPlacement )
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+#endif // WITH_BOOST_TESTS

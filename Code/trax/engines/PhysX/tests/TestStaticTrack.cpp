@@ -9,6 +9,7 @@
 //								Peter Gabriel
 
 
+#if defined( WITH_BOOST_TESTS )
 #include <boost/test/unit_test.hpp>
 
 #include "trax/collections/tests/FixturesCollections.h"
@@ -86,3 +87,4 @@ BOOST_FIXTURE_TEST_CASE( CollectionFrameShift_Test3, TrackSystemFixture )
 }
 
 BOOST_AUTO_TEST_SUITE_END() //TestStaticTrack
+#endif // WITH_BOOST_TESTS

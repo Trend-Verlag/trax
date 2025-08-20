@@ -10,6 +10,7 @@
 //
 
 
+#if defined( WITH_BOOST_TESTS )
 #define BOOST_TEST_MODULE TestsTraxCollections
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
@@ -26,3 +27,5 @@
 //	RedirectStandardOutput<OutputDebugSink> Redirect_cerr{ std::cerr };
 //	RedirectStandardOutput<OutputDebugSink> Redirect_clog{ std::clog };
 //#endif
+
+#endif

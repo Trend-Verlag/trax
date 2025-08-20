@@ -9,6 +9,7 @@
 //								Peter Gabriel
 
 
+#if defined( WITH_BOOST_TESTS )
 #include <boost/test/unit_test.hpp>
 
 #include "dim/tests/BoostTestDimensionedValuesHelpers.h"
@@ -326,3 +327,4 @@ BOOST_AUTO_TEST_CASE( moveoverseveraltracks )
 
 
 BOOST_AUTO_TEST_SUITE_END() //Location_tests
+#endif // WITH_BOOST_TESTS

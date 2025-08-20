@@ -3,6 +3,7 @@
 //
 
 
+#if defined( WITH_BOOST_TESTS )
 #include <boost/test/unit_test.hpp>
 
 #include "trax/Plug.h"
@@ -160,3 +161,5 @@ BOOST_FIXTURE_TEST_CASE( twosensors_trigger_right_order2, SensorFixture )
 
 BOOST_AUTO_TEST_SUITE_END() //Sensor_tests
 BOOST_AUTO_TEST_SUITE_END() //trax_tests
+
+#endif // WITH_BOOST_TESTS
