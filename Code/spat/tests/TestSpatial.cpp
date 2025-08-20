@@ -525,6 +525,7 @@ BOOST_AUTO_TEST_CASE( testMultiply )
 	//auto x9 = r1 * f;
 }
 ///////////////////////////////////////
+#ifdef TRAX_OPEN_SOURCE
 BOOST_AUTO_TEST_CASE( testRotationCalc )
 {
 	Rotation<Real> R{	0,0,0,
@@ -561,6 +562,7 @@ BOOST_AUTO_TEST_CASE( testRotationCalc )
 
 	BOOST_CHECK_EQUAL( R, spatmatB );
 }
+#endif // TRAX_OPEN_SOURCE
 ///////////////////////////////////////
 BOOST_AUTO_TEST_CASE ( testDismantle )
 {
@@ -590,6 +592,7 @@ BOOST_AUTO_TEST_CASE ( testDismantle )
 	BOOST_CHECK_EQUAL( S, S2 );
 }
 ///////////////////////////////////////
+#ifdef TRAX_OPEN_SOURCE
 BOOST_AUTO_TEST_CASE ( testSlerp )
 {
 	Transformation<Real> A, B, T;
@@ -612,6 +615,7 @@ BOOST_AUTO_TEST_CASE ( testSlerp )
 	R = T;
 	BOOST_CHECK_CLOSE( R.RotationAngle(), pi/4, 0.001f );
 }
+#endif // TRAX_OPEN_SOURCE
 ///////////////////////////////////////
 BOOST_AUTO_TEST_CASE ( testMatrixMultiplication )
 {
