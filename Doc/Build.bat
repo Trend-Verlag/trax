@@ -1,0 +1,1 @@
+./TraxAPI/GenerateDocumentation.bat
