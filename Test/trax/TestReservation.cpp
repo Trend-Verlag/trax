@@ -13,7 +13,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "trax/Fixtures.h"
-#include "dim/tests/BoostTestDimensionedValuesHelpers.h"
+#include "../Test/dim/BoostTestDimensionedValuesHelpers.h"
 
 namespace reservation_tests{
 

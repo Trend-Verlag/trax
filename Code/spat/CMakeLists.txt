@@ -18,6 +18,3 @@ target_sources(spat
         BASE_DIRS ${_COMMON_PARENT_DIR}
         FILES ${COMMON_HEADERS}
 )
-
-# Always add tests; they are just normal executables now
-add_subdirectory(tests)

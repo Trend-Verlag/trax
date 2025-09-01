@@ -60,9 +60,3 @@ target_sources(trax_core
 target_include_directories(trax_core PRIVATE ${Boost_INCLUDE_DIRS})
 
 # No extra Boost libraries needed for math/tools.
-
-
-# ---------- Tests subdirectory (if any) ----------
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
-    add_subdirectory(tests)
-endif()

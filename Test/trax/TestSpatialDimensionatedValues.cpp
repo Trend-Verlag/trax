@@ -15,8 +15,8 @@
 #include "common/Interval.h"
 #include "dim/support/DimSupportStream.h"
 #include "dim/DimLimits.h"
-#include "dim/tests/BoostTestDimensionedValuesHelpers.h"
-#include "spat/tests/BoostTestSpatialHelpers.h"
+#include "../Test/dim/BoostTestDimensionedValuesHelpers.h"
+#include "../Test/spat/BoostTestSpatialHelpers.h"
 #include "spat/Spatial.h"
 
 using namespace common;

@@ -1,5 +1,12 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.26)
 project(Trax2 LANGUAGES CXX)
+
+# Disallow in-source builds to keep the source tree clean.
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  message(FATAL_ERROR
+    "In-source builds are not supported.\n"
+    "Use: cmake -S . -B _Build (or choose an out-of-repository preset).")
+endif()
 
 # Global standard (header-only still benefits: consumers inherit the requirement)
 set(CMAKE_CXX_STANDARD 17)
@@ -70,3 +77,8 @@ add_subdirectory(Code/spat)
 add_subdirectory(Code/trax)
 add_subdirectory(Code/trax/collections)
 add_subdirectory(Code/trax/engines/PhysX)
+
+add_subdirectory(Test/common)
+add_subdirectory(Test/dim)
+add_subdirectory(Test/spat)
+add_subdirectory(Test/trax)

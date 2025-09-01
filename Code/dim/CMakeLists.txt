@@ -47,6 +47,3 @@ target_sources(dim
         BASE_DIRS ${_DIM_PARENT_DIR}
         FILES ${DIM_HEADERS}
 )
-
-# Add tests (not part of the library)
-add_subdirectory(tests)

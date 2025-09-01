@@ -16,8 +16,8 @@
 #include "trax/ParallelTrack.h"
 #include "trax/support/TraxSupportStream.h"
 #include "trax/Fixtures.h"
-#include "dim/tests/BoostTestDimensionedValuesHelpers.h"
-#include "spat/tests/BoostTestSpatialHelpers.h"
+#include "../Test/dim/BoostTestDimensionedValuesHelpers.h"
+#include "../Test/spat/BoostTestSpatialHelpers.h"
 
 
 using namespace trax;

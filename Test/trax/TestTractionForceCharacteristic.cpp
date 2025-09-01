@@ -13,7 +13,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "dim/support/DimSupportStream.h"
-#include "dim/tests/BoostTestDimensionedValuesHelpers.h"
+#include "../Test/dim/BoostTestDimensionedValuesHelpers.h"
 #include "trax/TractionForceCharacteristic.h"
 
 using namespace trax;

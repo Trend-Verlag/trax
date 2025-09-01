@@ -12,7 +12,7 @@
 #if defined( WITH_BOOST_TESTS )
 #include <boost/test/unit_test.hpp>
 
-#include "dim/tests/BoostTestDimensionedValuesHelpers.h"
+#include "../Test/dim/BoostTestDimensionedValuesHelpers.h"
 #include "trax/Fixtures.h"
 #include "trax/Location.h"
 #include "trax/support/TraxSupportStream.h"
