@@ -14,11 +14,11 @@
 
 #include "spat/Spatial.h"
 #include "spat/support/SpatSupportXML.h"
-#include "spat/tests/BoostTestSpatialHelpers.h"
+#include "spat/BoostTestSpatialHelpers.h"
 
 #include "dim/DimensionedValues.h"
 #include "dim/support/DimSupportStream.h"
-#include "dim/tests/BoostTestDimensionedValuesHelpers.h"
+#include "dim/BoostTestDimensionedValuesHelpers.h"
 
 #include <boost/property_tree/ptree.hpp>
 

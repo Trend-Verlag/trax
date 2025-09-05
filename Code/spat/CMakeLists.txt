@@ -1,20 +1,21 @@
-add_library(spat INTERFACE)
-
-file(GLOB_RECURSE COMMON_HEADERS CONFIGURE_DEPENDS *.h *.hpp)
-
-set(_COMMON_PARENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
-
-target_include_directories(spat
+add_library(spat 
     INTERFACE
-        $<BUILD_INTERFACE:${_COMMON_PARENT_DIR}>
-        $<INSTALL_INTERFACE:include>
+        Box.h
+        Frame.h
+        Matrix.h
+        Position.h
+        Position2D.h
+        PositionH.h
+        Rect.h
+        Spatial.h
+        Sphere.h
+        Vector.h
+        Vector2D.h
+        VectorBundle.h
+        VectorBundle2.h
 )
 
-target_compile_features(spat INTERFACE cxx_std_17)
-
-target_sources(spat
-    INTERFACE
-        FILE_SET HEADERS
-        BASE_DIRS ${_COMMON_PARENT_DIR}
-        FILES ${COMMON_HEADERS}
+target_link_libraries(spat
+    INTERFACE 
+        common
 )

@@ -1,9 +1,13 @@
-add_executable(tests_spat
+add_executable(spat_tests
     SpatTest.cpp
     TestSpatial.cpp
     TestStream.cpp
 )
 
-target_link_libraries(tests_spat PRIVATE spat)
+target_link_libraries(spat_tests 
+    PRIVATE 
+        test_settings
+        spat_support
+)
 
-configure_boost_test_exe(tests_spat)
+configure_boost_test_exe(spat_tests)

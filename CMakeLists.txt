@@ -9,10 +9,35 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 endif()
 
 # Global standard (header-only still benefits: consumers inherit the requirement)
-set(CMAKE_CXX_STANDARD 17)
+#set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# -------- Project-wide settings (all targets) --------
+add_library(project_settings INTERFACE)
+target_include_directories(project_settings 
+    INTERFACE 
+        "${CMAKE_CURRENT_SOURCE_DIR}/Code"
+
+)
+
+target_compile_features(project_settings 
+    INTERFACE 
+    cxx_std_17
+)
+
+# -------- test settings (all test targets) --------
+add_library(test_settings INTERFACE)
+target_include_directories(test_settings 
+    INTERFACE 
+        "${CMAKE_CURRENT_SOURCE_DIR}/Test"
+
+)
+
+target_compile_features(test_settings 
+    INTERFACE 
+    cxx_std_17
+)
 
 # -------- Central Boost / Boost.Test configuration --------
 set(BOOST_MIN_VERSION 1.85)
@@ -35,6 +60,7 @@ else()
 endif()
 
 # Find Boost once (add components here as project grows)
+cmake_policy(SET CMP0167 OLD)
 find_package(Boost ${BOOST_MIN_VERSION} REQUIRED COMPONENTS unit_test_framework)
 
 # Interface helper target all test executables can link
@@ -72,10 +98,15 @@ endfunction()
 
 
 add_subdirectory(Code/common)
+add_subdirectory(Code/common/support)
 add_subdirectory(Code/dim)
+add_subdirectory(Code/dim/support)
 add_subdirectory(Code/spat)
+add_subdirectory(Code/spat/support)
 add_subdirectory(Code/trax)
+add_subdirectory(Code/trax/support)
 add_subdirectory(Code/trax/collections)
+add_subdirectory(Code/trax/collections/support)
 add_subdirectory(Code/trax/engines/PhysX)
 
 add_subdirectory(Test/common)

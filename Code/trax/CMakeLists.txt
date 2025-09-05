@@ -1,57 +1,140 @@
-# Static library 'trax_core'
-
-# Collect sources (exclude tests/)
-file(GLOB_RECURSE TRAX_SOURCES CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+add_library(trax_core 
+    STATIC
+        "./source/Body_Imp.cpp"
+        "./source/Connector_Imp.cpp"
+        "./source/Curve_Imp.cpp"
+        "./source/CurveCreators_Imp.cpp"
+        "./source/Event_Imp.cpp"
+        "./source/Fixtures.cpp"
+        "./source/GeomTrack_Imp.cpp"
+        "./source/Indicator_Imp.cpp"
+        "./source/Jack_Imp.cpp"
+        "./source/Location_Imp.cpp"
+        "./source/LogicElements_Imp.cpp"
+        "./source/Material_Imp.cpp"
+        "./source/MovableTrack_Imp.cpp"
+        "./source/Orientation_Imp.cpp"
+        "./source/ParallelTrack_Imp.cpp"
+        "./source/Parser_Imp.cpp"
+        "./source/Plug_Imp.cpp"
+        "./source/RoadwayTwist_Imp.cpp"
+        "./source/Section_Imp.cpp"
+        "./source/Sensor_Imp.cpp"
+        "./source/SignalSemaphore_Imp.cpp"
+        "./source/Signal_Imp.cpp"
+        "./source/SocketRegistry_Imp.cpp"
+        "./source/SwitchSemaphore_Imp.cpp"
+        "./source/Switch_Imp.cpp"
+        "./source/Timer_Imp.cpp"
+        "./source/TrackCreators_Imp.cpp"
+        "./source/TrackJointFeeder_Imp.cpp"
+        "./source/TrackPainter.cpp"
+        "./source/TrackTools_Imp.cpp"
+        "./source/Track_Imp.cpp"
+        "./source/TractionForceCharacteristic_Imp.cpp"
+        "./source/Version_Imp.cpp"
+        "./source/curves/ArcP_Imp.cpp"
+        "./source/curves/Arc_Imp.cpp"
+        "./source/curves/Clothoid_Imp.cpp"
+        "./source/curves/Cubic_Imp.cpp"
+        "./source/curves/HelixP_Imp.cpp"
+        "./source/curves/Helix_Imp.cpp"
+        "./source/curves/LineP_Imp.cpp"
+        "./source/curves/Line_Imp.cpp"
+        "./source/curves/PolygonalChain_Imp.cpp"
+        "./source/curves/Rotator_Imp.cpp"
+        "./source/curves/SampledCurve_Imp.cpp"
 )
-list(FILTER TRAX_SOURCES EXCLUDE REGEX "[/\\]tests[/\\]")
-list(FILTER TRAX_SOURCES EXCLUDE REGEX "[/\\]collections[/\\]")
-list(FILTER TRAX_SOURCES EXCLUDE REGEX "[/\\]engines[/\\]")
 
-# Collect headers (exclude tests/)
-file(GLOB_RECURSE TRAX_HEADERS CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp"
-)
-list(FILTER TRAX_HEADERS EXCLUDE REGEX "[/\\]tests[/\\]")
-list(FILTER TRAX_HEADERS EXCLUDE REGEX "[/\\]collections[/\\]")
-list(FILTER TRAX_HEADERS EXCLUDE REGEX "[/\\]engines[/\\]")
-
-if(TRAX_SOURCES STREQUAL "")
-    message(WARNING "trax_core: no .cpp source files found (after excluding tests/)")
-endif()
-
-add_library(trax_core STATIC
-    ${TRAX_SOURCES}
-    ${TRAX_HEADERS}   # for IDE visibility only; not strictly required
-)
-
-# Allow includes as: #include "trax_core/YourHeader.h"
-set(_TRAX_CORE_PARENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
-
-target_include_directories(trax_core
+target_sources(trax_core
     PUBLIC
-        $<BUILD_INTERFACE:${_TRAX_CORE_PARENT_DIR}>
-        $<INSTALL_INTERFACE:include>
-)
-
-# Depends on dim and spat
-target_link_libraries(trax_core
-    PUBLIC
-    common
-    dim
-    spat
+        "./Body.h"
+        "./Configuration.h"
+        "./Connector.h"
+        "./ConnectorType.h"
+        "./Curve.h"
+        "./Curve_Imp.h"
+        "./Event.h"
+        "./Fixtures.h"
+        "./GeomTrack.h"
+        "./Identified.h"
+        "./IDType.h"
+        "./ImplementationHelper.h"
+        "./Indicator.h"
+        "./Interfaces.h"
+        "./Jack.h"
+        "./Location.h"
+        "./LogicElements.h"
+        "./Material.h"
+        "./Numerics.h"
+        "./ObjectID.h"
+        "./Orientation.h"
+        "./ParallelTrack.h"
+        "./Parser.h"
+        "./Plug.h"
+        "./RoadwayTwist.h"
+        "./Section.h"
+        "./Sensor.h"
+        "./Signal.h"
+        "./Simulated.h"
+        "./SocketRegistry.h"
+        "./Switch.h"
+        "./Timer.h"
+        "./Track.h"
+        "./TrackData.h"
+        "./TrackJoint.h"
+        "./TrackJointFeeder.h"
+        "./TrackJointLimits.h"
+        "./TrackLocation.h"
+        "./TrackPainter.h"
+        "./TractionForceCharacteristic.h"
+        "./Trax.h"
+        "./Units.h"
+        "./UnitsHelper.h"
+        "./Version.h"
+        "./Wheelset.h"
+    PRIVATE
+        "./source/Body_Imp.h"
+        "./source/Connector_Imp.h"
+        "./source/Event_Imp.h"
+        "./source/GeomTrack_Imp.h"
+        "./source/Indicator_Imp.h"
+        "./source/Jack_Imp.h"
+        "./source/LogicElements_Imp.h"
+        "./source/MovableTrack_Imp.h"
+        "./source/ParallelTrack_Imp.h"
+        "./source/Parser_Imp.h"
+        "./source/Plug_Imp.h"
+        "./source/RoadwayTwist_Imp.h"
+        "./source/Section_Imp.h"
+        "./source/Sensor_Imp.h"
+        "./source/SignalSemaphore_Imp.h"
+        "./source/Signal_Imp.h"
+        "./source/SocketRegistry_Imp.h"
+        "./source/SwitchSemaphore_Imp.h"
+        "./source/Switch_Imp.h"
+        "./source/Timer_Imp.h"
+        "./source/Track_Imp.h"
+        "./source/TractionForceCharacteristic_Imp.h"
+        "./source/curves/ArcP_Imp.h"
+        "./source/curves/Arc_Imp.h"
+        "./source/curves/Clothoid_Imp.h"
+        "./source/curves/Cubic_Imp.h"
+        "./source/curves/HelixP_Imp.h"
+        "./source/curves/Helix_Imp.h"
+        "./source/curves/LineP_Imp.h"
+        "./source/curves/Line_Imp.h"
+        "./source/curves/PolygonalChain_Imp.h"
+        "./source/curves/Rotator_Imp.h"
+        "./source/curves/SampledCurve_Imp.h"
 )
 
 target_compile_definitions(trax_core PUBLIC TRAX_STATIC_LIBRARY)
-target_compile_features(trax_core PUBLIC cxx_std_17)
 
-# Publish only non-test headers
-target_sources(trax_core
+target_link_libraries(trax_core
     PUBLIC
-        FILE_SET HEADERS
-        BASE_DIRS ${_TRAX_CORE_PARENT_DIR}
-        FILES ${TRAX_HEADERS}
+        dim_support
+        spat_support
 )
 
 # ---------- Boost (header-only math/tools) ----------

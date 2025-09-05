@@ -3,6 +3,9 @@ add_executable(tests_trax_collections
     TestTrackSystem.cpp
 )
 
-target_link_libraries(tests_trax_collections PRIVATE trax_collections)
+target_link_libraries(tests_trax_collections 
+    PRIVATE
+        test_settings
+        trax_collections)
 
 configure_boost_test_exe(tests_trax_collections)

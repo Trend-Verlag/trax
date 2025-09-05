@@ -1,20 +1,12 @@
-add_library(common INTERFACE)
-
-file(GLOB_RECURSE COMMON_HEADERS CONFIGURE_DEPENDS *.h *.hpp)
-
-set(_COMMON_PARENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/..")
-
-target_include_directories(common
+add_library(common 
     INTERFACE
-        $<BUILD_INTERFACE:${_COMMON_PARENT_DIR}>
-        $<INSTALL_INTERFACE:include>
+        Helpers.h
+        Interval.h
+        NarrowCast.h
+        RedirectStandardOutput_Base.h
 )
 
-target_compile_features(common INTERFACE cxx_std_17)
-
-target_sources(common
-    INTERFACE
-        FILE_SET HEADERS
-        BASE_DIRS ${_COMMON_PARENT_DIR}
-        FILES ${COMMON_HEADERS}
+target_link_libraries(common
+    INTERFACE 
+        project_settings
 )
