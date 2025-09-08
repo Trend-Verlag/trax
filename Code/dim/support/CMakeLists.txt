@@ -1,5 +1,6 @@
-add_library(dim_support STATIC
-    "./source/DimSupportStream.cpp"
+add_library(dim_support 
+    STATIC
+        "./source/DimSupportStream.cpp"
 )
 
 target_sources(dim_support
