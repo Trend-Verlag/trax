@@ -11,6 +11,8 @@ target_sources(trax_core_support
 
 target_link_libraries(trax_core_support 
      PUBLIC 
+        dim_support
+        spat_support
         trax_core
 )
 

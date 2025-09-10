@@ -25,7 +25,7 @@
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
 #include "MovableTrackAutoConnecting_Imp.h"
-#include "trax/Body.h"
+#include "trax/rigid/Body.h"
 #include "trax/collections/TrackSystem.h"
 
 #include "spat/Sphere.h"

@@ -154,7 +154,6 @@
 namespace trax{
 }
 
-#include "Body.h"
 #include "Configuration.h"
 #include "Connector.h"
 #include "ConnectorType.h"
@@ -187,9 +186,6 @@ namespace trax{
 #include "Timer.h"
 #include "Track.h"
 #include "TrackData.h"
-#include "TrackJoint.h"
-#include "TrackJointFeeder.h"
-#include "TrackJointLimits.h"
 #include "TrackLocation.h"
 #include "TractionForceCharacteristic.h"
 #include "Units.h"

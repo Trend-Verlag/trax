@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "trax/TrackJoint.h"
+#include "trax/rigid/TrackJoint.h"
 
 #include "PhysX_Imp.h"
 

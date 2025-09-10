@@ -3,7 +3,6 @@ add_library(trax_core_collections STATIC
     "./source/ConnectorCollection_Imp.cpp"
     "./source/FixturesCollections.cpp"
     "./source/IndicatorCollection_Imp.cpp"
-    "./source/MovableTrackAutoConnecting_Imp.cpp"
     "./source/PulseCounterCollection_Imp.cpp"
     "./source/SignalCollection_Imp.cpp"
     "./source/TimerCollection_Imp.cpp"
@@ -21,7 +20,6 @@ target_sources(trax_core_collections
         "./FixturesCollections.h"
         "./IndicatorCollection.h"
         "./Interfaces.h"
-        "./MovableTrackAutoConnecting.h"
         "./ObjectIDDecorator.h"
         "./PulseCounterCollection.h"
         "./SignalCollection.h"
@@ -33,7 +31,6 @@ target_sources(trax_core_collections
     PRIVATE
         "./source/ConnectorCollection_Imp.h"
         "./source/IndicatorCollection_Imp.h"
-        "./source/MovableTrackAutoConnecting_Imp.h"
         "./source/PulseCounterCollection_Imp.h"
         "./source/SignalCollection_Imp.h"
         "./source/TimerCollection_Imp.h"

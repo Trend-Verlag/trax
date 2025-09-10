@@ -1,5 +1,5 @@
 //	trax track library
-//	AD 2013 
+//	AD 2023 
 //
 //  "the resolution of all the fruitless searches"
 //
@@ -26,30 +26,27 @@
 
 #pragma once
 
-#include "Track_Imp.h"
+#include "../MovableTrackAutoConnecting.h"
+#include "../../source/MovableTrack_Imp.h"
 
-namespace trax{
-
-	class MovableTrack_Imp :	public virtual MovableTrack,
-								public Track_Imp
-							 
+namespace trax
+{
+	class MovableTrackAutoConnecting_Imp: public MovableTrackAutoConnecting,
+										  public MovableTrack_Imp
 	{
 	public:
-		MovableTrack_Imp() noexcept;
+		MovableTrackAutoConnecting_Imp();
 
-		TrackType GetTrackType() const noexcept override;
+		// Inherited via MovableTrackAutoConnecting:
+		void AutoConnecting( Length distance ) noexcept override;
 
-		// Inherited via MovableTrack:
-		void SetBody( std::shared_ptr<const Body> pBody ) noexcept override;
+		Length AutoConnecting() const noexcept override;
 
-		std::shared_ptr<const Body> GetBody() const noexcept override;
+		bool IsAutoConnecting() const noexcept override;
 
-		void UpdateTrackPose() override;
-
-		bool IsMoving() const noexcept override;
+		void Update( const TrackSystem& trackSystem ) override;
 	private:
-		spat::Frame<Length,One>		m_RelativePose;
-		std::shared_ptr<const Body>	m_pBody;
+		Length m_AutoConnectingDistance;
 	};
 
 }

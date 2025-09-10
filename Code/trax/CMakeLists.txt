@@ -1,6 +1,5 @@
 add_library(trax_core 
     STATIC
-        "./source/Body_Imp.cpp"
         "./source/Connector_Imp.cpp"
         "./source/Curve_Imp.cpp"
         "./source/CurveCreators_Imp.cpp"
@@ -12,7 +11,6 @@ add_library(trax_core
         "./source/Location_Imp.cpp"
         "./source/LogicElements_Imp.cpp"
         "./source/Material_Imp.cpp"
-        "./source/MovableTrack_Imp.cpp"
         "./source/Orientation_Imp.cpp"
         "./source/ParallelTrack_Imp.cpp"
         "./source/Parser_Imp.cpp"
@@ -27,7 +25,6 @@ add_library(trax_core
         "./source/Switch_Imp.cpp"
         "./source/Timer_Imp.cpp"
         "./source/TrackCreators_Imp.cpp"
-        "./source/TrackJointFeeder_Imp.cpp"
         "./source/TrackPainter.cpp"
         "./source/TrackTools_Imp.cpp"
         "./source/Track_Imp.cpp"
@@ -48,7 +45,6 @@ add_library(trax_core
 
 target_sources(trax_core
     PUBLIC
-        "./Body.h"
         "./Configuration.h"
         "./Connector.h"
         "./ConnectorType.h"
@@ -82,9 +78,6 @@ target_sources(trax_core
         "./Timer.h"
         "./Track.h"
         "./TrackData.h"
-        "./TrackJoint.h"
-        "./TrackJointFeeder.h"
-        "./TrackJointLimits.h"
         "./TrackLocation.h"
         "./TrackPainter.h"
         "./TractionForceCharacteristic.h"
@@ -94,14 +87,12 @@ target_sources(trax_core
         "./Version.h"
         "./Wheelset.h"
     PRIVATE
-        "./source/Body_Imp.h"
         "./source/Connector_Imp.h"
         "./source/Event_Imp.h"
         "./source/GeomTrack_Imp.h"
         "./source/Indicator_Imp.h"
         "./source/Jack_Imp.h"
         "./source/LogicElements_Imp.h"
-        "./source/MovableTrack_Imp.h"
         "./source/ParallelTrack_Imp.h"
         "./source/Parser_Imp.h"
         "./source/Plug_Imp.h"

@@ -27,7 +27,6 @@
 #include "trax/support/TraxSupportXML.h"
 
 #include "trax/Material.h"
-#include "trax/TrackJointLimits.h"
 #include "trax/TrackLocation.h"
 #include "trax/TractionForceCharacteristic.h"
 #include "trax/Wheelset.h"
@@ -61,21 +60,21 @@ void ReadTrackEnd( const boost::property_tree::ptree& pt, Track::End& trackend )
 	trackend.type	= ToEndType( pt.get( "<xmlattr>.type", "front" ) );
 }
 
-void ReadTrackJointLimits( const boost::property_tree::ptree& pt, TrackJointLimits& wfl ) noexcept{
-	const TrackJointLimits def;
-
-	wfl.NormalForceLimitMin		= get( pt, "<xmlattr>.NormalForceLimitMin", def.NormalForceLimitMin, _kN );
-	wfl.NormalForceLimitMax		= get( pt, "<xmlattr>.NormalForceLimitMax", def.NormalForceLimitMax, _kN );
-	wfl.BinormalForceLimitMin	= get( pt, "<xmlattr>.BinormalForceLimitMin", def.BinormalForceLimitMin, _kN );
-	wfl.BinormalForceLimitMax	= get( pt, "<xmlattr>.BinormalForceLimitMax", def.BinormalForceLimitMax, _kN );
-	wfl.NormalTorqueLimit		= get( pt, "<xmlattr>.NormalTorqueLimit", def.NormalTorqueLimit, _kNm );
-	wfl.TorqueLimit				= get( pt, "<xmlattr>.TorqueLimit", def.TorqueLimit, _kNm );
-	wfl.ThresholdPosition		= get( pt, "<xmlattr>.ThresholdPosition", def.ThresholdPosition, _m );
-	wfl.ThresholdTangent		= pt.get( "<xmlattr>.ThresholdTangent", def.ThresholdTangent );
-	wfl.ThresholdNormal			= pt.get( "<xmlattr>.ThresholdNormal", def.ThresholdNormal );
-	wfl.ThresholdBinormal		= pt.get( "<xmlattr>.ThresholdBinormal", def.ThresholdBinormal );
-	wfl.bTiltingEnabled			= pt.get( "<xmlattr>.bTiltingEnabled", def.bTiltingEnabled );
-}
+//void ReadTrackJointLimits( const boost::property_tree::ptree& pt, TrackJointLimits& wfl ) noexcept{
+//	const TrackJointLimits def;
+//
+//	wfl.NormalForceLimitMin		= get( pt, "<xmlattr>.NormalForceLimitMin", def.NormalForceLimitMin, _kN );
+//	wfl.NormalForceLimitMax		= get( pt, "<xmlattr>.NormalForceLimitMax", def.NormalForceLimitMax, _kN );
+//	wfl.BinormalForceLimitMin	= get( pt, "<xmlattr>.BinormalForceLimitMin", def.BinormalForceLimitMin, _kN );
+//	wfl.BinormalForceLimitMax	= get( pt, "<xmlattr>.BinormalForceLimitMax", def.BinormalForceLimitMax, _kN );
+//	wfl.NormalTorqueLimit		= get( pt, "<xmlattr>.NormalTorqueLimit", def.NormalTorqueLimit, _kNm );
+//	wfl.TorqueLimit				= get( pt, "<xmlattr>.TorqueLimit", def.TorqueLimit, _kNm );
+//	wfl.ThresholdPosition		= get( pt, "<xmlattr>.ThresholdPosition", def.ThresholdPosition, _m );
+//	wfl.ThresholdTangent		= pt.get( "<xmlattr>.ThresholdTangent", def.ThresholdTangent );
+//	wfl.ThresholdNormal			= pt.get( "<xmlattr>.ThresholdNormal", def.ThresholdNormal );
+//	wfl.ThresholdBinormal		= pt.get( "<xmlattr>.ThresholdBinormal", def.ThresholdBinormal );
+//	wfl.bTiltingEnabled			= pt.get( "<xmlattr>.bTiltingEnabled", def.bTiltingEnabled );
+//}
 
 void ReadTrackLocation( const boost::property_tree::ptree& pt, TrackLocation& trackLocation ) noexcept{
 	trackLocation.parameter		= get( pt, "<xmlattr>.parameter", 0_m, _m );

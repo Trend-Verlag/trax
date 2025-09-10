@@ -27,7 +27,6 @@
 #include "TrackSystem_Imp.h"
 #include "trax/collections/TrackCollection.h"
 #include "trax/collections/ConnectorCollection.h"
-#include "trax/collections/MovableTrackAutoConnecting.h"
 #include "trax/Sensor.h"
 #include "TrackCollectionContainer_Imp.h"
 #include "trax/source/Track_Imp.h"
@@ -111,15 +110,6 @@ IDType TrackSystem_Imp::Add( std::shared_ptr<TrackBuilder> pTrack ){
 	if( auto pCollection = m_pTrackCollectionContainer->GetActive() ){
 		if( IDType retval = TrackSystem_Base::Add( pTrack ) ){
 			pCollection->Add( pTrack );
-
-			if( auto pMovableTrack = std::dynamic_pointer_cast<MovableTrack>(pTrack) )
-				if( std::find( m_MovableTracks.begin(), m_MovableTracks.end(), pMovableTrack ) == m_MovableTracks.end() )
-					m_MovableTracks.push_back( pMovableTrack );
-
-			if( auto pMovableTrackAutoConnecting = std::dynamic_pointer_cast<MovableTrackAutoConnecting>(pTrack) )
-				if( std::find( m_MovableTracksAutoConnecting.begin(), m_MovableTracksAutoConnecting.end(), pMovableTrackAutoConnecting ) == m_MovableTracksAutoConnecting.end() )
-					m_MovableTracksAutoConnecting.push_back( pMovableTrackAutoConnecting );
-
 			return retval;
 		}
 	}
@@ -133,21 +123,7 @@ IDType TrackSystem_Imp::Add( std::shared_ptr<TrackBuilder> pTrack ){
 
 bool TrackSystem_Imp::Remove( TrackBuilder* pTrack, bool zeroIDs ){
 	if( TrackSystem_Base::Remove( pTrack ) )
-	{
-		if( auto pMovableTrackAutoConnecting = dynamic_cast<MovableTrackAutoConnecting*>(pTrack) ){
-			auto iter = std::find_if( m_MovableTracksAutoConnecting.begin(), m_MovableTracksAutoConnecting.end(), 
-				[pMovableTrackAutoConnecting]( const auto& pMT ) noexcept { return pMovableTrackAutoConnecting == pMT.get(); } );
-			if( iter != m_MovableTracksAutoConnecting.end() )
-				m_MovableTracksAutoConnecting.erase( iter );
-		}
-
-		if( auto pMovableTrack = dynamic_cast<MovableTrack*>(pTrack) ){
-			auto iter = std::find_if( m_MovableTracks.begin(), m_MovableTracks.end(), 
-				[pMovableTrack]( const auto& pMT ) noexcept { return pMovableTrack == pMT.get(); } );
-			if( iter != m_MovableTracks.end() )
-				m_MovableTracks.erase( iter );
-		}
-		 
+	{		 
 		for( auto iter = m_pTrackCollectionContainer->begin(); iter != m_pTrackCollectionContainer->end(); ++iter )
 			if( iter->Remove( pTrack ) )
 			{
@@ -411,11 +387,6 @@ bool TrackSystem_Imp::Start( Scene& scene )
 
 void TrackSystem_Imp::Update( Time dt )
 {
-	for( auto& pMovableTrack : m_MovableTracks )
-		pMovableTrack->UpdateTrackPose();
-
-	for( auto& pMovableTrackAutoConnecting : m_MovableTracksAutoConnecting )
-		pMovableTrackAutoConnecting->Update( *this );
 }
 
 void TrackSystem_Imp::Pause() noexcept
@@ -479,9 +450,6 @@ void TrackSystem_Imp::DoClear(){
 
 	if( m_pConnectorCollection )
 		m_pConnectorCollection->Clear();
-
-	m_MovableTracks.clear();
-	m_MovableTracksAutoConnecting.clear();
 }
 ///////////////////////////////////////
 std::vector<std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>> FindTrackEnds( 

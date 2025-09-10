@@ -26,21 +26,34 @@
 
 #pragma once
 
-#include "trax/Body.h"
+#include "trax/rigid/MovableTrack.h"
 
-namespace trax
-{
-	class Body_Imp : public virtual Body
-	{
+namespace trax {
+
+	struct TrackSystem;
+
+	struct MovableTrackAutoConnecting : public virtual MovableTrack {
 	public:
-		
+
+		/// \brief Makes a MovableTrackAutoConnecting object.
+		static dclspc std::shared_ptr<MovableTrackAutoConnecting> Make() noexcept;
 
 
-		// Body:
-		void SetMass( Mass mass ) override;
+		/// \name AutoConnecting
+		/// \brief Specifies, wether the track should disconnect and try to reconnect.
+		/// \param distance Distance to disconnect if the actual distance between this 
+		/// track's ends and the coupled ones get greater than. Or try to reconnect if
+		/// getting smaller. A value <= 0 disables autoconnecting.
+		///@{
+		virtual void AutoConnecting( Length distance ) noexcept = 0;
+
+		virtual Length AutoConnecting() const noexcept = 0;
+
+		virtual bool IsAutoConnecting() const noexcept = 0;
+		///@}
 
 
-
-	
+		/// \brief Updates the track, e.g. reconnecting the end couplings.
+		virtual void Update( const TrackSystem& trackSystem ) = 0;
 	};
 }

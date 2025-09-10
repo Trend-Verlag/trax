@@ -1,10 +1,10 @@
-add_library(trax_core_physx 
+add_library(trax_rigid_physx 
     STATIC
         "./Source/PhysX_Body_Imp.cpp"
         "./Source/PhysX_TrackJoint.cpp"
 )
 
-target_sources(trax_core_physx
+target_sources(trax_rigid_physx
     PUBLIC
         PhysX_Adapter.h
         PhysX_Body_Imp.h
@@ -12,9 +12,9 @@ target_sources(trax_core_physx
         PhysX_TrackJoint.h
 )
 
-target_link_libraries(trax_core_physx
+target_link_libraries(trax_rigid_physx
     PUBLIC
-        trax_core
+        trax_rigid
 )
 
 # ---------- PhysX linking ----------
@@ -24,7 +24,7 @@ endif()
 set(PHYSX_ROOT "$ENV{PHYSX_ROOT}")
 
 # PhysX includes (assumes PHYSX_ROOT/include has PxPhysicsAPI.h etc.)
-target_include_directories(trax_core_physx PRIVATE "${PHYSX_ROOT}/include")
+target_include_directories(trax_rigid_physx PRIVATE "${PHYSX_ROOT}/include")
 
 # Guess library directory candidates (adjust if your layout differs)
 set(_PHYSX_LIB_DIR_CANDIDATES
@@ -69,7 +69,7 @@ _find_physx_lib(PX_EXTENSIONS      PhysXExtensions_static_64)
 _find_physx_lib(PX_PVDSDK          PhysXPvdSDK_static_64)
 
 # Link per configuration
-target_link_libraries(trax_core_physx PRIVATE
+target_link_libraries(trax_rigid_physx PRIVATE
     $<$<CONFIG:Debug>:${PX_FOUNDATION_DEBUG}>
     $<$<CONFIG:Release>:${PX_FOUNDATION_RELEASE}>
     $<$<CONFIG:RelWithDebInfo>:${PX_FOUNDATION_RELEASE}>
@@ -98,5 +98,5 @@ target_link_libraries(trax_core_physx PRIVATE
 
 # If you have an export/import macro logic for building PhysX as static libs,
 # you might need definitions like PX_PHYSX_STATIC_LIB or similar:
-# target_compile_definitions(trax_core_physx PRIVATE PX_PHYSX_STATIC_LIB)
+# target_compile_definitions(trax_rigid_physx PRIVATE PX_PHYSX_STATIC_LIB)
 # (Uncomment only if required by your PhysX build configuration.)

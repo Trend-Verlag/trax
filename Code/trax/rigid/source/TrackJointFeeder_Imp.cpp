@@ -24,10 +24,10 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#include "trax/TrackJointFeeder.h"
+#include "../TrackJointFeeder.h"
+#include "../MovableTrack.h"
 #include "trax/Wheelset.h"
 #include "trax/TractionForceCharacteristic.h"
-
 #include "trax/Plug.h"
 
 #include <algorithm>

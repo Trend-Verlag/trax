@@ -26,27 +26,21 @@
 
 #pragma once
 
-#include "trax/collections/MovableTrackAutoConnecting.h"
-#include "trax/source/MovableTrack_Imp.h"
+#include "trax/rigid/Body.h"
 
 namespace trax
 {
-	class MovableTrackAutoConnecting_Imp: public MovableTrackAutoConnecting,
-										  public MovableTrack_Imp
+	class Body_Imp : public virtual Body
 	{
 	public:
-		MovableTrackAutoConnecting_Imp();
+		
 
-		// Inherited via MovableTrackAutoConnecting:
-		void AutoConnecting( Length distance ) noexcept override;
 
-		Length AutoConnecting() const noexcept override;
+		// Body:
+		void SetMass( Mass mass ) override;
 
-		bool IsAutoConnecting() const noexcept override;
 
-		void Update( const TrackSystem& trackSystem ) override;
-	private:
-		Length m_AutoConnectingDistance;
+
+	
 	};
-
 }

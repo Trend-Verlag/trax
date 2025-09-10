@@ -32,7 +32,6 @@
 #include "trax/TrackData.h"
 
 #include "GeomTrack_Imp.h"
-#include "MovableTrack_Imp.h"
 #include "RoadwayTwist_Imp.h"
 ////#include "Parallel_Imp.h"
 
@@ -55,7 +54,7 @@ std::shared_ptr<TrackBuilder> TrackBuilder::Make( TrackType type ) noexcept
 			pRetval = std::make_shared<Track_Imp>();
 			break;
 		case TrackType::movable:
-			pRetval = std::make_shared<MovableTrack_Imp>();
+	//		pRetval = std::make_shared<MovableTrack_Imp>();
 			break;
 		case TrackType::withGeoms:
 			pRetval = std::make_shared<GeomTrack_Imp>();
@@ -153,7 +152,7 @@ std::shared_ptr<TrackBuilder> Track_Imp::This() const noexcept{
 }
 
 std::shared_ptr<MovableTrack> Track_Imp::GetMovableTrack() const noexcept{
-	return std::dynamic_pointer_cast<MovableTrack>(This());
+	return nullptr;
 }
 
 std::shared_ptr<ParallelizableTrack> Track_Imp::GetParallelizableTrack() const noexcept{

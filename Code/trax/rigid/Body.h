@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "Configuration.h"
-#include "Units.h"
+#include "trax/Configuration.h"
+#include "trax/Units.h"
 
 #include "spat/Frame.h"
 #include "spat/Matrix.h"

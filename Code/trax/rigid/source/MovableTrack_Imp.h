@@ -1,5 +1,5 @@
 //	trax track library
-//	AD 2023 
+//	AD 2013 
 //
 //  "the resolution of all the fruitless searches"
 //
@@ -26,34 +26,34 @@
 
 #pragma once
 
-#include "trax/Track.h"
+#include "../MovableTrack.h"
+#include "trax/source/Track_Imp.h"
 
-namespace trax {
+namespace trax{
 
-	struct TrackSystem;
-
-	struct MovableTrackAutoConnecting : public virtual MovableTrack {
+	class MovableTrack_Imp :	public virtual MovableTrack,
+								public Track_Imp
+							 
+	{
 	public:
+		MovableTrack_Imp() noexcept;
 
-		/// \brief Makes a MovableTrackAutoConnecting object.
-		static dclspc std::shared_ptr<MovableTrackAutoConnecting> Make() noexcept;
+		TrackType GetTrackType() const noexcept override;
 
-
-		/// \name AutoConnecting
-		/// \brief Specifies, wether the track should disconnect and try to reconnect.
-		/// \param distance Distance to disconnect if the actual distance between this 
-		/// track's ends and the coupled ones get greater than. Or try to reconnect if
-		/// getting smaller. A value <= 0 disables autoconnecting.
-		///@{
-		virtual void AutoConnecting( Length distance ) noexcept = 0;
-
-		virtual Length AutoConnecting() const noexcept = 0;
-
-		virtual bool IsAutoConnecting() const noexcept = 0;
-		///@}
+		std::shared_ptr<MovableTrack> GetMovableTrack() const noexcept override;
 
 
-		/// \brief Updates the track, e.g. reconnecting the end couplings.
-		virtual void Update( const TrackSystem& trackSystem ) = 0;
+		// Inherited via MovableTrack:
+		void SetBody( std::shared_ptr<const Body> pBody ) noexcept override;
+
+		std::shared_ptr<const Body> GetBody() const noexcept override;
+
+		void UpdateTrackPose() override;
+
+		bool IsMoving() const noexcept override;
+	private:
+		spat::Frame<Length,One>		m_RelativePose;
+		std::shared_ptr<const Body>	m_pBody;
 	};
+
 }

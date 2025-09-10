@@ -1,5 +1,5 @@
 //	trax track library
-//	AD 2024 
+//	AD 2025 
 //
 //  "the resolution of all the fruitless searches"
 //
@@ -26,15 +26,34 @@
 
 #pragma once
 
-#include "Collection.h"
-#include "CollectionDecorator.h"
-#include "ConnectorCollection.h"
-#include "ObjectIDDecorator.h"
-#include "TrackCollection.h"
-#include "TrackCollectionContainer.h"
-#include "TrackSystem.h"
+#include "trax/Track.h"
 
 namespace trax{
 
-} // namespace trax
+	struct Body;
 
+
+	/// \brief Track that can get attached to a moving body.
+	struct MovableTrack : virtual TrackBuilder{
+
+		/// \brief Makes a MovableTrack object.
+		static dclspc std::shared_ptr<MovableTrack> Make() noexcept;
+
+
+		/// \brief Sets a body the track is attached to (if any).
+		virtual void SetBody( std::shared_ptr<const Body> pBody ) noexcept = 0;
+
+
+		/// \returns Returns the body a track is assigned to or nullptr.
+		virtual std::shared_ptr<const Body> GetBody() const noexcept = 0;
+
+
+		/// \brief Updates the track's position from the moving body.
+		virtual void UpdateTrackPose() = 0;
+
+
+		/// \returns true if the track is actually in motion.
+		virtual bool IsMoving() const noexcept = 0;
+	};
+
+}

@@ -1,5 +1,5 @@
 //	trax track library
-//	AD 2024 
+//	AD 2025 
 //
 //  "the resolution of all the fruitless searches"
 //
@@ -26,15 +26,28 @@
 
 #pragma once
 
-#include "Collection.h"
-#include "CollectionDecorator.h"
-#include "ConnectorCollection.h"
-#include "ObjectIDDecorator.h"
-#include "TrackCollection.h"
-#include "TrackCollectionContainer.h"
-#include "TrackSystem.h"
+#include "trax/collections/source/TrackSystem_Imp.h"
 
 namespace trax{
 
-} // namespace trax
+	struct MovableTrackAutoConnecting;
 
+	class TrackSystemMovable_Imp : public TrackSystem_Imp
+	{
+	public:
+		IDType Add( std::shared_ptr<TrackBuilder> pTrack ) override;
+
+		bool Remove( TrackBuilder* pTrack, bool zeroIDs = false ) override;
+
+		void Clear() noexcept override;
+
+
+		// Simulated:
+		void Update( Time dt ) override;
+
+	private:
+		std::vector<std::shared_ptr<MovableTrack>>					m_MovableTracks;
+		std::vector<std::shared_ptr<MovableTrackAutoConnecting>>	m_MovableTracksAutoConnecting;
+	};
+
+}

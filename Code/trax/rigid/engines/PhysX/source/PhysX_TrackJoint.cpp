@@ -24,11 +24,11 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#include "trax/engines/PhysX/PhysX_TrackJoint.h"
+#include "../PhysX_TrackJoint.h"
 
-#include "trax/engines/PhysX/PhysX_Adapter.h"
-#include "trax/engines/PhysX/PhysX_Imp.h"
-#include "trax/engines/PhysX/PhysX_Body_Imp.h"
+#include "../PhysX_Adapter.h"
+#include "../PhysX_Imp.h"
+#include "../PhysX_Body_Imp.h"
 
 
 namespace trax{

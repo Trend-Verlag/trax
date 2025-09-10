@@ -28,10 +28,10 @@
 #pragma once
 
 #include "TrackJoint.h"
-#include "Location.h"
-#include "Wheelset.h"
 #include "TrackJointLimits.h"
-#include "Jack.h"
+#include "trax/Location.h"
+#include "trax/Wheelset.h"
+#include "trax/Jack.h"
 
 namespace trax{
 

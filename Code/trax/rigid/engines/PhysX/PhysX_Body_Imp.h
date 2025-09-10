@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "trax/source/Body_Imp.h"
+#include "trax/rigid/source/Body_Imp.h"
 
 #include "PhysX_Imp.h"
 

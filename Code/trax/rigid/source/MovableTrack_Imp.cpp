@@ -25,7 +25,7 @@
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
 #include "MovableTrack_Imp.h"
-#include "trax/Body.h"
+#include "trax/rigid/Body.h"
 
 #include <iostream>
 
@@ -54,6 +54,10 @@ MovableTrack_Imp::MovableTrack_Imp() noexcept
 
 Track::TrackType MovableTrack_Imp::GetTrackType() const noexcept{
 	return TrackType::movable;
+}
+
+std::shared_ptr<MovableTrack> MovableTrack_Imp::GetMovableTrack() const noexcept{
+	return std::dynamic_pointer_cast<MovableTrack>(This());
 }
 
 void MovableTrack_Imp::SetBody( std::shared_ptr<const Body> pBody ) noexcept{

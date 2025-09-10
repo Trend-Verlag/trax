@@ -26,14 +26,13 @@
 
 #pragma once
 
-#include "trax/collections/TrackSystem.h"
+#include "../TrackSystem.h"
 #include "trax/ImplementationHelper.h"
 #include "trax/Jack.h"
 
 namespace trax{
 	using namespace spat;
 
-	struct MovableTrackAutoConnecting;
 
 	typedef ObjectID_Imp<Container_Imp<TrackBuilder,TrackSystem>> TrackSystem_Base;
 
@@ -155,8 +154,6 @@ namespace trax{
 		IDType														m_IDActiveTrackCollection;
 
 		std::shared_ptr<ConnectorCollection>						m_pConnectorCollection;
-		std::vector<std::shared_ptr<MovableTrack>>					m_MovableTracks;
-		std::vector<std::shared_ptr<MovableTrackAutoConnecting>>	m_MovableTracksAutoConnecting;
 
 		void DoClear();
 	};

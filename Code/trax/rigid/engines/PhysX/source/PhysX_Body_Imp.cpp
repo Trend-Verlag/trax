@@ -24,8 +24,8 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#include "trax/engines/PhysX/PhysX_Body_Imp.h"
-#include "trax/engines/PhysX/PhysX_Adapter.h"
+#include "../PhysX_Body_Imp.h"
+#include "../PhysX_Adapter.h"
 
 namespace trax{
 	using namespace spat;
