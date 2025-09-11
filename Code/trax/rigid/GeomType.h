@@ -1,9 +1,10 @@
 //	trax track library
-//	AD 2024 
+//	AD 2023 
 //
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
+//
 //
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
@@ -26,34 +27,22 @@
 
 #pragma once
 
-#include "Track.h"
-
-namespace trax{
-
-	struct Section;
-
-	struct GeomTrack : virtual TrackBuilder{
-
-		/// \brief Makes a GeomTrack object.
-		static dclspc std::shared_ptr<GeomTrack> Make() noexcept;
-
-
-		using TrackBuilder::Attach;
-
-
-		/// \brief Sets a Section describing the lateral geometry as a profile.
-		///	\param pSection Pointer to the Section object to use.
-		virtual void Attach( std::shared_ptr<const Section> pSection ) noexcept = 0;
-
-
-		/// \brief Detaches the Section from the track.
-		/// \returns A pointer to the previous attached Section or nullptr if none.
-		virtual std::shared_ptr<const Section> DetachSection() noexcept = 0;
-
-
-		/// \returns A pointer to the attached Section or nullptr if none.
-		virtual std::shared_ptr<const Section> GetSection() const noexcept = 0;
+namespace trax
+{
+	/// \brief Type of a geom.
+	enum class GeomType : char{
+		unknown = -1,
+		none  = 0,
+		box,
+		cylinder,
+		capsule,
+		sphere,
+		heightField,
+		convexMesh,
+		triangleMesh,
 	};
 
+	dclspc std::string ToString( GeomType type );
 
+	dclspc GeomType ToGeomType( const std::string& type );
 }

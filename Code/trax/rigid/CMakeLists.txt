@@ -1,20 +1,43 @@
 add_library(trax_rigid 
     STATIC
         "./source/Body_Imp.cpp"
+        "./source/Geom_Imp.cpp"
+        "./source/Gestalt_Imp.cpp"
+        "./source/Material_Imp.cpp"
         "./source/MovableTrack_Imp.cpp"
+        "./source/Scene_Imp.cpp"
+        "./source/Shape_Imp.cpp"
+        "./source/Simulator_Imp.cpp"
+        "./source/StaticTrack_Imp.cpp"
+        "./source/TrackJointFeeder_Imp.cpp"
 )
 
 target_sources(trax_rigid
     PUBLIC
-        "./MovableTrack.h"
         "./Body.h"
+        "./Geom.h"
+        "./GeomType.h"
+        "./Gestalt.h"
+        "./Joint.h"
+        "./Material.h"
+        "./MovableTrack.h"
+        "./Scene.h"
+        "./Shape.h"
+        "./Simulated.h"
+        "./Simulator.h"
+        "./StaticTrack.h"
         "./TrackJoint.h"
         "./TrackJointFeeder.h"
         "./TrackJointLimits.h"
     PRIVATE
         "./source/Body_Imp.h"
+        "./source/Geom_Imp.h"
+        "./source/Gestalt_Imp.h"
         "./source/MovableTrack_Imp.h"
-        "./source/TrackJointFeeder_Imp.cpp"
+        "./source/Scene_Imp.h"
+        "./source/Shape_Imp.h"
+        "./source/Simulator_Imp.h"
+        "./source/StaticTrack_Imp.h"
 )
 
 target_link_libraries(trax_rigid

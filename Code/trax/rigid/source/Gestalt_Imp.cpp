@@ -5,6 +5,7 @@
 //
 //								Peter Gabriel
 //
+//
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //
@@ -24,30 +25,43 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
+#include "Gestalt_Imp.h"
 
-#include "trax/GeomTrack.h"
-#include "Track_Imp.h"
+namespace trax
+{
 
-namespace trax{
+int Gestalt_Imp::Attach( std::unique_ptr<Geom> pGeom )
+{
+	return Attach( std::move( pGeom ), 0_kg );
+}
 
-	class GeomTrack_Imp :	public virtual GeomTrack,
-							public Track_Imp{
-	public:
-		// Track:
-		TrackType GetTrackType() const noexcept override;
+int Gestalt_Imp::Attach( std::unique_ptr<Geom> pGeom, Mass mass )
+{
+	if( int idx = Shape_ImpBase::Attach( std::move( pGeom ) ); idx >= 0 )
+	{
+		m_Masses.push_back( mass );
+		DoCalculateMassProperties();
+		return idx;
+	}
+	else
+		return idx;
+}
 
-		bool IsValid() const noexcept override;
+Mass Gestalt_Imp::GeomMass( int idx ) const
+{
+	return m_Masses.at(idx);
+}
 
+std::unique_ptr<Geom> Gestalt_Imp::Remove( int idx )
+{
+	if( std::unique_ptr<Geom> pRetval = Shape_ImpBase::Remove(idx); pRetval )
+	{
+		m_Masses.erase( m_Masses.begin() + idx );
+		DoCalculateMassProperties();
+		return pRetval;
+	}
 
-		// GeomTrack:
-		void Attach( std::shared_ptr<const Section> pSection ) noexcept override;
-
-		std::shared_ptr<const Section> DetachSection() noexcept override;
-
-		std::shared_ptr<const Section> GetSection() const noexcept override;
-	private:
-		std::shared_ptr<const Section> m_pSection;
-	};
+	return nullptr;
+}
 
 }

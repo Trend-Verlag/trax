@@ -5,6 +5,7 @@
 //
 //								Peter Gabriel
 //
+// 
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //
@@ -49,7 +50,7 @@ namespace trax{
 		/// \name Explicit XML Reading
 		///@{
 		dclspc void ReadConnection( const boost::property_tree::ptree& pt, Track::End& trackend ) noexcept;
-		dclspc void ReadMaterial( const boost::property_tree::ptree& pt, Material& material ) noexcept;
+	//	dclspc void ReadMaterial( const boost::property_tree::ptree& pt, Material& material ) noexcept;
 		dclspc void ReadTrackEnd( const boost::property_tree::ptree& pt, Track::End& trackend ) noexcept;
 	//	dclspc void ReadTrackJointLimits( const boost::property_tree::ptree& pt, TrackJointLimits& wfl ) noexcept;
 		dclspc void ReadTrackLocation( const boost::property_tree::ptree& pt, TrackLocation& trackLocation ) noexcept;

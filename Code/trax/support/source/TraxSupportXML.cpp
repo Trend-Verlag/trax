@@ -26,7 +26,6 @@
 
 #include "trax/support/TraxSupportXML.h"
 
-#include "trax/Material.h"
 #include "trax/TrackLocation.h"
 #include "trax/TractionForceCharacteristic.h"
 #include "trax/Wheelset.h"
@@ -40,12 +39,12 @@ namespace trax{
 namespace ptreesupport{
 
 
-void ReadMaterial( const boost::property_tree::ptree& pt, Material& material ) noexcept{
-	material.type = MaterialType( pt.get( "<xmlattr>.type", "none" ) );
-	material.staticFriction = pt.get( "<xmlattr>.staticFriction", 0.6f );
-	material.dynamicFriction= pt.get( "<xmlattr>.dynamicFriction", 0.4f );
-	material.restitution	= pt.get( "<xmlattr>.restitution", 0.1f );
-}
+//void ReadMaterial( const boost::property_tree::ptree& pt, Material& material ) noexcept{
+//	material.type = MaterialType( pt.get( "<xmlattr>.type", "none" ) );
+//	material.staticFriction = pt.get( "<xmlattr>.staticFriction", 0.6f );
+//	material.dynamicFriction= pt.get( "<xmlattr>.dynamicFriction", 0.4f );
+//	material.restitution	= pt.get( "<xmlattr>.restitution", 0.1f );
+//}
 
 void ReadConnection( const boost::property_tree::ptree& pt, Track::End& trackend ) noexcept{
 	for( const auto& pair : pt )

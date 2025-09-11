@@ -5,6 +5,7 @@
 //
 //								Peter Gabriel
 //
+// 
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //

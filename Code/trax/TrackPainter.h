@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "GeomTrack.h"
+#include "SectionTrack.h"
 #include "Section.h"
 
 #include "common/NarrowCast.h"
@@ -80,7 +80,7 @@ namespace trax{
 		TrackPainter& operator=( const TrackPainter& ) = default;
 		TrackPainter& operator=( TrackPainter&& ) = default;
 
-		inline TrackPainter& operator()( const GeomTrack& track ){
+		inline TrackPainter& operator()( const SectionTrack& track ){
 			if( track.IsValid() )
 				Paint( track, *track.GetSection() );
 			return *this;

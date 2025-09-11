@@ -31,7 +31,7 @@
 #include "trax/collections/TrackCollectionContainer.h"
 #include "trax/collections/ConnectorCollection.h"
 
-#include "trax/GeomTrack.h"
+#include "trax/SectionTrack.h"
 #include "trax/Indicator.h"
 #include "trax/Jack.h"
 #include "trax/LogicElements.h"
@@ -176,8 +176,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 	ptTrack	<< track.GetTwist();
 
-	if( const GeomTrack* pGeomTrack = dynamic_cast<const GeomTrack*>(&track); pGeomTrack )
-		if( auto pSection = pGeomTrack->GetSection() )
+	if( const SectionTrack* pSectionTrack = dynamic_cast<const SectionTrack*>(&track); pSectionTrack )
+		if( auto pSection = pSectionTrack->GetSection() )
 			ptTrack << *pSection;
 
 	for( int idx = 0; idx < track.CountSensors(); ++idx )

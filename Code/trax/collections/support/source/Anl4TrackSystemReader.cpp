@@ -34,7 +34,7 @@
 #include "trax/collections/TrackSystem.h"
 #include "trax/collections/TrackCollectionContainer.h"
 
-#include "trax/GeomTrack.h"
+#include "trax/SectionTrack.h"
 #include "trax/Jack.h"
 #include "trax/Plug.h"
 #include "trax/Section.h"
@@ -936,8 +936,8 @@ void Anl4TrackSystemReader::ReadPlug( const boost::property_tree::ptree& pt, Mul
 
 void Anl4TrackSystemReader::ReadSection( const boost::property_tree::ptree& pt, trax::TrackBuilder& track ) const noexcept
 {
-	if( GeomTrack* pGeomTrack = dynamic_cast<GeomTrack*>(&track); pGeomTrack )
-		pGeomTrack->Attach( CreateSection( pt ) );
+	if( SectionTrack* pSectionTrack = dynamic_cast<SectionTrack*>(&track); pSectionTrack )
+		pSectionTrack->Attach( CreateSection( pt ) );
 }
 ///////////////////////////////////////
 void ReadEnd( const boost::property_tree::ptree& pt,

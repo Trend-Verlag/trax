@@ -24,14 +24,14 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#include "GeomTrack_Imp.h"
+#include "SectionTrack_Imp.h"
 
 namespace trax{
 ///////////////////////////////////////
-std::shared_ptr<GeomTrack> GeomTrack::Make() noexcept
+std::shared_ptr<SectionTrack> SectionTrack::Make() noexcept
 {
 	try{
-		if( std::shared_ptr<GeomTrack_Imp> pRetval = std::make_shared<GeomTrack_Imp>(); pRetval )
+		if( std::shared_ptr<SectionTrack_Imp> pRetval = std::make_shared<SectionTrack_Imp>(); pRetval )
 		{
 			pRetval->SetWeakPointerToSelf( pRetval );
 			return pRetval;
@@ -43,11 +43,11 @@ std::shared_ptr<GeomTrack> GeomTrack::Make() noexcept
 	return nullptr;
 }
 ///////////////////////////////////////
-Track::TrackType GeomTrack_Imp::GetTrackType() const noexcept{
+Track::TrackType SectionTrack_Imp::GetTrackType() const noexcept{
 	return TrackType::withGeoms;
 }
 
-bool GeomTrack_Imp::IsValid() const noexcept
+bool SectionTrack_Imp::IsValid() const noexcept
 {
 	if( !Track_Imp::IsValid() )
 		return false;
@@ -57,7 +57,7 @@ bool GeomTrack_Imp::IsValid() const noexcept
 	return true;
 }
 
-void GeomTrack_Imp::Attach( std::shared_ptr<const Section> pSection ) noexcept{
+void SectionTrack_Imp::Attach( std::shared_ptr<const Section> pSection ) noexcept{
 	if( !pSection )
 		return;
 
@@ -65,14 +65,14 @@ void GeomTrack_Imp::Attach( std::shared_ptr<const Section> pSection ) noexcept{
 	OnGeometryChanged();
 }
 
-std::shared_ptr<const Section> GeomTrack_Imp::DetachSection() noexcept{
+std::shared_ptr<const Section> SectionTrack_Imp::DetachSection() noexcept{
 	std::shared_ptr<const Section> retval(m_pSection);
 	m_pSection.reset();
 	OnGeometryChanged();
 	return retval;
 }
 
-std::shared_ptr<const Section> GeomTrack_Imp::GetSection() const noexcept{
+std::shared_ptr<const Section> SectionTrack_Imp::GetSection() const noexcept{
 	return m_pSection;
 }
 ///////////////////////////////////////
