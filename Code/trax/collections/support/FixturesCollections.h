@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "trax/Fixtures.h"
+#include "trax/support/Fixtures.h"
 
 #include "trax/collections/TrackSystem.h"
 #include "spat/Frame.h"

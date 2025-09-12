@@ -31,7 +31,7 @@
 #include "trax/Track.h"
 #include "trax/ParallelTrack.h"
 #include "trax/support/TraxSupportStream.h"
-#include "trax/Fixtures.h"
+#include "trax/support/Fixtures.h"
 #include "../Test/dim/BoostTestDimensionedValuesHelpers.h"
 #include "../Test/spat/BoostTestSpatialHelpers.h"
 

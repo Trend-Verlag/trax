@@ -17,7 +17,7 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#include "trax/collections/FixturesCollections.h"
+#include "trax/collections/support/FixturesCollections.h"
 
 #include "dim/DimensionedValues.h"
 

@@ -28,7 +28,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "../Test/dim/BoostTestDimensionedValuesHelpers.h"
-#include "trax/Fixtures.h"
+#include "trax/support/Fixtures.h"
 #include "trax/Location.h"
 #include "trax/support/TraxSupportStream.h"
 

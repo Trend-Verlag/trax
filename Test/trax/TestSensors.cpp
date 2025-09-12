@@ -23,7 +23,7 @@
 #include "trax/Plug.h"
 #include "trax/Jack.h"
 #include "trax/support/TraxSupportStream.h"
-#include "trax/Fixtures.h"
+#include "trax/support/Fixtures.h"
 
 using namespace trax;
 using namespace spat;

@@ -1,10 +1,12 @@
 add_library(trax_core_support 
     STATIC
+        "./source/Fixtures.cpp"
         "./source/TraxSupportXML.cpp"
 )
 
 target_sources(trax_core_support
     PUBLIC
+        "./Fixtures.h"
         "./TraxSupportStream.h"
         "./TraxSupportXML.h"
 )

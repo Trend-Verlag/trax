@@ -24,12 +24,11 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#include "trax/Fixtures.h"
+#include "trax/support/Fixtures.h"
 
 #include "trax/Plug.h"
 #include "trax/Jack.h"
 #include "trax/Event.h"
-#include "trax/Fixtures.h"
 
 using namespace std;
 using namespace spat;

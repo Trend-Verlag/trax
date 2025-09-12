@@ -27,7 +27,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "trax/collections/FixturesCollections.h"
+#include "trax/collections/support/FixturesCollections.h"
 #include "trax/rigid/Scene.h"
 #include "trax/rigid/Simulator.h"
 #include "trax/rigid/StaticTrack.h"

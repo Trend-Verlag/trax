@@ -27,7 +27,7 @@
 #if defined( WITH_BOOST_TESTS )
 #include <boost/test/unit_test.hpp>
 
-#include "trax/Fixtures.h"
+#include "trax/support/Fixtures.h"
 #include "../Test/dim/BoostTestDimensionedValuesHelpers.h"
 
 namespace reservation_tests{

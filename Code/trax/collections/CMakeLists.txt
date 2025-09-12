@@ -1,7 +1,6 @@
 add_library(trax_core_collections STATIC
     "./source/Collections_Imp.cpp"
     "./source/ConnectorCollection_Imp.cpp"
-    "./source/FixturesCollections.cpp"
     "./source/IndicatorCollection_Imp.cpp"
     "./source/PulseCounterCollection_Imp.cpp"
     "./source/SignalCollection_Imp.cpp"
@@ -17,7 +16,6 @@ target_sources(trax_core_collections
         "./CollectionDecorator.h"
         "./Collections.h"
         "./ConnectorCollection.h"
-        "./FixturesCollections.h"
         "./IndicatorCollection.h"
         "./Interfaces.h"
         "./ObjectIDDecorator.h"
