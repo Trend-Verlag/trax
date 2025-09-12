@@ -1,7 +1,8 @@
 add_executable(trax_rigid_tests
     "./Test.cpp"
     "./TestStaticTrack.cpp"
- )
+    "./TestTractionForceCharacteristic.cpp"
+)
 
 target_link_libraries(trax_rigid_tests 
     PRIVATE
@@ -19,11 +20,8 @@ if(MSVC)
     set(_physx_bin_debug   "$<SHELL_PATH:$ENV{PHYSX_ROOT}/bin/win.x86_64.vc143.md/debug>;$<SHELL_PATH:$ENV{BOOST_ROOT}/stage/lib>")
     set(_physx_bin_release "$<SHELL_PATH:$ENV{PHYSX_ROOT}/bin/win.x86_64.vc143.md/release>;$<SHELL_PATH:$ENV{BOOST_ROOT}/stage/lib>")
 
-    # One property, config-specific via generator expressions
+    # One property value; pick per-config without creating empty list elements
     set_property(TARGET trax_rigid_tests PROPERTY VS_DEBUGGER_ENVIRONMENT
-        "$<$<CONFIG:Debug>:PATH=%PATH%;${_physx_bin_debug}>"
-        "$<$<CONFIG:Release>:PATH=%PATH%;${_physx_bin_release}>"
-        "$<$<CONFIG:RelWithDebInfo>:PATH=%PATH%;${_physx_bin_release}>"
-        "$<$<CONFIG:MinSizeRel>:PATH=%PATH%;${_physx_bin_release}>"
+        "PATH=%PATH%;$<IF:$<CONFIG:Debug>,${_physx_bin_debug},${_physx_bin_release}>"
     )
 endif()

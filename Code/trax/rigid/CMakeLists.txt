@@ -10,6 +10,7 @@ add_library(trax_rigid
         "./source/Simulator_Imp.cpp"
         "./source/StaticTrack_Imp.cpp"
         "./source/TrackJointFeeder_Imp.cpp"
+        "./source/TractionForceCharacteristic_Imp.cpp"
 )
 
 target_sources(trax_rigid
@@ -23,12 +24,12 @@ target_sources(trax_rigid
         "./MovableTrack.h"
         "./Scene.h"
         "./Shape.h"
-        "./Simulated.h"
         "./Simulator.h"
         "./StaticTrack.h"
         "./TrackJoint.h"
         "./TrackJointFeeder.h"
         "./TrackJointLimits.h"
+        "./TractionForceCharacteristic.h"
     PRIVATE
         "./source/Body_Imp.h"
         "./source/Geom_Imp.h"
@@ -38,6 +39,7 @@ target_sources(trax_rigid
         "./source/Shape_Imp.h"
         "./source/Simulator_Imp.h"
         "./source/StaticTrack_Imp.h"
+        "./source/TractionForceCharacteristic_Imp.h"
 )
 
 target_link_libraries(trax_rigid

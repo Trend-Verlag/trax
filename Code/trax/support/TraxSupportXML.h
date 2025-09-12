@@ -57,7 +57,7 @@ namespace trax{
 		dclspc void ReadTrackLocationRef( const boost::property_tree::ptree& pt, TrackLocationRef& trackLocationRef ) noexcept;
 		dclspc void ReadTrackRange( const boost::property_tree::ptree& pt, TrackRange& trackRange ) noexcept;
 		dclspc void ReadWheelset( const boost::property_tree::ptree& pt, Wheelset& wheelset ) noexcept;
-		dclspc void ReadTractionForceCharacteristic( const boost::property_tree::ptree& pt, TractionForceCharacteristic& tractionForceCharacteristic ) noexcept;
+	//	dclspc void ReadTractionForceCharacteristic( const boost::property_tree::ptree& pt, TractionForceCharacteristic& tractionForceCharacteristic ) noexcept;
 		///@}
 
 

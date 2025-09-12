@@ -29,7 +29,7 @@
 
 #include "../Gestalt.h"
 #include "../GeomType.h"
-#include "../Simulated.h"
+#include "trax/Simulated.h"
 
 namespace trax
 {

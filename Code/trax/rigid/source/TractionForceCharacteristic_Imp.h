@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "trax/TractionForceCharacteristic.h"
+#include "../TractionForceCharacteristic.h"
 
 namespace trax{
 

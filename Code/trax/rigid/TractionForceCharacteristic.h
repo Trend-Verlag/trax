@@ -27,8 +27,8 @@
 
 #pragma once
 
-#include "Configuration.h"
-#include "Units.h"
+#include "trax/Configuration.h"
+#include "trax/Units.h"
 
 namespace trax{
 

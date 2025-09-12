@@ -7,7 +7,6 @@ add_executable(trax_core_tests
     "./TestSpatialDimensionatedValues.cpp"
     "./TestTracks.cpp"
     "./TestTracksNormalize.cpp"
-    "./TestTractionForceCharacteristic.cpp"
     "./TestVersion.cpp"
     "./support/TestSupportXML.cpp"
 )

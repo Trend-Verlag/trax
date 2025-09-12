@@ -29,7 +29,7 @@
 
 #include "dim/support/DimSupportStream.h"
 #include "../Test/dim/BoostTestDimensionedValuesHelpers.h"
-#include "trax/TractionForceCharacteristic.h"
+#include "trax/rigid/TractionForceCharacteristic.h"
 
 using namespace trax;
 

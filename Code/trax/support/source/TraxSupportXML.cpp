@@ -27,7 +27,7 @@
 #include "trax/support/TraxSupportXML.h"
 
 #include "trax/TrackLocation.h"
-#include "trax/TractionForceCharacteristic.h"
+//#include "trax/TractionForceCharacteristic.h"
 #include "trax/Wheelset.h"
 
 namespace trax{
@@ -113,15 +113,15 @@ void ReadWheelset( const boost::property_tree::ptree& pt, Wheelset& wheelset ) n
 	} );
 }
 
-void ReadTractionForceCharacteristic( const boost::property_tree::ptree& pt, TractionForceCharacteristic& TFC ) noexcept
-{
-	for( const auto& pair : pt )
-	{
-		if( pair.first == "SpeedStep" )
-			TFC.AddSpeedStep( get(  pair.second, "<xmlattr>.velocity", 0_mIs, _mIs ),
-									pair.second.get( "<xmlattr>.value", 1.0f ) );
-	};
-}
+//void ReadTractionForceCharacteristic( const boost::property_tree::ptree& pt, TractionForceCharacteristic& TFC ) noexcept
+//{
+//	for( const auto& pair : pt )
+//	{
+//		if( pair.first == "SpeedStep" )
+//			TFC.AddSpeedStep( get(  pair.second, "<xmlattr>.velocity", 0_mIs, _mIs ),
+//									pair.second.get( "<xmlattr>.value", 1.0f ) );
+//	};
+//}
 
 } // namespace ptreesupport
 } // namespace trax
