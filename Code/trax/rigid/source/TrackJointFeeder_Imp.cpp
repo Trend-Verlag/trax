@@ -28,7 +28,7 @@
 #include "../TrackJointFeeder.h"
 #include "../MovableTrack.h"
 #include "../TractionForceCharacteristic.h"
-#include "trax/Wheelset.h"
+#include "../Wheelset.h"
 #include "trax/Plug.h"
 
 #include <algorithm>

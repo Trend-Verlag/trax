@@ -28,7 +28,7 @@
 
 #include "trax/TrackLocation.h"
 //#include "trax/TractionForceCharacteristic.h"
-#include "trax/Wheelset.h"
+//#include "trax/Wheelset.h"
 
 namespace trax{
 	using namespace dim;
@@ -91,27 +91,27 @@ void ReadTrackRange( const boost::property_tree::ptree& pt, TrackRange& trackRan
 	trackRange.refid = pt.get( "<xmlattr>.refid", IDType{0} );
 }
 
-void ReadWheelset( const boost::property_tree::ptree& pt, Wheelset& wheelset ) noexcept{
-	const Wheelset def;
-	wheelset.Radius				= get( pt, "<xmlattr>.radius", def.Radius, _m );
-	wheelset.Gauge				= get( pt, "<xmlattr>.gauge", def.Gauge, _m );
-	wheelset.Flange				= get( pt, "<xmlattr>.flange", def.Flange, _m );
-	wheelset.WheelWidth			= get( pt, "<xmlattr>.wheel_width", def.WheelWidth, _m );
-	wheelset.AxleRadius			= get( pt, "<xmlattr>.axle_radius", def.AxleRadius, _m );
-	wheelset.TotalMass			= get( pt, "<xmlattr>.mass", def.TotalMass, _t );
-	wheelset.Rotation			= pt.get( "<xmlattr>.rotation", def.Rotation );
-	wheelset.Shift				= get( pt, "<xmlattr>.shift", def.Shift, _m );
-	wheelset.MaxMotorTorque		= get( pt, "<xmlattr>.motor_torque", def.MaxMotorTorque, _kNm );
-	wheelset.MaxBrakingTorque	= get( pt, "<xmlattr>.brake_torque", def.MaxBrakingTorque, _kNm );
-	wheelset.FrictionTorque		= get( pt, "<xmlattr>.friction_torque", def.FrictionTorque, _kNm );
-
-	std::for_each( pt.begin(), pt.end(),
-		[&wheelset]( const boost::property_tree::ptree::value_type& pair )
-	{
-		if( pair.first == "Position2D" )
-			ReadPosition2D( pair.second, wheelset.AxlePosition );
-	} );
-}
+//void ReadWheelset( const boost::property_tree::ptree& pt, Wheelset& wheelset ) noexcept{
+//	const Wheelset def;
+//	wheelset.Radius				= get( pt, "<xmlattr>.radius", def.Radius, _m );
+//	wheelset.Gauge				= get( pt, "<xmlattr>.gauge", def.Gauge, _m );
+//	wheelset.Flange				= get( pt, "<xmlattr>.flange", def.Flange, _m );
+//	wheelset.WheelWidth			= get( pt, "<xmlattr>.wheel_width", def.WheelWidth, _m );
+//	wheelset.AxleRadius			= get( pt, "<xmlattr>.axle_radius", def.AxleRadius, _m );
+//	wheelset.TotalMass			= get( pt, "<xmlattr>.mass", def.TotalMass, _t );
+//	wheelset.Rotation			= pt.get( "<xmlattr>.rotation", def.Rotation );
+//	wheelset.Shift				= get( pt, "<xmlattr>.shift", def.Shift, _m );
+//	wheelset.MaxMotorTorque		= get( pt, "<xmlattr>.motor_torque", def.MaxMotorTorque, _kNm );
+//	wheelset.MaxBrakingTorque	= get( pt, "<xmlattr>.brake_torque", def.MaxBrakingTorque, _kNm );
+//	wheelset.FrictionTorque		= get( pt, "<xmlattr>.friction_torque", def.FrictionTorque, _kNm );
+//
+//	std::for_each( pt.begin(), pt.end(),
+//		[&wheelset]( const boost::property_tree::ptree::value_type& pair )
+//	{
+//		if( pair.first == "Position2D" )
+//			ReadPosition2D( pair.second, wheelset.AxlePosition );
+//	} );
+//}
 
 //void ReadTractionForceCharacteristic( const boost::property_tree::ptree& pt, TractionForceCharacteristic& TFC ) noexcept
 //{

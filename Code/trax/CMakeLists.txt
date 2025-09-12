@@ -79,7 +79,6 @@ target_sources(trax_core
         "./Units.h"
         "./UnitsHelper.h"
         "./Version.h"
-        "./Wheelset.h"
     PRIVATE
         "./source/Connector_Imp.h"
         "./source/Event_Imp.h"

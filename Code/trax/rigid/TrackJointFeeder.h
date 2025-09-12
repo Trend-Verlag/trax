@@ -29,8 +29,9 @@
 
 #include "TrackJoint.h"
 #include "TrackJointLimits.h"
+#include "Wheelset.h"
+
 #include "trax/Location.h"
-#include "trax/Wheelset.h"
 #include "trax/Jack.h"
 
 namespace trax{

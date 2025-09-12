@@ -31,6 +31,7 @@ namespace trax{
 	struct Arc;
 	struct ArcP;
 	struct Axis;
+	struct BallAndSocketJoint;
 	struct BinaryIndicator;
 	struct Body;
 	struct Clothoid;
@@ -41,25 +42,34 @@ namespace trax{
 	struct Curve;
 	struct CurveSample;
 	struct DirectionalTwist;
+	struct DistanceJoint;
 	struct DoubleSlipSwitch;
 	struct EEPCurve;
 	struct Event;
-	struct GeomTrack;
+	struct Geom;
+	struct Gestalt;
 	struct Helix;
 	struct HelixP;
+	struct HingeJoint;
 	struct Indicator;
 	struct IntervalSensor;
 	struct Jack;
 	struct JackEnumerator;
+	struct Joint;
 	struct JumpSite;
 	struct Line;
 	struct LineP;
 	struct LinearTwist;
 	class  Location;
+	struct Lockable;
+	struct Material;
 	struct MovableTrack;
 	struct MultiPlug;
 	struct NarrowSwitch;
+	struct Orientation;
+	struct ParallelTrack;
 	struct ParallelizableTrack;
+	class Parser;
 	struct PiecewiseTwist;
 	struct Plug;
 	struct PlugEnumerator;
@@ -69,13 +79,22 @@ namespace trax{
 	struct Rotator;
 	struct RotatorChain;
 	struct SampledCurve;
+	struct Scene;
+	struct Shape;
 	struct Section;
+	struct SectionTrack;
 	struct Sensor;
 	struct SensorFilterJack;
+	struct Signal;
+	struct SignalTarget;
+	struct SignalAligned;
+	struct Simulated;
 	struct Simulator;
 	struct SingleSlipSwitch;
+	struct SliderJoint;
 	struct SocketRegistry;
 	struct Spline;
+	struct StaticTrack;
 	struct Switch;
 	struct Timer;
 	struct ThreeWaySwitch;
@@ -83,6 +102,7 @@ namespace trax{
 	struct TrackBuilder;
 	template<typename> 
 	struct TrackData;
+	struct TrackEndTransition;
 	template<typename> 
 	class  TrackJoint;
 	class  TrackJointFeeder;
@@ -90,10 +110,12 @@ namespace trax{
 	struct TrackJointLimits;
 	struct TrackLocation;
 	struct TrackLocationRef;
+	class TrackPainter;
 	struct TrackRange;
 	struct TractionForceCharacteristic;
 	struct VelocityControl;
 	struct VelocitySensor;
+	class Version;
 	struct WeighSensor;
 	struct Wheelset;
 }

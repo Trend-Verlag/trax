@@ -30,6 +30,7 @@ target_sources(trax_rigid
         "./TrackJointFeeder.h"
         "./TrackJointLimits.h"
         "./TractionForceCharacteristic.h"
+        "./Wheelset.h"
     PRIVATE
         "./source/Body_Imp.h"
         "./source/Geom_Imp.h"
