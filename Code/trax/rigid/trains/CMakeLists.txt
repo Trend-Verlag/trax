@@ -1,0 +1,34 @@
+add_library(trax_trains 
+    STATIC
+        "./source/Bogie_Imp.cpp"
+        "./source/RollingStock_Imp.cpp"
+        "./source/Train_Imp.cpp"
+        "./source/TrainComponent_Imp.cpp"
+        "./source/TrainScene_Imp.cpp"
+        "./source/WheelFrame_Imp.cpp"
+)
+
+target_sources(trax_trains
+    PUBLIC
+        "./Bogie.h"
+        "./RailRunner.h"
+        "./RollingStock.h"
+        "./Train.h"
+        "./TrainComponent.h"
+        "./TrainScene.h"
+        "./WheelFrame.h"
+    PRIVATE
+        "./source/Bogie_Imp.h"
+        "./source/BogieJoint.h"
+        "./source/RailRunner_Imp.h"
+        "./source/RollingStock_Imp.h"
+        "./source/Train_Imp.h"
+        "./source/TrainComponent_Imp.h"
+        "./source/TrainScene_Imp.h"
+        "./source/WheelFrame_Imp.h"
+)
+
+target_link_libraries(trax_trains
+    PUBLIC
+        trax_rigid
+)

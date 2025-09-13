@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RollingStock>
+  <Bogie id="1" name="main">
+    <Frame>
+      <Position x="0" y="0" z="0"/>
+      <Vector dx="1" dy="0" dz="0"/>
+      <Vector dx="0" dy="1" dz="0"/>
+      <Vector dx="0" dy="0" dz="1"/>
+    </Frame>
+    <Coupling end="north" bufferLength="0.4" maxForce="2000" typeID="1">
+      <Frame>
+        <Position x="5.8" y="0" z="1"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+    </Coupling>
+    <Coupling end="south" bufferLength="0.4" maxForce="2000" typeID="1">
+      <Frame>
+        <Position x="-5.8" y="0" z="1"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+    </Coupling>
+    <Geom name="foundation" type="bogie" shape="box" mass="30">
+      <Frame>
+        <Position x="0" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+      <Box xnear="-5.8" xfar="5.8" ynear="-1.58000004" yfar="1.59300005" znear="1.2" zfar="1.7"/>
+      <Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+    </Geom>
+    <Geom name="motor" type="bogie" shape="box" mass="14">
+      <Frame>
+        <Position x="0" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+      <Box xnear="-5.5" xfar="5.5" ynear="-1" yfar="1" znear="1.8" zfar="3.3"/>
+      <Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+    </Geom>
+    <Geom name="cabin" type="bogie" shape="box" mass="7">
+      <Frame>
+        <Position x="0" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+      <Box xnear="-2.2" xfar="1" ynear="-1.5" yfar="1.5" znear="1.8" zfar="4.1"/>
+      <Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+    </Geom>
+    <Swivel slot="north" childID="2">
+      <Frame>
+        <Position x="2.86" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+    </Swivel>
+    <Swivel slot="south" childID="3">
+      <Frame>
+        <Position x="-3.14" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+    </Swivel>   
+  </Bogie>
+  <WheelFrame id="2" name="north_wheelframe">
+    <Frame>
+      <Position x="2.86" y="0" z="0"/>
+      <Vector dx="1" dy="0" dz="0"/>
+      <Vector dx="0" dy="1" dz="0"/>
+      <Vector dx="0" dy="0" dz="1"/>
+    </Frame>
+    <Geom name="frame" type="wheelframe" shape="box" mass="5">
+      <Frame>
+        <Position x="0" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+      <Box xnear="-2.2" xfar="+2.2" ynear="-0.5" yfar="0.5" znear="0.25" zfar="0.8"/>
+      <Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+    </Geom>
+    <Anchor>
+      <Frame>
+        <Position x="0" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+    </Anchor>
+    <WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="10" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+    <Wheelset radius="0.5" gauge="1.435" flange="0.1" wheel_width="0.2" axle_radius="0.1" mass="3" rotation="0" shift="0" motor_torque="22" brake_torque="33.33334" friction_torque="0.09">
+      <Position2D x="-1.5" y="0.5"/>
+    </Wheelset>
+    <Wheelset radius="0.5" gauge="1.435" flange="0.1" wheel_width="0.2" axle_radius="0.1" mass="3" rotation="0" shift="0" motor_torque="22" brake_torque="33.33334" friction_torque="0.09">
+      <Position2D x="1.5" y="0.5"/>
+    </Wheelset>
+    <TractionForceCharacteristic>
+      <SpeedStep velocity="0" value="1"/>
+      <SpeedStep velocity="12" value="0.38"/>
+      <SpeedStep velocity="15.15552" value="0.2"/>
+      <SpeedStep velocity="30" value="0"/>
+    </TractionForceCharacteristic>
+  </WheelFrame>
+  <WheelFrame id="3" name="south_wheelframe">
+    <Frame>
+      <Position x="-3.14" y="0" z="0"/>
+      <Vector dx="1" dy="0" dz="0"/>
+      <Vector dx="0" dy="1" dz="0"/>
+      <Vector dx="0" dy="0" dz="1"/>
+    </Frame>
+    <Geom name="frame" type="wheelframe" shape="box" mass="5">
+      <Frame>
+        <Position x="0" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+      <Box xnear="-2.2" xfar="+2.2" ynear="-0.5" yfar="0.5" znear="0.25" zfar="0.8"/>
+      <Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+    </Geom>
+    <Anchor>
+      <Frame>
+        <Position x="0" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+    </Anchor>
+    <WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="10" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+    <Wheelset radius="0.5" gauge="1.435" flange="0.1" wheel_width="0.2" axle_radius="0.1" mass="3" rotation="0" shift="0" motor_torque="22" brake_torque="33.33334" friction_torque="0.09">
+      <Position2D x="-1.5" y="0.5"/>
+    </Wheelset>
+    <Wheelset radius="0.5" gauge="1.435" flange="0.1" wheel_width="0.2" axle_radius="0.1" mass="3" rotation="0" shift="0" motor_torque="22" brake_torque="33.33334" friction_torque="0.09">
+      <Position2D x="1.5" y="0.5"/>
+    </Wheelset>
+    <TractionForceCharacteristic>
+      <SpeedStep velocity="0" value="1"/>
+      <SpeedStep velocity="12" value="0.38"/>
+      <SpeedStep velocity="15.15552" value="0.2"/>
+      <SpeedStep velocity="30" value="0"/>
+    </TractionForceCharacteristic>
+  </WheelFrame>
+</RollingStock>

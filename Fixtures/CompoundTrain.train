@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<Train name="Compound Train" id="1">
+  <DisplayName language="english">Compound Train</DisplayName>
+  <DisplayName language="german">Zusammengesetzter Zug</DisplayName>
+  <Train name="Compound1" reference="/Commuter.train" orientation="para" />
+  <Train name="Compound2" reference="/DoubleCommuter.train" orientation="para" />
+  <Train name="Compound3" reference="/CargoTwoLokos.train" orientation="para" />
+  <Train name="Compound4" reference="/Cargo.train" orientation="para" />
+</Train>

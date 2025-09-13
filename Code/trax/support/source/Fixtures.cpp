@@ -37,12 +37,14 @@ using namespace trax;
 ///////////////////////////////////////
 std::filesystem::path FixtureBase::FixturePath()
 {
-	std::filesystem::path fixturePath = std::filesystem::current_path();
-	fixturePath = fixturePath.parent_path();
-	fixturePath = fixturePath.parent_path();
-	fixturePath /= "Fixtures";
+	//std::filesystem::path fixturePath = std::filesystem::current_path();
+	//fixturePath = fixturePath.parent_path();
+	//fixturePath = fixturePath.parent_path();
+	//fixturePath /= "Fixtures";
 
-	return fixturePath;
+	//return fixturePath;
+
+	return std::filesystem::path{ std::string{TRAX_FIXTURES_DIR} };
 }
 ///////////////////////////////////////
 TrackFixture::TrackFixture()

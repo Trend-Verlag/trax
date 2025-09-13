@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxisArrangement>
+	<WheelFrame centerShift="0.300000012" length="7.76000023" id="0" name="Basis" model="Okmm38_2" height="1.5">
+		<WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="infinite" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+		<Geom name="bottom" type="bogie" shape="box" mass="1.5">
+			<Area xnear="-3.5" xfar="3.5" ynear="-1.5" yfar="1.5" znear="1" zfar="1.5"/>
+			<Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+		</Geom>	
+		<Geom name="side_right" type="bogie" shape="box" mass="1">
+			<Area xnear="-3.5" xfar="3.5" ynear="-1.5" yfar="-1.1" znear="1" zfar="3.96000004"/>
+			<Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+		</Geom>
+		<Geom name="side_left" type="bogie" shape="box" mass="1">
+			<Area xnear="-3.5" xfar="3.5" ynear="1.1" yfar="1.5" znear="1" zfar="3.96000004"/>
+			<Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+		</Geom>
+		<Geom name="front_north" type="bogie" shape="box" mass="1">
+			<Area xnear="3.2" xfar="3.5" ynear="-1.5" yfar="1.5" znear="1" zfar="3.96000004"/>
+			<Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+		</Geom>
+		<Geom name="front_south" type="bogie" shape="box" mass="1">
+			<Area xnear="-3" xfar="-2.8" ynear="-1.5" yfar="1.5" znear="1" zfar="3.96000004"/>
+			<Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+		</Geom>
+		<Geom name="middle_separator" type="bogie" shape="box" mass="1">
+			<Area xnear="-0.2" xfar="0.4" ynear="-1.51999998" yfar="1.51999998" znear="1" zfar="3.96000004"/>
+			<Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+		</Geom>		
+		<Coupling end="north" height="1" bufferLength="0.400000006" maxForce="1000.00006"/>
+		<Coupling end="south" height="1" bufferLength="0.400000006" maxForce="1000.00006"/>
+		<Wheelset radius="0.5" gauge="1.43499994" flange="0.100000001" wheel_width="0.200000003" axle_radius="0.100000001" mass="1" rotation="0" shift="0" motor_torque="0" brake_torque="25.0000019" friction_torque="0.0250000004">
+			<Position2D x="-2" y="0.5"/>
+		</Wheelset>
+		<Wheelset radius="0.5" gauge="1.43499994" flange="0.100000001" wheel_width="0.200000003" axle_radius="0.100000001" mass="1" rotation="0" shift="0" motor_torque="0" brake_torque="25.0000019" friction_torque="0.0250000004">
+			<Position2D x="2" y="0.5"/>
+		</Wheelset>
+		<Axis id="3" name="1Ladung" model="kohle_58_1" param="0" min="0" null="0" max="2.57999992" vmin="-1.57079637" vmax="1.57079637" type="free_translational" drive="1000">
+			<Frame>
+				<Position x="-1.27999997" y="0" z="1.10000002"/>
+				<Vector dx="1" dy="0" dz="0"/>
+				<Vector dx="0" dy="1" dz="0"/>
+				<Vector dx="0" dy="0" dz="1"/>
+			</Frame>
+		</Axis>
+		<Axis id="4" name="2Ladung" model="kohle_58_1" param="0" min="0" null="0" max="2.57999992" vmin="-1.57079637" vmax="1.57079637" type="free_translational" drive="1000">
+			<Frame>
+				<Position x="1.88" y="0" z="1.10000002"/>
+				<Vector dx="1" dy="0" dz="0"/>
+				<Vector dx="0" dy="1" dz="0"/>
+				<Vector dx="0" dy="0" dz="1"/>
+			</Frame>
+		</Axis>
+	</WheelFrame>
+</AxisArrangement>

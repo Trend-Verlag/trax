@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<Train name="Commuter Train" id="1">
+  <DisplayName language="english">Commuter Train</DisplayName>
+  <DisplayName language="german">Pendlerzug</DisplayName>
+  <RollingStock name="Commuter" reference="Commuter.rollingStock" orientation="para"/>
+</Train>

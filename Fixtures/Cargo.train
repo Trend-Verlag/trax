@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<Train name="Cargo Train" id="1">
+  <DisplayName language="english">Cargo Train</DisplayName>
+  <DisplayName language="german">Güterzug</DisplayName>
+  <RollingStock name="Locomotive" reference="DB_212.xml" orientation="para"/>
+  <RollingStock name="Waggon1" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
+  <RollingStock name="Waggon2" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
+  <RollingStock name="Waggon3" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
+  <RollingStock name="Waggon4" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
+  <RollingStock name="Waggon5" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
+  <RollingStock name="Waggon6" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
+  <RollingStock name="Waggon7" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
+  <RollingStock name="Waggon8" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
+  <RollingStock name="Waggon9" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
+</Train>

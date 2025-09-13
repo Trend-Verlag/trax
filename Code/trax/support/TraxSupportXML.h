@@ -35,13 +35,9 @@
 
 namespace trax{
 
-	struct Material;
-	struct TrackJointLimits;
 	struct TrackLocation;
 	struct TrackLocationRef;
 	struct TrackRange;
-	struct TractionForceCharacteristic;
-	struct Wheelset;
 
 	namespace ptreesupport{
 
@@ -50,14 +46,10 @@ namespace trax{
 		/// \name Explicit XML Reading
 		///@{
 		dclspc void ReadConnection( const boost::property_tree::ptree& pt, Track::End& trackend ) noexcept;
-	//	dclspc void ReadMaterial( const boost::property_tree::ptree& pt, Material& material ) noexcept;
 		dclspc void ReadTrackEnd( const boost::property_tree::ptree& pt, Track::End& trackend ) noexcept;
-	//	dclspc void ReadTrackJointLimits( const boost::property_tree::ptree& pt, TrackJointLimits& wfl ) noexcept;
 		dclspc void ReadTrackLocation( const boost::property_tree::ptree& pt, TrackLocation& trackLocation ) noexcept;
 		dclspc void ReadTrackLocationRef( const boost::property_tree::ptree& pt, TrackLocationRef& trackLocationRef ) noexcept;
 		dclspc void ReadTrackRange( const boost::property_tree::ptree& pt, TrackRange& trackRange ) noexcept;
-	//	dclspc void ReadWheelset( const boost::property_tree::ptree& pt, Wheelset& wheelset ) noexcept;
-	//	dclspc void ReadTractionForceCharacteristic( const boost::property_tree::ptree& pt, TractionForceCharacteristic& tractionForceCharacteristic ) noexcept;
 		///@}
 
 

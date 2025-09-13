@@ -1,0 +1,633 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AxisArrangement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.trendverlag.com/Schema/AxesArrangement.xsd">
+  <Bogie centerShift="-0.140000001" length="12.2600002" totalMass="63" id="0" name="Basis" model="Baes" height="1.5">
+    <Geom name="" type="bogie" shape="box" mass="30">
+      <Area xnear="-5.8" xfar="5.8" ynear="-1.58000004" yfar="1.59300005" znear="1.2" zfar="1.7"/>
+      <Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+    </Geom>
+    <Geom name="" type="bogie" shape="box" mass="14">
+      <Area xnear="-5.5" xfar="5.5" ynear="-1" yfar="1" znear="1.8" zfar="3.3"/>
+      <Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+    </Geom>
+    <Geom name="" type="bogie" shape="box" mass="7">
+      <Area xnear="-2.2" xfar="1" ynear="-1.5" yfar="1.5" znear="1.8" zfar="4.1"/>
+      <Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+    </Geom>
+    <Coupling end="north" height="1" bufferLength="0.400000006" maxForce="2000.00012"/>
+    <Coupling end="south" height="1" bufferLength="0.400000006" maxForce="2000.00012"/>
+    <WheelFrame id="1" name="_vRadsatz" soundGroup="ModelType5" model="Vuuzq" height="0.5" length="0">
+      <Frame>
+        <Position x="2.8599999" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+      <WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="0" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+      <Wheelset radius="0.5" gauge="1.435" flange="0.1" wheel_width="0.2" axle_radius="0.1" mass="3" rotation="0" shift="0" motor_torque="22" brake_torque="33.33334" friction_torque="0.09">
+        <Position2D x="-1.5" y="0.5"/>
+      </Wheelset>
+      <Wheelset radius="0.5" gauge="1.435" flange="0.1" wheel_width="0.2" axle_radius="0.1" mass="3" rotation="0" shift="0" motor_torque="22" brake_torque="33.33334" friction_torque="0.09">
+        <Position2D x="1.5" y="0.5"/>
+      </Wheelset>
+      <TractionForceCharacteristic>
+        <SpeedStep velocity="0" value="1"/>
+        <SpeedStep velocity="12" value="0.38"/>
+        <SpeedStep velocity="15.15552" value="0.2"/>
+        <SpeedStep velocity="30" value="0"/>
+      </TractionForceCharacteristic>
+      <Axis id="2" name="_Quuk01" model="Kuuk" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+        <Frame>
+          <Position x="3.99300003" y="0" z="0.451999992"/>
+          <Vector dx="1" dy="0" dz="0"/>
+          <Vector dx="0" dy="0" dz="-1"/>
+          <Vector dx="0" dy="1" dz="0"/>
+        </Frame>
+        <AxesCoupling rname="_Geschwindigkeit" factor="9.99999997e-07"/>
+      </Axis>
+      <Axis id="3" name="_Quuk02" model="Kuuk" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+        <Frame>
+          <Position x="1.727" y="0" z="0.451999992"/>
+          <Vector dx="0.259000003" dy="0" dz="-0.966000021"/>
+          <Vector dx="-0.966000021" dy="0" dz="-0.259000003"/>
+          <Vector dx="0" dy="1" dz="0"/>
+        </Frame>
+        <AxesCoupling rname="_Geschwindigkeit" factor="9.99999997e-07"/>
+      </Axis>
+    </WheelFrame>
+    <WheelFrame id="4" name="_hRadsatz" soundGroup="ModelType5" model="Vuuzq" height="0.5" length="0">
+      <Frame>
+        <Position x="-3.1400001" y="0" z="0"/>
+        <Vector dx="-1" dy="0" dz="0"/>
+        <Vector dx="0" dy="-1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+      <WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="0" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+      <Wheelset radius="0.5" gauge="1.435" flange="0.1" wheel_width="0.2" axle_radius="0.1" mass="3" rotation="0" shift="0" motor_torque="22" brake_torque="33.33334" friction_torque="0.09">
+        <Position2D x="-1.5" y="0.5"/>
+      </Wheelset>
+      <Wheelset radius="0.5" gauge="1.435" flange="0.1" wheel_width="0.2" axle_radius="0.1" mass="3" rotation="0" shift="0" motor_torque="22" brake_torque="33.33334" friction_torque="0.09">
+        <Position2D x="1.5" y="0.5"/>
+      </Wheelset>
+      <TractionForceCharacteristic>
+        <SpeedStep velocity="0" value="1"/>
+        <SpeedStep velocity="12" value="0.38"/>
+        <SpeedStep velocity="15.15552" value="0.2"/>
+        <SpeedStep velocity="30" value="0"/>
+      </TractionForceCharacteristic>
+      <Axis id="5" name="_Quuk03" model="Kuuk" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+        <Frame>
+          <Position x="-2.00699997" y="0" z="0.451999992"/>
+          <Vector dx="-0.865999997" dy="0" dz="-0.5"/>
+          <Vector dx="-0.5" dy="0" dz="0.865999997"/>
+          <Vector dx="0" dy="1" dz="0"/>
+        </Frame>
+        <AxesCoupling rname="_Geschwindigkeit" factor="9.99999997e-07"/>
+      </Axis>
+      <Axis id="6" name="_Quuk04" model="Kuuk" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+        <Frame>
+          <Position x="-4.27299976" y="0" z="0.451999992"/>
+          <Vector dx="0.819000006" dy="0" dz="0.574000001"/>
+          <Vector dx="0.574000001" dy="0" dz="-0.819000006"/>
+          <Vector dx="0" dy="1" dz="0"/>
+        </Frame>
+        <AxesCoupling rname="_Geschwindigkeit" factor="9.99999997e-07"/>
+      </Axis>
+    </WheelFrame>
+    <Axis id="9" name="_NonstopIf1" model="VycBs" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="0.224999994" y="0.786000013" z="3.83899999"/>
+        <Vector dx="0.0560000017" dy="0.726999998" dz="-0.684000015"/>
+        <Vector dx="-0.282999992" dy="0.66900003" dz="0.688000023"/>
+        <Vector dx="0.958000004" dy="0.155000001" dz="0.243000001"/>
+      </Frame>
+      <AxesCoupling rname="_VycPeeoor01" factor="9.99999997e-07"/>
+      <Axis id="10" name="_VycPeeoor01" model="VycPeoor" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+        <Frame>
+          <Position x="0.340000004" y="0.549000025" z="3.59699988"/>
+          <Vector dx="-0.125" dy="0.981999993" dz="-0.141000003"/>
+          <Vector dx="-0.266000003" dy="0.104000002" dz="0.958000004"/>
+          <Vector dx="0.95599997" dy="0.158000007" dz="0.247999996"/>
+        </Frame>
+        <AxesCoupling rname="_NonstopIf1" factor="9.99999997e-07"/>
+      </Axis>
+    </Axis>
+    <Axis id="11" name="_NonstopIf2" model="VycBs" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="0.224999994" y="-0.786000013" z="3.83899999"/>
+        <Vector dx="-0.0540000014" dy="0.731000006" dz="0.680000007"/>
+        <Vector dx="-0.282999992" dy="-0.663999975" dz="0.691999972"/>
+        <Vector dx="0.958000004" dy="-0.155000001" dz="0.243000001"/>
+      </Frame>
+      <AxesCoupling rname="_VycPeeoor02" factor="9.99999997e-07"/>
+      <Axis id="12" name="_VycPeeoor02" model="VycPeoor" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+        <Frame>
+          <Position x="0.340000004" y="-0.550999999" z="3.59500003"/>
+          <Vector dx="0.150000006" dy="0.986999989" dz="0.0520000011"/>
+          <Vector dx="-0.254000008" dy="-0.0130000003" dz="0.967000008"/>
+          <Vector dx="0.95599997" dy="-0.158000007" dz="0.248999998"/>
+        </Frame>
+        <AxesCoupling rname="_NonstopIf2" factor="9.99999997e-07"/>
+      </Axis>
+    </Axis>
+    <Axis id="13" name="_NonstopIf3" model="VycBs" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.85500002" y="-0.786000013" z="3.83899999"/>
+        <Vector dx="-0.0560000017" dy="-0.726999998" dz="-0.684000015"/>
+        <Vector dx="0.282999992" dy="-0.66900003" dz="0.688000023"/>
+        <Vector dx="-0.958000004" dy="-0.155000001" dz="0.243000001"/>
+      </Frame>
+      <AxesCoupling rname="_VycPeeoor03" factor="9.99999997e-07"/>
+      <Axis id="14" name="_VycPeeoor03" model="VycPeoor" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+        <Frame>
+          <Position x="-1.97000003" y="-0.549000025" z="3.59699988"/>
+          <Vector dx="0.125" dy="-0.981999993" dz="-0.141000003"/>
+          <Vector dx="0.266000003" dy="-0.104000002" dz="0.958000004"/>
+          <Vector dx="-0.95599997" dy="-0.158000007" dz="0.247999996"/>
+        </Frame>
+        <AxesCoupling rname="_NonstopIf3" factor="9.99999997e-07"/>
+      </Axis>
+    </Axis>
+    <Axis id="15" name="_NonstopIf4" model="VycBs" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.85500002" y="0.786000013" z="3.83899999"/>
+        <Vector dx="0.0540000014" dy="-0.731000006" dz="0.680000007"/>
+        <Vector dx="0.282999992" dy="0.663999975" dz="0.691999972"/>
+        <Vector dx="-0.958000004" dy="0.155000001" dz="0.243000001"/>
+      </Frame>
+      <AxesCoupling rname="_VycPeeoor04" factor="9.99999997e-07"/>
+      <Axis id="16" name="_VycPeeoor04" model="VycPeoor" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+        <Frame>
+          <Position x="-1.97000003" y="0.550999999" z="3.59500003"/>
+          <Vector dx="0.149000004" dy="0.986999989" dz="-0.0540000014"/>
+          <Vector dx="-0.254000008" dy="-0.0140000004" dz="-0.967000008"/>
+          <Vector dx="-0.95599997" dy="0.158000007" dz="0.248999998"/>
+        </Frame>
+        <AxesCoupling rname="_NonstopIf4" factor="9.99999997e-07"/>
+      </Axis>
+    </Axis>
+    <Axis id="17" name="_XtraCabeu" model="Cabeu" param="0" min="0" null="0" max="0" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.140000001" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+    </Axis>
+    <Axis id="18" name="Kierowiec" model="Kiero_F" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational" drive="1000">
+      <Frame>
+        <Position x="-0.814999998" y="0" z="0"/>
+        <Vector dx="-1" dy="0" dz="0"/>
+        <Vector dx="0" dy="-1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+      <AxesCoupling rname="_KieroTyu" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="19" name="_KieroTyu" model="Kiero_R" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.814999998" y="0" z="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="Kierowiec" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="20" name="_Velocity" model="Cb_Wxaz_Speed" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="0.200000003" y="-0.736999989" z="3.06699991"/>
+        <Vector dx="0.632000029" dy="0.606999993" dz="0.481999993"/>
+        <Vector dx="-0.469000012" dy="0.795000017" dz="-0.386000007"/>
+        <Vector dx="-0.616999984" dy="0.0179999992" dz="0.787"/>
+      </Frame>
+      <AxesCoupling rname="_Velotyci2" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="21" name="_Wxz_Leitung" model="" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="0.201000005" y="-0.90200001" z="3.05900002"/>
+        <Vector dx="0.76700002" dy="-0.0790000036" dz="0.637000024"/>
+        <Vector dx="0.0659999996" dy="0.996999979" dz="0.0439999998"/>
+        <Vector dx="-0.638000011" dy="0.00800000038" dz="0.769999981"/>
+      </Frame>
+      <Axis id="22" name="_Leitung_Sub" model="Cb_Wxaz_PressYel" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+        <Frame>
+          <Position x="0.201000005" y="-0.90200001" z="3.05900002"/>
+          <Vector dx="0.368999988" dy="-0.874000013" dz="0.316000015"/>
+          <Vector dx="0.675000012" dy="0.485000014" dz="0.555000007"/>
+          <Vector dx="-0.638000011" dy="0.00800000038" dz="0.769999981"/>
+        </Frame>
+      </Axis>
+    </Axis>
+    <Axis id="23" name="_Wxz_BrZ_yel" model="Cb_Wxaz_PressYel" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="0.194999993" y="-1.046" z="3.05599999"/>
+        <Vector dx="0.643000007" dy="0.555999994" dz="0.52700001"/>
+        <Vector dx="-0.416000009" dy="0.83099997" dz="-0.370000005"/>
+        <Vector dx="-0.643000007" dy="0.0189999994" dz="0.764999986"/>
+      </Frame>
+    </Axis>
+    <Axis id="24" name="_Wxz_BrZ_red" model="Cb_Wxaz_PressRed" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="0.194000006" y="-1.046" z="3.05800009"/>
+        <Vector dx="0.208000004" dy="-0.958000004" dz="0.197999999"/>
+        <Vector dx="0.736999989" dy="0.286000013" dz="0.611999989"/>
+        <Vector dx="-0.643000007" dy="0.0189999994" dz="0.764999986"/>
+      </Frame>
+    </Axis>
+    <Axis id="25" name="_Avtopil" model="Cb_L_PrzelczSml" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.140000001" y="-0.795000017" z="2.95700002"/>
+        <Vector dx="0.806999981" dy="0" dz="-0.591000021"/>
+        <Vector dx="0.591000021" dy="0" dz="0.806999981"/>
+        <Vector dx="0" dy="-1" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_Indic_auto" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="26" name="_Reversy" model="Cb_L_Bieg" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.108999997" y="-0.441000015" z="2.9690001"/>
+        <Vector dx="0.63499999" dy="-0.765999973" dz="0.0989999995"/>
+        <Vector dx="0.757000029" dy="0.643000007" dz="0.116999999"/>
+        <Vector dx="-0.152999997" dy="0.00100000005" dz="0.987999976"/>
+      </Frame>
+    </Axis>
+    <Axis id="27" name="_Przepoo" model="Cb_L_Przepoo" param="0" min="0" null="0" max="5.23598766" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.200000003" y="-0.647000015" z="2.954"/>
+        <Vector dx="0.987999976" dy="0" dz="0.152999997"/>
+        <Vector dx="0" dy="-1" dz="0"/>
+        <Vector dx="0.152999997" dy="0" dz="-0.987999976"/>
+      </Frame>
+    </Axis>
+    <Axis id="28" name="_LocoBraek" model="Cb_L_HampelLok" param="0" min="0" null="0" max="1.04719758" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.307000011" y="-1.21599996" z="3.04900002"/>
+        <Vector dx="-0.704999983" dy="-0.707000017" dz="-0.0540000014"/>
+        <Vector dx="0.704999983" dy="-0.707000017" dz="0.0529999994"/>
+        <Vector dx="-0.0759999976" dy="-0.00100000005" dz="0.996999979"/>
+      </Frame>
+    </Axis>
+    <Axis id="29" name="_TrainBraek" model="Cb_L_HampelTotal" param="0" min="0" null="0" max="1.04719758" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="0.00700000022" y="-1.17200005" z="3.33299994"/>
+        <Vector dx="0.573000014" dy="0.815999985" dz="-0.0710000023"/>
+        <Vector dx="-0.819000006" dy="0.57099998" dz="-0.0500000007"/>
+        <Vector dx="-0" dy="0.0869999975" dz="0.995999992"/>
+      </Frame>
+    </Axis>
+    <Axis id="30" name="_Hurn" model="Cb_L_PrzelczKulka" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.226999998" y="-0.888999999" z="2.84500003"/>
+        <Vector dx="-1" dy="-0.00400000019" dz="0.00200000009"/>
+        <Vector dx="0.00200000009" dy="-0" dz="1"/>
+        <Vector dx="-0.00400000019" dy="1" dz="0"/>
+      </Frame>
+    </Axis>
+    <Axis id="31" name="_Sndrbrgr" model="Cb_L_PrzelczSml" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.0710000023" y="-0.825999975" z="2.96799994"/>
+        <Vector dx="0.806999981" dy="0" dz="-0.591000021"/>
+        <Vector dx="0.591000021" dy="0" dz="0.806999981"/>
+        <Vector dx="0" dy="-1" dz="0"/>
+      </Frame>
+    </Axis>
+    <Axis id="32" name="_Lgtswtch" model="Cb_L_Light" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.074000001" y="-1.02199996" z="2.95799994"/>
+        <Vector dx="0.774999976" dy="0" dz="-0.632000029"/>
+        <Vector dx="0.632000029" dy="0" dz="0.774999976"/>
+        <Vector dx="0" dy="-1" dz="0"/>
+      </Frame>
+    </Axis>
+    <Axis id="33" name="_KuppFrnt" model="Cb_L_Przelcz" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.228" y="-0.782999992" z="2.84500003"/>
+        <Vector dx="-0.952000022" dy="-0.00400000019" dz="-0.307000011"/>
+        <Vector dx="-0.307000011" dy="-0.00200000009" dz="0.952000022"/>
+        <Vector dx="-0.00400000019" dy="1" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_Indic_connF" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="34" name="_KuppRear" model="Cb_L_Przelcz" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.226999998" y="-0.836000025" z="2.84500003"/>
+        <Vector dx="-0.952000022" dy="-0.00400000019" dz="-0.307000011"/>
+        <Vector dx="-0.307000011" dy="-0.00200000009" dz="0.952000022"/>
+        <Vector dx="-0.00400000019" dy="1" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_Indic_connR" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="35" name="_NonMovables" model="NonMovalbes" param="0" min="0" null="0" max="0" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.140000001" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+    </Axis>
+    <Axis id="36" name="VycWajh01" model="Cb_VycWajh" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational" drive="1000">
+      <Frame>
+        <Position x="0.111000001" y="-0.616999984" z="3.80299997"/>
+        <Vector dx="0.282999992" dy="0.428000003" dz="-0.85799998"/>
+        <Vector dx="-0.0280000009" dy="-0.890999973" dz="-0.453999996"/>
+        <Vector dx="-0.958999991" dy="0.151999995" dz="-0.239999995"/>
+      </Frame>
+    </Axis>
+    <Axis id="37" name="VycWajh02" model="Cb_VycWajh" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational" drive="1000">
+      <Frame>
+        <Position x="0.111000001" y="0.616999984" z="3.80299997"/>
+        <Vector dx="0.284000009" dy="-0.509000003" dz="-0.813000023"/>
+        <Vector dx="0.00200000009" dy="-0.847000003" dz="0.531000018"/>
+        <Vector dx="-0.958999991" dy="-0.151999995" dz="-0.239999995"/>
+      </Frame>
+    </Axis>
+    <Axis id="38" name="VycWajh03" model="Cb_VycWajh" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational" drive="1000">
+      <Frame>
+        <Position x="-1.74100006" y="0.616999984" z="3.80299997"/>
+        <Vector dx="-0.282999992" dy="-0.42899999" dz="-0.85799998"/>
+        <Vector dx="0.0280000009" dy="0.889999986" dz="-0.453999996"/>
+        <Vector dx="0.958999991" dy="-0.152999997" dz="-0.239999995"/>
+      </Frame>
+    </Axis>
+    <Axis id="39" name="VycWajh04" model="Cb_VycWajh" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational" drive="1000">
+      <Frame>
+        <Position x="-1.74100006" y="-0.616999984" z="3.80299997"/>
+        <Vector dx="-0.284000009" dy="0.509000003" dz="-0.813000023"/>
+        <Vector dx="-0.00200000009" dy="0.847000003" dz="0.531000018"/>
+        <Vector dx="0.958999991" dy="0.151999995" dz="-0.239999995"/>
+      </Frame>
+    </Axis>
+    <Axis id="40" name="_ZasuRam01" model="Cb_ZasuRamie" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.136000007" y="-0.708999991" z="3.94400001"/>
+        <Vector dx="0.0120000001" dy="0.245000005" dz="-0.968999982"/>
+        <Vector dx="0.995000005" dy="-0.103" dz="-0.0140000004"/>
+        <Vector dx="-0.103" dy="-0.963999987" dz="-0.245000005"/>
+      </Frame>
+      <AxesCoupling rname="Zasuona01" factor="9.99999997e-07"/>
+      <Axis id="41" name="Zasuona01" model="Cb_Zasuu" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational" drive="1000">
+        <Frame>
+          <Position x="-0.358999997" y="-0.68599999" z="3.94700003"/>
+          <Vector dx="-0.0120000001" dy="-0.245000005" dz="0.968999982"/>
+          <Vector dx="-0.995000005" dy="0.103" dz="0.0140000004"/>
+          <Vector dx="-0.103" dy="-0.963999987" dz="-0.245000005"/>
+        </Frame>
+        <AxesCoupling rname="_ZasuRam01" factor="9.99999997e-07"/>
+      </Axis>
+    </Axis>
+    <Axis id="42" name="_ZasuRam02" model="Cb_ZasuRamie" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.136000007" y="0.708999991" z="3.94400001"/>
+        <Vector dx="0.00499999989" dy="-0.252999991" dz="-0.967000008"/>
+        <Vector dx="0.995000005" dy="0.0989999995" dz="-0.0209999997"/>
+        <Vector dx="0.101000004" dy="-0.962000012" dz="0.252000004"/>
+      </Frame>
+      <AxesCoupling rname="Zasuona02" factor="9.99999997e-07"/>
+      <Axis id="43" name="Zasuona02" model="Cb_Zasuu" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational" drive="1000">
+        <Frame>
+          <Position x="-0.358999997" y="0.686999977" z="3.94899988"/>
+          <Vector dx="-0.00499999989" dy="0.252999991" dz="0.967000008"/>
+          <Vector dx="-0.995000005" dy="-0.0989999995" dz="0.0209999997"/>
+          <Vector dx="0.101000004" dy="-0.962000012" dz="0.252000004"/>
+        </Frame>
+        <AxesCoupling rname="_ZasuRam02" factor="9.99999997e-07"/>
+      </Axis>
+    </Axis>
+    <Axis id="44" name="_ZasuRam03" model="Cb_ZasuRamie" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.49399996" y="0.708999991" z="3.94400001"/>
+        <Vector dx="-0.0120000001" dy="-0.245000005" dz="-0.968999982"/>
+        <Vector dx="-0.995000005" dy="0.101999998" dz="-0.0130000003"/>
+        <Vector dx="0.101999998" dy="0.963999987" dz="-0.245000005"/>
+      </Frame>
+      <AxesCoupling rname="Zasuona03" factor="9.99999997e-07"/>
+      <Axis id="45" name="Zasuona03" model="Cb_Zasuu" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational" drive="1000">
+        <Frame>
+          <Position x="-1.27100003" y="0.68599999" z="3.94700003"/>
+          <Vector dx="0.0120000001" dy="0.245000005" dz="0.968999982"/>
+          <Vector dx="0.995000005" dy="-0.101999998" dz="0.0130000003"/>
+          <Vector dx="0.101999998" dy="0.963999987" dz="-0.245000005"/>
+        </Frame>
+        <AxesCoupling rname="_ZasuRam03" factor="9.99999997e-07"/>
+      </Axis>
+    </Axis>
+    <Axis id="46" name="_ZasuRam04" model="Cb_ZasuRamie" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.49399996" y="-0.708999991" z="3.94400001"/>
+        <Vector dx="-0.00600000005" dy="0.252999991" dz="-0.967000008"/>
+        <Vector dx="-0.995000005" dy="-0.100000001" dz="-0.0199999996"/>
+        <Vector dx="-0.101999998" dy="0.962000012" dz="0.252000004"/>
+      </Frame>
+      <AxesCoupling rname="Zasuona04" factor="9.99999997e-07"/>
+      <Axis id="47" name="Zasuona04" model="Cb_Zasuu" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational" drive="1000">
+        <Frame>
+          <Position x="-1.27100003" y="-0.686999977" z="3.94899988"/>
+          <Vector dx="0.00600000005" dy="-0.252999991" dz="0.967000008"/>
+          <Vector dx="0.995000005" dy="0.100000001" dz="0.0199999996"/>
+          <Vector dx="-0.101999998" dy="0.962000012" dz="0.252000004"/>
+        </Frame>
+        <AxesCoupling rname="_ZasuRam04" factor="9.99999997e-07"/>
+      </Axis>
+    </Axis>
+    <Axis id="48" name="_Indic_auto" model="Cb_IndicLgt" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="0.158000007" y="-0.602999985" z="3.02699995"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_Avtopil" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="49" name="_Indic_connR" model="Cb_IndicLgt" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="0.159999996" y="-0.527999997" z="3.02699995"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_KuppRear" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="50" name="_Indic_connF" model="Cb_IndicLgt" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="0.162" y="-0.451999992" z="3.02800012"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_KuppFrnt" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="51" name="_Velotyci2" model="Cb_Wxaz_Speed" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.83000004" y="0.736999989" z="3.06699991"/>
+        <Vector dx="-0.632000029" dy="-0.606999993" dz="0.481999993"/>
+        <Vector dx="0.469000012" dy="-0.79400003" dz="-0.386000007"/>
+        <Vector dx="0.616999984" dy="-0.0179999992" dz="0.787"/>
+      </Frame>
+      <AxesCoupling rname="_Velocity" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="52" name="_Wxz_Leitung2" model="" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.83099997" y="0.90200001" z="3.05900002"/>
+        <Vector dx="-0.76700002" dy="0.0790000036" dz="0.637000024"/>
+        <Vector dx="-0.0659999996" dy="-0.996999979" dz="0.0439999998"/>
+        <Vector dx="0.638000011" dy="-0.00800000038" dz="0.769999981"/>
+      </Frame>
+      <Axis id="53" name="_Leitung_Sub2" model="Cb_Wxaz_PressYel" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+        <Frame>
+          <Position x="-1.83099997" y="0.90200001" z="3.05900002"/>
+          <Vector dx="-0.368999988" dy="0.874000013" dz="0.316000015"/>
+          <Vector dx="-0.675000012" dy="-0.486000001" dz="0.555000007"/>
+          <Vector dx="0.638000011" dy="-0.00800000038" dz="0.769999981"/>
+        </Frame>
+      </Axis>
+    </Axis>
+    <Axis id="54" name="_Wxz_BrZ_yel2" model="Cb_Wxaz_PressYel" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.82500005" y="1.046" z="3.05599999"/>
+        <Vector dx="-0.643000007" dy="-0.555999994" dz="0.52700001"/>
+        <Vector dx="0.416000009" dy="-0.83099997" dz="-0.370000005"/>
+        <Vector dx="0.643000007" dy="-0.0189999994" dz="0.764999986"/>
+      </Frame>
+    </Axis>
+    <Axis id="55" name="_Wxz_BrZ_red2" model="Cb_Wxaz_PressRed" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.824" y="1.046" z="3.05800009"/>
+        <Vector dx="-0.208000004" dy="0.958000004" dz="0.197999999"/>
+        <Vector dx="-0.736999989" dy="-0.286000013" dz="0.611999989"/>
+        <Vector dx="0.643000007" dy="-0.0189999994" dz="0.764999986"/>
+      </Frame>
+    </Axis>
+    <Axis id="56" name="_Avtopil2" model="Cb_L_PrzelczSml" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.48899996" y="0.795000017" z="2.95700002"/>
+        <Vector dx="-0.806999981" dy="0" dz="-0.591000021"/>
+        <Vector dx="-0.591000021" dy="0" dz="0.806999981"/>
+        <Vector dx="0" dy="1" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_Indic_auto2" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="57" name="_Reversy2" model="Cb_L_Bieg" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.52100003" y="0.441000015" z="2.9690001"/>
+        <Vector dx="0.63499999" dy="0.765999973" dz="-0.0979999974"/>
+        <Vector dx="-0.757000029" dy="0.643000007" dz="0.118000001"/>
+        <Vector dx="0.152999997" dy="-0.00100000005" dz="0.987999976"/>
+      </Frame>
+    </Axis>
+    <Axis id="58" name="_Przepoo2" model="Cb_L_Przepoo" param="0" min="0" null="0" max="5.23598766" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.42900002" y="0.647000015" z="2.954"/>
+        <Vector dx="-0.987999976" dy="0" dz="0.152999997"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="-0.152999997" dy="0" dz="-0.987999976"/>
+      </Frame>
+    </Axis>
+    <Axis id="59" name="_LocoBraek2" model="Cb_L_HampelLok" param="0" min="0" null="0" max="1.04719758" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.32200003" y="1.21599996" z="3.04900002"/>
+        <Vector dx="0.704999983" dy="0.707000017" dz="-0.0540000014"/>
+        <Vector dx="-0.704999983" dy="0.707000017" dz="0.0529999994"/>
+        <Vector dx="0.0759999976" dy="0.00100000005" dz="0.996999979"/>
+      </Frame>
+    </Axis>
+    <Axis id="60" name="_TrainBraek2" model="Cb_L_HampelTotal" param="0" min="0" null="0" max="1.04719758" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.63699996" y="1.17200005" z="3.33299994"/>
+        <Vector dx="-0.573000014" dy="-0.815999985" dz="-0.0710000023"/>
+        <Vector dx="0.819000006" dy="-0.57099998" dz="-0.0500000007"/>
+        <Vector dx="0" dy="-0.0869999975" dz="0.995999992"/>
+      </Frame>
+    </Axis>
+    <Axis id="61" name="_Hurn2" model="Cb_L_PrzelczKulka" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.403" y="0.888999999" z="2.84500003"/>
+        <Vector dx="1" dy="0.00400000019" dz="0.00200000009"/>
+        <Vector dx="-0.00200000009" dy="-0" dz="1"/>
+        <Vector dx="0.00400000019" dy="-1" dz="-0"/>
+      </Frame>
+    </Axis>
+    <Axis id="62" name="_Sndrbrgr2" model="Cb_L_PrzelczSml" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.55900002" y="0.825999975" z="2.96799994"/>
+        <Vector dx="-0.806999981" dy="0" dz="-0.591000021"/>
+        <Vector dx="-0.591000021" dy="0" dz="0.806999981"/>
+        <Vector dx="0" dy="1" dz="0"/>
+      </Frame>
+    </Axis>
+    <Axis id="63" name="_Lgtswtch2" model="Cb_L_Light" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.55599999" y="1.02199996" z="2.95799994"/>
+        <Vector dx="-0.774999976" dy="0" dz="-0.632000029"/>
+        <Vector dx="-0.632000029" dy="0" dz="0.774999976"/>
+        <Vector dx="0" dy="1" dz="0"/>
+      </Frame>
+    </Axis>
+    <Axis id="64" name="_KuppFrnt2" model="Cb_L_Przelcz" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.40199995" y="0.782999992" z="2.84500003"/>
+        <Vector dx="0.952000022" dy="0.00400000019" dz="-0.307000011"/>
+        <Vector dx="0.307000011" dy="0.00200000009" dz="0.952000022"/>
+        <Vector dx="0.00400000019" dy="-1" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_Indic_connF2" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="65" name="_KuppRear2" model="Cb_L_Przelcz" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.40199995" y="0.836000025" z="2.84500003"/>
+        <Vector dx="0.952000022" dy="0.00400000019" dz="-0.307000011"/>
+        <Vector dx="0.307000011" dy="0.00200000009" dz="0.952000022"/>
+        <Vector dx="0.00400000019" dy="-1" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_Indic_connR2" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="66" name="_Indic_auto2" model="Cb_IndicLgt" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.78799999" y="0.602999985" z="3.02699995"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_Avtopil2" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="67" name="_Indic_connF2" model="Cb_IndicLgt" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.78900003" y="0.527999997" z="3.02699995"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_KuppFrnt2" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="68" name="_Indic_connR2" model="Cb_IndicLgt" param="0" min="0" null="0" max="6.28318548" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-1.79200006" y="0.451999992" z="3.02699995"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="0"/>
+      </Frame>
+      <AxesCoupling rname="_KuppRear2" factor="9.99999997e-07"/>
+    </Axis>
+    <Axis id="69" name="Win_Slide_R" model="Cb_Oknu" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational" drive="1000">
+      <Frame>
+        <Position x="-0.670000017" y="-1.21500003" z="3.47099996"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+    </Axis>
+    <Axis id="70" name="Win_Slide_L" model="Cb_Oknu" param="0" min="0" null="0" max="25.1327419" vmin="-0.157079637" vmax="0.157079637" type="free_rotational" drive="1000">
+      <Frame>
+        <Position x="-0.959999979" y="1.21500003" z="3.47099996"/>
+        <Vector dx="-1" dy="0" dz="0"/>
+        <Vector dx="0" dy="-1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+    </Axis>
+    <Axis id="71" name="_Szybz" model="Szkuaw" param="0" min="0" null="0" max="0" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+      <Frame>
+        <Position x="-0.140000001" y="0" z="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+    </Axis>
+  </Bogie>
+</AxisArrangement>
