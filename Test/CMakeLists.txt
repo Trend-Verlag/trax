@@ -27,9 +27,6 @@ add_executable(ALL_TESTS
 target_link_libraries(ALL_TESTS
 	PRIVATE
 		test_settings
-		common_support
-		dim_support
-		spat_support
         trax_core_support
         trax_core_collections_support
         trax_trains_support
