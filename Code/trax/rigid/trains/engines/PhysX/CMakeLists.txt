@@ -23,5 +23,5 @@ target_link_libraries(trax_trains_physx
 )
 
 # Reuse shared PhysX linking
-include("${CMAKE_SOURCE_DIR}/cmake/TraxPhysX.cmake")
+include("${CMAKE_SOURCE_DIR}/CMake/TraxPhysX.cmake")
 trax_link_physx(trax_trains_physx)

@@ -116,6 +116,7 @@ add_subdirectory(Code/trax/rigid/trains/engines/PhysX)
 add_subdirectory(Code/trax/rigid/trains/support)
 add_subdirectory(Code/trax/support)
 
+add_subdirectory(Test)
 add_subdirectory(Test/common)
 add_subdirectory(Test/dim)
 add_subdirectory(Test/spat)

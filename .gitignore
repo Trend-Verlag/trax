@@ -45,3 +45,6 @@
 
 # In-repository build
 /_Build/
+
+# ctest created ...
+/Testing/

@@ -12,4 +12,3 @@ target_link_libraries(common_tests
 )
 
 configure_boost_test_exe(common_tests)
-
