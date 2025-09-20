@@ -14,6 +14,7 @@
 //
 //								Funeral Party
 //
+// 
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //
@@ -35,116 +36,91 @@
 
 
 /// \mainpage Overview
-/// <p><b>The trax library implements</b> the logic of track guided vehicles together
+/// <p>The trax library implements the logic of track guided vehicles together
 /// with a signaling and sensor system as well as cargo transportation. It makes use
 /// of the Nvidia PhysX engine to simulate the dynamics of trains moving along tracks 
 /// and beyond.</p>
 /// 
-/// <p>The library was used to build the railroad simulators <a href="http://train-simulator.trendverlag.com/">EEP Train Simulator Mission</a> and 
-/// <a href="https://store.steampowered.com/app/722200">EEP TSM Gotthardbahn Nordrampe Modul Erstfeld</a>. There is a 
-/// <a href="../../EisenbahnNow.pdf">whitepaper</a> that describes the basic ideas behind the library. The mathematical foundations for the railroad 
-/// dynamics are described <a href="../../TrackConstraint.pdf">here</a>.</p>
+/// 
+/// <p>The library was used to build the railroad simulators 
+/// <a href="https://eepshopping.de/eep_train_simulator_mission_v1_122|7683.html">EEP Train Simulator Mission</a> 
+/// and <a href="https://eepshopping.de/eep_tsm_gotthardbahn_nordrampe_modul_erstfeld|8235.html"> EEP TSM Gotthardbahn Nordrampe Modul Erstfeld</a>. 
+/// It also is part of the <a href="https://eepshopping.de/eep_eisenbahn_exe_professional_18_download_version|11927.html">Eisenbahn.exe Professional (EEP)</a> product line.
+/// There is a <a href="../EisenbahnNow.pdf">whitepaper</a> that describes the basic ideas behind the library. 
+/// The mathematical foundations for the railroad dynamics are described <a href="../TrackConstraint.pdf">here</a>.</p>
 ///
 ///
 /// \section gettingStarted_tools 1. Tools
 ///	
-/// <b>Install these tools</b> prior to following the installation instructions for the project.
+/// Install these tools prior to following the installation instructions for 
+/// the project.
+/// 
 /// <ul>
-///		<li><b><a href="http://visualstudio.com/">Visual Studio 2017 Community Edition</a></b>: Download and install the community edition. We will
+///		<li><b><a href="https://git-scm.com/">Git</a></b>: A version control system. Needed to get the source code from the repository.</li>
+///		<li>Register a <b><a href="https://github.com/">GitHub Account</a></b>: Here the 'Trend Trax Library' resides.</li>
+///		<li><b><a href="http://visualstudio.com/">Visual Studio 2022 Community Edition</a></b>: Download and install the community edition. We will
 ///			only need the 'workload' called Desktop Development with C++.
 ///		</li>
-///     <li><b><a href="https://www.visualsvn.com/">VisualSVN</a> and TortoiseSVN</b>: Plugin for VS 2017 that provides easy to use access to Subversion. 
-///			Install the client.
-///		</li>
-///     <li><b>Subversion (SVN)</b>: A version control system. This software is installed by TortoiseSVN.</li>
+///     <li><b><a href="https://cmake.org/">CMake</a></b>, a project configuration tool, will also be used by the PhysX SDK.</li>
 ///     <li><b><a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a></b>: A documentation generator.</li>
-///     <li><b><a href="https://cmake.org/">CMake</a></b>, a project configuration tool, will be used by the PhysX SDK.</li>
 ///     <li><b><a href="https://www.python.org/">Python</a></b> will be used by the PhysX SDK.</li>
 /// </ul>
 ///
-/// \section gettingStarted_installation 2. Installation
+/// \section gettingStarted_dependencies 2. Dependencies
 ///
-/// <p><b>The first step</b> would be to install the tools from the list (see above). Then get the latest version of trax from subversion: with a valid 
-/// account use Subversion (svn co --username YourName https://82.165.38.60/repos/eeptsm/trunk/Trax) or use VisualSVN.</p>
-///
-///	From here there are two ways to get the library SDKs. A compareably easy way, using my 'BinaryPackage', downloadable from my folder ('marc')  
-/// on the SoftPro Server or a hard one by getting these libraries from their respective projects.</p>
-///
-///	<p>
-///		<b>As a minimum</b> you need to get a copy of the <a href="https://www.boost.org">Boost</a> library. The other libraries are only
-///		needed if you actually want to make use of them.
-///	</p>
-///
-///	<h3>2.1. The easy way: Binary Package</h3>
-///
-///	<p>
-///		<b>The BinaryPackage contains</b> the external libraries currently used. It can be found on the SoftPro-Server under marc/BinaryPackage/LibrariesExternal.rar.
-///		All this stuff would have to get extracted somewhere (e.g some folder named 'C:\\Trend\\LibrariesExternal'). To set the environment variables run the
-///		SetEnvironmentVariables.bat batch file from the package root.
-///	</p>
-///
-///	<h3>2.2. The hard way: Getting the full libraries</h3>
-///
-/// <p>
-/// <b>There is no guarantee for different C++ compilers</b> to produce the same binary output or even for
-/// dynamic or static libraries to be usable together when compiled with different compilers. This
-/// in general not even holds for different versions of the same compiler (VS is binary compatible since VS 2015). 
-/// For this reason the library vendors encourage their users to compile the binaries of their libraries on their 
-/// own compilers.
-/// </p>
-///	<p>
-/// Currently there are three dependencies of the library:
+/// Currently there are two dependencies of the library:
 /// </p>
 /// <ul>
 ///		<li>
 ///			<a href="https://www.boost.org">Boost</a>, referenced in the project by the environment variable BOOST_ROOT.<br />
 ///			From that we currently need the following libraries:
-///		<ul>
-///			<li>boost/property_tree</li>
-///			<li>boost/algorithm</li>
-///			<li>boost/test</li>
+///			<ul>
+///				<li>boost/property_tree</li>
+///				<li>boost/algorithm</li>
+///				<li>boost/test</li>
 ///			</ul>
 ///				<br />From these only the last one needs to get built. After downloading and unpacking the library, copy the batch file:
 ///				.\\Tools\\BuildBoost.bat
-///            <br />to the boost root and execute it. (Alternatively execute the commands within per hand.)
+///            <br />to the boost root and execute it. (Alternatively execute the commands within accordingly.)
 ///			</li>
 ///			<li>
 ///				<a href="https://developer.nvidia.com/gameworks-physx-overview">PhysX</a>, referenced by the environment variable PHYSX_ROOT.<br />
-///				Get version 4.0. It provides a batch file that lets you create the project files for VS; let it create the 32 bit and 64 bit
-///				solutions. We need the PhysX library being compiled with the 'Multi-threaded DLL' runtime libary, so open the solutions and
-///				in the solution explorer mark all the projects under the folder 'PhysX SDK', rightclick and open the properties dialog for them.
-///				Under 'Configuration Properties->C/C++->Code Generation->Runtime Library' switch to 'Multi-threaded DLL (/MD)', respectively
-///            'Multi-threaded Debug DLL (/MD)' for all the project configurations (debug, profile, checked and release). From the menue
-///				select 'Build->Batch Build' and select the following projects in all their configurations:
-///				<ul>
-///                <li>PhysX</li>
-///                <li>PhysXCommon</li>
-///                <li>PhysXCooking</li>
-///                <li>PhysXExtensions</li>
-///                <li>PhysXFoundation</li>
-///                <li>PhysXPvdSDK</li>
-///            </ul>
-///            <br />Hit 'Build'. Do this for the 32 and 64 bit solutions.
-///        </li>
-///        <li>
-///            <a href="http://ode.org/">Open Dynamics Engine (ODE)</a>, referenced by the environment variable ODE_ROOT.<br />
-///            There is a link to the sourcecode on <a href="https://bitbucket.org/odedevs/ode/downloads/">bitbucket</a> with a download section,
-///            containing stable releases. Get ode-0.13 (actually you need a modified version ode-0.13Modified.rar, see SoftPro Server). Follow the
-///            installation instructions by creating a project for the newest VS version. This only is needed to get the Config.h file, the project itself comes with the trax solution.
-///            It might be necessary to trigger a reload of the file locations if the environment variable ODE_ROOT changes, by forcing a change to the ODE.vcxproj.filters
-///            and ODE.vcxproj.
+///				Get the newest version. It provides a batch file that lets you create the project files for VS; we need a '64 bit CPU only' solution.
+///				Also the PhysX library has to link with the 'Multi-threaded DLL' runtime libary. That can be done, by editing the respective xml 
+///				data files in the folder: .\physx\buildtools\presets\public. So PX_GENERATE_STATIC_LIBRARIES should be set to 'False':
+///				\code
+///					<cmakeSwitch name="PX_GENERATE_STATIC_LIBRARIES" value="False" comment="Generate static libraries" />
+///				\endcode
+///            <br />Open the generated soulution and build all the targets ('Release', 'Debug', 'Checked', 'Profile') for the 'INSTALL' project.
 ///        </li>
 ///    </ul>
 ///
-/// \section gettingStarted_build 3. Build
+/// \section gettingStarted_installation 3. Installation
 ///
-/// <p>There is a batch file (Installation.cmd) in the root folder of trax that would do necessary installations like generating this documentation 
-/// and setting environment variables: update the pathes to the libraries and run it.</p>
+/// <p>The first step would be to install the tools from the list (see above); 
+/// download, build and install the dependencies and then get the latest version of 
+/// trax from GitHub: with a valid account use git:</p>
+/// 
+/// \code
+/// git clone https://github.com/Trend-Verlag/trax.git Trax2
+/// \endcode
+/// 
+/// \section gettingStarted_build 4. Build
 ///
-/// <p>Open the solution in the Trax/Projects folder, go to Menue->Build->Batch Build ..., select all projects and hit 'Build'.</p>
-///	
-/// <p>Run the tests.</p>
-///
+/// <p>There is a batch file (Install.bat) in the root folder of trax, that does 
+/// necessary installations like setting environment variables, generating project 
+/// files with CMake, build Debug version as a compile test and generate this 
+/// documentation:</p>
+/// 
+/// \code
+/// cd ./Trax2
+/// ./Install.bat
+/// \endcode
+/// 
+/// <p>Open the solution in the ./_Build folder, select 'Release' as a configuration and 
+/// and build and run the 'ALL_TESTS' project.</p>
+/// 
+
 #pragma once
 
 #include <memory>
@@ -192,7 +168,3 @@ namespace trax{
 #include "Version.h"
 
 #include "spat/Spatial.h"
-
-
-
-

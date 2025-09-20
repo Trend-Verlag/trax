@@ -37,20 +37,6 @@
 
 namespace trax{
 
-	struct Body;
-	struct Geom;
-	struct GeomCuboid;
-	struct GeomCylinder;
-	struct GeomCapsule;
-	struct GeomSphere;
-	struct GeomHeightField;
-	struct GeomMesh;
-	struct Gestalt;
-	struct Shape;
-	enum class GeomType : char;
-	class TrackJointFeeder;
-	class TrackJointFeederMotorModel;
-
 	struct Simulator{
 
 		enum class Type{

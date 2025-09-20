@@ -1046,23 +1046,19 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = ../../Code/trax/tests \
-                         ../../Code/trax/source \
-                         ../../Code/trax/engines \
-                         ../../Code/trax/support/source \
-                         ../../Code/trax/support/tests \
+EXCLUDE                = ../../Code/trax/source \
                          ../../Code/trax/collections/source \
                          ../../Code/trax/collections/support/source \
-                         ../../Code/trax/collections/tests \
-                         ../../Code/trax/trains/tests \
-                         ../../Code/trax/trains/engines \
-                         ../../Code/trax/trains/source \
-                         ../../Code/trax/trains/support/source \
-						 ../../Code/common/tests \
-						 ../../Code/dim/tests \
-						 ../../Code/dim/support/source \
-						 ../../Code/spat/tests \
-						 ../../Code/spat/support/tests 
+                         ../../Code/trax/rigid/collections/source \
+                         ../../Code/trax/rigid/engines \
+                         ../../Code/trax/rigid/source \
+                         ../../Code/trax/rigid/support/source \
+                         ../../Code/trax/rigid/trains/collections/source \
+                         ../../Code/trax/rigid/trains/engines \
+                         ../../Code/trax/rigid/trains/source \
+                         ../../Code/trax/rigid/trains/support/source \
+                         ../../Code/usd/source \
+                         ../../Code/dim/support/source
 						 
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
