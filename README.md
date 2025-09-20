@@ -8,8 +8,8 @@ The library was used to build the railroad simulators
 <a href="https://eepshopping.de/eep_train_simulator_mission_v1_122|7683.html">EEP Train Simulator Mission</a> 
 and <a href="https://eepshopping.de/eep_tsm_gotthardbahn_nordrampe_modul_erstfeld|8235.html"> EEP TSM Gotthardbahn Nordrampe Modul Erstfeld</a>. 
 It also is part of the <a href="https://eepshopping.de/eep_eisenbahn_exe_professional_18_download_version|11927.html">Eisenbahn.exe Professional (EEP)</a> product line.
-There is a <a href="../EisenbahnNow.pdf">whitepaper</a> that describes the basic ideas behind the library. 
-The mathematical foundations for the railroad dynamics are described <a href="../TrackConstraint.pdf">here</a>.</p>
+There is a <a href="https://www.trendverlag.com/Trax/Doc/BlogArticle/traxLibrary.html">whitepaper</a> that describes the basic ideas behind the library. 
+The mathematical foundations for the railroad dynamics are described <a href="https://www.trendverlag.com/Trax/Doc/TrackConstraint.pdf">here</a>.</p>
 
 # 1. Tools
 
@@ -44,7 +44,7 @@ you can copy the
 
     ./Tools/BuildBoost.bat
 
-file from the trax project (see 3. Installation) into the boost root and execute it, to simplify and speed up the process for our
+file from the trax project (see 3. Installation) into the boost root and execute it from a command prompt started with admin rights, to simplify and speed up the process for our
 purposes.
 
 ## PhysX
@@ -61,7 +61,7 @@ data files in the folder:
 
     ./physx/buildtools/presets/public
 	
-PX_GENERATE_STATIC_LIBRARIES should be set to False: 
+NV_USE_STATIC_WINCRT should be set to False: 
  
     <cmakeSwitch name="NV_USE_STATIC_WINCRT" value="False" comment="Use the statically linked windows CRT" />
     

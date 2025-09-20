@@ -3,8 +3,7 @@ echo Copy this file to the Boost root directory and execute it.
 
 pushd "%~dp0"
 
-rem Prefer a local env var; avoids requiring a new shell like setx does
-set "BOOST_ROOT=%CD%"
+setx /M BOOST_ROOT "%CD%"
 
 rem Bootstrap Boost.Build
 call bootstrap.bat
