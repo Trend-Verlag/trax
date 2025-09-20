@@ -32,31 +32,36 @@ the project.
 Currently there are two dependencies of the library:
 
 ## Boost
-<a href="https://www.boost.org">Boost</a>, referenced in the project by the environment variable BOOST_ROOT.<br />
+<a href="https://www.boost.org">Boost</a>, referenced in the project by the environment variable BOOST_ROOT.
 From that we currently need the following libraries:
 <ul>
 	<li>boost/property_tree</li>
 	<li>boost/algorithm</li>
 	<li>boost/test</li>
 </ul>
-From these only the last one needs to get built. After downloading and unpacking the library, copy the batch file:
-.\\Tools\\BuildBoost.bat
-to the boost root and execute it. (Alternatively execute the commands within accordingly.)
+From these only the last one needs to get built. Follow the instructions for bulding and installing boost; alternatively
+you can copy the
+
+./Tools/BuildBoost.bat
+
+from the trax project into the boost root and execute it (see 3. Installation), to simplify and speed up the process for our
+purposes.
 
 ## PhysX
-<a href="https://github.com/NVIDIA-Omniverse/PhysX">PhysX</a>, referenced by the environment variable PHYSX_ROOT.<br />
-Clone the main branch of the repository:
+<a href="https://github.com/NVIDIA-Omniverse/PhysX">PhysX</a>, referenced by the environment variable PHYSX_ROOT.
+Open a command prompt with admin rights and clone the main branch of the repository:
 
     git clone https://github.com/NVIDIA-Omniverse/PhysX.git PhysX
 	cd ./PhysX/physx
+	setx /M PHYSX_ROOT "%CD%"
 
 It provides a batch file that lets you create the project files for VS; we need a '64 bit CPU only' solution.
 Also the PhysX library has to link with the 'Multi-threaded DLL' runtime libary. That can be done, by editing the respective xml 
 data files in the folder: .\physx\buildtools\presets\public. So PX_GENERATE_STATIC_LIBRARIES should be set to False: 
  
-    <cmakeSwitch name="PX_GENERATE_STATIC_LIBRARIES" value="False" comment="Generate static libraries" />
-
-Open the generated soulution and build all the targets ('Release', 'Debug', 'Checked', 'Profile') for the 'INSTALL' project.
+    <cmakeSwitch name="NV_USE_STATIC_WINCRT" value="False" comment="Use the statically linked windows CRT" />
+    
+Open the generated solution and build all the targets ('Release', 'Debug', 'Checked', 'Profile') for the 'INSTALL' project.
 
 # 3. Installation
 
@@ -76,5 +81,5 @@ documentation:
     cd ./Trax2
     ./Install.bat
 
-Open the solution in the ./_Build folder, select 'Release' as a configuration and 
-and build and run the 'ALL_TESTS' project. 
+Open the solution in the ./_Build folder, select 'Release' as a configuration,
+select the 'ALL_TESTS' project and build and run it.
