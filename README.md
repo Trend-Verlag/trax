@@ -44,15 +44,19 @@ From these only the last one needs to get built. After downloading and unpacking
 to the boost root and execute it. (Alternatively execute the commands within accordingly.)
 
 ## PhysX
-<a href="https://developer.nvidia.com/gameworks-physx-overview">PhysX</a>, referenced by the environment variable PHYSX_ROOT.<br />
-Get the newest version. It provides a batch file that lets you create the project files for VS; we need a '64 bit CPU only' solution.
+<a href="https://github.com/NVIDIA-Omniverse/PhysX">PhysX</a>, referenced by the environment variable PHYSX_ROOT.<br />
+Clone the main branch of the repository:
+
+    git clone https://github.com/NVIDIA-Omniverse/PhysX.git PhysX
+	cd ./PhysX/physx
+
+It provides a batch file that lets you create the project files for VS; we need a '64 bit CPU only' solution.
 Also the PhysX library has to link with the 'Multi-threaded DLL' runtime libary. That can be done, by editing the respective xml 
 data files in the folder: .\physx\buildtools\presets\public. So PX_GENERATE_STATIC_LIBRARIES should be set to False: 
  
     <cmakeSwitch name="PX_GENERATE_STATIC_LIBRARIES" value="False" comment="Generate static libraries" />
 
 Open the generated soulution and build all the targets ('Release', 'Debug', 'Checked', 'Profile') for the 'INSTALL' project.
-
 
 # 3. Installation
 
