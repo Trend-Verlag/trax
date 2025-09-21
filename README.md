@@ -49,8 +49,8 @@ file from the trax project (see 3. Installation) into the boost root and execute
 
 ## PhysX
 <a href="https://github.com/NVIDIA-Omniverse/PhysX">PhysX</a>, referenced by the 
-environment variable PHYSX_ROOT. Open a command prompt and clone the main branch 
-of the repository:
+environment variable PHYSX_ROOT. Open a command prompt <b>with administrator rights</b> 
+and clone the main branch of the repository:
 
     git clone https://github.com/NVIDIA-Omniverse/PhysX.git PhysX
 	cd ./PhysX/physx
