@@ -5,6 +5,7 @@ add_library(trax_core_collections_support
         "./source/FixturesCollections.cpp"
         "./source/SupportXML_Collection.cpp"
         "./source/SupportXML_Twist.cpp"
+        "./source/TrackSystemReader.cpp"
         "./source/curves/SupportXML_Arc.cpp"
         "./source/curves/SupportXML_ArcP.cpp"
         "./source/curves/SupportXML_Clothoid.cpp"
@@ -24,8 +25,9 @@ target_sources(trax_core_collections_support
     PUBLIC
         "./Anl4TrackSystemReader.h"
         "./Anl4TrackSystemWriter.h"
-        "./FixturesCollections.h"
         "./CollectionSupportXML.h"
+        "./FixturesCollections.h"
+        "./TrackSystemReader.h"
 )
 
 target_link_libraries(trax_core_collections_support 

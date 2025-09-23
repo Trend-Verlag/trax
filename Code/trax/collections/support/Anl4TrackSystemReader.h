@@ -25,6 +25,8 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
+#pragma once
+
 #include "CollectionSupportXML.h"
 
 #include "trax/collections/Interfaces.h"
