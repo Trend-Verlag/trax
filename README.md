@@ -25,6 +25,7 @@ the project.
 	<li><b><a href="https://cmake.org/">CMake</a></b>, a project configuration tool, will also be used by the PhysX SDK.</li>
 	<li><b><a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a></b>: A documentation generator.</li>
 	<li><b><a href="https://www.python.org/">Python</a></b> will be used by the PhysX SDK.</li>
+	<li><b><a href="https://developer.nvidia.com/physx-visual-debugger">PhysX Visual Debugger</a></b>: A tool that renders a PhysX simulated scene. Can be used with the trax tests.</li>
 </ul>
 
 # 2. Dependencies

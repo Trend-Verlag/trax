@@ -37,8 +37,8 @@
 
 using namespace trax;
 
-BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixtureVisualDebugger )
-//BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixture ) 
+//BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixtureVisualDebugger )
+BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixture ) 
 {
 	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
 	BOOST_REQUIRE( reader( "Cargo.train" ) );

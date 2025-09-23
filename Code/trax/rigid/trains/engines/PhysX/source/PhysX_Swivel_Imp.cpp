@@ -57,16 +57,20 @@ PhysX_Swivel_Imp::PhysX_Swivel_Imp(
 	physx::PxReal driveStiffness = 10000;
 	physx::PxReal driveDamping = 10000;
 
-	physx::PxJointLimitCone swingLimit{ _rad( 10_deg ), _rad( 1_deg ), physx::PxSpring{ driveStiffness, driveDamping } };//PX_MAX_F32, PX_MAX_F32 } };
+	physx::PxJointLimitCone swingLimit{ 
+		_rad( 30_deg ), 
+		_rad( 1_deg ), 
+		physx::PxSpring{ driveStiffness, driveDamping } 
+	};//PX_MAX_F32, PX_MAX_F32 } };
 	swingLimit.restitution = 1.0f;
 	m_D6Joint.setSwingLimit( swingLimit );
 
-	m_D6Joint.setDrive( physx::PxD6Drive::eSWING, physx::PxD6JointDrive{ driveStiffness, driveDamping, driveForceLimit, false } );
+	m_D6Joint.setAngularDriveConfig( physx::PxD6AngularDriveConfig::eSWING_TWIST );
+	m_D6Joint.setDrive( physx::PxD6Drive::eSWING1, physx::PxD6JointDrive{ driveStiffness, driveDamping, driveForceLimit, false } );
 	m_D6Joint.setDrivePosition( PoseFrom( poseParent.RotateNor( pi/2 ) ) );
 
-
 	m_D6Joint.setConstraintFlag( physx::PxConstraintFlag::eCOLLISION_ENABLED, true );
-	m_D6Joint.setConstraintFlag( physx::PxConstraintFlag::eVISUALIZATION, true );
+	m_D6Joint.setConstraintFlag( physx::PxConstraintFlag::eVISUALIZATION, true ); // Visual Debugger causes benign PhysX/PVD validation warning caused by a mismatch between the D6 joint’s angular-drive “mode” and what the Visual Debugger tries to query. 
 }
 
 PhysX_Swivel_Imp::~PhysX_Swivel_Imp() noexcept

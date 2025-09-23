@@ -46,8 +46,8 @@ using namespace trax;
 
 BOOST_AUTO_TEST_SUITE(TestTrain)
 
-BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixture ) //
-//BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixtureVisualDebugger ) //
+//BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixture )
+BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixtureVisualDebugger )
 {
 	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
 	BOOST_REQUIRE( reader( "Cargo.train" ) );
