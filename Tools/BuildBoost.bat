@@ -15,10 +15,20 @@ rem - address-model=64 ensures x64
 rem - link=shared builds DLL
 rem - variant=release reduces build time/noise unless you specifically need debug
 rem - stage copies artifacts to .\stage\lib
+
 b2 -j%NUMBER_OF_PROCESSORS% ^
   toolset=msvc ^
   address-model=64 ^
   variant=release ^
+  link=shared ^
+  threading=multi ^
+  --with-test ^
+  stage
+
+b2 -j%NUMBER_OF_PROCESSORS% ^
+  toolset=msvc ^
+  address-model=64 ^
+  variant=debug ^
   link=shared ^
   threading=multi ^
   --with-test ^

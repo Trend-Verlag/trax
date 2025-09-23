@@ -341,21 +341,20 @@ namespace common{
 	// it say's "this library component should be retired to Annex D, along side , until a suitable replacement is standardized"
 	// i.e. D.18.1. TODO: substitute implementation with the replacement when available. Until then, use deprecated feature.
 	{
-		using namespace std;
 		// UTF-8 to wstring
 #if defined(_MSC_VER)
 #	pragma warning(push)
 #	pragma warning(disable: 4996) // deprecated stl feature
 #endif
-		wstring_convert<codecvt_utf8<wchar_t>> wconv;
-		wstring wstr = wconv.from_bytes(utf8str.c_str());
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> wconv;
+		std::wstring wstr = wconv.from_bytes(utf8str.c_str());
 #if defined(_MSC_VER)
 #	pragma warning(pop)
 #endif
 		// wstring to string
-		vector<char> buf(wstr.size());
-		use_facet<ctype<wchar_t>>(loc).narrow(wstr.data(), wstr.data() + wstr.size(), '?', buf.data());
-		return string(buf.data(), buf.size());
+		std::vector<char> buf(wstr.size());
+		std::use_facet<std::ctype<wchar_t>>(loc).narrow(wstr.data(), wstr.data() + wstr.size(), '?', buf.data());
+		return std::string(buf.data(), buf.size());
 	}
 
 	/// \brief Flips a flag for the lifetime of the class object.

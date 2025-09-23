@@ -21,8 +21,6 @@
 
 #include "dim/DimensionedValues.h"
 
-using namespace trax;
-using namespace spat;
 
 ///////////////////////////////////////
 TrackSystemFixture::TrackSystemFixture()
@@ -51,9 +49,9 @@ TrackSystemCircleFixture::~TrackSystemCircleFixture()
 ///////////////////////////////////////
 TrackAndTrackSystem::TrackAndTrackSystem()
 {
-	spat::Vector<Angle> rotator( 1.0f, 1.0f, 1.0f );
+	spat::Vector<dim::Angle> rotator( 1.0f, 1.0f, 1.0f );
 	rotator.Normalize();
-	rotator *= pi/2;
+	rotator *= dim::pi/2;
 
 	m_FrameA.Init();
 	m_FrameA.Rotate( rotator );

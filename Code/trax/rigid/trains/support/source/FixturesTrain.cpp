@@ -30,71 +30,69 @@
 #include "trax/rigid/StaticTrack.h"
 #include "trax/collections/TrackSystem.h"
 
-using namespace std;
-using namespace spat;
-using namespace trax;
+using namespace dim::literals;
 
 ///////////////////////////////////////
 TrainFixture::TrainFixture( bool bVisualDebugger )
-	:	m_pSimulator{ Simulator::Make( bVisualDebugger ? Simulator::Type::PhysX_VisualDebugger : Simulator::Type::PhysX ) },
-		m_pScene	{ TrainScene::Make(*m_pSimulator) },
-		m_pTrack1	{ StaticTrack::Make(*m_pScene) },
-		m_pTrack2	{ StaticTrack::Make(*m_pScene) },
-		m_pTrack3	{ StaticTrack::Make(*m_pScene) },
-		m_pTrack4	{ StaticTrack::Make(*m_pScene) },
-		m_pTrack5	{ StaticTrack::Make(*m_pScene) },
-		m_pTrack6	{ StaticTrack::Make(*m_pScene) },
-		m_pArc1		{ ArcP::Make() },
-		m_pArc2		{ ArcP::Make() },
-		m_pArc3		{ ArcP::Make() },
-		m_pArc4		{ ArcP::Make() },
-		m_pLine1	{ Line::Make() },
+	:	m_pSimulator{ trax::Simulator::Make( bVisualDebugger ? trax::Simulator::Type::PhysX_VisualDebugger : trax::Simulator::Type::PhysX ) },
+		m_pScene	{ trax::TrainScene::Make(*m_pSimulator) },
+		m_pTrack1	{ trax::StaticTrack::Make(*m_pScene) },
+		m_pTrack2	{ trax::StaticTrack::Make(*m_pScene) },
+		m_pTrack3	{ trax::StaticTrack::Make(*m_pScene) },
+		m_pTrack4	{ trax::StaticTrack::Make(*m_pScene) },
+		m_pTrack5	{ trax::StaticTrack::Make(*m_pScene) },
+		m_pTrack6	{ trax::StaticTrack::Make(*m_pScene) },
+		m_pArc1		{ trax::ArcP::Make() },
+		m_pArc2		{ trax::ArcP::Make() },
+		m_pArc3		{ trax::ArcP::Make() },
+		m_pArc4		{ trax::ArcP::Make() },
+		m_pLine1	{ trax::Line::Make() },
 		R			{ 100_m }
 {
-	std::shared_ptr<Section> pSection = Section::Make( Section::SpecialSections::vignol_UIC60 );
+	std::shared_ptr<trax::Section> pSection = trax::Section::Make( trax::Section::SpecialSections::vignol_UIC60 );
 
 	// this fixture should give a circle with r == 10...
-	m_pArc1->Create( { Origin3D<Length>, {1,0,0}, {0,_m(R),0} } );
+	m_pArc1->Create( { spat::Origin3D<dim::Length>, {1,0,0}, {0,_m(R),0} } );
 	m_pTrack1->Attach( pSection );
-	m_pTrack1->Attach( m_pArc1, {0_m,R*pi/2} );
-	m_pTrack1->Attach( LinearTwist::Make() );
+	m_pTrack1->Attach( m_pArc1, {0_m,R*dim::pi/2} );
+	m_pTrack1->Attach( trax::LinearTwist::Make() );
 
-	m_pArc2->Create( { Origin3D<Length>, {0,1,0}, {_m(-R),0,0} } );
+	m_pArc2->Create( { spat::Origin3D<dim::Length>, {0,1,0}, {_m(-R),0,0} } );
 	m_pTrack2->Attach( pSection );
-	m_pTrack2->Attach( m_pArc2, {0_m,R*pi/2} );
-	m_pTrack2->Attach( LinearTwist::Make() );
+	m_pTrack2->Attach( m_pArc2, {0_m,R*dim::pi/2} );
+	m_pTrack2->Attach( trax::LinearTwist::Make() );
 
-	m_pArc3->Create( { Origin3D<Length>, {-1,0,0}, {0,_m(-R),0} } );
+	m_pArc3->Create( { spat::Origin3D<dim::Length>, {-1,0,0}, {0,_m(-R),0} } );
 	m_pTrack3->Attach( pSection );
-	m_pTrack3->Attach( m_pArc3, {0_m,R*pi/2} );
-	m_pTrack3->Attach( LinearTwist::Make() );
+	m_pTrack3->Attach( m_pArc3, {0_m,R*dim::pi/2} );
+	m_pTrack3->Attach( trax::LinearTwist::Make() );
 
-	m_pArc4->Create( { Origin3D<Length>, {0,-1,0}, {_m(R),0,0} } );
+	m_pArc4->Create( { spat::Origin3D<dim::Length>, {0,-1,0}, {_m(R),0,0} } );
 	m_pTrack4->Attach( pSection );
-	m_pTrack4->Attach( m_pArc4,{0_m, R*pi/2} );
-	m_pTrack4->Attach( LinearTwist::Make() );
+	m_pTrack4->Attach( m_pArc4,{0_m, R*dim::pi/2} );
+	m_pTrack4->Attach( trax::LinearTwist::Make() );
 
 	m_pTrack5->Attach( pSection );
 	m_pTrack5->Attach( m_pLine1, {0_m, R} );
-	m_pTrack5->Attach( LinearTwist::Make() );
+	m_pTrack5->Attach( trax::LinearTwist::Make() );
 
 	m_pTrack6->Attach( pSection );
 	m_pTrack6->Attach( m_pLine1, {0_m, R} );
-	m_pTrack6->Attach( LinearTwist::Make() );
-	Frame<Length,One> frame;
+	m_pTrack6->Attach( trax::LinearTwist::Make() );
+	spat::Frame<dim::Length,dim::One> frame;
 	frame.Init();
 	frame.T *= -1;
 	frame.N *= -1;
 	m_pTrack6->SetFrame( frame );
 
-	m_pTrack1->Couple( std::make_pair(m_pTrack1, Track::EndType::end), std::make_pair(m_pTrack2, Track::EndType::front) );
-	m_pTrack2->Couple( std::make_pair(m_pTrack2, Track::EndType::end), std::make_pair(m_pTrack3, Track::EndType::front) );
-	m_pTrack3->Couple( std::make_pair(m_pTrack3, Track::EndType::end), std::make_pair(m_pTrack4, Track::EndType::front) );
-	m_pTrack4->Couple( std::make_pair(m_pTrack4, Track::EndType::end), std::make_pair(m_pTrack1, Track::EndType::front) );
+	m_pTrack1->Couple( std::make_pair(m_pTrack1, trax::Track::EndType::end), std::make_pair(m_pTrack2, trax::Track::EndType::front) );
+	m_pTrack2->Couple( std::make_pair(m_pTrack2, trax::Track::EndType::end), std::make_pair(m_pTrack3, trax::Track::EndType::front) );
+	m_pTrack3->Couple( std::make_pair(m_pTrack3, trax::Track::EndType::end), std::make_pair(m_pTrack4, trax::Track::EndType::front) );
+	m_pTrack4->Couple( std::make_pair(m_pTrack4, trax::Track::EndType::end), std::make_pair(m_pTrack1, trax::Track::EndType::front) );
 
-	m_pTrack5->Couple( std::make_pair( m_pTrack5, Track::EndType::front ), std::make_pair( m_pTrack6, Track::EndType::front ) );
+	m_pTrack5->Couple( std::make_pair( m_pTrack5, trax::Track::EndType::front ), std::make_pair( m_pTrack6, trax::Track::EndType::front ) );
 
-	m_Location.PutOn( m_pTrack1, TrackLocation{ 0_m, true } );
+	m_Location.PutOn( m_pTrack1, trax::TrackLocation{ 0_m, true } );
 }
 
 TrainFixture::~TrainFixture(){
@@ -105,8 +103,8 @@ TrainFixture::~TrainFixture(){
 /////////////////////////////////////
 ///////////////////////////////////////
 MultiTrackSystemFixture::MultiTrackSystemFixture( bool bVisualDebugger )
-	:	m_pSimulator{ Simulator::Make( bVisualDebugger ? Simulator::Type::PhysX_VisualDebugger : Simulator::Type::PhysX ) },
-		m_pScene	{ TrainScene::Make(*m_pSimulator) }
+	:	m_pSimulator{ trax::Simulator::Make( bVisualDebugger ? trax::Simulator::Type::PhysX_VisualDebugger : trax::Simulator::Type::PhysX ) },
+		m_pScene	{ trax::TrainScene::Make(*m_pSimulator) }
 {
 }
 
@@ -121,23 +119,23 @@ void MultiTrackSystemFixture::BuildFixture( int nTrackCollections )
 	m_pTrackSystem = trax::TrackSystem::Make();
 
 	// this fixture should give a circle with r == 10...
-	Length R = 50_m;
-	Length D = 2*R + 5_m;
-	Length H = 10_m;
-	std::shared_ptr<trax::ArcP> pArc1 = ArcP::Make();
-	std::shared_ptr<trax::ArcP> pArc2 = ArcP::Make();
-	std::shared_ptr<trax::ArcP> pArc3 = ArcP::Make();
-	std::shared_ptr<trax::ArcP> pArc4 = ArcP::Make();
+	dim::Length R = 50_m;
+	dim::Length D = 2*R + 5_m;
+	dim::Length H = 10_m;
+	std::shared_ptr<trax::ArcP> pArc1 = trax::ArcP::Make();
+	std::shared_ptr<trax::ArcP> pArc2 = trax::ArcP::Make();
+	std::shared_ptr<trax::ArcP> pArc3 = trax::ArcP::Make();
+	std::shared_ptr<trax::ArcP> pArc4 = trax::ArcP::Make();
 
-	pArc1->Create( { Origin3D<Length>, {1,0,0}, {0,_m(R),0} } );
-	pArc2->Create( { Origin3D<Length>, {0,1,0}, {_m(-R),0,0} } );
-	pArc3->Create( { Origin3D<Length>, {-1,0,0}, {0,_m(-R),0} } );
-	pArc4->Create( { Origin3D<Length>, {0,-1,0}, {_m(R),0,0} } );
+	pArc1->Create( { spat::Origin3D<dim::Length>, {1,0,0}, {0,_m(R),0} } );
+	pArc2->Create( { spat::Origin3D<dim::Length>, {0,1,0}, {_m(-R),0,0} } );
+	pArc3->Create( { spat::Origin3D<dim::Length>, {-1,0,0}, {0,_m(-R),0} } );
+	pArc4->Create( { spat::Origin3D<dim::Length>, {0,-1,0}, {_m(R),0,0} } );
 
-	std::shared_ptr<Section> pSection = Section::Make( Section::SpecialSections::vignol_UIC60 );
+	std::shared_ptr<trax::Section> pSection = trax::Section::Make( trax::Section::SpecialSections::vignol_UIC60 );
 
 	int length = static_cast<int>(cbrt( nTrackCollections ));
-	spat::Frame<Length,One> frame;
+	spat::Frame<dim::Length,dim::One> frame;
 	frame.Init();
 	frame.TransportTan( -D * length/2 );
 	frame.TransportNor( -D * length/2 );
@@ -145,13 +143,13 @@ void MultiTrackSystemFixture::BuildFixture( int nTrackCollections )
 
 	for( int i = 0; i < nTrackCollections; ++i )
 	{
-		IDType id = m_pTrackSystem->CreateCollection();
+		trax::IDType id = m_pTrackSystem->CreateCollection();
 		m_pTrackSystem->SetCollectionFrame( id, frame );
 
-		std::shared_ptr<StaticTrack>	pTrack1 = StaticTrack::Make(*m_pScene);
-		std::shared_ptr<StaticTrack>	pTrack2 = StaticTrack::Make(*m_pScene);
-		std::shared_ptr<StaticTrack>	pTrack3 = StaticTrack::Make(*m_pScene);
-		std::shared_ptr<StaticTrack>	pTrack4 = StaticTrack::Make(*m_pScene);
+		std::shared_ptr<trax::StaticTrack>	pTrack1 = trax::StaticTrack::Make(*m_pScene);
+		std::shared_ptr<trax::StaticTrack>	pTrack2 = trax::StaticTrack::Make(*m_pScene);
+		std::shared_ptr<trax::StaticTrack>	pTrack3 = trax::StaticTrack::Make(*m_pScene);
+		std::shared_ptr<trax::StaticTrack>	pTrack4 = trax::StaticTrack::Make(*m_pScene);
 
 		//std::shared_ptr<TrackBuilder>	pTrack1 = TrackBuilder::Make();
 		//std::shared_ptr<TrackBuilder>	pTrack2 = TrackBuilder::Make();
@@ -159,25 +157,25 @@ void MultiTrackSystemFixture::BuildFixture( int nTrackCollections )
 		//std::shared_ptr<TrackBuilder>	pTrack4 = TrackBuilder::Make();
 
 		pTrack1->Attach( pSection );
-		pTrack1->Attach( pArc1, {0_m,R*pi/2} );
-		pTrack1->Attach( LinearTwist::Make() );
+		pTrack1->Attach( pArc1, {0_m,R*dim::pi/2} );
+		pTrack1->Attach( trax::LinearTwist::Make() );
 
 		pTrack2->Attach( pSection );
-		pTrack2->Attach( pArc2, {0_m,R*pi/2} );
-		pTrack2->Attach( LinearTwist::Make() );
+		pTrack2->Attach( pArc2, {0_m,R*dim::pi/2} );
+		pTrack2->Attach( trax::LinearTwist::Make() );
 
 		pTrack3->Attach( pSection );
-		pTrack3->Attach( pArc3, {0_m,R*pi/2} );	
-		pTrack3->Attach( LinearTwist::Make() );
+		pTrack3->Attach( pArc3, {0_m,R*dim::pi/2} );	
+		pTrack3->Attach( trax::LinearTwist::Make() );
 
 		pTrack4->Attach( pSection );
-		pTrack4->Attach( pArc4, {0_m,R*pi/2} );
-		pTrack4->Attach( LinearTwist::Make() );
+		pTrack4->Attach( pArc4, {0_m,R*dim::pi/2} );
+		pTrack4->Attach( trax::LinearTwist::Make() );
 
-		pTrack1->Couple( std::make_pair(pTrack1, Track::EndType::end), std::make_pair(pTrack2, Track::EndType::front) );
-		pTrack2->Couple( std::make_pair(pTrack2, Track::EndType::end), std::make_pair(pTrack3, Track::EndType::front) );
-		pTrack3->Couple( std::make_pair(pTrack3, Track::EndType::end), std::make_pair(pTrack4, Track::EndType::front) );
-		pTrack4->Couple( std::make_pair(pTrack4, Track::EndType::end), std::make_pair(pTrack1, Track::EndType::front) );
+		pTrack1->Couple( std::make_pair(pTrack1, trax::Track::EndType::end), std::make_pair(pTrack2, trax::Track::EndType::front) );
+		pTrack2->Couple( std::make_pair(pTrack2, trax::Track::EndType::end), std::make_pair(pTrack3, trax::Track::EndType::front) );
+		pTrack3->Couple( std::make_pair(pTrack3, trax::Track::EndType::end), std::make_pair(pTrack4, trax::Track::EndType::front) );
+		pTrack4->Couple( std::make_pair(pTrack4, trax::Track::EndType::end), std::make_pair(pTrack1, trax::Track::EndType::front) );
 
 		m_pTrackSystem->Add( pTrack1 );
 		m_pTrackSystem->Add( pTrack2 );

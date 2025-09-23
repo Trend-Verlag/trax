@@ -30,9 +30,12 @@
 #include "trax/Jack.h"
 #include "trax/Event.h"
 
-using namespace std;
-using namespace spat;
-using namespace trax;
+#ifndef TRAX_FIXTURES_DIR
+#define TRAX_FIXTURES_DIR 
+#pragma message("TRAX_FIXTURES_DIR not defined; fixure path might not be found.")
+#endif // !TRAX_FIXTURES_DIR
+
+using namespace dim::literals;
 
 ///////////////////////////////////////
 std::filesystem::path FixtureBase::FixturePath()
@@ -49,10 +52,10 @@ std::filesystem::path FixtureBase::FixturePath()
 ///////////////////////////////////////
 TrackFixture::TrackFixture()
 {
-	m_pTrack = TrackBuilder::Make();
-	shared_ptr<trax::ArcP> pArc = ArcP::Make();
+	m_pTrack = trax::TrackBuilder::Make();
+	std::shared_ptr<trax::ArcP> pArc = trax::ArcP::Make();
 	pArc->Create( { {0_m,0_m,0_m}, {1,0,0}, {0,_m(100_m),0} } );
-	m_pTrack->Attach( pArc, {0_m,100_m*pi/2}  );
+	m_pTrack->Attach( pArc, {0_m,100_m*dim::pi/2}  );
 }
 
 TrackFixture::~TrackFixture(){
@@ -66,18 +69,18 @@ SwichFixture::SwichFixture()
 	//		\3
 	//		 \
 	//
-	m_pTrack1 = TrackBuilder::Make();
- 	shared_ptr<LineP> pLine = LineP::Make();
- 	pLine->Create( Origin3D<Length>, Position<Length>(1_m,0_m,0_m), Vector<One>(0,0,1) );
+	m_pTrack1 = trax::TrackBuilder::Make();
+ 	std::shared_ptr<trax::LineP> pLine = trax::LineP::Make();
+ 	pLine->Create( spat::Origin3D<trax::Length>, spat::Position<trax::Length>(1_m,0_m,0_m), spat::Vector<trax::One>(0,0,1) );
 	m_pTrack1->Attach( pLine, {0_m,10_m} );
 
-	m_pTrack2 = TrackBuilder::Make();
- 	std::shared_ptr<trax::ArcP> pArc1 = ArcP::Make();
+	m_pTrack2 = trax::TrackBuilder::Make();
+ 	std::shared_ptr<trax::ArcP> pArc1 = trax::ArcP::Make();
 	pArc1->Create( { {10_m,0_m,0_m}, {1,0,0} }, {20_m,1_m,0_m} );
 	m_pTrack2->Attach( pArc1, {0_m,10_m} );
 
-	m_pTrack3 = TrackBuilder::Make();
- 	std::shared_ptr<trax::ArcP> pArc2 = ArcP::Make();
+	m_pTrack3 = trax::TrackBuilder::Make();
+ 	std::shared_ptr<trax::ArcP> pArc2 = trax::ArcP::Make();
 	pArc2->Create( { {10_m,0_m,0_m}, {1,0,0} }, {20_m,-10_m,0_m} );
 	m_pTrack3->Attach( pArc2, {0_m,10_m} );
 }
@@ -95,39 +98,39 @@ TrackAndLocation::TrackAndLocation()
 }
 ///////////////////////////////////////
 TrackCircle::TrackCircle()
-	:	m_pTrack1	{ TrackBuilder::Make() },
-		m_pTrack2	{ TrackBuilder::Make() },
-		m_pTrack3	{ TrackBuilder::Make() },
-		m_pTrack4	{ TrackBuilder::Make() },
-		m_pArc1		{ ArcP::Make() },
-		m_pArc2		{ ArcP::Make() },
-		m_pArc3		{ ArcP::Make() },
-		m_pArc4		{ ArcP::Make() },
+	:	m_pTrack1	{ trax::TrackBuilder::Make() },
+		m_pTrack2	{ trax::TrackBuilder::Make() },
+		m_pTrack3	{ trax::TrackBuilder::Make() },
+		m_pTrack4	{ trax::TrackBuilder::Make() },
+		m_pArc1		{ trax::ArcP::Make() },
+		m_pArc2		{ trax::ArcP::Make() },
+		m_pArc3		{ trax::ArcP::Make() },
+		m_pArc4		{ trax::ArcP::Make() },
 		R			{ 100_m }
 {
 	// this fixture should give a circle with r == 10...
-	m_pArc1->Create( { Origin3D<Length>, {1,0,0}, {0,_m(R),0} } );
-	m_pTrack1->Attach( m_pArc1, {0_m,R*pi/2} );
-	m_pTrack1->Attach( LinearTwist::Make() );
+	m_pArc1->Create( { spat::Origin3D<dim::Length>, {1,0,0}, {0,_m(R),0} } );
+	m_pTrack1->Attach( m_pArc1, {0_m,R*dim::pi/2} );
+	m_pTrack1->Attach( trax::LinearTwist::Make() );
 
-	m_pArc2->Create( { Origin3D<Length>, {0,1,0}, {_m(-R),0,0} } );
-	m_pTrack2->Attach( m_pArc2, {0_m,R*pi/2} );
-	m_pTrack2->Attach( LinearTwist::Make() );
+	m_pArc2->Create( { spat::Origin3D<dim::Length>, {0,1,0}, {_m(-R),0,0} } );
+	m_pTrack2->Attach( m_pArc2, {0_m,R*dim::pi/2} );
+	m_pTrack2->Attach( trax::LinearTwist::Make() );
 
-	m_pArc3->Create( { Origin3D<Length>, {-1,0,0}, {0,_m(-R),0} } );
-	m_pTrack3->Attach( m_pArc3, {0_m,R*pi/2} );
-	m_pTrack3->Attach( LinearTwist::Make() );
+	m_pArc3->Create( { spat::Origin3D<dim::Length>, {-1,0,0}, {0,_m(-R),0} } );
+	m_pTrack3->Attach( m_pArc3, {0_m,R*dim::pi/2} );
+	m_pTrack3->Attach( trax::LinearTwist::Make() );
 
-	m_pArc4->Create( { Origin3D<Length>, {0,-1,0}, {_m(R),0,0} } );
-	m_pTrack4->Attach( m_pArc4,{0_m, R*pi/2} );
-	m_pTrack4->Attach( LinearTwist::Make() );
+	m_pArc4->Create( { spat::Origin3D<dim::Length>, {0,-1,0}, {_m(R),0,0} } );
+	m_pTrack4->Attach( m_pArc4,{0_m, R*dim::pi/2} );
+	m_pTrack4->Attach( trax::LinearTwist::Make() );
 
-	m_pTrack1->Couple( std::make_pair(m_pTrack1, Track::EndType::end), std::make_pair(m_pTrack2, Track::EndType::front) );
-	m_pTrack2->Couple( std::make_pair(m_pTrack2, Track::EndType::end), std::make_pair(m_pTrack3, Track::EndType::front) );
-	m_pTrack3->Couple( std::make_pair(m_pTrack3, Track::EndType::end), std::make_pair(m_pTrack4, Track::EndType::front) );
-	m_pTrack4->Couple( std::make_pair(m_pTrack4, Track::EndType::end), std::make_pair(m_pTrack1, Track::EndType::front) );
+	m_pTrack1->Couple( std::make_pair(m_pTrack1, trax::Track::EndType::end), std::make_pair(m_pTrack2, trax::Track::EndType::front) );
+	m_pTrack2->Couple( std::make_pair(m_pTrack2, trax::Track::EndType::end), std::make_pair(m_pTrack3, trax::Track::EndType::front) );
+	m_pTrack3->Couple( std::make_pair(m_pTrack3, trax::Track::EndType::end), std::make_pair(m_pTrack4, trax::Track::EndType::front) );
+	m_pTrack4->Couple( std::make_pair(m_pTrack4, trax::Track::EndType::end), std::make_pair(m_pTrack1, trax::Track::EndType::front) );
 
-	m_Location.PutOn( m_pTrack1, TrackLocation( 0_m, true ) );
+	m_Location.PutOn( m_pTrack1, trax::TrackLocation( 0_m, true ) );
 }
 
 TrackCircle::~TrackCircle(){
@@ -137,9 +140,9 @@ TrackCircle::~TrackCircle(){
 /////////////////////////////////////
 SensorFixture::SensorFixture()
 	:	TrackCircle		(),
-		m_pSensor		( SensorFilterJack::Make() ),
-		m_pPulseCounter	( PulseCounter::Make() ),
-		m_pEvent		( EventFilter::Make() )
+		m_pSensor		( trax::SensorFilterJack::Make() ),
+		m_pPulseCounter	( trax::PulseCounter::Make() ),
+		m_pEvent		( trax::EventFilter::Make() )
 {
 	m_pSensor->JackOnTrigger().Insert( &m_pPulseCounter->PlugToCountUp() );
 }
