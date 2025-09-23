@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.26)
-project(Trax2 LANGUAGES CXX)
+project(Trax3 LANGUAGES CXX)
 
 # Disallow in-source builds to keep the source tree clean.
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
