@@ -308,9 +308,10 @@ std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Couple(
 	TrackBuilder& track,
 	Track::EndType endType,
 	Length maxDistance, 
+	Angle maxKink,
 	bool bUncoupled )
 {
-	if( maxDistance <= 0_m )
+	if( maxDistance <= 0_m || maxKink <= 0_deg )
 		return { nullptr, Track::EndType::none };
 
 	Length s;
@@ -327,16 +328,33 @@ std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Couple(
 		return { nullptr, Track::EndType::none };
 	};
 
-	spat::Position<trax::Length> trackEndPosition;
-	track.Transition( s, trackEndPosition );
-	const spat::Sphere<trax::Length> searchArea{ trackEndPosition, maxDistance };
+	spat::Frame<Length,One> trackEndFrame;
+	track.Transition( s, trackEndFrame );
+	const spat::Sphere<Length> searchArea{ trackEndFrame.P, maxDistance };
 
-	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>> TrackEnds = trax::FindTrackEnds( collection, searchArea, true );
+	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>> TrackEnds = FindTrackEnds( collection, searchArea, true );
 	TrackEnds.erase( 
 		std::remove_if( 
 			TrackEnds.begin(), 
 			TrackEnds.end(), 
 			[&track]( std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& tuple ) noexcept { return std::get<0>(tuple).get() == &track; }
+		), 
+		TrackEnds.end() 
+	);
+
+	TrackEnds.erase( 
+		std::remove_if( 
+			TrackEnds.begin(), 
+			TrackEnds.end(), 
+			[maxDistance,maxKink,&trackEndFrame]( std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& tuple ) noexcept 
+			{ 
+				const Track& otherTrack = *std::get<0>( tuple );
+				spat::Frame<Length,One> otherFrame;
+				otherTrack.Transition( std::get<Track::EndType>(tuple) == Track::EndType::front ? 0_m : otherTrack.GetLength(), otherFrame );
+
+				return	abs( asin( (trackEndFrame.T % otherFrame.T).Length() ) ) > maxKink ||
+						acos( trackEndFrame.B * otherFrame.B ) > maxKink;
+			}
 		), 
 		TrackEnds.end() 
 	);
@@ -350,7 +368,7 @@ std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Couple(
 			), 
 			TrackEnds.end() 
 		);
-		
+
 	if( !TrackEnds.empty() )
 	{
 		std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> retval{ std::get<0>(TrackEnds.front()), std::get<1>(TrackEnds.front()) };

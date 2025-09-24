@@ -740,9 +740,9 @@ inline void TrackJoint<Valtype>::Precalculate( const spat::Frame<Valtype>& bodyF
 	m_MovingBodyFrame.ToParent( Fm );
 
 	// calculate error vectors:
-	eT = A.T % wF.T;
-	eN = A.N % wF.N;
-	eB = A.B % wF.B;
+	eT = A.T % wF.T;	// the angular errors are accurate only if the 
+	eN = A.N % wF.N;	// angle is < pi/2. Especially if the vectors 
+	eB = A.B % wF.B;	// are antiparallel, no derailment will happen.
 	eP = wF.P - A.P;
 
 	//precalculated values:

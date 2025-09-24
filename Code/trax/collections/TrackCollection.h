@@ -103,14 +103,15 @@ namespace trax{
 	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> dclspc Snap( const TrackCollection& collection, TrackBuilder& track, Track::EndType endType, Length maxDistance, bool bUncoupled = true );
 
 
-	/// \brief Searches open track ends inside an area around a given one and couples to the closest.
+	/// \brief Searches open track ends inside an area around a given track end and couples to the closest.
 	/// \param collection The track collection to search track ends in.
 	/// \param track The track to couple.
 	/// \param endType The track's end to couple
 	/// \param maxDistance A threshold for the distance to search track ends around the to be coupled end.
+	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
 	/// \param bUncoupled If true only uncoupled track ends are taken into consideration.
 	/// \return The other track end, the track was coupled to, or { nullptr, Track::EndType::none } if no suitable track end was found.
-	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> dclspc Couple( const TrackCollection& collection, TrackBuilder& track, Track::EndType endType, Length maxDistance, bool bUncoupled = true );
+	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> dclspc Couple( const TrackCollection& collection, TrackBuilder& track, Track::EndType endType, Length maxDistance, Angle maxKink = pi, bool bUncoupled = true );
 
 
 	/// \brief A decorator for TrackCollection.

@@ -101,6 +101,7 @@ namespace trax{
 		/// \throws std::logic_error If there are no suitable WheelFrame children in
 		/// the RailRunner to rail.
 		/// \throws std::invalid_argument If location is not on a track.
+		/// \throws std::out_of_range If the railrunner would end up off the track system.
 		/// \throws std::logic_error If the present configuration does not allow railing.
 		virtual void Rail( const Location& location, bool bMoveTo = true ) = 0;
 

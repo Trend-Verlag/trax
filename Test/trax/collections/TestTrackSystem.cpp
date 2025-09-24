@@ -12,7 +12,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "trax/collections/FixturesCollections.h"
+#include "trax/collections/support/FixturesCollections.h"
 #include "trax/Track.h"
 #include "trax/Section.h"
 //#include "trax/StaticTrack.h"
@@ -21,8 +21,8 @@
 #include "trax/collections/TrackCollectionContainer.h"
 #include "trax/support/TraxSupportStream.h"
 
-#include "dim/tests/BoostTestDimensionedValuesHelpers.h"
-#include "spat/tests/BoostTestSpatialHelpers.h"
+#include "../Test/dim/BoostTestDimensionedValuesHelpers.h"
+#include "../Test/spat/BoostTestSpatialHelpers.h"
 
 using namespace trax;
 using namespace spat;
