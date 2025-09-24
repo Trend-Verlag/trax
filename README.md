@@ -11,7 +11,7 @@ It also is part of the <a href="https://eepshopping.de/eep_eisenbahn_exe_profess
 There is a <a href="https://www.trendverlag.com/Trax/Doc/BlogArticle/traxLibrary.html">whitepaper</a> that describes the basic ideas behind the library. 
 The mathematical foundations for the railroad dynamics are described <a href="https://www.trendverlag.com/Trax/Doc/TrackConstraint.pdf">here</a>.</p>
 
-# 1. Tools
+## 1. Tools
 
 Install these tools prior to following the installation instructions for 
 the project.
@@ -28,11 +28,11 @@ the project.
 	<li><b><a href="https://developer.nvidia.com/physx-visual-debugger">PhysX Visual Debugger</a></b>: A tool that renders a PhysX simulated scene. Can be used with the trax tests.</li>
 </ul>
 
-# 2. Dependencies
+## 2. Dependencies
 
 Currently there are two dependencies of the library:
 
-## Boost
+### Boost
 <a href="https://www.boost.org">Boost</a>, referenced in the project by the 
 environment variable BOOST_ROOT. From that we currently need the following libraries:
 <ul>
@@ -48,7 +48,7 @@ purposes, you can copy the
 
 file from the trax project (see 3. Installation) into the boost root and execute it.
 
-## PhysX
+### PhysX
 <a href="https://github.com/NVIDIA-Omniverse/PhysX">PhysX</a>, referenced by the 
 environment variable PHYSX_ROOT. Open a command prompt <b>with administrator rights</b> 
 and clone the main branch of the repository:
@@ -71,11 +71,11 @@ NV_USE_STATIC_WINCRT should be set to 'False':
 Open the generated solution and build all the targets ('Release', 'Debug', 'Checked', 
 'Profile') for the 'INSTALL' project.
 
-# 3. Installation
+## 3. Installation
 
 The first step would be to install the tools from the list (see above);
 download, build and install the dependencies and then get the latest version of
-trax from GitHub: open a new command prompt and with a valid account use git:</p>
+trax from GitHub: open a new command prompt and with a valid account use git:
 
     git clone https://github.com/Trend-Verlag/trax.git Trax3
 
