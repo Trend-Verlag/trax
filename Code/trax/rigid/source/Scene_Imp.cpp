@@ -42,21 +42,16 @@ Scene_Imp::Scene_Imp()
 	m_PlugToStop.Reference( "name", "PlugToStop" );
 }
 
-void Scene_Imp::Register( std::shared_ptr<Simulated> pSimulated )
+void Scene_Imp::Register( Simulated& simulated )
 {
-	if( !pSimulated )
-		return;
-
-	if( std::find( m_Simulated.begin(), m_Simulated.end(), pSimulated ) == m_Simulated.end() )
-		m_Simulated.push_back( pSimulated );
+	if( std::find( m_Simulated.begin(), m_Simulated.end(), &simulated ) == m_Simulated.end() )
+		m_Simulated.push_back( &simulated );
 }
 
-void Scene_Imp::Unregister( std::shared_ptr<Simulated> pSimulated )
+void Scene_Imp::Unregister( const Simulated& simulated )
 {
-	if( !pSimulated )
-		return;
+	auto it = std::find( m_Simulated.begin(), m_Simulated.end(), &simulated );
 
-	auto it = std::find( m_Simulated.begin(), m_Simulated.end(), pSimulated );
 	if( it != m_Simulated.end() )
 	{
 		if( m_bLoopRunning )
@@ -64,10 +59,19 @@ void Scene_Imp::Unregister( std::shared_ptr<Simulated> pSimulated )
 
 		m_Simulated.erase( it );
 	}
-	else
+}
+
+void Scene_Imp::UnregisterAllSimulated()
+{
+	if( m_bLoopRunning )
 	{
-		assert( false && "Unregistering a Simulated object that was not registered!" );
+		for( auto& pSimulated : m_Simulated )
+		{
+			pSimulated->Stop();
+		}
 	}
+
+	m_Simulated.clear();
 }
 
 void Scene_Imp::Update( Time dt ) noexcept

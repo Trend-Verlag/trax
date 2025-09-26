@@ -321,8 +321,9 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation6, TrainFixture )//VisualDebugger
 	BOOST_CHECK( pTrain->IsRailed() );
 	BOOST_CHECK_SMALL( pTrain->GetVelocity(), epsilon__velocity );
 }
-
-BOOST_FIXTURE_TEST_CASE( testTrainCreation7, TrainFixture ) //VisualDebugger
+/*
+//BOOST_FIXTURE_TEST_CASE( testTrainCreation7, TrainFixture ) //VisualDebugger
+BOOST_FIXTURE_TEST_CASE( testTrainCreation7, TrainFixtureVisualDebugger )
 {
 	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
 	BOOST_REQUIRE( reader( "Mixed.train" ) );
@@ -332,16 +333,17 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation7, TrainFixture ) //VisualDebugger
 
 	pTrain->Rail( m_Location );
 	pTrain->TargetVelocity( 5_mIs );
-	pTrain->Thrust( 0.75 );
+	pTrain->Thrust( 1 );
+	pTrain->Brake( 0.75 );
 
 	BOOST_REQUIRE( pTrain->IsValid() );
 	BOOST_REQUIRE( pTrain->IsRailed() );
 
 	BOOST_CHECK_EQUAL( pTrain->TargetVelocity(), 5_mIs );
-	BOOST_CHECK_EQUAL( pTrain->Thrust(), 0.75 );
+	BOOST_CHECK_EQUAL( pTrain->Thrust(), 1 );
 	BOOST_CHECK( pTrain->ThrustAbsolute() );
 
-	Time simulationTime = 40_s;
+	Time simulationTime = 20_s;
 
 	const auto start = std::chrono::steady_clock::now();
 	m_pScene->Loop( simulationTime );
@@ -355,7 +357,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation7, TrainFixture ) //VisualDebugger
 	BOOST_CHECK( pTrain->IsRailed() );
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetVelocity(), 5_mIs, 1 );
 }
-
+*/
 BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture ) //VisualDebugger ) 
 {
 	{

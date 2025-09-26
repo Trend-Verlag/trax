@@ -49,7 +49,7 @@ namespace trax{
 	public:
 		Bogie_Imp( TrainScene& scene, std::shared_ptr<Gestalt> pGestalt );
 		Bogie_Imp( const Bogie_Imp& ) = delete;
-		Bogie_Imp( Bogie_Imp&& bogie );
+		Bogie_Imp( Bogie_Imp&& bogie ) noexcept;
 		~Bogie_Imp() noexcept;
 
 		Bogie_Imp& operator=( const Bogie_Imp& ) = delete;

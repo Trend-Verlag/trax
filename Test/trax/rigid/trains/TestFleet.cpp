@@ -49,7 +49,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixture )
 
 	std::shared_ptr<Fleet> pFleet = Fleet::Make();
 	BOOST_REQUIRE( pFleet );
-	m_pScene->Register( pFleet );
+	m_pScene->Register( *pFleet );
 	BOOST_REQUIRE( pFleet->Add( pTrain ) );
 	BOOST_CHECK_EQUAL( pFleet->Count(), 1 );
 
@@ -82,7 +82,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixture )
 	pFleet->GetActive()->TargetVelocity( 10_mIs );
 	m_pScene->Loop( 10_s );
 
-	m_pScene->Unregister( pFleet );
+	m_pScene->Unregister( *pFleet );
 }
 
 //BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixtureVisualDebugger )
@@ -115,7 +115,7 @@ BOOST_FIXTURE_TEST_CASE( testTwoRollingStockCouple, TrainFixture )
 
 	std::shared_ptr<Fleet> pFleet = Fleet::Make();
 	BOOST_REQUIRE( pFleet );
-	m_pScene->Register( pFleet );
+	m_pScene->Register( *pFleet );
 	BOOST_REQUIRE( pFleet->Add( pLocoTrain ) );
 	BOOST_REQUIRE( pFleet->Add( pWaggonTrain ) );
 

@@ -87,10 +87,20 @@ namespace trax{
 		virtual spat::Vector<Acceleration> Gravity() const = 0;
 
 
-		virtual void Register( std::shared_ptr<Simulated> pSimulated ) = 0;
+		/// \brief Registers a Simulated object for simulation.
+		///
+		/// Objects that are created with a scene reference register automatically,
+		/// others will need manual registration.
+		/// \param simulated The Simulated object to register.
+		virtual void Register( Simulated& simulated ) = 0;
 
 
-		virtual void Unregister( std::shared_ptr<Simulated> pSimulated ) = 0;
+		/// \brief Unregisters a Simulated object from simulation.
+		virtual void Unregister( const Simulated& simulated ) = 0;
+
+
+		/// \brief Unregisters all Simulated objects from simulation.
+		virtual void UnregisterAllSimulated() = 0;
 
 
 		/// \brief Starts the simulation calculations.

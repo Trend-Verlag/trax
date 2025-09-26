@@ -42,9 +42,11 @@ namespace trax{
 			return "Scene";
 		}
 
-		void Register( std::shared_ptr<Simulated> pSimulated ) override;
+		void Register( Simulated& simulated ) override;
 
-		void Unregister( std::shared_ptr<Simulated> pSimulated ) override;
+		void Unregister( const Simulated& simulated ) override;
+
+		void UnregisterAllSimulated() override;
 
 		void Update( Time dt = fixed_timestep ) noexcept override;
 
@@ -80,7 +82,7 @@ namespace trax{
 	private:
 		bool m_bLoopRunning = false;
 		Time m_LoopTime = 0.0_s;
-		std::vector<std::shared_ptr<Simulated>> m_Simulated;
+		std::vector<Simulated*> m_Simulated;
 	
 		Jack_Imp m_JackOnSimulationStep{ "JackOnSimulationStep" };
 		MultiPlug_Imp<Plug_Imp_ParentPointer<Scene_Imp>> m_PlugToStop;

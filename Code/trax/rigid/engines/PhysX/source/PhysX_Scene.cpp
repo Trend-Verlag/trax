@@ -89,6 +89,8 @@ PhysX_Scene::PhysX_Scene(
 
 PhysX_Scene::~PhysX_Scene()
 {
+	UnregisterAllSimulated();
+
 	m_TrackJoints.clear();
 
 	if( m_bSceneCreated ){

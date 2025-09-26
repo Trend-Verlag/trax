@@ -27,11 +27,11 @@ namespace trax
 	public:
 		RailRunner_Imp() = default;
 		RailRunner_Imp( const RailRunner_Imp& ) = delete;
-		RailRunner_Imp( RailRunner_Imp&& ) = default;
-		~RailRunner_Imp() = default;
+		RailRunner_Imp( RailRunner_Imp&& ) noexcept = default;
+		~RailRunner_Imp() noexcept = default;
 
 		RailRunner_Imp& operator=( const RailRunner_Imp& ) = delete;
-		RailRunner_Imp& operator=( RailRunner_Imp&& ) = default;
+		RailRunner_Imp& operator=( RailRunner_Imp&& ) noexcept = default;
 
 		/// \brief to return correct shared_ptr to this, this object have 
 		/// to know about the use count structure.

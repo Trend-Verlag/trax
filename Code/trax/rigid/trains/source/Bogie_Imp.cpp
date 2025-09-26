@@ -47,7 +47,7 @@ std::shared_ptr<Bogie> Bogie::Make( TrainScene& scene, std::shared_ptr<Gestalt> 
 		
 		if( pRetval )
 			pRetval->SetWeakPointerToSelf( pRetval );
-	
+
 		return pRetval;
 	}
 	catch( const std::bad_alloc& ){
@@ -94,7 +94,7 @@ Bogie_Imp::Bogie_Imp( TrainScene& scene, std::shared_ptr<Gestalt> pGestalt )
 		jack.Reference( "parent", TypeName() );
 }
 
-Bogie_Imp::Bogie_Imp( Bogie_Imp&& bogie )
+Bogie_Imp::Bogie_Imp( Bogie_Imp&& bogie ) noexcept
 	: Bogie_Base					{ std::move(bogie) }
 	, m_Scene						{ bogie.m_Scene }
 	, m_pGestalt					{ std::move( bogie.m_pGestalt ) }
@@ -172,6 +172,7 @@ Bogie_Imp::Bogie_Imp( Bogie_Imp&& bogie )
 Bogie_Imp::~Bogie_Imp() noexcept
 {
 	m_pGestalt->SetName( nullptr );
+	m_Scene.Unregister( *this );
 }
 
 void Bogie_Imp::SetWeakPointerToSelf( std::weak_ptr<RailRunner_Imp> pThis ) noexcept
@@ -672,6 +673,7 @@ void Bogie_Imp::Attach( std::shared_ptr<Bogie> pChildBogie, EndType atEnd, const
 
 			if( std::shared_ptr<Swivel> pSwivel = m_Scene.CreateSwivel( ThisBogie(), swivelPose, pChildBogie, childLocalPose ); pSwivel )
 			{
+				m_Scene.Register( *this );
 				m_pBogieChildNorth = pChildBogie_Imp;
 				m_pSwivelChildNorth = pSwivel;
 				m_pSwivelChildNorth->SetName( "SwivelChildNorth" );
@@ -689,6 +691,7 @@ void Bogie_Imp::Attach( std::shared_ptr<Bogie> pChildBogie, EndType atEnd, const
 
 			if( std::shared_ptr<Swivel> pSwivel = m_Scene.CreateSwivel(ThisBogie(), swivelPose, pChildBogie, childLocalPose ); pSwivel )
 			{
+				m_Scene.Register( *this );
 				m_pBogieChildSouth = pChildBogie_Imp;
 				m_pSwivelChildSouth = pSwivel;
 				m_pSwivelChildSouth->SetName( "SwivelChildSouth" );
@@ -899,6 +902,7 @@ bool Bogie_Imp::Couple( EndType end, Bogie& with, EndType withEnd, bool btrigger
 	if( !thisCoupling.pCoupling )
 		return false;
 
+	m_Scene.Register( *this );
 	thisCoupling.pCoupling->SetName( "Coupling" );
 	thisCoupling.pCoupling->SetLength( GetCouplingDistance( {*this,end}, {with,withEnd} ) );
 	Length couplinglength = thisCoupling.pCoupling->GetLength();
