@@ -441,17 +441,17 @@ bool ParseTrackSystem( const boost::property_tree::ptree& pt, TrackSystemParser&
 
 } // namespace ptreesupport
 	
-bool ParseTrackSystem( std::basic_istream<char>& stream, TrackSystemParser& callback ) noexcept(false){
+bool ParseTrackSystem( std::basic_istream<char>& /*stream*/, TrackSystemParser& /*callback*/ ) noexcept(false){
 	assert( !"Not implemented yet!" );
 	return false;
 }
 
-bool ParseTrackSystem( std::string filePath, TrackSystemParser& callback ) noexcept(false){
+bool ParseTrackSystem( std::string /*filePath*/, TrackSystemParser& /*callback*/ ) noexcept(false){
 	assert( !"Not implemented yet!" );
 	return false;
 }
 	 
-bool ParseTrackSystem( const TrackSystem& trackSystem, TrackSystemParser& callback ) noexcept(false){
+bool ParseTrackSystem( const TrackSystem& /*trackSystem*/, TrackSystemParser& /*callback*/ ) noexcept(false){
 	assert( !"Not implemented yet!" );
 	return false;
 }

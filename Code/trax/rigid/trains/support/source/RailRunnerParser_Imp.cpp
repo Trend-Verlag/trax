@@ -106,7 +106,7 @@ void ParseMaterial( const boost::property_tree::ptree& pt, Parser& callback ) no
 	callback.Material( material );
 }
 ///////////////////////////////////////
-void ParseAxisAxisArrangement( const boost::property_tree::ptree& pt, RollingStockParser& callback )
+void ParseAxisAxisArrangement( const boost::property_tree::ptree& /*pt*/, RollingStockParser& /*callback*/ )
 {
 	//if( callback.AxisStart(
 	//		pt.get<IDType>( "<xmlattr>.id", 0 ),
@@ -660,7 +660,7 @@ void ParseRollingStock( const std::filesystem::path& filePath, RollingStockParse
 	ptreesupport::ParseRollingStockRoot( ptr, callback );
 }
 
-void ParseRollingStock( const Bogie& rollingStock, RollingStockParser& callback ) noexcept(false)
+void ParseRollingStock( const Bogie& /*rollingStock*/, RollingStockParser& /*callback*/ ) noexcept(false)
 {
 	//callback.BogieStart( 
 	//	rollingStock.Reference( "name" ), 
@@ -710,24 +710,24 @@ void ParseTrain( const std::filesystem::path& filePath, TrainParser& callback ) 
 	ptreesupport::ParseTrainRoot( ptr, callback );
 }
 
-void ParseTrain( const Train& train, TrainParser& callback ) noexcept(false)
+void ParseTrain( const Train& /*train*/, TrainParser& /*callback*/ ) noexcept(false)
 {
 	assert( !"Not implemented yet!" );
 }
 
-bool ParseFleet( std::basic_istream<char>& stream, FleetParser& callback ) noexcept(false)
-{
-	assert( !"Not implemented yet!" );
-	return false;
-}
-
-bool ParseFleet( const std::filesystem::path& filePath, FleetParser& callback ) noexcept(false)
+bool ParseFleet( std::basic_istream<char>& /*stream*/, FleetParser& /*callback*/ ) noexcept(false)
 {
 	assert( !"Not implemented yet!" );
 	return false;
 }
 
-bool ParseFleet( const Fleet& fleet, FleetParser& callback ) noexcept(false)
+bool ParseFleet( const std::filesystem::path& /*filePath*/, FleetParser& /*callback*/ ) noexcept(false)
+{
+	assert( !"Not implemented yet!" );
+	return false;
+}
+
+bool ParseFleet( const Fleet& /*fleet*/, FleetParser& /*callback*/ ) noexcept(false)
 {
 	assert( !"Not implemented yet!" );
 	return false;

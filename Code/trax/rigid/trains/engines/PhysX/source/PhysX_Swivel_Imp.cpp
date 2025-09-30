@@ -70,7 +70,7 @@ PhysX_Swivel_Imp::PhysX_Swivel_Imp(
 	m_D6Joint.setDrivePosition( PoseFrom( poseParent.RotateNor( pi/2 ) ) );
 
 	m_D6Joint.setConstraintFlag( physx::PxConstraintFlag::eCOLLISION_ENABLED, true );
-	m_D6Joint.setConstraintFlag( physx::PxConstraintFlag::eVISUALIZATION, true ); // Visual Debugger causes benign PhysX/PVD validation warning caused by a mismatch between the D6 joint’s angular-drive “mode” and what the Visual Debugger tries to query. 
+	m_D6Joint.setConstraintFlag( physx::PxConstraintFlag::eVISUALIZATION, true ); // Visual Debugger causes benign PhysX/PVD validation warning caused by a mismatch between the D6 joint's angular-drive 'mode' and what the Visual Debugger tries to query. 
 }
 
 PhysX_Swivel_Imp::~PhysX_Swivel_Imp() noexcept

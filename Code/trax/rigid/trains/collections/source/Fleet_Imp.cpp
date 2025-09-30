@@ -135,7 +135,7 @@ bool Fleet_Imp::IsTrainGenerationEnabled() const noexcept{
 	return m_bTrainGenerationEnabled;
 }
 
-bool Fleet_Imp::Start( Scene& scene )
+bool Fleet_Imp::Start( Scene& /*scene*/ )
 {
 	return true;
 }

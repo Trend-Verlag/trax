@@ -191,25 +191,25 @@ std::unique_ptr<GeomMesh> PhysX_Scene::CreateGeomTriangleMesh() const{
 	return std::make_unique<PhysX_TriangleMesh>( *this );
 }
 
-std::unique_ptr<HingeJoint> PhysX_Scene::CreateHingeJoint( std::shared_ptr<Body> pBodyA, const spat::Frame<Length, One>& localAnchorA, std::shared_ptr<Body> pBodyB, const spat::Frame<Length, One>& localAnchorB ) const
+std::unique_ptr<HingeJoint> PhysX_Scene::CreateHingeJoint( std::shared_ptr<Body> /*pBodyA*/, const spat::Frame<Length, One>& /*localAnchorA*/, std::shared_ptr<Body> /*pBodyB*/, const spat::Frame<Length, One>& /*localAnchorB*/ ) const
 {
 	std::cerr << "PhysX_Scene::CreateHingeJoint: This function is not implemented in PhysX_Scene yet." << std::endl;
 	return nullptr;
 }
 
-std::unique_ptr<SliderJoint> PhysX_Scene::CreateSliderJoint( std::shared_ptr<Body> pBodyA, const spat::Frame<Length, One>& localAnchorA, std::shared_ptr<Body> pBodyB, const spat::Frame<Length, One>& localAnchorB ) const
+std::unique_ptr<SliderJoint> PhysX_Scene::CreateSliderJoint( std::shared_ptr<Body> /*pBodyA*/, const spat::Frame<Length, One>& /*localAnchorA*/, std::shared_ptr<Body> /*pBodyB*/, const spat::Frame<Length, One>& /*localAnchorB*/ ) const
 {
 	std::cerr << "PhysX_Scene::CreateSliderJoint: This function is not implemented in PhysX_Scene yet." << std::endl;
 	return nullptr;
 }
 
-std::unique_ptr<BallAndSocketJoint> PhysX_Scene::CreateBallAndSocketJoint( std::shared_ptr<Body> pBodyA, const spat::Frame<Length, One>& localAnchorA, std::shared_ptr<Body> pBodyB, const spat::Frame<Length,One>& localAnchorB ) const
+std::unique_ptr<BallAndSocketJoint> PhysX_Scene::CreateBallAndSocketJoint( std::shared_ptr<Body> /*pBodyA*/, const spat::Frame<Length, One>& /*localAnchorA*/, std::shared_ptr<Body> /*pBodyB*/, const spat::Frame<Length,One>& /*localAnchorB*/ ) const
 {
 	std::cerr << "PhysX_Scene::CreateBallAndSocketJoint: This function is not implemented in PhysX_Scene yet." << std::endl;
 	return nullptr;
 }
 
-std::unique_ptr<DistanceJoint> PhysX_Scene::CreateDistanceJoint( std::shared_ptr<Body> pBodyA, const spat::Position<Length>& localAnchorA, std::shared_ptr<Body> pBodyB, const spat::Position<Length>& localAnchorB ) const
+std::unique_ptr<DistanceJoint> PhysX_Scene::CreateDistanceJoint( std::shared_ptr<Body> /*pBodyA*/, const spat::Position<Length>& /*localAnchorA*/, std::shared_ptr<Body> /*pBodyB*/, const spat::Position<Length>& /*localAnchorB*/ ) const
 {
 	std::cerr << "PhysX_Scene::CreateDistanceJoint: This function is not implemented in PhysX_Scene yet." << std::endl;
 	return nullptr;
@@ -305,22 +305,21 @@ void PhysX_Scene::Release( TrackJointFeeder& feeder ) noexcept
 	}
 }
 
-void PhysX_Scene::onConstraintBreak( physx::PxConstraintInfo* constraints, physx::PxU32 count )
+void PhysX_Scene::onConstraintBreak( physx::PxConstraintInfo* /*constraints*/, physx::PxU32 /*count*/ )
 {
 }
 
-void PhysX_Scene::onWake( physx::PxActor** actors, physx::PxU32 count )
+void PhysX_Scene::onWake( physx::PxActor** /*actors*/, physx::PxU32 /*count*/ )
 {
 	// TODO
 }
 
-void PhysX_Scene::onSleep( physx::PxActor** actors, physx::PxU32 count )
+void PhysX_Scene::onSleep( physx::PxActor** /*actors*/, physx::PxU32 /*count*/ )
 {
 }
 
-void PhysX_Scene::onContact( const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs )
+void PhysX_Scene::onContact( const physx::PxContactPairHeader& /*pairHeader*/, const physx::PxContactPair* /*pairs*/, physx::PxU32 /*nbPairs*/ )
 {
-	int x = 0;
 	//for(physx::PxU32 i=0; i < nbPairs; i++)	// NOLINT // Evaluate {$pairs,nbPairs}
 	//{
 	//	const physx::PxContactPair& cp = pairs[i];
@@ -378,11 +377,11 @@ void PhysX_Scene::onContact( const physx::PxContactPairHeader& pairHeader, const
 	//}
 }
 
-void PhysX_Scene::onTrigger( physx::PxTriggerPair* pairs, physx::PxU32 count )
+void PhysX_Scene::onTrigger( physx::PxTriggerPair* /*pairs*/, physx::PxU32 /*count*/ )
 {
 }
 
-void PhysX_Scene::onAdvance( const physx::PxRigidBody* const* bodyBuffer, const physx::PxTransform* poseBuffer, const physx::PxU32 count )
+void PhysX_Scene::onAdvance( const physx::PxRigidBody* const* /*bodyBuffer*/, const physx::PxTransform* /*poseBuffer*/, const physx::PxU32 /*count*/ )
 {
 }
 
@@ -423,12 +422,13 @@ physx::PxScene& PhysX_Scene::InitScene( const Vector<Acceleration>& _G  )
 	if( physx::PxTaskManager* pTM = pScene->getTaskManager(); pTM )
 		pTM->setCpuDispatcher( m_CpuDispatcher );
 
+	bool result = false;
 #ifdef _DEBUG
 	pScene->getScenePvdClient()->setScenePvdFlag( physx::PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true );								  
 	pScene->getScenePvdClient()->setScenePvdFlag( physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true );
 	pScene->getScenePvdClient()->setScenePvdFlag( physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS, true );
 
-	bool result = pScene->setVisualizationParameter( physx::PxVisualizationParameter::eSCALE, 2.0f);			//+
+	result = pScene->setVisualizationParameter( physx::PxVisualizationParameter::eSCALE, 2.0f);			//+
 //	result = pScene->setVisualizationParameter( physx::PxVisualizationParameter::eWORLD_AXES, 2.0f);			//+
 //	result = pScene->setVisualizationParameter( physx::PxVisualizationParameter::eBODY_AXES, 2.0f);				//+
 //	result = pScene->setVisualizationParameter( physx::PxVisualizationParameter::eBODY_MASS_AXES, 0.1f); 		//+
@@ -454,7 +454,7 @@ physx::PxScene& PhysX_Scene::InitScene( const Vector<Acceleration>& _G  )
 //	result = pScene->setVisualizationParameter( physx::PxVisualizationParameter::eSIMULATION_MESH, 1.0f);		//-
 //	result = pScene->setVisualizationParameter( physx::PxVisualizationParameter::eSDF, 1.0f);					//+
 #else
-	bool result = pScene->setVisualizationParameter( physx::PxVisualizationParameter::eSCALE, 0.0f);
+	result = pScene->setVisualizationParameter( physx::PxVisualizationParameter::eSCALE, 0.0f);
 #endif
 
 	m_bSceneCreated = true;

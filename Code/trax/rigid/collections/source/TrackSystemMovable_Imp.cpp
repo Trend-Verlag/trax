@@ -47,7 +47,7 @@ IDType TrackSystemMovable_Imp::Add( std::shared_ptr<TrackBuilder> pTrack )
 	return 0;
 }
 
-bool TrackSystemMovable_Imp::Remove( TrackBuilder* pTrack, bool zeroIDs )
+bool TrackSystemMovable_Imp::Remove( TrackBuilder* pTrack, bool /*zeroIDs*/ )
 {
 	if( TrackSystem_Imp::Remove( pTrack ) )
 	{

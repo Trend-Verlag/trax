@@ -201,7 +201,7 @@ void RollingStockCreator::Wheelset( const trax::Wheelset& wheelset ) noexcept
 	m_ActiveWheelFrame.top()->Attach( wheelset );
 }
 
-bool RollingStockCreator::TrackLocation( const TrackLocationRef& trackLocation ) noexcept(false)
+bool RollingStockCreator::TrackLocation( const TrackLocationRef& /*trackLocation*/ ) noexcept(false)
 {
 	return false;
 }

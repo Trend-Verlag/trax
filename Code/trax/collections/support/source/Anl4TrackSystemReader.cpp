@@ -574,8 +574,8 @@ std::unique_ptr<WeighSensor> Anl4TrackSystemReader::CreateWeighSensor(
 }
 
 std::unique_ptr<IntervalSensor> Anl4TrackSystemReader::CreateTractionSensor(
-	const boost::property_tree::ptree& pt,
-	TrackLocation& trackLocation ) const
+	const boost::property_tree::ptree& /*pt*/,
+	TrackLocation& /*trackLocation*/ ) const
 {
 	//if( auto pSensor = TractionSensor::Make() )
 	//{
