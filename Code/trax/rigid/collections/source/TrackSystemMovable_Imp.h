@@ -43,7 +43,7 @@ namespace trax{
 
 
 		// Simulated:
-		void Update( Time dt ) override;
+		void Update( Time dt ) noexcept override;
 
 	private:
 		std::vector<std::shared_ptr<MovableTrack>>					m_MovableTracks;

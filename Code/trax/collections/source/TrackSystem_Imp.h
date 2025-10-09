@@ -114,9 +114,9 @@ namespace trax{
 
 
 		// Simulated:
-		bool Start( Scene& scene ) override;
+		bool Start( Scene& scene ) noexcept override;
 
-		void Update( Time dt ) override;
+		void Update( Time dt ) noexcept override;
 
 		void Pause() noexcept override;
 

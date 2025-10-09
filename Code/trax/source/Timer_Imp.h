@@ -50,13 +50,13 @@ namespace trax{
 		// Inherited via ObjectID_Imp
 		const char* TypeName() const noexcept override;
 
-		void Start() override;
+		void Start() noexcept override;
 
-		bool IsStarted() const override;
+		bool IsStarted() const noexcept override;
 
-		void Reset() override;
+		void Reset() noexcept override;
 
-		void Pause() override;
+		void Pause() noexcept override;
 
 		void Lapse( Time timeLapse ) override;
 

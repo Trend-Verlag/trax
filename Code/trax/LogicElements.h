@@ -103,11 +103,11 @@ namespace trax{
 
 
 		/// \brief Increments the counter by 1.
-		virtual void CountUp() = 0;
+		virtual void CountUp() noexcept = 0;
 
 
 		/// \brief Decrements the counter by 1.
-		virtual void CountDown() = 0;
+		virtual void CountDown() noexcept = 0;
 
 
 		/// \brief Sets the threshold to a specific value. 
@@ -117,7 +117,7 @@ namespace trax{
 
 
 		/// \brief Gets the threshold value, set with this.
-		virtual int Threshold() const = 0;
+		virtual int Threshold() const noexcept = 0;
 
 
 		/// \brief Sets the counter to a specific value. 
@@ -127,11 +127,11 @@ namespace trax{
 
 
 		/// \brief Gets the value of the counter
-		virtual int Counter() const = 0;
+		virtual int Counter() const noexcept = 0;
 
 
 		/// \brief Resets the counter to 0.
-		virtual void Reset() = 0;
+		virtual void Reset() noexcept = 0;
 
 
 		/// \brief Plug whose pulses increment the counter by 1.

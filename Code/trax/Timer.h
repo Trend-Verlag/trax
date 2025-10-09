@@ -54,25 +54,25 @@ namespace trax{
 		/// \brief Starts the timer.
 		///
 		/// The timer will tick after the time lapse is over.
-		virtual void Start() = 0;
+		virtual void Start() noexcept = 0;
 
 
 		/// \returns true if the timer is running.
-		virtual bool IsStarted() const = 0;
+		virtual bool IsStarted() const noexcept = 0;
 
 
 		/// \brief Resets the timer. 
 		///
 		/// Sets the time value to 0.
 		/// It will not tick until it gets started again.
-		virtual void Reset() = 0;
+		virtual void Reset() noexcept = 0;
 
 
 		/// \brief Pauses the timer.
 		///
 		/// Does not change the time value.
 		/// It will not tick until it gets started again.
-		virtual void Pause() = 0;
+		virtual void Pause() noexcept = 0;
 
 
 		/// \brief Sets the time span for the timer.

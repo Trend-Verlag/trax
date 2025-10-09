@@ -1,9 +1,7 @@
-//	trax track library
-//	AD 2013 
-//
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
+//
 //
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
@@ -24,36 +22,32 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
-
-#include "../MovableTrack.h"
-#include "trax/source/Track_Imp.h"
+#include "ModuleSet_Imp.h"
+#include "../Module.h"
 
 namespace trax{
 
-	class MovableTrack_Imp :	public virtual MovableTrack,
-								public Track_Imp
-							 
-	{
-	public:
-		MovableTrack_Imp() noexcept;
+ModuleSet_Imp::ModuleSet_Imp()
+{
+}
 
-		TrackType GetTrackType() const noexcept override;
+void ModuleSet_Imp::AddModule( std::unique_ptr<Module> module )
+{
+	if( module )
+		m_Modules.push_back( std::move( module ) );
+}
 
-		std::shared_ptr<MovableTrack> GetMovableTrack() const noexcept override;
+void ModuleSet_Imp::RemoveModule( Module& module )
+{
+	auto it = std::find_if( m_Modules.begin(), m_Modules.end(), 
+		[&module]( const std::unique_ptr<Module>& m ){ return m.get() == &module; } );
+	if( it != m_Modules.end() )
+		m_Modules.erase( it );
+}
 
-
-		// Inherited via MovableTrack:
-		void SetBody( std::shared_ptr<const Body> pBody ) noexcept override;
-
-		std::shared_ptr<const Body> GetBody() const noexcept override;
-
-		void UpdateTrackPose() noexcept override;
-
-		bool IsMoving() const noexcept override;
-	private:
-		spat::Frame<Length,One>		m_RelativePose;
-		std::shared_ptr<const Body>	m_pBody;
-	};
+void ModuleSet_Imp::ClearModules()
+{
+	m_Modules.clear();
+}
 
 }

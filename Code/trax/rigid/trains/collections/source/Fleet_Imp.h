@@ -111,7 +111,7 @@ namespace trax{
 			Fleet_Imp& m_Parent;
 			Train& m_Train;
 
-			void PulseToSeparate();
+			void PulseToSeparate() noexcept;
 
 			trax::Plug_Imp_ParentPointer<FPlugEnumerator> m_PlugToSeparate;
 		};

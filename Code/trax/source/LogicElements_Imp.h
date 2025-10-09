@@ -60,19 +60,19 @@ namespace trax{
 		}
 
 		// Inherited via PulseCounter
-		void CountUp() override;
+		void CountUp() noexcept override;
 
-		void CountDown() override;
+		void CountDown() noexcept override;
 
 		void Threshold( int threshold ) override;
 
-		int Threshold() const override;
+		int Threshold() const noexcept override;
 
 		void Counter( int counter ) override;
 
-		int Counter() const override;
+		int Counter() const noexcept override;
 
-		void Reset() override;
+		void Reset() noexcept override;
 
 		MultiPlug& PlugToCountUp() override;
 

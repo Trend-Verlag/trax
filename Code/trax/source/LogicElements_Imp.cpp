@@ -45,7 +45,7 @@ PulseCounter_Imp::PulseCounter_Imp()
 	m_PlugToCountDown.Reference( "name", "PlugToCountDown" );
 }
 
-void PulseCounter_Imp::CountUp(){
+void PulseCounter_Imp::CountUp() noexcept{
 	m_JackOnCountUp.Pulse();
 
 	if( m_Counter == m_Threshold )
@@ -54,7 +54,7 @@ void PulseCounter_Imp::CountUp(){
 		m_JackOnReachThreshold.Pulse();
 }
 
-void PulseCounter_Imp::CountDown(){
+void PulseCounter_Imp::CountDown() noexcept{
 	m_JackOnCountDown.Pulse();
 
 	if( m_Counter == m_Threshold )
@@ -67,7 +67,7 @@ void PulseCounter_Imp::Threshold( int threshold ){
 	m_Threshold = threshold;
 }
 
-int PulseCounter_Imp::Threshold() const{
+int PulseCounter_Imp::Threshold() const noexcept{
 	return m_Threshold;
 }
 
@@ -75,11 +75,11 @@ void PulseCounter_Imp::Counter( int counter ){
 	m_Counter = counter;
 }
 
-int PulseCounter_Imp::Counter() const{
+int PulseCounter_Imp::Counter() const noexcept{
 	return m_Counter;
 }
 
-void PulseCounter_Imp::Reset(){
+void PulseCounter_Imp::Reset() noexcept{
 	m_Counter = 0;
 }
 

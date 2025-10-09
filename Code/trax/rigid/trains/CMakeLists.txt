@@ -1,6 +1,7 @@
 add_library(trax_trains 
     STATIC
         "./source/Bogie_Imp.cpp"
+        "./source/Cargo_Imp.cpp"
         "./source/RollingStock_Imp.cpp"
         "./source/Train_Imp.cpp"
         "./source/TrainComponent_Imp.cpp"
@@ -11,6 +12,7 @@ add_library(trax_trains
 target_sources(trax_trains
     PUBLIC
         "./Bogie.h"
+        "./Cargo.h"
         "./RailRunner.h"
         "./RollingStock.h"
         "./Train.h"
@@ -19,6 +21,7 @@ target_sources(trax_trains
         "./WheelFrame.h"
     PRIVATE
         "./source/Bogie_Imp.h"
+        "./source/Cargo_Imp.h"
         "./source/BogieJoint.h"
         "./source/RailRunner_Imp.h"
         "./source/RollingStock_Imp.h"

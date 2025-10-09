@@ -449,14 +449,14 @@ namespace trax{
 		Plug_Imp_ParentPointer(const Plug_Imp_ParentPointer& plug) = delete;
 		Plug_Imp_ParentPointer(Plug_Imp_ParentPointer&& plug) = default;
 
-		Plug_Imp_ParentPointer(ParentType& parent, void (ParentType::* pPulseFunction)())
+		Plug_Imp_ParentPointer(ParentType& parent, void (ParentType::* pPulseFunction)() noexcept )
 			: Plug_Imp_Parent<ParentType>{ parent },
 			m_pPulseFunction{ pPulseFunction }
 		{
 			//static_assert( std::is_convertible<Plug_Imp_ParentPointer*,PlugEnumerator*>::value );
 			assert(m_pPulseFunction);
 		}
-		Plug_Imp_ParentPointer(ParentType& parent, void (ParentType::* pPulseFunction)(), Plug_Imp_ParentPointer&& plug)
+		Plug_Imp_ParentPointer(ParentType& parent, void (ParentType::* pPulseFunction)() noexcept, Plug_Imp_ParentPointer&& plug)
 			: Plug_Imp_Parent<ParentType>{ parent, std::move(plug) },
 			m_pPulseFunction{ pPulseFunction }
 		{

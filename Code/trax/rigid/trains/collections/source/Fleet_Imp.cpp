@@ -342,7 +342,7 @@ const trax::Plug& Fleet_Imp::FPlugEnumerator::_GetPlug( int idx ) const
 		throw std::range_error( "FPlugEnumerator::_GetPlug: index out of range" );
 }
 
-void Fleet_Imp::FPlugEnumerator::PulseToSeparate()
+void Fleet_Imp::FPlugEnumerator::PulseToSeparate() noexcept
 {
 	m_Parent.m_TrainsSeparated.push_back( &m_Train );
 }

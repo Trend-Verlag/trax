@@ -79,7 +79,7 @@ void TrackSystemMovable_Imp::Clear() noexcept
 	TrackSystem_Imp::Clear();
 }
 
-void TrackSystemMovable_Imp::Update( Time dt )
+void TrackSystemMovable_Imp::Update( Time dt ) noexcept
 {
 	TrackSystem_Imp::Update( dt );
 

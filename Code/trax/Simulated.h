@@ -46,7 +46,7 @@ namespace trax{
 
 		/// \brief Called to update the simulated object.
 		/// \param dt The time step to update the object with.
-		virtual void Update( Time dt ) = 0;
+		virtual void Update( Time dt = fixed_timestep ) = 0;
 
 
 		virtual void Pause() noexcept = 0;

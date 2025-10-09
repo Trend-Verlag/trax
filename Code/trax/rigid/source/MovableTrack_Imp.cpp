@@ -76,7 +76,7 @@ std::shared_ptr<const Body> MovableTrack_Imp::GetBody() const noexcept{
 	return m_pBody;
 }
 
-void MovableTrack_Imp::UpdateTrackPose()
+void MovableTrack_Imp::UpdateTrackPose() noexcept
 {
 	if( m_pBody )
 	{

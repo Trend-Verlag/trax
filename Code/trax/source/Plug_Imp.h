@@ -43,12 +43,12 @@ namespace trax{
 			: ParentPlugType{ parent }
 		{}
 
-		MultiPlug_Imp( typename ParentPlugType::TargetType& parent, void (ParentPlugType::TargetType::*pPulseFunction)() )
+		MultiPlug_Imp( typename ParentPlugType::TargetType& parent, void (ParentPlugType::TargetType::*pPulseFunction)() noexcept )
 			: ParentPlugType{ parent, pPulseFunction }
 		{}
 
 		template<typename ValueType>
-		MultiPlug_Imp( typename ParentPlugType::TargetType& parent, void (ParentPlugType::TargetType::*pPulseFunction)(ValueType), ValueType value )
+		MultiPlug_Imp( typename ParentPlugType::TargetType& parent, void (ParentPlugType::TargetType::*pPulseFunction)(ValueType) noexcept, ValueType value )
 			: ParentPlugType{ parent, pPulseFunction, value }
 		{}
 

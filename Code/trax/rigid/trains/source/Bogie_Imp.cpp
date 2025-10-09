@@ -187,11 +187,11 @@ void Bogie_Imp::SetWeakPointerToSelf( std::weak_ptr<RailRunner_Imp> pThis ) noex
 		m_pSwivelParentSouth->BogieA()->m_pBogieChildSouth = std::dynamic_pointer_cast<Bogie_Imp>(This());
 }
 
-bool Bogie_Imp::Start( Scene& ){
+bool Bogie_Imp::Start( Scene& ) noexcept{
 	return true;
 }
 
-void Bogie_Imp::Update( Time dt )
+void Bogie_Imp::Update( Time dt ) noexcept
 {
 	if( m_CouplingNorth.CheckCoupling( dt ) )
 		Uncouple( EndType::north );
@@ -1371,7 +1371,7 @@ Bogie_Imp::CouplingProps_Ext& Bogie_Imp::CouplingProps_Ext::operator=( const Bog
 	return *this;
 }
 
-bool Bogie_Imp::CouplingProps_Ext::CheckCoupling( Time dt )
+bool Bogie_Imp::CouplingProps_Ext::CheckCoupling( Time dt ) noexcept
 {
 	if( Type == onNever )
 		return false;

@@ -59,9 +59,9 @@ namespace trax{
 
 
 		// Simulated:
-		bool Start( Scene& scene ) override;
+		bool Start( Scene& scene ) noexcept override;
 
-		void Update( Time dt ) override;
+		void Update( Time dt ) noexcept override;
 
 		void Pause() noexcept override;
 
@@ -247,7 +247,7 @@ namespace trax{
 
 			CouplingProps_Ext& operator=( const CouplingProps& props ) noexcept;
 
-			bool CheckCoupling( Time dt );
+			bool CheckCoupling( Time dt ) noexcept;
 			bool Uncouple( bool btriggerPulses = true ) noexcept;
 			bool Break( bool btriggerPulses = true ) noexcept;
 

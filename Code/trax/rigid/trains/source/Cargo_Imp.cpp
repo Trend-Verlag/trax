@@ -1,9 +1,7 @@
-//	trax track library
-//	AD 2013 
-//
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
+//
 //
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
@@ -24,36 +22,10 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
-
-#include "../MovableTrack.h"
-#include "trax/source/Track_Imp.h"
+#include "Cargo_Imp.h"
 
 namespace trax{
 
-	class MovableTrack_Imp :	public virtual MovableTrack,
-								public Track_Imp
-							 
-	{
-	public:
-		MovableTrack_Imp() noexcept;
 
-		TrackType GetTrackType() const noexcept override;
-
-		std::shared_ptr<MovableTrack> GetMovableTrack() const noexcept override;
-
-
-		// Inherited via MovableTrack:
-		void SetBody( std::shared_ptr<const Body> pBody ) noexcept override;
-
-		std::shared_ptr<const Body> GetBody() const noexcept override;
-
-		void UpdateTrackPose() noexcept override;
-
-		bool IsMoving() const noexcept override;
-	private:
-		spat::Frame<Length,One>		m_RelativePose;
-		std::shared_ptr<const Body>	m_pBody;
-	};
 
 }

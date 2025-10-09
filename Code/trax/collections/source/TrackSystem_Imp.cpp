@@ -380,12 +380,12 @@ void TrackSystem_Imp::DeCoupleAll(){
 	});
 }
 
-bool TrackSystem_Imp::Start( Scene& /*scene*/ )
+bool TrackSystem_Imp::Start( Scene& /*scene*/ ) noexcept
 {
 	return true;
 }
 
-void TrackSystem_Imp::Update( Time /*dt*/ )
+void TrackSystem_Imp::Update( Time /*dt*/ ) noexcept
 {
 }
 

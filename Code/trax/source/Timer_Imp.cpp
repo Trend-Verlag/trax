@@ -59,22 +59,22 @@ const char* Timer_Imp::TypeName() const noexcept{
 	return "Timer";
 }
 
-void Timer_Imp::Start(){
+void Timer_Imp::Start() noexcept{
 	m_bStarted = true;
 	m_JackOnStart.Pulse();
 }
 
-bool Timer_Imp::IsStarted() const{
+bool Timer_Imp::IsStarted() const noexcept{
 	return m_bStarted;
 }
 
-void Timer_Imp::Reset(){
+void Timer_Imp::Reset() noexcept{
 	m_bStarted = false;
 	m_Timer = 0_s;
 	m_JackOnReset.Pulse();
 }
 
-void Timer_Imp::Pause(){
+void Timer_Imp::Pause() noexcept{
 	m_bStarted = false;
 	m_JackOnPause.Pulse();
 }
