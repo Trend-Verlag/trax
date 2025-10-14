@@ -1088,7 +1088,7 @@ namespace trax{
 	/// \brief Simplifies the track's curve.
 	///
 	/// For some curves it is possible to pick simpler ones, while keeping the
-	/// geometry of the track. This curve will exchange the LineP, ArcP, HelixP
+	/// geometry of the track. This method will exchange the LineP, ArcP, HelixP
 	/// curves by the simpler Line, Arc, Helix curves.
 	/// \param track The track to simplify.
 	/// \returns true if the track was simplified, false if not.

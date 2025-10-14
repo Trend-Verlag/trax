@@ -26,8 +26,8 @@
 
 
 #include "../TrackSystemReader.h"
-
-#include "trax/collections/support/Anl4TrackSystemReader.h"
+#include "../Anl3TrackSystemReader.h"
+#include "../Anl4TrackSystemReader.h"
 
 
 #if defined(_MSC_VER)
@@ -65,12 +65,12 @@ static std::shared_ptr<TrackSystem> ReadTrackSystem( const boost::property_tree:
 			ptreesupport::RegisterAllTwistReaders( readerBase );
 			return ptreesupport::ReadTrackSystemFromANL4( readerBase, ptr, atIdx );
 		}
-		//else if( pair.first == "sutrackp" ){
-		//	ptreesupport::Anl3TrackSystemReader readerBase;
-		//	ptreesupport::RegisterAllCurveReaders( readerBase );
-		//	ptreesupport::RegisterAllTwistReaders( readerBase );
-		//	return ptreesupport::ReadTrackSystemFromANL3( readerBase, ptr, atIdx );
-		//}
+		else if( pair.first == "sutrackp" ){
+			ptreesupport::Anl3TrackSystemReader readerBase;
+			ptreesupport::RegisterAllCurveReaders( readerBase );
+			ptreesupport::RegisterAllTwistReaders( readerBase );
+			return ptreesupport::ReadTrackSystemFromANL3( readerBase, ptr, atIdx );
+		}
 	}
 
 	return nullptr;

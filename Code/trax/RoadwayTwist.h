@@ -279,7 +279,7 @@ namespace trax{
 
 		virtual const Data& GetData() const noexcept = 0;
 
-		virtual void Create( const Data& data ) = 0;
+		virtual void Create( const Data& data ) noexcept = 0;
 	};
 
 
@@ -320,7 +320,7 @@ namespace trax{
 
 		virtual const Data& GetData() const noexcept = 0;
 
-		virtual void Create( const Data& data ) = 0;
+		virtual void Create( const Data& data ) noexcept = 0;
 	};
 
 
@@ -401,6 +401,10 @@ namespace trax{
 
 		virtual const Data& GetData() const noexcept = 0;
 
+
+		/// \brief Creates the twist from the data.
+		/// \throws std::invalid_argument if attractor is a null vector.
+		/// \throws std::logic_error If the twist is already attached to a track.
 		virtual void Create( const Data& data ) = 0;
 	};
 
@@ -454,7 +458,10 @@ namespace trax{
 	/// \brief Combines the effect of two twists by adding them.
 	///
 	/// If a slot of the combined twist is empty, it will be populated
-	/// with a ConstantTwist with a zero angle.
+	/// with a ConstantTwist with a zero angle. The combined twist is
+	/// symmetric in the twist1 slot and the twist2 slot, meaning 
+	/// RoadwayTwist::Equals() returns true if only the twists in the 
+	/// slots are switched.
 	struct CombinedTwist : RoadwayTwist{
 
 		/// \brief Makes a CombinedTwist object.
@@ -464,12 +471,21 @@ namespace trax{
 		static dclspc std::unique_ptr<CombinedTwist> Make( const RoadwayTwist& fromTwist ) noexcept;
 
 
+		/// \brief Populates the first slot
+		/// \throws std::invalid_argument if pTwist is null or the combined twist
+		/// would end up with two dynamic twists.
+		/// \throws std::logic_error if this twist is attached to a track.
 		virtual void AttachTwist1( std::unique_ptr<RoadwayTwist> pTwist ) = 0;
 
 		virtual RoadwayTwist& Twist1() const noexcept = 0;
 
 		virtual std::unique_ptr<RoadwayTwist> DetachTwist1() = 0;
 
+
+		/// \brief Populates the second slot
+		/// \throws std::invalid_argument if pTwist is null or the combined twist
+		/// would end up with two dynamic twists.
+		/// \throws std::logic_error if this twist is attached to a track.
 		virtual void AttachTwist2( std::unique_ptr<RoadwayTwist> pTwist ) = 0;
 
 		virtual RoadwayTwist& Twist2() const noexcept = 0;

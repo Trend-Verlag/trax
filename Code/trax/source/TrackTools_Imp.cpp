@@ -24,20 +24,19 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#include "trax/Track.h"
 #include "trax/UnitsHelper.h"
+#include "trax/Track.h"
 
 #include <iostream>
 
 namespace trax{
 	using namespace spat;
 
-
-std::pair<bool,Length> Foot( const spat::Position<Length>& ofPoint, const Track& toTrack ){
+std::pair<bool,Length> Foot( const Position<Length>& ofPoint, const Track& toTrack ){
 	return Foot( ofPoint, toTrack, toTrack.Range().Center(), toTrack.Range() );
 }
 
-std::pair<bool,Length> Foot( const spat::Position<Length>& ofPoint, const Track& toTrack, Length bestGuess ){
+std::pair<bool,Length> Foot( const Position<Length>& ofPoint, const Track& toTrack, Length bestGuess ){
 	return Foot( ofPoint, toTrack, bestGuess, toTrack.Range() );
 }
 
@@ -102,15 +101,15 @@ std::pair<bool,Length> Foot(
 	}
 }
 
-std::pair<bool,Length> Foot( const spat::VectorBundle<Length,One>& ofRay, const Track& toTrack ){
+std::pair<bool,Length> Foot( const VectorBundle<Length,One>& ofRay, const Track& toTrack ){
 	return Foot( ofRay, toTrack, toTrack.Range().Center(), toTrack.Range() );
 }
 
-std::pair<bool,Length> Foot( const spat::VectorBundle<Length,One>& ofRay, const Track& toTrack, Length bestGuess ){
+std::pair<bool,Length> Foot( const VectorBundle<Length,One>& ofRay, const Track& toTrack, Length bestGuess ){
 	return Foot( ofRay, toTrack, bestGuess, toTrack.Range() );
 }
 
-std::pair<bool,Length> Foot( const spat::VectorBundle<Length,One>& R, const Track& toTrack, Length bestGuess, common::Interval<Length> inRange )
+std::pair<bool,Length> Foot( const VectorBundle<Length,One>& R, const Track& toTrack, Length bestGuess, common::Interval<Length> inRange )
 // As a wild guess: The locally shortest distance vector between two curves is perpendicular on both, or the shortest distance is zero.
 // 
 // At the closest point of a track to a ray the (squared) distance D2 gets 
@@ -177,7 +176,7 @@ std::pair<bool,Length> Foot( const spat::VectorBundle<Length,One>& R, const Trac
 	}
 }
 
-Length Closest( const spat::Position<Length>& A, const Track& onTrack, bool includeEndpoints )
+Length Closest( const Position<Length>& A, const Track& onTrack, bool includeEndpoints )
 {
 	Position<Length> F, E;
 	onTrack.Transition( 0_m, F );
@@ -217,7 +216,7 @@ Length Closest( const spat::Position<Length>& A, const Track& onTrack, bool incl
 			[]( const std::pair<Length,Length>& a, const std::pair<Length,Length>& b ){ return a.second < b.second; } )->first;
 }
 
-Length Closest( const spat::VectorBundle<Length,One>& R, const Track& onTrack, bool includeEndpoints )
+Length Closest( const VectorBundle<Length,One>& R, const Track& onTrack, bool includeEndpoints )
 {
 	const auto DistanceFromRay = [&R]( const Position<Length>& P ){ return ((P - R.P) - ((P - R.P) * R.T) * R.T).Length(); };
 

@@ -226,7 +226,7 @@ const ConstantTwist::Data& ConstantTwist_Imp::GetData() const noexcept{
 	return m_Twist;
 }
 
-void ConstantTwist_Imp::Create( const Data& data ){
+void ConstantTwist_Imp::Create( const Data& data ) noexcept{
 	m_Twist = data;
 }
 
@@ -358,7 +358,7 @@ const LinearTwist::Data& LinearTwist_Imp::GetData() const noexcept{
 	return m_Data;
 }
 
-void LinearTwist_Imp::Create( const Data& data ){
+void LinearTwist_Imp::Create( const Data& data ) noexcept{
 	m_Data = data;
 }
 ///////////////////////////////////////

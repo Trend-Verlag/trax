@@ -1,5 +1,6 @@
 add_library(trax_core_collections_support 
     STATIC
+        "./source/Anl3TrackSystemReader.cpp"
         "./source/Anl4TrackSystemReader.cpp"
         "./source/Anl4TrackSystemWriter.cpp"
         "./source/FixturesCollections.cpp"
@@ -23,6 +24,7 @@ add_library(trax_core_collections_support
 
 target_sources(trax_core_collections_support
     PUBLIC
+        "./Anl3TrackSystemReader.h"
         "./Anl4TrackSystemReader.h"
         "./Anl4TrackSystemWriter.h"
         "./CollectionSupportXML.h"

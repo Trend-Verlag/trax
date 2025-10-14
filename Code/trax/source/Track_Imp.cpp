@@ -1730,7 +1730,12 @@ void StraightenUp( TrackBuilder& track, const spat::Vector<One>& U )
 
 bool Simplify( TrackBuilder& track ) noexcept
 {
+	bool retval = false;
 	std::pair<std::shared_ptr<const Curve>,common::Interval<Length>> Curve = track.GetCurve();
+
+	// unfreeze to maintain global attractor directions while attaching new curve:
+	bool bFrozen= track.GetTwist().IsFrozen();
+	track.GetTwist().Freeze( false ); 
 
 	if( std::shared_ptr<const LineP> lineP = std::dynamic_pointer_cast<const LineP>(Curve.first); lineP )
 	{
@@ -1740,7 +1745,7 @@ bool Simplify( TrackBuilder& track ) noexcept
 		if( std::shared_ptr<Line> pLine = Line::Make(); pLine )
 		{
 			track.Attach( std::make_pair( pLine, Curve.second ) );
-			return true;
+			retval = true;
 		}
 	}
 	else if( std::shared_ptr<const ArcP> arcP = std::dynamic_pointer_cast<const ArcP>(Curve.first); arcP )
@@ -1753,7 +1758,7 @@ bool Simplify( TrackBuilder& track ) noexcept
 		{
 			pArc->Create( Arc::Data{ 1 / radius } );
 			track.Attach( std::make_pair( pArc, Curve.second ) );
-			return true;
+			retval = true;
 		}
 	}
 	else if( std::shared_ptr<const HelixP> helixP = std::dynamic_pointer_cast<const HelixP>(Curve.first); helixP )
@@ -1765,11 +1770,14 @@ bool Simplify( TrackBuilder& track ) noexcept
 		{
 			pHelix->Create( Helix::Data{ data.a, data.b } );
 			track.Attach( std::make_pair( pHelix, Curve.second ) );
-			return true;
+			retval = true;
 		}
 	}
 
-	return false;
+	if( bFrozen )
+		track.GetTwist().Freeze();
+
+	return retval;
 }
 
 std::shared_ptr<TrackBuilder> CopyTrack( const TrackBuilder& originalTrack, TrackBuilder& copyTrack, const bool cloneCurve ){

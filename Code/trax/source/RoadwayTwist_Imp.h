@@ -202,7 +202,7 @@ namespace trax{
 
 		const Data& GetData() const noexcept override;
 
-		void Create( const Data& data ) override;
+		void Create( const Data& data ) noexcept override;
 	private:
 		Data m_Twist;
 	};
@@ -249,7 +249,7 @@ namespace trax{
 
 		const Data& GetData() const noexcept override;
 
-		void Create( const Data& data ) override;
+		void Create( const Data& data ) noexcept override;
 
 	private:
 		Data m_Data;
