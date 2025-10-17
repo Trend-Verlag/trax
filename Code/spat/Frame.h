@@ -655,14 +655,16 @@ Frame<Valtype,ValtypeT>& Frame<Valtype,ValtypeT>::LookAt( const Vector<ValtypeT>
 	Vector<ValtypeT> D = dir;
 	D.Normalize();
 	Vector<ValtypeT> R = reference;
+	ToParent( R );
 	R.Normalize();
 	
 	Vector<ValtypeT> rotation = R % D;
 	if( ValtypeT sin = rotation.Normalize() ){
+		sin = std::clamp( sin, ValtypeT{-1}, ValtypeT{1} );
 		if( R*D < decltype(ValtypeT{}*ValtypeT{}){0} )
-			rotation *= pi__ - std::asin( sin );
+			rotation *= pi__ - asin( sin );
 		else
-			rotation *= std::asin( sin );
+			rotation *= asin( sin );
 	}
 	else{
 		if( R == -D ){
@@ -689,22 +691,22 @@ Frame<Valtype,ValtypeT>& Frame<Valtype,ValtypeT>::LookAt( const Vector<ValtypeT>
 
 template<typename Valtype,typename ValtypeT>
 Frame<Valtype,ValtypeT>& Frame<Valtype,ValtypeT>::LookTAt( const Vector<ValtypeT>& dir ) noexcept{
-	return LookAt( T, dir );
+	return LookAt( Ex<ValtypeT>, dir );
 }
 
 template<typename Valtype,typename ValtypeT>
 Frame<Valtype,ValtypeT>& Frame<Valtype,ValtypeT>::LookTAt( const Vector<ValtypeT>& dir, const Vector<ValtypeT>& up ) noexcept{
-	return LookAt( T, dir ).RotateTan( up );
+	return LookAt( Ex<ValtypeT>, dir ).RotateTan( up );
 }
 
 template<typename Valtype,typename ValtypeT>
 Frame<Valtype,ValtypeT>& Frame<Valtype,ValtypeT>::LookNAt( const Vector<ValtypeT>& dir ) noexcept{
-	return LookAt( N, dir );
+	return LookAt( Ey<ValtypeT>, dir );
 }
 
 template<typename Valtype,typename ValtypeT>
 Frame<Valtype,ValtypeT>& Frame<Valtype,ValtypeT>::LookBAt( const Vector<ValtypeT>& dir ) noexcept{
-	return LookAt( B, dir );
+	return LookAt( Ez<ValtypeT>, dir );
 }
 
 template<typename Valtype,typename ValtypeT>

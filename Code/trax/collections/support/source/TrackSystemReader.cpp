@@ -69,7 +69,7 @@ static std::shared_ptr<TrackSystem> ReadTrackSystem( const boost::property_tree:
 			ptreesupport::Anl3TrackSystemReader readerBase;
 			ptreesupport::RegisterAllCurveReaders( readerBase );
 			ptreesupport::RegisterAllTwistReaders( readerBase );
-			return ptreesupport::ReadTrackSystemFromANL3( readerBase, ptr, atIdx );
+			return ptreesupport::ReadTrackSystemFromANL3( readerBase, ptr );
 		}
 	}
 

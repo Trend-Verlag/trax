@@ -108,10 +108,13 @@ namespace trax{
 
 
 		/// \brief Sets the indicator to the next setting.
+		/// \param pulse If true, the JackOnChange Jack will pulse.
 		virtual void Toggle( bool pulse = true ) = 0;
 
 
 		/// \brief Turns the indicator to the specified setting.
+		/// \param status The status to set the indicator to.
+		/// \param pulse If true, the JackOnChange Jack will pulse.
 		/// \returns The previous status of the indicator.
 		virtual Status Set( Status status, bool pulse = true ) = 0;
 

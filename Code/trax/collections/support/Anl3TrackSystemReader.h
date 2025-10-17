@@ -65,6 +65,6 @@ namespace trax{
 
 		};
 
-		std::shared_ptr<TrackSystem> dclspc ReadTrackSystemFromANL3( const ptreesupport::PTreeReader& reader, const boost::property_tree::ptree& pt, int atIdx );
+		std::shared_ptr<TrackSystem> dclspc ReadTrackSystemFromANL3( const ptreesupport::PTreeReader& reader, const boost::property_tree::ptree& pt );
 	} // namespace ptreesupport
 } // namespace trax

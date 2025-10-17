@@ -1045,10 +1045,8 @@ void Anl3TrackSystemReader::ReadDreibein( const boost::property_tree::ptree& pt,
 ///////////////////////////////////////
 std::shared_ptr<trax::TrackSystem> ReadTrackSystemFromANL3( 
 	const ptreesupport::PTreeReader& reader, 
-	const boost::property_tree::ptree& pt, 
-	int atIdx )
+	const boost::property_tree::ptree& pt )
 {
-	int Idx = 0;
 	for( const auto& pair : pt )
 	{
 		if( pair.first == "sutrackp" )

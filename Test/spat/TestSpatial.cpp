@@ -361,6 +361,32 @@ BOOST_AUTO_TEST_CASE( frame_lookat )
 	BOOST_CHECK( frame.B.Equals( reference.B, 0.001f ) );
 }
 
+BOOST_AUTO_TEST_CASE( frame_lookat2 )
+{
+	Frame<Real> frame = { 
+		{ -91.5103836, -108.284927, 151.642899 }, 
+		{ -0.915139854, -0.403132617, -0.00173116114 }, 
+		{ 0.403133273, -0.915141225, 8.66334133e-08 }, 
+		{ -0.00158429239, -0.000697809621, 0.999998331 } };
+	Frame<Real> reference = frame;
+
+	frame.LookAt( Ez<Real>, -frame.N );
+	BOOST_CHECK( frame.B.Equals( -reference.N, 0.01f ) );
+}
+
+BOOST_AUTO_TEST_CASE( frame_lookat3 )
+{
+	Frame<Real> frame = { 
+		{ 0, 0, 0 }, 
+		Ez<Real>, 
+		Ex<Real>, 
+		Ey<Real> };
+	Frame<Real> reference = frame;
+
+	frame.LookAt( Ez<Real>, Ey<Real> );
+	BOOST_CHECK( frame.B.Equals( Ey<Real>, 0.01f ) );
+}
+
 BOOST_AUTO_TEST_CASE( frame_AircraftPrincipalAxes )
 {
 	Frame<Real> frame;
