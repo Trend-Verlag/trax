@@ -159,6 +159,7 @@ namespace trax{
 	struct Signal;
 	struct SignalTarget;
 	template<typename> struct TrackData;
+	struct TrackBuilder;
 	struct TrackLocation;
 	struct TrackRange;
 
@@ -209,6 +210,8 @@ namespace trax{
 			: id	{ trackEnd.first ? trackEnd.first->ID() : IDType{0u} },
 			  type	{ trackEnd.second }
 			{}
+
+			End( const std::pair<std::shared_ptr<TrackBuilder>,Track::EndType>& trackEnd ) noexcept;
 
 			IDType	id;						///< Identifier of the track.
 			EndType	type = EndType::none;	///< front or end end of the track.
@@ -1269,6 +1272,11 @@ namespace trax{
 
 ///////////////////////////////////////
 // inlines:
+inline Track::End::End( const std::pair<std::shared_ptr<TrackBuilder>,Track::EndType>& trackEnd ) noexcept
+	: id	{ trackEnd.first ? trackEnd.first->ID() : IDType{0u} }
+	, type	{ trackEnd.second }
+{}
+
 inline bool operator==( const Track::End& theone, const Track::End& theother ) noexcept{
 	return theone.id == theother.id && theone.type == theother.type;
 }

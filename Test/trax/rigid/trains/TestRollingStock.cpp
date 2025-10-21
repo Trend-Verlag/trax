@@ -233,7 +233,8 @@ BOOST_FIXTURE_TEST_CASE( testAxisArrangementReader2, TrainFixture )//TrainFixtur
 	BOOST_CHECK( pRollingStock->IsRailed() );
 }
 
-BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader, TrainFixture )//TrainFixtureVisualDebugger )
+//BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader, TrainFixture )//TrainFixtureVisualDebugger )
+BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader, TrainFixtureVisualDebugger )
 {
 	RollingStockCreator creator{ *m_pScene };
 	RollingStockFileReader reader{ creator, FixturePath() };

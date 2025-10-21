@@ -50,6 +50,10 @@ namespace trax{
 
 	inline std::istream& operator >> ( std::istream& is, Track::EndType& endType );
 
+	inline std::ostream& operator << ( std::ostream& os, const Track::End& end );
+
+	inline std::istream& operator >> ( std::istream& is, Track::End& end );
+
 	inline std::ostream& operator << ( std::ostream& ost, const Location& location );
 
 	inline std::ostream& operator << ( std::ostream& ost, const TrackLocation& location );
@@ -122,6 +126,27 @@ namespace trax{
 		is >> c;
 
 		endType = ToEndType( token );
+		return is;
+	}
+
+	std::ostream& operator<<( std::ostream& os, const Track::End& end )
+	{
+		os << "Track::End( " << end.id << ", " << end.type << " )";
+		return os;
+	}
+
+	std::istream& operator>>( std::istream& is, Track::End& end )
+	{
+		std::string token;
+		is >> token;
+		if( token != "Track::End(" )
+			throw std::runtime_error( "No Track::End" );
+
+		char c;
+		is >> end.id;
+		is >> c; assert( c == ',' );
+		is >> end.type;
+		is >> c; assert( c == ')' );
 		return is;
 	}
 

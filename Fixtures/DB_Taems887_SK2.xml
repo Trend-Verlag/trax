@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxisArrangement>
+	<Bogie centerShift="0" length="11.5" id="0" name="Basis" model="Taems887-DB" height="2.5">
+		<WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="infinite" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+		<Geom name="bottom" type="bogie" shape="box" mass="3">
+			<Area xnear="-5.34" xfar="5.34" ynear="-1.54" yfar="1.54" znear="1" zfar="1.3"/>
+			<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+		</Geom>	
+		<Geom name="side_left_south" type="bogie" shape="box" mass="1.5">
+			<Area xnear="-5.34" xfar="-1.34" ynear="1.34" yfar="1.54" znear="1" zfar="3.3"/>
+			<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+		</Geom>
+		<Geom name="side_right_south" type="bogie" shape="box" mass="1.5">
+			<Area xnear="-5.34" xfar="-1.34" ynear="-1.54" yfar="-1.34" znear="1" zfar="3.3"/>
+			<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+		</Geom>
+		<Geom name="" type="front_south" shape="box" mass="1.5">
+			<Area xnear="-5.34" xfar="-5.14" ynear="-1.54" yfar="1.54" znear="1" zfar="4.15"/>
+			<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+		</Geom>		
+		<Geom name="side_left_north" type="bogie" shape="box" mass="1.5">
+			<Area xnear="1.34" xfar="5.34" ynear="1.34" yfar="1.54" znear="1" zfar="3.3"/>
+			<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+		</Geom>
+		<Geom name="side_right_north" type="bogie" shape="box" mass="1.5">
+			<Area xnear="1.34" xfar="5.34" ynear="-1.54" yfar="-1.34" znear="1" zfar="3.3"/>
+			<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+		</Geom>
+		<Geom name="front_north" type="bogie" shape="box" mass="1.5">
+			<Area xnear="5.14" xfar="5.34" ynear="-1.54" yfar="1.54" znear="1" zfar="4.15"/>
+			<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+		</Geom>		
+		<Coupling end="north" height="1" bufferLength="0.400000006" maxForce="2000.00006"/>
+		<Coupling end="south" height="1" bufferLength="0.400000006" maxForce="2000.00006"/>	
+		<WheelFrame id="1" name="_vRadsatz" model="DK1 Drehgestell_Container" height="0.5">
+			<Frame>
+				<Position x="3" y="0" z="0"/>
+				<Vector dx="1" dy="0" dz="0"/>
+				<Vector dx="0" dy="1" dz="0"/>
+				<Vector dx="0" dy="0" dz="1"/>
+			</Frame>
+			<WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="0" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+´			<Wheelset radius="0.5" gauge="1.43499994" flange="0.100000001" wheel_width="0.200000003" axle_radius="0.100000001" mass="1.5" rotation="0" shift="0" motor_torque="0" brake_torque="10" friction_torque="0.0199999996">
+				<Position2D x="-1" y="0.5"/>
+			</Wheelset>
+			<Wheelset radius="0.5" gauge="1.43499994" flange="0.100000001" wheel_width="0.200000003" axle_radius="0.100000001" mass="1.5" rotation="0" shift="0" motor_torque="0" brake_torque="10" friction_torque="0.0199999996">
+				<Position2D x="1" y="0.5"/>
+			</Wheelset>
+		</WheelFrame>
+		<WheelFrame id="2" name="_hRadsatz" model="DK1 Drehgestell_Container" height="0.5">
+			<Frame>
+				<Position x="-3" y="0" z="0"/>
+				<Vector dx="1" dy="0" dz="0"/>
+				<Vector dx="0" dy="1" dz="0"/>
+				<Vector dx="0" dy="0" dz="1"/>
+			</Frame>
+			<WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="0" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+			<Wheelset radius="0.5" gauge="1.43499994" flange="0.100000001" wheel_width="0.200000003" axle_radius="0.100000001" mass="1.5" rotation="0" shift="0" motor_torque="0" brake_torque="10" friction_torque="0.0199999996">
+				<Position2D x="-1" y="0.5"/>
+			</Wheelset>
+			<Wheelset radius="0.5" gauge="1.43499994" flange="0.100000001" wheel_width="0.200000003" axle_radius="0.100000001" mass="1.5" rotation="0" shift="0" motor_torque="0" brake_torque="10" friction_torque="0.0199999996">
+				<Position2D x="1" y="0.5"/>
+			</Wheelset>
+		</WheelFrame>	
+		<Axis id="7" name="Tuer1-Teams887-1" model="Tuer-Taems887" param="0" min="0" null="0" max="2.65" vmin="-1.57079637" vmax="1.57079637" type="slider" drive="1000">
+			<Frame>
+				<Position x="0" y="-1.54" z="1"/>
+				<Vector dx="0" dy="1" dz="0"/>
+				<Vector dx="0" dy="0" dz="1"/>
+				<Vector dx="1" dy="0" dz="0"/>
+			</Frame>
+			<Geom name="door_right" type="bogie" shape="box" mass="0.5">
+				<Area xnear="0" xfar="0.3" ynear="0" yfar="2.3" znear="-1.4" zfar="1.4"/>
+				<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+			</Geom>
+		</Axis>
+		<Axis id="8" name="Tuer2-Teams887-1" model="Tuer-Taems887" param="0" min="0" null="0" max="2.64999986" vmin="-1.57079637" vmax="1.57079637" type="slider" drive="1000">
+			<Frame>
+				<Position x="0" y="1.45000005" z="0.980000019"/>
+				<Vector dx="0" dy="-1" dz="0"/>
+				<Vector dx="0" dy="0" dz="1"/>
+				<Vector dx="-1" dy="0" dz="0"/>
+			</Frame>
+			<Geom name="door_left" type="bogie" shape="box" mass="0.5">
+				<Area xnear="0" xfar="0.3" ynear="0" yfar="2.3" znear="-1.4" zfar="1.4"/>
+				<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+			</Geom>
+		</Axis>
+		<Axis id="10" name="Zg-vorn-Taems887-1" model="Zugschluss-EpIV" param="0" min="0" null="0" max="0.0300000012" vmin="-1.57079637" vmax="1.57079637" type="free_translational" drive="1000">
+			<Frame>
+				<Position x="5.07000017" y="0" z="1.35000002"/>
+				<Vector dx="0" dy="0" dz="-1"/>
+				<Vector dx="0" dy="1" dz="0"/>
+				<Vector dx="1" dy="0" dz="0"/>
+			</Frame>
+		</Axis>
+		<Axis id="11" name="Zg-hinten-Taems887-1" model="Zugschluss-EpIV" param="0" min="0" null="0" max="0.0300000012" vmin="-1.57079637" vmax="1.57079637" type="free_translational" drive="1000">
+			<Frame>
+				<Position x="-5.07000017" y="0" z="1.20000005"/>
+				<Vector dx="0" dy="0" dz="-1"/>
+				<Vector dx="0" dy="-1" dz="0"/>
+				<Vector dx="-1" dy="0" dz="0"/>
+			</Frame>
+		</Axis>
+		<Axis id="12" name="Schwenkdach1-Teams887-1" model="Schwenkdach-Taems887" param="0" min="0" null="0" max="1.13446403" vmin="-0.157079637" vmax="0.157079637" type="hinge" drive="1000">
+			<Frame>
+				<Position x="-5.23" y="-0.56" z="2.4"/>
+				<Vector dx="0" dy="1" dz="0"/>
+				<Vector dx="0" dy="0" dz="1"/>
+				<Vector dx="1" dy="0" dz="0"/>
+			</Frame>
+			<Geom name="roof_right" type="bogie" shape="box" mass="1">
+				<Area xnear="-0.5" xfar="0.56" ynear="1.4" yfar="1.75" znear="0" zfar="10.46"/>
+				<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+			</Geom>	
+			<Geom name="roof_right_counterwight" type="bogie" shape="box" mass="0.5">
+				<Area xnear="-0.5" xfar="0.56" ynear="-1.75" yfar="-1.4" znear="10.4" zfar="10.5"/>
+				<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+			</Geom>	
+			<Coupling rname="_dach-unten1" factor="0.584600031"/>
+		</Axis>
+		<Axis id="13" name="Schwenkdach2-Teams887-1" model="Schwenkdach-Taems887" param="0" min="0" null="0" max="1.13446403" vmin="-0.157079637" vmax="0.157079637" type="hinge" drive="1000">
+			<Frame>
+				<Position x="5.23" y="0.56" z="2.4"/>
+				<Vector dx="0" dy="-1" dz="0"/>
+				<Vector dx="0" dy="0" dz="1"/>
+				<Vector dx="-1" dy="0" dz="0"/>
+			</Frame>
+			<Geom name="roof_left" type="bogie" shape="box" mass="1">
+				<Area xnear="-0.5" xfar="0.56" ynear="1.4" yfar="1.75" znear="0" zfar="10.46"/>
+				<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+			</Geom>	
+			<Geom name="roof_left_counterwight" type="bogie" shape="box" mass="0.5">
+				<Area xnear="-0.5" xfar="0.56" ynear="-1.75" yfar="-1.4" znear="10.4" zfar="10.5"/>
+				<Material type="steel" staticFriction="0.6" dynamicFriction="0.4" restitution="0.1"/>
+			</Geom>	
+			<Coupling rname="_dach-unten2" factor="0.584600031"/>
+		</Axis>
+		<Axis id="14" name="_dach-unten1" model="Schwenkdach2-Teams887" param="0" min="0" null="0" max="0.663225114" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+			<Frame>
+				<Position x="-5.23000002" y="-0.560000002" z="2.4000001"/>
+				<Vector dx="0" dy="1" dz="0"/>
+				<Vector dx="0" dy="0" dz="1"/>
+				<Vector dx="1" dy="0" dz="0"/>
+			</Frame>
+			<Coupling rname="Schwenkdach1-Teams887-1" factor="1.71057129"/>
+		</Axis>
+		<Axis id="15" name="_dach-unten2" model="Schwenkdach2-Teams887" param="0" min="0" null="0" max="0.663225114" vmin="-0.157079637" vmax="0.157079637" type="free_rotational">
+			<Frame>
+				<Position x="5.23000002" y="0.560000002" z="2.4000001"/>
+				<Vector dx="0" dy="-1" dz="0"/>
+				<Vector dx="0" dy="0" dz="1"/>
+				<Vector dx="-1" dy="0" dz="0"/>
+			</Frame>
+			<Coupling rname="Schwenkdach2-Teams887-1" factor="1.71057129"/>
+		</Axis>
+	</Bogie>
+</AxisArrangement>
