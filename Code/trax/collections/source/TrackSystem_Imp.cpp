@@ -103,6 +103,67 @@ std::shared_ptr<TrackSystem> TrackSystem_Imp::This() const noexcept{
 	return m_pThis.lock();
 }
 
+bool TrackSystem_Imp::IsValid( bool bSilent ) const noexcept
+{
+	bool bOK = true;
+	if( m_pTrackCollectionContainer == nullptr )
+	{
+		if( !bSilent )
+			std::cerr << "No TrackCollectionContainer assigned to TrackSystem!" << std::endl;	
+		bOK = false;
+	}
+	else{
+		for( const auto& collection : *m_pTrackCollectionContainer )
+		{
+			if( !collection.GetFrame().IsOrthoNormal() )
+			{
+				if( !bSilent )
+					std::cerr << "TrackCollection with ID " << collection.ID() << " has a non orthonormal frame!" << std::endl;	
+				bOK = false;
+			}
+		}
+	}
+
+	for( auto iter = begin(); iter != end(); ++iter ){
+		if( !iter->IsValid() )
+		{
+			if( !bSilent )
+				std::cerr << "Track with ID " << iter->ID() << " is not valid!" << std::endl;
+			bOK = false;
+		}
+	}
+
+	if( m_pConnectorCollection == nullptr )
+	{
+		if( !bSilent )
+			std::cerr << "No ConnectorCollection assigned to TrackSystem!" << std::endl;
+		bOK = false;
+	}
+	else{
+		if( !m_pConnectorCollection->IsValid( bSilent ) )
+			bOK = false;
+		else 
+			for( const auto& Connector : *m_pConnectorCollection )
+			{
+				for( int slot = 0; slot < Connector.CntSlots(); ++slot )
+				{
+					auto trackEnd = Connector.Slot( slot );
+					if( trackEnd.first )
+					{
+						if( !IsMember( *trackEnd.first ) )
+						{
+							if( !bSilent )
+								std::cerr << "Connector with ID " << Connector.ID() << " has a track end assigned to a track not in the track system! Track ID: " << trackEnd.first->ID() << std::endl;
+							bOK = false;
+						}
+					}
+				}
+			}
+	}
+
+	return bOK;
+}
+
 IDType TrackSystem_Imp::Add( std::shared_ptr<TrackBuilder> pTrack ){
 	if( !pTrack || !pTrack->IsValid() )
 		return 0;
@@ -282,18 +343,11 @@ std::shared_ptr<Sensor> TrackSystem_Imp::GetSensor(
 	return nullptr;
 }
 
-Length TrackSystem_Imp::CalculateGapSize( const Track::End& theOne, const Track::End& theOther ) const{
-	if( auto pTheOne = Get( theOne.id ) ){
-		if( auto pTheOther = Get( theOther.id ) ){
-			Position<Length> posTheOne, posTheOther;
-			pTheOne->Transition( theOne.type == Track::EndType::front ? 0_m : pTheOne->GetLength(), posTheOne );
-			pTheOther->Transition( theOther.type == Track::EndType::front ? 0_m : pTheOther->GetLength(), posTheOther );
-
-			return (posTheOther - posTheOne).Length();
-		}
-	}
-
-	return 0_m;
+Length TrackSystem_Imp::CalculateGapSize( const Track::End& theOne, const Track::End& theOther ) const
+{
+	return DistanceOf( 
+		Track::cTrackEnd{ Get( theOne.id ), theOne.type }, 
+		Track::cTrackEnd{ Get( theOther.id ), theOther.type } );
 }
 
 std::vector<Track::End> TrackSystem_Imp::GetUncoupledIn( const Sphere<Length>& area ) const{
@@ -354,7 +408,7 @@ void TrackSystem_Imp::Connection( const Track::Coupling& couplings, Track::Coupl
 		}
 }
 
-void TrackSystem_Imp::CoupleAll( Length maxDistance )
+void TrackSystem_Imp::CoupleAll( Length maxDistance, Angle maxKink, bool bSilent )
 {
 	if( m_pTrackCollectionContainer )
 	{
@@ -363,10 +417,10 @@ void TrackSystem_Imp::CoupleAll( Length maxDistance )
 			for( TrackBuilder& track : trackCollection )
 			{
 				if( !track.IsCoupled( Track::EndType::front ) )
-					trax::Couple( trackCollection, track, Track::EndType::front, maxDistance );
+					trax::Couple( trackCollection, track, Track::EndType::front, maxDistance, maxKink, bSilent );
 
 				if( !track.IsCoupled( Track::EndType::end ) )
-					trax::Couple( trackCollection, track, Track::EndType::end, maxDistance );
+					trax::Couple( trackCollection, track, Track::EndType::end, maxDistance, maxKink, bSilent );
 			}
 		}
 	}

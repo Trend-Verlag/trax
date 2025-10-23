@@ -36,6 +36,8 @@ namespace trax{
 	class ConnectorCollection_Imp : public ConnectorCollection_Base{
 	public:
 		const char* TypeName() const override;
+
+		bool IsValid( bool bSilent = true ) const noexcept override;
 	};
 
 }

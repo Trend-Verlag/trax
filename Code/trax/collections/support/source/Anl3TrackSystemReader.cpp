@@ -336,6 +336,7 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 			//Todo: substitute with CreateNonEEPCurve function
 			Frame<Length,One> frame;
 			ReadDreibein( pt, frame );
+			frame.OrthoNormalize();
 			frame.RotateTan( -From );	// The starting Frame includes the twist at the starting point. 
 										// For trax this is not the case, so we calculate this out here:
 
@@ -486,6 +487,7 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 			if( pair.first == "Frame" ){
 				Frame<Length,One> frame;
 				ReadFrame( pair.second, frame );
+				frame.OrthoNormalize();
 				pTrack->SetFrame( frame );
 			}
 

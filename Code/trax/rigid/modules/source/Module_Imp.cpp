@@ -30,6 +30,8 @@
 #include "trax/rigid/trains/collections/CargoCollection.h"
 #include "trax/rigid/trains/collections/Fleet.h"
 
+#include <iostream>
+
 namespace trax{
 
 std::unique_ptr<Module> Module::Make( bool bCreateCollections ) noexcept
@@ -56,6 +58,70 @@ Module_Imp::Module_Imp( bool bCreateCollections )
 		m_pIndicatorCollection = trax::IndicatorCollection::Make();
 		m_pCargoCollection = trax::CargoCollection::Make();
 	}
+}
+
+bool Module_Imp::IsValid( bool bSilent ) const noexcept
+{
+	if( !m_Frame.IsOrthoNormal() )
+	{
+		if( !bSilent )
+			std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has a non-orthonormal frame." << std::endl;
+		return false;
+	}
+
+	if( m_Volume.Volume() <= 0_m3 )
+	{
+		if( !bSilent )
+			std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has an invalid volume." << std::endl;
+		return false;
+	}
+
+	if( !m_pTrackSystem )
+	{
+		if( !bSilent )
+			std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no TrackSystem attached." << std::endl;
+		return false;
+	} 
+	else if( !m_pTrackSystem->IsValid( bSilent ) )
+		return false;
+
+	//if( !m_pFleet )
+	//{
+	//	if( !bSilent )
+	//		std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no Fleet attached." << std::endl;
+	//	return false;
+	//}
+	//else if( !m_pFleet->IsValid( bSilent ) )
+	//	return false;
+
+	//if( !m_pSignalCollection )
+	//{
+	//	if( !bSilent )
+	//		std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no SignalCollection attached." << std::endl;
+	//	return false;
+	//}
+	//else if( !m_pSignalCollection->IsValid( bSilent ) )
+	//	return false;
+
+	//if( !m_pIndicatorCollection )
+	//{
+	//	if( !bSilent )
+	//		std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no IndicatorCollection attached." << std::endl;
+	//	return false;
+	//}
+	//else if( !m_pIndicatorCollection->IsValid( bSilent ) )
+	//	return false;
+
+	//if( !m_pCargoCollection )
+	//{
+	//	if( !bSilent )
+	//		std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no CargoCollection attached." << std::endl;
+	//	return false;
+	//}
+	//else if( !m_pCargoCollection->IsValid( bSilent ) )
+	//	return false;
+
+	return true;
 }
 
 void Module_Imp::SetFrame( const spat::Frame<Length,One>& frame ) noexcept{

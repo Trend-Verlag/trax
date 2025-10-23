@@ -434,6 +434,13 @@ BOOST_AUTO_TEST_CASE ( testDimensionalFrameTransformation )
 	BOOST_CHECK( P1.Equals( P0, epsilon ) );
 }
 
+BOOST_AUTO_TEST_CASE( testFrameOrthonormalize )
+{
+	Frame<Length,One> startFrame{ {1_m,2_m,3_m}, {1,1,1}, {-1,1,0}, {0,0,1} };
+	startFrame.OrthoNormalize();
+	BOOST_CHECK( startFrame.IsOrthoNormal() );
+}
+
 BOOST_AUTO_TEST_CASE ( testDimensionalMatrixAlgebra )
 {
 	Position<Length> P1{1_m,2_m,3_m};

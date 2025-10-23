@@ -338,6 +338,13 @@ BOOST_AUTO_TEST_CASE( frame_conversion )
 	//---------------
 }
 
+BOOST_AUTO_TEST_CASE( frame_orthonormalize )
+{
+	Frame<Real> startFrame{ {1,2,3}, {1,1,1}, {-1,1,0}, {0,0,1} };
+	startFrame.OrthoNormalize();
+	BOOST_CHECK( startFrame.IsOrthoNormal() );
+}
+
 BOOST_AUTO_TEST_CASE( frame_lookat )
 {
 	Frame<Real> frame, reference;

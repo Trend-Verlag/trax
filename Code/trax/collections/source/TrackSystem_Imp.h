@@ -72,6 +72,8 @@ namespace trax{
 		// TrackSystem:
 		std::shared_ptr<TrackSystem> This() const noexcept override;
 	 
+		bool IsValid( bool bSilent = true ) const noexcept override;
+
 		IDType CreateCollection( IDType id = 0 ) override;
 
 		void RemoveCollection( IDType id ) override;
@@ -108,7 +110,7 @@ namespace trax{
 
 		void Connection( const Track::Coupling& couplings, Track::Coupling& active ) const override;
 
-		void CoupleAll( Length maxDistance = 1_m ) override;
+		void CoupleAll( Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true ) override;
 
 		void DeCoupleAll() override;
 

@@ -49,7 +49,7 @@ bool EqualsByCenters(
 	common::Interval<Length> range, 
 	Length epsilon_length ) noexcept
 {
-	if( range.Length() <= 10*epsilon_length )
+	if( abs(range.Length()) <= 10*epsilon_length )
 		return true;
 
 	spat::Position<Length> posA, posB;

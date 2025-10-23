@@ -73,6 +73,14 @@ void PhysX_Cuboid_Imp::Diagonal( const Vector<Length>& diagonal ){
 	m_BoxGeometry.halfExtents.y *= scale.dy;
 	m_BoxGeometry.halfExtents.z *= scale.dz;
 
+	// <= 0 extent would cause an error ...
+	if( m_BoxGeometry.halfExtents.x < epsilon )
+		m_BoxGeometry.halfExtents.x = epsilon;
+	if( m_BoxGeometry.halfExtents.y < epsilon )
+		m_BoxGeometry.halfExtents.y = epsilon;
+	if( m_BoxGeometry.halfExtents.z < epsilon )
+		m_BoxGeometry.halfExtents.z = epsilon;
+
 	AdjustShapeGeometry();
 }
 

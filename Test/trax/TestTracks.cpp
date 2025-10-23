@@ -108,6 +108,7 @@ BOOST_AUTO_TEST_CASE( trackSetStartAccuracy )
 
 	for( int i = 0; i < 10; ++i ){
 		pBuildTrack->Transition( 0_m, testStartFrame );
+		BOOST_CHECK( testStartFrame.IsOrthoNormal() );
 		pBuildTrack->SetFrame( testStartFrame, 0_m );
 		BOOST_CHECK( startFrame.Equals( testStartFrame, epsilon__length, epsilon__angle ) );
 	}

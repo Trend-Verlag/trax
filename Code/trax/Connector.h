@@ -56,6 +56,12 @@ namespace trax{
 		virtual const char*	TypeName() const = 0;
 
 
+		/// \brief Checks whether the connectors in this collection are valid 
+		/// \param bSilent If false there will be diagnostic output to the console.
+		/// \returns true if all the connectors are valid build.
+		virtual bool IsValid( bool bSilent = true ) const noexcept = 0;
+
+
 		/// \brief Sets the connector to the next setting.
 		/// \param pulse If true the call will trigger a pulse on a plug if plugged
 		/// into an appropriate jack.

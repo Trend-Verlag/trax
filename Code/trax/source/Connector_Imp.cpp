@@ -78,6 +78,11 @@ Connector_Imp::Connector_Imp( int cntSlots )
 	m_PlugToToggle.Reference( "name", "PlugToToggle" );
 }
 
+bool Connector_Imp::IsValid( bool bSilent ) const noexcept
+{
+	return bSilent ? IsComplete() : Check( std::cout );
+}
+
 void Connector_Imp::Disconnect(){
 	for( const auto& pair : m_Slots )
 		if( pair.first )
@@ -259,39 +264,46 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 		return false;
 	}
 
-	if( auto pTrack = m_Slots[slot].first ){
-		if( e_distance > 0_m ){
-			if( DistanceToCoupled( *pTrack, m_Slots[slot].second ) > e_distance ){
-				os << "Distance to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
-					<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
-					<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
-					<< " Distance: " << DistanceToCoupled( *pTrack, m_Slots[slot].second ) << std::endl;
-				return false;
+	bool bOk = true;
+	if( auto pTrack = m_Slots[slot].first; pTrack ){
+		try{
+			if( e_distance > 0_m ){
+				if( DistanceToCoupled( *pTrack, m_Slots[slot].second ) > e_distance ){
+					os << "Distance to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
+						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
+						<< " Distance: " << DistanceToCoupled( *pTrack, m_Slots[slot].second ) << std::endl;
+					bOk = false;
+				}
+			}
+
+			if( e_kink > 0_deg ){
+				if( KinkToCoupled( *pTrack, m_Slots[slot].second ) > e_kink ){
+					os << "Kink to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
+						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
+						<< " Kink: " << _deg(KinkToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
+					bOk = false;
+				}
+			}
+
+			if( e_twist > 0_deg ){
+				if( TwistToCoupled( *pTrack, m_Slots[slot].second ) > e_twist ){
+					os << "Twist to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
+						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
+						<< " Twist: " << _deg(TwistToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
+					bOk = false;
+				}
 			}
 		}
-
-		if( e_kink > 0_deg ){
-			if( KinkToCoupled( *pTrack, m_Slots[slot].second ) > e_kink ){
-				os << "Kink to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
-					<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
-					<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
-					<< " Kink: " << _deg(KinkToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
-				return false;
-			}
-		}
-
-		if( e_twist > 0_deg ){
-			if( TwistToCoupled( *pTrack, m_Slots[slot].second ) > e_twist ){
-				os << "Twist to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
-					<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
-					<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
-					<< " Twist: " << _deg(TwistToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
-				return false;
-			}
+		catch( const std::exception& e ){
+			os << "Connector_Imp::CheckSlot: Exception caught during check: " << e.what() << std::endl;
+			return false;
 		}
 	}
 
-	return true;
+	return bOk;
 }
 ///////////////////////////////////////
 void Couple( 

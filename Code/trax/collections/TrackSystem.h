@@ -89,6 +89,12 @@ namespace trax{
 		virtual std::shared_ptr<TrackSystem> This() const noexcept = 0;
 
 
+		/// \brief Checks whether the tracks in this collection are valid 
+		/// \param bSilent If false there will be diagnostic output to the console.
+		/// \returns true if all the tracks are valid build.
+		virtual bool IsValid( bool bSilent = true ) const noexcept = 0;
+
+
 		// TrackCollections:
 
 		/// \brief Creates a TrackCollection with the supplied id.
@@ -176,7 +182,10 @@ namespace trax{
 
 		///\brief Couples all open ends in the track system, if they are closer
 		/// than maxDistance.
-		virtual void CoupleAll( Length maxDistance = 1_m ) = 0;
+		/// \param maxDistance A threshold for the distance to search track ends around the to be coupled end.
+		/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
+		/// \param bSilent If true no log messages are emitted.
+		virtual void CoupleAll( Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true ) = 0;
 
 
 		/// \brief Uncouples all the Tracks in the TrackSystem from each other.

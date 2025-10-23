@@ -131,7 +131,7 @@ namespace trax{
 
 	std::ostream& operator<<( std::ostream& os, const Track::End& end )
 	{
-		os << "Track::End( " << end.id << ", " << end.type << " )";
+		os << "Track::End( " << end.id << ", " << ToString(end.type) << " )";
 		return os;
 	}
 
@@ -143,9 +143,11 @@ namespace trax{
 			throw std::runtime_error( "No Track::End" );
 
 		char c;
+		std::string typeStr;
 		is >> end.id;
 		is >> c; assert( c == ',' );
-		is >> end.type;
+		is >> typeStr;
+		end.type = ToEndType( typeStr );
 		is >> c; assert( c == ')' );
 		return is;
 	}

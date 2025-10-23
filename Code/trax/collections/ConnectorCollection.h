@@ -38,6 +38,11 @@ namespace trax{
 		/// \brief Makes a standard ConnectorCollection object.
 		static std::unique_ptr<ConnectorCollection> Make() noexcept;
 
+
+		/// \brief Checks whether the connectors in this collection are valid 
+		/// \param bSilent If false there will be diagnostic output to the console.
+		/// \returns true if all the connectors are valid build.
+		virtual bool IsValid( bool bSilent = true ) const noexcept = 0;
 	};
 
 

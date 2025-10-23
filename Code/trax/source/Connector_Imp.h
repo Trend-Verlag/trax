@@ -37,6 +37,8 @@ namespace trax{
 	public:
 		Connector_Imp( int cntSlots );
 
+		bool IsValid( bool bSilent = true ) const noexcept override;
+
 		void Disconnect() override;
 
 		int Slot( int slot, std::shared_ptr<TrackBuilder> pTrack, Track::EndType trackend, bool connectAnonymous = false ) override;

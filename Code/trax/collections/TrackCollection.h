@@ -109,11 +109,10 @@ namespace trax{
 	/// \param endType The track's end to couple
 	/// \param maxDistance A threshold for the distance to search track ends around the to be coupled end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
-	/// \param bUncoupled If true only uncoupled track ends are taken into consideration.
 	/// \param bSilent If true no log messages are emitted.
 	/// \return The other track end, the track was coupled to, or { nullptr, Track::EndType::none } if no suitable track end was found.
 	/// \throws std::invalid_argument If the end type is not recocnised.
-	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> dclspc Couple( const TrackCollection& collection, TrackBuilder& track, Track::EndType endType, Length maxDistance, Angle maxKink = pi, bool bUncoupled = true, bool bSilent = true );
+	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> dclspc Couple( const TrackCollection& collection, TrackBuilder& track, Track::EndType endType, Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true );
 
 
 	/// \brief A decorator for TrackCollection.

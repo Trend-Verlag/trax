@@ -60,6 +60,12 @@ namespace trax{
 		virtual const char*	TypeName() const noexcept = 0;
 
 
+		/// \brief Checks whether the elements in this module are valid 
+		/// \param bSilent If false there will be diagnostic output to the console.
+		/// \returns true if all the elements are valid build.
+		virtual bool IsValid( bool bSilent = true ) const noexcept = 0;
+
+
 		/// \brief Set frame of reference.
 		///
 		/// The module's frame of reference gets applied to track locations 
@@ -143,8 +149,6 @@ namespace trax{
 
 		/// \brief Clears all the attached collections.
 		virtual void ClearCollections() = 0;
-
-
 	};
 
 }

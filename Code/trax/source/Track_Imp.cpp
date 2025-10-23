@@ -194,12 +194,11 @@ void Track_Imp::SetFrame(
 	const Angle twist = m_pTwist->Twist( s );
 	base.RotateTan( twist );
 
-	const Frame<Length,One> frame{	Transformation<One>{ GetAbsoluteFrame() }.Invert() * 
-									Transformation<One>{ S } * 
-									Transformation<One>{ base }.Invert() };
-
-	//spat::OrthogonalityDump( std::cout, frame );
-	assert( frame.IsOrthoNormal(epsilon__length/Length{1},epsilon__angle) );
+	Frame<Length,One> frame{	Transformation<One>{ GetAbsoluteFrame() }.Invert() * 
+								Transformation<One>{ S } * 
+								Transformation<One>{ base }.Invert() };
+	if( !frame.IsOrthoNormal() )
+		frame.OrthoNormalize();
 
 	const spat::Frame<Length,One> oldFrame{ GetFrame() };
 	SetFrame( frame );
@@ -235,7 +234,9 @@ void Track_Imp::SetFrame(
 }
 
 bool Track_Imp::IsValid() const noexcept{
-	return  m_pCurve && m_pCurve->IsValid() &&
+	return  GetFrame().IsOrthoNormal() &&
+			GetAbsoluteFrame().IsOrthoNormal() &&
+			m_pCurve && m_pCurve->IsValid() &&
 			m_pTwist && m_pTwist->IsValid();
 }
 
@@ -1741,7 +1742,7 @@ bool Simplify( TrackBuilder& track ) noexcept
 	{
 		const LineP::Data& data = lineP->GetData();
 		spat::Frame<Length,One> SupplementalFrame{ data.vb.P, data.vb.T, data.up % data.vb.T, data.up };
-		track.SetFrame(	track.GetFrame() * SupplementalFrame );
+		track.SetFrame(	(track.GetFrame() * SupplementalFrame).OrthoNormalize() );
 		if( std::shared_ptr<Line> pLine = Line::Make(); pLine )
 		{
 			track.Attach( std::make_pair( pLine, Curve.second ) );
@@ -1753,7 +1754,7 @@ bool Simplify( TrackBuilder& track ) noexcept
 		ArcP::Data data = arcP->GetData();
 		Length radius = _m(data.vb2.N.Normalize());
 		spat::Frame<Length,One> SupplementalFrame{ data.vb2.P, -data.vb2.N, data.vb2.T, data.vb2.T % data.vb2.N };
-		track.SetFrame(	track.GetFrame() * SupplementalFrame );
+		track.SetFrame(	(track.GetFrame() * SupplementalFrame).OrthoNormalize() );
 		if( std::shared_ptr<Arc> pArc = Arc::Make(); pArc )
 		{
 			pArc->Create( Arc::Data{ 1 / radius } );
@@ -1765,7 +1766,7 @@ bool Simplify( TrackBuilder& track ) noexcept
 	{
 		const HelixP::Data& data = helixP->GetData();
 		spat::Frame<Length,One> SupplementalFrame{ data.center.P, data.center.T, data.center.N, data.center.T % data.center.N };
-		track.SetFrame( track.GetFrame() * SupplementalFrame );
+		track.SetFrame( (track.GetFrame() * SupplementalFrame).OrthoNormalize() );
 		if( std::shared_ptr<Helix> pHelix = Helix::Make(); pHelix )
 		{
 			pHelix->Create( Helix::Data{ data.a, data.b } );

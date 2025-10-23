@@ -42,5 +42,18 @@ const char* ConnectorCollection_Imp::TypeName() const{
 	return "ConnectorCollection";
 }
 
+bool ConnectorCollection_Imp::IsValid( bool bSilent ) const noexcept
+{
+	bool bOK = true;
+	for( const auto& connectorPair : m_Container ){
+		auto& connector = *(connectorPair.second);
+		if( !connector.IsValid( bSilent ) ){
+			bOK = false;
+		}
+	}
+
+	return bOK;
+}
+
 }
 

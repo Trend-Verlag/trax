@@ -729,16 +729,27 @@ namespace trax{
 
 	/// \returns the 3D distance between two track ends. If 
 	/// the distance can not be calculated, +infinite_length is returned.
+	/// \throws std::invalid_argument if any of the track ends is invalid.
 	dclspc Length DistanceOf( Track::cTrackEnd trackEndA, Track::cTrackEnd trackEndB );
 
 
 	/// \returns The 3D distance of the coupled track, if any. 
-	/// If no coupled track end exists, +infinite_length is returned.
+	/// \throws std::invalid_argument if any of the track ends is invalid.
+	/// \throws std::logic_error if the track end is not coupled.
 	dclspc Length DistanceToCoupled( const Track& track, Track::EndType atEnd );
 
+
+	/// \returns The angle of the tangent of the coupled track, if any. 
+	/// \throws std::invalid_argument if any of the track ends is invalid.
+	/// \throws std::logic_error if the track end is not coupled.
 	dclspc Angle KinkToCoupled( const Track& track, Track::EndType atEnd );
 
+
+	/// \returns The angle of the binormal of the coupled track, if any. 
+	/// \throws std::invalid_argument if any of the track ends is invalid.
+	/// \throws std::logic_error if the track end is not coupled.
 	dclspc Angle TwistToCoupled( const Track& track, Track::EndType atEnd );
+
 
 
 	///	\brief Interface for making and shaping tracks.

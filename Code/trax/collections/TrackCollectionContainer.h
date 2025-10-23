@@ -36,7 +36,6 @@ namespace trax{
 	{
 		/// \brief Makes a standard TrackCollectionContainer object.
 		static dclspc std::unique_ptr<TrackCollectionContainer> Make( bool doCreateCollections = false ) noexcept;
-
 	};
 
 
