@@ -39,7 +39,11 @@
 				<Vector dx="0" dy="1" dz="0"/>
 				<Vector dx="0" dy="0" dz="1"/>
 			</Frame>
-			<WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="0" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+      <Geom name="framev" type="wheelframe" shape="box" mass="2">
+        <Area xnear="-1.2" xfar="+1.2" ynear="-0.5" yfar="0.5" znear="0.25" zfar="0.8"/>
+        <Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+      </Geom>
+      <WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="0" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
 ´			<Wheelset radius="0.5" gauge="1.43499994" flange="0.100000001" wheel_width="0.200000003" axle_radius="0.100000001" mass="1.5" rotation="0" shift="0" motor_torque="0" brake_torque="10" friction_torque="0.0199999996">
 				<Position2D x="-1" y="0.5"/>
 			</Wheelset>
@@ -54,7 +58,11 @@
 				<Vector dx="0" dy="1" dz="0"/>
 				<Vector dx="0" dy="0" dz="1"/>
 			</Frame>
-			<WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="0" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+      <Geom name="frameh" type="wheelframe" shape="box" mass="2">
+        <Area xnear="-1.2" xfar="+1.2" ynear="-0.5" yfar="0.5" znear="0.25" zfar="0.8"/>
+        <Material type="steel" staticFriction="0.600000024" dynamicFriction="0.400000006" restitution="0.100000001"/>
+      </Geom>
+      <WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="0" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
 			<Wheelset radius="0.5" gauge="1.43499994" flange="0.100000001" wheel_width="0.200000003" axle_radius="0.100000001" mass="1.5" rotation="0" shift="0" motor_torque="0" brake_torque="10" friction_torque="0.0199999996">
 				<Position2D x="-1" y="0.5"/>
 			</Wheelset>

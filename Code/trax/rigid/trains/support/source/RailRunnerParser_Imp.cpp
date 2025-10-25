@@ -288,6 +288,8 @@ void ParseBogieContentAxisArrangement( const boost::property_tree::ptree& pt, Ro
 			parentEnd = RailRunner::EndType::north;
 		else if( role == "_hRadsatz" )
 			parentEnd = RailRunner::EndType::south;
+		else
+			continue;
 
 		Frame<Length,One> frame;
 		frame.Init();

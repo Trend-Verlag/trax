@@ -327,7 +327,7 @@ Angle KinkToCoupled( const Track& track, Track::EndType atEnd )
 	if( atEnd == otherEnd.second )
 		t2 *= -1;
 
-	return acos(t1 * t2);
+	return atan2( (t1 % t2).Length(), t1 * t2 );
 }
 
 Angle TwistToCoupled( const Track& track, Track::EndType atEnd )
@@ -335,7 +335,7 @@ Angle TwistToCoupled( const Track& track, Track::EndType atEnd )
 	if( !track.IsCoupled( atEnd ) )
 		throw std::logic_error( "TwistToCoupled: track end is not coupled!" );
 
-	VectorBundle2<Length,One> b1, b2;
+	Frame<Length,One> b1, b2;
 	Track::TrackEnd otherEnd = track.TransitionEnd( atEnd );
 
 	switch( otherEnd.second ){
@@ -364,7 +364,7 @@ Angle TwistToCoupled( const Track& track, Track::EndType atEnd )
 		return pi;
 	}
 
-	return asin((b1.N % b2.N).Length());
+	return atan2( (b1.B % b2.B).Length(), b1.B * b2.B );
 }
 
 }

@@ -90,14 +90,14 @@ BOOST_FIXTURE_TEST_CASE( testTwoRollingStockCouple, TrainFixture )
 {
 	RollingStockCreator creator{ *m_pScene };
 	RollingStockFileReader reader{ creator, FixturePath() };
-	BOOST_REQUIRE( reader( "BR212_267-9_2cb_SM2.xml" ) );
+	BOOST_REQUIRE( reader( "BR212_267-9_2cb_SM2.rollingstock" ) );
 	std::shared_ptr<RollingStock> pLoco = creator.GetRollingStock();
 	BOOST_REQUIRE( pLoco );
 	std::shared_ptr<Train> pLocoTrain = Train::Make();
 	BOOST_REQUIRE( pLocoTrain );
 	pLocoTrain->Create( *pLoco );
 
-	BOOST_REQUIRE( reader( "Okmm38.xml" ) );
+	BOOST_REQUIRE( reader( "Okmm38.rollingstock" ) );
 	std::shared_ptr<RollingStock> pWaggon = creator.GetRollingStock();
 	BOOST_REQUIRE( pWaggon );
 	std::shared_ptr<Train> pWaggonTrain = Train::Make();

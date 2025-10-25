@@ -196,7 +196,7 @@ BOOST_FIXTURE_TEST_CASE( testAxisArrangementReader, TrainFixture )//TrainFixture
 
 	RollingStockCreator creator{ *m_pScene };
 	RollingStockFileReader reader{ creator, FixturePath() };
-	BOOST_REQUIRE( reader( "BR212_267-9_2cb_SM2.xml" ) );
+	BOOST_REQUIRE( reader( "BR212_267-9_2cb_SM2.rollingstock" ) );
 	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
 	BOOST_REQUIRE( pRollingStock );
 
@@ -218,7 +218,7 @@ BOOST_FIXTURE_TEST_CASE( testAxisArrangementReader2, TrainFixture )//TrainFixtur
 
 	RollingStockCreator creator{ *m_pScene };
 	RollingStockFileReader reader{ creator, FixturePath() };
-	BOOST_REQUIRE( reader( "Okmm38.xml" ) );
+	BOOST_REQUIRE( reader( "Okmm38.rollingstock" ) );
 	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
 	BOOST_REQUIRE( pRollingStock );
 
@@ -238,7 +238,7 @@ BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader, TrainFixtureVisualDebugge
 {
 	RollingStockCreator creator{ *m_pScene };
 	RollingStockFileReader reader{ creator, FixturePath() };
-	BOOST_REQUIRE( reader( "DB_212.xml" ) );
+	BOOST_REQUIRE( reader( "DB_212.rollingstock" ) );
 	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
 	BOOST_REQUIRE( pRollingStock );
 
@@ -266,7 +266,7 @@ BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader2, TrackCircle )
 
 	RollingStockCreator creator{ *pScene };
 	RollingStockFileReader reader{ creator, FixturePath() };
-	BOOST_REQUIRE( reader( "DR_Eas5951-EpIV_SK2-v8.xml" ) );
+	BOOST_REQUIRE( reader( "DR_Eas5951-EpIV_SK2-v8.rollingstock" ) );
 	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
 	BOOST_REQUIRE( pRollingStock );
 
@@ -287,7 +287,7 @@ BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader3, TrainFixture )
 {
 	RollingStockCreator creator{ *m_pScene };
 	RollingStockFileReader reader{ creator, FixturePath() };
-	BOOST_REQUIRE( reader( "DR_Eas5951-EpIV_SK2-v8.xml" ) );
+	BOOST_REQUIRE( reader( "DR_Eas5951-EpIV_SK2-v8.rollingstock" ) );
 	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
 	BOOST_REQUIRE( pRollingStock );
 
@@ -318,7 +318,7 @@ BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader4, TrainFixture )
 {
 	RollingStockCreator creator{ *m_pScene };
 	RollingStockFileReader reader{ creator, FixturePath() };
-	BOOST_REQUIRE( reader( "DR_Eas5951-EpIV_SK2-v8.xml" ) );
+	BOOST_REQUIRE( reader( "DR_Eas5951-EpIV_SK2-v8.rollingstock" ) );
 	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
 	BOOST_REQUIRE( pRollingStock );
 

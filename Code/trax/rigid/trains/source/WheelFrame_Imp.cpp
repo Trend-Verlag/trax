@@ -359,7 +359,8 @@ void WheelFrame_Imp::CalculateWheelsetFramesFromAnchor() noexcept
 }
 
 void WheelFrame_Imp::Update( Time dt ) noexcept{
-	m_pTrackJointFeederMotorModel->Update( dt );
+	// track joints are updated by scene ...
+	//m_pTrackJointFeederMotorModel->Update( dt );
 	Bogie_Imp::Update( dt );
 }
 

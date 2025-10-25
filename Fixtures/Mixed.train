@@ -2,8 +2,8 @@
 <Train name="Cargo Train" id="1">
   <DisplayName language="english">Cargo Train</DisplayName>
   <DisplayName language="german">Güterzug</DisplayName>
-  <RollingStock name="Locomotive" reference="DB_212.xml" orientation="para"/>
-  <AxisArrangement name="Waggon1" reference="Okmm38.xml" orientation="para"/>
-  <AxisArrangement name="Waggon2" reference="Okmm38.xml" orientation="anti"/>
-  <AxisArrangement name="Waggon3" reference="Okmm38.xml" orientation="para"/>
+  <RollingStock name="Locomotive" reference="DB_212.rollingstock" orientation="para"/>
+  <AxisArrangement name="Waggon1" reference="Okmm38.rollingstock" orientation="para"/>
+  <AxisArrangement name="Waggon2" reference="Okmm38.rollingstock" orientation="anti"/>
+  <AxisArrangement name="Waggon3" reference="Okmm38.rollingstock" orientation="para"/>
 </Train>

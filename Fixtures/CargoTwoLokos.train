@@ -2,15 +2,15 @@
 <Train name="Cargo Train" id="1">
   <DisplayName language="english">Cargo Train</DisplayName>
   <DisplayName language="german">Güterzug</DisplayName>
-  <RollingStock name="Locomotive1" reference="DB_212.xml" orientation="para"/>
-  <RollingStock name="Waggon1" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="anti"/>
-  <RollingStock name="Waggon2" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
-  <RollingStock name="Waggon3" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="anti"/>
-  <RollingStock name="Waggon4" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
-  <RollingStock name="Waggon5" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="anti"/>
-  <RollingStock name="Waggon6" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
-  <RollingStock name="Waggon7" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="anti"/>
-  <RollingStock name="Waggon8" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="para"/>
-  <RollingStock name="Waggon9" reference="DR_Eas5951-EpIV_SK2-v8.xml" orientation="anti"/>
-  <RollingStock name="Locomotive2" reference="DB_212.xml" orientation="anti"/>
+  <RollingStock name="Locomotive1" reference="DB_212.rollingstock" orientation="para"/>
+  <RollingStock name="Waggon1" reference="DR_Eas5951-EpIV_SK2-v8.rollingstock" orientation="anti"/>
+  <RollingStock name="Waggon2" reference="DR_Eas5951-EpIV_SK2-v8.rollingstock" orientation="para"/>
+  <RollingStock name="Waggon3" reference="DR_Eas5951-EpIV_SK2-v8.rollingstock" orientation="anti"/>
+  <RollingStock name="Waggon4" reference="DR_Eas5951-EpIV_SK2-v8.rollingstock" orientation="para"/>
+  <RollingStock name="Waggon5" reference="DR_Eas5951-EpIV_SK2-v8.rollingstock" orientation="anti"/>
+  <RollingStock name="Waggon6" reference="DR_Eas5951-EpIV_SK2-v8.rollingstock" orientation="para"/>
+  <RollingStock name="Waggon7" reference="DR_Eas5951-EpIV_SK2-v8.rollingstock" orientation="anti"/>
+  <RollingStock name="Waggon8" reference="DR_Eas5951-EpIV_SK2-v8.rollingstock" orientation="para"/>
+  <RollingStock name="Waggon9" reference="DR_Eas5951-EpIV_SK2-v8.rollingstock" orientation="anti"/>
+  <RollingStock name="Locomotive2" reference="DB_212.rollingstock" orientation="anti"/>
 </Train>
