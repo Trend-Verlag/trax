@@ -95,7 +95,7 @@
         <Vector dx="0" dy="0" dz="1"/>
       </Frame>
     </Anchor>
-    <WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="10" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+    <WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="100" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
     <Wheelset radius="0.5" gauge="1.435" flange="0.1" wheel_width="0.2" axle_radius="0.1" mass="3" rotation="0" shift="0" motor_torque="22" brake_torque="33.33334" friction_torque="0.09">
       <Position2D x="-1.5" y="0.5"/>
     </Wheelset>
@@ -134,7 +134,7 @@
         <Vector dx="0" dy="0" dz="1"/>
       </Frame>
     </Anchor>
-    <WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="10" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
+    <WheelFrameLimits NormalForceLimitMin="-infinite" NormalForceLimitMax="infinite" BinormalForceLimitMin="0" BinormalForceLimitMax="infinite" NormalTorqueLimit="100" TorqueLimit="250" ThresholdPosition="0.358749986" ThresholdTangent="pi/4" ThresholdNormal="pi/4" ThresholdBinormal="pi/4" bTiltingEnabled="false"/>
     <Wheelset radius="0.5" gauge="1.435" flange="0.1" wheel_width="0.2" axle_radius="0.1" mass="3" rotation="0" shift="0" motor_torque="22" brake_torque="33.33334" friction_torque="0.09">
       <Position2D x="-1.5" y="0.5"/>
     </Wheelset>

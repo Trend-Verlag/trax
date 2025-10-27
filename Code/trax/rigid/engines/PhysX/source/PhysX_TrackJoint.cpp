@@ -277,8 +277,6 @@ PhysXTrackJoint::PhysXTrackJoint(
 	{
 		SceneLockRead lock{ pMovingBody ? pMovingBody->getScene() : pTrackBody->getScene() };
 		m_pConstraint = physics.createConstraint(pMovingBody, pTrackBody, *this, s_ShaderTable, sizeof(TrackJoint<physx::PxReal>));
-		
-		std::clog << "TrackJoint created!" << std::endl;
 	}
 	else
 		throw std::runtime_error( "PhysXTrackJoint: at least one actor must be non-static" );
@@ -290,8 +288,6 @@ void PhysXTrackJoint::release(){
 		physx::PxConstraint* pConstraint = m_pConstraint;
 		m_pConstraint = nullptr;
 		pConstraint->release(); //might delete this, so no further access to this object after this call
-
-		std::clog << "TrackJoint released!" << std::endl;
 	}
 }
 
