@@ -61,9 +61,9 @@ Track::TrackType StaticTrack_Imp::GetTrackType() const noexcept{
 	return TrackType::withGeoms;
 }
 
-bool StaticTrack_Imp::IsValid() const noexcept
+bool StaticTrack_Imp::IsValid( bool bSilent ) const noexcept
 {
-	if( !SectionTrack_Imp::IsValid() )
+	if( !SectionTrack_Imp::IsValid( bSilent ) )
 		return false;
 
 	if( GetLength() == +infinite__length )

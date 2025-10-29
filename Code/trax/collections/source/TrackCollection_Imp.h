@@ -54,6 +54,8 @@ namespace trax{
 
 		const char* TypeName() const override;
 
+		bool	IsValid	( bool bSilent = true ) const noexcept override;
+
 		IDType	Add		( std::shared_ptr<TrackBuilder> pTrack ) override;
 
 		bool	Remove	( TrackBuilder* pTrack, bool zeroIDs = false ) override;

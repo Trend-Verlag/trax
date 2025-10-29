@@ -82,6 +82,11 @@ const char* TrackCollection_Imp::TypeName() const{
 	return "TrackCollection";
 }
 
+bool TrackCollection_Imp::IsValid( bool bSilent ) const noexcept
+{
+	return IsValid_Imp( m_Container, bSilent );
+}
+
 IDType TrackCollection_Imp::Add( std::shared_ptr<TrackBuilder> pTrack ){
 	if( IDType retval = TrackCollection_Base::Add( pTrack ) )
 	{

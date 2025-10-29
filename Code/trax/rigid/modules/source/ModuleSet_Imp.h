@@ -29,22 +29,21 @@
 
 #include "../ModuleSet.h"
 
+#include "trax/ImplementationHelper.h"
+
 namespace trax{
 
-	class ModuleSet_Imp : public ModuleSet
+	typedef Container_Imp<Module,ModuleSet> ModuleSet_Base;
+
+	class ModuleSet_Imp : public ModuleSet_Base
 	{
 	public:
 		ModuleSet_Imp();
 
 		// ModuleSet interface
-		void AddModule( std::unique_ptr<Module> module ) override;
+		const char* TypeName() const override;
 
-		void RemoveModule( Module& module ) override;
-
-		void ClearModules() override;
-
-	private:
-		std::vector<std::unique_ptr<Module>> m_Modules;
+		bool IsValid( bool bSilent = true ) const noexcept override;
 	};
 
 }

@@ -201,7 +201,6 @@ void Bogie_Imp::Update( Time dt ) noexcept
 	if( m_pSwivelChildNorth )
 	{
 		if( m_bNorthSwivelBending == (m_pSwivelChildNorth->GetBendAngle() <= scm_BendingAngle) ){
-			std::cerr << "Bend angle north: " << m_pSwivelChildNorth->GetBendAngle() << std::endl;
 			m_bNorthSwivelBending = !m_bNorthSwivelBending;
 			m_bNorthSwivelBending ? m_JackOnNorthSwivelBendingIn.Pulse() : m_JackOnNorthSwivelBendingOut.Pulse();
 		}

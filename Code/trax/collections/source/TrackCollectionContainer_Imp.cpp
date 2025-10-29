@@ -86,6 +86,10 @@ const char* TrackCollectionContainer_Imp::TypeName() const{
 	return "TrackCollectionContainer";
 }
 
+bool TrackCollectionContainer_Imp::IsValid( bool bSilent ) const noexcept{
+	return IsValid_Imp( m_Container, bSilent );
+}
+
 IDType TrackCollectionContainer_Imp::Add( std::shared_ptr<TrackCollection> pTrackCollection ){
 	return DoAdd( pTrackCollection );
 }

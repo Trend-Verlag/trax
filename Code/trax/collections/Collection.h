@@ -99,6 +99,12 @@ namespace trax{
 		virtual const char*	TypeName() const = 0;
 
 
+		/// \brief Checks whether the elements in this collection are valid 
+		/// \param bSilent If false there will be diagnostic output to the console.
+		/// \returns true if all the elements are valid.
+		virtual bool IsValid( bool bSilent = true ) const noexcept = 0;
+
+
 		/// \brief Adds an element to the container and returns its index in the container.
 		///
 		/// If the element carries an id, it is used as long as it is unique. If the id is 0 

@@ -98,6 +98,11 @@ PhysX_Scene::~PhysX_Scene()
 	}
 }
 
+bool PhysX_Scene::IsValid( bool bSilent ) const noexcept
+{
+	return m_bSceneCreated;
+}
+
 void PhysX_Scene::Up( const Vector<One>& up ){
 	Gravity( Normalize( Gravity() ).first * up );
 }

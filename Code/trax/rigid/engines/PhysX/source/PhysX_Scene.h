@@ -53,6 +53,8 @@ namespace trax
 		const char*	TypeName() const noexcept override{
 			return "PhysXScene";
 		}
+		
+		bool IsValid( bool bSilent = true ) const noexcept override;
 
 		const PhysX_Simulator& Simulator() const { return m_Simulator; }
 

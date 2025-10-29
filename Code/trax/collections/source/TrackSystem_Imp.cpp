@@ -99,10 +99,6 @@ const char*	TrackSystem_Imp::TypeName() const noexcept{
 	return "TrackSystem";
 }
 
-std::shared_ptr<TrackSystem> TrackSystem_Imp::This() const noexcept{
-	return m_pThis.lock();
-}
-
 bool TrackSystem_Imp::IsValid( bool bSilent ) const noexcept
 {
 	bool bOK = true;
@@ -162,6 +158,10 @@ bool TrackSystem_Imp::IsValid( bool bSilent ) const noexcept
 	}
 
 	return bOK;
+}
+
+std::shared_ptr<TrackSystem> TrackSystem_Imp::This() const noexcept{
+	return m_pThis.lock();
 }
 
 IDType TrackSystem_Imp::Add( std::shared_ptr<TrackBuilder> pTrack ){

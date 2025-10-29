@@ -28,6 +28,7 @@
 #pragma once
 
 #include "trax/Configuration.h"
+#include "trax/Identified.h"
 #include "trax/Units.h"
 
 #include "spat/Frame.h"
@@ -57,7 +58,8 @@ namespace trax{
 	class TrackJointFeeder;
 	class TrackJointFeederMotorModel;
 
-	struct Scene{
+	struct Scene : Identified<Scene>
+	{
 
 		/// \brief Makes a Scene object.
 		static dclspc std::unique_ptr<Scene> Make( const Simulator& simulator ) noexcept;
@@ -65,6 +67,12 @@ namespace trax{
 
 		/// \returns the name for the object type that implements this interface. 
 		virtual const char*	TypeName() const noexcept = 0;
+
+
+		/// \brief Checks whether the scene is valid 
+		/// \param bSilent If false there will be diagnostic output to the console.
+		/// \returns true if the scene is valid.
+		virtual bool IsValid( bool bSilent = true ) const noexcept = 0;
 
 
 		/// \brief Sets the up direction for this simulator.

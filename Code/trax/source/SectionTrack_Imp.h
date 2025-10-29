@@ -37,7 +37,7 @@ namespace trax{
 		// Track:
 		TrackType GetTrackType() const noexcept override;
 
-		bool IsValid() const noexcept override;
+		bool IsValid( bool bSilent = true ) const noexcept override;
 
 
 		// SectionTrack:

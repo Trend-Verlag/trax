@@ -38,14 +38,8 @@ namespace trax{
 	/// Holds several modules that m
 	struct ModuleSet : Collection<ModuleSet,Module>
 	{
-		/// \returns the name for the object type that implements this interface. 
-		virtual const char*	TypeName() const = 0;
-
-		virtual void AddModule( std::unique_ptr<Module> module ) = 0;
-
-		virtual void RemoveModule( Module& module ) = 0;
-
-		virtual void ClearModules() = 0;
+		/// \brief Makes a standard ModuleSet object.
+		static std::unique_ptr<ModuleSet> Make() noexcept;
 
 	};
 }

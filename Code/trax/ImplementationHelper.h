@@ -102,6 +102,8 @@ namespace trax{
 		using Base::GetNext;
 		using Base::IsMember;
 
+		bool										IsValid		( bool bSilent ) const noexcept override;
+
 		IDType										Add			( std::shared_ptr<TraxType> pTraxType ) override;
 
 		IDType										AddRelaxed	( std::shared_ptr<TraxType> pTraxType ) override;
@@ -193,6 +195,12 @@ inline Container_Imp<TraxType, Base>::Container_Imp() noexcept
 	:	Base{}
 {
 	SetDecorator( this );
+}
+
+template<class TraxType, class Base>
+inline bool Container_Imp<TraxType, Base>::IsValid( bool /*bSilent*/ ) const noexcept
+{
+	return false;
 }
 
 template<class TraxType, class Base>
@@ -463,6 +471,19 @@ void Container_Imp<TraxType, Base>::SetDecorator( Base* pDecorator ) noexcept{
 		m_pDecorator = pDecorator;
 	else
 		m_pDecorator = this;
+}
+
+template<class ContainerType>
+inline bool IsValid_Imp( const ContainerType& container, bool bSilent ){
+	bool bOK = true;
+	for( const auto& pair : container ){
+		auto& element = *(pair.second);
+		if( !element.IsValid( bSilent ) ){
+			bOK = false;
+		}
+	}
+
+	return bOK;
 }
 
 }

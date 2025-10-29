@@ -28,11 +28,12 @@
 #pragma once
 
 #include "../Scene.h"
+#include "trax/ObjectID.h"
 #include "trax/source/Plug_Imp.h"
 
 namespace trax{
 
-	class Scene_Imp :	public virtual Scene,
+	class Scene_Imp :	public virtual ObjectID_Imp<Scene>,
 						public PlugEnumerator,
 						public JackEnumerator{
 	public:

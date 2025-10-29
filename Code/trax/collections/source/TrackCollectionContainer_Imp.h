@@ -46,6 +46,8 @@ namespace trax{
 
 		const char* TypeName() const override;
 
+		bool IsValid( bool bSilent = true ) const noexcept override;
+
 		void SetAbsoluteFrame( const spat::Frame<Length,One>& frame ) noexcept;
 
 		IDType Add( std::shared_ptr<TrackCollection> pTrackCollection ) override;

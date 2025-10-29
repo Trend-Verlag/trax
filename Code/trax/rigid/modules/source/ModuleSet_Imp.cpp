@@ -31,23 +31,13 @@ ModuleSet_Imp::ModuleSet_Imp()
 {
 }
 
-void ModuleSet_Imp::AddModule( std::unique_ptr<Module> module )
-{
-	if( module )
-		m_Modules.push_back( std::move( module ) );
+const char* ModuleSet_Imp::TypeName() const{
+	return "ModuleSet";
 }
 
-void ModuleSet_Imp::RemoveModule( Module& module )
+bool ModuleSet_Imp::IsValid( bool bSilent ) const noexcept
 {
-	auto it = std::find_if( m_Modules.begin(), m_Modules.end(), 
-		[&module]( const std::unique_ptr<Module>& m ){ return m.get() == &module; } );
-	if( it != m_Modules.end() )
-		m_Modules.erase( it );
-}
-
-void ModuleSet_Imp::ClearModules()
-{
-	m_Modules.clear();
+	return IsValid_Imp( m_Container, bSilent );
 }
 
 }

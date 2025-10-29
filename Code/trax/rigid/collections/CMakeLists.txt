@@ -1,13 +1,16 @@
 add_library(trax_rigid_collections STATIC
     "./source/MovableTrackAutoConnecting_Imp.cpp"
+    "./source/SceneCollection_Imp.cpp"
     "./source/TrackSystemMovable_Imp.cpp"
 )
 
 target_sources(trax_rigid_collections
     PUBLIC
         "./MovableTrackAutoConnecting.h"
+        "./SceneCollection.h"
     PRIVATE
         "./source/MovableTrackAutoConnecting_Imp.h"
+        "./source/SceneCollection_Imp.h"
         "./source/TrackSystemMovable_Imp.h"
 )
 

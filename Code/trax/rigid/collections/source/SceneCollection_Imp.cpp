@@ -1,10 +1,9 @@
 //	trax track library
-//	AD 2024 
+//	AD 2025 
 //
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
-//
 //
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
@@ -27,44 +26,27 @@
 
 #pragma once
 
-#include "../StaticTrack.h"
-#include "../Material.h"
-#include "trax/source/SectionTrack_Imp.h"
+#include "SceneCollection_Imp.h"
 
 namespace trax{
 
-	class StaticTrack_Imp : public StaticTrack,
-							public SectionTrack_Imp			
-	{
-	public:
-		StaticTrack_Imp( const Scene& scene );
+std::unique_ptr<SceneCollection> SceneCollection::Make() noexcept
+{
+	try{
+		return std::make_unique<SceneCollection_Imp>();
+	}
+	catch( const std::bad_alloc& ){
+		return nullptr;
+	}
+}
 
+const char* SceneCollection_Imp::TypeName() const{
+	return "SceneCollection";
+}
 
-		// Track:
-		TrackType GetTrackType() const noexcept override;
-
-		bool IsValid( bool bSilent = true ) const noexcept override;
-
-
-		// StaticTrack:
-		void SetMaterial( const Material& material ) noexcept override;
-
-		const Material& GetMaterial() const noexcept override;
-
-		const Shape& GetShape() const noexcept override;
-
-	protected:
-		// PoseImp:
-		void PropagateAbsoluteFrameToClients() noexcept override;
-
-		// TrackBuilder:
-		void OnGeometryChanged() noexcept override;
-	private:
-		const Scene&					m_Scene;
-		std::unique_ptr<Shape>			m_pShape;
-		Material						m_Material;
-
-		void CreateShape() noexcept;
-	};
+bool SceneCollection_Imp::IsValid( bool bSilent ) const noexcept
+{
+	return IsValid_Imp( m_Container, bSilent );
+}
 
 }

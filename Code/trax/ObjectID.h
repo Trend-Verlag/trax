@@ -69,7 +69,6 @@ namespace trax{
 		void ID( IDType id ) noexcept override{
 			m_ID = id;
 		}
-
 	private:
 		std::unordered_map<std::string, std::string> m_References;
 		static const std::string m_Empty;

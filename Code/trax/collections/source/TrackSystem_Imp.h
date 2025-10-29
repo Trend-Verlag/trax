@@ -60,6 +60,8 @@ namespace trax{
 		// Collection:
 		const char* TypeName() const noexcept override;
 
+		bool IsValid( bool bSilent = true ) const noexcept override;
+
 		IDType Add( std::shared_ptr<TrackBuilder> pTrack ) override;
 
 		bool Remove( TrackBuilder* pTrack, bool zeroIDs = false ) override;
@@ -72,7 +74,6 @@ namespace trax{
 		// TrackSystem:
 		std::shared_ptr<TrackSystem> This() const noexcept override;
 	 
-		bool IsValid( bool bSilent = true ) const noexcept override;
 
 		IDType CreateCollection( IDType id = 0 ) override;
 

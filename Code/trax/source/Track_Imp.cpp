@@ -233,7 +233,7 @@ void Track_Imp::SetFrame(
 #endif
 }
 
-bool Track_Imp::IsValid() const noexcept{
+bool Track_Imp::IsValid( bool /*bSilent*/ ) const noexcept{
 	return  GetFrame().IsOrthoNormal() &&
 			GetAbsoluteFrame().IsOrthoNormal() &&
 			m_pCurve && m_pCurve->IsValid() &&

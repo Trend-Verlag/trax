@@ -47,9 +47,9 @@ Track::TrackType SectionTrack_Imp::GetTrackType() const noexcept{
 	return TrackType::withGeoms;
 }
 
-bool SectionTrack_Imp::IsValid() const noexcept
+bool SectionTrack_Imp::IsValid( bool bSilent ) const noexcept
 {
-	if( !Track_Imp::IsValid() )
+	if( !Track_Imp::IsValid( bSilent ) )
 		return false;
 	if( !m_pSection )
 		return false;
