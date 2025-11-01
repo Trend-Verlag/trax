@@ -67,12 +67,6 @@ namespace trax
 		Vector<Acceleration> Gravity() const override;
 
 
-		void Update( Time dt = fixed_timestep ) noexcept override;
-
-		void StartStep( Time dt = fixed_timestep ) noexcept override;
-
-		bool EndStep() noexcept override;
-
 		using Scene::CreateBody;
 
 		std::unique_ptr<Body> CreateBody() const override;
@@ -152,6 +146,12 @@ namespace trax
 
 		inline Real 				EngineMetersPerUnit() const noexcept { return m_EngineMetersPerUnit; }
 		inline Real 				EngineKilogramsPerUnit() const noexcept { return m_EngineKilogramsPerUnit; }
+	
+	protected:
+		void StartStep( Time dt = fixed_timestep ) noexcept override;
+		void Update( Time dt = fixed_timestep ) noexcept override;
+		bool EndStep() noexcept override;
+
 	private:
 		const PhysX_Simulator& m_Simulator;
 		physx::PxScene&	m_Scene;

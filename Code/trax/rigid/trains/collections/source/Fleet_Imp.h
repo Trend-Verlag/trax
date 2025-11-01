@@ -76,6 +76,8 @@ namespace trax{
 		// Simulated:
 		bool Start( Scene& scene ) override;
 
+		void Idle() noexcept override;
+
 		void Update( Time dt ) override;
 
 		void Pause() noexcept override;

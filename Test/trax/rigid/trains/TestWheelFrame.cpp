@@ -86,7 +86,7 @@ BOOST_FIXTURE_TEST_CASE( testWheelFrame, TrackFixture )
 		pScene->JackOnSimulationStep().Insert( &pCounter->PlugToCountUp() );
 		pWheelFrame->JackOnDerail().Insert( &pScene->PlugToStop() );
 
-		pScene->Loop();
+		pScene->Simulate();
 
 		BOOST_CHECK_CLOSE_DIMENSION( fixed_timestep * pCounter->Counter(), m_pTrack->GetLength()/2 / velocity, 0.05f );
 
@@ -119,7 +119,7 @@ BOOST_FIXTURE_TEST_CASE( testWheelFrameResetAnchor, TrackFixture )
 		pScene->JackOnSimulationStep().Insert( &pCounter->PlugToCountUp() );
 		pWheelFrame->JackOnDerail().Insert( &pScene->PlugToStop() );
 
-		pScene->Loop();
+		pScene->Simulate();
 
 		BOOST_CHECK( !pWheelFrame->IsRailed() );
 	}

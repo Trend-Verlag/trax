@@ -32,14 +32,34 @@ namespace trax{
 
 
 
-	//void TrainScene_Imp::Register( class Bogie_Imp& bogie ){
-	//	m_Bogies.push_back( &bogie );
-	//}
+//void TrainScene_Imp::Register( class Bogie_Imp& bogie ){
+//	m_Bogies.push_back( &bogie );
+//}
 
-	//void TrainScene_Imp::Unregister( class Bogie_Imp& bogie ){
-	//	auto it = std::find( m_Bogies.begin(), m_Bogies.end(), &bogie );
-	//	if( it != m_Bogies.end() )
-	//		m_Bogies.erase( it );
-	//}
+//void TrainScene_Imp::Unregister( class Bogie_Imp& bogie ){
+//	auto it = std::find( m_Bogies.begin(), m_Bogies.end(), &bogie );
+//	if( it != m_Bogies.end() )
+//		m_Bogies.erase( it );
+//}
+
+	
+std::unique_ptr<TrainSceneCollection> TrainSceneCollection::Make() noexcept
+{
+	try{
+		return std::make_unique<TrainSceneCollection_Imp>();
+	}
+	catch( const std::bad_alloc& ){
+		return nullptr;
+	}
+}
+
+const char* TrainSceneCollection_Imp::TypeName() const{
+	return "TrainSceneCollection";
+}
+
+bool TrainSceneCollection_Imp::IsValid( bool bSilent ) const noexcept
+{
+	return IsValid_Imp( m_Container, bSilent );
+}
 
 } // namespace trax

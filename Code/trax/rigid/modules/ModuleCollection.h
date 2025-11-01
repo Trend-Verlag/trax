@@ -27,6 +27,7 @@
 
 #pragma once
 
+#include "trax/Configuration.h"
 #include "trax/collections/Collection.h"
 
 namespace trax{
@@ -36,10 +37,9 @@ namespace trax{
 	/// \brief A collection of modules.
 	///
 	/// Holds several modules that m
-	struct ModuleSet : Collection<ModuleSet,Module>
+	struct ModuleCollection : Collection<ModuleCollection,Module>
 	{
-		/// \brief Makes a standard ModuleSet object.
-		static std::unique_ptr<ModuleSet> Make() noexcept;
-
+		/// \brief Makes a standard ModuleCollection object.
+		static dclspc std::unique_ptr<ModuleCollection> Make() noexcept;
 	};
 }

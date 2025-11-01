@@ -140,6 +140,10 @@ bool Fleet_Imp::Start( Scene& /*scene*/ )
 	return true;
 }
 
+void Fleet_Imp::Idle() noexcept
+{
+}
+
 void Fleet_Imp::Update( Time dt )
 {
 	SeparateTrains();

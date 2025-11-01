@@ -28,12 +28,24 @@
 #pragma once
 
 #include "trax/rigid/trains/TrainScene.h"
+#include "trax/ImplementationHelper.h"
 
 namespace trax{
 
 	class TrainScene_Imp : public TrainScene{
 	public:
 
+
+	};
+
+
+	typedef Container_Imp<TrainScene,TrainSceneCollection> TrainSceneCollection_Base;
+
+	class TrainSceneCollection_Imp : public TrainSceneCollection_Base{
+	public:
+		const char* TypeName() const override;
+
+		bool IsValid( bool bSilent = true ) const noexcept override;
 
 	};
 

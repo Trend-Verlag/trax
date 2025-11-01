@@ -27,6 +27,8 @@
 #pragma once
 
 #include "trax/rigid/collections/SceneCollection.h"
+
+#include "trax/rigid/Scene.h"
 #include "trax/ImplementationHelper.h"
 
 namespace trax{
@@ -40,9 +42,5 @@ namespace trax{
 		bool IsValid( bool bSilent = true ) const noexcept override;
 
 	};
-
-
-
-
 }
 

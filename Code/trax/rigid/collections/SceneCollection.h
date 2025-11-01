@@ -28,16 +28,17 @@
 
 #pragma once
 
-
+#include "trax/Configuration.h"
 #include "trax/collections/Collection.h"
-#include "trax/rigid/Scene.h"
 
 namespace trax{
+
+	struct Scene;
 
 	struct SceneCollection : public Collection<SceneCollection,Scene>{
 
 		/// \brief Makes a standard SceneCollection object.
-		static std::unique_ptr<SceneCollection> Make() noexcept;
+		static dclspc std::unique_ptr<SceneCollection> Make() noexcept;
 
 
 	};

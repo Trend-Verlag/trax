@@ -36,8 +36,7 @@ namespace trax
 	using namespace spat;
 
 Scene_Imp::Scene_Imp()
-	: m_bLoopRunning{ false }
-	, m_PlugToStop	{ *this, &Scene_Imp::Stop }
+	: m_PlugToStop{ *this, &Scene_Imp::Stop }
 {
 	m_PlugToStop.Reference( "name", "PlugToStop" );
 }
@@ -54,7 +53,7 @@ void Scene_Imp::Unregister( const Simulated& simulated )
 
 	if( it != m_Simulated.end() )
 	{
-		if( m_bLoopRunning )
+		if( m_bSimulationRunning )
 			(*it)->Stop();
 
 		m_Simulated.erase( it );
@@ -63,7 +62,7 @@ void Scene_Imp::Unregister( const Simulated& simulated )
 
 void Scene_Imp::UnregisterAllSimulated()
 {
-	if( m_bLoopRunning )
+	if( m_bSimulationRunning )
 	{
 		for( auto& pSimulated : m_Simulated )
 		{
@@ -74,74 +73,101 @@ void Scene_Imp::UnregisterAllSimulated()
 	m_Simulated.clear();
 }
 
-void Scene_Imp::Update( Time dt ) noexcept
+void Scene_Imp::Simulate()
 {
+	BeginSimulation();
+
+	while( m_bSimulationRunning )
+	{
+		Step();
+	}
+
+	EndSimulation();
+}
+
+void Scene_Imp::Simulate( Time forTimePeriod )
+{
+	BeginSimulation();
+
+	Loop( forTimePeriod );
+
+	EndSimulation();
+}
+
+bool Scene_Imp::IsSimulationRunning() const noexcept{
+	return m_bSimulationRunning;
+}
+
+Time Scene_Imp::SimulationTime() const noexcept{
+	return m_SimulationTime;
+}
+
+void Scene_Imp::BeginSimulation() noexcept
+{
+	m_bSimulationRunning = true;
+	m_SimulationTime = 0_s;
+	m_LoopTime = 0_s;
+
 	for( auto& pSimulated : m_Simulated )
 	{
-		pSimulated->Update( dt );
+		pSimulated->Start( *this );
 	}
 }
 
-void Scene_Imp::Step( Time dt ) noexcept
+void Scene_Imp::Loop( Time forTimePeriod )
+{
+	m_LoopTime += forTimePeriod;
+	m_bLoopRunning = true;
+
+	while( m_bLoopRunning )
+	{
+		if( m_bPaused )
+			continue;
+
+		Step();
+
+		if( m_LoopTime -= fixed_timestep; m_LoopTime <= 0_s )
+			m_bLoopRunning = false;
+	}
+}
+
+void Scene_Imp::Step( Time dt )
 {
 	StartStep( dt );
 
+	Idle();
+
 	while( !EndStep() )
 		;
+
+	m_SimulationTime += dt;
 
 	Update( dt );
 
 	m_JackOnSimulationStep.Pulse();
 }
 
-void Scene_Imp::Loop() noexcept
+void Scene_Imp::EndSimulation() noexcept
 {
-	m_bLoopRunning = true;
-
-	for( auto& pSimulated : m_Simulated )
-	{
-		pSimulated->Start( *this );
-	}
-
-	while( m_bLoopRunning )
-	{
-		Step();
-	}
-
 	for( auto& pSimulated : m_Simulated )
 	{
 		pSimulated->Stop();
 	}
+
+	m_bSimulationRunning = false;
 }
 
-void Scene_Imp::Loop( Time forTimePeriod ) noexcept
-{
-	m_LoopTime = forTimePeriod;
-	m_bLoopRunning = true;
+void Scene_Imp::Pause() noexcept{
+	m_bPaused = true;
+}
 
-	for( auto& pSimulated : m_Simulated )
-	{
-		pSimulated->Start( *this );
-	}
-
-	while( m_bLoopRunning )
-	{
-		Step();
-
-		if( m_LoopTime -= fixed_timestep; m_LoopTime <= 0_s ){
-		//	m_LoopTime = 0_s;
-			m_bLoopRunning = false;
-		}
-	}
-
-	for( auto& pSimulated : m_Simulated )
-	{
-		pSimulated->Stop();
-	}
+void Scene_Imp::Resume() noexcept{
+	m_bPaused = false;
 }
 
 void Scene_Imp::Stop() noexcept{
 	m_bLoopRunning = false;
+	m_bSimulationRunning = false;
 }
 
 std::unique_ptr<Gestalt> Scene_Imp::CreateGestalt( Box<Length> box, Mass mass ) const noexcept
@@ -231,4 +257,19 @@ const Plug& Scene_Imp::_GetPlug( int idx ) const{
 	throw std::range_error( stream.str() );
 }
 
+void Scene_Imp::Idle() const
+{
+	for( auto& pSimulated : m_Simulated )
+	{
+		pSimulated->Idle();
+	}
+}
+
+void Scene_Imp::Update( Time dt )
+{
+	for( auto& pSimulated : m_Simulated )
+	{
+		pSimulated->Update( dt );
+	}
+}
 }

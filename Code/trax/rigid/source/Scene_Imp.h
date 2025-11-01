@@ -49,13 +49,25 @@ namespace trax{
 
 		void UnregisterAllSimulated() override;
 
-		void Update( Time dt = fixed_timestep ) noexcept override;
+		void Simulate() override;
 
-		void Step( Time dt = fixed_timestep ) noexcept override;
+		void Simulate( Time forTimePeriod ) override;
 
-		void Loop() noexcept override;
+		bool IsSimulationRunning() const noexcept override;
 
-		void Loop( Time forTimePeriod ) noexcept override;
+		Time SimulationTime() const noexcept override;
+
+		void BeginSimulation() noexcept override;
+
+		void Loop( Time forTimePeriod ) override;
+
+		void Step( Time dt = fixed_timestep ) override;
+
+		void EndSimulation() noexcept;
+		
+		void Pause() noexcept override;
+
+		void Resume() noexcept override;
 
 		void Stop() noexcept override;
 
@@ -80,9 +92,17 @@ namespace trax{
 		const Jack& _GetJack( int idx ) const override;
 		const Plug& _GetPlug( int idx ) const override;
 
+		virtual void StartStep( Time dt = fixed_timestep ) noexcept = 0;
+				void Idle() const;
+		virtual void Update( Time dt = fixed_timestep );
+		virtual bool EndStep() noexcept = 0;	
 	private:
+		bool m_bSimulationRunning = false;
+		Time m_SimulationTime = 0.0_s;
 		bool m_bLoopRunning = false;
 		Time m_LoopTime = 0.0_s;
+		bool m_bPaused = false;
+
 		std::vector<Simulated*> m_Simulated;
 	
 		Jack_Imp m_JackOnSimulationStep{ "JackOnSimulationStep" };

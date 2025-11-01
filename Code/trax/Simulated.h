@@ -44,15 +44,33 @@ namespace trax{
 		virtual bool Start( Scene& scene ) = 0;
 
 
-		/// \brief Called to update the simulated object.
+		/// \brief Called during the simulation calculations,
+		/// to perform tasks foreign to the physical simulation.
+		/// 
+		/// This is meant for precalculating values for the 
+		/// next frame, but is not allowed to acces simulation
+		/// data: no read/write poses or velocities of Bodies
+		/// and Shapes or creation/deletion of objects created 
+		/// from the Scene interface.
+		virtual void Idle() = 0;
+
+
+		/// \brief Called to update the simulated object after
+		/// the simuation step finishes.
 		/// \param dt The time step to update the object with.
 		virtual void Update( Time dt = fixed_timestep ) = 0;
 
 
+		/// \brief Called if the simulation is paused.
 		virtual void Pause() noexcept = 0;
 
+
+		/// \brief Called if the simulation is resumed after 
+		/// pause
 		virtual void Resume() noexcept = 0;
 
+
+		/// \brief Called if the simulation is stopped
 		virtual void Stop() noexcept = 0;
 
 
@@ -76,6 +94,10 @@ namespace trax{
 
 		bool Start( Scene& scene ) override{
 			return m_pComponent->Start( scene );
+		}
+
+		void Idle() override{
+			return m_pComponent->Idle();
 		}
 
 		void Update( Time dt ) override{

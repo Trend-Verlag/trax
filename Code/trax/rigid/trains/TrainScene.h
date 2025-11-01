@@ -28,6 +28,7 @@
 #pragma once
 
 #include "trax/rigid/Scene.h"
+#include "trax/collections/Collection.h"
 
 namespace trax{
 
@@ -54,4 +55,12 @@ namespace trax{
 			const spat::Frame<Length,One>& poseChild ) const noexcept = 0;
 	};
 
+
+	struct TrainSceneCollection : public Collection<TrainSceneCollection,TrainScene>{
+
+		/// \brief Makes a standard TrainSceneCollection object.
+		static dclspc std::unique_ptr<TrainSceneCollection> Make() noexcept;
+
+
+	};
 }

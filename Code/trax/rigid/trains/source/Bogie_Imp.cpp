@@ -191,6 +191,10 @@ bool Bogie_Imp::Start( Scene& ) noexcept{
 	return true;
 }
 
+void Bogie_Imp::Idle() noexcept
+{
+}
+
 void Bogie_Imp::Update( Time dt ) noexcept
 {
 	if( m_CouplingNorth.CheckCoupling( dt ) )

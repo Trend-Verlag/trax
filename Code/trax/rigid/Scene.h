@@ -58,9 +58,18 @@ namespace trax{
 	class TrackJointFeeder;
 	class TrackJointFeederMotorModel;
 
+
+	/// \brief A physical simulation scene for running a simulation 
+	/// and creating physical objects in the scene.
+	/// 
+	/// The times given to the simulation are proper simulation times, 
+	/// not the time that passes for the real world. Ideally the 
+	/// simulation runs faster than real time.
+	/// It is strongly recommended to use fixed time steps for the 
+	/// simulation; variable time steps will lead to instabilities.
+	/// Use the Loop() method to adapt to variable time steps.
 	struct Scene : Identified<Scene>
 	{
-
 		/// \brief Makes a Scene object.
 		static dclspc std::unique_ptr<Scene> Make( const Simulator& simulator ) noexcept;
 
@@ -111,36 +120,66 @@ namespace trax{
 		virtual void UnregisterAllSimulated() = 0;
 
 
-		/// \brief Starts the simulation calculations.
-		/// \param dt Fixed time step in milliseconds.
-		virtual void StartStep( Time dt = fixed_timestep ) noexcept = 0;
-
-
-		/// \brief Updates the simulation by the fixed time step.
-		virtual void Update( Time dt = fixed_timestep ) = 0;
-
-
-		/// \brief Requests the Simulator to end simulation.
+		/// \name Simulate
+		/// \brief Enters a main simulation loop and simulates the
+		/// scene.
 		///
-		/// \returns True if the simulation has finished; false if still calculations are in progress.
-		virtual bool EndStep() noexcept = 0;
+		/// The simulation is left when the simulation is stopped or the 
+		/// PlugToStop is triggered.
+		/// \param forTimePeriod Time to run simulation for. This is meant
+		/// as a convenience function to run the simulation for a certain 
+		/// time (e.g. for testing); to do one simulation step in a game 
+		/// loop use Loop() or Step() instead.
+		//@}
+		virtual void Simulate() = 0;
+
+		virtual void Simulate( Time forTimePeriod ) = 0;
+		//@}
 
 
-		/// \brief Completes one simulation step.
-		virtual void Step( Time dt = fixed_timestep ) noexcept = 0;
+		/// \returns whether the simulation is currently running.
+		virtual bool IsSimulationRunning() const noexcept = 0;
 
 
-		/// \name Loop
-		/// \brief Enters a main simulation loop.
+		/// \returns the current expired simulation time.
+		virtual Time SimulationTime() const noexcept = 0;
+
+
+		/// \brief Prepares the simulation to start.
+		///
+		/// If you do not use the Simulate() methods but Loop()
+		/// or Step() the simulation your own, call this before 
+		/// entering the simulation loop the first time.
+		virtual void BeginSimulation() noexcept = 0;
+
+
+		/// \brief Steps the simulation by fixed_timestep until
+		/// forTimePeriod expires.
 		///
 		/// The loop is left when the simulation is stopped or the 
 		/// PlugToStop is triggered.
 		/// \param forTimePeriod Time to run simulation for.
-		//@}
-		virtual void Loop() noexcept = 0;
+		virtual void Loop( Time forTimePeriod ) = 0;
 
-		virtual void Loop( Time forTimePeriod ) noexcept = 0;
-		//@}
+
+		/// \brief Completes one simulation step.
+		virtual void Step( Time dt = fixed_timestep ) = 0;
+
+
+		/// \brief Cleans up after the simulation ends.
+		///
+		/// If you do not use the Simulate() methods but Loop()
+		/// or Step() the simulation your own, call this after 
+		/// leaving the simulation loop the last time.
+		virtual void EndSimulation() noexcept = 0;
+
+
+		/// \brief Pauses the simulation.
+		virtual void Pause() noexcept = 0;
+
+
+		/// \brief Resumes the simulation.
+		virtual void Resume() noexcept = 0;
 
 
 		/// \brief Stops the simulation loop.
@@ -208,7 +247,7 @@ namespace trax{
 		virtual struct Jack& JackOnSimulationStep() noexcept = 0;
 
 
-		/// \brief A Plug that stops a simulation loop.
+		/// \brief A Plug that stops a running simulation.
 		virtual struct MultiPlug& PlugToStop() noexcept = 0;
 
 

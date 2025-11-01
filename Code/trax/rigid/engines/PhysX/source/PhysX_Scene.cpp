@@ -98,7 +98,7 @@ PhysX_Scene::~PhysX_Scene()
 	}
 }
 
-bool PhysX_Scene::IsValid( bool bSilent ) const noexcept
+bool PhysX_Scene::IsValid( bool /*bSilent*/ ) const noexcept
 {
 	return m_bSceneCreated;
 }
@@ -117,35 +117,6 @@ void PhysX_Scene::Gravity( const spat::Vector<Acceleration>& gravityAccelerarion
 
 Vector<Acceleration> PhysX_Scene::Gravity() const{
 	return VecFrom<Acceleration>( Scene().getGravity() );
-}
-
-void PhysX_Scene::Update( Time dt ) noexcept
-{
-	Scene_Imp::Update( dt );
-
-	for( const auto& jnf : m_TrackJoints )
-		jnf->Update( dt );
-}
-
-void PhysX_Scene::StartStep( Time dt ) noexcept
-{
-	Scene().simulate(static_cast<physx::PxReal>(_s(dt)));
-}
-
-bool PhysX_Scene::EndStep() noexcept
-{
-	physx::PxU32 errorState = 0;
-
-	if( !Scene().fetchResults(false,&errorState) ){
-		if( errorState ){
-			assert(errorState);
-			return true; 
-		}
-
-		return false;
-	}
-
-	return true;
 }
 
 std::unique_ptr<Body> PhysX_Scene::CreateBody() const{
@@ -388,6 +359,35 @@ void PhysX_Scene::onTrigger( physx::PxTriggerPair* /*pairs*/, physx::PxU32 /*cou
 
 void PhysX_Scene::onAdvance( const physx::PxRigidBody* const* /*bodyBuffer*/, const physx::PxTransform* /*poseBuffer*/, const physx::PxU32 /*count*/ )
 {
+}
+
+void PhysX_Scene::StartStep( Time dt ) noexcept
+{
+	Scene().simulate(static_cast<physx::PxReal>(_s(dt)));
+}
+
+void PhysX_Scene::Update( Time dt ) noexcept
+{
+	Scene_Imp::Update( dt );
+
+	for( const auto& jnf : m_TrackJoints )
+		jnf->Update( dt );
+}
+
+bool PhysX_Scene::EndStep() noexcept
+{
+	physx::PxU32 errorState = 0;
+
+	if( !Scene().fetchResults(false,&errorState) ){
+		if( errorState ){
+			assert(errorState);
+			return true; 
+		}
+
+		return false;
+	}
+
+	return true;
 }
 
 physx::PxScene& PhysX_Scene::InitScene( const Vector<Acceleration>& _G  )

@@ -1,6 +1,3 @@
-//	trax track library
-//	AD 2025 
-//
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
@@ -25,25 +22,32 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
-
-#include "../ModuleSet.h"
-
-#include "trax/ImplementationHelper.h"
+#include "ModuleCollection_Imp.h"
+#include "../Module.h"
 
 namespace trax{
 
-	typedef Container_Imp<Module,ModuleSet> ModuleSet_Base;
+std::unique_ptr<ModuleCollection> ModuleCollection::Make() noexcept
+{
+	try{
+		return  std::make_unique<ModuleCollection_Imp>();
+	}
+	catch( const std::bad_alloc& ){
+		return nullptr;
+	}
+}
 
-	class ModuleSet_Imp : public ModuleSet_Base
-	{
-	public:
-		ModuleSet_Imp();
+ModuleCollection_Imp::ModuleCollection_Imp()
+{
+}
 
-		// ModuleSet interface
-		const char* TypeName() const override;
+const char* ModuleCollection_Imp::TypeName() const{
+	return "ModuleCollection";
+}
 
-		bool IsValid( bool bSilent = true ) const noexcept override;
-	};
+bool ModuleCollection_Imp::IsValid( bool bSilent ) const noexcept
+{
+	return IsValid_Imp( m_Container, bSilent );
+}
 
 }

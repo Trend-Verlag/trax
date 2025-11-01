@@ -439,6 +439,10 @@ bool TrackSystem_Imp::Start( Scene& /*scene*/ ) noexcept
 	return true;
 }
 
+void TrackSystem_Imp::Idle() noexcept
+{
+}
+
 void TrackSystem_Imp::Update( Time /*dt*/ ) noexcept
 {
 }
