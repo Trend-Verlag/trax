@@ -23,7 +23,7 @@ target_sources(trax_modules
 
 # Create source groups (filters) for Visual Studio
 source_group("Interface" FILES ${PUBLIC_HEADERS})
-source_group("Header Files" FILES ${PRIVATE_HEADERS})
+source_group("Private Headers" FILES ${PRIVATE_HEADERS})
 
 target_link_libraries(trax_modules
     PUBLIC

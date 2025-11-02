@@ -122,7 +122,7 @@ target_sources(trax_core
 
 # Create source groups (filters) for Visual Studio
 source_group("Interface" FILES ${PUBLIC_HEADERS})
-source_group("Header Files" FILES ${PRIVATE_HEADERS})
+source_group("Private Headers" FILES ${PRIVATE_HEADERS})
 
 target_compile_definitions(trax_core PUBLIC TRAX_STATIC_LIBRARY)
 
