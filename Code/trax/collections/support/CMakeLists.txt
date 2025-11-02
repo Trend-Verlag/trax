@@ -22,15 +22,22 @@ add_library(trax_core_collections_support
         "./source/curves/SupportXML_Spline.cpp"
 )
 
+set(PUBLIC_HEADERS
+    "./Anl3TrackSystemReader.h"
+    "./Anl4TrackSystemReader.h"
+    "./Anl4TrackSystemWriter.h"
+    "./CollectionSupportXML.h"
+    "./FixturesCollections.h"
+    "./TrackSystemReader.h"
+)
+
 target_sources(trax_core_collections_support
     PUBLIC
-        "./Anl3TrackSystemReader.h"
-        "./Anl4TrackSystemReader.h"
-        "./Anl4TrackSystemWriter.h"
-        "./CollectionSupportXML.h"
-        "./FixturesCollections.h"
-        "./TrackSystemReader.h"
+        ${PUBLIC_HEADERS}
 )
+
+# Create source groups (filters) for Visual Studio
+source_group("Interface" FILES ${PUBLIC_HEADERS} )
 
 target_link_libraries(trax_core_collections_support 
      PUBLIC 

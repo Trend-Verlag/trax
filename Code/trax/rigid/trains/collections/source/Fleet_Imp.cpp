@@ -150,9 +150,8 @@ void Fleet_Imp::Update( Time /*dt*/ )
 
 	std::vector<std::tuple<Bogie*,RailRunner::EndType,spat::Sphere<Length>>> activeCouplings;
 	for( auto bogie : m_Bogies )
+	// Don't update bogies, they are registered by their own.
 	{
-	//	bogie->Update( dt );
-
 		if( bogie->IsActivated( RailRunner::EndType::north ) )
 		{
 			activeCouplings.push_back( std::make_tuple( bogie, RailRunner::EndType::north, bogie->GetCoupling( RailRunner::EndType::north ) ) );

@@ -10,21 +10,27 @@ add_library(trax_rigid_physx
         "./source/PhysX_TrackJoint.cpp"
 )
 
+set(PRIVATE_HEADERS
+    "./source/PhysX_Adapter.h"
+    "./source/PhysX_Body_Imp.h"
+    "./source/PhysX_GeomBase_Imp.h"
+    "./source/PhysX_GeomSpecials_Imp.h"
+    "./source/PhysX_Gestalt_Imp.h"
+    "./source/PhysX_Imp.h"
+    "./source/PhysX_Scene.h"
+    "./source/PhysX_Shape_Imp.h"
+    "./source/PhysX_Simulator.h"
+    "./source/PhysX_TrackJoint.h"
+)
+
 target_sources(trax_rigid_physx
     PUBLIC
     PRIVATE
-        "./source/PhysX_Adapter.h"
-        "./source/PhysX_Body_Imp.h"
-        "./source/PhysX_GeomBase_Imp.h"
-        "./source/PhysX_GeomSpecials_Imp.h"
-        "./source/PhysX_Gestalt_Imp.h"
-        "./source/PhysX_Imp.h"
-        "./source/PhysX_Scene.h"
-        "./source/PhysX_Shape_Imp.h"
-        "./source/PhysX_Simulator.h"
-        "./source/PhysX_TrackJoint.h"
-        # Add any additional headers needed
+        ${PRIVATE_HEADERS}
 )
+
+# Create source groups (filters) for Visual Studio
+source_group("Header Files" FILES ${PRIVATE_HEADERS} )
 
 target_link_libraries(trax_rigid_physx
     PUBLIC

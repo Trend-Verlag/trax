@@ -3,10 +3,17 @@ add_library(trax_rigid_support
         "./source/RigidSupportXML.cpp"
 )
 
+set(PUBLIC_HEADERS
+    "./RigidSupportXML.h"
+)
+
 target_sources(trax_rigid_support
     PUBLIC
-        "./RigidSupportXML.h"
+        ${PUBLIC_HEADERS}
 )
+
+# Create source groups (filters) for Visual Studio
+source_group("Interface" FILES ${PUBLIC_HEADERS})
 
 target_link_libraries(trax_rigid_support
      PUBLIC

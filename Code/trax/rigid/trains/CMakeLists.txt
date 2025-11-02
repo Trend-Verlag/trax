@@ -9,27 +9,39 @@ add_library(trax_trains
         "./source/WheelFrame_Imp.cpp"
 )
 
+set(PUBLIC_HEADERS
+    "./Bogie.h"
+    "./Cargo.h"
+    "./RailRunner.h"
+    "./RollingStock.h"
+    "./Train.h"
+    "./TrainComponent.h"
+    "./TrainScene.h"
+    "./WheelFrame.h"
+)
+
+set(PRIVATE_HEADERS
+    "./source/Bogie_Imp.h"
+    "./source/Cargo_Imp.h"
+    "./source/BogieJoint.h"
+    "./source/RailRunner_Imp.h"
+    "./source/RollingStock_Imp.h"
+    "./source/Train_Imp.h"
+    "./source/TrainComponent_Imp.h"
+    "./source/TrainScene_Imp.h"
+    "./source/WheelFrame_Imp.h"
+)
+
 target_sources(trax_trains
     PUBLIC
-        "./Bogie.h"
-        "./Cargo.h"
-        "./RailRunner.h"
-        "./RollingStock.h"
-        "./Train.h"
-        "./TrainComponent.h"
-        "./TrainScene.h"
-        "./WheelFrame.h"
+        ${PUBLIC_HEADERS}
     PRIVATE
-        "./source/Bogie_Imp.h"
-        "./source/Cargo_Imp.h"
-        "./source/BogieJoint.h"
-        "./source/RailRunner_Imp.h"
-        "./source/RollingStock_Imp.h"
-        "./source/Train_Imp.h"
-        "./source/TrainComponent_Imp.h"
-        "./source/TrainScene_Imp.h"
-        "./source/WheelFrame_Imp.h"
+        ${PRIVATE_HEADERS}
 )
+
+# Create source groups (filters) for Visual Studio
+source_group("Interface" FILES ${PUBLIC_HEADERS})
+source_group("Header Files" FILES ${PRIVATE_HEADERS} )
 
 target_link_libraries(trax_trains
     PUBLIC

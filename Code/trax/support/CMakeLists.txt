@@ -4,12 +4,19 @@ add_library(trax_core_support
         "./source/TraxSupportXML.cpp"
 )
 
+set(PUBLIC_HEADERS
+    "./Fixtures.h"
+    "./TraxSupportStream.h"
+    "./TraxSupportXML.h"
+)
+
 target_sources(trax_core_support
     PUBLIC
-        "./Fixtures.h"
-        "./TraxSupportStream.h"
-        "./TraxSupportXML.h"
+        ${PUBLIC_HEADERS}
 )
+
+# Create source groups (filters) for Visual Studio
+source_group("Interface" FILES ${PUBLIC_HEADERS} )
 
 target_link_libraries(trax_core_support 
      PUBLIC 

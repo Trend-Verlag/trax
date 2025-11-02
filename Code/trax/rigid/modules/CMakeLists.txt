@@ -4,14 +4,26 @@ add_library(trax_modules
         "./source/ModuleCollection_Imp.cpp"
 )
 
+set(PUBLIC_HEADERS
+    "./Module.h"
+    "./ModuleCollection.h"
+)
+
+set(PRIVATE_HEADERS
+    "./source/Module_Imp.h"
+    "./source/ModuleCollection_Imp.h"
+)
+
 target_sources(trax_modules
     PUBLIC
-        "./Module.h"
-        "./ModuleCollection.h"
+        ${PUBLIC_HEADERS}
     PRIVATE
-        "./source/Module_Imp.h"
-        "./source/ModuleCollection_Imp.h"
+        ${PRIVATE_HEADERS}
 )
+
+# Create source groups (filters) for Visual Studio
+source_group("Interface" FILES ${PUBLIC_HEADERS})
+source_group("Header Files" FILES ${PRIVATE_HEADERS})
 
 target_link_libraries(trax_modules
     PUBLIC

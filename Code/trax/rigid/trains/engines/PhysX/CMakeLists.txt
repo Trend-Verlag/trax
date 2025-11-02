@@ -5,14 +5,21 @@ add_library(trax_trains_physx
         "./source/PhysX_TrainScene.cpp"
 )
 
+set(PRIVATE_HEADERS
+    "./source/PhysX_Coupling_Imp.h"
+    "./source/PhysX_Joint_Imp.h"
+    "./source/PhysX_Swivel_Imp.h"
+    "./source/PhysX_TrainScene.h"
+)
+
 target_sources(trax_trains_physx
     PUBLIC
     PRIVATE
-        "./source/PhysX_Coupling_Imp.h"
-        "./source/PhysX_Joint_Imp.h"
-        "./source/PhysX_Swivel_Imp.h"
-        "./source/PhysX_TrainScene.h"
+        ${PRIVATE_HEADERS}
 )
+
+# Create source groups (filters) for Visual Studio
+source_group("Header Files" FILES ${PRIVATE_HEADERS})
 
 target_link_libraries(trax_trains_physx
     PUBLIC

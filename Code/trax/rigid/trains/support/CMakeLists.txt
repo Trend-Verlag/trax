@@ -9,17 +9,29 @@ add_library(trax_trains_support
         "./source/TrainFileReader.cpp"
 )
 
+set(PUBLIC_HEADERS
+    "./FixturesTrain.h"
+    "./RailRunnerParser.h"
+    "./RollingStockCreator.h"
+    "./RollingStockFileReader.h"
+    "./TrainCreator.h"
+    "./TrainFileReader.h"
+)
+
+set(PRIVATE_HEADERS
+    "./source/RailRunnerParser_Imp.h"
+)
+
 target_sources(trax_trains_support
     PUBLIC
-        "./FixturesTrain.h"
-        "./RailRunnerParser.h"
-        "./RollingStockCreator.h"
-        "./RollingStockFileReader.h"
-        "./TrainCreator.h"
-        "./TrainFileReader.h"
+        ${PUBLIC_HEADERS}
     PRIVATE
-        "./source/RailRunnerParser_Imp.h"
+        ${PRIVATE_HEADERS}
 )
+
+# Create source groups (filters) for Visual Studio
+source_group("Interface" FILES ${PUBLIC_HEADERS})
+source_group("Header Files" FILES ${PRIVATE_HEADERS})
 
 target_link_libraries(trax_trains_support
     PUBLIC

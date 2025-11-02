@@ -11,32 +11,44 @@ add_library(trax_core_collections STATIC
     "./source/TrackSystem_Imp.cpp"
 )
 
+set(PUBLIC_HEADERS
+    "./CollectionDecorator.h"
+    "./Collections.h"
+    "./ConnectorCollection.h"
+    "./IndicatorCollection.h"
+    "./Interfaces.h"
+    "./ObjectIDDecorator.h"
+    "./PulseCounterCollection.h"
+    "./SignalCollection.h"
+    "./TimerCollection.h"
+    "./TrackCollection.h"
+    "./TrackCollectionContainer.h"
+    "./TrackSystem.h"
+    "./TrackSystemParser.h"
+)
+
+set(PRIVATE_HEADERS
+    "./source/ConnectorCollection_Imp.h"
+    "./source/IndicatorCollection_Imp.h"
+    "./source/PulseCounterCollection_Imp.h"
+    "./source/SignalCollection_Imp.h"
+    "./source/TimerCollection_Imp.h"
+    "./source/TrackCollectionContainer_Imp.h"
+    "./source/TrackCollection_Imp.h"
+    "./source/TrackSystemParser_Imp.h"
+    "./source/TrackSystem_Imp.h"
+)
+
 target_sources(trax_core_collections
     PUBLIC
-        "./CollectionDecorator.h"
-        "./Collections.h"
-        "./ConnectorCollection.h"
-        "./IndicatorCollection.h"
-        "./Interfaces.h"
-        "./ObjectIDDecorator.h"
-        "./PulseCounterCollection.h"
-        "./SignalCollection.h"
-        "./TimerCollection.h"
-        "./TrackCollection.h"
-        "./TrackCollectionContainer.h"
-        "./TrackSystem.h"
-        "./TrackSystemParser.h"
+        ${PUBLIC_HEADERS}
     PRIVATE
-        "./source/ConnectorCollection_Imp.h"
-        "./source/IndicatorCollection_Imp.h"
-        "./source/PulseCounterCollection_Imp.h"
-        "./source/SignalCollection_Imp.h"
-        "./source/TimerCollection_Imp.h"
-        "./source/TrackCollectionContainer_Imp.h"
-        "./source/TrackCollection_Imp.h"
-        "./source/TrackSystemParser_Imp.h"
-        "./source/TrackSystem_Imp.h"
+        ${PRIVATE_HEADERS}
 )
+
+# Create source groups (filters) for Visual Studio
+source_group("Interface" FILES ${PUBLIC_HEADERS})
+source_group("Header Files" FILES ${PRIVATE_HEADERS})
 
 target_link_libraries(trax_core_collections
     PUBLIC
