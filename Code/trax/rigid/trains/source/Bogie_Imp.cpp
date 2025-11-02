@@ -30,7 +30,6 @@
 #include "trax/rigid/Scene.h"
 #include "../WheelFrame.h"
 #include "trax/rigid/Gestalt.h"
-#include "Coupling.h"
 #include "trax/rigid/Joint.h"
 
 #include "dim/support/DimSupportStream.h"

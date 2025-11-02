@@ -21,7 +21,6 @@ set(PUBLIC_HEADERS
 set(PRIVATE_HEADERS
     "./source/Bogie_Imp.h"
     "./source/Cargo_Imp.h"
-    "./source/BogieJoint.h"
     "./source/RailRunner_Imp.h"
     "./source/RollingStock_Imp.h"
     "./source/Train_Imp.h"
