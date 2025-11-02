@@ -27,12 +27,12 @@
 
 #include "RollingStock_Imp.h"
 #include "trax/rigid/Gestalt.h"
-#include "trax/rigid/Simulator.h"
-#include "trax/rigid/Wheelset.h"
-#include "trax/rigid/trains/TrainScene.h"
+//#include "trax/rigid/Simulator.h"
+//#include "trax/rigid/Wheelset.h"
+//#include "trax/rigid/Scene.h"
 #include "trax/rigid/trains/WheelFrame.h"
 
-#include "spat/Position2D.h"
+//#include "spat/Position2D.h"
 
 #include <iostream>
 

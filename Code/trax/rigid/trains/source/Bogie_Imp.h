@@ -37,8 +37,8 @@
 
 namespace trax{
 
-	struct Swivel;
-	struct Coupling;
+	struct DistanceJoint;
+	struct HingeJoint;
 
 	typedef RailRunner_Imp<ObjectID_Imp<Bogie>> Bogie_Base;
 
@@ -47,9 +47,9 @@ namespace trax{
 						//public PlugEnumerator
 	{
 	public:
-		Bogie_Imp( TrainScene& scene, std::shared_ptr<Gestalt> pGestalt );
+		Bogie_Imp( Scene& scene, std::shared_ptr<Gestalt> pGestalt );
 		Bogie_Imp( const Bogie_Imp& ) = delete;
-		Bogie_Imp( Bogie_Imp&& bogie ) noexcept;
+	//	Bogie_Imp( Bogie_Imp&& bogie ) noexcept;
 		~Bogie_Imp() noexcept;
 
 		Bogie_Imp& operator=( const Bogie_Imp& ) = delete;
@@ -222,15 +222,87 @@ namespace trax{
 		const Jack& _GetJack( int idx ) const override;
 	//	const Plug& _GetPlug( int idx ) const override;
 
-		TrainScene& m_Scene;
+		Scene& m_Scene;
 
 		void RailChildBogies( const trax::Location& location, bool bMoveTo );
 		void SetGlobalAnchorToChildBogies( const spat::Frame<Length,One>& anchor );
 		void AlignToChildBogies();
 
-		std::shared_ptr<Swivel>		m_pSwivelParentNorth, m_pSwivelParentSouth;
-		std::shared_ptr<Swivel>		m_pSwivelChildNorth, m_pSwivelChildSouth;
-		std::shared_ptr<Bogie_Imp>	m_pBogieChildNorth, m_pBogieChildSouth;		// keep references to child bogies (but not to parent) to prevent them from being deleted.
+		template<typename JointType>
+		class BogieJoint{
+		public:
+			BogieJoint(	std::unique_ptr<JointType> pJoint,
+						Bogie_Imp& bogieParent, 
+						Bogie_Imp& bogieChild )
+				: m_pJoint( std::move( pJoint ) )
+				, m_BogieA( bogieParent )
+				, m_BogieB( bogieChild )
+			{
+			}
+
+			void SetName( const char* name ) noexcept{
+				m_pJoint->SetName( name );
+			}
+
+			std::shared_ptr<Bogie_Imp> BogieA() const noexcept{
+				return std::dynamic_pointer_cast<Bogie_Imp>(m_BogieA.This());
+			}
+
+			spat::Frame<Length,One> LocalPoseA() const noexcept{
+				return m_pJoint->LocalPoseA();
+			}
+
+			std::shared_ptr<Bogie_Imp> BogieB() const noexcept{
+				return std::dynamic_pointer_cast<Bogie_Imp>(m_BogieB.This());
+			}
+
+			spat::Frame<Length, One> LocalPoseB() const noexcept{
+				return m_pJoint->LocalPoseB();
+			}
+		protected:
+			Bogie_Imp& m_BogieA;
+			Bogie_Imp& m_BogieB;
+			std::unique_ptr<JointType> m_pJoint;
+		private:
+			Real m_Engine_meters_per_unit = 1.0f;
+		};
+
+		class BogieSwivel : public BogieJoint<HingeJoint>{
+		public:
+			BogieSwivel(	const Scene& scene,
+							Bogie_Imp& bogieParent, 
+							const spat::Frame<Length, One>& poseParent, 
+							Bogie_Imp& bogieChild, 
+							const spat::Frame<Length, One>& poseChild );
+
+			spat::VectorBundle<Length,One> LocalAxisA() const noexcept;
+
+			spat::VectorBundle<Length,One> LocalAxisB() const noexcept;
+
+			Angle GetBendAngle() const noexcept;
+		private:
+		};
+
+		class BogieCoupling : public BogieJoint<DistanceJoint>{
+		public:
+			BogieCoupling(	const Scene& scene,
+							Bogie_Imp& bogieParent, 
+							const spat::Frame<Length, One>& poseParent, 
+							Bogie_Imp& bogieChild, 
+							const spat::Frame<Length, One>& poseChild );
+
+			std::shared_ptr<Bogie_Imp> GetCoupledBogie( const Bogie_Imp& toBogie ) const noexcept;
+
+			Length GetLength() const noexcept;
+
+			void SetLength( Length length ) noexcept;
+
+			spat::Vector<Force> GetForce() const noexcept;
+		};
+
+		std::shared_ptr<BogieSwivel>	m_pSwivelParentNorth, m_pSwivelParentSouth;
+		std::shared_ptr<BogieSwivel>	m_pSwivelChildNorth, m_pSwivelChildSouth;
+		std::shared_ptr<Bogie_Imp>		m_pBogieChildNorth, m_pBogieChildSouth;		// keep references to child bogies (but not to parent) to prevent them from being deleted.
 
 		virtual Length AnchorToParentNorth() const noexcept;
 		virtual Length AnchorToParentSouth() const noexcept;
@@ -243,7 +315,7 @@ namespace trax{
 		struct CouplingProps_Ext : CouplingProps{
 			CouplingProps_Ext( const Bogie_Imp& parentBogie ) noexcept;
 			const Bogie_Imp& ParentBogie;
-			std::shared_ptr<Coupling> pCoupling;
+			std::shared_ptr<BogieCoupling> pCoupling;
 			bool bActivated = false;
 			Momentum ActualBreakingSpareMomentum = BreakingSpareMomentum;
 

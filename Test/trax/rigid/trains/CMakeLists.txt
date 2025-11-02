@@ -10,10 +10,12 @@ add_executable(trax_trains_tests
 target_link_libraries(trax_trains_tests
     PRIVATE
         test_settings
+        trax_core_collections
         trax_core_support
+        trax_rigid_support
+        trax_rigid_physx
         trax_trains_support
         trax_trains_collections
-        trax_trains_physx
 )
 
 configure_boost_test_exe(trax_trains_tests)

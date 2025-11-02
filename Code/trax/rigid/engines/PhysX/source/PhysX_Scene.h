@@ -98,16 +98,29 @@ namespace trax
 		std::unique_ptr<GeomMesh> CreateGeomTriangleMesh() const override;
 
 
-		std::unique_ptr<HingeJoint> CreateHingeJoint( std::shared_ptr<Body> pBodyA, const spat::Frame<Length,One>& localAnchorA, std::shared_ptr<Body> pBodyB, const spat::Frame<Length,One>& localAnchorB ) const override;
+		std::unique_ptr<HingeJoint> CreateHingeJoint( 
+			Body* pBodyA, 
+			const spat::Frame<Length,One>& localAnchorA, 
+			Body* pBodyB, 
+			const spat::Frame<Length,One>& localAnchorB ) const override;
 
-		std::unique_ptr<SliderJoint> CreateSliderJoint( std::shared_ptr<Body> pBodyA, const spat::Frame<Length,One>& localAnchorA, std::shared_ptr<Body> pBodyB, const spat::Frame<Length,One>& localAnchorB ) const override;
+		std::unique_ptr<SliderJoint> CreateSliderJoint( 
+			Body* pBodyA, 
+			const spat::Frame<Length,One>& localAnchorA, 
+			Body* pBodyB, 
+			const spat::Frame<Length,One>& localAnchorB ) const override;
 
-		std::unique_ptr<BallAndSocketJoint> CreateBallAndSocketJoint( std::shared_ptr<Body> pBodyA, const spat::Frame<Length,One>& localAnchorA, std::shared_ptr<Body> pBodyB, const spat::Frame<Length,One>& localAnchorB ) const override;
+		std::unique_ptr<BallAndSocketJoint> CreateBallAndSocketJoint( 
+			Body* pBodyA, 
+			const spat::Frame<Length,One>& localAnchorA, 
+			Body* pBodyB, 
+			const spat::Frame<Length,One>& localAnchorB ) const override;
 
-		std::unique_ptr<DistanceJoint> CreateDistanceJoint( std::shared_ptr<Body> pBodyA, const spat::Position<Length>& localAnchorA, std::shared_ptr<Body> pBodyB, const spat::Position<Length>& localAnchorB ) const override;
-
-
-
+		std::unique_ptr<DistanceJoint> CreateDistanceJoint( 
+			Body* pBodyA, 
+			const spat::Frame<Length,One>& localAnchorA, 
+			Body* pBodyB, 
+			const spat::Frame<Length,One>& localAnchorB ) const override;
 
 		std::shared_ptr<class TrackJointFeeder> CreateTrackJointFeeder( 
 			const Body& bodyMoving, 

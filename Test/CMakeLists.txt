@@ -29,10 +29,11 @@ target_link_libraries(ALL_TESTS
 		test_settings
         trax_core_support
         trax_core_collections_support
+        trax_rigid_support
+        trax_rigid_physx
         trax_trains_support
         trax_trains_collections
-        trax_trains_physx
-)
+ )
 
 set(TEST_DEBUG_ARGS "--log_level=test_suite --report_level=short --color_output=yes")
 set_property(TARGET ALL_TESTS PROPERTY VS_DEBUGGER_COMMAND_ARGUMENTS "${TEST_DEBUG_ARGS}")

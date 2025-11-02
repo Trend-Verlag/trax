@@ -41,7 +41,7 @@ namespace trax{
 		/// \param scene The scene to insert the WheelFrame into.
 		/// \param pGestalt The Gestalt to use. If no Gestalt is given 
 		/// one is automatically created.
-		static dclspc std::shared_ptr<WheelFrame> Make( TrainScene& scene, std::shared_ptr<Gestalt> pGestalt = nullptr ) noexcept;
+		static dclspc std::shared_ptr<WheelFrame> Make( Scene& scene, std::shared_ptr<Gestalt> pGestalt = nullptr ) noexcept;
 
 
 
@@ -180,7 +180,7 @@ namespace trax{
 
 
 	/// \brief Reverts all WheelFrames that has no wheels to Bogies.
-	std::shared_ptr<Bogie> RemoveUnusedWheelFrames( std::shared_ptr<Bogie> pBogie );
+	//std::shared_ptr<Bogie> RemoveUnusedWheelFrames( std::shared_ptr<Bogie> pBogie );
 
 }
 

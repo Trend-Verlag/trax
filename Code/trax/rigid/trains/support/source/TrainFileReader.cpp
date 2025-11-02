@@ -51,7 +51,7 @@ bool TrainFileReader::Read( std::filesystem::path filePath )
 }
 ///////////////////////////////////////
 TrainFileReferenceReader::TrainFileReferenceReader( 
-		TrainScene& scene,
+		Scene& scene,
 		std::filesystem::path basePath ) noexcept
 	: TrainFileReader			{ *this, basePath }
 	, TrainCreator				{ scene }

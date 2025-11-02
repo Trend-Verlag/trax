@@ -41,7 +41,7 @@ namespace trax{
 						   public Bogie_Imp
 	{
 	public:
-		WheelFrame_Imp( TrainScene& scene, std::shared_ptr<Gestalt> pGestalt );
+		WheelFrame_Imp( Scene& scene, std::shared_ptr<Gestalt> pGestalt );
 		WheelFrame_Imp( const WheelFrame_Imp& ) = delete;
 		WheelFrame_Imp( WheelFrame_Imp&& bogie ) = delete;
 		~WheelFrame_Imp();

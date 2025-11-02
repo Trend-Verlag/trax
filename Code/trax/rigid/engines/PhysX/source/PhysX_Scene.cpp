@@ -16,6 +16,7 @@
 #include "PhysX_Adapter.h"
 #include "PhysX_GeomSpecials_Imp.h"
 #include "PhysX_Gestalt_Imp.h"
+#include "PhysX_Joints_Imp.h"
 #include "PhysX_Simulator.h"
 
 #include "trax/rigid/Joint.h"
@@ -167,28 +168,58 @@ std::unique_ptr<GeomMesh> PhysX_Scene::CreateGeomTriangleMesh() const{
 	return std::make_unique<PhysX_TriangleMesh>( *this );
 }
 
-std::unique_ptr<HingeJoint> PhysX_Scene::CreateHingeJoint( std::shared_ptr<Body> /*pBodyA*/, const spat::Frame<Length, One>& /*localAnchorA*/, std::shared_ptr<Body> /*pBodyB*/, const spat::Frame<Length, One>& /*localAnchorB*/ ) const
+std::unique_ptr<HingeJoint> PhysX_Scene::CreateHingeJoint( 
+	Body* pBodyA, 
+	const spat::Frame<Length,One>& localAnchorA, 
+	Body* pBodyB, 
+	const spat::Frame<Length,One>& localAnchorB ) const
 {
-	std::cerr << "PhysX_Scene::CreateHingeJoint: This function is not implemented in PhysX_Scene yet." << std::endl;
-	return nullptr;
+	return std::make_unique<PhysX_HingeJoint_Imp>( Simulator().Physics(), pBodyA, localAnchorA, pBodyB, localAnchorB, m_EngineMetersPerUnit );
 }
 
-std::unique_ptr<SliderJoint> PhysX_Scene::CreateSliderJoint( std::shared_ptr<Body> /*pBodyA*/, const spat::Frame<Length, One>& /*localAnchorA*/, std::shared_ptr<Body> /*pBodyB*/, const spat::Frame<Length, One>& /*localAnchorB*/ ) const
+std::unique_ptr<SliderJoint> PhysX_Scene::CreateSliderJoint( 
+	Body* pBodyA, 
+	const spat::Frame<Length, One>& localAnchorA, 
+	Body* pBodyB, 
+	const spat::Frame<Length, One>& localAnchorB ) const
 {
-	std::cerr << "PhysX_Scene::CreateSliderJoint: This function is not implemented in PhysX_Scene yet." << std::endl;
-	return nullptr;
+	return std::make_unique<PhysX_SliderJoint_Imp>( 
+		Simulator().Physics(), 
+		pBodyA, 
+		localAnchorA, 
+		pBodyB, 
+		localAnchorB, 
+		m_EngineMetersPerUnit );
 }
 
-std::unique_ptr<BallAndSocketJoint> PhysX_Scene::CreateBallAndSocketJoint( std::shared_ptr<Body> /*pBodyA*/, const spat::Frame<Length, One>& /*localAnchorA*/, std::shared_ptr<Body> /*pBodyB*/, const spat::Frame<Length,One>& /*localAnchorB*/ ) const
+std::unique_ptr<BallAndSocketJoint> PhysX_Scene::CreateBallAndSocketJoint( 
+	Body* pBodyA, 
+	const spat::Frame<Length, One>& localAnchorA, 
+	Body* pBodyB, 
+	const spat::Frame<Length, One>& localAnchorB ) const
 {
-	std::cerr << "PhysX_Scene::CreateBallAndSocketJoint: This function is not implemented in PhysX_Scene yet." << std::endl;
-	return nullptr;
+	return std::make_unique<PhysX_BallAndSocketJoint_Imp>( 
+		Simulator().Physics(), 
+		pBodyA, 
+		localAnchorA, 
+		pBodyB, 
+		localAnchorB, 
+		m_EngineMetersPerUnit );
 }
 
-std::unique_ptr<DistanceJoint> PhysX_Scene::CreateDistanceJoint( std::shared_ptr<Body> /*pBodyA*/, const spat::Position<Length>& /*localAnchorA*/, std::shared_ptr<Body> /*pBodyB*/, const spat::Position<Length>& /*localAnchorB*/ ) const
+std::unique_ptr<DistanceJoint> PhysX_Scene::CreateDistanceJoint( 
+	Body* pBodyA, 
+	const spat::Frame<Length,One>& localAnchorA, 
+	Body* pBodyB, 
+	const spat::Frame<Length,One>& localAnchorB ) const
 {
-	std::cerr << "PhysX_Scene::CreateDistanceJoint: This function is not implemented in PhysX_Scene yet." << std::endl;
-	return nullptr;
+	return std::make_unique<PhysX_DistanceJoint_Imp>( 
+		Simulator().Physics(), 
+		pBodyA, 
+		localAnchorA, 
+		pBodyB, 
+		localAnchorB, 
+		m_EngineMetersPerUnit );
 }
 
 std::shared_ptr<TrackJointFeeder>

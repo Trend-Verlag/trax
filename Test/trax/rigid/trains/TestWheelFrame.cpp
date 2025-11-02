@@ -30,7 +30,7 @@
 #include "trax/support/Fixtures.h"
 
 #include "trax/rigid/Simulator.h"
-#include "trax/rigid/trains/TrainScene.h"
+#include "trax/rigid/Scene.h"
 #include "trax/rigid/trains/WheelFrame.h"
 #include "trax/rigid/Body.h"
 #include "trax/support/TraxSupportStream.h"
@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE( testSimulator )
 {
 	std::unique_ptr<trax::Simulator> pSimulator = Simulator::Make( Simulator::Type::PhysX );
 	BOOST_REQUIRE( pSimulator );
-	std::unique_ptr<trax::TrainScene> pScene = TrainScene::Make( *pSimulator );
+	std::unique_ptr<trax::Scene> pScene = Scene::Make( *pSimulator );
 	BOOST_REQUIRE( pScene );
 }
 
@@ -68,7 +68,7 @@ BOOST_FIXTURE_TEST_CASE( testWheelFrame, TrackFixture )
 {
 	std::unique_ptr<trax::Simulator> pSimulator = Simulator::Make( Simulator::Type::PhysX );
 	BOOST_REQUIRE( pSimulator );
-	std::unique_ptr<trax::TrainScene> pScene = TrainScene::Make( *pSimulator );
+	std::unique_ptr<trax::Scene> pScene = Scene::Make( *pSimulator );
 	BOOST_REQUIRE( pScene );
 
 	{
@@ -98,7 +98,7 @@ BOOST_FIXTURE_TEST_CASE( testWheelFrameResetAnchor, TrackFixture )
 {
 	std::unique_ptr<trax::Simulator> pSimulator = Simulator::Make( Simulator::Type::PhysX );
 	BOOST_REQUIRE( pSimulator );
-	std::unique_ptr<trax::TrainScene> pScene = TrainScene::Make( *pSimulator );
+	std::unique_ptr<trax::Scene> pScene = Scene::Make( *pSimulator );
 	BOOST_REQUIRE( pScene );
 
 	{

@@ -34,11 +34,11 @@
 
 namespace trax{
 
-	struct TrainScene;
+	struct Scene;
 
 	class RollingStockCreator : public RollingStockParser{
 	public:
-		RollingStockCreator( TrainScene& scene );
+		RollingStockCreator( Scene& scene );
 
 		std::shared_ptr<RollingStock> GetRollingStock() const noexcept;
 	protected:
@@ -119,7 +119,7 @@ namespace trax{
 
 		void ParsingEnd() noexcept override;
 	private:
-		TrainScene& m_Scene;
+		Scene& m_Scene;
 		std::shared_ptr<RollingStock> m_pRollingStock;
 
 		std::vector<std::shared_ptr<Bogie>> m_AllBogies;

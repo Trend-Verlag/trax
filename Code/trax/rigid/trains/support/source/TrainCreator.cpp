@@ -32,7 +32,7 @@
 
 namespace trax{
 
-TrainCreator::TrainCreator( TrainScene& scene ) noexcept
+TrainCreator::TrainCreator( Scene& scene ) noexcept
 	: RollingStockCreator{ scene }
 {
 }

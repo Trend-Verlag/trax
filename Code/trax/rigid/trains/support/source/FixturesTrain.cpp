@@ -35,7 +35,7 @@ using namespace dim::literals;
 ///////////////////////////////////////
 TrainFixture::TrainFixture( bool bVisualDebugger )
 	:	m_pSimulator{ trax::Simulator::Make( bVisualDebugger ? trax::Simulator::Type::PhysX_VisualDebugger : trax::Simulator::Type::PhysX ) },
-		m_pScene	{ trax::TrainScene::Make(*m_pSimulator) },
+		m_pScene	{ trax::Scene::Make(*m_pSimulator) },
 		m_pTrack1	{ trax::StaticTrack::Make(*m_pScene) },
 		m_pTrack2	{ trax::StaticTrack::Make(*m_pScene) },
 		m_pTrack3	{ trax::StaticTrack::Make(*m_pScene) },
@@ -104,7 +104,7 @@ TrainFixture::~TrainFixture(){
 ///////////////////////////////////////
 MultiTrackSystemFixture::MultiTrackSystemFixture( bool bVisualDebugger )
 	:	m_pSimulator{ trax::Simulator::Make( bVisualDebugger ? trax::Simulator::Type::PhysX_VisualDebugger : trax::Simulator::Type::PhysX ) },
-		m_pScene	{ trax::TrainScene::Make(*m_pSimulator) }
+		m_pScene	{ trax::Scene::Make(*m_pSimulator) }
 {
 }
 

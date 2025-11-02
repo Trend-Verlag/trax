@@ -32,7 +32,7 @@
 
 #include "trax/rigid/StaticTrack.h"
 #include "trax/rigid/Simulator.h"
-#include "trax/rigid/trains/TrainScene.h"
+#include "trax/rigid/Scene.h"
 
 namespace trax{
 	struct TrackSystem;
@@ -43,7 +43,7 @@ struct TrainFixture : FixtureBase{
 	~TrainFixture();
 
 	std::unique_ptr<trax::Simulator> m_pSimulator;
-	std::unique_ptr<trax::TrainScene> m_pScene;
+	std::unique_ptr<trax::Scene> m_pScene;
 
 	std::shared_ptr<trax::StaticTrack>	m_pTrack1;
 	std::shared_ptr<trax::StaticTrack>	m_pTrack2;
@@ -76,7 +76,7 @@ struct MultiTrackSystemFixture : FixtureBase
 	void BuildFixture( int nTrackCollections );
 
 	std::unique_ptr<trax::Simulator> m_pSimulator;
-	std::unique_ptr<trax::TrainScene> m_pScene;
+	std::unique_ptr<trax::Scene> m_pScene;
 	std::shared_ptr<trax::TrackSystem> m_pTrackSystem;
 };
 

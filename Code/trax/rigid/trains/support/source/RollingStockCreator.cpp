@@ -31,12 +31,12 @@
 #include "trax/rigid/Gestalt.h"
 #include "trax/rigid/TractionForceCharacteristic.h"
 #include "trax/rigid/trains/RollingStock.h"
-#include "trax/rigid/trains/TrainScene.h"
+#include "trax/rigid/Scene.h"
 #include "trax/rigid/trains/WheelFrame.h"
 
 namespace trax{
 
-RollingStockCreator::RollingStockCreator( TrainScene& scene )
+RollingStockCreator::RollingStockCreator( Scene& scene )
 	: m_Scene{ scene }
 {
 }

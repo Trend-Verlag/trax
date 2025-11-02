@@ -261,7 +261,7 @@ BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader2, TrackCircle )
 {
 	std::unique_ptr<trax::Simulator> pSimulator = Simulator::Make( Simulator::Type::PhysX );
 	BOOST_REQUIRE( pSimulator );
-	std::unique_ptr<trax::TrainScene> pScene = TrainScene::Make( *pSimulator );
+	std::unique_ptr<trax::Scene> pScene = Scene::Make( *pSimulator );
 	BOOST_REQUIRE( pScene );
 
 	RollingStockCreator creator{ *pScene };

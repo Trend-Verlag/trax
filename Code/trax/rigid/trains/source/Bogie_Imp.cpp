@@ -27,11 +27,11 @@
 
 #include "Bogie_Imp.h"
 
-#include "../TrainScene.h"
+#include "trax/rigid/Scene.h"
 #include "../WheelFrame.h"
 #include "trax/rigid/Gestalt.h"
 #include "Coupling.h"
-#include "Swivel.h"
+#include "trax/rigid/Joint.h"
 
 #include "dim/support/DimSupportStream.h"
 
@@ -40,7 +40,7 @@
 namespace trax{
 	using namespace spat;
 ///////////////////////////////////////
-std::shared_ptr<Bogie> Bogie::Make( TrainScene& scene, std::shared_ptr<Gestalt> pGestalt ) noexcept
+std::shared_ptr<Bogie> Bogie::Make( Scene& scene, std::shared_ptr<Gestalt> pGestalt ) noexcept
 {
 	try{
 		std::shared_ptr<Bogie_Imp> pRetval = std::make_shared<Bogie_Imp>( scene, pGestalt );
@@ -57,7 +57,7 @@ std::shared_ptr<Bogie> Bogie::Make( TrainScene& scene, std::shared_ptr<Gestalt> 
 ///////////////////////////////////////
 const Angle Bogie_Imp::scm_BendingAngle = pi/64;
 
-Bogie_Imp::Bogie_Imp( TrainScene& scene, std::shared_ptr<Gestalt> pGestalt )
+Bogie_Imp::Bogie_Imp( Scene& scene, std::shared_ptr<Gestalt> pGestalt )
 	: m_Scene				{ scene }
 	, m_CouplingNorth		{ *this }
 	, m_CouplingSouth		{ *this }
@@ -93,7 +93,7 @@ Bogie_Imp::Bogie_Imp( TrainScene& scene, std::shared_ptr<Gestalt> pGestalt )
 	for( Jack& jack : *this )
 		jack.Reference( "parent", TypeName() );
 }
-
+/*
 Bogie_Imp::Bogie_Imp( Bogie_Imp&& bogie ) noexcept
 	: Bogie_Base					{ std::move(bogie) }
 	, m_Scene						{ bogie.m_Scene }
@@ -168,7 +168,7 @@ Bogie_Imp::Bogie_Imp( Bogie_Imp&& bogie ) noexcept
 		m_CouplingSouth.pCoupling->SetBogieA( this ) :
 		m_CouplingSouth.pCoupling->SetBogieB( this );	
 }
-
+*/
 Bogie_Imp::~Bogie_Imp() noexcept
 {
 	m_pGestalt->SetName( nullptr );
@@ -674,7 +674,7 @@ void Bogie_Imp::Attach( std::shared_ptr<Bogie> pChildBogie, EndType atEnd, const
 			if( pChildBogie_Imp->m_pSwivelParentSouth )
 				throw std::runtime_error( "Child bogie already has a parent bogie at south end!" );
 
-			if( std::shared_ptr<Swivel> pSwivel = m_Scene.CreateSwivel( ThisBogie(), swivelPose, pChildBogie, childLocalPose ); pSwivel )
+			if( std::shared_ptr<BogieSwivel> pSwivel = std::make_shared<BogieSwivel>( m_Scene, *this, swivelPose, *pChildBogie_Imp, childLocalPose ) )
 			{
 				m_Scene.Register( *this );
 				m_pBogieChildNorth = pChildBogie_Imp;
@@ -692,7 +692,7 @@ void Bogie_Imp::Attach( std::shared_ptr<Bogie> pChildBogie, EndType atEnd, const
 			if( pChildBogie_Imp->m_pSwivelParentNorth )
 				throw std::runtime_error( "Child bogie already has a parent bogie at north end!" );
 
-			if( std::shared_ptr<Swivel> pSwivel = m_Scene.CreateSwivel(ThisBogie(), swivelPose, pChildBogie, childLocalPose ); pSwivel )
+			if( std::shared_ptr<BogieSwivel> pSwivel = std::make_shared<BogieSwivel>( m_Scene, *this, swivelPose, *pChildBogie_Imp, childLocalPose ) )
 			{
 				m_Scene.Register( *this );
 				m_pBogieChildSouth = pChildBogie_Imp;
@@ -896,10 +896,11 @@ bool Bogie_Imp::Couple( EndType end, Bogie& with, EndType withEnd, bool btrigger
 	if( thisCoupling.CouplingTypeIdx <= 0 )
 		return false;
 
-	thisCoupling.pCoupling = thatCoupling.pCoupling = m_Scene.CreateCoupling( 
-		ThisBogie(), 
+	thisCoupling.pCoupling = thatCoupling.pCoupling = std::make_shared<BogieCoupling>( 
+		m_Scene,
+		*this, 
 		Frame<Length,One>{ thisCoupling.Position.Center(), Ex<One>, Ey<One>, Ez<One> }, 
-		with.ThisBogie(), 
+		dynamic_cast<Bogie_Imp&>(with), 
 		Frame<Length,One>{ thatCoupling.Position.Center(), Ex<One>, Ey<One>, Ez<One> } );
 
 	if( !thisCoupling.pCoupling )
@@ -1289,7 +1290,67 @@ void Bogie_Imp::AlignToChildBogies()
 		GetGestalt().SetFrame( Frame<Length,One>{ RxCFxCP * PPI } );
 	}
 }
+///////////////////////////////////////
+trax::Bogie_Imp::BogieSwivel::BogieSwivel(
+	const Scene& scene,
+	Bogie_Imp& bogieParent, 
+	const spat::Frame<Length,One>& poseParent, 
+	Bogie_Imp& bogieChild, 
+	const spat::Frame<Length,One>& poseChild )
+	: BogieJoint<HingeJoint>{ 
+		scene.CreateHingeJoint( &bogieParent.GetGestalt(), poseParent, &bogieChild.GetGestalt(), poseChild ), 
+		bogieParent, 
+		bogieChild }
+{
+}
 
+spat::VectorBundle<Length,One> trax::Bogie_Imp::BogieSwivel::LocalAxisA() const noexcept{
+	return m_pJoint->LocalAxisA();
+}
+
+spat::VectorBundle<Length,One> trax::Bogie_Imp::BogieSwivel::LocalAxisB() const noexcept{
+	return m_pJoint->LocalAxisB();
+}
+
+Angle trax::Bogie_Imp::BogieSwivel::GetBendAngle() const noexcept{
+	return m_pJoint->GetBendAngle();
+}
+///////////////////////////////////////
+trax::Bogie_Imp::BogieCoupling::BogieCoupling(
+	const Scene& scene, 
+	Bogie_Imp& bogieParent, 
+	const spat::Frame<Length,One>& poseParent, 
+	Bogie_Imp& bogieChild, 
+	const spat::Frame<Length,One>& poseChild )
+	: BogieJoint<DistanceJoint>{ 
+		scene.CreateDistanceJoint( &bogieParent.GetGestalt(), poseParent, &bogieChild.GetGestalt(), poseChild ),
+		bogieParent, 
+		bogieChild }
+{
+}
+
+std::shared_ptr<Bogie_Imp> trax::Bogie_Imp::BogieCoupling::GetCoupledBogie( const Bogie_Imp& toBogie ) const noexcept
+{
+	if( &toBogie == &m_BogieA )
+		return BogieB();
+	else if( &toBogie == &m_BogieB )
+		return BogieA();
+
+	return nullptr;
+}
+
+Length trax::Bogie_Imp::BogieCoupling::GetLength() const noexcept{
+	return m_pJoint->GetDistance();
+}
+
+void trax::Bogie_Imp::BogieCoupling::SetLength( Length length ) noexcept{
+	m_pJoint->SetDistance( length );
+}
+
+spat::Vector<Force> trax::Bogie_Imp::BogieCoupling::GetForce() const noexcept{
+	return m_pJoint->GetForce();
+}
+///////////////////////////////////////
 Vector<One> Bogie_Imp::LocalVerticalDirection() const noexcept
 {
 	if( m_pSwivelParentNorth )

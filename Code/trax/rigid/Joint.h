@@ -38,14 +38,25 @@ namespace trax{
 
 	struct Body;
 
-	struct Joint : Identified<Joint>
+	struct Joint
 	{
+		/// \brief Sets the name of the Joint.
+		/// 
+		/// This is for debug purposes; the string is not copied,
+		/// only the pointer is stored.
+		virtual void SetName( const char* name ) noexcept = 0;
+
+
+		/// \returns The name of the Joint.
+		virtual const char* GetName() const noexcept = 0;
+
+
 		/// \brief The dominant body of the connection.
-		virtual std::shared_ptr<Body> BodyA() const noexcept = 0;
+		virtual Body* BodyA() const noexcept = 0;
 
 
 		/// \brief Set the dominant body of the connection.
-		virtual void BodyA( std::shared_ptr<Body> pBody ) const noexcept = 0;
+		virtual void BodyA( Body* pBody ) = 0;
 
 
 		/// \brief The pose of the joint in the local coordinate system of body A.
@@ -53,15 +64,15 @@ namespace trax{
 
 
 		/// \brief Set the pose of the joint in the local coordinate system of body A.
-		virtual void LocalPoseA( const spat::Frame<Length,One>& pose ) const noexcept = 0;
+	//	virtual void LocalPoseA( const spat::Frame<Length,One>& pose ) const noexcept = 0;
 
 
 		/// \brief The subordinate body of the connection.
-		virtual std::shared_ptr<Body> BodyB() const noexcept = 0;
+		virtual Body* BodyB() const noexcept = 0;
 
 
 		/// \brief Set the subordinate body of the connection.
-		virtual void BodyB( std::shared_ptr<Body> pBody ) const noexcept = 0;
+		virtual void BodyB( Body* pBody ) = 0;
 
 
 		/// \brief The pose of the joint in the local coordinate system of body B.
@@ -69,19 +80,28 @@ namespace trax{
 
 
 		/// \brief Set the pose of the joint in the local coordinate system of body B.
-		virtual void LocalPoseB( const spat::Frame<Length,One>& pose ) const noexcept = 0;
+	//	virtual void LocalPoseB( const spat::Frame<Length,One>& pose ) const noexcept = 0;
+
+		virtual ~Joint() = default;
 	};
 
 
 	struct HingeJoint : Joint
 	{
-		virtual Angle GetAngle() const noexcept = 0;
+		/// \returns The axis of rotation in local coordinates of the parent (BodyA).
+		virtual spat::VectorBundle<Length,One> LocalAxisA() const noexcept = 0;
 
+		/// \returns The axis of rotation in local coordinates of the child (BodyB).
+		virtual spat::VectorBundle<Length,One> LocalAxisB() const noexcept = 0;
 
-		virtual void SetAngle( Angle angle ) const noexcept = 0;
+		/// \returns The rotational angle the child turned around the axis of rotation.
+		virtual Angle GetTurnAngle() const noexcept = 0;
 
+		/// \returns The side bending or tilt between parent and child.
+		virtual Angle GetBendAngle() const noexcept = 0;
 
-
+		/// \returns The pitch angle of the child relative to the parent.
+		virtual Angle GetPitchAngle() const noexcept = 0;
 	};
 
 
@@ -106,5 +126,7 @@ namespace trax{
 		virtual Length GetDistance() const noexcept = 0;
 
 		virtual void SetDistance( Length distance ) const noexcept = 0;
+
+		virtual spat::Vector<Force> GetForce() const noexcept = 0;
 	};
 }

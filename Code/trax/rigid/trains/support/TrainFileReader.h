@@ -48,7 +48,7 @@ namespace trax{
 	class TrainFileReferenceReader : public TrainFileReader,
 									 protected TrainCreator {
 	public:
-		TrainFileReferenceReader( TrainScene& scene, std::filesystem::path basePath = std::filesystem::path{} ) noexcept;
+		TrainFileReferenceReader( Scene& scene, std::filesystem::path basePath = std::filesystem::path{} ) noexcept;
 
 		std::shared_ptr<Train> GetTrain() const noexcept;
 	protected:

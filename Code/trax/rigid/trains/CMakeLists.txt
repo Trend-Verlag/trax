@@ -5,7 +5,6 @@ add_library(trax_trains
         "./source/RollingStock_Imp.cpp"
         "./source/Train_Imp.cpp"
         "./source/TrainComponent_Imp.cpp"
-        "./source/TrainScene_Imp.cpp"
         "./source/WheelFrame_Imp.cpp"
 )
 
@@ -16,7 +15,6 @@ set(PUBLIC_HEADERS
     "./RollingStock.h"
     "./Train.h"
     "./TrainComponent.h"
-    "./TrainScene.h"
     "./WheelFrame.h"
 )
 
@@ -28,7 +26,6 @@ set(PRIVATE_HEADERS
     "./source/RollingStock_Imp.h"
     "./source/Train_Imp.h"
     "./source/TrainComponent_Imp.h"
-    "./source/TrainScene_Imp.h"
     "./source/WheelFrame_Imp.h"
 )
 

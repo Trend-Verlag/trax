@@ -112,7 +112,6 @@ add_subdirectory(Code/trax/rigid/engines/PhysX)
 add_subdirectory(Code/trax/rigid/support)
 add_subdirectory(Code/trax/rigid/trains)
 add_subdirectory(Code/trax/rigid/trains/collections)
-add_subdirectory(Code/trax/rigid/trains/engines/PhysX)
 add_subdirectory(Code/trax/rigid/trains/support)
 add_subdirectory(Code/trax/rigid/modules)
 

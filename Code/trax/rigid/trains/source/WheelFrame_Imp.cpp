@@ -29,19 +29,18 @@
 
 #include "trax/rigid/Gestalt.h"
 #include "trax/rigid/Material.h"
+#include "trax/rigid/Scene.h"
 #include "trax/rigid/TrackJointFeeder.h"
-#include "Swivel.h"
-#include "../TrainScene.h"
 
 namespace trax{
 	using namespace spat;
 ///////////////////////////////////////
 std::shared_ptr<WheelFrame> WheelFrame::Make( 
-	TrainScene& simulator, 
+	Scene& scene, 
 	std::shared_ptr<Gestalt> pGestalt ) noexcept
 {
 	try{
-		std::shared_ptr<WheelFrame_Imp> pRetval = std::make_shared<WheelFrame_Imp>( simulator, pGestalt );
+		std::shared_ptr<WheelFrame_Imp> pRetval = std::make_shared<WheelFrame_Imp>( scene, pGestalt );
 		
 		if( pRetval )
 			pRetval->SetWeakPointerToSelf( pRetval );
@@ -54,7 +53,7 @@ std::shared_ptr<WheelFrame> WheelFrame::Make(
 }
 
 WheelFrame_Imp::WheelFrame_Imp( 
-	TrainScene& scene, 
+	Scene& scene, 
 	std::shared_ptr<Gestalt> pGestalt )
 	: Bogie_Imp			{ scene, pGestalt }
 	, m_bEnableDerailing{ true }
@@ -520,27 +519,27 @@ Vector<One> WheelFrame_Imp::LocalHorizontalDirection() const noexcept{
 	return UnflippedAnchor().T;
 }
 ///////////////////////////////////////
-std::shared_ptr<Bogie> RemoveUnusedWheelFrames( std::shared_ptr<Bogie> pBogie )
-{
-	std::shared_ptr<Bogie> pRetval = pBogie;
-	for( std::shared_ptr<Bogie> pNextBogie = pBogie->GetFirst(); 
-		 pNextBogie; 
-		 pNextBogie = pNextBogie->GetNext() )
-	{
-		if( std::shared_ptr<WheelFrame> pWheelFrame = std::dynamic_pointer_cast<WheelFrame>(pNextBogie); 
-			pWheelFrame && pWheelFrame->CntWheelsets() == 0 )
-		{
-			std::shared_ptr<Bogie_Imp> pNewBogie = std::make_shared<Bogie_Imp>( std::move(*std::dynamic_pointer_cast<Bogie_Imp>(pNextBogie)) );
-			pNewBogie->SetWeakPointerToSelf( pNewBogie );
-
-			if( pNextBogie == pBogie )
-				pRetval = pNewBogie;
-
-			pNextBogie = pNewBogie;
-		}
-	}
-
-	return pRetval;
-}
+//std::shared_ptr<Bogie> RemoveUnusedWheelFrames( std::shared_ptr<Bogie> pBogie )
+//{
+//	std::shared_ptr<Bogie> pRetval = pBogie;
+//	for( std::shared_ptr<Bogie> pNextBogie = pBogie->GetFirst(); 
+//		 pNextBogie; 
+//		 pNextBogie = pNextBogie->GetNext() )
+//	{
+//		if( std::shared_ptr<WheelFrame> pWheelFrame = std::dynamic_pointer_cast<WheelFrame>(pNextBogie); 
+//			pWheelFrame && pWheelFrame->CntWheelsets() == 0 )
+//		{
+//			std::shared_ptr<Bogie_Imp> pNewBogie = std::make_shared<Bogie_Imp>( std::move(*std::dynamic_pointer_cast<Bogie_Imp>(pNextBogie)) );
+//			pNewBogie->SetWeakPointerToSelf( pNewBogie );
+//
+//			if( pNextBogie == pBogie )
+//				pRetval = pNewBogie;
+//
+//			pNextBogie = pNewBogie;
+//		}
+//	}
+//
+//	return pRetval;
+//}
 ///////////////////////////////////////
 }

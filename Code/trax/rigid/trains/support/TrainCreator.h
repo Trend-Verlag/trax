@@ -34,13 +34,13 @@
 
 namespace trax
 {
-	struct TrainScene;
+	struct Scene;
 
 	class TrainCreator :	public TrainParser, 
 							protected RollingStockCreator
 	{
 	public:
-		TrainCreator( TrainScene& scene ) noexcept;
+		TrainCreator( Scene& scene ) noexcept;
 
 		std::shared_ptr<Train> GetTrain() const noexcept;
 	protected:
