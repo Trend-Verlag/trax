@@ -92,7 +92,7 @@ Bogie_Imp::Bogie_Imp( Scene& scene, std::shared_ptr<Gestalt> pGestalt )
 	for( Jack& jack : *this )
 		jack.Reference( "parent", TypeName() );
 }
-/*
+/* Needed by RemoveUnusedWheelFrames but temporarily disfunct ...
 Bogie_Imp::Bogie_Imp( Bogie_Imp&& bogie ) noexcept
 	: Bogie_Base					{ std::move(bogie) }
 	, m_Scene						{ bogie.m_Scene }

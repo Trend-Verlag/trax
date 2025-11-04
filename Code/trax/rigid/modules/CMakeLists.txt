@@ -1,15 +1,19 @@
 add_library(trax_modules
     STATIC
+        "./source/Camera_Imp.cpp"
         "./source/Module_Imp.cpp"
         "./source/ModuleCollection_Imp.cpp"
 )
 
 set(PUBLIC_HEADERS
+    "./Camera.h"
+    "./CameraType.h"
     "./Module.h"
     "./ModuleCollection.h"
 )
 
 set(PRIVATE_HEADERS
+    "./source/Camera_Imp.h"
     "./source/Module_Imp.h"
     "./source/ModuleCollection_Imp.h"
 )

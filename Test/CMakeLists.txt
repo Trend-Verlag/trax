@@ -14,7 +14,9 @@ add_executable(ALL_TESTS
     "./trax/TestTracks.cpp"
     "./trax/TestTracksNormalize.cpp"
     "./trax/TestVersion.cpp"
+    "./trax/collections/TestTrackSystem.cpp"
     "./trax/support/TestSupportXML.cpp"
+    "./trax/rigid/modules/TestReadWrite.cpp"
     "./trax/rigid/TestStaticTrack.cpp"
     "./trax/rigid/TestTractionForceCharacteristic.cpp"
     "./trax/rigid/trains/TestFleet.cpp"
@@ -31,6 +33,7 @@ target_link_libraries(ALL_TESTS
         trax_core_collections_support
         trax_rigid_support
         trax_rigid_physx
+        trax_modules_support
         trax_trains_support
         trax_trains_collections
  )

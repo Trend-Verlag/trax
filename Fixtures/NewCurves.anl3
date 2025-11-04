@@ -1,0 +1,1541 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sutrackp xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.trendverlag.com/Schema/EEP.xsd">
+  <Version EEP="18" Language="ENG" No3DMs="12" Edit3D="0"/>
+  <Gleissystem GleissystemID="1" TrackSystemNumber="1">
+    <Dreibein>
+      <Vektor x="0" y="0" z="0">Pos</Vektor>
+      <Vektor x="1" y="0" z="0">Dir</Vektor>
+      <Vektor x="0" y="1" z="0">Nor</Vektor>
+      <Vektor x="0" y="0" z="1">Bin</Vektor>
+    </Dreibein>
+    <Gleis GleisID="1" clsid="2E25C8E2-ADCD-469A-942E-7484556FF932" data="0" scale="1" ElectSideS="0" ElectSideE="0" stil="5076" gsbname="\Gleisstile\Gleise\3DVersion\UIC60_Holzschwelle_Eisenbahnweichen.3dm" LockEd="0">
+      <Frame>
+        <Position x="-44.2" y="42.2" z="0.3"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+      <Interval near="0" far="60"/>
+      <Curve>
+        <BasicLine/>
+      </Curve>
+      <Twist>
+        <CombinedTwist>
+          <Twist>
+            <DirectionalTwist bFrozen="true">
+              <Vector dx="0" dy="0" dz="1"/>
+            </DirectionalTwist>
+          </Twist>
+          <Twist>
+            <LinearTwist startangle="0" endangle="0"/>
+          </Twist>
+        </CombinedTwist>
+      </Twist>
+    </Gleis>
+    <Gleis GleisID="2" clsid="2E25C8E2-ADCD-469A-942E-7484556FF932" data="0" scale="1" ElectSideS="0" ElectSideE="0" stil="5076" gsbname="\Gleisstile\Gleise\3DVersion\UIC60_Holzschwelle_Eisenbahnweichen.3dm" LockEd="0">
+      <Frame>
+        <Position x="-41.8" y="102.4" z="0.3"/>
+        <Vector dx="0" dy="-1" dz="0"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+      <Interval near="0" far="60"/>
+      <Curve>
+        <BasicArc k="0.01"/>
+      </Curve>
+      <Twist>
+        <CombinedTwist>
+          <Twist>
+            <DirectionalTwist bFrozen="true">
+              <Vector dx="0" dy="0" dz="1"/>
+            </DirectionalTwist>
+          </Twist>
+          <Twist>
+            <LinearTwist startangle="0" endangle="0"/>
+          </Twist>
+        </CombinedTwist>
+      </Twist>
+    </Gleis>
+    <Gleis GleisID="3" clsid="2E25C8E2-ADCD-469A-942E-7484556FF932" data="0" scale="1" ElectSideS="0" ElectSideE="0" stil="5076" gsbname="\Gleisstile\Gleise\3DVersion\UIC60_Holzschwelle_Eisenbahnweichen.3dm" LockEd="0">
+      <Frame>
+        <Position x="-44.2" y="83.00002" z="0.3"/>
+        <Vector dx="0" dy="-1" dz="0"/>
+        <Vector dx="1" dy="0" dz="2.980232E-08"/>
+        <Vector dx="-2.980232E-08" dy="0" dz="1"/>
+      </Frame>
+      <Interval near="0" far="60"/>
+      <Curve>
+        <BasicHelix k="9.698463E-03" t="1.710101E-03"/>
+      </Curve>
+      <Twist>
+        <CombinedTwist>
+          <Twist>
+            <DirectionalTwist bFrozen="true">
+              <Vector dx="0" dy="0" dz="1"/>
+            </DirectionalTwist>
+          </Twist>
+          <Twist>
+            <LinearTwist startangle="0" endangle="0"/>
+          </Twist>
+        </CombinedTwist>
+      </Twist>
+    </Gleis>
+    <Gleis GleisID="4" clsid="2E25C8E2-ADCD-469A-942E-7484556FF932" data="0" scale="1" ElectSideS="0" ElectSideE="0" stil="5076" gsbname="\Gleisstile\Gleise\3DVersion\UIC60_Holzschwelle_Eisenbahnweichen.3dm" LockEd="0">
+      <Frame>
+        <Position x="-107.6" y="64.8" z="0.3"/>
+        <Vector dx="0.9807765" dy="-0.1951348" dz="0"/>
+        <Vector dx="0.1951348" dy="0.9807765" dz="0"/>
+        <Vector dx="-1.490116E-08" dy="-1.490116E-08" dz="1"/>
+      </Frame>
+      <Interval near="0" far="60"/>
+      <Curve>
+        <Rotator a="1.163553E-02" b="2.908882E-03" a0="0.1745329" b0="0.1745329"/>
+      </Curve>
+      <Twist>
+        <CombinedTwist>
+          <Twist>
+            <DirectionalTwist bFrozen="true">
+              <Vector dx="0" dy="0" dz="1"/>
+            </DirectionalTwist>
+          </Twist>
+          <Twist>
+            <LinearTwist startangle="0" endangle="0"/>
+          </Twist>
+        </CombinedTwist>
+      </Twist>
+    </Gleis>
+    <Gleis GleisID="5" clsid="2E25C8E2-ADCD-469A-942E-7484556FF932" data="0" scale="1" ElectSideS="0" ElectSideE="0" stil="5076" gsbname="\Gleisstile\Gleise\3DVersion\UIC60_Holzschwelle_Eisenbahnweichen.3dm" LockEd="0">
+      <Frame>
+        <Position x="-49.8" y="-45.6" z="0.3"/>
+        <Vector dx="1" dy="0" dz="0"/>
+        <Vector dx="0" dy="1" dz="0"/>
+        <Vector dx="0" dy="0" dz="1"/>
+      </Frame>
+      <Interval near="0" far="60"/>
+      <Curve>
+        <RotatorChain>
+          <Link a="0.3490659" b="0.1745329" length="30"/>
+          <Link a="-0.5235988" b="-0.1745329" length="30"/>
+        </RotatorChain>
+      </Curve>
+      <Twist>
+        <CombinedTwist>
+          <Twist>
+            <DirectionalTwist bFrozen="true">
+              <Vector dx="0" dy="0" dz="1"/>
+            </DirectionalTwist>
+          </Twist>
+          <Twist>
+            <LinearTwist startangle="0" endangle="0"/>
+          </Twist>
+        </CombinedTwist>
+      </Twist>
+    </Gleis>
+  </Gleissystem>
+  <Gleissystem GleissystemID="2" TrackSystemNumber="2">
+    <Dreibein>
+      <Vektor x="0" y="0" z="0">Pos</Vektor>
+      <Vektor x="1" y="0" z="0">Dir</Vektor>
+      <Vektor x="0" y="1" z="0">Nor</Vektor>
+      <Vektor x="0" y="0" z="1">Bin</Vektor>
+    </Dreibein>
+  </Gleissystem>
+  <Gleissystem GleissystemID="3" TrackSystemNumber="3">
+    <Dreibein>
+      <Vektor x="0" y="0" z="0">Pos</Vektor>
+      <Vektor x="1" y="0" z="0">Dir</Vektor>
+      <Vektor x="0" y="1" z="0">Nor</Vektor>
+      <Vektor x="0" y="0" z="1">Bin</Vektor>
+    </Dreibein>
+  </Gleissystem>
+  <Gleissystem GleissystemID="4" TrackSystemNumber="4">
+    <Dreibein>
+      <Vektor x="0" y="0" z="0">Pos</Vektor>
+      <Vektor x="1" y="0" z="0">Dir</Vektor>
+      <Vektor x="0" y="1" z="0">Nor</Vektor>
+      <Vektor x="0" y="0" z="1">Bin</Vektor>
+    </Dreibein>
+  </Gleissystem>
+  <Gleissystem GleissystemID="5" TrackSystemNumber="5" type="Steuerstrecken">
+    <Dreibein>
+      <Vektor x="0" y="0" z="0">Pos</Vektor>
+      <Vektor x="1" y="0" z="0">Dir</Vektor>
+      <Vektor x="0" y="1" z="0">Nor</Vektor>
+      <Vektor x="0" y="0" z="1">Bin</Vektor>
+    </Dreibein>
+  </Gleissystem>
+  <Gleissystem GleissystemID="6" TrackSystemNumber="6" type="GBS">
+    <Dreibein>
+      <Vektor x="0" y="0" z="0">Pos</Vektor>
+      <Vektor x="1" y="0" z="0">Dir</Vektor>
+      <Vektor x="0" y="1" z="0">Nor</Vektor>
+      <Vektor x="0" y="0" z="1">Bin</Vektor>
+    </Dreibein>
+  </Gleissystem>
+  <Fuhrpark FuhrparkID="1" clsid="C5A87AD3-EE1E-495D-AFED-CFA786C845AC"/>
+  <Gebaeudesammlung GebaudesammlungID="1"/>
+  <Gebaeudesammlung GebaudesammlungID="2"/>
+  <Gebaeudesammlung GebaudesammlungID="3"/>
+  <Gebaeudesammlung GebaudesammlungID="6"/>
+  <Gebaeudesammlung GebaudesammlungID="4"/>
+  <Gebaeudesammlung GebaudesammlungID="5"/>
+  <Gleisbildstellpultsammlung/>
+  <AnimRoll count="0"/>
+  <Goods count="0"/>
+  <CrowdSammlung/>
+  <Kammerasammlung cnt="160">
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="0" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+    <Kammera name="Blank" DOF="0" Dynamic="1" FocalIdx="193" FStopIdx="13" SubDist="100" DOFSubDist="100" DOFShiftNear="9.65" DOFShiftFar="12.965" FOV="0" TakeSwitch="0" PPFilter="0" PPParam_X="1" PPParam_Y="1" PPParam_Z="1" PPParam_W="1">
+      <Dreibein>
+        <Vektor x="6000" y="-6000" z="400">Pos</Vektor>
+        <Vektor x="-6000" y="6000" z="-400">Dir</Vektor>
+        <Vektor x="-0.7071068" y="-0.7071068" z="0">Nor</Vektor>
+        <Vektor x="-3.329636E-02" y="3.329636E-02" z="0.9988908">Bin</Vektor>
+      </Dreibein>
+    </Kammera>
+  </Kammerasammlung>
+  <Settings TrainElect="0" AutoSwitch="1" WaterLevel="0" ActCamera_POSX="-10726.43" ActCamera_POSY="-8034.742" ActCamera_POSZ="407.0937" ActCamera_DIRX="0.9252041" ActCamera_DIRY="0.3769991" ActCamera_DIRZ="-4.323384E-02" ActCamera_BINX="4.003755E-02" ActCamera_BINY="1.631437E-02" ActCamera_BINZ="0.999065" ActCamera_NORX="-0.3773519" ActCamera_NORY="0.9260699" ActCamera_NORZ="0" ActCamera_Mode="0" ActCamera_No="0" ActCamera_Persp="0" ActCamera_Timer="5" ActZugId="-1" ActRollIdx="-1" Plan2DZoom="4" Plan2DPosX="844" Plan2DPosY="543" GREAT_CL="113" THotKey_A="" THotKey_B="" THotKey_C="" THotKey_D="" THotKey_E="" THotKey_F="" THotKey_G="" THotKey_H="" THotKey_I="" THotKey_J="" THotKey_K="" THotKey_L="" THotKey_M="" THotKey_N="" THotKey_O="" THotKey_P="" THotKey_Q="" THotKey_R="" THotKey_S="" THotKey_T="" THotKey_U="" THotKey_V="" THotKey_W="" THotKey_X="" THotKey_Y="" THotKey_Z=""/>
+  <Options RouteItems="0" SoundItems="0" FavTrainCB="0"/>
+  <Weather SDIdx="0" SDFile="" SDTex="" bRandom="0" bClock="0" bDay="1" bNight="0" bRain="0" bWind="1" bSnow="0" bSun="1" bMoon="0" bClouds="1" iRain="50" iExtFog="10" iWind="10" iSnow="50" iSunMoonOrientation="0" iCloudsMlt="50" iSeason="0" iTimeSun="7" iTimeMoon="5" iTimeRandom="5" TimeH="4" TimeM="9" TimeS="28" TimeInSec="14968" TimeStep="1" SkyPlane="1" DirLight="15855584" SkyColor1="5455679" SkyColor2="5455679" SkyColor3="10067077" SkyColor4="15916724" SkyColor5="15855584" SkyColor6="14272697" SkyColor7="11848949" SkyColor8="8022360" BloomStart="100" BloomPower="10" EEP6FOV="0" AFSANL="0" TS1="0" TS2="0" TS3="0" TS4="0" TerrainLOD="0" TerrainNoise="1" TerrainNoAA="0" LeftSideTraffic="0" TrainColl="0" OnlyNewPhysic="0" KeepTrNames="1" SparkSlip="1" NewBreaks="1" DefaultT1="5076" DefaultT2="1502" DefaultT3="10" DefaultT4="1004"/>
+  <TimeTable TimeTableItems="0" VehicleItems="0"/>
+  <EEPLua LUAS="c83dd8b3 f19ab0b2" LUAPath="\NewCurves.lua"/>
+  <Kamera3D cnt="0" id="0" Progress="0" CamIdx0="0" CamIdx1="1" CamIdx2="2" CamIdx3="3" CamIdx4="4" CamIdx5="5" CamIdx6="6" CamIdx7="7" CamIdx8="8" CamIdx9="9" CamIdx10="10" CamIdx11="11" CamIdx12="12" CamIdx13="13" CamIdx14="14" CamIdx15="15" CamIdx16="16" CamIdx17="17" CamIdx18="18" CamIdx19="19" CamIdx20="20" CamIdx21="21" CamIdx22="22" CamIdx23="23" CamIdx24="24" CamIdx25="25" CamIdx26="26" CamIdx27="27" CamIdx28="28" CamIdx29="29" CamIdx30="30" CamIdx31="31" CamIdx32="32" CamIdx33="33" CamIdx34="34" CamIdx35="35" CamIdx36="36" CamIdx37="37" CamIdx38="38" CamIdx39="39" CamIdx40="40" CamIdx41="41" CamIdx42="42" CamIdx43="43" CamIdx44="44" CamIdx45="45" CamIdx46="46" CamIdx47="47" CamIdx48="48" CamIdx49="49" CamIdx50="50" CamIdx51="51" CamIdx52="52" CamIdx53="53" CamIdx54="54" CamIdx55="55" CamIdx56="56" CamIdx57="57" CamIdx58="58" CamIdx59="59" CamIdx60="60" CamIdx61="61" CamIdx62="62" CamIdx63="63" CamIdx64="64" CamIdx65="65" CamIdx66="66" CamIdx67="67" CamIdx68="68" CamIdx69="69" CamIdx70="70" CamIdx71="71" CamIdx72="72" CamIdx73="73" CamIdx74="74" CamIdx75="75" CamIdx76="76" CamIdx77="77" CamIdx78="78" CamIdx79="79" CamIdx80="80" CamIdx81="81" CamIdx82="82" CamIdx83="83" CamIdx84="84" CamIdx85="85" CamIdx86="86" CamIdx87="87" CamIdx88="88" CamIdx89="89" CamIdx90="90" CamIdx91="91" CamIdx92="92" CamIdx93="93" CamIdx94="94" CamIdx95="95" CamIdx96="96" CamIdx97="97" CamIdx98="98" CamIdx99="99" CamIdx100="100" CamIdx101="101" CamIdx102="102" CamIdx103="103" CamIdx104="104" CamIdx105="105" CamIdx106="106" CamIdx107="107" CamIdx108="108" CamIdx109="109" CamIdx110="110" CamIdx111="111" CamIdx112="112" CamIdx113="113" CamIdx114="114" CamIdx115="115" CamIdx116="116" CamIdx117="117" CamIdx118="118" CamIdx119="119" CamIdx120="120" CamIdx121="121" CamIdx122="122" CamIdx123="123" CamIdx124="124" CamIdx125="125" CamIdx126="126" CamIdx127="127" CamIdx128="128" CamIdx129="129" CamIdx130="130" CamIdx131="131" CamIdx132="132" CamIdx133="133" CamIdx134="134" CamIdx135="135" CamIdx136="136" CamIdx137="137" CamIdx138="138" CamIdx139="139" CamIdx140="140" CamIdx141="141" CamIdx142="142" CamIdx143="143" CamIdx144="144" CamIdx145="145" CamIdx146="146" CamIdx147="147" CamIdx148="148" CamIdx149="149" CamIdx150="150" CamIdx151="151" CamIdx152="152" CamIdx153="153" CamIdx154="154" CamIdx155="155" CamIdx156="156" CamIdx157="157" CamIdx158="158" CamIdx159="159"/>
+  <Schandlaft HorizonFile="Horizons\Horizon4.3dm" extX="150" extY="90" posX="-50000" posY="-30000" h_max="100000" h_min="-10000" dichte="0.0015" Routes="0" HoehenFile="\NewCurvesH.bmp" FarbenFile="\NewCurvesF.bmp" TexturenFile="\NewCurvesT.bmp" TextureBinFile="\NewCurvesB.bmp" TextureScaleFile="\NewCurvesS.bmp" AtlasDFile="\NewCurvesAD.dds" AtlasNFile="\NewCurvesAN.dds" AtlasHFile="\NewCurvesAH.dds" AtlasTexCount="64" AtlasMipMap="8" AtlasRatioX="1" AtlasRatioY="1" AtlasMinTexX="16" AtlasMinTexY="8">
+    <Atlas Idx="0" TexId="2985" tuB="0.0625" tvB="0.125" tuE="0.1875" tvE="0.375" flag="0"/>
+    <Atlas Idx="1" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="2" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="3" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="4" TexId="2987" tuB="0.3125" tvB="0.125" tuE="0.4375" tvE="0.375" flag="0"/>
+    <Atlas Idx="5" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="6" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="7" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="8" TexId="2992" tuB="0.5625" tvB="0.125" tuE="0.6875" tvE="0.375" flag="0"/>
+    <Atlas Idx="9" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="10" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="11" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="12" TexId="2982" tuB="0.8125" tvB="0.125" tuE="0.9375" tvE="0.375" flag="0"/>
+    <Atlas Idx="13" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="14" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="15" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="16" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="17" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="18" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="19" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="20" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="21" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="22" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="23" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="24" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="25" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="26" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="27" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="28" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="29" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="30" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="31" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="32" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="33" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="34" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="35" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="36" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="37" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="38" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="39" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="40" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="41" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="42" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="43" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="44" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="45" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="46" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="47" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="48" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="49" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="50" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="51" TexId="2985" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="52" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="53" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="54" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="55" TexId="2987" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="56" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="57" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="58" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="59" TexId="2992" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="60" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="61" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="62" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+    <Atlas Idx="63" TexId="2982" tuB="0" tvB="0" tuE="0" tvE="0" flag="0"/>
+  </Schandlaft>
+  <Beschreibung> </Beschreibung>
+</sutrackp>

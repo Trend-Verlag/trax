@@ -30,6 +30,8 @@
 #include "trax/Configuration.h"
 #include "trax/Identified.h"
 #include "trax/Units.h"
+#include "trax/SocketRegistry.h"
+#include "trax/collections/ObjectIDDecorator.h"
 
 #include "spat/Box.h"
 #include "spat/Frame.h"
@@ -37,10 +39,13 @@
 
 namespace trax{
 
+	struct CameraCollection;
 	struct CargoCollection;
 	struct Fleet;
 	struct IndicatorCollection;
+	struct PulseCounterCollection;
 	struct SignalCollection;
+	struct TimerCollection;
 	struct TrackSystem;
 
 
@@ -50,7 +55,8 @@ namespace trax{
 	/// Fleet and Batch collections can be assigned to it (one of each only). A module maintains
 	/// a frame of reference which is used to determine the general situation of the module. 
 	/// A track will give module local coordinates.
-	struct Module : Identified<Module>
+	struct Module : Identified<Module>,
+					virtual SocketRegistry
 	{
 		/// \brief Makes a standard Module object.
 		static dclspc std::unique_ptr<Module> Make( bool bCreateCollections = true ) noexcept;
@@ -133,6 +139,33 @@ namespace trax{
 
 		/// \returns A pointer to the attached CargoCollection.
 		virtual std::shared_ptr<CargoCollection> GetCargoCollection() const noexcept = 0;
+
+
+		/// \brief Attaches a TimerCollection to the module.
+		/// \param pTimerCollection Pointer to object to attach or nullptr to remove.
+		virtual void Attach( std::shared_ptr<TimerCollection> pTimerCollection ) noexcept = 0;
+
+
+		/// \returns A pointer to the attached TimerCollection.
+		virtual std::shared_ptr<TimerCollection> GetTimerCollection() const noexcept = 0;
+
+
+		/// \brief Attaches a PulseCounterCollection to the module.
+		/// \param pPulseCounterCollection Pointer to object to attach or nullptr to remove.
+		virtual void Attach( std::shared_ptr<PulseCounterCollection> pPulseCounterCollection ) noexcept = 0;
+
+
+		/// \returns A pointer to the attached PulseCounterCollection.
+		virtual std::shared_ptr<PulseCounterCollection> GetPulseCounterCollection() const noexcept = 0;
+
+
+		/// \brief Attaches an CameraCollection to the track system.
+		/// \param pCameraCollection Pointer to object to attach or nullptr to remove.
+		virtual void Attach( std::shared_ptr<CameraCollection> pCameraCollection ) noexcept = 0;
+
+
+		/// \returns A pointer to the attached Batch.
+		virtual std::shared_ptr<CameraCollection> GetCameraCollection() const noexcept = 0;
 
 
 		/// \brief Moves all objects from all the collections to this module.

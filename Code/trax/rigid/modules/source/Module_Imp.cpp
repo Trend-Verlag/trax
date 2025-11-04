@@ -25,8 +25,11 @@
 #include "Module_Imp.h"
 
 #include "trax/collections/IndicatorCollection.h"
+#include "trax/collections/PulseCounterCollection.h"
 #include "trax/collections/SignalCollection.h"
+#include "trax/collections/TimerCollection.h"
 #include "trax/collections/TrackSystem.h"
+#include "trax/rigid/modules/Camera.h"
 #include "trax/rigid/trains/collections/CargoCollection.h"
 #include "trax/rigid/trains/collections/Fleet.h"
 
@@ -182,6 +185,30 @@ std::shared_ptr<CargoCollection> Module_Imp::GetCargoCollection() const noexcept
 	return m_pCargoCollection;
 }
 
+void Module_Imp::Attach( std::shared_ptr<TimerCollection> pTimerCollection ) noexcept{
+	m_pTimerCollection = pTimerCollection;
+}
+
+std::shared_ptr<TimerCollection> Module_Imp::GetTimerCollection() const noexcept{
+	return m_pTimerCollection;
+}
+
+void Module_Imp::Attach( std::shared_ptr<PulseCounterCollection> pPulseCounterCollection ) noexcept{
+	m_pPulseCounterCollection = pPulseCounterCollection;
+}
+
+std::shared_ptr<PulseCounterCollection> Module_Imp::GetPulseCounterCollection() const noexcept{
+	return m_pPulseCounterCollection;
+}
+
+void Module_Imp::Attach( std::shared_ptr<CameraCollection> pCameraCollection ) noexcept{
+	m_pCameraCollection = pCameraCollection;
+}
+
+std::shared_ptr<CameraCollection> Module_Imp::GetCameraCollection() const noexcept{
+	return m_pCameraCollection;
+}
+
 void Module_Imp::Take( Module& fromModule )
 {
 	if( m_pTrackSystem && fromModule.GetTrackSystem() )
@@ -194,22 +221,24 @@ void Module_Imp::Take( Module& fromModule )
 		m_pIndicatorCollection->Take( *fromModule.GetIndicatorCollection() );
 	if( m_pCargoCollection && fromModule.GetCargoCollection() )
 		m_pCargoCollection->Take( *fromModule.GetCargoCollection() );
-
-	//if( m_pCameraCollection && fromModule.GetCameraCollection() )
-	//	m_pCameraCollection->Take( *fromModule.GetCameraCollection() );
-	//if( m_pPulseCounterCollection && fromModule.GetPulseCounterCollection() )
-	//	m_pPulseCounterCollection->Take( *fromModule.GetPulseCounterCollection() );
-	//if( m_pTimerCollection && fromModule.GetTimerCollection() )
-	//	m_pTimerCollection->Take( *fromModule.GetTimerCollection() );
+	if( m_pTimerCollection && fromModule.GetTimerCollection() )
+		m_pTimerCollection->Take( *fromModule.GetTimerCollection() );
+	if( m_pPulseCounterCollection && fromModule.GetPulseCounterCollection() )
+		m_pPulseCounterCollection->Take( *fromModule.GetPulseCounterCollection() );
+	if( m_pCameraCollection && fromModule.GetCameraCollection() )
+		m_pCameraCollection->Take( *fromModule.GetCameraCollection() );
 }
 
-void Module_Imp::Clear()
+void Module_Imp::Clear() noexcept
 {
 	m_pTrackSystem.reset();
 	m_pFleet.reset();
 	m_pSignalCollection.reset();
 	m_pIndicatorCollection.reset();
 	m_pCargoCollection.reset();
+	m_pTimerCollection.reset();
+	m_pPulseCounterCollection.reset();
+	m_pCameraCollection.reset();
 }
 
 void Module_Imp::ClearCollections()
@@ -224,6 +253,62 @@ void Module_Imp::ClearCollections()
 		m_pIndicatorCollection->Clear();
 	if( m_pCargoCollection )
 		m_pCargoCollection->Clear();
+	if( m_pTimerCollection )
+		m_pTimerCollection->Clear();
+	if( m_pPulseCounterCollection )
+		m_pPulseCounterCollection->Clear();
+	if( m_pCameraCollection )
+		m_pCameraCollection->Clear();
+}
+
+int Module_Imp::CountJacks() const
+{
+	int count = 0;
+	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(m_pTrackSystem.get()) )
+		count += pJackEnumerator->CountJacks();
+
+	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(m_pPulseCounterCollection.get()) )
+		count += pJackEnumerator->CountJacks();
+
+	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(m_pTimerCollection.get()) )
+		count += pJackEnumerator->CountJacks();
+
+	// todo: count further jacks here ...
+
+	return count;
+}
+
+const Jack& Module_Imp::_GetJack( int idx ) const
+{
+	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pTrackSystem.get()) ){
+		const int countJacks = pJackEnumerator->CountJacks();
+		if( idx < countJacks )
+			return pJackEnumerator->GetJack( idx );
+		idx -= countJacks;
+	}
+
+	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pPulseCounterCollection.get()) ){
+		const int countJacks = pJackEnumerator->CountJacks();
+		if( idx < countJacks )
+			return pJackEnumerator->GetJack( idx );
+		idx -= countJacks;
+	}
+
+	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pTimerCollection.get()) ){
+		const int countJacks = pJackEnumerator->CountJacks();
+		if( idx < countJacks )
+			return pJackEnumerator->GetJack( idx );
+		idx -= countJacks;
+	}
+
+
+	// todo: supply further jacks here ...
+
+
+	std::ostringstream stream;
+	stream << "Out of range!" << std::endl;
+	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
+	throw std::range_error( stream.str() );
 }
 
 

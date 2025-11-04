@@ -114,6 +114,7 @@ add_subdirectory(Code/trax/rigid/trains)
 add_subdirectory(Code/trax/rigid/trains/collections)
 add_subdirectory(Code/trax/rigid/trains/support)
 add_subdirectory(Code/trax/rigid/modules)
+add_subdirectory(Code/trax/rigid/modules/support)
 
 add_subdirectory(Code/trax/support)
 
@@ -123,4 +124,5 @@ add_subdirectory(Test/dim)
 add_subdirectory(Test/spat)
 add_subdirectory(Test/trax)
 add_subdirectory(Test/trax/rigid)
+add_subdirectory(Test/trax/rigid/modules)
 add_subdirectory(Test/trax/rigid/trains)

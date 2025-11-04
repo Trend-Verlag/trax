@@ -29,12 +29,15 @@
 
 #include "../Module.h"
 #include "trax/ImplementationHelper.h"
+#include "trax/source/SocketRegistry_Imp.h"
 
 namespace trax{
 
 	typedef ObjectID_Imp<Module> Module_Base;
 
-	class Module_Imp : public Module_Base
+	class Module_Imp :  public Module_Base,
+						public SocketRegistry_Imp,
+						public JackEnumerator
 	{
 	public:
 		Module_Imp( bool bCreateCollections = true );
@@ -76,11 +79,29 @@ namespace trax{
 
 		std::shared_ptr<CargoCollection> GetCargoCollection() const noexcept override;
 
+		void Attach( std::shared_ptr<TimerCollection> pTimerCollection ) noexcept;
+
+		std::shared_ptr<TimerCollection> GetTimerCollection() const noexcept;
+
+		void Attach( std::shared_ptr<PulseCounterCollection> pPulseCounterCollection ) noexcept;
+		
+		std::shared_ptr<PulseCounterCollection> GetPulseCounterCollection() const noexcept;
+
+		void Attach( std::shared_ptr<CameraCollection> pCameraCollection ) noexcept;
+
+		std::shared_ptr<CameraCollection> GetCameraCollection() const noexcept;
+
 		void Take( Module& fromModule ) override;
 
-		void Clear() override;
+		void Clear() noexcept override;
 
 		void ClearCollections() override;
+
+
+		int CountJacks() const override;
+	protected:
+		const Jack& _GetJack( int idx ) const override;
+
 	private:
 		spat::Frame<Length, One>	m_Frame;
 		spat::Box<Length>			m_Volume;
@@ -90,5 +111,10 @@ namespace trax{
 		std::shared_ptr<SignalCollection>		m_pSignalCollection;
 		std::shared_ptr<IndicatorCollection>	m_pIndicatorCollection;
 		std::shared_ptr<CargoCollection>		m_pCargoCollection;
+		std::shared_ptr<TimerCollection>		m_pTimerCollection;
+		std::shared_ptr<PulseCounterCollection> m_pPulseCounterCollection;
+		std::shared_ptr<CameraCollection>		m_pCameraCollection;
+
+
 	};
 }

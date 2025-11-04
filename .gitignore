@@ -45,6 +45,8 @@
 
 # In-repository build
 /_Build/
+/Fixtures/Demo.anl4
+/Fixtures/NewCurves.anl4
 
 # ctest created ...
 /Testing/
