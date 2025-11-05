@@ -23,6 +23,7 @@ b2 -j%NUMBER_OF_PROCESSORS% ^
   link=shared ^
   threading=multi ^
   --with-test ^
+  --with-program_options ^
   stage
 
 b2 -j%NUMBER_OF_PROCESSORS% ^
@@ -32,7 +33,26 @@ b2 -j%NUMBER_OF_PROCESSORS% ^
   link=shared ^
   threading=multi ^
   --with-test ^
+  --with-program_options ^
   stage
+  
+b2 -j%NUMBER_OF_PROCESSORS% ^
+  toolset=msvc ^
+  address-model=64 ^
+  variant=release ^
+  link=static ^
+  threading=multi ^
+  --with-program_options ^
+  stage
+
+b2 -j%NUMBER_OF_PROCESSORS% ^
+  toolset=msvc ^
+  address-model=64 ^
+  variant=debug ^
+  link=static ^
+  threading=multi ^
+  --with-program_options ^
+  stage 
 
 popd
 pause

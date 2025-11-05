@@ -86,7 +86,8 @@ std::unique_ptr<Module> Anl3ModuleReader::ReadModule(
 				for( const auto& pair : pt ){
 					if( pair.first == "Gleissystem" ){
 						std::vector<std::pair<Track::Coupling,std::string>> local_couplings;
-						if( auto pTempTrackSystem = CreateTrackSystem( pair.second, local_couplings, *pModule->GetSignalCollection(), *pModule->GetIndicatorCollection(), *pModule->GetTimerCollection(), *pModule->GetPulseCounterCollection(), travelVelocities, maxSensorID ) ){
+						if( std::shared_ptr<TrackSystem> pTempTrackSystem = TrackSystem::Make(); pTempTrackSystem ){
+							CreateTrackCollection( pair.second, *pTempTrackSystem, local_couplings, *pModule->GetSignalCollection(), *pModule->GetIndicatorCollection(), *pModule->GetTimerCollection(), *pModule->GetPulseCounterCollection(), travelVelocities, maxSensorID );
 							if( std::shared_ptr<TrackCollection> pTrackCollection = TrackCollection::Make(); pTrackCollection ){
 								pModule->GetTrackSystem()->GetCollectionContainer()->Add( pTrackCollection );
 

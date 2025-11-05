@@ -38,13 +38,25 @@ namespace trax{
 			std::shared_ptr<TrackSystem> dclspc ReadTrackSystem( const boost::property_tree::ptree& pt ) const override;
 			
 		protected:
-			virtual std::shared_ptr<TrackSystem> CreateTrackSystem( const boost::property_tree::ptree& pt, std::vector<std::pair<Track::Coupling,std::string>>& couplings, 
+			virtual std::shared_ptr<TrackSystem> CreateTrackSystem( const boost::property_tree::ptree& pt, 
+				std::vector<std::pair<Track::Coupling,std::string>>& couplings, 
 				SignalCollection& signalCollection, 
 				IndicatorCollection& indicatorCollection, 
 				TimerCollection& timerCollection, 
 				PulseCounterCollection& pulseCounterCollection, 
 				std::map<IDType,Velocity>& travelVelocities, 
 				IDType& maxSensorID ) const;
+
+			virtual void CreateTrackCollection( const boost::property_tree::ptree& pt, 
+				TrackSystem& trackSystem,
+				std::vector<std::pair<Track::Coupling,std::string>>& couplings, 
+				SignalCollection& signalCollection, 
+				IndicatorCollection& indicatorCollection, 
+				TimerCollection& timerCollection, 
+				PulseCounterCollection& pulseCounterCollection, 
+				std::map<IDType,Velocity>& travelVelocities, 
+				IDType& maxSensorID ) const;
+
 		
 			void ReadDreibein( const boost::property_tree::ptree& pt, spat::Frame<Length,One>& frame ) const;
 

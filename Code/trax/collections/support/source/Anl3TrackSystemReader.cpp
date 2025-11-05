@@ -88,150 +88,14 @@ std::shared_ptr<TrackSystem> Anl3TrackSystemReader::CreateTrackSystem(
 		{
 			if( pairTrackSystem.first == "Gleissystem" )
 			{
-				if( std::shared_ptr<TrackCollection> pTrackCollection = TrackCollection::Make(); pTrackCollection )
-				{
-					// There is a separate frame for 'Gleissystem' in anl3, and it sometimes
-					// apears shifted. But EEP doesn't actually use that value ...
-					//Frame<trax::Real> frame;
-					//ReadDreibein( pt, frame );
-					//pTrackCollection->SetFrame( frame );
-
-					pTrackCollection->ID( pairTrackSystem.second.get( "<xmlattr>.GleissystemID", 0 ) );
-					pTrackCollection->Reference( "TrackSystemNumber", pairTrackSystem.second.get( "<xmlattr>.TrackSystemNumber", "" ) );
-					pTrackCollection->Reference( "Name", "TrackCollection_" + pairTrackSystem.second.get( "<xmlattr>.TrackSystemNumber", "" ) );
-
-					pTrackSystem->GetCollectionContainer()->Add( pTrackCollection );
-
-					std::vector<std::tuple<std::shared_ptr<Signal>, TrackBuilder*, Interval<Length>>> signals;
-
-					for( const auto& pair : pairTrackSystem.second ){
-						if( pair.first == "Gleis" )
-							pTrackSystem->Add( CreateTrack( pair.second, *pTrackSystem->GetConnectorCollection(), signals, indicatorCollection, timerCollection, pulseCounterCollection, travelVelocities, maxSensorID ) );
-
-						if( pair.first == "Gleisverbindung" ){
-							try{
-								const std::pair<Track::Coupling,std::string> coupling{ CreateTrackCoupling( pair.second, *pTrackSystem ) };
-								const Length gap = pTrackSystem->CalculateGapSize( coupling.first.theOne, coupling.first.theOther );
-								if( gap > 30_cm ){
-									std::clog << "Warning: ";
-									std::clog << "There is a gap between two tracks in EEP. GleissystemID (" << pairTrackSystem.second.get( "<xmlattr>.GleissystemID", 0 );								
-									std::clog << ") : (" << coupling.first.theOne.id << ',';
-									std::clog << ToString( coupling.first.theOne.type ) << ") and (" << coupling.first.theOther.id << ',' << ToString( coupling.first.theOther.type );
-									std::clog << ") that are supposed to be coupled. Gap size: ";
-									std::clog << gap << ". This might lead to rolling stocks derailing." << std::endl;
-								}
-
-								pTrackSystem->Couple( coupling.first );
-								couplings.push_back( coupling );
-							}
-							catch( const std::runtime_error& e ){
-								std::clog << "Warning: ";
-								std::clog << "The coupling between track (" << pair.second.get( "<xmlattr>.GleisID1", 0 ) << "," << pair.second.get( "<xmlattr>.Anschluss1", "" ) << ") ";
-								std::clog << "and track (" << pair.second.get( "<xmlattr>.GleisID2", 0 ) << "," << pair.second.get( "<xmlattr>.Anschluss2", "" ) << ") ";
-								std::clog << "could not be established. Reason: " << e.what() << std::endl;
-							}
-						}
-					}
-
-					for( auto iter = pTrackSystem->GetConnectorCollection()->begin(); 
-						iter != pTrackSystem->GetConnectorCollection()->end(); ++iter )
-					{					
-						if( !iter->IsComplete() ){
-							std::clog << "There is a track missing for the arm of a switch. GleisID(" << iter->Reference( "GleisID" ) 
-							<< "), GleissystemID(" << pairTrackSystem.second.get( "<xmlattr>.GleissystemID", 0 ) << ")."<< std::endl;
-							continue;
-						}
-
-						// bit 0 1=show electric // bit 1 1=hide weichen// bit 2 1=weichen at right// bit 3 1=weichen at left //bit 4 DKW
-						const int data = std::stoi( iter->Reference( "data" ) );
-						if( !(data & 0x02) ){
-							if( auto pSwitch = std::dynamic_pointer_cast<Switch>(iter.operator->()); pSwitch ){
-								if( std::shared_ptr<BinaryIndicator> pSwitchIndicator = BinaryIndicator::Make( Indicator::Type::switch_mono ); pSwitchIndicator ){
-									pSwitchIndicator->Reference( "reference", pSwitch->Reference( "gsbname" ) );
-									std::string TipTxt = pSwitch->Reference( "TipTxt" );
-									if( !TipTxt.empty() ){
-										pSwitchIndicator->Reference( "TipTxt", TipTxt );
-										pSwitchIndicator->Reference( "TipBGCR", pSwitch->Reference( "TipBGCR" ) );
-										pSwitchIndicator->Reference( "TipBGCG", pSwitch->Reference( "TipBGCG" ) );
-										pSwitchIndicator->Reference( "TipBGCB", pSwitch->Reference( "TipBGCB" ) );
-									}
-
-									Frame<Length,One> offset;
-									offset.Init();
-
-									Real sign = pSwitch->BranchLeftOrRight() ? -1.0f : +1.0f;
-									if( data & 0x04 )
-										sign = -1.0f;
-									if( data & 0x08 )
-										sign = +1.0f;
-									offset.P.y += sign * 2_m;
-
-									pSwitchIndicator->SetFrame( offset );
-
-									pSwitchIndicator->Set( static_cast<trax::Indicator::Status>(std::stoi( pSwitch->Reference( "weichenstellung" ) )), false );
-
-									if( auto pAligned = dynamic_cast<SwitchAligned*>(pSwitchIndicator.get()) ){
-										pAligned->PreserveUpDirection( true );
-										pAligned->Attach( pSwitch );
-									}
-
-									for( int i = 1; i <= Switch::status_count; ++i ){
-										pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pSwitch->PlugTo( SwitchStatusFromEEP( i ) ).Unplugged( &m_SocketRegistry ) );
-										pSwitch->JackOn( SwitchStatusFromEEP( i ) ).InsertAtTail( &pSwitchIndicator->PlugTo( static_cast<trax::Indicator::Status>(i) ) );
-									}
-
-									indicatorCollection.Add( pSwitchIndicator );
-									pSwitchIndicator->RegisterSockets( m_SocketRegistry );
-								}
-							}
-
-							else if( std::shared_ptr<ThreeWaySwitch> pThreeWaySwitch = std::dynamic_pointer_cast<ThreeWaySwitch>(iter.operator->()); pThreeWaySwitch ){
-								if( std::shared_ptr<Indicator> pSwitchIndicator = Indicator::Make( Indicator::Type::switch_multi ); pSwitchIndicator ){
-									pSwitchIndicator->Reference( "reference", pThreeWaySwitch->Reference( "gsbname" ) );
-									std::string TipTxt = pThreeWaySwitch->Reference( "TipTxt" );
-									if( !TipTxt.empty() ){
-										pSwitchIndicator->Reference( "TipTxt", TipTxt );
-										pSwitchIndicator->Reference( "TipBGCR", pThreeWaySwitch->Reference( "TipBGCR" ) );
-										pSwitchIndicator->Reference( "TipBGCG", pThreeWaySwitch->Reference( "TipBGCG" ) );
-										pSwitchIndicator->Reference( "TipBGCB", pThreeWaySwitch->Reference( "TipBGCB" ) );
-									}
-
-									Frame<Length,One> offset;
-									offset.Init();
-
-									Real sign = +1.0f;
-									if( data & 0x04 )
-										sign = -1.0f;
-									if( data & 0x08 )
-										sign = +1.0f;
-									offset.P.y += sign * 2_m;
-
-									pSwitchIndicator->SetFrame( offset );
-
-									pSwitchIndicator->Set( static_cast<trax::Indicator::Status>(std::stoi( pThreeWaySwitch->Reference( "weichenstellung" ) )), false );
-
-									if( auto pAligned = dynamic_cast<SwitchAligned*>(pSwitchIndicator.get()) ){
-										pAligned->PreserveUpDirection( true );
-										pAligned->Attach( pThreeWaySwitch );
-									}
-
-									for( int i = 1; i <= ThreeWaySwitch::status_count; ++i ){
-										pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pThreeWaySwitch->PlugTo( ThreeWaySwitchStatusFromEEP( i ) ).Unplugged( &m_SocketRegistry ) );
-										pThreeWaySwitch->JackOn( ThreeWaySwitchStatusFromEEP( i ) ).InsertAtTail( &pSwitchIndicator->PlugTo( static_cast<trax::Indicator::Status>(i) ) );
-									}
-
-									indicatorCollection.Add( pSwitchIndicator );
-									pSwitchIndicator->RegisterSockets( m_SocketRegistry );
-								}
-							}
-						}
-					}
-
-					for( const auto& tuple : signals ){
-						signalCollection.Add( std::get<0>(tuple) );
-						std::get<1>( tuple )->Attach( std::get<0>( tuple ), std::get<2>( tuple ) );
-					}
-				}
+				CreateTrackCollection( pairTrackSystem.second, *pTrackSystem,
+					couplings, 
+					signalCollection, 
+					indicatorCollection, 
+					timerCollection, 
+					pulseCounterCollection, 
+					travelVelocities, 
+					maxSensorID );
 			}
 		}
 
@@ -239,6 +103,162 @@ std::shared_ptr<TrackSystem> Anl3TrackSystemReader::CreateTrackSystem(
 	}
 
 	return nullptr;
+}
+
+void Anl3TrackSystemReader::CreateTrackCollection( const boost::property_tree::ptree& pt, 
+	TrackSystem& trackSystem, 
+	std::vector<std::pair<Track::Coupling, std::string>>& couplings, 
+	SignalCollection& signalCollection, 
+	IndicatorCollection& indicatorCollection, 
+	TimerCollection& timerCollection, 
+	PulseCounterCollection& pulseCounterCollection, 
+	std::map<IDType, Velocity>& travelVelocities, 
+	IDType & maxSensorID ) const
+{
+	if( std::shared_ptr<TrackCollection> pTrackCollection = TrackCollection::Make(); pTrackCollection )
+	{
+		// There is a separate frame for 'Gleissystem' in anl3, and it sometimes
+		// apears shifted. But EEP doesn't actually use that value ...
+		//Frame<trax::Real> frame;
+		//ReadDreibein( pt, frame );
+		//pTrackCollection->SetFrame( frame );
+
+		pTrackCollection->ID( pt.get( "<xmlattr>.GleissystemID", 0 ) );
+		pTrackCollection->Reference( "TrackSystemNumber", pt.get( "<xmlattr>.TrackSystemNumber", "" ) );
+		pTrackCollection->Reference( "Name", "TrackCollection_" + pt.get( "<xmlattr>.TrackSystemNumber", "" ) );
+
+		trackSystem.GetCollectionContainer()->Add( pTrackCollection );
+
+		std::vector<std::tuple<std::shared_ptr<Signal>, TrackBuilder*, Interval<Length>>> signals;
+
+		for( const auto& pair : pt ){
+			if( pair.first == "Gleis" )
+				trackSystem.Add( CreateTrack( pair.second, *trackSystem.GetConnectorCollection(), signals, indicatorCollection, timerCollection, pulseCounterCollection, travelVelocities, maxSensorID ) );
+
+			if( pair.first == "Gleisverbindung" ){
+				try{
+					const std::pair<Track::Coupling,std::string> coupling{ CreateTrackCoupling( pair.second, trackSystem ) };
+					const Length gap = trackSystem.CalculateGapSize( coupling.first.theOne, coupling.first.theOther );
+					if( gap > 30_cm ){
+						std::clog << "Warning: ";
+						std::clog << "There is a gap between two tracks in EEP. GleissystemID (" << pt.get( "<xmlattr>.GleissystemID", 0 );								
+						std::clog << ") : (" << coupling.first.theOne.id << ',';
+						std::clog << ToString( coupling.first.theOne.type ) << ") and (" << coupling.first.theOther.id << ',' << ToString( coupling.first.theOther.type );
+						std::clog << ") that are supposed to be coupled. Gap size: ";
+						std::clog << gap << ". This might lead to rolling stocks derailing." << std::endl;
+					}
+
+					trackSystem.Couple( coupling.first );
+					couplings.push_back( coupling );
+				}
+				catch( const std::runtime_error& e ){
+					std::clog << "Warning: ";
+					std::clog << "The coupling between track (" << pair.second.get( "<xmlattr>.GleisID1", 0 ) << "," << pair.second.get( "<xmlattr>.Anschluss1", "" ) << ") ";
+					std::clog << "and track (" << pair.second.get( "<xmlattr>.GleisID2", 0 ) << "," << pair.second.get( "<xmlattr>.Anschluss2", "" ) << ") ";
+					std::clog << "could not be established. Reason: " << e.what() << std::endl;
+				}
+			}
+		}
+
+		for( auto iter = trackSystem.GetConnectorCollection()->begin(); 
+			iter != trackSystem.GetConnectorCollection()->end(); ++iter )
+		{					
+			if( !iter->IsComplete() ){
+				std::clog << "There is a track missing for the arm of a switch. GleisID(" << iter->Reference( "GleisID" ) 
+				<< "), GleissystemID(" << pt.get( "<xmlattr>.GleissystemID", 0 ) << ")."<< std::endl;
+				continue;
+			}
+
+			// bit 0 1=show electric // bit 1 1=hide weichen// bit 2 1=weichen at right// bit 3 1=weichen at left //bit 4 DKW
+			const int data = std::stoi( iter->Reference( "data" ) );
+			if( !(data & 0x02) ){
+				if( auto pSwitch = std::dynamic_pointer_cast<Switch>(iter.operator->()); pSwitch ){
+					if( std::shared_ptr<BinaryIndicator> pSwitchIndicator = BinaryIndicator::Make( Indicator::Type::switch_mono ); pSwitchIndicator ){
+						pSwitchIndicator->Reference( "reference", pSwitch->Reference( "gsbname" ) );
+						std::string TipTxt = pSwitch->Reference( "TipTxt" );
+						if( !TipTxt.empty() ){
+							pSwitchIndicator->Reference( "TipTxt", TipTxt );
+							pSwitchIndicator->Reference( "TipBGCR", pSwitch->Reference( "TipBGCR" ) );
+							pSwitchIndicator->Reference( "TipBGCG", pSwitch->Reference( "TipBGCG" ) );
+							pSwitchIndicator->Reference( "TipBGCB", pSwitch->Reference( "TipBGCB" ) );
+						}
+
+						Frame<Length,One> offset;
+						offset.Init();
+
+						Real sign = pSwitch->BranchLeftOrRight() ? -1.0f : +1.0f;
+						if( data & 0x04 )
+							sign = -1.0f;
+						if( data & 0x08 )
+							sign = +1.0f;
+						offset.P.y += sign * 2_m;
+
+						pSwitchIndicator->SetFrame( offset );
+
+						pSwitchIndicator->Set( static_cast<trax::Indicator::Status>(std::stoi( pSwitch->Reference( "weichenstellung" ) )), false );
+
+						if( auto pAligned = dynamic_cast<SwitchAligned*>(pSwitchIndicator.get()) ){
+							pAligned->PreserveUpDirection( true );
+							pAligned->Attach( pSwitch );
+						}
+
+						for( int i = 1; i <= Switch::status_count; ++i ){
+							pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pSwitch->PlugTo( SwitchStatusFromEEP( i ) ).Unplugged( &m_SocketRegistry ) );
+							pSwitch->JackOn( SwitchStatusFromEEP( i ) ).InsertAtTail( &pSwitchIndicator->PlugTo( static_cast<trax::Indicator::Status>(i) ) );
+						}
+
+						indicatorCollection.Add( pSwitchIndicator );
+						pSwitchIndicator->RegisterSockets( m_SocketRegistry );
+					}
+				}
+
+				else if( std::shared_ptr<ThreeWaySwitch> pThreeWaySwitch = std::dynamic_pointer_cast<ThreeWaySwitch>(iter.operator->()); pThreeWaySwitch ){
+					if( std::shared_ptr<Indicator> pSwitchIndicator = Indicator::Make( Indicator::Type::switch_multi ); pSwitchIndicator ){
+						pSwitchIndicator->Reference( "reference", pThreeWaySwitch->Reference( "gsbname" ) );
+						std::string TipTxt = pThreeWaySwitch->Reference( "TipTxt" );
+						if( !TipTxt.empty() ){
+							pSwitchIndicator->Reference( "TipTxt", TipTxt );
+							pSwitchIndicator->Reference( "TipBGCR", pThreeWaySwitch->Reference( "TipBGCR" ) );
+							pSwitchIndicator->Reference( "TipBGCG", pThreeWaySwitch->Reference( "TipBGCG" ) );
+							pSwitchIndicator->Reference( "TipBGCB", pThreeWaySwitch->Reference( "TipBGCB" ) );
+						}
+
+						Frame<Length,One> offset;
+						offset.Init();
+
+						Real sign = +1.0f;
+						if( data & 0x04 )
+							sign = -1.0f;
+						if( data & 0x08 )
+							sign = +1.0f;
+						offset.P.y += sign * 2_m;
+
+						pSwitchIndicator->SetFrame( offset );
+
+						pSwitchIndicator->Set( static_cast<trax::Indicator::Status>(std::stoi( pThreeWaySwitch->Reference( "weichenstellung" ) )), false );
+
+						if( auto pAligned = dynamic_cast<SwitchAligned*>(pSwitchIndicator.get()) ){
+							pAligned->PreserveUpDirection( true );
+							pAligned->Attach( pThreeWaySwitch );
+						}
+
+						for( int i = 1; i <= ThreeWaySwitch::status_count; ++i ){
+							pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pThreeWaySwitch->PlugTo( ThreeWaySwitchStatusFromEEP( i ) ).Unplugged( &m_SocketRegistry ) );
+							pThreeWaySwitch->JackOn( ThreeWaySwitchStatusFromEEP( i ) ).InsertAtTail( &pSwitchIndicator->PlugTo( static_cast<trax::Indicator::Status>(i) ) );
+						}
+
+						indicatorCollection.Add( pSwitchIndicator );
+						pSwitchIndicator->RegisterSockets( m_SocketRegistry );
+					}
+				}
+			}
+		}
+
+		for( const auto& tuple : signals ){
+			signalCollection.Add( std::get<0>(tuple) );
+			std::get<1>( tuple )->Attach( std::get<0>( tuple ), std::get<2>( tuple ) );
+		}
+	}
 }
 
 std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack( 
