@@ -478,7 +478,7 @@ inline bool IsValid_Imp( const ContainerType& container, bool bSilent ){
 	bool bOK = true;
 	for( const auto& pair : container ){
 		auto& element = *(pair.second);
-		if( !element.IsValid( bSilent ) ){
+		if( !element.IsValid() ){
 			bOK = false;
 		}
 	}

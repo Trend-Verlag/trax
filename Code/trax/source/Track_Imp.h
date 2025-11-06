@@ -96,7 +96,7 @@ namespace trax{
 
 		void SetFrame( const spat::Frame<Length,One>& start, Length s, bool bAllowTwistOffset = true ) override;
 
-		bool IsValid( bool bSilent = true ) const noexcept override;
+		bool IsValid() const noexcept override;
 
 		Length GetLength() const noexcept override;
 		

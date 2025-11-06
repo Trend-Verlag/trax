@@ -1,5 +1,6 @@
 add_library(trax_core 
     STATIC
+        "./source/Configuration_Imp.cpp"
         "./source/Connector_Imp.cpp"
         "./source/Curve_Imp.cpp"
         "./source/CurveCreators_Imp.cpp"
@@ -31,6 +32,7 @@ add_library(trax_core
         "./source/curves/Arc_Imp.cpp"
         "./source/curves/Clothoid_Imp.cpp"
         "./source/curves/Cubic_Imp.cpp"
+        "./source/curves/EEPCurve_Imp.cpp"
         "./source/curves/HelixP_Imp.cpp"
         "./source/curves/Helix_Imp.cpp"
         "./source/curves/LineP_Imp.cpp"
@@ -104,6 +106,7 @@ set(PRIVATE_HEADERS
         "./source/curves/Arc_Imp.h"
         "./source/curves/Clothoid_Imp.h"
         "./source/curves/Cubic_Imp.h"
+        "./source/curves/EEPCurve_Imp.h"
         "./source/curves/HelixP_Imp.h"
         "./source/curves/Helix_Imp.h"
         "./source/curves/LineP_Imp.h"

@@ -140,22 +140,22 @@ void Anl3TrackSystemReader::CreateTrackCollection( const boost::property_tree::p
 					const std::pair<Track::Coupling,std::string> coupling{ CreateTrackCoupling( pair.second, trackSystem ) };
 					const Length gap = trackSystem.CalculateGapSize( coupling.first.theOne, coupling.first.theOther );
 					if( gap > 30_cm ){
-						std::clog << "Warning: ";
-						std::clog << "There is a gap between two tracks in EEP. GleissystemID (" << pt.get( "<xmlattr>.GleissystemID", 0 );								
-						std::clog << ") : (" << coupling.first.theOne.id << ',';
-						std::clog << ToString( coupling.first.theOne.type ) << ") and (" << coupling.first.theOther.id << ',' << ToString( coupling.first.theOther.type );
-						std::clog << ") that are supposed to be coupled. Gap size: ";
-						std::clog << gap << ". This might lead to rolling stocks derailing." << std::endl;
+						std::clog << Verbosity::detailed << "Warning: ";
+						std::clog << Verbosity::detailed << "There is a gap between two tracks in EEP. GleissystemID (" << pt.get( "<xmlattr>.GleissystemID", 0 );								
+						std::clog << Verbosity::detailed << ") : (" << coupling.first.theOne.id << ',';
+						std::clog << Verbosity::detailed << ToString( coupling.first.theOne.type ) << ") and (" << coupling.first.theOther.id << ',' << ToString( coupling.first.theOther.type );
+						std::clog << Verbosity::detailed << ") that are supposed to be coupled. Gap size: ";
+						std::clog << Verbosity::detailed << gap << ". This might lead to rolling stocks derailing." << std::endl;
 					}
 
 					trackSystem.Couple( coupling.first );
 					couplings.push_back( coupling );
 				}
 				catch( const std::runtime_error& e ){
-					std::clog << "Warning: ";
-					std::clog << "The coupling between track (" << pair.second.get( "<xmlattr>.GleisID1", 0 ) << "," << pair.second.get( "<xmlattr>.Anschluss1", "" ) << ") ";
-					std::clog << "and track (" << pair.second.get( "<xmlattr>.GleisID2", 0 ) << "," << pair.second.get( "<xmlattr>.Anschluss2", "" ) << ") ";
-					std::clog << "could not be established. Reason: " << e.what() << std::endl;
+					std::clog << Verbosity::error << "Warning: ";
+					std::clog << Verbosity::error << "The coupling between track (" << pair.second.get( "<xmlattr>.GleisID1", 0 ) << "," << pair.second.get( "<xmlattr>.Anschluss1", "" ) << ") ";
+					std::clog << Verbosity::error << "and track (" << pair.second.get( "<xmlattr>.GleisID2", 0 ) << "," << pair.second.get( "<xmlattr>.Anschluss2", "" ) << ") ";
+					std::clog << Verbosity::error << "could not be established. Reason: " << e.what() << std::endl;
 				}
 			}
 		}
@@ -164,7 +164,7 @@ void Anl3TrackSystemReader::CreateTrackCollection( const boost::property_tree::p
 			iter != trackSystem.GetConnectorCollection()->end(); ++iter )
 		{					
 			if( !iter->IsComplete() ){
-				std::clog << "There is a track missing for the arm of a switch. GleisID(" << iter->Reference( "GleisID" ) 
+				std::clog << Verbosity::normal << "There is a track missing for the arm of a switch. GleisID(" << iter->Reference( "GleisID" ) 
 				<< "), GleissystemID(" << pt.get( "<xmlattr>.GleissystemID", 0 ) << ")."<< std::endl;
 				continue;
 			}
@@ -558,7 +558,7 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 		if( pTrack->IsValid() )
 			return pTrack;
 		else
-			std::cerr << "Warning: Track " << pTrack->ID() << " is invalid. " << pTrack->Reference( "reference" ) << std::endl;
+			std::cerr << Verbosity::error << "Warning: Track " << pTrack->ID() << " is invalid. " << pTrack->Reference( "reference" ) << std::endl;
 	}
 
 	return nullptr;
@@ -629,7 +629,7 @@ std::shared_ptr<Signal> Anl3TrackSystemReader::CreateSignal(
 		    name == "Sign_Countr1_SM2" )
 			//exclude some signals with special functionality that have no implementation yet...
 		{
-			std::cerr << "Warning: Signal " << pSignal->ID() << " is not implemented yet. " << pSignal->Reference( "name" ) << std::endl;
+			std::cerr << Verbosity::error << "Warning: Signal " << pSignal->ID() << " is not implemented yet. " << pSignal->Reference( "name" ) << std::endl;
 			return nullptr;
 		}
 
@@ -752,7 +752,7 @@ std::shared_ptr<Signal> Anl3TrackSystemReader::CreateSignal(
 				catch( const std::invalid_argument& e ){
 					std::stringstream stream;
 					stream << e.what() << ": Signal id:(" << pSignal->ID() << ") 'stellung' (" << pSignal->Reference( "stellung" ) << ") found that is not valid and could not get set for a signal semaphore." << std::endl;
-					std::cerr << stream.str();
+					std::cerr << Verbosity::error << stream.str();
 				}
 
 				indicatorCollection.Add( pSignalSemaphore );
@@ -788,7 +788,7 @@ std::shared_ptr<Signal> Anl3TrackSystemReader::CreateSignal(
 				catch( const std::invalid_argument& e ){
 					std::stringstream stream;
 					stream << e.what() << ": Signal id:(" << pSignal->ID() << ")'stellung' (" << pSignal->Reference( "stellung" ) << ") found that is not valid and could not get set for a vorsignal semaphore" << std::endl;
-					std::cerr << stream.str();
+					std::cerr << Verbosity::error << stream.str();
 				}
 
 				indicatorCollection.Add( pSignalSemaphore );

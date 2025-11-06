@@ -242,7 +242,7 @@ namespace trax{
 
 		/// Tests wether a valid curve and twist are attached.
 		/// \returns true if the track is able to deliver valid geometry.
-		virtual bool IsValid( bool bSilent = true ) const noexcept = 0;
+		virtual bool IsValid() const noexcept = 0;
 
 
 		///	\returns the maximum valid parameter value of the track.

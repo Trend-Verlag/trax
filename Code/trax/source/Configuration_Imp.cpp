@@ -1,10 +1,9 @@
 //	trax track library
-//	AD 2024 
+//	AD 2025
 //
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
-//
 //
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
@@ -25,46 +24,34 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
-
-#include "../StaticTrack.h"
-#include "../Material.h"
-#include "trax/source/SectionTrack_Imp.h"
+#include "trax/Configuration.h"
 
 namespace trax{
 
-	class StaticTrack_Imp : public StaticTrack,
-							public SectionTrack_Imp			
-	{
-	public:
-		StaticTrack_Imp( const Scene& scene );
+std::ostream cnull{ false };
+
+static Verbosity g_ReportVerbosity = Verbosity::normal;
 
 
-		// Track:
-		TrackType GetTrackType() const noexcept override;
+std::string ToString( Verbosity type )
+{
+    return std::string dclspc();
+}
 
-		bool IsValid() const noexcept override;
+Verbosity ToVerbosity( const std::string & type )
+{
+    return Verbosity dclspc();
+}
 
+void SetReportVerbosity( Verbosity verbosity ) noexcept {
+    g_ReportVerbosity = verbosity;
+}
+Verbosity GetReportVerbosity() noexcept {
+    return g_ReportVerbosity;
+}
 
-		// StaticTrack:
-		void SetMaterial( const Material& material ) noexcept override;
-
-		const Material& GetMaterial() const noexcept override;
-
-		const Shape& GetShape() const noexcept override;
-
-	protected:
-		// PoseImp:
-		void PropagateAbsoluteFrameToClients() noexcept override;
-
-		// TrackBuilder:
-		void OnGeometryChanged() noexcept override;
-	private:
-		const Scene&					m_Scene;
-		std::unique_ptr<Shape>			m_pShape;
-		Material						m_Material;
-
-		void CreateShape() noexcept;
-	};
+std::ostream& operator<<( std::ostream& stream, Verbosity verbosity ){
+    return (verbosity <= g_ReportVerbosity) ? stream : cnull;
+}
 
 }

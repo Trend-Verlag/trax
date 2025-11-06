@@ -12,6 +12,7 @@ add_library(trax_core_collections_support
         "./source/curves/SupportXML_Clothoid.cpp"
         "./source/curves/SupportXML_Cubic.cpp"
         "./source/curves/SupportXML_Curve.cpp"
+        "./source/curves/SupportXML_EEPCurve.cpp"
         "./source/curves/SupportXML_Helix.cpp"
         "./source/curves/SupportXML_HelixP.cpp"
         "./source/curves/SupportXML_Line.cpp"

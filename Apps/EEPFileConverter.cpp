@@ -27,6 +27,8 @@ Allowed options");
 			("input,I", boost::program_options::value<std::filesystem::path>(), "Input *.anl3 or *.anl4 file, obligatory.")
 			("output,O", boost::program_options::value<std::filesystem::path>(), "Output *.anl4 file, obligatory.")
 			("polygonal_chain,P", "Convert track curves to polygonal chains." )
+			("verbose", "Enables verbose output.")
+			("quiet,Q", "Disables all output except errors.")
 			;
 
         boost::program_options::positional_options_description p;
@@ -57,8 +59,15 @@ Allowed options");
 			return 0;
 		}
 
-		std::cout << "Input: " << vm["input"].as<std::filesystem::path>() << std::endl;
-		std::cout << "Output: " << vm["output"].as<std::filesystem::path>() << std::endl;
+		if( vm.count("verbose") ){
+			trax::SetReportVerbosity( trax::Verbosity::verbose );
+		}
+		else if( vm.count("quiet") ){
+			trax::SetReportVerbosity( trax::Verbosity::silent );
+		}
+
+		std::cout << trax::Verbosity::normal << "Input: " << vm["input"].as<std::filesystem::path>() << std::endl;
+		std::cout << trax::Verbosity::normal << "Output: " << vm["output"].as<std::filesystem::path>() << std::endl;
 
 		if( std::unique_ptr<trax::ModuleCollection> pModuleCollection = trax::AnlReader{}.ReadModuleCollection( vm["input"].as<std::filesystem::path>() ); 
 			pModuleCollection )
@@ -75,8 +84,8 @@ Allowed options");
 								track.Attach( pNewTrack->DetachTwist() );
 							}
 							catch( std::exception& e ){
-								std::cerr << "EEPFileConverter: Error: " << e.what() << std::endl;
-								std::cerr << "Could not convert track to polygonal chain.Track ID: " << track.ID() << std::endl;
+								std::cerr << trax::Verbosity::error  << "EEPFileConverter: Error: " << e.what() << std::endl;
+								std::cerr << trax::Verbosity::error  << "Could not convert track to polygonal chain.Track ID: " << track.ID() << std::endl;
 							}
 						}
 					}
@@ -85,17 +94,17 @@ Allowed options");
 				trax::Write( *pModule, vm["output"].as<std::filesystem::path>() );
 			}
 			else
-				std::cerr << "EEPFileConverter: No module found in file: " << vm["input"].as<std::filesystem::path>() << std::endl;
+				std::cerr << trax::Verbosity::error  << "EEPFileConverter: No module found in file: " << vm["input"].as<std::filesystem::path>() << std::endl;
 
-			std::cout << "EEPFileConverter: file " << vm["output"].as<std::filesystem::path>() << " successfully created." << std::endl;
+			std::cout << trax::Verbosity::normal << "EEPFileConverter: file " << vm["output"].as<std::filesystem::path>() << " successfully created." << std::endl;
 		}
 	}
 	catch( std::exception& e ) {
-        std::cerr << "EEPFileConverter: error: " << e.what() << std::endl;
+        std::cerr << trax::Verbosity::error << "EEPFileConverter: error: " << e.what() << std::endl;
         return 1;
     }
     catch( ... ) {
-        std::cerr << "EEPFileConverter: Exception of unknown type!" << std::endl;
+        std::cerr << trax::Verbosity::error << "EEPFileConverter: Exception of unknown type!" << std::endl;
         return 1;
     }
 

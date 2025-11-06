@@ -45,9 +45,7 @@ namespace trax
             toReader.RegisterCurveReader( TypeToName( Curve::CurveType::RotatorChain ), CreateRotatorChain );
             toReader.RegisterCurveReader( TypeToName( Curve::CurveType::PolygonalChain ), CreatePolygonalChain );
             toReader.RegisterCurveReader( TypeToName( Curve::CurveType::SampledCurve ), CreateSampledCurve );
-#ifdef TRAX_SUPPORT_EEPCURVE
 			toReader.RegisterCurveReader( TypeToName( Curve::CurveType::EEPCurve ), CreateEEPCurve );
-#endif
         }
 	}
 }

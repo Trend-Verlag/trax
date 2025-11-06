@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "common/support/CommonSupportConsole.h"
 #include "trax/support/TraxSupportXML.h"
 #include "trax/Curve.h"
 
@@ -70,9 +71,7 @@ namespace trax{
 		std::unique_ptr<Curve> dclspc CreateRotatorChain( const boost::property_tree::ptree& pt );
 		std::unique_ptr<Curve> dclspc CreatePolygonalChain( const boost::property_tree::ptree& pt );
 		std::unique_ptr<Curve> dclspc CreateSampledCurve( const boost::property_tree::ptree& pt );
-#ifdef TRAX_SUPPORT_EEPCURVE
 		std::unique_ptr<Curve> dclspc CreateEEPCurve( const boost::property_tree::ptree& pt );
-#endif
 
 		void dclspc RegisterAllCurveReaders( class PTreeReader& toReader );
 

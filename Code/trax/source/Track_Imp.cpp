@@ -233,7 +233,7 @@ void Track_Imp::SetFrame(
 #endif
 }
 
-bool Track_Imp::IsValid( bool /*bSilent*/ ) const noexcept{
+bool Track_Imp::IsValid() const noexcept{
 	return  GetFrame().IsOrthoNormal() &&
 			GetAbsoluteFrame().IsOrthoNormal() &&
 			m_pCurve && m_pCurve->IsValid() &&
@@ -931,7 +931,7 @@ void Track_Imp::Attach( std::shared_ptr<const Curve> pCurve, common::Interval<Le
 	if ((m_pCurve) && (pCurve))
 		if (m_pCurve->GetCurveType() != pCurve->GetCurveType())
 		{
-			std::cout  << m_pCurve->TypeName() <<  " curve changed to: " << pCurve->TypeName() << std::endl;
+			std::cout << Verbosity::verbose<< m_pCurve->TypeName() <<  " curve changed to: " << pCurve->TypeName() << std::endl;
 		}
 #endif
 
@@ -1341,7 +1341,6 @@ void Track_Imp::TestTransition( Length s ) const{
 	if( !m_pCurve )
 		throw std::logic_error( "Tried to parametrize track with no Curve attached" );
 	if( InvalidParameter( s ) ){
-		//std::cerr << "Parameter value out of range for track. Range==" << Range() << " s = " << s << std::endl;
 		std::ostringstream stream;
 		stream << "Parameter value out of range for track. Range==" << Range() << " s = " << s << std::endl;
 		throw std::range_error( stream.str() );

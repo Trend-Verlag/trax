@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include <ostream>
+
 #if defined( _WIN32 )
 #	if defined( TRAX_STATIC_LIBRARY )
 #		define dclspc
@@ -39,3 +41,39 @@
 #else
 #	define dclspc
 #endif
+
+namespace trax{
+
+    /// \brief Verbosity scale of trax library messages.
+    enum class Verbosity : char{
+	    silent,		//< no messages at all
+	    error,		//< errors only
+	    normal,		//< important messages only
+	    detailed,	//< detailed report
+	    verbose		//< everything
+    };
+
+	std::string dclspc ToString( Verbosity type );
+
+	Verbosity dclspc ToVerbosity( const std::string& type );
+
+	void dclspc SetReportVerbosity( Verbosity verbosity ) noexcept;
+
+    Verbosity dclspc GetReportVerbosity() noexcept;
+
+	std::ostream& dclspc operator<<( std::ostream& stream, Verbosity verbosity );
+
+
+	class ReportVerbosityGuard{
+		Verbosity m_PreviousVerbosity;
+	public:
+		ReportVerbosityGuard( Verbosity verbosity ) noexcept {
+			m_PreviousVerbosity = GetReportVerbosity();
+			SetReportVerbosity( verbosity );
+		}
+		~ReportVerbosityGuard() noexcept {
+			SetReportVerbosity( m_PreviousVerbosity );
+		}
+	};
+
+} // namespace trax
