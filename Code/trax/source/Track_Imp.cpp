@@ -534,7 +534,7 @@ Track* Track_Imp::Transform( Interval<Length>& range, Track::EndType& toTrackAtE
 
 std::vector<std::pair<const Track&,Interval<Length>>> Track_Imp::GetRanges( const Interval<Length>& range ) const{
 	std::vector<std::pair<const Track&,Interval<Length>>> list;
-	if( Intersecting( range, Range() ) ){
+	if( Touching( range, Range() ) ){
 		list.push_back( std::make_pair( *this, range ) );
 
 		EndType theEnd = EndType::front;
@@ -549,9 +549,9 @@ std::vector<std::pair<const Track&,Interval<Length>>> Track_Imp::GetRanges( cons
 	return list;
 }
 
-std::vector<std::pair<Track&,Interval<Length>>> Track_Imp::GetRanges(const Interval<Length>& range){
+std::vector<std::pair<Track&,Interval<Length>>> Track_Imp::GetRanges( const Interval<Length>& range ){
 	std::vector<std::pair<Track&,Interval<Length>>> list;
-	if( Intersecting( range, Range() ) ){
+	if( Touching( range, Range() ) ){
 		list.push_back( std::pair<Track&,Interval<Length>>{ *this, range } );
 
 		EndType theEnd = EndType::front;
@@ -568,7 +568,7 @@ std::vector<std::pair<Track&,Interval<Length>>> Track_Imp::GetRanges(const Inter
 
 void Track_Imp::RangeAt( Track::EndType& theEnd, Interval<Length>& range, std::vector<std::pair<const Track&,Interval<Length>>>& list ) const{
 	if( auto pTrack = dynamic_cast<Track_Imp*>(Transform( range, theEnd )) ){
-		if( Intersecting( range, pTrack->Range() ) ){
+		if( Touching( range, pTrack->Range() ) ){
 			list.push_back( std::make_pair( *pTrack, range ) );
 			pTrack->RangeAt( theEnd, range, list );
 		}
@@ -577,7 +577,7 @@ void Track_Imp::RangeAt( Track::EndType& theEnd, Interval<Length>& range, std::v
 
 void Track_Imp::RangeAt( Track::EndType& theEnd, Interval<Length>& range, std::vector<std::pair<Track&,Interval<Length>>>& list ){
 	if( auto pTrack = dynamic_cast<Track_Imp*>(Transform( range, theEnd )) ){
-		if( Intersecting( range, pTrack->Range() ) ){
+		if( Touching( range, pTrack->Range() ) ){
 			list.push_back( std::pair<Track&,Interval<Length>>( *pTrack, range ) );
 			pTrack->RangeAt( theEnd, range, list );
 		}
@@ -931,7 +931,7 @@ void Track_Imp::Attach( std::shared_ptr<const Curve> pCurve, common::Interval<Le
 	if ((m_pCurve) && (pCurve))
 		if (m_pCurve->GetCurveType() != pCurve->GetCurveType())
 		{
-			std::cout << Verbosity::verbose<< m_pCurve->TypeName() <<  " curve changed to: " << pCurve->TypeName() << std::endl;
+			std::cout << Verbosity::verbose << m_pCurve->TypeName() <<  " curve changed to: " << pCurve->TypeName() << std::endl;
 		}
 #endif
 

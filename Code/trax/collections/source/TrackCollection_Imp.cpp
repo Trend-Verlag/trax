@@ -78,13 +78,13 @@ void TrackCollection_Imp::SetParent( TrackSystem* pParent ){
 //	return m_pParent;
 //}
 
-const char* TrackCollection_Imp::TypeName() const{
+const char* TrackCollection_Imp::TypeName() const noexcept{
 	return "TrackCollection";
 }
 
-bool TrackCollection_Imp::IsValid( bool bSilent ) const noexcept
+bool TrackCollection_Imp::IsValid() const noexcept
 {
-	return IsValid_Imp( m_Container, bSilent );
+	return IsValid_Imp( m_Container );
 }
 
 IDType TrackCollection_Imp::Add( std::shared_ptr<TrackBuilder> pTrack ){

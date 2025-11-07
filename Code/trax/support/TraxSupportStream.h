@@ -35,6 +35,7 @@
 #include "trax/Plug.h"
 #include "trax/Switch.h"
 
+#include "common/support/CommonSupportStream.h"
 #include "dim/support/DimSupportStream.h"
 #include "spat/support/SpatSupportStream.h"
 

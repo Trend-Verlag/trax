@@ -35,7 +35,7 @@ std::unique_ptr<IndicatorCollection> IndicatorCollection::Make() noexcept{
 IndicatorCollection_Imp::IndicatorCollection_Imp() noexcept
 {}
 
-const char* IndicatorCollection_Imp::TypeName() const{
+const char* IndicatorCollection_Imp::TypeName() const noexcept{
 	return "IndicatorCollection";
 }
 

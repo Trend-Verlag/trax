@@ -16,7 +16,7 @@
 
 #include "spat/support/SpatSupportStream.h"
 
-#define BOOST_CHECK_CLOSE_SPATIAL( a, b, epsilon ) if( !a.Equals( b, epsilon ) ){ BOOST_CHECK_EQUAL( a, b ); }
+#define BOOST_CHECK_CLOSE_SPATIAL( a, b, epsilon ) if( !a.Equals( b, epsilon ) ){ BOOST_CHECK_EQUAL( a, b ); } else { BOOST_CHECK( 1 ); }
 
-#define BOOST_CHECK_CLOSE_SPATIAL2( a, b, epsilon1, epsilon2 ) if( !a.Equals( b, epsilon1, epsilon2 ) ){ BOOST_CHECK_EQUAL( a, b ); }
+#define BOOST_CHECK_CLOSE_SPATIAL2( a, b, epsilon1, epsilon2 ) if( !a.Equals( b, epsilon1, epsilon2 ) ){ BOOST_CHECK_EQUAL( a, b ); } else { BOOST_CHECK( 1 ); }
 

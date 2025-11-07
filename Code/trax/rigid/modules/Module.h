@@ -67,9 +67,8 @@ namespace trax{
 
 
 		/// \brief Checks whether the elements in this module are valid 
-		/// \param bSilent If false there will be diagnostic output to the console.
 		/// \returns true if all the elements are valid build.
-		virtual bool IsValid( bool bSilent = true ) const noexcept = 0;
+		virtual bool IsValid() const noexcept = 0;
 
 
 		/// \brief Set frame of reference.

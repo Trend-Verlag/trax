@@ -82,12 +82,12 @@ void TrackCollectionContainer_Imp::SetAbsoluteFrame( const Frame<Length,One>& fr
 	SetCollectionsAbsoluteFrame(m_AbsoluteFrame);
 }
 
-const char* TrackCollectionContainer_Imp::TypeName() const{
+const char* TrackCollectionContainer_Imp::TypeName() const noexcept{
 	return "TrackCollectionContainer";
 }
 
-bool TrackCollectionContainer_Imp::IsValid( bool bSilent ) const noexcept{
-	return IsValid_Imp( m_Container, bSilent );
+bool TrackCollectionContainer_Imp::IsValid() const noexcept{
+	return IsValid_Imp( m_Container );
 }
 
 IDType TrackCollectionContainer_Imp::Add( std::shared_ptr<TrackCollection> pTrackCollection ){

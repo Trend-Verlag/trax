@@ -41,13 +41,13 @@ ModuleCollection_Imp::ModuleCollection_Imp()
 {
 }
 
-const char* ModuleCollection_Imp::TypeName() const{
+const char* ModuleCollection_Imp::TypeName() const noexcept{
 	return "ModuleCollection";
 }
 
-bool ModuleCollection_Imp::IsValid( bool bSilent ) const noexcept
+bool ModuleCollection_Imp::IsValid() const noexcept
 {
-	return IsValid_Imp( m_Container, bSilent );
+	return IsValid_Imp( m_Container );
 }
 
 }

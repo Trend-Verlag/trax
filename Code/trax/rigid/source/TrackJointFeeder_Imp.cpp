@@ -68,7 +68,7 @@ bool TrackJointFeeder::Update( Time dt )
 
 		if( MoveBy( Ds ).first ){
 			DeRail();
-			std::clog << "trax: TrackJoint derailed over open end!" << std::endl;
+			std::clog << Verbosity::normal << "trax: TrackJoint derailed over open end!" << std::endl;
 			return false;
 		}
 		else{
@@ -105,7 +105,7 @@ bool TrackJointFeeder::Rail( std::shared_ptr<Track> pTrack, const TrackLocation&
 		SetValues( TrackData );
 
 		if( TrackData.wF.T * GlobalAnchor().T < 0 )
-			std::cerr << "Railing appears to be in the wrong direction. Is this intended?" << std::endl;
+			std::cerr << Verbosity::detailed << "Railing appears to be in the wrong direction. Is this intended?" << std::endl;
 
 		DoRail();
 

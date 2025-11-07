@@ -89,12 +89,6 @@ namespace trax{
 		virtual std::shared_ptr<TrackSystem> This() const noexcept = 0;
 
 
-		/// \brief Checks whether the tracks in this collection are valid 
-		/// \param bSilent If false there will be diagnostic output to the console.
-		/// \returns true if all the tracks are valid build.
-		virtual bool IsValid( bool bSilent = true ) const noexcept = 0;
-
-
 		// TrackCollections:
 
 		/// \brief Creates a TrackCollection with the supplied id.

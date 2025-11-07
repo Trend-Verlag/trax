@@ -61,7 +61,7 @@ namespace trax{
 
 		/// \name Collection member function forwarding.
 		///@{
-		const char* TypeName() const override{
+		const char* TypeName() const noexcept override{
 			return m_pComponent->TypeName();
 		}
 

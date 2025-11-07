@@ -37,7 +37,7 @@ namespace trax{
 	public:
 		Connector_Imp( int cntSlots );
 
-		bool IsValid( bool bSilent = true ) const noexcept override;
+		bool IsValid() const noexcept override;
 
 		void Disconnect() override;
 

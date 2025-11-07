@@ -53,13 +53,12 @@ namespace trax{
 
 
 		/// \returns the name for the object type that implements this interface. 
-		virtual const char*	TypeName() const = 0;
+		virtual const char*	TypeName() const noexcept = 0;
 
 
 		/// \brief Checks whether the connector is valid 
-		/// \param bSilent If false there will be diagnostic output to the console.
 		/// \returns true if the connector is valid.
-		virtual bool IsValid( bool bSilent = true ) const noexcept = 0;
+		virtual bool IsValid() const noexcept = 0;
 
 
 		/// \brief Sets the connector to the next setting.

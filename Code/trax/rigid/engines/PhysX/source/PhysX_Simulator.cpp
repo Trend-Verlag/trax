@@ -220,7 +220,7 @@ void PhysX_Simulator::InitPvd() noexcept
 			2000 )) != nullptr )	// timeout in milliseconds to wait for PVD to respond, 
 		{
 			if( !m_pPhysxVisualDebugger->connect(*m_pTransport,physx::PxPvdInstrumentationFlag::eALL) )
-				std::cerr << "PhysX_Simulator: PhysX Visual Debugger connection failed!" << std::endl;
+				std::cerr << Verbosity::normal << "PhysX_Simulator: PhysX Visual Debugger connection failed!" << std::endl;
 		}
 	}
 

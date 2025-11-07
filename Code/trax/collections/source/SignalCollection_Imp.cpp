@@ -37,7 +37,7 @@ std::unique_ptr<SignalCollection> SignalCollection::Make() noexcept{
 	}
 }
 ////////////////////////////////////////
-const char* SignalCollection_Imp::TypeName() const{
+const char* SignalCollection_Imp::TypeName() const noexcept{
 	return "SignalCollection";
 }
 ////////////////////////////////////////

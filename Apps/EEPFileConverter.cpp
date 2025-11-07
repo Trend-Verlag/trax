@@ -27,7 +27,7 @@ Allowed options");
 			("input,I", boost::program_options::value<std::filesystem::path>(), "Input *.anl3 or *.anl4 file, obligatory.")
 			("output,O", boost::program_options::value<std::filesystem::path>(), "Output *.anl4 file, obligatory.")
 			("polygonal_chain,P", "Convert track curves to polygonal chains." )
-			("verbose", "Enables verbose output.")
+			("verbosity", boost::program_options::value<std::string>(), "Output verbosity. Options are: 'silent', 'error', 'normal' (the default), 'detailed', 'verbose'.")
 			("quiet,Q", "Disables all output except errors.")
 			;
 
@@ -59,10 +59,23 @@ Allowed options");
 			return 0;
 		}
 
-		if( vm.count("verbose") ){
-			trax::SetReportVerbosity( trax::Verbosity::verbose );
+		if( vm.count("verbosity") ){
+			const auto& verbosity = vm["verbosity"].as<std::string>();
+			if( verbosity == "verbose" ){
+				trax::SetReportVerbosity( trax::Verbosity::verbose );
+			}
+			else if( verbosity == "detailed" ){
+				trax::SetReportVerbosity( trax::Verbosity::detailed );
+			}
+			else if( verbosity == "error" ){
+				trax::SetReportVerbosity( trax::Verbosity::error );
+			}
+			else if( verbosity == "quiet" ){
+				trax::SetReportVerbosity( trax::Verbosity::silent );
+			}
 		}
-		else if( vm.count("quiet") ){
+
+		if( vm.count("quiet") ){
 			trax::SetReportVerbosity( trax::Verbosity::silent );
 		}
 

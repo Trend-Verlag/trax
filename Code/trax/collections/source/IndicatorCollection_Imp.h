@@ -37,7 +37,7 @@ namespace trax{
 	public:
 		IndicatorCollection_Imp() noexcept;
 
-		const char* TypeName() const override;
+		const char* TypeName() const noexcept override;
 
 		void Update() override;
 

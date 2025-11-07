@@ -31,7 +31,8 @@ BOOST_AUTO_TEST_CASE( RoundtripTest )
 	BOOST_REQUIRE( pModuleCollection );
 
 	int numTracks = pModuleCollection->GetFirst()->GetTrackSystem()->Count();
-	BOOST_WARN_EQUAL( numTracks, 0 );
+	BOOST_WARN_NE( numTracks, 0 );
+	BOOST_CHECK_EQUAL( numTracks, 175 );
 	BOOST_CHECK_NO_THROW( Write( *pModuleCollection, FixtureBase::FixturePath() / "Demo.anl4" ) );
 	BOOST_CHECK_NO_THROW( pModuleCollection = reader.ReadModuleCollection( FixtureBase::FixturePath() / "Demo.anl4" ) );
 
@@ -49,7 +50,8 @@ BOOST_AUTO_TEST_CASE( RoundtripTest2 )
 	BOOST_REQUIRE( pModuleCollection );
 
 	int numTracks = pModuleCollection->GetFirst()->GetTrackSystem()->Count();
-	BOOST_WARN_EQUAL( numTracks, 0 );
+	BOOST_WARN_NE( numTracks, 0 );
+	BOOST_CHECK_EQUAL( numTracks, 5 );
 	BOOST_CHECK_NO_THROW( Write( *pModuleCollection, FixtureBase::FixturePath() / "NewCurves.anl4" ) );
 	BOOST_CHECK_NO_THROW( pModuleCollection = reader.ReadModuleCollection( FixtureBase::FixturePath() / "NewCurves.anl4" ) );
 
@@ -67,7 +69,8 @@ BOOST_AUTO_TEST_CASE( RoundtripTest3 )
 	BOOST_REQUIRE( pModule );
 
 	int numTracks = pModule->GetTrackSystem()->Count();
-	BOOST_WARN_EQUAL( numTracks, 0 );
+	BOOST_WARN_NE( numTracks, 0 );
+	BOOST_CHECK_EQUAL( numTracks, 175 );
 	BOOST_CHECK_NO_THROW( Write( *pModule, FixtureBase::FixturePath() / "Demo.anl4" ) );
 	BOOST_CHECK_NO_THROW( pModule = reader.ReadModule( FixtureBase::FixturePath() / "Demo.anl4" ) );
 

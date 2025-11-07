@@ -60,7 +60,7 @@ namespace trax{
 		// Collection:
 		const char* TypeName() const noexcept override;
 
-		bool IsValid( bool bSilent = true ) const noexcept override;
+		bool IsValid() const noexcept override;
 
 		IDType Add( std::shared_ptr<TrackBuilder> pTrack ) override;
 

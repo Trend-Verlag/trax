@@ -38,13 +38,13 @@ std::unique_ptr<ConnectorCollection> ConnectorCollection::Make() noexcept
 	}
 }
 
-const char* ConnectorCollection_Imp::TypeName() const{
+const char* ConnectorCollection_Imp::TypeName() const noexcept{
 	return "ConnectorCollection";
 }
 
-bool ConnectorCollection_Imp::IsValid( bool bSilent ) const noexcept
+bool ConnectorCollection_Imp::IsValid() const noexcept
 {
-	return IsValid_Imp( m_Container, bSilent );
+	return IsValid_Imp( m_Container );
 }
 
 }

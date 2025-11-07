@@ -31,7 +31,7 @@ std::unique_ptr<Scene> Scene::Make( const Simulator& simulator ) noexcept
 		if( const PhysX_Simulator* pPhysX_Simulator = dynamic_cast<const PhysX_Simulator*>(&simulator); pPhysX_Simulator )
 			return std::make_unique<PhysX_Scene>( *pPhysX_Simulator );
 		else{
-			std::cerr << "Scene::Make: Simulator is of wrong type!" << std::endl;
+			std::cerr << Verbosity::error << "Scene::Make: Simulator is of wrong type!" << std::endl;
 		}
 	}
 	catch( const std::runtime_error& e ){
@@ -308,7 +308,7 @@ void PhysX_Scene::Release( TrackJointFeeder& feeder ) noexcept
 	}
 	else
 	{
-		std::cerr << "PhysX_Scene::Release: TrackJointFeeder not found!" << std::endl;
+		std::cerr << Verbosity::normal << "PhysX_Scene::Release: TrackJointFeeder not found!" << std::endl;
 	}
 }
 
@@ -603,7 +603,7 @@ PhysX_Scene::Dispatcher::ThreadInfo::~ThreadInfo(){
 		delete m_pThread;
 	}
 
-	std::clog << "PhysX Dispatcher shut down. Number of PhysX Tasks processed: " << m_nTasksAccepted << std::endl; 
+	std::clog << Verbosity::verbose << "PhysX Dispatcher shut down. Number of PhysX Tasks processed: " << m_nTasksAccepted << std::endl; 
 }
 
 void PhysX_Scene::Dispatcher::ThreadInfo::ThreadFunc( ThreadInfo* pTI ){

@@ -35,7 +35,7 @@ namespace trax{
 
 	class SignalCollection_Imp : public SignalCollection_Base{
 	public:
-		const char* TypeName() const override;
+		const char* TypeName() const noexcept override;
 	};
 
 }

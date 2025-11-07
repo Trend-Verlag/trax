@@ -40,13 +40,13 @@ std::unique_ptr<SceneCollection> SceneCollection::Make() noexcept
 	}
 }
 
-const char* SceneCollection_Imp::TypeName() const{
+const char* SceneCollection_Imp::TypeName() const noexcept{
 	return "SceneCollection";
 }
 
-bool SceneCollection_Imp::IsValid( bool bSilent ) const noexcept
+bool SceneCollection_Imp::IsValid() const noexcept
 {
-	return IsValid_Imp( m_Container, bSilent );
+	return IsValid_Imp( m_Container );
 }
 
 }

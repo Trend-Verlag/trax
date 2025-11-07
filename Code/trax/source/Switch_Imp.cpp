@@ -160,7 +160,7 @@ int NarrowSwitch_Imp::Slot(
 bool NarrowSwitch_Imp::Check( std::ostream& os, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
 {
 	if( !IsComplete() ){
-		os << "Switch is incomplete! SwitchID: " << ID() << std::endl;
+		os << Verbosity::detailed << "Switch is incomplete! SwitchID: " << ID() << std::endl;
 		return false;
 	}
 
@@ -953,7 +953,7 @@ void SingleSlipSwitch_Imp::Set(
 bool SingleSlipSwitch_Imp::Check( std::ostream& os, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
 {
 	if( !IsComplete() ){
-		os << "SingleSlipSwitch is incomplete! SwitchID: " << ID() << std::endl;
+		os << Verbosity::detailed << "SingleSlipSwitch is incomplete! SwitchID: " << ID() << std::endl;
 		return false;
 	}
 
@@ -1257,7 +1257,7 @@ void DoubleSlipSwitch_Imp::Set(
 bool DoubleSlipSwitch_Imp::Check( std::ostream& os, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
 {
 	if( !IsComplete() ){
-		os << "DoubleSlipSwitch is incomplete! SwitchID: " << ID() << std::endl;
+		os << Verbosity::detailed << "DoubleSlipSwitch is incomplete! SwitchID: " << ID() << std::endl;
 		return false;
 	}
 

@@ -48,7 +48,7 @@ namespace trax{
 			return "Module";
 		}
 
-		bool IsValid( bool bSilent = true ) const noexcept override;
+		bool IsValid() const noexcept override;
 
 		void SetFrame( const spat::Frame<Length,One>& frame ) noexcept override;
 

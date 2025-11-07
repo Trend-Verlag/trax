@@ -42,7 +42,7 @@ namespace trax{
 	public:
 		Fleet_Imp() noexcept;
 
-		const char* TypeName() const override;
+		const char* TypeName() const noexcept override;
 
 
 		// Collection:

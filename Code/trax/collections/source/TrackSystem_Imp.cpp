@@ -39,8 +39,7 @@ namespace trax{
 TrackSystem_Imp::TrackSystem_Imp( 
 	std::unique_ptr<TrackCollectionContainer> pTrackCollectionContainer,
 	std::unique_ptr<ConnectorCollection> pConnectorCollection ) noexcept
-	:	//m_pModule					{nullptr},
-		m_pTrackCollectionContainer	{std::move(pTrackCollectionContainer)},
+	:	m_pTrackCollectionContainer	{std::move(pTrackCollectionContainer)},
 		m_IDActiveTrackCollection	{0u},
 		m_pConnectorCollection		{std::move(pConnectorCollection)}
 {
@@ -99,13 +98,12 @@ const char*	TrackSystem_Imp::TypeName() const noexcept{
 	return "TrackSystem";
 }
 
-bool TrackSystem_Imp::IsValid( bool bSilent ) const noexcept
+bool TrackSystem_Imp::IsValid() const noexcept
 {
 	bool bOK = true;
 	if( m_pTrackCollectionContainer == nullptr )
 	{
-		if( !bSilent )
-			std::cerr << "No TrackCollectionContainer assigned to TrackSystem!" << std::endl;	
+		std::cout << Verbosity::verbose << "No TrackCollectionContainer assigned to TrackSystem!" << std::endl;	
 		bOK = false;
 	}
 	else{
@@ -113,8 +111,7 @@ bool TrackSystem_Imp::IsValid( bool bSilent ) const noexcept
 		{
 			if( !collection.GetFrame().IsOrthoNormal() )
 			{
-				if( !bSilent )
-					std::cerr << "TrackCollection with ID " << collection.ID() << " has a non orthonormal frame!" << std::endl;	
+				std::cout << Verbosity::verbose << "TrackCollection with ID " << collection.ID() << " has a non orthonormal frame!" << std::endl;	
 				bOK = false;
 			}
 		}
@@ -123,20 +120,18 @@ bool TrackSystem_Imp::IsValid( bool bSilent ) const noexcept
 	for( auto iter = begin(); iter != end(); ++iter ){
 		if( !iter->IsValid() )
 		{
-			if( !bSilent )
-				std::cerr << "Track with ID " << iter->ID() << " is not valid!" << std::endl;
+			std::cout << Verbosity::verbose << "Track with ID " << iter->ID() << " is not valid!" << std::endl;
 			bOK = false;
 		}
 	}
 
 	if( m_pConnectorCollection == nullptr )
 	{
-		if( !bSilent )
-			std::cerr << "No ConnectorCollection assigned to TrackSystem!" << std::endl;
+		std::cout << Verbosity::verbose << "No ConnectorCollection assigned to TrackSystem!" << std::endl;
 		bOK = false;
 	}
 	else{
-		if( !m_pConnectorCollection->IsValid( bSilent ) )
+		if( !m_pConnectorCollection->IsValid() )
 			bOK = false;
 		else 
 			for( const auto& Connector : *m_pConnectorCollection )
@@ -148,8 +143,7 @@ bool TrackSystem_Imp::IsValid( bool bSilent ) const noexcept
 					{
 						if( !IsMember( *trackEnd.first ) )
 						{
-							if( !bSilent )
-								std::cerr << "Connector with ID " << Connector.ID() << " has a track end assigned to a track not in the track system! Track ID: " << trackEnd.first->ID() << std::endl;
+							std::cout << Verbosity::verbose << "Connector with ID " << Connector.ID() << " has a track end assigned to a track not in the track system! Track ID: " << trackEnd.first->ID() << std::endl;
 							bOK = false;
 						}
 					}
@@ -176,7 +170,7 @@ IDType TrackSystem_Imp::Add( std::shared_ptr<TrackBuilder> pTrack ){
 	}
 	else{
 		if( pTrack )
-			std::cerr << "No active track collection to add track to!" << std::endl;
+			std::cerr << Verbosity::error << "No active track collection to add track to!" << std::endl;
 	}
 
 	return 0;

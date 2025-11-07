@@ -78,9 +78,9 @@ Connector_Imp::Connector_Imp( int cntSlots )
 	m_PlugToToggle.Reference( "name", "PlugToToggle" );
 }
 
-bool Connector_Imp::IsValid( bool bSilent ) const noexcept
+bool Connector_Imp::IsValid() const noexcept
 {
-	return bSilent ? IsComplete() : Check( std::cout );
+	return Check( std::cout );
 }
 
 void Connector_Imp::Disconnect(){
@@ -96,8 +96,8 @@ int Connector_Imp::Slot(
 	bool connectAnonymous )
 {
 	if( !pTrack ){
-		std::cerr << "Connector_Imp::Slot: Invalid parameter! Tried to polpulate connector slot with nullptr. Use Clear(slot) to clear a connectors's slot.";
-		std::cerr << "Connector ID: " << ID() << " trackend: " << ToString(trackend) << std::endl;
+		std::cerr << Verbosity::error << "Connector_Imp::Slot: Invalid parameter! Tried to polpulate connector slot with nullptr. Use Clear(slot) to clear a connectors's slot."
+				  << "Connector ID: " << ID() << " trackend: " << ToString(trackend) << std::endl;
 		return -1;
 	}
 
@@ -110,15 +110,15 @@ int Connector_Imp::Slot(
 		if( pConnector == this ){
 			if( Slot( *pTrack, trackend ) == slot )
 				return slot;
-			std::cerr << "Track with ID: " << pTrack->ID() << " and end: " 
+			std::cerr << Verbosity::normal << "Track with ID: " << pTrack->ID() << " and end: " 
 				<< ToString(trackend) << " already connected to different slot with number: ";
 		}
 		else
-			std::cerr << "Track with ID: " << pTrack->ID() << " and end: " 
+			std::cerr << Verbosity::normal << "Track with ID: " << pTrack->ID() << " and end: " 
 				<< ToString(trackend) << " already connected to different connector's slot with number: ";
 
 		const int oldSlot = pConnector->Slot( *pTrack, trackend );
-		std::cerr << oldSlot << std::endl;
+		std::cerr << Verbosity::normal << oldSlot << std::endl;
 
 		if( !connectAnonymous ){
 			pConnector->Clear( oldSlot );
@@ -255,12 +255,12 @@ const Jack& Connector_Imp::_GetJack( int idx ) const{
 bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
 {
 	if( slot < 0 || slot >= CntSlots() ){
-		os << "Slot ID is out of range!" << std::endl;
+		os << Verbosity::error << "Slot ID is out of range!" << std::endl;
 		return false;
 	}
 
 	if( !m_Slots[slot].first ){
-		os << "Slot is empty!" << std::endl;
+		os << Verbosity::verbose << "Slot is empty!" << std::endl;
 		return false;
 	}
 
@@ -269,7 +269,7 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 		try{
 			if( e_distance > 0_m ){
 				if( DistanceToCoupled( *pTrack, m_Slots[slot].second ) > e_distance ){
-					os << "Distance to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+					os << Verbosity::verbose << "Distance to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
 						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
 						<< " Distance: " << DistanceToCoupled( *pTrack, m_Slots[slot].second ) << std::endl;
@@ -279,7 +279,7 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 
 			if( e_kink > 0_deg ){
 				if( KinkToCoupled( *pTrack, m_Slots[slot].second ) > e_kink ){
-					os << "Kink to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+					os << Verbosity::verbose << "Kink to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
 						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
 						<< " Kink: " << _deg(KinkToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
@@ -289,7 +289,7 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 
 			if( e_twist > 0_deg ){
 				if( TwistToCoupled( *pTrack, m_Slots[slot].second ) > e_twist ){
-					os << "Twist to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+					os << Verbosity::verbose << "Twist to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
 						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
 						<< " Twist: " << _deg(TwistToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
@@ -298,7 +298,7 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 			}
 		}
 		catch( const std::exception& e ){
-			os << "Connector_Imp::CheckSlot: Exception caught during check: " << e.what() << std::endl;
+			os << Verbosity::error << "Connector_Imp::CheckSlot: Exception caught during check: " << e.what() << std::endl;
 			return false;
 		}
 	}

@@ -385,36 +385,42 @@ namespace trax{
 		virtual Signal* GetSignal( const TrackLocation& loc ) const noexcept = 0;
 
 
-		/// \brief Recalculates the track parameter with respect to a connected track.
+		/// \name Transform
+		/// \brief Recalculates track parameters with respect to a connected track.
 		/// \param parameter Track parameter relative to this track to get transformed to
 		/// be formulated relative to the appended's track system.
-		/// \param toTrackAtEnd To wich track the value shall get transformed. This will receive the
-		/// end type of the other track wich is not connected with this track.
-		/// \returns A Pointer to the track at the specified end or nullptr if none.
-		virtual Track* Transform( Length& parameter, Track::EndType& toTrackAtEnd ) const noexcept = 0;
-
-
-		/// \brief Recalculates the track range with respect to a connected track.
 		/// \param range Track range relative to this track to get transformed to
 		/// be formulated relative to the appended's track system.
-		/// \param toTrackAtEnd To wich track the value shall get transformed. This will receive the
-		/// end type of the other track wich is not connected with this track.
+		/// \param toTrackAtEnd To which track the value shall get transformed. This 
+		/// will receive the end type of the other track wich is not connected with 
+		/// this track.
 		/// \returns A Pointer to the track at the specified end or nullptr if none.
+		///@{
+		
+		/// \brief Recalculates a track parameter with respect to a connected track.
+		virtual Track* Transform( Length& parameter, Track::EndType& toTrackAtEnd ) const noexcept = 0;
+
+		/// \brief Recalculates a track range with respect to a connected track.
 		virtual Track* Transform( common::Interval<Length>& range, Track::EndType& toTrackAtEnd ) const noexcept = 0;
+		///@}
 
 
 		/// \name Get Ranges
-		/// \brief Resolves a given range relative to this Track into a list of 
-		/// resolved track/ranges pairs. It contains all the tracks, the range touches
-		/// and the range resolved for the particular track.
+		/// \brief Gets the ranges of the tracks that are touched by the specified 
+		/// range.
+		/// 
+		/// Resolves a given range relative to this track into a list of resolved 
+		/// track/ranges pairs. It contains all the tracks that the range touches,
+		/// with the range resolved for the particular track.
 		/// \param range range specified relative to this track.
-		/// \returns List of pairs to receive the results.
+		/// \returns List of pairs to receive the results. Will be empty, if range
+		/// does not touch this track at all.
 		///@{
 		
-		/// \brief Gets the ranges of the tracks that are touched by the specified range. Const version.
+		/// \brief Const version. 
 		virtual std::vector<std::pair<const Track&,common::Interval<Length>>> GetRanges( const common::Interval<Length>& range ) const = 0;
 
-		/// \brief Gets the ranges of the tracks that are touched by the specified range.
+		/// \brief Non-const version.
 		virtual std::vector<std::pair<Track&,common::Interval<Length>>> GetRanges( const common::Interval<Length>& range ) = 0;
 		///@}
 

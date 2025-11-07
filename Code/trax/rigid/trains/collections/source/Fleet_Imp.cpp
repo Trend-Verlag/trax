@@ -51,7 +51,7 @@ Fleet_Imp::Fleet_Imp() noexcept
 	:  m_bTrainGenerationEnabled{ true }
 {}
 
-const char*	Fleet_Imp::TypeName() const{
+const char*	Fleet_Imp::TypeName() const noexcept{
 	return "Fleet";
 }
 

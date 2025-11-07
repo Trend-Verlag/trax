@@ -41,9 +41,9 @@ namespace trax{
 		ModuleCollection_Imp();
 
 		// ModuleCollection interface
-		const char* TypeName() const override;
+		const char* TypeName() const noexcept override;
 
-		bool IsValid( bool bSilent = true ) const noexcept override;
+		bool IsValid() const noexcept override;
 	};
 
 }

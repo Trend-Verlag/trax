@@ -63,66 +63,59 @@ Module_Imp::Module_Imp( bool bCreateCollections )
 	}
 }
 
-bool Module_Imp::IsValid( bool bSilent ) const noexcept
+bool Module_Imp::IsValid() const noexcept
 {
 	if( !m_Frame.IsOrthoNormal() )
 	{
-		if( !bSilent )
-			std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has a non-orthonormal frame." << std::endl;
+		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has a non-orthonormal frame." << std::endl;
 		return false;
 	}
 
 	if( m_Volume.Volume() <= 0_m3 )
 	{
-		if( !bSilent )
-			std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has an invalid volume." << std::endl;
+		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has an invalid volume." << std::endl;
 		return false;
 	}
 
 	if( !m_pTrackSystem )
 	{
-		if( !bSilent )
-			std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no TrackSystem attached." << std::endl;
+		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no TrackSystem attached." << std::endl;
 		return false;
 	} 
-	else if( !m_pTrackSystem->IsValid( bSilent ) )
+	else if( !m_pTrackSystem->IsValid() )
 		return false;
 
-	//if( !m_pFleet )
-	//{
-	//	if( !bSilent )
-	//		std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no Fleet attached." << std::endl;
-	//	return false;
-	//}
-	//else if( !m_pFleet->IsValid( bSilent ) )
-	//	return false;
+	if( !m_pFleet )
+	{
+		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no Fleet attached." << std::endl;
+		return false;
+	}
+	else if( !m_pFleet->IsValid() )
+		return false;
 
-	//if( !m_pSignalCollection )
-	//{
-	//	if( !bSilent )
-	//		std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no SignalCollection attached." << std::endl;
-	//	return false;
-	//}
-	//else if( !m_pSignalCollection->IsValid( bSilent ) )
-	//	return false;
+	if( !m_pSignalCollection )
+	{
+		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no SignalCollection attached." << std::endl;
+		return false;
+	}
+	else if( !m_pSignalCollection->IsValid() )
+		return false;
 
-	//if( !m_pIndicatorCollection )
-	//{
-	//	if( !bSilent )
-	//		std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no IndicatorCollection attached." << std::endl;
-	//	return false;
-	//}
-	//else if( !m_pIndicatorCollection->IsValid( bSilent ) )
-	//	return false;
+	if( !m_pIndicatorCollection )
+	{
+		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no IndicatorCollection attached." << std::endl;
+		return false;
+	}
+	else if( !m_pIndicatorCollection->IsValid() )
+		return false;
 
-	//if( !m_pCargoCollection )
-	//{
-	//	if( !bSilent )
-	//		std::cout << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no CargoCollection attached." << std::endl;
-	//	return false;
-	//}
-	//else if( !m_pCargoCollection->IsValid( bSilent ) )
-	//	return false;
+	if( !m_pCargoCollection )
+	{
+		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no CargoCollection attached." << std::endl;
+		return false;
+	}
+	else if( !m_pCargoCollection->IsValid() )
+		return false;
 
 	return true;
 }
@@ -280,37 +273,66 @@ int Module_Imp::CountJacks() const
 
 const Jack& Module_Imp::_GetJack( int idx ) const
 {
-	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pTrackSystem.get()) ){
+	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pTrackSystem.get()); pJackEnumerator ){
 		const int countJacks = pJackEnumerator->CountJacks();
 		if( idx < countJacks )
 			return pJackEnumerator->GetJack( idx );
 		idx -= countJacks;
 	}
 
-	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pPulseCounterCollection.get()) ){
+	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pFleet.get()); pJackEnumerator ){
 		const int countJacks = pJackEnumerator->CountJacks();
 		if( idx < countJacks )
 			return pJackEnumerator->GetJack( idx );
 		idx -= countJacks;
 	}
 
-	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pTimerCollection.get()) ){
+	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pSignalCollection.get()); pJackEnumerator ){
 		const int countJacks = pJackEnumerator->CountJacks();
 		if( idx < countJacks )
 			return pJackEnumerator->GetJack( idx );
 		idx -= countJacks;
 	}
 
+	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pIndicatorCollection.get()); pJackEnumerator ){
+		const int countJacks = pJackEnumerator->CountJacks();
+		if( idx < countJacks )
+			return pJackEnumerator->GetJack( idx );
+		idx -= countJacks;
+	}
 
-	// todo: supply further jacks here ...
+	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pCargoCollection.get()); pJackEnumerator ){
+		const int countJacks = pJackEnumerator->CountJacks();
+		if( idx < countJacks )
+			return pJackEnumerator->GetJack( idx );
+		idx -= countJacks;
+	}
 
+	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pTimerCollection.get()); pJackEnumerator ){
+		const int countJacks = pJackEnumerator->CountJacks();
+		if( idx < countJacks )
+			return pJackEnumerator->GetJack( idx );
+		idx -= countJacks;
+	}
+
+	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pPulseCounterCollection.get()); pJackEnumerator ){
+		const int countJacks = pJackEnumerator->CountJacks();
+		if( idx < countJacks )
+			return pJackEnumerator->GetJack( idx );
+		idx -= countJacks;
+	}
+
+	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pCameraCollection.get()); pJackEnumerator ){
+		const int countJacks = pJackEnumerator->CountJacks();
+		if( idx < countJacks )
+			return pJackEnumerator->GetJack( idx );
+		idx -= countJacks;
+	}
 
 	std::ostringstream stream;
 	stream << "Out of range!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
 	throw std::range_error( stream.str() );
 }
-
-
 
 }
