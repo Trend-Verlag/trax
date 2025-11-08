@@ -26,6 +26,17 @@
 
 #pragma once
 
+
+/// \page docu_dim Dimensionated Values
+/// 
+/// \section dim_outputstreams Output Streams
+/// 
+/// This section documents the output stream operators for dimensionated values.
+/// 
+/// \section dim_inputstreams Input Streams
+/// 
+/// This section documents the input stream operators for dimensionated values.
+
 #include "dim/DimensionedValues.h"
 #include "common/support/CommonSupportStream.h"
 
@@ -190,6 +201,7 @@ namespace dim
 
 
 	/// \name Setters for Output Units
+	/// \brief These functions set the output units for dimensionated values
 	///@{
 	dclspc_dim std::ostream& _deg( std::ostream& ostr, Angle angle );
 

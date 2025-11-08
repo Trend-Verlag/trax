@@ -35,7 +35,7 @@
 #include <memory>
 
 namespace trax{
-/// \page twist_docu Twists
+/// \page docu_twist Twists
 /// \section twist_intro Introduction
 /// Since Curves maintain no direct notion of what is to be an up direction (see \ref curve_docu), with the RoadwayTwist 
 /// we introduced an additional rotation around the Curve's tangent axis T. This will rotate the TNB frame returned by

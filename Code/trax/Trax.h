@@ -41,6 +41,24 @@
 #include <memory>
 
 
+/// \page main_page Main Documentation
+/// This is the main page
+/// - \subpage docu_dim
+/// - \subpage docu_spat
+/// - \subpage docu_units
+/// - \subpage docu_curve
+/// - \subpage docu_twist
+/// - \subpage docu_track
+/// - \subpage docu_connector
+/// - \subpage docu_location
+/// - \subpage docu_sensor
+/// - \subpage docu_signal
+/// - \subpage docu_jacksnplugs
+/// - \subpage docu_gestalt
+/// - \subpage docu_joints
+/// - \subpage docu_simulation
+/// - \subpage docu_railrunners
+
 /// \brief Namespace of all the trax track libraries classes and methods.
 namespace trax{
 }

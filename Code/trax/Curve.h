@@ -42,7 +42,7 @@
 
 
 namespace trax{
-/// \page curve_docu Curves
+/// \page docu_curve Curves
 /// \section curve_intro Introduction
 /// Curves are separate objects in trax. They can be created as objects, using a trax::Factory; 
 /// furthermore each Curve supplies several Create - methods to specify its characteristic. 

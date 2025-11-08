@@ -34,7 +34,7 @@
 #include <memory>
 
 namespace trax{
-/// \page location_docu Location
+/// \page docu_location Location
 /// \section location_intro Introduction
 /// A Location helps with moving along a system of connected tracks. It provides methods for 
 /// determining the exact position on the track system, which would be the Track and some 

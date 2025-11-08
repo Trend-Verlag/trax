@@ -42,7 +42,7 @@
 #include "spat/VectorBundle2.h"
 
 namespace trax{
-/// \page track_docu Tracks
+/// \page docu_track Tracks
 /// \section track_intro Introduction
 /// A track is something with two ends - the Track::front end and the Track::end end - which 
 /// can get connected with the ends of other tracks; it can provide geometry, by taking a 

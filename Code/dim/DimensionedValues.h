@@ -26,6 +26,140 @@
 
 #pragma once
 
+/// \page docu_dim Dimensionated Values
+/// 
+/// \section dim_intro Introduction
+/// Calculations in physics not only deal with stark naked numbers (for tranquility 
+/// of mind we call them 'values'), but they are generally also connected with two 
+/// other aspects: dimension and unit. The dimension is the quality that is dealt 
+/// with, be it a length in space, a time span or an inertial mass or any combination 
+/// of these. The units on the other hand specify the quantity we are measuring, 
+/// telling us that 1000 are actually 1000_kg, not 1000_t. If you do physics calculation
+/// is wise to check the dimensions of your result and then reason about its magnitude.
+/// For the trax library the dim library automates both.
+/// 
+/// \section dim_basics Basics
+/// To define a length of 2 meters, with dim we would write (the code can be found 
+/// in /Test/dim/TestDimDocu.cpp):
+/// 
+/// \code
+/// Length length = 2_m;
+/// \endcode
+/// 
+/// Note that we can use the literal operator '_m' to denote a length in meters. We also can
+/// use other operators like '_cm' for centimeters or '_km' for kilometers:
+/// 
+/// \code
+/// Length width = 300_cm;
+/// \endcode
+/// 
+/// We are not bound to the metric system, we can also use imperial units:
+/// 
+/// \code
+/// Length height = 6_ft + 3_in;
+/// BOOST_CHECK( height < length );
+/// \endcode
+/// 
+/// Note the check that uses the operator '<' between two Length values. With 
+/// stark naked numbers we would have to take care of the units ourselves, but with
+/// dim this is done automatically and safely. You'll never need to care about
+/// what unit a value has, ever again. Also note our first arithmetic operation
+/// with dimensionated values: the addition of two Length values, even with different
+/// units.
+/// 
+/// Multiplication also works:
+/// 
+/// \code
+/// Area area = width * length; // area has dimension Length^2
+/// Volume volume = area * height; // volume has dimension Length^3
+/// std::cout << "Volume is " << volume << std::endl; // prints "Volume is 11.43m3"
+/// \endcode
+/// 
+/// The dim library deals with three base dimensions: Length, Mass and Time. From these
+/// three base dimensions several other physical dimensions can be constructed:
+/// 
+/// \code
+/// Mass mass = 7.874_t;
+/// BOOST_CHECK( mass == 7874_kg );
+/// Density DensityOfIron = mass / 1_m3; // density has dimension Mass / Volume
+/// BOOST_CHECK( DensityOfIron == 7.874_gIcm3 );
+/// \endcode
+/// 
+/// Note that division in units we symbolize by a capital 'I' in the unit literal.
+/// 
+/// \code
+/// Length distance = 100_m;
+/// Time dt = 9.58_s // Usain Bolt's 100m world record
+/// Velocity vUsain = distance / dt; // velocity has dimension Length / Time
+/// std::cout << "Usain's velocity was " << vUsain << std::endl; // prints "Usain's average velocity was 37.58km/h"
+/// \endcode
+/// 
+/// If we wanted the velocity in m/s we would write:
+/// 
+/// \code
+/// std::cout << "Usain's velocity was " << _mIs << vUsain << std::endl; // prints "Usain's average velocity was 10.44m/s"
+/// \endcode
+/// 
+/// If g is the acceleration due to gravity, we can calculate the time to fall from s = 1/2 * g * t * t; -> t = sqrt(2*s/g):
+/// 
+/// \code
+/// Acceleration g = 9.81_mIs2; // acceleration due to gravity.
+/// Time tJump = sqrt(2 * distance / g);
+/// std::cout << "Time to fall " << _m << distance << ": " << _ms << tJump << std::endl; // prints "Time to fall 100m: 4515ms" 
+/// Velocity v = g * tJump;
+/// std::cout << "Velocity when hitting the ground: " << v << std::endl; // prints "Velocity when hitting the ground: 44.29m/s"
+/// \endcode
+/// 
+/// You might have noticed that all of a sudden we get the velocity always in m/s. This is because
+/// we permanently specified this unit for the streaming target std::cout. To get km/h again we need:
+/// 
+/// \code
+/// std::cout << _kmIh << "Velocity when hitting the ground: " << v << std::endl; // prints "Velocity when hitting the ground: 159.46km/h"
+/// \endcode
+/// 
+/// \section dim_compilererrors Compiler Errors
+/// 
+/// The dim library is designed to prevent you from making mistakes with 
+/// dimensions and units. If you try to add two values with different 
+/// dimensions, e.g. a Length and a Time, the compiler will complain. 
+/// The same happens if you try to assign a value with wrong dimension 
+/// to a variable.
+/// 
+/// One might think that the dim library is providing conversions of units
+/// and maybe a certain clarity on method parameter definitions; but that
+/// is not its primary goal. The main purpose of the dim library is to
+/// provide a type-safe way to work with physical quantities and their
+/// units, preventing common mistakes and ensuring correct calculations.
+/// It is actually the main purpose of the dim library to produce compiler
+/// errors: if a complicated formula compiles without errors, be assured
+/// it is mathematically correct with respect to dimensions and units.
+/// 
+/// \section dim_conversions Conversions
+/// 
+/// If you have a stark naked number 'lengthInCentimeters' and happen to know it to be centimeters, assign it like this:
+/// 
+/// \code
+/// float lengthInCentimeters = 250.0f;
+/// Length length = _cm(lengthInCentimeters);
+/// std::cout << "Length is " << _m << length << std::endl; // prints "Length is 2.5m"	
+/// \endcode
+/// 
+/// If you want to get a value in meters from a dim::Length length, do this:
+/// 
+/// \code
+/// float lengthInMeters = _m(length);
+/// std::cout << "Length in meters: " << lengthInMeters << std::endl; // prints "Length in meters: 2.5"
+/// \endcode
+/// 
+/// The other units of course work accordingly.
+/// 
+/// \section dim_dimension_one Dimension One and Angles
+/// 
+/// A Dimensionated Value with no dimension is still a Dimensionated 
+/// Value and is to distinguish conceptionally from a stark naked number
+/// like float, int or double.
+/// 
+
 #include <cmath>
 #include <limits>
 #include <utility>

@@ -27,7 +27,7 @@
 
 #pragma once
 
-/// \page units_docu Units
+/// \page docu_units Units
 /// \section units_intro Introduction
 /// Calculations in physics not only deal with stark naked numbers (for tranquility of mind we call them 'values'), 
 /// but they are generally also connected with two other aspects: dimension and unit. The dimension is the 
