@@ -57,7 +57,7 @@ Section_Imp::Section_Imp() noexcept
 		m_GaugeRight	{0}
 {}
 
-std::string	Section_Imp::TypeName() const{
+std::string	Section_Imp::TypeName() const noexcept{
 	return "Section";
 }
 

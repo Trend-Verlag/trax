@@ -46,7 +46,7 @@ namespace trax{
 	struct Signal : Identified<Signal>
 	{
 		/// \returns the name for the object type that implements this interface. 
-		virtual const char*	TypeName() const = 0;
+		virtual const char*	TypeName() const noexcept = 0;
 
 
 		/// \brief Various Signal status settings.

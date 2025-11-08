@@ -72,7 +72,7 @@ Jack_Imp::~Jack_Imp() noexcept{
 	DoClear();
 }
 
-const char* Jack_Imp::TypeName() const{
+const char* Jack_Imp::TypeName() const noexcept{
 	return "Jack";
 }
 

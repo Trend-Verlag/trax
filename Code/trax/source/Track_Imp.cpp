@@ -265,15 +265,6 @@ bool Track_Imp::IsCoupled( EndType atend ) const noexcept{
 	return (atend == EndType::front && m_TrackFront.first) || (atend == EndType::end && m_TrackEnd.first);
 }
 
-std::shared_ptr<Track> Track_Imp::Next( EndType& theEnd ) const noexcept{
-	if( TrackEnd retval = TransitionEnd( theEnd ); retval.first ){
-		theEnd = retval.second == EndType::front ? EndType::end : EndType::front;
-		return retval.first;
-	}
-
-	return nullptr;
-}
-
 void Track_Imp::TNBFrame( Length s, Frame<Length,One>& frame ) const{
 	TestTransition( s );
 
@@ -476,112 +467,6 @@ Signal* Track_Imp::GetSignal( const TrackLocation& loc ) const noexcept{
 	}
 
 	return nullptr;
-}
-
-Track* Track_Imp::Transform( Length& parameter, Track::EndType& toTrackAtEnd ) const noexcept{
-	if( TrackEnd trackEnd = TransitionEnd( toTrackAtEnd ); trackEnd.first )
-	{
-		if( toTrackAtEnd == EndType::front ){
-			if( trackEnd.second == EndType::front )
-				parameter = -parameter;
-			else
-				parameter += trackEnd.first->GetLength();
-		}
-		else{
-			if( trackEnd.second == EndType::front )
-				parameter -= GetLength();
-			else
-				parameter = GetLength() + trackEnd.first->GetLength() - parameter;
-		}
-
-		toTrackAtEnd = trackEnd.second == EndType::front ? EndType::end : EndType::front;
-		return trackEnd.first.get();
-	}
-
-	return nullptr;
-}
-
-Track* Track_Imp::Transform( Interval<Length>& range, Track::EndType& toTrackAtEnd ) const noexcept{
-	if( TrackEnd trackEnd = TransitionEnd( toTrackAtEnd ); trackEnd.first )
-	{
-		if( toTrackAtEnd == EndType::front ){
-			if( trackEnd.second == EndType::front ){
-				range.m_Near= -range.m_Near;
-				range.m_Far	= -range.m_Far;
-			}
-			else{
-				range.m_Near+= trackEnd.first->GetLength();
-				range.m_Far += trackEnd.first->GetLength();
-			}
-		}
-		else{
-			if( trackEnd.second == EndType::front ){
-				range.m_Near -= GetLength();
-				range.m_Far -= GetLength();
-			}
-			else{
-				range.m_Near = GetLength() + trackEnd.first->GetLength() - range.m_Near;
-				range.m_Far = GetLength() + trackEnd.first->GetLength() - range.m_Far;
-			}
-		}
-
-		toTrackAtEnd = trackEnd.second == EndType::front ? EndType::end : EndType::front;
-		return trackEnd.first.get();
-	}
-
-	return nullptr;
-}
-
-std::vector<std::pair<const Track&,Interval<Length>>> Track_Imp::GetRanges( const Interval<Length>& range ) const{
-	std::vector<std::pair<const Track&,Interval<Length>>> list;
-	if( Touching( range, Range() ) ){
-		list.push_back( std::make_pair( *this, range ) );
-
-		EndType theEnd = EndType::front;
-		Interval<Length> transformedRange( range );
-		RangeAt( theEnd, transformedRange, list );
-
-		theEnd = EndType::end;
-		transformedRange = range;
-		RangeAt( theEnd, transformedRange, list );
-	}
-
-	return list;
-}
-
-std::vector<std::pair<Track&,Interval<Length>>> Track_Imp::GetRanges( const Interval<Length>& range ){
-	std::vector<std::pair<Track&,Interval<Length>>> list;
-	if( Touching( range, Range() ) ){
-		list.push_back( std::pair<Track&,Interval<Length>>{ *this, range } );
-
-		EndType theEnd = EndType::front;
-		Interval<Length> transformedRange( range );
-		RangeAt( theEnd, transformedRange, list );
-
-		theEnd = EndType::end;
-		transformedRange = range;
-		RangeAt( theEnd, transformedRange, list );
-	}
-
-	return list;
-}
-
-void Track_Imp::RangeAt( Track::EndType& theEnd, Interval<Length>& range, std::vector<std::pair<const Track&,Interval<Length>>>& list ) const{
-	if( auto pTrack = dynamic_cast<Track_Imp*>(Transform( range, theEnd )) ){
-		if( Touching( range, pTrack->Range() ) ){
-			list.push_back( std::make_pair( *pTrack, range ) );
-			pTrack->RangeAt( theEnd, range, list );
-		}
-	}
-}
-
-void Track_Imp::RangeAt( Track::EndType& theEnd, Interval<Length>& range, std::vector<std::pair<Track&,Interval<Length>>>& list ){
-	if( auto pTrack = dynamic_cast<Track_Imp*>(Transform( range, theEnd )) ){
-		if( Touching( range, pTrack->Range() ) ){
-			list.push_back( std::pair<Track&,Interval<Length>>( *pTrack, range ) );
-			pTrack->RangeAt( theEnd, range, list );
-		}
-	}
 }
 
 void Track_Imp::Reserve( Interval<Length> range, IDType forID )
@@ -1062,20 +947,18 @@ int Track_Imp::CountSensors() const{
 void Track_Imp::Attach( std::shared_ptr<Signal> pSignal, const Interval<Length>& trackRange ){
 	if( !pSignal )
 		throw std::invalid_argument( "Invalid Signal pointer." );
-	//if( !Intersecting( Range(), trackRange ) )
-	//	throw exception::make_traced( std::invalid_argument( "trackRange not part of this track." ) );
+	if( !Touching( Range(), trackRange ) )
+		throw std::invalid_argument( "trackRange not part of this track." );
 
 	pSignal->Attach( this );
 
 	auto list = GetRanges( trackRange );
 	for( const auto& pair : list )
 	{
-		if( auto pTrack = dynamic_cast<Track_Imp*>(&pair.first) ){
-			if( pTrack->Attached( *pSignal ) )
-				throw std::logic_error( "Cannot attach a signal to the same track twice." );
+		if( pair.first.Attached( *pSignal ) )
+			throw std::logic_error( "Cannot attach a signal to the same track twice." );
 
-			pTrack->m_Signals.push_back( std::make_pair( Track_Imp::OrientedInterval(pair.second), pSignal ) );
-		}
+		pair.first.m_Signals.push_back( std::make_pair( Track_Imp::OrientedInterval(pair.second), pSignal ) );
 	}
 }
 
@@ -1118,12 +1001,10 @@ void Track_Imp::Detach( const Signal& signal ){
 
 		auto list = GetRanges( iter->first );
 		for( const auto& pair : list ){
-			if( auto pTrack = dynamic_cast<Track_Imp*>(&pair.first) ){		
-				for( auto iter2 = pTrack->m_Signals.begin(); iter2 != pTrack->m_Signals.end(); ++iter2 ){
-					if( iter2->second.get() == &signal ){
-						pTrack->m_Signals.erase( iter2 );
-						break;
-					}
+			for( auto iter2 = pair.first.m_Signals.begin(); iter2 != pair.first.m_Signals.end(); ++iter2 ){
+				if( iter2->second.get() == &signal ){
+					pair.first.m_Signals.erase( iter2 );
+					break;
 				}
 			}
 		}
@@ -1345,6 +1226,63 @@ void Track_Imp::TestTransition( Length s ) const{
 		stream << "Parameter value out of range for track. Range==" << Range() << " s = " << s << std::endl;
 		throw std::range_error( stream.str() );
 	}
+}
+
+std::vector<std::pair<Track_Imp&, common::Interval<Length>>> Track_Imp::GetRanges( const common::Interval<Length>& range ){
+	std::vector<std::pair<Track_Imp&,common::Interval<Length>>> list;
+	if( Touching( range, Range() ) ){
+		list.push_back( std::pair<Track_Imp&,common::Interval<Length>>{ *this, range } );
+
+		EndType theEnd = EndType::front;
+		Interval<Length> transformedRange( range );
+		RangeAt( theEnd, transformedRange, list );
+
+		theEnd = EndType::end;
+		transformedRange = range;
+		RangeAt( theEnd, transformedRange, list );
+	}
+
+	return list;
+}
+
+void Track_Imp::RangeAt( Track::EndType& theEnd, Interval<Length>& range, std::vector<std::pair<Track_Imp&,Interval<Length>>>& list ){
+	if( auto pTrack = dynamic_cast<Track_Imp*>(Transform( range, theEnd )) ){
+		if( Touching( range, pTrack->Range() ) ){
+			list.push_back( { *pTrack, range } );
+			pTrack->RangeAt( theEnd, range, list );
+		}
+	}
+}
+
+Track* Track_Imp::Transform( Interval<Length>& range, Track::EndType& toTrackAtEnd ) const noexcept{
+	if( TrackEnd trackEnd = TransitionEnd( toTrackAtEnd ); trackEnd.first )
+	{
+		if( toTrackAtEnd == EndType::front ){
+			if( trackEnd.second == EndType::front ){
+				range.m_Near= -range.m_Near;
+				range.m_Far	= -range.m_Far;
+			}
+			else{
+				range.m_Near+= trackEnd.first->GetLength();
+				range.m_Far += trackEnd.first->GetLength();
+			}
+		}
+		else{
+			if( trackEnd.second == EndType::front ){
+				range.m_Near -= GetLength();
+				range.m_Far -= GetLength();
+			}
+			else{
+				range.m_Near = GetLength() + trackEnd.first->GetLength() - range.m_Near;
+				range.m_Far = GetLength() + trackEnd.first->GetLength() - range.m_Far;
+			}
+		}
+
+		toTrackAtEnd = trackEnd.second == EndType::front ? EndType::end : EndType::front;
+		return trackEnd.first.get();
+	}
+
+	return nullptr;
 }
 ///////////////////////////////////////
 const char* ToString( Track::TrackType type ){

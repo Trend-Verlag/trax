@@ -1,5 +1,24 @@
 cmake_minimum_required(VERSION 3.26)
-project(Trax3 LANGUAGES CXX)
+
+# Read version from Version.h (single source of truth)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/Code/trax/Version.h" VERSION_FILE_CONTENT)
+
+string(REGEX MATCH "TRAX_VERSION_MAJOR = ([0-9]+)" _ "${VERSION_FILE_CONTENT}")
+set(VERSION_MAJOR ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "TRAX_VERSION_MINOR = ([0-9]+)" _ "${VERSION_FILE_CONTENT}")
+set(VERSION_MINOR ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "TRAX_VERSION_PATCH = ([0-9]+)" _ "${VERSION_FILE_CONTENT}")
+set(VERSION_PATCH ${CMAKE_MATCH_1})
+
+project(Trax3 
+    VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+    LANGUAGES CXX
+)
+
+message(STATUS "Trax version: ${PROJECT_VERSION} (from Code/trax/Version.h)")
+
 
 # Disallow in-source builds to keep the source tree clean.
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
@@ -96,6 +115,55 @@ endfunction()
 # -------- End central Boost config --------
 
 
+# -------- Doxygen Documentation --------
+option(BUILD_DOCUMENTATION "Build documentation using Doxygen" ON)
+
+if(BUILD_DOCUMENTATION)
+    find_package(Doxygen)
+    
+    if(DOXYGEN_FOUND)
+        # Set input and output files
+        set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doc/TraxAPI/Trax_Doxyfile)
+        set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.generated)
+        
+        # Set the output directory for generated HTML
+        set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/Doc/TraxHtml)
+        
+        # Set paths for Doxygen to use
+        set(DOXYGEN_IMAGE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Doc/TraxAPI)
+        set(DOXYGEN_INPUT_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/Code ${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+        
+        # Configure the Doxyfile
+        configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+        
+        # Add custom target to build documentation
+        add_custom_target(ALL_DOCUMENTATION
+            # Create the output directory first
+            COMMAND ${CMAKE_COMMAND} -E make_directory ${DOXYGEN_OUTPUT_DIR}
+            # Then run Doxygen from the source directory (so relative paths work)
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+             # Open the documentation after building
+            COMMAND ${CMAKE_COMMAND} -E echo "Opening documentation..."
+            COMMAND start ${DOXYGEN_OUTPUT_DIR}/html/index.html
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM
+            SOURCES 
+                ${DOXYGEN_IN}
+                LICENSE
+                README.md
+                "${CMAKE_CURRENT_SOURCE_DIR}/Doc/EisenbahnNow.pdf"
+                "${CMAKE_CURRENT_SOURCE_DIR}/Doc/TrackConstraint.pdf"
+        )
+        
+        message(STATUS "Doxygen found - documentation target 'ALL_DOCUMENTATION' available")
+        message(STATUS "Documentation will be generated in: ${DOXYGEN_OUTPUT_DIR}")
+    else()
+        message(WARNING "Doxygen not found - documentation will not be built")
+    endif()
+endif()
+# -------- End Doxygen config --------
+
 
 add_subdirectory(Code/common)
 add_subdirectory(Code/common/support)
@@ -127,4 +195,3 @@ add_subdirectory(Test/trax/rigid/modules)
 add_subdirectory(Test/trax/rigid/trains)
 
 add_subdirectory(Apps)
-

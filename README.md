@@ -37,6 +37,7 @@ Currently there are two dependencies of the library:
 environment variable BOOST_ROOT. From that we currently need the following libraries:
 <ul>
 	<li>boost/math</li>
+	<li>boost/program_options</li>
 	<li>boost/property_tree</li>
 	<li>boost/test</li>
 </ul>

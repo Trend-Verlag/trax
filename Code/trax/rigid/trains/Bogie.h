@@ -234,6 +234,7 @@ namespace trax{
 		/// Same as uncouple but sends ForceLimitExceeded pulse as if the
 		/// coupling would have actually broken due to overstrech.
 		/// \param atEnd Coupling to break.
+		/// \param btriggerPulses If true the respective jacks are pulsing.
 		/// \returns True if a coupling was defined and actually coupled.
 		virtual bool BreakCoupling( EndType atEnd, bool btriggerPulses = true ) noexcept = 0;
 

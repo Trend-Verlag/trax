@@ -32,7 +32,7 @@
 #include <iostream>
 
 constexpr int TRAX_VERSION_MAJOR = 3;
-constexpr int TRAX_VERSION_MINOR = 0;
+constexpr int TRAX_VERSION_MINOR = 1;
 constexpr int TRAX_VERSION_PATCH = 0;
 
 namespace trax{

@@ -56,7 +56,7 @@ namespace trax{
 	struct Plug : Identified<Plug>
 	{
 		/// \returns the name for the object type that implements this interface. 
-		virtual const char*	TypeName() const = 0;
+		virtual const char*	TypeName() const noexcept = 0;
 
 
 		/// \brief Is this Plug already plugged into a jack?

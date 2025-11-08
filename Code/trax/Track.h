@@ -173,7 +173,7 @@ namespace trax{
 	struct Track : Identified<Track>
 	{
 		/// \returns the name for the object type that implements this interface. 
-		virtual const char*	TypeName() const = 0;
+		virtual const char*	TypeName() const noexcept = 0;
 
 		enum class TrackType : char{
 			unknown = -1,
@@ -218,7 +218,6 @@ namespace trax{
 		};
 
 
-
 		/// \brief Designates two track ends. Typically used for coupling relations.
 		///
 		/// An End with zero id will mean an uncoupled end of the other track.
@@ -240,6 +239,10 @@ namespace trax{
 		virtual std::shared_ptr<ParallelizableTrack> GetParallelizableTrack() const noexcept = 0;
 
 
+		/// \returns Returns the body a track is assigned to or nullptr.
+		virtual std::shared_ptr<const Body> GetBody() const noexcept = 0;
+
+
 		/// Tests wether a valid curve and twist are attached.
 		/// \returns true if the track is able to deliver valid geometry.
 		virtual bool IsValid() const noexcept = 0;
@@ -249,41 +252,12 @@ namespace trax{
 		virtual Length GetLength() const noexcept = 0;
 
 
-		/// \returns the track's parameter range (0,Length())
+		/// \returns the track's parameter range [0,Length()[
 		virtual common::Interval<Length> Range() const noexcept = 0;
-
-
-		/// \brief Gives the Track coupled to this at the specified end.
-		/// \param thisEnd End of this track to get the coupled track for.
-		/// \returns A shared pointer to the coupled track or a nullptr if
-		/// no track is connected. If not nullptr, othersend will receive 
-		/// the type of end of the other track the coupling is existing for.
-		virtual TrackEnd TransitionEnd( EndType thisEnd ) const noexcept = 0;
 
 
 		/// \returns true if the respective end is coupled to another track end.
 		virtual bool IsCoupled( EndType atend = EndType::any ) const noexcept = 0;
-
-
-		/// \brief Gets a coupled track at a specified track end.
-		///
-		/// theEnd will receive the other end of the connected track, so that 
-		/// iterating over all the tracks in one direction becomes
-		/// possible.
-		/// \param theEnd To wich track the value shall get transformed. This will receive the
-		/// end type of the other track wich is not connected with this track.
-		/// \returns The connected track at theEnd or nullptr if none.
-		virtual std::shared_ptr<Track> Next( EndType& theEnd ) const noexcept = 0;
-
-
-		/// \brief Receives the TNB - Frame of the curve at the location.
-		///
-		///	The Frame received by the Transition() methods is aligned to Locations orientation 
-		/// on the tracks and a twisting of the line. For dynamic calculations the
-		/// real geometry of the curve is needed.
-		/// \throws std::logic_error if no proper curve is attached with the track.
-		/// \throws std::range_error if s is outside the [0,Length()] range.
-		virtual void TNBFrame( Length s, spat::Frame<Length,One>& frame ) const = 0;
 
 
 		/// \param s Parameter value 0 <= s <= Length()
@@ -323,6 +297,16 @@ namespace trax{
 		virtual spat::Vector<One> LocalUp() const = 0;
 
 
+		/// \brief Receives the TNB - Frame of the curve at the location.
+		///
+		///	The Frame received by the Transition() methods is aligned to Locations orientation 
+		/// on the tracks and a twisting of the line. For dynamic calculations the
+		/// real geometry of the curve is needed.
+		/// \throws std::logic_error if no proper curve is attached with the track.
+		/// \throws std::range_error if s is outside the [0,Length()] range.
+		virtual void TNBFrame( Length s, spat::Frame<Length,One>& frame ) const = 0;
+
+
 		/// \anchor transition
 		/// \name Transition to Space
 		/// \brief Gives geometrical data for a specific location along the track. 
@@ -356,6 +340,14 @@ namespace trax{
 		///@}
 
 
+		/// \brief Gives the Track coupled to this at the specified end.
+		/// \param thisEnd End of this track to get the coupled track for.
+		/// \returns A shared pointer to the coupled track or a nullptr if
+		/// no track is connected. If not nullptr, othersend will receive 
+		/// the type of end of the other track the coupling is existing for.
+		virtual TrackEnd TransitionEnd( EndType thisEnd ) const noexcept = 0;
+
+
 		/// Triggers all sensors in the range in the order of their positioning along the track
 		/// according to start and end of the range.
 		///
@@ -385,46 +377,6 @@ namespace trax{
 		virtual Signal* GetSignal( const TrackLocation& loc ) const noexcept = 0;
 
 
-		/// \name Transform
-		/// \brief Recalculates track parameters with respect to a connected track.
-		/// \param parameter Track parameter relative to this track to get transformed to
-		/// be formulated relative to the appended's track system.
-		/// \param range Track range relative to this track to get transformed to
-		/// be formulated relative to the appended's track system.
-		/// \param toTrackAtEnd To which track the value shall get transformed. This 
-		/// will receive the end type of the other track wich is not connected with 
-		/// this track.
-		/// \returns A Pointer to the track at the specified end or nullptr if none.
-		///@{
-		
-		/// \brief Recalculates a track parameter with respect to a connected track.
-		virtual Track* Transform( Length& parameter, Track::EndType& toTrackAtEnd ) const noexcept = 0;
-
-		/// \brief Recalculates a track range with respect to a connected track.
-		virtual Track* Transform( common::Interval<Length>& range, Track::EndType& toTrackAtEnd ) const noexcept = 0;
-		///@}
-
-
-		/// \name Get Ranges
-		/// \brief Gets the ranges of the tracks that are touched by the specified 
-		/// range.
-		/// 
-		/// Resolves a given range relative to this track into a list of resolved 
-		/// track/ranges pairs. It contains all the tracks that the range touches,
-		/// with the range resolved for the particular track.
-		/// \param range range specified relative to this track.
-		/// \returns List of pairs to receive the results. Will be empty, if range
-		/// does not touch this track at all.
-		///@{
-		
-		/// \brief Const version. 
-		virtual std::vector<std::pair<const Track&,common::Interval<Length>>> GetRanges( const common::Interval<Length>& range ) const = 0;
-
-		/// \brief Non-const version.
-		virtual std::vector<std::pair<Track&,common::Interval<Length>>> GetRanges( const common::Interval<Length>& range ) = 0;
-		///@}
-
-
 		/// \brief retreives a connector (e.g. a Switch) at the respective track end.
 		/// \returns A pointer to the connector or nullptr if none is present.
 		virtual Connector* GetConnector( EndType atend ) const noexcept = 0;
@@ -435,10 +387,6 @@ namespace trax{
 		/// \param inDirection direction relative to this track to search for a Connector.
 		/// \returns A pointer to a Connector or nullptr if none could be found.
 		virtual Connector* GetConnector( const Orientation& inDirection ) const noexcept = 0;
-
-
-		/// \returns Returns the body a track is assigned to or nullptr.
-		virtual std::shared_ptr<const Body> GetBody() const noexcept = 0;
 
 
 		/// \name Reservation mechanism

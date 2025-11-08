@@ -100,7 +100,6 @@ namespace trax{
 
 
 		/// \brief Checks whether the elements in this collection are valid 
-		/// \param bSilent If false there will be diagnostic output to the console.
 		/// \returns true if all the elements are valid.
 		virtual bool IsValid() const noexcept = 0;
 

@@ -50,31 +50,32 @@ namespace trax{
 		static dclspc std::unique_ptr<Fleet> Make() noexcept;
 
 
-		/// \brief Couple two Bogie's ends, contained in this Fleet.
-		///
-		/// The Bogies are coupled in the distance they are at the time of 
-		/// coupling and the coupling will try to maintain this distance.
-		/// \param coupling Reference values for Bogie's ends.
-	//	virtual void Couple( const Bogie::Coupling& coupling ) const = 0;
+		///// \brief Couple two Bogie's ends, contained in this Fleet.
+		/////
+		///// The Bogies are coupled in the distance they are at the time of 
+		///// coupling and the coupling will try to maintain this distance.
+		///// \param coupling Reference values for Bogie's ends.
+		//virtual void Couple( const Bogie::Coupling& coupling ) const = 0;
 
 
-		/// \brief Gets the Train for a Bogie, if there is any.
-		///
-		/// \param pRailRunner Pointer to a Bogie to get the train for. Or to a train to convert
-		/// the pointer type.
-		/// \returns A ponter to the train, pRailRunner is contained in or a coverted pointer if
-		/// pRailRunner is in fact a Train.
-	//	virtual Train* GetTrain( const RailRunner* pRailRunner ) const = 0;
+		///// \brief Gets the Train for a Bogie, if there is any.
+		/////
+		///// \param pRailRunner Pointer to a Bogie to get the train for. Or to a train to convert
+		///// the pointer type.
+		///// \returns A ponter to the train, pRailRunner is contained in or a coverted pointer if
+		///// pRailRunner is in fact a Train.
+		//virtual Train* GetTrain( const RailRunner* pRailRunner ) const = 0;
 
 
-		/// \brief Searches for a RailRunner by name.
-		///
-		/// The method includes the depots into the search.
-		/// \returns The first RailRunner with the given name to be found. 
-	//	virtual std::shared_ptr<RailRunner> GetAny( const std::string& name ) const = 0;
+		///// \brief Searches for a RailRunner by name.
+		/////
+		///// The method includes the depots into the search.
+		///// \returns The first RailRunner with the given name to be found. 
+		//virtual std::shared_ptr<RailRunner> GetAny( const std::string& name ) const = 0;
 
 
-		/// \brief 
+		/// \brief Enables or disables generation of trains due to decoupling.
+		/// \param bEnable true to enable, false to disable.
 		virtual void EnableTrainGeneration( bool bEnable = true ) noexcept = 0;
 
 
@@ -85,27 +86,27 @@ namespace trax{
 
 
 
-		/// \brief Attaches a DepotCollection to this Fleet.
-		/// \param pDepotCollection Pointer to object to attach or nullptr to remove.
-		/// \returns Pointer to previously attached object.
-	//	virtual std::shared_ptr<DepotCollection> Attach( std::shared_ptr<DepotCollection> pDepotCollection ) = 0;
+		///// \brief Attaches a DepotCollection to this Fleet.
+		///// \param pDepotCollection Pointer to object to attach or nullptr to remove.
+		///// \returns Pointer to previously attached object.
+		//virtual std::shared_ptr<DepotCollection> Attach( std::shared_ptr<DepotCollection> pDepotCollection ) = 0;
 
 
-		/// \returns A pointer to the attached DepotCollection.
-	//	virtual DepotCollection* GetDepotCollection() const noexcept = 0;
+		///// \returns A pointer to the attached DepotCollection.
+		//virtual DepotCollection* GetDepotCollection() const noexcept = 0;
 
 
-		/// \brief Called from the engine if a collision with the Bogie has happened.
-		///
-		/// Override Fleet by using a decorator to receive these events.
-		/// \param pBogie Pointer to Bogie that has received the hit. The Bogie will be
-		/// a member of the Fleet.
-		/// \param hitData Position and impulse of the hit in coordinates relative to
-		/// the global frame. The impulse is delivered to the item in one time frame,
-		/// dividing it by fixed_timestep_seconds would yield the active force.
-		/// \param filterCombination The combined filter bitpattern of the two colliding objects.
-		/// \param materialCombination The two materials that are involved in the hit.
-	//	virtual void Hit( const Bogie* pBogie, const spat::VectorBundle<Real>& hitData, int filterCombination, const Materials& materialCombination ) = 0;
+		///// \brief Called from the engine if a collision with the Bogie has happened.
+		/////
+		///// Override Fleet by using a decorator to receive these events.
+		///// \param pBogie Pointer to Bogie that has received the hit. The Bogie will be
+		///// a member of the Fleet.
+		///// \param hitData Position and impulse of the hit in coordinates relative to
+		///// the global frame. The impulse is delivered to the item in one time frame,
+		///// dividing it by fixed_timestep_seconds would yield the active force.
+		///// \param filterCombination The combined filter bitpattern of the two colliding objects.
+		///// \param materialCombination The two materials that are involved in the hit.
+		//virtual void Hit( const Bogie* pBogie, const spat::VectorBundle<Real>& hitData, int filterCombination, const Materials& materialCombination ) = 0;
 	};
 
 

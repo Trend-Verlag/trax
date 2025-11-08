@@ -45,7 +45,7 @@ namespace trax{
 	struct Section{
 
 		/// \brief Name for the object type that implements this interface. 
-		virtual std::string	TypeName() const = 0;
+		virtual std::string	TypeName() const noexcept = 0;
 
 
 		/// \brief Predefined cross sections.

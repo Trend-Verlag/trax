@@ -42,13 +42,13 @@ DOXYFILE_ENCODING      = UTF-8
 # title of most generated pages and in a few other places.
 # The default value is: My Project.
 
-PROJECT_NAME           = trax
+PROJECT_NAME           = "@PROJECT_NAME@"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. This
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 2.0.0
+PROJECT_NUMBER         = "@PROJECT_VERSION@"
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -61,7 +61,7 @@ PROJECT_BRIEF          = "trax track library"
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = Logo.png
+PROJECT_LOGO           = @DOXYGEN_IMAGE_PATH@/Logo.png
 
 # With the PROJECT_ICON tag one can specify an icon that is included in the tabs
 # when the HTML document is shown. Doxygen will copy the logo to the output
@@ -74,7 +74,7 @@ PROJECT_ICON           =
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ../
+OUTPUT_DIRECTORY       = @DOXYGEN_OUTPUT_DIR@
 
 # If the CREATE_SUBDIRS tag is set to YES then doxygen will create up to 4096
 # sub-directories (in 2 levels) under the output directory of each output format
@@ -348,7 +348,7 @@ OPTIMIZE_OUTPUT_SLICE  = NO
 #
 # Note see also the list of default file extension mappings.
 
-EXTENSION_MAPPING      =
+EXTENSION_MAPPING      = 
 
 # If the MARKDOWN_SUPPORT tag is enabled then doxygen pre-processes all comments
 # according to the Markdown format, which allows for more readable
@@ -949,8 +949,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = ../../Code \
-                         ../../README.md
+INPUT                  = @DOXYGEN_INPUT_PATHS@
 						 
 						 
 # This tag can be used to specify the character encoding of the source files
@@ -1047,19 +1046,20 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = ../../Code/trax/source \
-                         ../../Code/trax/collections/source \
-                         ../../Code/trax/collections/support/source \
-                         ../../Code/trax/rigid/collections/source \
-                         ../../Code/trax/rigid/engines \
-                         ../../Code/trax/rigid/source \
-                         ../../Code/trax/rigid/support/source \
-                         ../../Code/trax/rigid/trains/collections/source \
-                         ../../Code/trax/rigid/trains/engines \
-                         ../../Code/trax/rigid/trains/source \
-                         ../../Code/trax/rigid/trains/support/source \
-                         ../../Code/usd/source \
-                         ../../Code/dim/support/source
+EXCLUDE                = @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/collections/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/collections/support/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/rigid/collections/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/rigid/engines \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/rigid/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/rigid/modules/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/rigid/modules/support/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/rigid/support/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/rigid/trains/collections/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/rigid/trains/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/trax/rigid/trains/support/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/usd/source \
+                         @CMAKE_CURRENT_SOURCE_DIR@/Code/dim/support/source
 						 
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
@@ -1110,7 +1110,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = .
+IMAGE_PATH             = @DOXYGEN_IMAGE_PATH@
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
@@ -1171,7 +1171,7 @@ FILTER_SOURCE_PATTERNS =
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
-USE_MDFILE_AS_MAINPAGE = ../../README.md
+USE_MDFILE_AS_MAINPAGE = @CMAKE_CURRENT_SOURCE_DIR@/README.md
 
 # The Fortran standard specifies that for fixed formatted Fortran code all
 # characters from position 72 are to be considered as comment. A common
@@ -1344,7 +1344,7 @@ GENERATE_HTML          = YES
 # The default directory is: html.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_OUTPUT            = TraxHtml
+HTML_OUTPUT            = 
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for each
 # generated HTML page (for example: .htm, .php, .asp).

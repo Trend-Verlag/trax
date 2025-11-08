@@ -40,9 +40,6 @@
 # debug information files
 *.dwo
 
-# Doc folder (documentation generation to be integrated into CMake project)
-/Doc/TraxHtml/
-
 # In-repository build
 /_Build/
 /Fixtures/Demo.anl4

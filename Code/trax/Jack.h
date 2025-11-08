@@ -43,7 +43,7 @@ namespace trax{
 	struct Jack : Identified<Jack>
 	{
 		/// \returns the name for the object type that implements this interface. 
-		virtual const char*	TypeName() const = 0;
+		virtual const char*	TypeName() const noexcept = 0;
 
 
 		/// \returns The Plugs id if connected or an plug id for reconnecting
@@ -102,7 +102,7 @@ namespace trax{
 
 		dclspc ~Jack_Imp() noexcept;
 
-		dclspc const char* TypeName() const override;
+		dclspc const char* TypeName() const noexcept override;
 
 		IDType dclspc RefPlugID() const noexcept override;
 

@@ -130,11 +130,11 @@ namespace trax{
 		/// as a convenience function to run the simulation for a certain 
 		/// time (e.g. for testing); to do one simulation step in a game 
 		/// loop use Loop() or Step() instead.
-		//@}
+		///@{
 		virtual void Simulate() = 0;
 
 		virtual void Simulate( Time forTimePeriod ) = 0;
-		//@}
+		///@}
 
 
 		/// \returns whether the simulation is currently running.

@@ -106,8 +106,6 @@ namespace trax{
 				
 		bool IsCoupled( EndType atend = EndType::any ) const noexcept override;
 
-		std::shared_ptr<Track>  Next( EndType& theEnd ) const noexcept override;
-
 		void TNBFrame( Length s, spat::Frame<Length,One>& frame ) const override;
 
 		AnglePerLength Curvature( Length s ) const override;
@@ -134,21 +132,11 @@ namespace trax{
 
 		void Transition	( Length s, spat::Frame<Length,One>& frame ) const override;
 
-
 		void DoTrigger( const Interval<Length>& range, const Event& _event ) const override;
 
 		bool DoSignal( const Interval<Length>& range, Orientation orientation, SignalTarget& signalTarget ) const override;
 
 		Signal* GetSignal( const TrackLocation& loc ) const noexcept override;
-
-
-		Track* Transform( Length& parameter, Track::EndType& toTrackAtEnd ) const noexcept override;
-
-		Track* Transform( Interval<Length>& range, Track::EndType& toTrackAtEnd ) const noexcept override;
-
-		std::vector<std::pair<const Track&,Interval<Length>>> GetRanges( const Interval<Length>& range ) const override;
-
-		std::vector<std::pair<Track&,common::Interval<Length>>> GetRanges( const common::Interval<Length>& range ) override;
 
 		void Reserve( common::Interval<Length> range, IDType forID ) override;
 
@@ -288,9 +276,16 @@ namespace trax{
 		}
 
 		void TestTransition( Length s ) const;
+	
+		// Resolves a given range relative to this track into a list of resolved 
+		// track/ranges pairs. It contains all the tracks that the range touches,
+		// with the range resolved for the particular track. vector<> will be 
+		// empty, if range does not touch this track at all.
+		std::vector<std::pair<Track_Imp&,common::Interval<Length>>> GetRanges( const common::Interval<Length>& range );
+		void RangeAt( Track::EndType& theEnd, Interval<Length>& range, std::vector<std::pair<Track_Imp&,Interval<Length>>>& list );
 
-		void RangeAt( Track::EndType& theEnd, Interval<Length>& range, std::vector<std::pair<const Track&,Interval<Length>>>& list ) const;
-		void RangeAt( Track::EndType& theEnd, Interval<Length>& range, std::vector<std::pair<Track&,Interval<Length>>>& list );
+		// Recalculates track parameters with respect to a connected track.
+		Track* Transform( Interval<Length>& range, Track::EndType& toTrackAtEnd ) const noexcept;
 
 		mutable bool m_LoopBraker; // used by iterations along track chains
 		TrackUserData* m_pData = nullptr;
