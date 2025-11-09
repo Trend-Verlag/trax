@@ -27,6 +27,12 @@
 
 #pragma once
 
+/// \page docu_signal Signals
+/// 
+/// \section signal_intro Introduction
+/// 
+/// 
+
 #include "Identified.h"
 #include "Track.h"
 #include "Location.h"

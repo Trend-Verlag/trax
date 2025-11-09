@@ -27,13 +27,6 @@
 
 #pragma once
 
-#include "Units.h"
-#include "Track.h"
-#include "TrackLocation.h"
-
-#include <memory>
-
-namespace trax{
 /// \page docu_location Location
 /// \section location_intro Introduction
 /// A Location helps with moving along a system of connected tracks. It provides methods for 
@@ -48,58 +41,59 @@ namespace trax{
 ///
 /// To move on a track circle:
 /// \code
-/// using namespace trax;
-/// using namespace spat;
-/// using namespace common;
-/// 
-/// auto pTrack1 = Factory::Instance().CreateTrack();
-/// auto pTrack2 = Factory::Instance().CreateTrack();
-/// auto pTrack3 = Factory::Instance().CreateTrack();
-/// auto pTrack4 = Factory::Instance().CreateTrack();
-/// 	
+///	auto pTrack1 = TrackBuilder::Make();
+///	auto pTrack2 = TrackBuilder::Make();
+///	auto pTrack3 = TrackBuilder::Make();
+///	auto pTrack4 = TrackBuilder::Make();
+///	
 /// // We build a track circle with radius 10_m around the Origin3D from the four pieces:
-/// auto pArc1 = Factory::Instance().CreateArc();
+/// auto pArc1 = ArcP::Make();
 /// pArc1->Create( { Origin3D<Length>, { 1, 0, 0 }, { 0, 10, 0 } } );
 /// pTrack1->Attach( std::move(pArc1), {0_m,10_m*pi/2} );
-/// 
-/// auto pArc2 = Factory::Instance().CreateArc();
+///
+/// auto pArc2 = ArcP::Make();
 /// pArc2->Create( { Origin3D<Length>, { 0, 1, 0 }, { -10, 0, 0 } } );
 /// pTrack2->Attach( std::move(pArc2), {0_m,10_m*pi/2} );
-/// 
-/// auto pArc3 = Factory::Instance().CreateArc();
+///
+/// auto pArc3 = ArcP::Make();
 /// pArc3->Create( { Origin3D<Length>, { -1, 0, 0 }, { 0, -10, 0 } } );
 /// pTrack3->Attach( std::move(pArc3), {0_m,10_m*pi/2} );
-/// 
-/// auto pArc4 = Factory::Instance().CreateArc();
+///
+/// auto pArc4 = ArcP::Make();
 /// pArc4->Create( { Origin3D<Length>, { 0, -1, 0 }, { 10, 0, 0 } } );
 /// pTrack4->Attach( std::move(pArc4), {0_m, 10_m*pi/2} );
 /// 
-/// pTrack1->Couple( std::make_pair(pTrack1, Track::end), std::make_pair(pTrack2, Track::front) );
-/// pTrack2->Couple( std::make_pair(pTrack2, Track::end), std::make_pair(pTrack3, Track::front) );
-/// pTrack3->Couple( std::make_pair(pTrack3, Track::end), std::make_pair(pTrack4, Track::front) );
-/// pTrack4->Couple( std::make_pair(pTrack4, Track::end), std::make_pair(pTrack1, Track::front) );
+/// pTrack1->Couple( std::make_pair(pTrack1, Track::EndType::end), std::make_pair(pTrack2, Track::EndType::front) );
+/// pTrack2->Couple( std::make_pair(pTrack2, Track::EndType::end), std::make_pair(pTrack3, Track::EndType::front) );
+/// pTrack3->Couple( std::make_pair(pTrack3, Track::EndType::end), std::make_pair(pTrack4, Track::EndType::front) );
+/// pTrack4->Couple( std::make_pair(pTrack4, Track::EndType::end), std::make_pair(pTrack1, Track::EndType::front) );
 /// 
-/// Location loc{ pTrack1, { 0_m, true } };
+/// Location loc{ pTrack1, { 0_m, Orientation::Value::para } };
 /// 
 /// Frame<Length,One> frame1, frame2;
 /// loc.Transition( frame1 );
 /// loc.Move( pTrack1->GetLength() + pTrack2->GetLength() + pTrack3->GetLength() + pTrack4->GetLength() );
 /// loc.Transition( frame2 );
-/// assert( frame1.Equals( frame2, epsilon__length, 0.001f ) );
+/// BOOST_CHECK( frame1.Equals( frame2, epsilon__length, 0.001f ) );
 /// 
 /// loc.Move( pTrack1->GetLength() + pTrack2->GetLength() + pTrack3->GetLength()/2 );
 /// auto pTrack = loc.GetTrack();
-/// assert( pTrack == pTrack3 );
+/// BOOST_CHECK( pTrack == pTrack3 );
 /// 
-/// pTrack1->DeCouple();
+/// pTrack1->DeCouple(); // Coupled tracks will prevent each others destruction \see TrackSystem
 /// pTrack3->DeCouple();
-/// 
-/// Release();
 /// \endcode
 ///
 /// Do also look at the tests in the test suit for further examples.
 
+#include "Units.h"
+#include "Track.h"
+#include "TrackLocation.h"
 
+#include <memory>
+
+namespace trax
+{
 	struct Event;
 	struct SignalTarget;
 

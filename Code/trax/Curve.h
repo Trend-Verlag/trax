@@ -28,20 +28,6 @@
 
 #pragma once
 
-#include "Configuration.h"
-#include "Units.h"
-
-#include <memory>
-
-#include "common/Interval.h"
-#include "spat/Frame.h"
-#include "spat/Matrix.h"
-#include "spat/VectorBundle.h"
-#include "spat/VectorBundle2.h"
-#include "spat/Vector2D.h"
-
-
-namespace trax{
 /// \page docu_curve Curves
 /// \section curve_intro Introduction
 /// Curves are separate objects in trax. They can be created as objects, using a trax::Factory; 
@@ -161,29 +147,45 @@ namespace trax{
 ///
 /// To create a quarter circle, starting from origin:
 /// \code
-///	auto pCurve = Factory::Instance().CreateArc();
-/// spat::Interval<Length> range = pCurve->Create( {{0_m,0_m,0_m},{1,0,0}}, {10_m,10_m,0_m} );
-/// assert( range.Equals( {0_m,trax::pi/2 * 10_m}, trax::epsilon__length ) );
+///	auto pArc = ArcP::Make();
+///	Interval<Length> rangeArc = pArc->Create( {{0_m,0_m,0_m},{1,0,0}}, {10_m,10_m,0_m} );
+///	BOOST_CHECK( rangeArc.Equals( {0_m,pi/2 * 10_m}, epsilon__length ) );
 /// \endcode
 ///
 /// To use one of the helper functions, to create the same Arc:
 /// \code
-///	auto curve = CreateCurve( Factory::Instance(), {{0_m,0_m,0_m},{1,0,0}}, {{10_m,10_m,0_m},{0,1,0}}, spat::Ez<One> );
-/// assert( curve.second.Equals( {0_m,trax::pi/2 * 10_m}, trax::epsilon__length ) );
-/// assert( curve.first->TypeName() == "Arc" );
+///	auto curve = CreateCurve( {{0_m,0_m,0_m},{1,0,0}}, {{10_m,10_m,0_m},{0,1,0}}, spat::Ez<One> );
+///	BOOST_CHECK( curve.second.Equals( {0_m,pi/2 * 10_m}, epsilon__length ) );
+///	BOOST_CHECK( curve.first->TypeName() == "Arc" );
 /// \endcode
 ///
 /// To create a Cubic, connecting two points, but starting and ending with parallel tangents:
 /// \code
-///	auto pCurve = Factory::Instance().CreateCubic();
-///	spat::VectorBundle<Length,One> start{{10_m, 10_m, 10_m},{250,0,0}};
-///	spat::VectorBundle<Length,One> end{{10_m,70_m,10_m},{250,0,0}};
-///	auto range = pCurve->Create( start, end );
+///	auto pCubic = Cubic::Make();
+///	spat::VectorBundle<Length,Length> start{ {10_m, 10_m, 10_m}, {250_m,0_m,0_m} };
+///	spat::VectorBundle<Length,Length> end{ {10_m,70_m,10_m}, {250_m,0_m,0_m} };
+///	auto rangeCubic = pCubic->Create( start, end );
+///	std::cout << "Cubic curve created with range: " << rangeCubic << std::endl;
 /// \endcode
 ///
 /// Do also look at the tests in the test suit for further examples.
+/// 
+
+#include "Configuration.h"
+#include "Units.h"
+
+#include <memory>
+
+#include "common/Interval.h"
+#include "spat/Frame.h"
+#include "spat/Matrix.h"
+#include "spat/VectorBundle.h"
+#include "spat/VectorBundle2.h"
+#include "spat/Vector2D.h"
 
 
+namespace trax
+{
 	/// \brief Curves implement this interface that then can get 
 	/// attached to a track to define the tracks geometry.
 	///

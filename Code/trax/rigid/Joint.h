@@ -27,6 +27,12 @@
 
 #pragma once
 
+/// \page docu_joints Connectors
+/// 
+/// \section joints_intro Introduction
+/// 
+/// 
+
 #include "trax/Identified.h"
 #include "trax/Units.h"
 

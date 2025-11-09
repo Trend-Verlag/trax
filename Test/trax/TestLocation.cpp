@@ -130,7 +130,7 @@ BOOST_FIXTURE_TEST_CASE( measureDistanceOverOpenTrackEnds, TrackAndLocation )
 	pArc1->Create( { Origin3D<Length>, { 1, 0, 0 }, { 0, 10, 0 } } );
 	pOther->Attach( pArc1, {0_m,10_m*pi/2} );
 
-	otherLocation.PutOn( pOther, {pOther->GetLength()/2,true} );
+	otherLocation.PutOn( pOther, {pOther->GetLength()/2,Orientation::Value::para} );
 
 	BOOST_CHECK_THROW( m_LocationOnTrack.Distance( otherLocation, -m_pTrack->GetLength() ), std::out_of_range );
 	BOOST_CHECK_THROW( m_LocationOnTrack.Distance( otherLocation, m_pTrack->GetLength() ), std::out_of_range );

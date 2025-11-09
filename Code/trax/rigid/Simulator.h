@@ -27,6 +27,12 @@
 
 #pragma once
 
+/// \page docu_simulation Simulation
+/// 
+/// \section simulation_intro Introduction
+/// 
+/// 
+
 #include "trax/Configuration.h"
 #include "trax/Units.h"
 

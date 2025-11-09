@@ -28,20 +28,6 @@
 
 #pragma once
 
-#include "IDType.h"
-#include "Units.h"
-#include "Identified.h"
-#include "Orientation.h"
-#include "RoadwayTwist.h"
-
-#include "common/Interval.h"
-#include "spat/Box.h"
-#include "spat/Frame.h"
-#include "spat/Vector2D.h"
-#include "spat/VectorBundle.h"
-#include "spat/VectorBundle2.h"
-
-namespace trax{
 /// \page docu_track Tracks
 /// \section track_intro Introduction
 /// A track is something with two ends - the Track::front end and the Track::end end - which 
@@ -49,7 +35,7 @@ namespace trax{
 /// Curve as a path in 3D space and a RoadwayTwist for determining the up direction
 /// of the path; there is a Location that can travel the tracks, including transitioning
 /// between tracks if they are coupled and deliver 3D poses by its \ref location_getters getter methods -
-/// \link Connector Connectors \endlink are taking track ends and help to dynamically reconnect
+/// \link trax::Connector Connectors \endlink are taking track ends and help to dynamically reconnect
 /// them according to their special patterns.
 ///
 /// \image html Tracksystem.png
@@ -61,10 +47,10 @@ namespace trax{
 /// \image html CurvesInterfaces.png
 ///
 /// \section track_details Details
-/// The overall pose of a track is governed by its \link TrackBuilder::GetFrame Frame \endlink.  
+/// The overall pose of a track is governed by its \link trax::TrackBuilder::GetFrame Frame \endlink.  
 /// It specifies the transformation between a Curve and the 3d space local to an \ref absolute_frame ,
 /// specified by a TrackCollection. If the Track is not a member of a TrackCollection, the frame will 
-/// be the global pose. To set a desired pose for the track, a \link TrackBuilder::SetFrame SetFrame \endlink 
+/// be the global pose. To set a desired pose for the track, a \link trax::TrackBuilder::SetFrame SetFrame \endlink 
 /// method can be used. This way any position along the track can get aligned 
 /// to a global (or TrackCollection - local) pose.
 ///
@@ -78,76 +64,83 @@ namespace trax{
 ///
 /// There are several trax::Strech - functions to help with solving certain geometrical problems, by 
 /// finding a most simple Curve, that does the trick and attaching it directly to the track.
+/// 
 /// \section track_examples Examples:
+/// 
+/// To properly create a track attach a curve to it:
+/// \code
+///	auto pTrack = TrackBuilder::Make();
+///	std::shared_ptr<RotatorChain> pCurve = RotatorChain::Make();
+///	pCurve->Create( RotatorChain::Data{ 
+///		{ 20_deg, 10_deg, 90_m }, 
+///		{ 20_deg, -10_deg, 60_m }, 
+///		{ -40_deg, 0_deg, 50_m } } );
+///	pTrack->Attach( pCurve, { 0_m, 90_m+60_m+50_m} );
+/// BOOST_CHECK( pTrack->IsValid() );
+/// \endcode
+/// 
 /// To set a track's starting position to a special place and orientation in 3D space:
 /// \code
-/// spat::Frame<trax::Length,trax::One> myPose = someFrame;
-/// trax::TrackBuilder& track = someTrack;
-///
-/// track.SetFrame( myPose, 0_m );
+///	spat::Frame<Length,One> myPose{ {100_m,200_m,300_m},
+///									{0,1,0},
+///									{0,0,1},
+///									{1,0,0} };
+///	pTrack->SetFrame( myPose, 0_m );
 /// \endcode
 ///
-/// 
 /// To set a track's middle position to a special place and orientation in 3D space:
 /// \code
-/// spat::Frame<trax::Length,trax::One> myPose = someFrame;
-/// trax::TrackBuilder& track = someTrack;
-///
-/// track.SetFrame( myPose, track.GetLength() / 2 );
+/// pTrack->SetFrame( myPose, pTrack->Range().Center() );
 /// \endcode
 ///
-/// 
-/// To Attach a Curve:
-/// \code
-/// auto pTrack = trax::Factory::Instance().CreateTrack();
-/// auto pCurve = trax::Factory::Instance().CreateRotatorChain();
-/// 
-/// pCurve->Create( trax::RotatorChain::Data{ 
-/// 	{20_deg, 10_deg, 90_m }, 
-/// 	{20_deg, -10_deg, 60_m }, 
-/// 	{-40_deg, 0_deg, 50_m } } );
-///
-/// pTrack->Attach( std::move(pCurve), {0_m,90_m+60_m+50_m} );
-/// \endcode
-///
-/// 
 /// To Detach a Curve:
 ///
 /// \code
-/// trax::TrackBuilder& track = someTrack;
-/// auto curve = track.DetachCurve();
+/// auto curve = pTrack->DetachCurve();
+///	// do something with the curve ...
+///	pTrack->Attach( curve );
 /// \endcode
 ///
-/// 
 /// To store geometry and pose for later use:
 ///
 /// \code
-/// trax::TrackBuilder& track = someTrack;
-/// spat::Frame<trax::Length,trax::One> frame = track.GetFrame();
-/// auto curve = track.GetCurve();
-/// auto pTwist = track.GetTwist().Clone();
-///
-/// // something else is happening to the track ...
-/// 
-/// // For some reason restore the track geometry:
-///
-/// track.Attach( pTwist );
-/// track.Attach( curve );
-/// track.SetFrame( frame );
+/// spat::Frame<Length,One> frame = pTrack->GetFrame();
+///	auto curve = pTrack->GetCurve();
+///	auto pTwist = pTrack->GetTwist().Clone();
+///	// something else is happening to the track ...
+///	// ...
+///	// For some reason restore the track geometry:
+///	pTrack->Attach( std::move(pTwist) );
+///	pTrack->Attach( curve );
+///	pTrack->SetFrame( frame );
 /// \endcode
 ///
 /// To make the track connect two points and maintaining specific tangents at those:
 ///
 /// \code
-/// auto pTrack = Factory.Instance().CreateTrack();
-///	spat::VectorBundle<Length,One> start{{10_m, 10_m, 10_m},{250,0,0}};
-///	spat::VectorBundle<Length,One> end{{10_m,70_m,10_m},{250,0,0}};
-///	Strech( Factory::Instance(), *pTrack, start, end );
+///	spat::VectorBundle<Length,One> start{ {10_m, 10_m, 10_m}, {250,0,0} };
+///	spat::VectorBundle<Length,One> end{ {10_m,70_m,10_m}, {250,0,0} };
+///	Strech( *pTrack, start, end );
+/// BOOST_CHECK( pTrack->IsValid() );
 /// \endcode
 ///
 /// Do also look at the tests in the test suit for further examples.
 
+#include "IDType.h"
+#include "Units.h"
+#include "Identified.h"
+#include "Orientation.h"
+#include "RoadwayTwist.h"
 
+#include "common/Interval.h"
+#include "spat/Box.h"
+#include "spat/Frame.h"
+#include "spat/Vector2D.h"
+#include "spat/VectorBundle.h"
+#include "spat/VectorBundle2.h"
+
+namespace trax
+{
 	struct Body;
 	struct Connector;
 	struct Curve;

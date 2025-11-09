@@ -34,15 +34,10 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-
-
 #pragma once
 
-#include <memory>
-
-
-/// \page main_page Main Documentation
-/// This is the main page
+/// \page main_page Overview
+/// 
 /// - \subpage docu_dim
 /// - \subpage docu_spat
 /// - \subpage docu_units

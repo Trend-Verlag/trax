@@ -26,6 +26,11 @@
 
 #pragma once
 
+/// \page docu_sensor Sensors
+/// 
+/// \section sensor_intro Introduction
+
+
 #include "Configuration.h"
 #include "Units.h"
 #include "Identified.h"

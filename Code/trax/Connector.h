@@ -28,6 +28,12 @@
 
 #pragma once
 
+/// \page docu_connector Connectors
+/// 
+/// \section connector_intro Introduction
+/// 
+/// 
+
 #include "Identified.h"
 #include "Track.h"
 #include "ConnectorType.h"

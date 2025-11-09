@@ -53,7 +53,7 @@ namespace trax{
 			: parameter{0}, orientation{ Orientation::Value::para }{}
 		explicit TrackLocation( Length param ) noexcept
 			: parameter{ param }, orientation{ Orientation::Value::para }{}
-		TrackLocation( Length param, bool orient ) noexcept
+		explicit TrackLocation( Length param, bool orient ) noexcept
 			: parameter{param}, orientation{orient}{}
 		TrackLocation( Length param, Orientation::Value orient ) noexcept
 			: parameter{param}, orientation{orient}{}

@@ -192,7 +192,6 @@ namespace trax{
 		/// Note that error correction stays in effect while still in the flange range. 
 		/// This makes the trackjoint a bit sticky while in flange range. So flange should 
 		/// be typically a small value to achieve realistic levitating.
-		/// \todo Switch off constraint 2 on levitating completely?
 		void Flange( Valtype flange ) noexcept;
 
 

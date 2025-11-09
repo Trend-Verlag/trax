@@ -27,6 +27,12 @@
 
 #pragma once
 
+/// \page docu_gestalt Gestalts
+/// 
+/// \section gestalt_intro Introduction
+/// 
+/// 
+
 #include "Body.h"
 #include "Shape.h"
 

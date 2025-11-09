@@ -141,9 +141,9 @@ BOOST_FIXTURE_TEST_CASE( twosensors_trigger_right_order, SensorFixture )
 	std::shared_ptr<Sensor> pSensor2 = SensorFilterJack::Make();
 	pSensor2->JackOnTrigger().Insert( &m_pPulseCounter->PlugToCountDown() );
 
-	m_pTrack1->Attach( m_pSensor, { m_pTrack1->GetLength() / 2, true } );
-	m_pTrack1->Attach( pSensor2, { m_pTrack1->GetLength() / 2 + 1_m, true } );
-	m_Location.PutOn( m_pTrack1 , { m_pTrack1->GetLength() / 4, true } );
+	m_pTrack1->Attach( m_pSensor, { m_pTrack1->GetLength() / 2, Orientation::Value::para } );
+	m_pTrack1->Attach( pSensor2, { m_pTrack1->GetLength() / 2 + 1_m, Orientation::Value::para } );
+	m_Location.PutOn( m_pTrack1 , { m_pTrack1->GetLength() / 4, Orientation::Value::para } );
 
 	std::unique_ptr<trax::PulseCounter>	pPulseCounter2 = PulseCounter::Make();
 	m_pPulseCounter->Threshold( -1 );
@@ -160,9 +160,9 @@ BOOST_FIXTURE_TEST_CASE( twosensors_trigger_right_order2, SensorFixture )
 	std::shared_ptr<Sensor> pSensor2 = SensorFilterJack::Make();
 	pSensor2->JackOnTrigger().Insert( &m_pPulseCounter->PlugToCountDown() );
 
-	m_pTrack1->Attach( m_pSensor, { m_pTrack1->GetLength() / 2, false } );
-	m_pTrack1->Attach( pSensor2, { m_pTrack1->GetLength() / 2 + 1_m, false } );
-	m_Location.PutOn( m_pTrack1 , { 3*m_pTrack1->GetLength() / 4, false } );
+	m_pTrack1->Attach( m_pSensor, { m_pTrack1->GetLength() / 2, Orientation::Value::anti } );
+	m_pTrack1->Attach( pSensor2, { m_pTrack1->GetLength() / 2 + 1_m, Orientation::Value::anti } );
+	m_Location.PutOn( m_pTrack1 , { 3*m_pTrack1->GetLength() / 4, Orientation::Value::anti } );
 
 	std::unique_ptr<trax::PulseCounter>	pPulseCounter2 = PulseCounter::Make();
 	m_pPulseCounter->Threshold( 1 );

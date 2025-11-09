@@ -26,18 +26,9 @@
 
 #pragma once
 
-#include "Configuration.h"
-#include "Units.h"
-
-#include "common/Interval.h"
-#include "spat/Vector.h"
-
-#include <memory>
-
-namespace trax{
 /// \page docu_twist Twists
 /// \section twist_intro Introduction
-/// Since Curves maintain no direct notion of what is to be an up direction (see \ref curve_docu), with the RoadwayTwist 
+/// Since Curves maintain no direct notion of what is to be an up direction (see \ref docu_curve), with the RoadwayTwist 
 /// we introduced an additional rotation around the Curve's tangent axis T. This will rotate the TNB frame returned by
 /// a track relative to the Curve's TNB frame. E.g., there is a DirectionalTwist that would rotate the frame in a way
 /// that the B vector as returned by the track would have the most minimal angle with an DirectionalTwist::Attractor() axis.
@@ -63,17 +54,26 @@ namespace trax{
 ///
 /// To make a track's B vector rotate from 0_deg to 7_deg around T with respect to the world's trax::Up during the course of the track:
 /// \code
-/// Factory& factory = Factory::Instance();
-/// TrackBuilder& track = someTrack;
-/// auto pCombinedTist = factory.CreateCombinedTwist();
-///	pCombinedTist->AttachTwist1( factory.CreateDirectionalTwist(Up) );	
-///	pCombinedTist->AttachTwist2( factory.CreateLinearTwist(0_deg,7_deg) );
-///
-///	track.Attach( std::move(pCombined) );
+///	auto pTrack = TrackBuilder::Make();
+///	auto pCombinedTwist = CombinedTwist::Make();
+///	pCombinedTwist->AttachTwist1( DirectionalTwist::Make(Up) );	
+///	pCombinedTwist->AttachTwist2( LinearTwist::Make( 0_deg, 7_deg ) );
+///	
+///	pTrack->Attach( std::move(pCombinedTwist) );
 /// \endcode
 ///
 /// Do also look at the tests in the test suit for further examples.
 
+#include "Configuration.h"
+#include "Units.h"
+
+#include "common/Interval.h"
+#include "spat/Vector.h"
+
+#include <memory>
+
+namespace trax
+{
 	struct TrackBuilder;
 
 	/// \brief A RoadwayTwist is used to define the actual rotating angle
@@ -116,6 +116,9 @@ namespace trax{
 
 
 		/// Tests wether the twist was properly created.
+		/// 
+		/// A dynamic twist will only be valid after attaching 
+		/// it to a track.
 		/// \returns true if the twist is able to deliver valid geometry.
 		virtual bool IsValid() const noexcept = 0;
 

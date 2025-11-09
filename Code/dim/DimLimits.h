@@ -29,6 +29,23 @@
 
 #pragma once
 
+/// \page docu_dim Dimensionated Values
+/// 
+/// \section dim_limits Limits
+/// 
+/// The limits of numerical calculations. E.g. for EEP, the smallest value in 
+/// length that would make a difference to the user, trax::epsilon__length, 
+/// would be something about 1_cm. From this the trax::plausible_maximum_length 
+/// can be estimated to be about 10_km for 32bit trax::Real values. At that 
+/// distance from the origin, the calculations would start to produce inaccurate 
+/// results with respect to the 1_cm difference. It is not accidential, that 
+/// the biggest layouts ever build in EEP are about 20_km in diameter. For 
+/// optimal results, the trax::meters_per_unit should not be 0.01 nor 1 but 
+/// rather something like 15.
+/// 
+/// 
+
+
 /// \file DimLimits.h User configurationable values for the dim library.
 namespace dim
 {

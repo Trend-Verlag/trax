@@ -35,7 +35,7 @@
 /// with, be it a length in space, a time span or an inertial mass or any combination 
 /// of these. The units on the other hand specify the quantity we are measuring, 
 /// telling us that 1000 are actually 1000_kg, not 1000_t. If you do physics calculation
-/// is wise to check the dimensions of your result and then reason about its magnitude.
+/// it is wise to check the dimensions of your result and then reason about its magnitude.
 /// For the trax library the dim library automates both.
 /// 
 /// \section dim_basics Basics
@@ -53,7 +53,7 @@
 /// Length width = 300_cm;
 /// \endcode
 /// 
-/// We are not bound to the metric system, we can also use imperial units:
+/// We are not confined to the metric system, we can also use imperial units:
 /// 
 /// \code
 /// Length height = 6_ft + 3_in;

@@ -28,6 +28,12 @@
 
 #pragma once
 
+/// \page docu_jacksnplugs Jacks'n Plugs
+/// 
+/// \section jacksnplugs_intro Introduction
+/// 
+/// 
+
 #include "Configuration.h"
 #include "Identified.h"
 #include "ObjectID.h"

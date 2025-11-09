@@ -26,6 +26,14 @@
 
 #pragma once
 
+/// \page docu_spat Spatial Computations
+/// 
+/// \section spat_intro Introduction
+/// 
+/// For calculations in three dimensional space, the spat library provides
+/// various structures like Position, Vector, Box, Sphere and Frame.
+
+
 /// \brief The namespace provides classes and methods for
 /// spatial computations.
 namespace spat{

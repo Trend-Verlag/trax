@@ -1,6 +1,7 @@
 add_executable(trax_core_tests
     "./Test.cpp"
     "./TestCurves.cpp"
+    "./TestCoreDocu.cpp"
     "./TestLocation.cpp"
     "./TestReservation.cpp"
     "./TestSensors.cpp"
