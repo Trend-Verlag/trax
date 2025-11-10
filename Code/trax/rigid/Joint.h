@@ -30,8 +30,9 @@
 /// \page docu_joints Connectors
 /// 
 /// \section joints_intro Introduction
-/// 
-/// 
+/// A Joint connects two Bodies together, restricting relative movement 
+/// between them in certain ways. Different types of Joints provide different 
+/// constraints on the movement of the connected Bodies. 
 
 #include "trax/Identified.h"
 #include "trax/Units.h"

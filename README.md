@@ -95,14 +95,21 @@ select the 'ALL_TESTS' project and build and run it.
 ## 4. External Resources
 
 ### Whitepaper
-- The [Trax Library Whitepaper](https://www.trendverlag.com/Trax/Doc/BlogArticle/traxLibrary.html) provides an overview of the basic concepts and architecture.
-- The [Trax Library Book](https://www.trendverlag.com/Trax/Doc/Book/start.html) offers a more in-depth exploration.
+- The [Trax Library Whitepaper](https://www.trendverlag.com/Trax/Doc/BlogArticle/traxLibrary.html) 
+provides an overview of the basic concepts and architecture.
+- The [Trax Library Book](https://www.trendverlag.com/Trax/Doc/Book/start.html) offers a more 
+in-depth exploration.
+- The [Trax GitHub Project](https://github.com/Trend-Verlag) produces a documentation from the 
+source code using Doxygen. It contains a medium level overview as well 
+as detailed description of the API.
 
 ### Mathematical Foundations
-- Detailed mathematical descriptions of the track constraint solver can be found in the [Track Constraint PDF](https://www.trendverlag.com/Trax/Doc/TrackConstraint.pdf).
+- Detailed mathematical descriptions of the track constraint solver can be found in the 
+[Track Constraint PDF](https://www.trendverlag.com/Trax/Doc/TrackConstraint.pdf).
 
 ### Blogs
-- [Simulating Railroads with OpenUSD](https://developer.nvidia.com/blog/simulating-railroads-with-openusd/): An article discussing the integration of Trax with OpenUSD for railroad simulation.
+- [Simulating Railroads with OpenUSD](https://developer.nvidia.com/blog/simulating-railroads-with-openusd/): 
+An article discussing the integration of Trax with OpenUSD for railroad simulation.
 - [YouTube Playlist](https://youtube.com/playlist?list=PLvSXZtqqeOvBoA_W5E5gI6Hz2sxWsNI45&si=oXRumqXrSvRmT5SS)
 
 ### Products Using Trax
@@ -110,4 +117,3 @@ select the 'ALL_TESTS' project and build and run it.
 - [EEP Train Simulator Mission](https://eepshopping.de/eep_train_simulator_mission_v1_122|7683.html)
 - [EEP TSM Gotthardbahn Nordrampe](https://eepshopping.de/eep_tsm_gotthardbahn_nordrampe_modul_erstfeld|8235.html)
 - [Building a Digital Twin of the German Rail Network](https://www.nvidia.com/en-us/on-demand/session/gtcspring23-s51560/)
-- [Trend Verlag GitHub](https://github.com/Trend-Verlag)

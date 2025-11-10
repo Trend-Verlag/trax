@@ -30,7 +30,19 @@
 /// \page docu_simulation Simulation
 /// 
 /// \section simulation_intro Introduction
+/// A physics \link trax::Simulator Simulator \endlink is the main component
+/// of a physics simulation. It manages the setup and the shutdown of the 
+/// physical simulator (in our case for now: NVIDIA's PhysX). A \link trax::Scene
+/// Scene \endlink creates all the physical objects in one simulation. Several
+/// Scenes can be simulated by one Simulator, independent of each other.
 /// 
+/// \section simulation_loop The Simulation Loop
+/// The simulation loop is the main loop of a physics simulation. It updates 
+/// the physics world by advancing the simulation time, handling collisions, 
+/// and applying forces. The loop typically runs at a fixed time step to 
+/// ensure consistent simulation results. The Scene object provides the 
+/// methods to either step the simulation by a fixed time step or running the
+/// simulation on its own.
 /// 
 
 #include "trax/Configuration.h"
@@ -43,6 +55,7 @@
 
 namespace trax{
 
+	/// \brief Interface for the physics simulator.
 	struct Simulator{
 
 		enum class Type{

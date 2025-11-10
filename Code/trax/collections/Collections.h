@@ -26,6 +26,18 @@
 
 #pragma once
 
+/// \page docu_collections Collections
+///
+/// \section collections_intro Introduction
+/// There is an abundance of different objects provided by the trax library. Typically
+/// they are created with smart pointers, managing their lifetimes automatically. However,
+/// who is holding these smart pointers? The answer is: Collections. 
+/// 
+/// \section collections_tracksystem Track Systems
+/// \section collections_fleet Fleets
+/// \section collections_Modules Modules
+/// 
+
 #include "Collection.h"
 #include "CollectionDecorator.h"
 #include "ConnectorCollection.h"

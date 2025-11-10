@@ -29,7 +29,26 @@
 /// \page docu_sensor Sensors
 /// 
 /// \section sensor_intro Introduction
-
+/// A \link trax::Sensor Sensor \endlink can get attached to a Track at 
+/// a certain position and with an orientation and will trigger when a 
+/// \link trax::Location Location \endlink passes by, fulfilling certain 
+/// filter conditions. It's up to the Sensor, to determine whether to 
+/// trigger a pulse or not. When triggered, the Sensor will pulse its
+/// \link trax::Sensor::JackOnTrigger JackOnTrigger() \endlink.
+/// 
+/// \image html Sensor.png
+///
+/// \section sensor_details Details
+/// Location, relaying an Event to trigger the Sensor: 
+/// 
+/// \image html SensorTrigger.png
+/// 
+/// While a Location is moved along the tracks, thereby for example 
+/// representing a train tip, it is fed by an Event, carrying the
+/// necesssary information for a specialized Sensor to figure out
+/// whether to trigger. If the Sensor triggers, that means it creates 
+/// a pulse in an associated Jack.
+/// 
 
 #include "Configuration.h"
 #include "Units.h"
@@ -47,6 +66,7 @@ namespace trax{
 
 	class Location;
 
+	/// \brief A Sensor can get attached to a track and be triggerd when a Location runs over it.
 	struct Sensor : Identified<Sensor>
 	{
 

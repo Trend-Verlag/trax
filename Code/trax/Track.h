@@ -30,15 +30,18 @@
 
 /// \page docu_track Tracks
 /// \section track_intro Introduction
-/// A track is something with two ends - the Track::front end and the Track::end end - which 
-/// can get connected with the ends of other tracks; it can provide geometry, by taking a 
-/// Curve as a path in 3D space and a RoadwayTwist for determining the up direction
-/// of the path; there is a Location that can travel the tracks, including transitioning
-/// between tracks if they are coupled and deliver 3D poses by its \ref location_getters getter methods -
-/// \link trax::Connector Connectors \endlink are taking track ends and help to dynamically reconnect
-/// them according to their special patterns.
+/// A \link trax::Track Track \endlink is something with two ends - the \link 
+/// trax::Track::front front end \endlink the \link trax::Track::end end end 
+/// \endlink - which can get connected with the ends of other tracks; it can 
+/// provide geometry, by taking a Curve as a path in 3D space and a \link 
+/// trax::RoadwayTwist RoadwayTwist \endlink for determining the up direction
+/// of the path; there is a \link trax::Location Location \endlink that can 
+/// travel the tracks, including transitioning between tracks if they are 
+/// coupled and deliver 3D poses by its \ref location_getters getter methods -
+/// \link trax::Connector Connectors \endlink are taking track ends and help 
+/// to dynamically reconnect them according to their special patterns.
 ///
-/// \image html Tracksystem.png
+/// \image html TrackCurve.jpg
 ///
 /// Trax' tracks provide two interfaces: the Track interface for using a track, e.g. \ref transition
 /// the track, to get a 3D location for a track parameter value; and the TrackBuilder interface, for 

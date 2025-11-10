@@ -32,7 +32,40 @@
 /// 
 /// \section jacksnplugs_intro Introduction
 /// 
+/// A lot of rigid logical connections have to be made in railroading. E.g. 
+/// there are switches and there might be lanterns along the track to show the
+/// state of the switch. Also there might be signals to interact with the 
+/// trains and then their semaphores to show the state of the logical signal. 
+/// Another application is a sensor in the track that registers a wheelset 
+/// rolling over it. Yet another application is to play sounds on certain 
+/// events inside the railroading system; e.g. a rolling stock starts rolling 
+/// and that triggers a looped sound to play that would be stopped again when 
+/// the rolling stock stops rolling. 
 /// 
+/// \image html Plug.png
+/// 
+/// A Plug gets inserted into a Jack. Then it would receive the Jack's pulses. 
+/// A Plug is very specific: it triggers one action and that action only; albeit
+/// this action might pulse other Jacks in turn.
+/// 
+/// \image html PlugChain.png
+/// 
+/// To foreward the action of a Sensor a Plug needs to be inserted into the 
+/// Sensor's Jack. The Plug then would Pulse the action it was created for.
+/// 
+/// \image html Sensor.png
+/// 
+/// \section jacksnplugs_warning A Word Of Warning
+/// 
+/// A word of warning is appropriate at this point. Even if we provide logical 
+/// elements like counters and timers and all these form a turing-complete 
+/// system, it is very advisable to keep the connection patterns simple and 
+/// don't try tricks, because there are no tools for debugging or testing a 
+/// complex system of Plugs N' Jacks connected elements. It is exclusively 
+/// meant to tie simple elements together in a simple way, or to build logical 
+/// blocks like a barrier that would close while some sensors that detect 
+/// wheelsets would count a counter up and down, and that barrier would open 
+/// if the counter becomes zero again. 
 
 #include "Configuration.h"
 #include "Identified.h"

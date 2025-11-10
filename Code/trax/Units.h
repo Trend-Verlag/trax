@@ -27,27 +27,35 @@
 
 #pragma once
 
-/// \page docu_units Units
+/// \page docu_units Space
 /// \section units_intro Introduction
+/// The spat and the dim libraries work seemlessly together to provide for 
+/// our railway simulation what it calls 'the space'. A Position<Length>
+/// represents a point in this space; a Vector<One> represents a direction.
+/// Together they form a Frame<Length,One> that represents a complete frame 
+/// of reference and allows for easy transformations. A velocity can be 
+/// expressed as a Vector<Velocity>, an acceleration as a Vector<Acceleration>.
+/// A force might be a VectorBundle<Length,Force>, giving us both the point
+/// of application and the force vector itself.
 ///
-/// \section units_motivation Motivation
+/// You get the idea.
 ///
-/// \section units_detail Details
+/// \section units_examples Examples
 /// 
-/// The spatial structures work together with dimensionated values seamlessly, just be aware of the type of the result:
+/// \code
+/// Mass m = 130_kg;
+/// Vector<Acceleration> a = G;	// acceleration due to gravity
+/// Vector<Force> F = m * a;
+/// std::cout << "the weight of a mass of " << m << " is " << F << std::endl; // prints: "the weight of a mass of 130kg is Vector( -0kN, -0kN, -1.2753kN )"
+/// \endcode
+/// 
 /// \code
 /// Vector<AngularVelocity> w{ Ez<One> * 20_deg / 1_s };
 /// Vector<Length> d{ Ex<One> * 2.8_m };
 ///	Vector<Velocity> v = w % d;
 ///	std::cout << "the momentary velocity of a point rotating around " << w << " at distance " << d << ": " << v << std::endl; // prints: "[...]  Vector( 0km/h, 3.52km/h, 0km/h )" 
 /// \endcode
-///
-/// Don't mind too much about performance: all these functions and operators are declared 'constexpr'. This means 'evaluated at compile time 
-/// if so possible' (intellisense over the 'v'). This is even better than inlining (which of course they are declared, too). Even if compile time evaluation is not possible, with constexpr 
-/// the compiler has a hint for optimizing in release version.
 /// 
-/// \section units_examples Examples
-///
 /// To use spatial structures with dimensionated values:
 /// \code
 ///	Position<Length> P1{1_m,2_m,3_m};

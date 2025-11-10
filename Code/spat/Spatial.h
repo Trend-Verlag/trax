@@ -31,7 +31,18 @@
 /// \section spat_intro Introduction
 /// 
 /// For calculations in three dimensional space, the spat library provides
-/// various structures like Position, Vector, Box, Sphere and Frame.
+/// various templated structures. A \link spat::Position Position \endlink
+/// represents a point in space, while a \link spat::Vector Vector \endlink
+/// represents a direction. Both are combined to form a \link spat::VectorBundle 
+/// VectorBundle \endlink, which represents a point and a direction in space.
+/// A \link spat::Frame Frame \endlink handles a frame of reference in space
+/// and allows transformations of Positions and Vectors between different frames.
+/// There are also \link spat::Matrix Matrix \endlink classes for more general 
+/// transformation calculations and geometric shapes like \link spat::Box Box 
+/// \endlink or \link spat::Sphere Sphere \endlink for spatial queries. Conceptually
+/// all these classes have 2D variants as well, e.g. \link spat::Position2D 
+/// Position2D \endlink.
+/// 
 
 
 /// \brief The namespace provides classes and methods for

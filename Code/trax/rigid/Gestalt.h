@@ -1,9 +1,11 @@
 //	trax track library
 //	AD 2024 
 //
-//  "the resolution of all the fruitless searches"
+//  "A ghost is spirit without form. I believe what we're looking
+//   for and what we're seeing here, is ... is form without spirit. 
+//   Something called a Golem."
 //
-//								Peter Gabriel
+//								Agent Mulder
 //
 //
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
@@ -30,7 +32,14 @@
 /// \page docu_gestalt Gestalts
 /// 
 /// \section gestalt_intro Introduction
-/// 
+/// A \link trax::Geom Geom \endlink is a simple geometrical object like a 
+/// \link trax::GeomCuboid Cuboid \endlink or a \link trax::GeomSphere Sphere 
+/// \endlink. A \link trax::Shape Shape \endlink is a collection of Geoms that
+/// forms a more complex shape and can be used for collision detection.
+/// A \link trax::Body Body \endlink is an object with mass and inertia that can
+/// be positioned and oriented in space. Together, a Body with a Shape is a
+/// \link trax::Gestalt Gestalt \endlink, that can be used in a physics simulation
+/// as a dynamic object with collision detection.
 /// 
 
 #include "Body.h"
@@ -38,6 +47,8 @@
 
 namespace trax
 {
+
+	/// \brief A Gestalt is a Body with a Shape.
 	struct Gestalt : virtual Body,
 					 virtual Shape
 	{

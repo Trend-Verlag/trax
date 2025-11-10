@@ -30,7 +30,15 @@
 /// \page docu_signal Signals
 /// 
 /// \section signal_intro Introduction
+/// A \link trax::Signal Signal \endlink is a directed range along the tracks that 
+/// provides information to be send to a \link trax::SignalTarget SignalTarget \endlink,
+/// while moving a \link trax::Location Location \endlink along the track inside that 
+/// range and according to the ranges direction: 
+///
+/// \image html Signal.png
 /// 
+/// Signal ranges can not include switches that branch in their direction. So it is best 
+/// avoided to strech the range of a Signal over any switch at all.
 /// 
 
 #include "Identified.h"

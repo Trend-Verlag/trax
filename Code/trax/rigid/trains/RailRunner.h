@@ -30,7 +30,56 @@
 /// \page docu_railrunners RailRunners
 /// 
 /// \section railrunners_intro Introduction
+/// A rail runner can be railed on a track. The \link trax::RailRunner 
+/// RailRunner \endlink interface provides all means for Railing/Derailing, 
+/// coupling and for steering something on a track system like thrust 
+/// and brake. 
 /// 
+/// \image html RailRunner.png
+/// 
+/// \section railrunners_coupling Coupling
+/// \link trax::Bogie Bogies \endlink provide couplings at their tip ends 
+/// that can form a stable connection to other Bogies. Those coupling 
+/// relay to \link trax::RollingStock RollingStock \endlink and
+/// \link trax::Train Trains \endlink. Automatic couplings are realised 
+/// in the trax library. Those couplings can be switched to active, passive 
+/// or beeing coupled. An active coupling would couple another active one, 
+/// as soon as their trigger spheres intersect. If one of the two couplings 
+/// is passive, nothing would happen.
+/// 
+/// \section railrunners_anchor Anchor
+/// The anchor is the position of the TrackJoint in a 
+/// \link trax::WheelFrame WheelFrame \endlink. It will define the Location 
+/// of the RailRunner on a Track. For a RollingStock, which is built up 
+/// from several WheelFrames and Bogies, the anchor will be the northmost 
+/// WheelFrame's anchor; for a Train it will be the northmost RollingStock's 
+/// anchor.
+/// 
+/// \section railrunners_train Train
+/// A Train is a RailRunner that maintains an ordered list of 
+/// \link trax::TrainComponent TrainComponents \endlink. RollingStock and Train 
+/// itself qualify as TrainComponents. That way a Train might be composed 
+/// from other Trains. On splitting a Train, a new Train might be created 
+/// automatically.
+/// 
+/// \section railrunners_drivemodel Drive Model
+/// Moving a RailRunner might look a little odd, since the velocity of a 
+/// WheelFrame is a constraint for the physics engine: first the Wheelsets 
+/// have to specify the maximum available braking and driving forces as 
+/// the capabilities of the machine. Of these limits a RailRunner can specify 
+/// what fraction to actually apply at a given moment by the 
+/// \link trax::RailRunner::Thrust() Thrust() \endlink and the 
+/// \link trax::RailRunner::Brake() Brake() \endlink methods. Secondly there 
+/// is a target velocity to be set for a RailRunner by the 
+/// \link trax::RailRunner::TargetVelocity() TargetVelocity() \endlink method, 
+/// so the physics engine knows what velocity to head for. It is clear that 
+/// these limits might not be sufficient to actually reach vTarget. If they 
+/// would, vTarget would be reached immediately and be kept that way. In 
+/// practice the braking and driving forces will compete with other forces 
+/// like gravity or mass inertia and friction, as they in reality do. To 
+/// simulate the behaviour of real locomotive controls, as handled by an 
+/// engineer, it is necessary to map those controls to the braking, thrust 
+/// and vTarget values properly.
 /// 
 
 #include "trax/Units.h"

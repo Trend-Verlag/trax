@@ -44,6 +44,11 @@ BOOST_AUTO_TEST_SUITE(CoreDocu)
 
 BOOST_AUTO_TEST_CASE( test_docu_units )
 {
+	Mass m = 130_kg;
+	Vector<Acceleration> a = G;	// acceleration due to gravity
+	Vector<Force> F = m * a;
+	std::cout << "the weight of a mass of " << m << " is " << F << std::endl; // prints: "the weight of a mass of 130kg is Vector( -0kN, -0kN, -1.2753kN )"
+
 	Vector<AngularVelocity> w{ Ez<One> * 20_deg / 1_s };
 	Vector<Length> d{ Ex<One> * 2.8_m };
 	Vector<Velocity> v = w % d;

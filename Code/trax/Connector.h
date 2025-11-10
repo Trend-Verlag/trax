@@ -32,7 +32,18 @@
 /// 
 /// \section connector_intro Introduction
 /// 
+/// \image html Tracksystem.png
 /// 
+/// As one can see from the above image, a switch is basically a re-connector of track 
+/// ends. So we call them 'Connector' in their most general form. A connector provides 
+/// several slots for being populated with track ends. It then maintains certain states 
+/// and switching from one state to another means reconnecting the track ends in a specific 
+/// way. To deal with the many intricacies of specific switches we also provide a (two way)
+/// Switch, a ThreeWaySwitch, SingleSlipSwitch, DoubleSlipSwitch and the like. This way, 
+/// what is called a switch in reality, would be made up e.g. from three tracks and a 
+/// connector. 
+/// 
+/// Also mind the Indicator - system that trax provide. 
 
 #include "Identified.h"
 #include "Track.h"

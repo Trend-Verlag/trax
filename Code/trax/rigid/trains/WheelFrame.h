@@ -35,6 +35,11 @@ namespace trax{
 	struct Wheelset;
 	struct TrackJointLimits;
 
+	/// \brief A WheelFrame is a Bogie that hosts Wheelsets 
+	/// and a TrackJoint and therefore can directly get 
+	/// attached to a track. It also is responsible for managing
+	/// a TractionForceCharacteristic and feeding the TrackJoint
+	/// with data. 
 	struct WheelFrame : virtual Bogie{
 
 		/// \brief Makes a WheelFrame object.

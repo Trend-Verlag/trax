@@ -35,7 +35,7 @@ namespace trax{
 	struct Bogie;
 	struct Train;
 
-
+	/// \brief A TrainComponent is a part of a Train.
 	struct TrainComponent : RailRunner
 	{
 		/// \brief Gets a shared pointer to this.

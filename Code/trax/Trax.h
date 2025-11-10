@@ -46,13 +46,16 @@
 /// - \subpage docu_track
 /// - \subpage docu_connector
 /// - \subpage docu_location
+/// - \subpage docu_jacksnplugs
 /// - \subpage docu_sensor
 /// - \subpage docu_signal
-/// - \subpage docu_jacksnplugs
 /// - \subpage docu_gestalt
 /// - \subpage docu_joints
 /// - \subpage docu_simulation
 /// - \subpage docu_railrunners
+/// - \subpage docu_collections
+/// 
+
 
 /// \brief Namespace of all the trax track libraries classes and methods.
 namespace trax{
