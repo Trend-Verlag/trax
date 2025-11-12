@@ -233,8 +233,8 @@ BOOST_FIXTURE_TEST_CASE( testAxisArrangementReader2, TrainFixture )//TrainFixtur
 	BOOST_CHECK( pRollingStock->IsRailed() );
 }
 
-//BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader, TrainFixture )//TrainFixtureVisualDebugger )
-BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader, TrainFixtureVisualDebugger )
+//BOOST_FIXTURE_TEST_CASE( testRollingStockReader, TrainFixture )//TrainFixtureVisualDebugger )
+BOOST_FIXTURE_TEST_CASE( testRollingStockReader, TrainFixtureVisualDebugger )
 {
 	RollingStockCreator creator{ *m_pScene };
 	RollingStockFileReader reader{ creator, FixturePath() };
@@ -257,7 +257,7 @@ BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader, TrainFixtureVisualDebugge
 	BOOST_CHECK( pRollingStock->IsRailed() );
 }
 
-BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader2, TrackCircle )
+BOOST_FIXTURE_TEST_CASE( testRollingStockReader2, TrackCircle )
 {
 	std::unique_ptr<trax::Simulator> pSimulator = Simulator::Make( Simulator::Type::PhysX );
 	BOOST_REQUIRE( pSimulator );
@@ -282,8 +282,8 @@ BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader2, TrackCircle )
 	BOOST_CHECK( pRollingStock->IsRailed() );
 }
 
-BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader3, TrainFixture )
-//BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader3, TrainFixtureVisualDebugger )
+BOOST_FIXTURE_TEST_CASE( testRollingStockReader3, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testRollingStockReader3, TrainFixtureVisualDebugger )
 {
 	RollingStockCreator creator{ *m_pScene };
 	RollingStockFileReader reader{ creator, FixturePath() };
@@ -313,8 +313,8 @@ BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader3, TrainFixture )
 	BOOST_CHECK_CLOSE_SPATIAL( globalLocationWF1.T, globalLocationWF2.T, epsilon__angle );
 }
 
-BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader4, TrainFixture )
-//BOOST_FIXTURE_TEST_CASE( testRollingStockReaderReader3, TrainFixtureVisualDebugger )
+BOOST_FIXTURE_TEST_CASE( testRollingStockReader4, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testRollingStockReader3, TrainFixtureVisualDebugger )
 {
 	RollingStockCreator creator{ *m_pScene };
 	RollingStockFileReader reader{ creator, FixturePath() };

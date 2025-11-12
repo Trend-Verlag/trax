@@ -29,6 +29,7 @@
 #include "trax/Location.h"
 #include "trax/Curve.h"
 #include "trax/Sensor.h"
+#include "trax/Signal.h"
 #include "trax/LogicElements.h"
 
 #include <filesystem>
@@ -45,6 +46,15 @@ struct TrackFixture{
 	~TrackFixture();
 
 	std::shared_ptr<trax::TrackBuilder> m_pTrack;	///< track unattached to system
+};
+
+struct ThreeTracksInALineFixture{
+	ThreeTracksInALineFixture();
+	~ThreeTracksInALineFixture();
+
+	std::shared_ptr<trax::TrackBuilder> m_pTrack1;	
+	std::shared_ptr<trax::TrackBuilder> m_pTrack2;	
+	std::shared_ptr<trax::TrackBuilder> m_pTrack3;	
 };
 
 struct SwichFixture{
@@ -99,4 +109,29 @@ struct SensorFixture : TrackCircle{
 	std::unique_ptr<trax::PulseCounter>		m_pPulseCounter;
 	std::unique_ptr<trax::Event>			m_pEvent;
 };
+
+class TestSignalTarget : public trax::SignalTarget{
+public:
+
+	// SignalTarget:
+	bool Notify( const trax::Signal& signal, dim::Length distance ) override{
+		m_bNotifyFlag = true;
+		return true;
+	}
+
+
+	void Active( bool bActive ) noexcept override{
+		m_bActive = bActive;
+	}
+
+	bool Active() const noexcept override{
+		return m_bActive;
+	}
+
+
+	bool m_bNotifyFlag = false;
+private:
+	bool m_bActive = true;
+};
+
 

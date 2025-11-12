@@ -30,6 +30,7 @@
 #include "trax/Jack.h"
 #include "trax/Event.h"
 
+
 #ifndef TRAX_FIXTURES_DIR
 #define TRAX_FIXTURES_DIR 
 #pragma message("TRAX_FIXTURES_DIR not defined; fixure path might not be found.")
@@ -60,6 +61,37 @@ TrackFixture::TrackFixture()
 
 TrackFixture::~TrackFixture(){
 	m_pTrack->DeCouple();
+}
+///////////////////////////////////////
+ThreeTracksInALineFixture::ThreeTracksInALineFixture()
+	: m_pTrack1	{ trax::TrackBuilder::Make() }
+	, m_pTrack2	{ trax::TrackBuilder::Make() }
+	, m_pTrack3{ trax::TrackBuilder::Make() }
+{
+	std::shared_ptr<trax::Line> pLine = trax::Line::Make();
+
+	m_pTrack1->ID( 1 );
+	m_pTrack2->ID( 2 );
+	m_pTrack3->ID( 3 );
+
+	m_pTrack1->Attach( pLine, { 0_m,10_m } );
+	m_pTrack2->Attach( pLine, { 0_m,10_m } );
+	m_pTrack3->Attach( pLine, { 0_m,10_m } );
+
+	spat::Frame<dim::Length,dim::One> frame = spat::Identity<dim::Length,dim::One>;
+	m_pTrack1->SetFrame( frame );
+	frame.TransportTan( 10_m );
+	m_pTrack2->SetFrame( frame);
+	frame.TransportTan( 10_m );
+	m_pTrack3->SetFrame( frame );
+
+	m_pTrack1->Couple( std::make_pair( m_pTrack1,trax::Track::EndType::end ), std::make_pair( m_pTrack2, trax::Track::EndType::front ) );
+	m_pTrack2->Couple( std::make_pair( m_pTrack2, trax::Track::EndType::end ), std::make_pair( m_pTrack3, trax::Track::EndType::front ) );
+}
+
+ThreeTracksInALineFixture::~ThreeTracksInALineFixture()
+{
+	m_pTrack2->DeCouple();
 }
 ///////////////////////////////////////
 SwichFixture::SwichFixture()
@@ -108,6 +140,11 @@ TrackCircle::TrackCircle()
 		m_pArc4		{ trax::ArcP::Make() },
 		R			{ 100_m }
 {
+	m_pTrack1->ID( 1 );
+	m_pTrack2->ID( 2 );
+	m_pTrack3->ID( 3 );
+	m_pTrack4->ID( 4 );
+
 	// this fixture should give a circle with r == 10...
 	m_pArc1->Create( { spat::Origin3D<dim::Length>, {1,0,0}, {0,_m(R),0} } );
 	m_pTrack1->Attach( m_pArc1, {0_m,R*dim::pi/2} );

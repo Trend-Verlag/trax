@@ -1,7 +1,7 @@
 add_executable(dim_tests
     DimTest.cpp
-    TestDimensionatedValues.cpp
     TestDimDocu.cpp
+    TestDimensionatedValues.cpp
 )
 
 target_link_libraries(dim_tests 

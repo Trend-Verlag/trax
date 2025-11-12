@@ -439,7 +439,7 @@ void Track_Imp::DoTrigger( const Interval<Length>& range, const Event& _event ) 
 
 bool Track_Imp::DoSignal( const Interval<Length>& range, Orientation orientation, SignalTarget& signalTarget ) const{
 	for( const auto& pair : m_Signals )
-		if( pair.first.m_Orientation == orientation && Intersecting( pair.first, range ) ){
+		if( pair.first.m_Orientation == orientation && IntersectingClosed( pair.first, range ) ){
 			if( !signalTarget.Notify( 
 				*pair.second,
 				-pair.second->GetLocation().Distance( Location{ m_pThis.lock(), TrackLocation{ range.m_Far, orientation } }, -1_km ) ) )
@@ -947,7 +947,7 @@ int Track_Imp::CountSensors() const{
 void Track_Imp::Attach( std::shared_ptr<Signal> pSignal, const Interval<Length>& trackRange ){
 	if( !pSignal )
 		throw std::invalid_argument( "Invalid Signal pointer." );
-	if( !Touching( Range(), trackRange ) )
+	if( !IntersectingClosed( Range(), trackRange ) )
 		throw std::invalid_argument( "trackRange not part of this track." );
 
 	pSignal->Attach( this );
@@ -1009,6 +1009,8 @@ void Track_Imp::Detach( const Signal& signal ){
 			}
 		}
 	}
+	else
+		throw std::logic_error( "Signal not attached to this track." );
 }
 
 void Track_Imp::Flip( bool flipAttached )
@@ -1228,26 +1230,20 @@ void Track_Imp::TestTransition( Length s ) const{
 	}
 }
 
-std::vector<std::pair<Track_Imp&, common::Interval<Length>>> Track_Imp::GetRanges( const common::Interval<Length>& range ){
+std::vector<std::pair<Track_Imp&,common::Interval<Length>>> Track_Imp::GetRanges( const common::Interval<Length>& range ){
 	std::vector<std::pair<Track_Imp&,common::Interval<Length>>> list;
-	if( Touching( range, Range() ) ){
+	if( IntersectingClosed( range, Range() ) ){
 		list.push_back( std::pair<Track_Imp&,common::Interval<Length>>{ *this, range } );
-
-		EndType theEnd = EndType::front;
-		Interval<Length> transformedRange( range );
-		RangeAt( theEnd, transformedRange, list );
-
-		theEnd = EndType::end;
-		transformedRange = range;
-		RangeAt( theEnd, transformedRange, list );
+		RangeAt( EndType::front, range, list );
+		RangeAt( EndType::end, range, list );
 	}
 
 	return list;
 }
 
-void Track_Imp::RangeAt( Track::EndType& theEnd, Interval<Length>& range, std::vector<std::pair<Track_Imp&,Interval<Length>>>& list ){
+void Track_Imp::RangeAt( Track::EndType theEnd, Interval<Length> range, std::vector<std::pair<Track_Imp&,Interval<Length>>>& list ){
 	if( auto pTrack = dynamic_cast<Track_Imp*>(Transform( range, theEnd )) ){
-		if( Touching( range, pTrack->Range() ) ){
+		if( IntersectingOpen( range, pTrack->Range() ) ){
 			list.push_back( { *pTrack, range } );
 			pTrack->RangeAt( theEnd, range, list );
 		}

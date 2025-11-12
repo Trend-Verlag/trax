@@ -104,24 +104,21 @@ int Connector_Imp::Slot(
 	if( slot < 0 || slot >= static_cast<int>(m_Slots.size()) )
 		throw std::out_of_range{ "Slot ID is out of range of valid slots!" };
 
-	if( auto pConnector = pTrack->GetConnector( trackend ) ){
+	if( auto pConnector = pTrack->GetConnector( trackend ); pConnector ){
 		assert( pConnector->Slot( *pTrack, trackend ) != -1 );
 
-		if( pConnector == this ){
-			if( Slot( *pTrack, trackend ) == slot )
-				return slot;
-			std::cerr << Verbosity::normal << "Track with ID: " << pTrack->ID() << " and end: " 
-				<< ToString(trackend) << " already connected to different slot with number: ";
-		}
-		else
-			std::cerr << Verbosity::normal << "Track with ID: " << pTrack->ID() << " and end: " 
-				<< ToString(trackend) << " already connected to different connector's slot with number: ";
+		if( pConnector == this && Slot( *pTrack, trackend ) == slot )
+			return slot; // already connected to this slot, call redundant but ok.
 
-		const int oldSlot = pConnector->Slot( *pTrack, trackend );
-		std::cerr << Verbosity::normal << oldSlot << std::endl;
+		std::cerr << Verbosity::normal << "Connector (" << ID() << "," << TypeName() 
+			<< ") Slot: " << slot << ", connect a track end (" << pTrack->ID() << "," << ToString(trackend) 
+			<< ") that was already connected to a different connector-slot: Connector ("
+			<< pConnector->ID() << "," << pConnector->TypeName() << ") Slot: " 
+			<< pConnector->Slot( *pTrack, trackend ) << std::endl;
+		std::cerr << Verbosity::detailed << "Possible reason: EEP switch to switch head on connection." << std::endl;
 
 		if( !connectAnonymous ){
-			pConnector->Clear( oldSlot );
+			pConnector->Clear( pConnector->Slot( *pTrack, trackend ) );
 			assert( pConnector->Slot( *pTrack, trackend ) == -1 );
 		}
 	}

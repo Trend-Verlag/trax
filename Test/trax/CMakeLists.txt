@@ -1,10 +1,11 @@
 add_executable(trax_core_tests
     "./Test.cpp"
-    "./TestCurves.cpp"
     "./TestCoreDocu.cpp"
+    "./TestCurves.cpp"
     "./TestLocation.cpp"
     "./TestReservation.cpp"
     "./TestSensors.cpp"
+    "./TestSignals.cpp"
     "./TestSpatialDimensionatedValues.cpp"
     "./TestTracks.cpp"
     "./TestTracksNormalize.cpp"

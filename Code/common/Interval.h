@@ -252,6 +252,20 @@ namespace common{
 	bool operator>( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept;
 
 
+	/// \returns true if every point in i2 is greater than any point in i1, including borders.
+	template<typename Valtype> constexpr 
+	bool SmallerClosed( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept;
+	/// \returns true if every point in i2 is lesser than any point in i1, excluding borders.
+	template<typename Valtype> constexpr 
+	bool SmallerOpen( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept;
+	/// \returns true if every point in i2 is lesser than any point in i1, including borders.
+	template<typename Valtype> constexpr 
+	bool GreaterClosed( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept;
+	/// \returns true if every point in i2 is lesser than any point in i1, excluding borders.
+	template<typename Valtype> constexpr 
+	bool GreaterOpen( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept;
+
+
 	template<typename Valtype> constexpr 
 	bool operator== ( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept;
 	template<typename Valtype> constexpr 
@@ -259,9 +273,20 @@ namespace common{
 	///@}
 
 
-	/// \returns true if the two intervals have a section in common.
+	/// \returns true if the two intervals have a section in common, including Near() and excluding Far().
 	template<typename Valtype> constexpr 
 	bool Intersecting( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept;
+
+
+	/// \returns true if the two intervals have a section in common, including borders.
+	template<typename Valtype> constexpr 
+	bool IntersectingClosed( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept;
+
+
+	/// \returns true if the two intervals have a section in common, excluding borders.
+	template<typename Valtype> constexpr 
+	bool IntersectingOpen( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept;
+
 
 	/// Two intervals touch, if the distance between them is insignificant (with respect to 
 	/// std::numeric_limits<Valtype>::epsilon()). Intersecting intervals always touch.
@@ -639,6 +664,32 @@ bool operator>( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexc
 	return i2 < i1;
 }
 
+template<typename Valtype>
+inline constexpr bool SmallerClosed( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept{
+	return	i1.Near() < i2.Near() && 
+			i1.Near() < i2.Far() && 
+			i1.Far() < i2.Near() && 
+			i1.Far() < i2.Far();
+}
+
+template<typename Valtype>
+inline constexpr bool SmallerOpen( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept{
+	return	i1.Near() <= i2.Near() && 
+			i1.Near() <= i2.Far() && 
+			i1.Far() <= i2.Near() && 
+			i1.Far() <= i2.Far();
+}
+
+template<typename Valtype>
+inline constexpr bool GreaterClosed( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept{
+	return SmallerClosed( i2, i1 );
+}
+
+template<typename Valtype>
+inline constexpr bool GreaterOpen( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept{
+	return SmallerOpen( i2, i1 );
+}
+
 template<typename Valtype> constexpr
 bool operator==( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept{
 	return i1.m_Near == i2.m_Near && i1.m_Far == i2.m_Far;
@@ -652,6 +703,16 @@ bool operator!= ( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noe
 template<typename Valtype> inline constexpr
 bool Intersecting( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept{
 	return !(i1 < i2 || i1 > i2);
+}
+
+template<typename Valtype>
+inline constexpr bool IntersectingClosed( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept{
+	return !(SmallerClosed( i1, i2 ) || GreaterClosed( i1, i2 ));
+}
+
+template<typename Valtype>
+inline constexpr bool IntersectingOpen( const Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept{
+	return !(SmallerOpen( i1, i2 ) || GreaterOpen( i1, i2 ));
 }
 
 template<typename Valtype>

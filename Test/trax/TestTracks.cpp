@@ -1959,71 +1959,7 @@ BOOST_AUTO_TEST_CASE( ConnectSelf )
 		pTrack->DeCouple();
 	}
 }
-/*
-BOOST_AUTO_TEST_CASE( GetRanges_OffTrack )
-{
-	std::shared_ptr<Line> pLine = Line::Make();
 
-	std::shared_ptr<trax::Track_Imp> pTrack1 = std::dynamic_pointer_cast<Track_Imp>(TrackBuilder::Make());
-	BOOST_REQUIRE( pTrack1 != nullptr );
-	pTrack1->ID( 1 );
-	pTrack1->Attach( pLine, { 0_m, 30_m } );
-
-	std::shared_ptr<trax::TrackBuilder> pTrack2 = TrackBuilder::Make();
-	BOOST_REQUIRE( pTrack2 != nullptr );
-	pTrack2->ID( 2 );
-	pTrack2->Attach( pLine, { 0_m, 30_m } );
-	Frame<Length,One> frame;
-	frame.Init();
-	frame.TransportTan( 15_m );
-	pTrack2->SetFrame( frame );
-
-	std::shared_ptr<trax::TrackBuilder> pTrack3 = TrackBuilder::Make();
-	BOOST_REQUIRE( pTrack3 != nullptr );
-	pTrack3->ID( 3 );
-	pTrack3->Attach( pLine, { 0_m, 30_m } );
-	frame.TransportTan( -30_m );
-	pTrack3->SetFrame( frame );
-
-
-	common::Interval<Length> zeroFront{ 0_m, 0_m };
-	common::Interval<Length> zeroEnd{ 30_m, 30_m };
-	common::Interval<Length> spreading{ -10_m, 50_m };
-	common::Interval<Length> overshooting{ 15_m, 70_m };
-
-	pTrack1->Couple( { pTrack1, Track::EndType::end }, {pTrack2,Track::EndType::front} );
-	pTrack1->Couple( { pTrack1, Track::EndType::front }, {pTrack3,Track::EndType::end} );
-
-	auto list1 = pTrack1->GetRanges( zeroFront );
-	BOOST_REQUIRE_EQUAL( list1.size(), 2 );
-	BOOST_CHECK_EQUAL( list1.front().first.ID(), pTrack1->ID() );
-	BOOST_CHECK_EQUAL( list1.front().second, zeroFront );
-	BOOST_CHECK_EQUAL( list1.back().first.ID(), pTrack3->ID() );
-	BOOST_CHECK_EQUAL( list1.back().second, zeroEnd );
-
-	auto list2 = pTrack1->GetRanges( zeroEnd );
-	BOOST_REQUIRE_EQUAL( list2.size(), 2 );
-	BOOST_CHECK_EQUAL( list2.front().first.ID(), pTrack1->ID() );
-	BOOST_CHECK_EQUAL( list2.front().second, zeroEnd );
-	BOOST_CHECK_EQUAL( list2.back().first.ID(), pTrack2->ID() );
-	BOOST_CHECK_EQUAL( list2.back().second, zeroFront );
-
-	auto list3 = pTrack1->GetRanges( spreading );
-	BOOST_REQUIRE_EQUAL( list3.size(), 3 );
-	BOOST_CHECK_EQUAL( list3.front().first.ID(), pTrack1->ID() );
-	BOOST_CHECK_EQUAL( list3.front().second, spreading );
-
-	auto list4 = pTrack1->GetRanges( overshooting );
-	BOOST_REQUIRE_EQUAL( list4.size(), 2 );
-	BOOST_CHECK_EQUAL( list4.front().first.ID(), pTrack1->ID() );
-	BOOST_CHECK_EQUAL( list4.front().second, overshooting );
-	BOOST_CHECK_EQUAL( list4.back().first.ID(), pTrack2->ID() );
-	common::Interval<Length> result2{ -15_m, 40_m };
-	BOOST_CHECK_EQUAL( list4.back().second, result2 );
-
-	pTrack1->DeCouple();
-}
-*/
 BOOST_AUTO_TEST_SUITE_END() //connect_tests
 BOOST_AUTO_TEST_SUITE(Switch_tests)
 

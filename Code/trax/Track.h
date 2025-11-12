@@ -50,8 +50,8 @@
 /// \image html CurvesInterfaces.png
 ///
 /// \section track_details Details
-/// The overall pose of a track is governed by its \link trax::TrackBuilder::GetFrame Frame \endlink.  
-/// It specifies the transformation between a Curve and the 3d space local to an \ref absolute_frame ,
+/// The overall pose of a track is governed by its \link trax::TrackBuilder::GetFrame Frame \endlink. It specifies the 
+/// transformation between a Curve and the 3d space local to an \ref absolute_frame ,
 /// specified by a TrackCollection. If the Track is not a member of a TrackCollection, the frame will 
 /// be the global pose. To set a desired pose for the track, a \link trax::TrackBuilder::SetFrame SetFrame \endlink 
 /// method can be used. This way any position along the track can get aligned 
@@ -248,7 +248,9 @@ namespace trax
 		virtual Length GetLength() const noexcept = 0;
 
 
-		/// \returns the track's parameter range [0,Length()[
+		/// \returns the track's parameter range [0,Length()]
+		///
+		/// The range includes the last point of the interval.
 		virtual common::Interval<Length> Range() const noexcept = 0;
 
 
@@ -868,11 +870,11 @@ namespace trax
 		/// if its MovingDirection() is in start-end orientation of the TrackRange.
 		/// If the TrackRange goes over the ends of this track, the signal will
 		/// also get registered with the adjacent tracks, respecting the switch settings.
-		/// A Train will receive Signals if ...
 		/// \param pSignal Pointer to Signal to be attached.
-		/// \param trackRange Range the Signal should influence trains in.
+		/// \param trackRange Range the Signal should influence trains in. 
 		/// \param TrackLocation location of a Signal with a zero length track range.
 		/// \throws std::invalid_argument if an invalid Signal was provided.
+		/// touching this track.
 		///@{
 		
 		/// \brief Attaches a Signal to the specified range to this track.
@@ -887,6 +889,7 @@ namespace trax
 
 
 		/// \brief Detaches a Signal from the track and all adjacent tracks
+		/// \throws std::logic_error if the Signal was not attached.
 		virtual void Detach( const Signal& signal ) = 0;
 		///@}
 

@@ -38,8 +38,8 @@ using namespace std;
 
 
 
+BOOST_AUTO_TEST_SUITE(trax_tests)
 BOOST_AUTO_TEST_SUITE(Location_tests)
-
 
 BOOST_AUTO_TEST_CASE( assignment )
 {
@@ -288,6 +288,7 @@ BOOST_FIXTURE_TEST_CASE( MoveTransitAnti, TrackCircle )
 BOOST_FIXTURE_TEST_CASE( MoveTransitExtremeCases, TrackCircle )
 {
 	m_Location.PutOn( m_pTrack1, {m_pTrack1->GetLength(),Orientation::Value::para} );
+	BOOST_CHECK( m_Location.GetTrack() == m_pTrack1 );
 	m_Location.MoveTransit();
 	BOOST_CHECK( m_Location.GetTrack() == m_pTrack2 );
 
@@ -295,7 +296,11 @@ BOOST_FIXTURE_TEST_CASE( MoveTransitExtremeCases, TrackCircle )
 	m_Location.MoveTransit( Orientation::Value::anti );
 	BOOST_CHECK( m_Location.GetTrack() == m_pTrack4 );
 
-	m_Location.PutOn( m_pTrack1, {_m(epsilon),Orientation::Value::para} );
+	m_Location.PutOn( m_pTrack1, {epsilon__length,Orientation::Value::para} );
+	m_Location.MoveTransit( Orientation::Value::anti );
+	BOOST_CHECK( m_Location.GetTrack() == m_pTrack4 );
+
+	m_Location.PutOn( m_pTrack1, {Length{epsilon},Orientation::Value::para} );
 	m_Location.MoveTransit( Orientation::Value::anti );
 	BOOST_CHECK( m_Location.GetTrack() == m_pTrack4 );
 
@@ -303,43 +308,67 @@ BOOST_FIXTURE_TEST_CASE( MoveTransitExtremeCases, TrackCircle )
 	m_Location.MoveTransit();
 	BOOST_CHECK( m_Location.GetTrack() == m_pTrack3 );
 
-	m_Location.PutOn( m_pTrack1, {_m(-epsilon),Orientation::Value::para} );
+	m_Location.PutOn( m_pTrack1, {-epsilon__length,Orientation::Value::para} );
+	BOOST_CHECK( m_Location.GetTrack() == m_pTrack4 );
+	m_Location.MoveTransit( Orientation::Value::anti );
+	BOOST_CHECK( m_Location.GetTrack() == m_pTrack3 );
+
+	m_Location.PutOn( m_pTrack1, {Length{-epsilon},Orientation::Value::para} );
+	BOOST_CHECK( m_Location.GetTrack() == m_pTrack4 );
 	m_Location.MoveTransit( Orientation::Value::anti );
 	BOOST_CHECK( m_Location.GetTrack() == m_pTrack3 );
 }
 
-BOOST_AUTO_TEST_CASE( moveoverseveraltracks )
+BOOST_FIXTURE_TEST_CASE( moveoverseveraltracks, ThreeTracksInALineFixture )
 //Move a location over three tracks and beyond. Measure the distance returned.
 {
-	std::shared_ptr<trax::TrackBuilder> pTrack1 = TrackBuilder::Make();
-	std::shared_ptr<trax::TrackBuilder> pTrack2 = TrackBuilder::Make();
-	std::shared_ptr<trax::TrackBuilder> pTrack3 = TrackBuilder::Make();
-	shared_ptr<Line> pLine = Line::Make();
+	Location Loc( m_pTrack1, trax::TrackLocation( 0_m, true ) );
+	auto rest = Loc.Move( m_pTrack1->GetLength() + m_pTrack2->GetLength() + m_pTrack3->GetLength() + m_pTrack3->GetLength() );
 
-	pTrack1->Attach( pLine,{ 0_m,10_m } );
-	pTrack2->Attach( pLine,{ 0_m,10_m } );
-	pTrack3->Attach( pLine,{ 0_m,10_m } );
-
-	Frame<Length,One> frame = Identity<Length,One>;
-	pTrack1->SetFrame( frame );
-	frame.TransportTan( 10_m );
-	pTrack2->SetFrame( frame);
-	frame.TransportTan( 10_m );
-	pTrack3->SetFrame( frame );
-
-	pTrack1->Couple( std::make_pair( pTrack1,Track::EndType::end ), std::make_pair( pTrack2,Track::EndType::front ) );
-	pTrack2->Couple( std::make_pair( pTrack2, Track::EndType::end ), std::make_pair( pTrack3,Track::EndType::front ) );
-
-	Location Loc( pTrack1, trax::TrackLocation( 0_m, true ) );
-	auto rest = Loc.Move( pTrack1->GetLength() + pTrack2->GetLength() + pTrack3->GetLength() + pTrack3->GetLength() );
-
-	BOOST_CHECK_EQUAL( rest.first, pTrack3->GetLength() );
-
-	pTrack1->DeCouple();
-	pTrack2->DeCouple();
+	BOOST_CHECK_EQUAL( rest.first, m_pTrack3->GetLength() );
 }
 
+BOOST_FIXTURE_TEST_CASE( movetransit, ThreeTracksInALineFixture )
+//MoveTransit backward over track connection
+{
+	Location Loc( m_pTrack2, trax::TrackLocation( 0_m, true ) );
+	const auto delta = Loc.MoveTransit( Orientation::Value::anti );
+	BOOST_CHECK_EQUAL( Loc.GetTrack(), m_pTrack1 );
+	BOOST_CHECK_EQUAL( delta.first, -0_m );
+	BOOST_CHECK( delta.second );
 
+	m_pTrack1->DeCouple();
+}
+
+BOOST_FIXTURE_TEST_CASE( distanceoverseveraltracks, ThreeTracksInALineFixture )
+//Distance over coupled track ends.
+{
+	Location Loc1{ m_pTrack3, trax::TrackLocation{ 5_m, true } };
+	Length dist = Loc1.Distance( Location( m_pTrack1, trax::TrackLocation{ m_pTrack1->Range().Center(), true } ), -1_km );
+	BOOST_CHECK_CLOSE_DIMENSION( dist, -20_m, 0.01 );
+
+	Location Loc2{ m_pTrack2, trax::TrackLocation{ 0_m, true } };
+	dist = Loc2.Distance( Location( m_pTrack1, trax::TrackLocation{ m_pTrack1->GetLength(), true } ), -1_km );
+	BOOST_CHECK_SMALL( dist, epsilon__length );
+
+	Location Loc3{ m_pTrack3, trax::TrackLocation{ 0_m, true } };
+	dist = Loc3.Distance( Location( m_pTrack1, trax::TrackLocation{ m_pTrack1->GetLength(), true } ), -1_km );
+	BOOST_CHECK_CLOSE_DIMENSION( dist, -10_m, 0.01 );
+}
+
+BOOST_FIXTURE_TEST_CASE( resolveFromEnd, ThreeTracksInALineFixture )
+// Don't resolve from track end.
+{	
+	Location Loc1{ m_pTrack2, trax::TrackLocation{ m_pTrack2->GetLength(), true } };
+	BOOST_CHECK_EQUAL( Loc1.GetTrack(), m_pTrack2 );
+	BOOST_CHECK_EQUAL( Loc1.Param(), m_pTrack2->GetLength() );
+
+	Location Loc2{ m_pTrack2, trax::TrackLocation{ m_pTrack2->GetLength() + Length{ epsilon }, true } };
+	BOOST_CHECK_EQUAL( Loc2.GetTrack(), m_pTrack2 );
+	BOOST_CHECK_EQUAL( Loc2.Param(), m_pTrack2->GetLength() + Length{ epsilon } );
+
+}
 
 BOOST_AUTO_TEST_SUITE_END() //Location_tests
-#endif // WITH_BOOST_TESTS
+BOOST_AUTO_TEST_SUITE_END() //trax_tests
+#endif

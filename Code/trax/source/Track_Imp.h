@@ -260,6 +260,8 @@ namespace trax{
 			}
 		};
 
+		// Signals operating on this track with their total 
+		// range and orientation relative to this track:
 		std::vector<std::pair<OrientedInterval,std::shared_ptr<Signal>>> m_Signals;
 		Connector* m_pConnectorFront;
 		Connector* m_pConnectorEnd;
@@ -278,12 +280,11 @@ namespace trax{
 		void TestTransition( Length s ) const;
 	
 		// Resolves a given range relative to this track into a list of resolved 
-		// track/ranges pairs. It contains all the tracks that the range touches,
+		// track/ranges pairs. It contains all the tracks that the range intersects,
 		// with the range resolved for the particular track. vector<> will be 
 		// empty, if range does not touch this track at all.
 		std::vector<std::pair<Track_Imp&,common::Interval<Length>>> GetRanges( const common::Interval<Length>& range );
-		void RangeAt( Track::EndType& theEnd, Interval<Length>& range, std::vector<std::pair<Track_Imp&,Interval<Length>>>& list );
-
+		void RangeAt( Track::EndType theEnd, Interval<Length> range, std::vector<std::pair<Track_Imp&,Interval<Length>>>& list );
 		// Recalculates track parameters with respect to a connected track.
 		Track* Transform( Interval<Length>& range, Track::EndType& toTrackAtEnd ) const noexcept;
 

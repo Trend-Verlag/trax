@@ -419,8 +419,7 @@ namespace trax{
 		/// \brief Switches the target on or off to receive notifications
 		/// from signals.
 		/// \param bActive true to receive, the default.
-		/// \returns The previous activity state.
-		virtual bool Active( bool bActive ) noexcept = 0;
+		virtual void Active( bool bActive ) noexcept = 0;
 
 
 		/// \returns Activity state of the target.

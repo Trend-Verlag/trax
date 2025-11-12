@@ -40,6 +40,7 @@ using namespace dim;
 using namespace spat;
 using namespace trax;
 
+BOOST_AUTO_TEST_SUITE(trax_tests)
 BOOST_AUTO_TEST_SUITE(CoreDocu)
 
 BOOST_AUTO_TEST_CASE( test_docu_units )
@@ -72,7 +73,7 @@ BOOST_AUTO_TEST_CASE( test_docu_curve )
 
 	auto curve = CreateCurve( {{0_m,0_m,0_m},{1,0,0}}, {{10_m,10_m,0_m},{0,1,0}}, spat::Ez<One> );
 	BOOST_CHECK( curve.second.Equals( {0_m,pi/2 * 10_m}, epsilon__length ) );
-	BOOST_CHECK( curve.first->TypeName() == "Arc" );
+	BOOST_CHECK_EQUAL( curve.first->TypeName(), "Arc" );
 
 	auto pCubic = Cubic::Make();
 	spat::VectorBundle<Length,Length> start{ {10_m, 10_m, 10_m}, {250_m,0_m,0_m} };
@@ -183,5 +184,5 @@ BOOST_AUTO_TEST_CASE( test_docu_location )
 }
 
 BOOST_AUTO_TEST_SUITE_END() //CoreDocu
-
-#endif 
+BOOST_AUTO_TEST_SUITE_END() //trax_tests
+#endif

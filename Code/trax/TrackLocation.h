@@ -70,12 +70,6 @@ namespace trax{
 			return !operator==( tl );
 		}
 
-		/// \returns true if the parameter value is in [range.Near(),range.Far()].
-		bool InRange( const common::Interval<Length>& range ) const noexcept{
-			return !(parameter < range.Near() ||
-					 parameter > range.Far());
-		}
-
 
 		/// \param loc TrackLocation to compare with.
 		/// \param _epsilon Threshold for parameter equality.

@@ -56,11 +56,16 @@ void Location::PutOn( std::shared_ptr<Track> pTrack, const TrackLocation& tl ){
 	m_pTrack = pTrack;
 	m_TLocation = tl;
 
-	if( !Resolve() ){
-		auto range = m_pTrack->Range();
-		range.Inflate( epsilon__length );
-		if( m_TLocation.InRange(range) )
-			m_pTrack->Range().Clip( m_TLocation.parameter );
+	if( !Resolve() )
+	{
+		if( common::Interval<Length>{ 
+				m_pTrack->Range().Far(), 
+				m_pTrack->Range().Far() + epsilon__length }.Includes( m_TLocation.parameter ) )
+			// Have the Location bee sticky to the end of the track within epsilon__length
+			// to prevent resolution issues due to infinite back and forth transitions.
+		{
+			m_TLocation.parameter = m_pTrack->Range().Far();
+		}
 		else{
 			std::ostringstream stream;
 			stream << "Couldn't resolve track location: " << tl << " on track: " << pTrack->ID();
@@ -351,7 +356,7 @@ Length Location::Distance( const Location& loc, const Length maxdistance ) const
 			return maxdistance;
 
 		if( !delta.second )
-			throw std::out_of_range{ "Reached open track end while searching for loacation!" };
+			throw std::out_of_range{ "Reached open track end while searching for location!" };
 	}
 
 	distance += common::Sign(maxdistance) * abs( thisLoc.Param() - loc.Param() );
@@ -446,8 +451,15 @@ bool Location::Resolve() noexcept{
 }
 
 bool Location::IsResolved() const noexcept{
-	if( m_pTrack )
-		return m_TLocation.InRange( m_pTrack->Range() );
+	if( m_pTrack ){
+		if( m_pTrack->Range().Includes( m_TLocation.parameter ) )
+			return true;
+
+		if( m_TLocation.parameter >= 0_m &&
+			m_TLocation.parameter <= m_pTrack->Range().Far() + Length{ epsilon } )
+			// Far belongs to the track range within epsilon
+			return true;
+	}
 
 	return false;
 }

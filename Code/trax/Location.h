@@ -133,9 +133,9 @@ namespace trax
 
 		/// \brief Attaches this Location onto the specified track. 
 		///
-		///	The track location gets resolved. This means that if the parameter value is 
-		/// out of range for this track, the method tries to find the track for the position 
-		/// denoted by the parameters (tl.parameter > 0 && tl.parameter < pTrack->GetLength()).
+		///	The track location gets resolved; this means that if the parameter value is 
+		/// out of Track::Range() for this track, the method tries to find the track for 
+		/// the position on coupled tracks.
 		/// If a dead end is encountered in this process a std::out_of_range exception gets
 		/// thrown.
 		/// \param pTrack The track relativ to wich tl is formulated.
@@ -303,7 +303,8 @@ namespace trax
 
 		/// \brief Gets the parameter distance between two locations.
 		///
-		/// \param loc Location to search for behind this location if maxdistance < 0 or in front of it if maxdistance > 0.
+		/// \param loc Location to search for behind this location if maxdistance < 0 or 
+		/// in front of it if maxdistance > 0.
 		/// \param maxdistance If the distance outgrews maxdistance, maxdistance is returned.
 		/// \throws std::logic_error exception if one of the locations is not attached to a track.
 		/// \throws std::out_of_range exception if it hits a not connected track end 

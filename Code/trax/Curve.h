@@ -156,7 +156,7 @@
 /// \code
 ///	auto curve = CreateCurve( {{0_m,0_m,0_m},{1,0,0}}, {{10_m,10_m,0_m},{0,1,0}}, spat::Ez<One> );
 ///	BOOST_CHECK( curve.second.Equals( {0_m,pi/2 * 10_m}, epsilon__length ) );
-///	BOOST_CHECK( curve.first->TypeName() == "Arc" );
+///	BOOST_CHECK_EQUAL( curve.first->TypeName(), "Arc" );
 /// \endcode
 ///
 /// To create a Cubic, connecting two points, but starting and ending with parallel tangents:
