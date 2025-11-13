@@ -1,2 +1,2 @@
-cmake --build ..\_Build --target docs
+cmake --build ..\_Build --target ALL_DOCUMENTATION
 pause

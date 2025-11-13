@@ -46,6 +46,7 @@ namespace trax{
 
     /// \brief Verbosity scale of trax library messages.
     enum class Verbosity : char{
+		unknown = 0,//< unknown verbosity
 	    silent,		//< no messages at all
 	    error,		//< errors only
 	    normal,		//< important messages only
@@ -53,15 +54,15 @@ namespace trax{
 	    verbose		//< everything
     };
 
-	std::string dclspc ToString( Verbosity type );
+	dclspc std::string ToString( Verbosity type );
 
-	Verbosity dclspc ToVerbosity( const std::string& type );
+	dclspc Verbosity ToVerbosity( const std::string& type ) noexcept;
 
-	void dclspc SetReportVerbosity( Verbosity verbosity ) noexcept;
+	dclspc void SetReportVerbosity( Verbosity verbosity ) noexcept;
 
-    Verbosity dclspc GetReportVerbosity() noexcept;
+    dclspc Verbosity GetReportVerbosity() noexcept;
 
-	std::ostream& dclspc operator<<( std::ostream& stream, Verbosity verbosity );
+	dclspc std::ostream& operator<<( std::ostream& stream, Verbosity verbosity );
 
 
 	class ReportVerbosityGuard{

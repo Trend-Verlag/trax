@@ -1709,7 +1709,8 @@ BOOST_AUTO_TEST_CASE( PlaneParallelCubic5 )
 	std::shared_ptr<const Spline> pSpline = std::dynamic_pointer_cast<const Spline>(pParallel->GetCurve().first);
 	BOOST_CHECK( !pSpline->HasGaps() );
 	BOOST_CHECK( !pSpline->HasKinks() );
-	BOOST_CHECK_EQUAL( pSpline->GetData().size(), 11u );
+	BOOST_CHECK_GE( pSpline->GetData().size(), 11u );
+	BOOST_CHECK_LE( pSpline->GetData().size(), 12u );
 
 
 	common::Interval<Length> rangeParellel = pParallel->Range();

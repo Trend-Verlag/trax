@@ -36,7 +36,7 @@ const Length Frustum::default_nearPlane = 1_m;
 const Length Frustum::default_farPlane = 1_km;
 
 ///////////////////////////////////////
-std::unique_ptr<Camera> Camera::Make( CameraType type ) noexcept{
+std::unique_ptr<Camera> Camera::Make( CameraType /*type*/ ) noexcept{
 	try{
 		return std::make_unique<Camera_Imp>();
 	}
@@ -265,7 +265,7 @@ Vector<Velocity> AnimatedCamera_Imp::GetVelocity() const{
 	return (GetFrame().P - m_StepBackPose.P) / fixed_timestep;
 }
 
-std::vector<GeomList*> AnimatedCamera_Imp::OverlapQuery( unsigned int filterflags ) const{
+std::vector<GeomList*> AnimatedCamera_Imp::OverlapQuery( unsigned int /*filterflags*/ ) const{
 	//if( m_pModule )
 	//	if( auto pSimulator = m_pModule->GetSimulator() )
 	//		return pSimulator->OverlapQuery( *m_pCollisionGeom, filterflags );
@@ -273,7 +273,7 @@ std::vector<GeomList*> AnimatedCamera_Imp::OverlapQuery( unsigned int filterflag
 	return {};
 }
 
-GeomList* AnimatedCamera_Imp::OverlapQueryAny( unsigned int filterflags ) const{
+GeomList* AnimatedCamera_Imp::OverlapQueryAny( unsigned int /*filterflags*/ ) const{
 	//if( m_pModule )
 	//	if( auto pSimulator = m_pModule->GetSimulator() )
 	//		return pSimulator->OverlapQueryAny( *m_pCollisionGeom, filterflags );

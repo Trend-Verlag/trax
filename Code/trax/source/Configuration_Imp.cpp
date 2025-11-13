@@ -28,19 +28,47 @@
 
 namespace trax{
 
-std::ostream cnull{ false };
+std::ostream cnull{ nullptr };
 
 static Verbosity g_ReportVerbosity = Verbosity::normal;
 
-
 std::string ToString( Verbosity type )
 {
-    return std::string dclspc();
+    switch( type )
+	{
+		case Verbosity::unknown:
+			return "unknown";
+		case Verbosity::silent:
+			return "silent";
+		case Verbosity::error:
+			return "error";
+		case Verbosity::normal:
+			return "normal";
+		case Verbosity::detailed:
+			return "detailed";
+		case Verbosity::verbose:
+			return "verbose";
+	}
+
+	throw std::logic_error{ "Invalid Verbosity type." };
 }
 
-Verbosity ToVerbosity( const std::string & type )
+Verbosity ToVerbosity( const std::string& type ) noexcept
 {
-    return Verbosity dclspc();
+	if( type == "unknown" )
+		return Verbosity::unknown;
+	if( type == "silent" )
+		return Verbosity::silent;
+	if( type == "error" )
+		return Verbosity::error;
+	if( type == "normal" )
+		return Verbosity::normal;
+	if( type == "detailed" )
+		return Verbosity::detailed;
+	if( type == "verbose" )
+		return Verbosity::verbose;
+
+    return Verbosity::unknown;
 }
 
 void SetReportVerbosity( Verbosity verbosity ) noexcept {

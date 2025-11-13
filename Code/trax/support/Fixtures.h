@@ -114,7 +114,7 @@ class TestSignalTarget : public trax::SignalTarget{
 public:
 
 	// SignalTarget:
-	bool Notify( const trax::Signal& signal, dim::Length distance ) override{
+	bool Notify( const trax::Signal& /*signal*/, dim::Length /*distance*/ ) override{
 		m_bNotifyFlag = true;
 		return true;
 	}

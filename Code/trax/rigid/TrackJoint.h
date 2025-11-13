@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "trax/Configuration.h"
 #include "trax/TrackData.h"
 #include "trax/Units.h"
 
