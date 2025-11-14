@@ -47,6 +47,8 @@ namespace trax{
 		TrainComponent_Imp() noexcept;
 
 		// RailRunner:
+		bool IsValid() const noexcept override;
+
 		void ActivateCoupling( RailRunner::EndType end ) override;
 
 		void DeactivateCoupling( RailRunner::EndType end ) override;
@@ -161,6 +163,18 @@ TrainComponent_Imp<Base>::TrainComponent_Imp() noexcept
 	m_JackOnCouplingActivatedSouth.Insert( &m_JackOnCouplingActivated.PlugToPulse().Make() );
 	m_JackOnCouplingDeactivatedNorth.Insert( &m_JackOnCouplingDeactivated.PlugToPulse().Make() );
 	m_JackOnCouplingDeactivatedSouth.Insert( &m_JackOnCouplingDeactivated.PlugToPulse().Make() );
+}
+
+template<class Base>
+bool TrainComponent_Imp<Base>::IsValid() const noexcept
+{
+	if( !RailRunner_Imp<Base>::IsValid() )
+		return false;
+
+	if( !ThisTrainComponent() )
+		return false;
+
+	return true;
 }
 
 template<class Base>

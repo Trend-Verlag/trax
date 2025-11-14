@@ -349,6 +349,8 @@ namespace dim
 
 	/// \name Positive infinity values
 	///@{
+
+	/// \brief Dimensionated infinite values.
 	constexpr One				infinite__one{ infinite };
 	constexpr Angle				infinite__angle{ infinite };
 	constexpr AnglePerLength	infinite__anglePerLength{ infinite };
@@ -463,6 +465,8 @@ namespace dim{
 
 	/// \name Dimensionated Values Operators
 	///@{
+
+	/// \brief Dimensionated Values operator.
 	template<int L,int M,int T> inline
 	constexpr Value<Dimension<L,M,T>> operator+( const Value<Dimension<L,M,T>>& a, const Value<Dimension<L,M,T>>& b ) noexcept{
 		return Value<Dimension<L,M,T>>{ a.Units() + b.Units() };
@@ -659,6 +663,8 @@ namespace dim{
 
 	/// \name Dimensionated Values Math Functions
 	///@{
+	
+	/// \brief Dimensionated Values math function.
 	template<int L,int M,int T>
 	constexpr Value<Dimension<L/2,M/2,T/2>> sqrt( Value<Dimension<L,M,T>> a ) noexcept{
 		return Value<Dimension<L/2,M/2,T/2>>{ std::sqrt(a.Units()) };
@@ -738,6 +744,8 @@ namespace dim{
 
 		/// \name Dimensioned Values Literals
 		///@{
+
+		/// \brief Dimensionated Values literal operator.
 		constexpr Value<Dimension<-1,0,0>> operator"" _1Ikm( const unsigned long long int value ){
 			return Value<Dimension<-1,0,0>>{ static_cast<Real>(value) * meters_per_unit / 1000 };
 		}
@@ -1133,6 +1141,8 @@ namespace dim{
 	inline namespace literals{
 		/// \name Dimensionated Values Literals
 		///@{
+		
+		/// \brief Dimensionated Values literal operator.
 		constexpr Angle operator"" _deg( const unsigned long long int degree ){
 			return Angle{ static_cast<Real>(degree) * pi/180 };
 		}
@@ -1154,6 +1164,8 @@ namespace dim{
 
 	/// \name Dimensionated Values Units Conversion Functions:
 	///@{
+
+	/// \brief Dimensionated Values conversion functions.
 	constexpr inline Real _1( One one ) noexcept{
 		return one.Units();
 	}

@@ -25,6 +25,7 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
+#if defined( WITH_BOOST_TESTS )
 #include <boost/test/unit_test.hpp>
 
 #include "trax/Jack.h"
@@ -39,6 +40,7 @@
 
 using namespace trax;
 
+BOOST_AUTO_TEST_SUITE(trax_tests)
 BOOST_AUTO_TEST_SUITE(TestJacksNPlugs)
 
 BOOST_FIXTURE_TEST_CASE( testTrainSplit, TrainFixture ) //
@@ -190,3 +192,5 @@ BOOST_FIXTURE_TEST_CASE( testOnUnCouplingCoupling, TrainFixture )
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() //trax_tests
+#endif

@@ -211,6 +211,8 @@ namespace common{
 
 	/// \name Mathematical Operators for Interval
 	///@{
+	
+	/// \brief Interval operator.
 	template<typename Valtype> 
 	void operator+=( Interval<Valtype>& i1, const Interval<Valtype>& i2 ) noexcept;
 	template<typename Valtype> constexpr 

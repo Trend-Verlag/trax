@@ -139,7 +139,7 @@ namespace trax{
 
 		bool Couple( EndType end, Train& with, EndType withEnd ) noexcept override;
 				
-		std::pair<std::shared_ptr<struct Train>, std::shared_ptr<struct Train>> Split( int at ) noexcept override;
+		std::pair<std::shared_ptr<struct Train>, std::shared_ptr<struct Train>> Split( int at ) override;
 		
 		std::shared_ptr<Train> Separate() override;
 

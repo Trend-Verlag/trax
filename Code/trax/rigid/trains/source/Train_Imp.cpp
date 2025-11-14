@@ -69,6 +69,12 @@ const char* Train_Imp::TypeName() const noexcept{
 
 bool Train_Imp::IsValid() const noexcept
 {
+	if( !Train_Base::IsValid() )
+		return false;
+
+	if( !ThisTrain() )
+		return false;
+
 	if( m_Train.empty() )
 		return false;
 
@@ -659,7 +665,7 @@ bool Train_Imp::Couple( EndType end, Train& with, EndType withEnd ) noexcept{
 }
 
 std::pair<std::shared_ptr<struct Train>,std::shared_ptr<struct Train>> 
-Train_Imp::Split( int at ) noexcept
+Train_Imp::Split( int at )
 {
 	std::size_t _at = static_cast<std::size_t>(at);
 	if( _at >= 0 && 
@@ -668,8 +674,10 @@ Train_Imp::Split( int at ) noexcept
 	{
 		m_JackOnSeparation.ClearPlugs();
 
-		std::shared_ptr<Train> pTrainA = std::make_shared<Train_Imp>();
-		std::shared_ptr<Train> pTrainB = std::make_shared<Train_Imp>();
+		std::shared_ptr<Train> pTrainA = Train::Make();
+		std::shared_ptr<Train> pTrainB = Train::Make();
+		if( !pTrainA || !pTrainB )
+			return std::make_pair( nullptr, nullptr );
 
 		for( std::size_t idx = 0; idx < m_Train.size(); ++idx )
 		{

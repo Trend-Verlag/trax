@@ -25,6 +25,8 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
+#if defined( WITH_BOOST_TESTS )
+
 #include <boost/test/unit_test.hpp>
 
 #include "trax/support/Fixtures.h"
@@ -41,7 +43,9 @@
 using namespace spat;
 using namespace trax;
 
+BOOST_AUTO_TEST_SUITE(trax_tests)
 BOOST_AUTO_TEST_SUITE(TestWheelFrame)
+
 BOOST_AUTO_TEST_CASE( testSimulator )
 {
 	std::unique_ptr<trax::Simulator> pSimulator = Simulator::Make( Simulator::Type::PhysX );
@@ -126,3 +130,5 @@ BOOST_FIXTURE_TEST_CASE( testWheelFrameResetAnchor, TrackFixture )
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() //trax_tests
+#endif

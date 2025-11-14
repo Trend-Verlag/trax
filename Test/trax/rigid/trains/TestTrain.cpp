@@ -25,6 +25,8 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
+#if defined( WITH_BOOST_TESTS )
+
 #include <boost/test/unit_test.hpp>
 
 #include "trax/rigid/trains/support/FixturesTrain.h"
@@ -44,10 +46,11 @@
 using namespace spat;
 using namespace trax;
 
-BOOST_AUTO_TEST_SUITE(TestTrain)
+BOOST_AUTO_TEST_SUITE(trax_tests)
+BOOST_AUTO_TEST_SUITE(TrainCreationTests)
 
-//BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixture )
-BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixtureVisualDebugger )
+BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixtureVisualDebugger )
 {
 	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
 	BOOST_REQUIRE( reader( "Cargo.train" ) );
@@ -221,8 +224,8 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation4, TrainFixture )
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetVelocity(), 10_mIs, 1 );
 }
 
-BOOST_FIXTURE_TEST_CASE( testTrainCreation5, TrainFixture ) //VisualDebugger
-//BOOST_FIXTURE_TEST_CASE( testTrainCreation5, TrainFixtureVisualDebugger ) //
+BOOST_FIXTURE_TEST_CASE( testTrainCreation5, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testTrainCreation5, TrainFixtureVisualDebugger )
 {
 	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
 	BOOST_REQUIRE( reader( "CargoTwoLokos.train" ) );
@@ -321,7 +324,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation6, TrainFixture )//VisualDebugger
 	BOOST_CHECK( pTrain->IsRailed() );
 	BOOST_CHECK_SMALL( pTrain->GetVelocity(), epsilon__velocity );
 }
-/*
+
 //BOOST_FIXTURE_TEST_CASE( testTrainCreation7, TrainFixture ) //VisualDebugger
 BOOST_FIXTURE_TEST_CASE( testTrainCreation7, TrainFixtureVisualDebugger )
 {
@@ -357,8 +360,12 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation7, TrainFixtureVisualDebugger )
 	BOOST_CHECK( pTrain->IsRailed() );
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetVelocity(), 5_mIs, 1 );
 }
-*/
-BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture ) //VisualDebugger ) 
+
+BOOST_AUTO_TEST_SUITE_END() // TrainCreationTests
+BOOST_AUTO_TEST_SUITE(TrainRunningTests)
+
+//BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixtureVisualDebugger )
+BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture )
 {
 	{
 		int cntSystems = 8u; //1u; //64u; //125u; //216u;//27u;
@@ -411,4 +418,130 @@ BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture ) //
 	m_pTrackSystem.reset();
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() // TrainRunningTests
+BOOST_AUTO_TEST_SUITE(TrainCouplingTests)
+
+BOOST_FIXTURE_TEST_CASE( testTrainDecouple, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testTrainDecouple, TrainFixtureVisualDebugger )
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "Cargo.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+	BOOST_CHECK( pTrain->IsValid() );
+
+	BOOST_CHECK_NO_THROW( pTrain->Rail( m_Location ) );
+
+	BOOST_REQUIRE( pTrain->IsValid() );
+	BOOST_REQUIRE( pTrain->IsRailed() );
+
+	// no split happening:
+	std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> Split = pTrain->Split( pTrain->GetNumberOfComponents()-1 );
+	BOOST_CHECK_EQUAL( Split.first, nullptr );
+	BOOST_CHECK_EQUAL( Split.second, nullptr );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
+		
+	BOOST_CHECK_NO_THROW( Split = pTrain->Split( pTrain->GetNumberOfComponents() ) );
+	BOOST_CHECK_EQUAL( Split.first, nullptr );
+	BOOST_CHECK_EQUAL( Split.second, nullptr );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
+
+	BOOST_CHECK_NO_THROW( Split = pTrain->Split( -1 ) );
+	BOOST_CHECK_EQUAL( Split.first, nullptr );
+	BOOST_CHECK_EQUAL( Split.second, nullptr );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
+
+
+	// split happens:
+	BOOST_CHECK_NO_THROW( Split = pTrain->Split( 5 ) );
+	BOOST_REQUIRE( Split.first );
+	BOOST_REQUIRE( Split.second );
+	BOOST_CHECK( Split.first->IsValid() );
+	BOOST_CHECK( Split.second->IsValid() );
+	BOOST_CHECK_EQUAL( Split.first->GetNumberOfComponents(), 6 );
+	BOOST_CHECK_EQUAL( Split.second->GetNumberOfComponents(), 4 );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
+	BOOST_CHECK_EQUAL( Split.first->GetCoupledTrainComponent( Train::EndType::south ).first, Split.second );
+	BOOST_CHECK_EQUAL( Split.first->GetCoupledTrainComponent( Train::EndType::north ).first, nullptr );
+	BOOST_CHECK_EQUAL( Split.second->GetCoupledTrainComponent( Train::EndType::north ).first, Split.first );
+	BOOST_CHECK_EQUAL( Split.second->GetCoupledTrainComponent( Train::EndType::south ).first, nullptr );
+	BOOST_CHECK( pTrain->IsValid() );
+	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
+	BOOST_CHECK( !Split.first->IsUnCoupledInternally() );
+	BOOST_CHECK( !Split.second->IsUnCoupledInternally() );
+	BOOST_CHECK_EQUAL( Split.first->GetTrain(), pTrain.get() );
+	BOOST_CHECK_EQUAL( Split.second->GetTrain(), pTrain.get() );
+
+	pTrain->Clear();
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 0 );
+	BOOST_CHECK( !pTrain->IsValid() );
+	BOOST_CHECK_EQUAL( Split.first->GetTrain(), nullptr );
+	BOOST_CHECK_EQUAL( Split.second->GetTrain(), nullptr );
+
+
+	// recouple:
+	BOOST_CHECK( !Split.first->Uncouple( Train::EndType::south ) );
+	BOOST_CHECK( Split.first->Couple( Train::EndType::south, *Split.second, Train::EndType::north ) );
+	BOOST_CHECK( Split.first->IsCoupled( Train::EndType::south ) );
+	BOOST_CHECK( Split.second->IsCoupled( Train::EndType::north ) );
+	BOOST_CHECK( Split.first->Uncouple( Train::EndType::south ) );
+	BOOST_CHECK( !Split.first->IsCoupled( Train::EndType::south ) );
+	BOOST_CHECK( !Split.second->IsCoupled( Train::EndType::north ) );
+
+
+	// Re-insert to train:
+	BOOST_CHECK_NO_THROW( pTrain->Append( Train::EndType::south, Split.first, Train::EndType::north ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 1 );
+	BOOST_CHECK_NO_THROW( pTrain->Append( Train::EndType::south, Split.second, Train::EndType::north ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
+	BOOST_CHECK( pTrain->IsValid() );
+	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
+	pTrain->Reduce();
+	BOOST_CHECK( pTrain->IsValid() );
+	BOOST_CHECK( pTrain->IsRailed() );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
+	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
+}
+
+BOOST_FIXTURE_TEST_CASE( testTrainSplit, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testTrainSplit, TrainFixtureVisualDebugger )
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "Cargo.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+	BOOST_CHECK( pTrain->IsValid() );
+
+	BOOST_CHECK_NO_THROW( pTrain->Rail( m_Location ) );
+
+	BOOST_REQUIRE( pTrain->IsValid() );
+	BOOST_REQUIRE( pTrain->IsRailed() );
+
+	std::shared_ptr<TrainComponent> pTrainComponent = pTrain->GetComponent( 5 );
+	BOOST_REQUIRE( pTrainComponent );
+
+	BOOST_CHECK( pTrainComponent->Uncouple( RailRunner::EndType::north ) );
+	BOOST_CHECK( pTrain->IsUnCoupledInternally() );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
+	std::shared_ptr<Train> pSeparate = pTrain->Separate();
+	BOOST_REQUIRE( pSeparate );
+	BOOST_CHECK( pSeparate->IsValid() );
+	BOOST_CHECK( pSeparate->IsRailed() );
+	BOOST_CHECK_EQUAL( pSeparate->GetNumberOfComponents(), 5 );
+	BOOST_CHECK( !pSeparate->IsUnCoupledInternally() );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 5 );
+	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
+
+	BOOST_CHECK_NO_THROW( pTrain->Append( Train::EndType::south, pSeparate, Train::EndType::north ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 6 );
+	BOOST_CHECK( pTrain->IsValid() );
+
+	pTrain->Reduce();
+	BOOST_CHECK( pTrain->IsValid() );
+	BOOST_CHECK( pTrain->IsRailed() );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
+}
+
+BOOST_AUTO_TEST_SUITE_END() // TrainCouplingTests
+BOOST_AUTO_TEST_SUITE_END() // trax_tests
+#endif

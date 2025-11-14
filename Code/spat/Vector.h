@@ -222,9 +222,10 @@ namespace spat{
 
 
 	/// \name Operators for Vector
-	///
 	/// \brief Algebra for Vectors.
 	///@{
+	
+	/// \brief Vector operator.
 	template<typename Valtype> constexpr 
 	Vector<Valtype> operator+( const Vector<Valtype>& v1, const Vector<Valtype>& v2 ) noexcept;
 	template<typename Valtype> 
@@ -254,7 +255,7 @@ namespace spat{
 	template<typename Valtype,typename Valtype2> constexpr 
 	auto operator%( const Vector<Valtype>& v1, const Vector<Valtype2>& v2 ) noexcept -> Vector<decltype(Valtype{}*Valtype2{})>; ///< Cross product.
 	template<typename Valtype>
-	Vector<Valtype>& operator%=( Vector<Valtype>& v1, const Vector<Valtype>& v2 ) noexcept;
+	Vector<Valtype>& operator%=( Vector<Valtype>& v1, const Vector<Valtype>& v2 ) noexcept; ///< Cross product assignment.
 	template<typename Valtype,typename Valtype2> constexpr 
 	auto operator/( const Vector<Valtype>&, const Vector<Valtype2>& ) = delete;
 	template<typename Valtype,typename Valtype2> constexpr 

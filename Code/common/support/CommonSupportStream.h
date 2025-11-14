@@ -32,12 +32,20 @@
 
 namespace common{
 
-	/// \name Streaming functions for common objects
+	/// \defgroup Group_StreamingFunctions Streaming functions
+	/// \brief Functions to stream data in and out.
+	
+	/// \name Streaming functions for Interval
 	/// \brief Streams data out and in.
 	///@{
+	
+	/// \brief Streams Interval data out.
+	/// \ingroup Group_StreamingFunctions
 	template<typename Valtype>
 	std::ostream& operator << ( std::ostream& os, const common::Interval<Valtype>& i );
 
+	/// \brief Streams Interval data in.
+	/// \ingroup Group_StreamingFunctions
 	template<typename Valtype>
 	std::istream& operator >> ( std::istream& is, common::Interval<Valtype>& i );
 	///@}

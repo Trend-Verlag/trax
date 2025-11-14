@@ -25,6 +25,8 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
+#if defined( WITH_BOOST_TESTS )
+
 #include <boost/test/unit_test.hpp>
 
 #include "trax/rigid/trains/support/FixturesTrain.h"
@@ -44,6 +46,7 @@ using namespace dim;
 using namespace spat;
 using namespace trax;
 
+BOOST_AUTO_TEST_SUITE(trax_tests)
 BOOST_AUTO_TEST_SUITE(TestRollingStock)
 //BOOST_FIXTURE_TEST_CASE( testWheelArrangementCreation, TrackFixture )
 //{
@@ -345,3 +348,5 @@ BOOST_FIXTURE_TEST_CASE( testRollingStockReader4, TrainFixture )
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_SUITE_END() //trax_tests
+#endif

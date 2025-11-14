@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include "trax/Configuration.h"
 #include <filesystem>
 
 namespace trax{
@@ -19,8 +20,8 @@ namespace trax{
 	struct Module;
 	struct ModuleCollection;
 
-	void Write( const ModuleCollection& moduleSet, const std::filesystem::path& path );
+	dclspc void Write( const ModuleCollection& moduleSet, const std::filesystem::path& path );
 	
-	void Write( const Module& modul, const std::filesystem::path& path );
+	dclspc void Write( const Module& modul, const std::filesystem::path& path );
 
 } // namespace trax

@@ -414,6 +414,8 @@ namespace spat{
 	/// \param f Frame to get the transformed for.
 	/// \returns Transformed element.
 	///@{
+
+	/// \brief Frame operator.
 	template<typename Valtype1,typename ValtypeT1,typename Valtype2>
 	Position<Valtype2> operator*( const Frame<Valtype1,ValtypeT1>& frame, const Position<Valtype2>& p ) noexcept;
 

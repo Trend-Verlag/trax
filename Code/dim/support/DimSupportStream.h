@@ -90,6 +90,9 @@ namespace dim
 	/// For dimension 'One' the precision can be raised to floating point
 	/// precision, streaming std::setprecision(std::numeric_limits<One>::max_digits10).
 	///@{
+	
+	/// \brief Streams Dimensionated value.
+	/// \ingroup Group_StreamingFunctions
 	dclspc_dim std::ostream& operator << ( std::ostream& ostr, const Value<Dimension<0,0,0>>& one );
 
 	dclspc_dim std::istream& operator >> ( std::istream& istr, Value<Dimension<0,0,0>>& one );
@@ -748,10 +751,10 @@ namespace dim
 		return stream.str();
 	}
 
-	std::string dclspc_dim to_string_deg( Angle val );				/// < \brief Writes the suffix 'deg' after the value.
-	std::string dclspc_dim to_string_deg0( Angle val );				/// < \brief Does'nt write a suffix after the value.
-	std::string dclspc_dim to_string_degIm( AnglePerLength val );
-	std::string dclspc_dim to_string_degIcm( AnglePerLength val );
+	dclspc_dim std::string to_string_deg( Angle val );				/// < \brief Writes the suffix 'deg' after the value.
+	dclspc_dim std::string to_string_deg0( Angle val );				/// < \brief Does'nt write a suffix after the value.
+	dclspc_dim std::string to_string_degIm( AnglePerLength val );
+	dclspc_dim std::string to_string_degIcm( AnglePerLength val );
 
 	template<class DimValtype>
 	DimValtype sto( std::string str ){

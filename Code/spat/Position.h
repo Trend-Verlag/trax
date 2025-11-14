@@ -163,6 +163,8 @@ namespace spat{
 	/// To transform a Position into a Vector use Position - Origin3D.
 	/// But try to avoid it.
 	///@{
+	
+	/// \brief Position operator.
 	template<typename Valtype> constexpr
 	Position<Valtype> operator+( const Position<Valtype>&, const Position<Valtype>& ) = delete;
 	template<typename Valtype> constexpr

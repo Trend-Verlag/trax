@@ -41,6 +41,8 @@ namespace trax
 		// RailRunner:
 		std::shared_ptr<RailRunner> This() const noexcept override;
 
+		bool IsValid() const noexcept override;
+
 		using Base::Thrust;
 
 		One Thrust() const noexcept override;
@@ -80,6 +82,15 @@ void RailRunner_Imp<Base>::SetWeakPointerToSelf( std::weak_ptr<RailRunner_Imp> p
 template<class Base>
 std::shared_ptr<RailRunner> RailRunner_Imp<Base>::This() const noexcept{
 	return m_pThis.lock();
+}
+
+template<class Base>
+inline bool RailRunner_Imp<Base>::IsValid() const noexcept
+{
+	if( !This() )
+		return false;
+
+	return true;
 }
 
 template<class Base>

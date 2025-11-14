@@ -45,8 +45,10 @@
 /// 
 /// 
 
+#include "DimensionedValues.h"
 
 /// \file DimLimits.h User configurationable values for the dim library.
+/// The default values relate to a real world railroad simulation.
 namespace dim
 {
 	/// \name Marginal values

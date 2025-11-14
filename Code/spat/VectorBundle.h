@@ -145,6 +145,8 @@ namespace spat{
 
 	/// \name Mathematical Operators for VectorBundle
 	///@{
+	
+	/// \brief VectorBundle operator.
 	template<typename Valtype,typename ValtypeT> constexpr
 	bool operator ==( const VectorBundle<Valtype,ValtypeT>& b1, const VectorBundle<Valtype,ValtypeT>& b2 ) noexcept;
 	template<typename Valtype,typename ValtypeT> constexpr 

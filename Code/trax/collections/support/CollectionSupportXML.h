@@ -58,31 +58,31 @@ namespace trax{
 
 		/// \name Explicit XML Reading
 		///@{	
-		std::unique_ptr<Curve> dclspc CreateLine( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateLineP( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateArc( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateArcP( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateHelix( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateHelixP( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateCubic( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateSpline( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateClothoid( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateRotator( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateRotatorChain( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreatePolygonalChain( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateSampledCurve( const boost::property_tree::ptree& pt );
-		std::unique_ptr<Curve> dclspc CreateEEPCurve( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateLine( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateLineP( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateArc( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateArcP( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateHelix( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateHelixP( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateCubic( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateSpline( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateClothoid( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateRotator( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateRotatorChain( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreatePolygonalChain( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateSampledCurve( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateEEPCurve( const boost::property_tree::ptree& pt );
 
-		void dclspc RegisterAllCurveReaders( class PTreeReader& toReader );
+		dclspc void RegisterAllCurveReaders( class PTreeReader& toReader );
 
-		std::unique_ptr<RoadwayTwist> dclspc CreateConstantTwist( const boost::property_tree::ptree& pt );
-		std::unique_ptr<RoadwayTwist> dclspc CreateLinearTwist( const boost::property_tree::ptree& pt );
-		std::unique_ptr<RoadwayTwist> dclspc CreatePiecewiseTwist( const boost::property_tree::ptree& pt );
-		std::unique_ptr<RoadwayTwist> dclspc CreatePiecewiseLinearTwist( const boost::property_tree::ptree& pt );
-		std::unique_ptr<RoadwayTwist> dclspc CreatePiecewiseCircularTwist( const boost::property_tree::ptree& pt );
-		std::unique_ptr<RoadwayTwist> dclspc CreateDirectionalTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreateConstantTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreateLinearTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreatePiecewiseTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreatePiecewiseLinearTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreatePiecewiseCircularTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreateDirectionalTwist( const boost::property_tree::ptree& pt );
 
-		void dclspc RegisterAllTwistReaders( class PTreeReader& toReader );
+		dclspc void RegisterAllTwistReaders( class PTreeReader& toReader );
 
 		///@}
 
@@ -153,9 +153,9 @@ namespace trax{
 
 		/// \name Explicit XML Reading
 		///@{
-		void dclspc Read( const boost::property_tree::ptree& pt, Cubic::Data& curve );
-		void dclspc Read( const boost::property_tree::ptree& pt, CurveSample& sample );
-		void dclspc Read( const boost::property_tree::ptree& pt, EEPCurve::Data& data );
+		dclspc void Read( const boost::property_tree::ptree& pt, Cubic::Data& curve );
+		dclspc void Read( const boost::property_tree::ptree& pt, CurveSample& sample );
+		dclspc void Read( const boost::property_tree::ptree& pt, EEPCurve::Data& data );
 		///@}
 
 	} // namespace ptreesupport

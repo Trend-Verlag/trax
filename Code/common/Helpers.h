@@ -39,6 +39,7 @@
 #include <cmath>
 #include <cassert>
 
+/// \brief Namespace of common utility classes and methods.
 namespace common{
 
 	///
@@ -133,7 +134,7 @@ namespace common{
 	/// \brief Rounding of floating point number to a certain digit aftzer the point
 	///
 	/// \param value Input value to round
-	/// \param atDigit Ordinal number of the digit to round to. 0 would round to integral number.
+	/// \param toDigit Ordinal number of the digit to round to. 0 would round to integral number.
 	/// \returns The rounded number.
 	template<class T> inline
 	T Round( T value, int toDigit ) noexcept

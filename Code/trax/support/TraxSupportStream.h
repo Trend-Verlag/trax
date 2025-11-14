@@ -47,6 +47,9 @@ namespace trax{
 	/// \name Streaming functions for trax objects
 	/// \brief Streams data out and in.
 	///@{
+	
+	/// \brief Streams trax objects.
+	/// \ingroup Group_StreamingFunctions
 	inline std::ostream& operator << ( std::ostream& os, const Track::EndType& endType );
 
 	inline std::istream& operator >> ( std::istream& is, Track::EndType& endType );

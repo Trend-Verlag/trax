@@ -55,12 +55,12 @@ namespace trax{
 		virtual int GetNumberOfComponents() const noexcept = 0;
 
 
-		/// \brief Gets the TrainComponent at index.
+		/// \brief Gets the TrainComponent at zero based index.
 		/// \param index zero based Index of the TrainComponent.
 		virtual std::shared_ptr<TrainComponent> GetComponent( int index ) const = 0;
 
 
-		/// \returns the valid index of the component if it is part of this Train or -1.
+		/// \returns the valid zero based index of the component if it is part of this Train or -1.
 		/// \param component The TrainComponent to search for.
 		virtual int GetIndexOf( const TrainComponent& component ) const noexcept = 0;
 
@@ -162,12 +162,12 @@ namespace trax{
 		/// if one of the couplings is deactivated. An coupling attempt will 
 		/// also fail, when two couplings wear different coupling type indices. 
 		/// \see Bogie::CouplingProps.
-		/// \param end End of this Train.
+		/// \param thisEnd End of this Train.
 		/// \param with Other Train.
 		/// \param withEnd Other Train's end to couple with.
 		/// \returns true if a new coupling was established or the two Trains
 		/// were already properly coupled.
-		virtual bool Couple( EndType end, Train& with, EndType withEnd ) noexcept = 0;
+		virtual bool Couple( EndType thisEnd, Train& with, EndType withEnd ) noexcept = 0;
 
 
 		/// \returns true if all the internal couplings of this Train are coupled
@@ -186,12 +186,14 @@ namespace trax{
 		///
 		/// Two new trains are created from the components, leaving the
 		/// idxAt component at the first and idxAt+1 at the second fragment.
-		///	This train becomes the parent train of the two new trains. Use
-		/// Clear() to remove all components from this train.
+		///	This train becomes the parent train of the two new trains. 
 		/// Note that the TrainComponents idxAt and idxAt+1 do not get
-		/// uncoupled from each other.
-		/// \param idxAt The index to split at. 0 is the first component.
-		virtual std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> Split( int idxAt ) noexcept = 0;
+		/// uncoupled from each other; use Clear() to remove all components 
+		/// from this train and decouple them.
+		/// \param idxAt The zero based index to split at. 0 is the first component.
+		/// \returns A pair of shared pointers to the two new trains. Will be nullptrs
+		/// if idxAt is out of range.
+		virtual std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> Split( int idxAt ) = 0;
 
 
 		/// \brief Removes everything south of a broken internal coupling 
@@ -217,6 +219,41 @@ namespace trax{
 	};
 
 
+	/// \defgroup Group_RailRunnerEndHelpers RailRunner's End Helpers
+	/// \brief Helper functions to get the front and back ends of an oriented element.
+
+	/// \name End Helpers
+	/// @{
+	
+	/// \brief Get the front end of an oriented element.
+	/// \ingroup Group_RailRunnerEndHelpers
+	/// \param orientation The orientation of the element.
+	/// \returns The end type corresponding to the given orientation.
+	RailRunner::EndType Front( Orientation orientation ) noexcept;
+
+	/// \brief Get the back end of an oriented element.
+	/// \ingroup Group_RailRunnerEndHelpers
+	/// \param orientation The orientation of the element.
+	/// \returns The end type corresponding to the given orientation.
+	RailRunner::EndType Back( Orientation orientation ) noexcept;
+
+	/// \brief Get the front end of a TrainComponent according to its orientation in its Train.
+	/// \ingroup Group_RailRunnerEndHelpers
+	/// \param trainComponent The TrainComponent to get the end for according to its orientation in its Train.
+	/// \returns The end type corresponding to the given orientation.
+	RailRunner::EndType Front( const TrainComponent& trainComponent ) noexcept;
+
+	/// \brief Get the back end of a TrainComponent according to its orientation in its Train.
+	/// \ingroup Group_RailRunnerEndHelpers
+	/// \param trainComponent The TrainComponent to get the end for according to its orientation in its Train.
+	/// \returns The end type corresponding to the given orientation.
+	RailRunner::EndType Back( const TrainComponent& trainComponent ) noexcept;
+
+	///@}
+
+
+
+// inlines:
 	inline RailRunner::EndType Front( Orientation orientation ) noexcept{
 		return orientation ? RailRunner::EndType::north : RailRunner::EndType::south;
 	}
