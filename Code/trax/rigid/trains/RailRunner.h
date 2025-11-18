@@ -228,7 +228,7 @@ namespace trax{
 		virtual void SetVelocity( Velocity velocity ) = 0;
 
 
-		/// \brief Gets the momentary velocity of this RailRunner along the track.
+		/// \returns the momentary velocity of this RailRunner along the track.
 		virtual Velocity GetVelocity() const = 0;
 
 
@@ -246,7 +246,7 @@ namespace trax{
 		virtual void TargetVelocity( Velocity velocity ) = 0;
 
 
-		/// \brief Gets the target velocity set for this RailRunner.
+		/// \returns the target velocity set for this RailRunner.
 		virtual Velocity TargetVelocity() const noexcept = 0;
 
 
@@ -291,7 +291,7 @@ namespace trax{
 		virtual void ThrustAbsolute( Force thrust ) = 0;
 
 
-		/// \brief Gets the thrust as absolute momentary available force value.
+		/// \returns the thrust as absolute momentary available force value.
 		virtual Force ThrustAbsolute() const noexcept = 0;
 
 
@@ -332,7 +332,7 @@ namespace trax{
 		virtual void BrakeAbsolute( Force brake ) = 0;
 
 
-		/// \brief Gets the brake as absolute force value.
+		/// \returns the brake as absolute force value.
 		virtual Force BrakeAbsolute() const noexcept = 0;
 
 

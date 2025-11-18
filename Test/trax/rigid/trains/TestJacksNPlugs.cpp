@@ -53,9 +53,9 @@ BOOST_FIXTURE_TEST_CASE( testTrainSplit, TrainFixture ) //
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
 
 	std::unique_ptr<PulseCounter> pCounter = PulseCounter::Make();
-	pTrain->JackOnSeparation().InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pTrain->JackOnUnCoupleInternal().InsertAtTail( &pCounter->PlugToCountUp().Make() );
 
-	auto subs = pTrain->Split( 1 );									// pTrain split in two subtrains
+	auto subs = pTrain->SplitAfter( 1 );									// pTrain split in two subtrains
 	BOOST_CHECK_EQUAL( pCounter->Counter(), 0 );
 
 	BOOST_REQUIRE( subs.first );
@@ -73,8 +73,8 @@ BOOST_FIXTURE_TEST_CASE( testTrainSplit, TrainFixture ) //
 
 	pCounter->PlugToCountUp().Clear();
 	pCounter->Counter( 0 );
-	subs.second->JackOnSeparation().InsertAtTail( &pCounter->PlugToCountUp().Make() );
-	auto subsubs = subs.second->Split( 3 );							// Second sub split in halfes (two subsub trains)
+	subs.second->JackOnUnCoupleInternal().InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	auto subsubs = subs.second->SplitAfter( 3 );							// Second sub split in halfes (two subsub trains)
 	BOOST_CHECK_EQUAL( pCounter->Counter(), 0 );
 
 	BOOST_REQUIRE( subsubs.first );
@@ -118,7 +118,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainUncouple, TrainFixture ) //
 
 	pTrain->GetComponent( 1 )->GetTipAt( RailRunner::EndType::south ).first.JackOnUnCouple( RailRunner::EndType::south ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
 	pTrain->GetComponent( 1 )->JackOnUnCouple( RailRunner::EndType::south ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
-	pTrain->JackOnSeparation().InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pTrain->JackOnUnCoupleInternal().InsertAtTail( &pCounter->PlugToCountUp().Make() );
 
 	pTrain->GetComponent( 1 )->Uncouple( RailRunner::EndType::south );
 	BOOST_CHECK_EQUAL( pCounter->Counter(), 3 );

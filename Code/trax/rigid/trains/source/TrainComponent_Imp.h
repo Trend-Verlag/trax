@@ -115,7 +115,9 @@ namespace trax{
 			m_TrainOrientation = orientation;
 		}
 
-		void ConnectJacks();
+		virtual void DisconnectJacks();
+		virtual void ConnectJacks();
+		void ReconnectJacks();
 		virtual void Clear() noexcept;
 
 		MultiPlug_Imp<Plug_Imp_ParentPointer<TrainComponent_Imp<Base>>> m_PlugRail;
@@ -545,7 +547,7 @@ Jack& TrainComponent_Imp<Base>::JackOnCouplingActivated( RailRunner::EndType end
 }
 
 template<class Base>
-inline Jack & TrainComponent_Imp<Base>::JackOnCouplingDeactivated( RailRunner::EndType end )
+inline Jack& TrainComponent_Imp<Base>::JackOnCouplingDeactivated( RailRunner::EndType end )
 {
 	switch( end )
 	{
@@ -629,33 +631,41 @@ const Plug& TrainComponent_Imp<Base>::_GetPlug( int idx ) const{
 }
 
 template<class Base>
+void TrainComponent_Imp<Base>::DisconnectJacks()
+{
+	m_PlugRail.Clear();
+	m_PlugDerail.Clear();
+	m_JackOnCoupleNorth.ClearPlugs();
+	m_JackOnCoupleSouth.ClearPlugs();
+	m_JackOnUnCoupleNorth.ClearPlugs();
+	m_JackOnUnCoupleSouth.ClearPlugs();
+	m_JackOnCouplingActivatedNorth.ClearPlugs();
+	m_JackOnCouplingActivatedSouth.ClearPlugs();
+	m_JackOnCouplingDeactivatedNorth.ClearPlugs();
+	m_JackOnCouplingDeactivatedSouth.ClearPlugs();	
+}
+
+template<class Base>
 void TrainComponent_Imp<Base>::ConnectJacks()
 {
-	m_JackOnCoupleNorth.ClearPlugs();
 	std::pair<Bogie&,RailRunner::EndType> couplingTipNorth = this->GetTipAt( RailRunner::EndType::north );
-	couplingTipNorth.first.JackOnCouple( couplingTipNorth.second ).InsertAndAppend( &m_JackOnCoupleNorth.PlugToPulse().Make() );
-
-	m_JackOnCoupleSouth.ClearPlugs();
 	std::pair<Bogie&,RailRunner::EndType> couplingTipSouth = this->GetTipAt( RailRunner::EndType::south );
+
+	couplingTipNorth.first.JackOnCouple( couplingTipNorth.second ).InsertAndAppend( &m_JackOnCoupleNorth.PlugToPulse().Make() );
 	couplingTipSouth.first.JackOnCouple( couplingTipSouth.second ).InsertAndAppend( &m_JackOnCoupleSouth.PlugToPulse().Make() );
-
-	m_JackOnUnCoupleNorth.ClearPlugs();
 	couplingTipNorth.first.JackOnUnCouple( couplingTipNorth.second ).InsertAndAppend( &m_JackOnUnCoupleNorth.PlugToPulse().Make() );
-
-	m_JackOnUnCoupleSouth.ClearPlugs();
 	couplingTipSouth.first.JackOnUnCouple( couplingTipSouth.second ).InsertAndAppend( &m_JackOnUnCoupleSouth.PlugToPulse().Make() );
-
-	m_JackOnCouplingActivatedNorth.ClearPlugs();
 	couplingTipNorth.first.JackOnCouplingActivated( couplingTipNorth.second ).InsertAndAppend( &m_JackOnCouplingActivatedNorth.PlugToPulse().Make() );
-
-	m_JackOnCouplingActivatedSouth.ClearPlugs();
 	couplingTipSouth.first.JackOnCouplingActivated( couplingTipSouth.second ).InsertAndAppend( &m_JackOnCouplingActivatedSouth.PlugToPulse().Make() );
-
-	m_JackOnCouplingDeactivatedNorth.ClearPlugs();
 	couplingTipNorth.first.JackOnCouplingDeactivated( couplingTipNorth.second ).InsertAndAppend( &m_JackOnCouplingDeactivatedNorth.PlugToPulse().Make() );
-
-	m_JackOnCouplingDeactivatedSouth.ClearPlugs();
 	couplingTipSouth.first.JackOnCouplingDeactivated( couplingTipSouth.second ).InsertAndAppend( &m_JackOnCouplingDeactivatedSouth.PlugToPulse().Make() );
+}
+
+template<class Base>
+void TrainComponent_Imp<Base>::ReconnectJacks()
+{
+	DisconnectJacks();
+	ConnectJacks();
 }
 
 template<class Base>
@@ -681,8 +691,7 @@ template<class Base>
 void TrainComponent_Imp<Base>::Clear() noexcept
 {	
 	m_bRailed = false;
-	m_PlugRail.Clear();
-	m_PlugDerail.Clear();
+	DisconnectJacks();
 }
 
 }

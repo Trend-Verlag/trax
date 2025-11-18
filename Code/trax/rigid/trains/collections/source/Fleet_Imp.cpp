@@ -334,7 +334,7 @@ Fleet_Imp::FPlugEnumerator::FPlugEnumerator( Fleet_Imp& parent, Train& train )
 	, m_Train         { train }
 	, m_PlugToSeparate{ *this, &FPlugEnumerator::PulseToSeparate }
 {
-	m_Train.JackOnSeparation().InsertAndAppend( &m_PlugToSeparate );
+	m_Train.JackOnUnCoupleInternal().InsertAndAppend( &m_PlugToSeparate );
 }
 
 const trax::Plug& Fleet_Imp::FPlugEnumerator::_GetPlug( int idx ) const

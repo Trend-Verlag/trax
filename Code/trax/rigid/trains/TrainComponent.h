@@ -59,7 +59,8 @@ namespace trax{
 		virtual bool IsFinal() const noexcept = 0;
 
 
-		/// \returns true if train is a parent train of this component. 
+		/// \returns true if train is a direct or indirect parent train of 
+		/// this component. 
 		virtual bool IsParent( const Train& train ) const noexcept = 0;
 
 
@@ -88,6 +89,7 @@ namespace trax{
 
 		// Coupled:
 
+		/// \brief Structure describing a coupling between two TrainComponents.
 		struct Coupling{
 			std::shared_ptr<TrainComponent> pTrainComponentA;	///< The TrainComponent A.
 			EndType endA;										///< The end of A.

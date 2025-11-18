@@ -48,7 +48,7 @@ using namespace trax;
 
 BOOST_AUTO_TEST_SUITE(trax_tests)
 BOOST_AUTO_TEST_SUITE(TrainCreationTests)
-
+/**/
 BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixture )
 //BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixtureVisualDebugger )
 {
@@ -436,24 +436,24 @@ BOOST_FIXTURE_TEST_CASE( testTrainDecouple, TrainFixture )
 	BOOST_REQUIRE( pTrain->IsRailed() );
 
 	// no split happening:
-	std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> Split = pTrain->Split( pTrain->GetNumberOfComponents()-1 );
+	std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> Split = pTrain->SplitAfter( pTrain->GetNumberOfComponents()-1 );
 	BOOST_CHECK_EQUAL( Split.first, nullptr );
 	BOOST_CHECK_EQUAL( Split.second, nullptr );
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
 		
-	BOOST_CHECK_NO_THROW( Split = pTrain->Split( pTrain->GetNumberOfComponents() ) );
+	BOOST_CHECK_NO_THROW( Split = pTrain->SplitAfter( pTrain->GetNumberOfComponents() ) );
 	BOOST_CHECK_EQUAL( Split.first, nullptr );
 	BOOST_CHECK_EQUAL( Split.second, nullptr );
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
 
-	BOOST_CHECK_NO_THROW( Split = pTrain->Split( -1 ) );
+	BOOST_CHECK_NO_THROW( Split = pTrain->SplitAfter( -1 ) );
 	BOOST_CHECK_EQUAL( Split.first, nullptr );
 	BOOST_CHECK_EQUAL( Split.second, nullptr );
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
 
 
 	// split happens:
-	BOOST_CHECK_NO_THROW( Split = pTrain->Split( 5 ) );
+	BOOST_CHECK_NO_THROW( Split = pTrain->SplitAfter( 5 ) );
 	BOOST_REQUIRE( Split.first );
 	BOOST_REQUIRE( Split.second );
 	BOOST_CHECK( Split.first->IsValid() );
@@ -540,6 +540,186 @@ BOOST_FIXTURE_TEST_CASE( testTrainSplit, TrainFixture )
 	BOOST_CHECK( pTrain->IsValid() );
 	BOOST_CHECK( pTrain->IsRailed() );
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
+}
+
+BOOST_FIXTURE_TEST_CASE( testTrainDeepStacked, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testTrainDeepStacked, TrainFixtureVisualDebugger )
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "Cargo.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+	BOOST_CHECK_NO_THROW( pTrain->Rail( m_Location ) );
+
+
+	// split Train to three levels:
+	std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> Split = pTrain->SplitAfter( 4 );
+	BOOST_REQUIRE( Split.first );
+	BOOST_REQUIRE( Split.second );
+	BOOST_CHECK_EQUAL( Split.first->GetNumberOfComponents(), 5 );
+	BOOST_CHECK_EQUAL( Split.second->GetNumberOfComponents(), 5 );
+
+	std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> SplitA = Split.first->SplitAfter( 2 );
+	BOOST_REQUIRE( SplitA.first );
+	BOOST_REQUIRE( SplitA.second );
+	BOOST_CHECK_EQUAL( SplitA.first->GetNumberOfComponents(), 3 );
+	BOOST_CHECK_EQUAL( SplitA.second->GetNumberOfComponents(), 2 );
+
+	std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> SplitB = Split.second->SplitAfter( 2 );
+	BOOST_REQUIRE( SplitB.first );
+	BOOST_REQUIRE( SplitB.second );
+	BOOST_CHECK_EQUAL( SplitB.first->GetNumberOfComponents(), 3 );
+	BOOST_CHECK_EQUAL( SplitB.second->GetNumberOfComponents(), 2 );
+
+	BOOST_CHECK( pTrain->IsValid() );
+	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
+	BOOST_CHECK( pTrain->IsRailed() );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
+
+	pTrain->Reduce();
+
+	BOOST_CHECK( pTrain->IsValid() );
+	BOOST_CHECK( pTrain->IsRailed() );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
+	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
+}
+
+BOOST_FIXTURE_TEST_CASE( testTrainSeparate, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testTrainSeparate, TrainFixtureVisualDebugger )
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "Cargo.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+	BOOST_CHECK_NO_THROW( pTrain->Rail( m_Location ) );
+
+	std::unique_ptr<PulseCounter> pPulseCounter = PulseCounter::Make();
+	pTrain->JackOnUnCoupleInternal().Insert( &pPulseCounter->PlugToCountUp() );
+	BOOST_CHECK_EQUAL( pPulseCounter->Counter(), 0 );
+	std::pair<std::shared_ptr<Train>, std::shared_ptr<Train>> Split = pTrain->SplitAfter( 5 );
+	BOOST_CHECK_EQUAL( pPulseCounter->Counter(), 0 );
+	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
+	BOOST_CHECK( !pTrain->Separate() );
+	pTrain->Reduce();
+	
+	BOOST_CHECK_NO_THROW( BOOST_CHECK( pTrain->GetComponent( 5 )->Uncouple( RailRunner::EndType::south ) ) );
+	BOOST_CHECK_EQUAL( pPulseCounter->Counter(), 1 );
+	BOOST_CHECK( pTrain->IsUnCoupledInternally() );
+
+	std::shared_ptr<Train> pTrain2;
+	BOOST_CHECK_NO_THROW( pTrain2 = pTrain->Separate() );
+	BOOST_REQUIRE( pTrain2 );
+	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
+	BOOST_CHECK( !pTrain2->IsUnCoupledInternally() );
+
+	BOOST_CHECK_NO_THROW( pTrain->Append( Train::EndType::south, pTrain2, Train::EndType::north ) );
+	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 7 );
+	pTrain->Reduce();
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
+	BOOST_CHECK( pTrain->GetComponent( 5 )->Uncouple( RailRunner::EndType::south ) );
+	BOOST_CHECK( pTrain->IsUnCoupledInternally() );
+	BOOST_CHECK_EQUAL( pPulseCounter->Counter(), 2 );
+	BOOST_CHECK( pTrain->GetComponent( 1 )->Uncouple( RailRunner::EndType::south ) );
+	BOOST_CHECK( pTrain->IsUnCoupledInternally() );
+	BOOST_CHECK_EQUAL( pPulseCounter->Counter(), 3 );
+
+	std::shared_ptr<Train> pTrain3;
+	BOOST_CHECK_NO_THROW( pTrain3 = pTrain->Separate() );
+	BOOST_REQUIRE( pTrain3 );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
+	BOOST_CHECK_EQUAL( pTrain3->GetNumberOfComponents(), 8 );
+	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
+	BOOST_CHECK( pTrain3->IsUnCoupledInternally() );
+	std::shared_ptr<Train> pTrain4;
+	BOOST_CHECK_NO_THROW( pTrain4 = pTrain3->Separate() );
+	BOOST_REQUIRE( pTrain4 );
+	BOOST_CHECK_EQUAL( pTrain3->GetNumberOfComponents(), 4 );
+	BOOST_CHECK_EQUAL( pTrain4->GetNumberOfComponents(), 4 );
+	BOOST_CHECK( !pTrain3->IsUnCoupledInternally() );
+	BOOST_CHECK( !pTrain4->IsUnCoupledInternally() );
+}
+
+BOOST_FIXTURE_TEST_CASE( testTrainTake, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testTrainTake, TrainFixtureVisualDebugger )
+// split Train to three levels and retake them:
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "Cargo.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+	BOOST_CHECK_NO_THROW( pTrain->Rail( m_Location ) );
+
+
+	// first run:
+	std::pair<std::shared_ptr<Train>, std::shared_ptr<Train>> Split;
+	BOOST_CHECK_NO_THROW( Split = pTrain->SplitAfter( 4 ) );
+	BOOST_REQUIRE( Split.first );
+	BOOST_REQUIRE( Split.second );
+	std::pair<std::shared_ptr<Train>, std::shared_ptr<Train>> SplitA;
+	BOOST_CHECK_NO_THROW( SplitA = Split.first->SplitAfter( 2 ) );
+	BOOST_REQUIRE( SplitA.first );
+	BOOST_REQUIRE( SplitA.second );
+	std::pair<std::shared_ptr<Train>, std::shared_ptr<Train>> SplitB;
+	BOOST_CHECK_NO_THROW( SplitB = Split.second->SplitAfter( 2 ) );
+	BOOST_REQUIRE( SplitB.first );
+	BOOST_REQUIRE( SplitB.second );
+
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
+	BOOST_CHECK_NO_THROW( Split.first->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 3 );
+	BOOST_CHECK_NO_THROW( Split.second->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 4 );
+	BOOST_CHECK_NO_THROW( SplitA.first->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 6 );
+	BOOST_CHECK_NO_THROW( SplitA.second->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 7 );
+	BOOST_CHECK_NO_THROW( SplitB.first->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 9 );
+	BOOST_CHECK_NO_THROW( SplitB.second->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
+
+
+	// second run:
+	BOOST_CHECK_NO_THROW( Split = pTrain->SplitAfter( 4 ) );
+	BOOST_REQUIRE( Split.first );
+	BOOST_REQUIRE( Split.second );
+	BOOST_CHECK_NO_THROW( SplitA = Split.first->SplitAfter( 2 ) );
+	BOOST_REQUIRE( SplitA.first );
+	BOOST_REQUIRE( SplitA.second );
+	BOOST_CHECK_NO_THROW( SplitB = Split.second->SplitAfter( 2 ) );
+	BOOST_REQUIRE( SplitB.first );
+	BOOST_REQUIRE( SplitB.second );
+
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
+	BOOST_CHECK_NO_THROW( SplitA.first->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
+	BOOST_CHECK_NO_THROW( SplitA.second->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
+	BOOST_CHECK_NO_THROW( SplitB.first->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
+	BOOST_CHECK_NO_THROW( SplitB.second->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
+	BOOST_CHECK_NO_THROW( Split.first->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 6 );
+	BOOST_CHECK_NO_THROW( Split.second->Reduce( false ) );
+	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
+}
+
+BOOST_FIXTURE_TEST_CASE( testTrainGetTip, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testTrainGetTip, TrainFixtureVisualDebugger )
+// Get the tip at the respective TrainComponent:
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "Cargo.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+
+	// don't propagate to Train end:
+	BOOST_CHECK_EQUAL( &pTrain->GetComponent( 0 )->GetTipAt( RailRunner::EndType::north ).first, &pTrain->GetTipAt( RailRunner::EndType::north ).first );
+	BOOST_CHECK_EQUAL( &pTrain->GetComponent( 9 )->GetTipAt( RailRunner::EndType::south ).first, &pTrain->GetTipAt( RailRunner::EndType::south ).first );
+	BOOST_CHECK_NE( &pTrain->GetComponent( 4 )->GetTipAt( RailRunner::EndType::north ).first, &pTrain->GetTipAt( RailRunner::EndType::north ).first );
+	BOOST_CHECK_NE( &pTrain->GetComponent( 4 )->GetTipAt( RailRunner::EndType::south ).first, &pTrain->GetTipAt( RailRunner::EndType::south ).first );
 }
 
 BOOST_AUTO_TEST_SUITE_END() // TrainCouplingTests

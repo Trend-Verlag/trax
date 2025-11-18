@@ -50,7 +50,6 @@ namespace trax{
 		virtual std::shared_ptr<Train> ThisTrain() const noexcept = 0;
 
 
-
 		/// \returns The number of train components.
 		virtual int GetNumberOfComponents() const noexcept = 0;
 
@@ -65,23 +64,14 @@ namespace trax{
 		virtual int GetIndexOf( const TrainComponent& component ) const noexcept = 0;
 
 
-		/// \brief Removes all Train objects from this Train and includes
-		/// its components directly to this train.
-		/// 
-		/// The sub - Train objects loose their references and should be deleted.
-		/// Their IsValid() method will return false. The method works recursively, 
-		/// so the Train will become a Train of RollingStock. Reduce the sub - Trains 
-		/// to keep a level of Trains.
-		/// \see IsValid()
-		virtual void Reduce() noexcept = 0;
-
-
 		// Creation:
+
 		/// \name Create
 		/// \brief Creates a train from components
 		///@{
 		
-		/// This method will find all already coupled components and build a Train from them.
+		/// This method will find all already coupled components and build a Train 
+		/// from them.
 		/// \param trainComponent The TrainComponent to make a Train from.
 		/// \param orientation The orientation of the given components in the Train.
 		/// location, prior to coupling.
@@ -90,8 +80,8 @@ namespace trax{
 			TrainComponent& trainComponent, 
 			Orientation orientation = Orientation::Value::para ) = 0;
 
-		/// This method takes a list of uncoupled TrainComponents and builds a Train from them.
-		/// It will do the coupling of the elements properly.
+		/// This method takes a list of uncoupled TrainComponents and builds a Train 
+		/// from them. It will do the coupling of the elements properly.
 		/// \param trainComponents A list of TrainComponents to make a Train from.
 		/// \param orientation The orientation of the given components in the Train.
 		/// location, prior to coupling.
@@ -111,43 +101,108 @@ namespace trax{
 		/// \name Align
 		/// \brief Positions the component at the respective Train end, but does not 
 		/// couple it or include it in the train.
+		/// 
+		/// If this Train is railed, the component will be railed at the respective 
+		/// end; if the Train is not railed, the component will be moved to the 
+		/// respective end.	
+		/// \throws std::exception if there is an error in railing the component.
+		/// \throws std::logic_error if there are invalid components.
 		///@{
 		
-		virtual void Align( EndType atEnd, TrainComponent& component, EndType withEnd ) const noexcept = 0;
+		/// \param atEnd End of this Train to append to.
+		/// \param component The TrainComponent to align.
+		/// \param withEnd End of the TrainComponent to align with.
+		virtual void Align( EndType atEnd, TrainComponent& component, EndType withEnd ) const = 0;
 
-		virtual void Align( EndType atEnd, TrainComponent& component, Orientation orientation ) const noexcept = 0;
+		/// \param atEnd End of this Train to append to.
+		/// \param component The TrainComponent to align.
+		/// \param orientation The orientation of the TrainComponent to align it in.
+		virtual void Align( EndType atEnd, TrainComponent& component, Orientation orientation ) const = 0;
 		///@}
 
 
 		/// \name Append
 		/// \brief Appends a TrainComponent to this Train.
-		///
-		/// If this Train is railed, the component will be railed at the 
-		/// respective end. If the Train is not railed, the component will be
-		/// moved to the respective end. In both cases it gets coupled
-		/// and becomes a part of this Train.
+		/// 
+		/// The component gets coupled (if bCouple) and becomes a part of this Train, 
+		/// but it will not get moved or railed. Use Align() to position or rail it 
+		/// properly first.
+		/// \param atEnd End of this Train to append to.
+		/// \param pComponent The TrainComponent to append. Does nothing if nullptr.
+		/// \param bCouple if true, the omponent gets coupled properly, if false the
+		/// coupling state remains unchanged.
+		/// \param withEnd End of the TrainComponent to append.
+		/// \param orientation Orientation of the TrainComponent to append it in.
+		/// \throws std::invalid_argument if the TrainComponent is already part of 
+		/// a Train.
+		/// \throws std::runtime_error if the TrainComponent is of unknown type.
 		///@{
 		
-		/// \param atEnd End of this Train to append to.
-		/// \param pComponent The TrainComponent to append. Does nothing if nullptr.
-		/// \param withEnd End of the TrainComponent to append.
-		/// \throws std::invalid_argument if the TrainComponent is already part of a Train.
-		/// \throws std::runtime_error if the TrainComponent is of unknown type.
-		virtual void Append( EndType atEnd, std::shared_ptr<TrainComponent> pComponent, EndType withEnd ) = 0;
+		virtual void Append( EndType atEnd, std::shared_ptr<TrainComponent> pComponent, EndType withEnd, bool bCouple = true ) = 0;
 
-		/// \param atEnd End of this Train to append to.
-		/// \param pComponent The TrainComponent to append. Does nothing if nullptr.
-		/// \param orientation Orientation of the TrainComponent to append it in.
-		/// \throws std::invalid_argument if the TrainComponent is already part of a Train.
-		/// \throws std::runtime_error if the TrainComponent is of unknown type.
-		virtual void Append( EndType atEnd, std::shared_ptr<TrainComponent> pComponent, Orientation orientation ) = 0;
+		virtual void Append( EndType atEnd, std::shared_ptr<TrainComponent> pComponent, Orientation orientation, bool bCouple = true ) = 0;
 		///@}
 		
 
+		/// \brief Takes all components from another Train.
+		/// 
+		/// Takes all components from another Train and Append()s them to this Train.
+		/// As with Append() the components are not railed or moved, but get coupled 
+		/// if not already so. This methods does not change the poses of the components.
+		/// \param atEnd End of this Train to append to.
+		/// \param fromTrain The Train to take components from.
+		/// \param withEnd End of the fromTrain to take components from.
+		virtual void Take( EndType atEnd, Train& fromTrain, EndType withEnd ) = 0;
 
-		virtual void Take( EndType atEnd, Train& from, EndType withEnd ) = 0;
-		
-		
+
+		/// \brief Splits this Train into two Trains at the specified index.
+		///
+		/// Two new trains are created from the components, leaving the
+		/// idxAt component at the first and idxAt+1 at the second fragment.
+		///	This train becomes the parent train of the two new trains. 
+		/// Note that the TrainComponents idxAt and idxAt+1 do not get
+		/// uncoupled from each other; use Clear() to remove all components 
+		/// from this train and decouple them.
+		/// \param idxAt The zero based index to split at. 0 is the first 
+		/// component.
+		/// \returns A pair of shared pointers to the two new trains. Will 
+		/// be nullptrs if idxAt is out of range.
+		virtual std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> SplitAfter( int idxAt ) = 0;
+
+
+		//Removing:
+
+		/// \brief Removes everything south of a broken internal coupling 
+		/// from this Train, and returns a new Train with the components 
+		/// that were removed. 
+		/// 
+		/// No coupling or railing as well as no change of poses is done. 
+		/// The new train as well as this train might be left with a single 
+		/// component; use Reduce() or Clear() to remove redundant Trains.
+		/// 
+		/// \returns a new Train with the components that were removed or 
+		/// nullptr if there was no broken coupling.
+		virtual std::shared_ptr<Train> Separate() = 0;
+
+
+		/// \brief Removes TrainComponents from this Train and includes them directly 
+		/// to the parent train. This Train will become empty and !IsValid().
+		/// 
+		/// Does nothing if this Train has no parent Train. The coupling and railing 
+		/// states as well as the poses of the components remain unchanged.
+		/// \param bRecursive if true, the method will be applied recursively to all 
+		/// sub-components, leaving the Train reduced to its RollingStock components 
+		/// only.
+		virtual void Reduce( bool bRecursive = true ) noexcept = 0;
+
+
+		/// \brief Removes all components from this train.
+		///
+		/// Decouples all components and removes them from this train.
+		/// It leaves subtrains intact.
+		virtual void Clear() noexcept = 0;
+
+
 		//Coupling:
 
 		using TrainComponent::Couple;
@@ -170,8 +225,8 @@ namespace trax{
 		virtual bool Couple( EndType thisEnd, Train& with, EndType withEnd ) noexcept = 0;
 
 
-		/// \returns true if all the internal couplings of this Train are coupled
-		/// propery.
+		/// \returns true if all the internal couplings of this Train (inluding 
+		/// that of sub-Trains) are coupled propery.
 		virtual bool IsUnCoupledInternally() const noexcept = 0;
 
 
@@ -182,40 +237,9 @@ namespace trax{
 	//	virtual std::pair<std::shared_ptr<Train>,EndType> GetCoupledTrain( EndType end ) const noexcept = 0;
 
 
-		/// \brief Splits this Train into two Trains at the specified index.
-		///
-		/// Two new trains are created from the components, leaving the
-		/// idxAt component at the first and idxAt+1 at the second fragment.
-		///	This train becomes the parent train of the two new trains. 
-		/// Note that the TrainComponents idxAt and idxAt+1 do not get
-		/// uncoupled from each other; use Clear() to remove all components 
-		/// from this train and decouple them.
-		/// \param idxAt The zero based index to split at. 0 is the first component.
-		/// \returns A pair of shared pointers to the two new trains. Will be nullptrs
-		/// if idxAt is out of range.
-		virtual std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> Split( int idxAt ) = 0;
-
-
-		/// \brief Removes everything south of a broken internal coupling 
-		/// from this Train, and returns a new Train with the components 
-		/// that were removed. The new train as well as this train might
-		/// be left with a single component; use Reduce() or Clear() to 
-		/// remove redundant Trains.
-		/// 
-		/// \returns a new Train with the components that were removed or 
-		/// nullptr if there was no broken coupling.
-		virtual std::shared_ptr<Train> Separate() = 0;
-
-
-		/// \brief Removes all components from this train.
-		///
-		/// Decouples all components and removes them from this train.
-		virtual void Clear() noexcept = 0;
-
-
-		/// \brief Gets a Jack that pulses its Plug if the a coupling
-		/// inside the train is uncoupled for whatever reason.
-		virtual struct Jack& JackOnSeparation() noexcept = 0;
+		/// \brief Gets a Jack that pulses its Plug if a coupling inside the 
+		/// train (including all sub-Trains) is uncoupled for whatever reason.
+		virtual struct Jack& JackOnUnCoupleInternal() noexcept = 0;
 	};
 
 

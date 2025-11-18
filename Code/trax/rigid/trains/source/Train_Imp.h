@@ -116,8 +116,6 @@ namespace trax{
 
 		int GetIndexOf( const TrainComponent& component ) const noexcept override;
 
-		void Reduce() noexcept override;
-
 		bool Create( TrainComponent& trainComponent, Orientation orientation = Orientation::Value::para ) override;
 
 		bool Create( const std::vector<std::pair<std::shared_ptr<TrainComponent>,Orientation>>& trainComponents, 
@@ -129,30 +127,35 @@ namespace trax{
 
 		void Align( EndType atEnd, TrainComponent& component, Orientation orientation ) const noexcept override;
 
-		void Append( EndType atEnd, std::shared_ptr<TrainComponent> pComponent, EndType withEnd ) override;
+		void Append( EndType atEnd, std::shared_ptr<TrainComponent> pComponent, EndType withEnd, bool bCouple = true ) override;
 
-		void Append( EndType atEnd, std::shared_ptr<TrainComponent> pComponent, Orientation orientation ) override;
-
+		void Append( EndType atEnd, std::shared_ptr<TrainComponent> pComponent, Orientation orientation, bool bCouple = true ) override;
+		
 		void Take( EndType atEnd, Train& from, EndType withEnd ) override;
 
-		bool IsUnCoupledInternally() const noexcept override;
+		std::pair<std::shared_ptr<struct Train>, std::shared_ptr<struct Train>> SplitAfter( int at ) override;
+
+		std::shared_ptr<Train> Separate() override;
+	
+		void Reduce( bool bRecursive = true ) noexcept override;
+
+		void Clear() noexcept override;
 
 		bool Couple( EndType end, Train& with, EndType withEnd ) noexcept override;
 				
-		std::pair<std::shared_ptr<struct Train>, std::shared_ptr<struct Train>> Split( int at ) override;
-		
-		std::shared_ptr<Train> Separate() override;
-
-		void Clear() noexcept override;
+		bool IsUnCoupledInternally() const noexcept override;
 		
 
-		Jack& JackOnSeparation() noexcept override;
+		Jack& JackOnUnCoupleInternal() noexcept override;
 
 		// Inherited via JackEnumerator
 		int CountJacks() const noexcept override;
 
 	protected:
 		const Jack& _GetJack( int idx ) const override;
+
+		void DisconnectJacks() override;
+		void ConnectJacks() override;
 	private:
 		std::deque<std::shared_ptr<TrainComponent>> m_Train;
  
@@ -160,7 +163,9 @@ namespace trax{
 
 		void Recouple() noexcept;
 
-		MultiPlugJack_Imp m_JackOnSeparation{ "JackOnSeparation" };
+		// Jack for internal uncouple events, triggers on decouple events and
+		// sub_Train's OnUnCoupleInternal events.
+		MultiPlugJack_Imp m_JackOnUnCoupleInternal{ "JackOnUnCoupleInternal" };
 	};
 	
 }
