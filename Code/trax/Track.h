@@ -29,7 +29,9 @@
 #pragma once
 
 /// \page docu_track Tracks
+/// 
 /// \section track_intro Introduction
+/// 
 /// A \link trax::Track Track \endlink is something with two ends - the \link 
 /// trax::Track::front front end \endlink the \link trax::Track::end end end 
 /// \endlink - which can get connected with the ends of other tracks; it can 
@@ -46,10 +48,9 @@
 /// Trax' tracks provide two interfaces: the Track interface for using a track, e.g. \ref transition
 /// the track, to get a 3D location for a track parameter value; and the TrackBuilder interface, for 
 /// creating track geometry by attaching curves and twists.
-///
-/// \image html CurvesInterfaces.png
-///
+/// 
 /// \section track_details Details
+/// 
 /// The overall pose of a track is governed by its \link trax::TrackBuilder::GetFrame Frame \endlink. It specifies the 
 /// transformation between a Curve and the 3d space local to an \ref absolute_frame ,
 /// specified by a TrackCollection. If the Track is not a member of a TrackCollection, the frame will 
@@ -67,6 +68,110 @@
 ///
 /// There are several trax::Strech - functions to help with solving certain geometrical problems, by 
 /// finding a most simple Curve, that does the trick and attaching it directly to the track.
+/// 
+/// \startuml
+/// skinparam classAttributeIconSize 0
+/// 
+/// together {
+/// interface Curve <<interface>> {
+///   +Curvature(Length) : AnglePerLength
+///   +Torsion(Length) : AnglePerLength
+///   +Transition(Length, Frame&)
+/// }
+/// 
+/// interface RoadwayTwist <<interface>> {
+///   +Twist(Length) : Angle
+///   +D1(Length) : AnglePerLength
+/// }
+/// }
+/// 
+/// interface Track <<interface>> {
+///   +GetLength() : Length
+///   +Transition(Length, Frame&)
+///   +DoTrigger(range, Event&)
+///   +DoSignal(range, Orientation, SignalTarget&)
+/// }
+/// 
+/// interface TrackBuilder <<interface>> {
+///   +{static} Make(TrackType) : shared_ptr<TrackBuilder>
+///   +SetFrame(Frame&)
+///   +GetFrame() : Frame&
+///   +Attach(Curve*, Interval)
+///   +Attach(RoadwayTwist*)
+///   +Attach(Sensor*, TrackLocation&)
+///   +Attach(Signal*, Interval)
+///   +Couple(TrackEnd, TrackEnd)
+///   +DeCouple(EndType)
+/// }
+/// 
+/// class Line
+/// class Arc
+/// class Helix
+/// class Cubic
+/// 
+/// class ConstantTwist
+/// class LinearTwist
+/// class DirectionalTwist
+/// 
+/// class Location {
+///   +Location(Track*, TrackLocation&)
+///   +GetTrack() : Track*
+///   +Move(Length)
+///   +Transition(Frame&)
+/// }
+/// 
+/// interface Sensor <<interface>> {
+///   +Trigger(Event&)
+/// }
+/// 
+/// interface Signal <<interface>> {
+///   +Set(Status) : Status
+/// }
+/// 
+/// Track <|-- TrackBuilder
+/// TrackBuilder o-right- "1" Curve : uses
+/// TrackBuilder o-right- "1" RoadwayTwist : applies
+/// 
+/// Curve <|.. Line
+/// Curve <|.. Arc
+/// Curve <|.. Helix
+/// Curve <|.. Cubic
+/// 
+/// RoadwayTwist <|.. ConstantTwist
+/// RoadwayTwist <|.. LinearTwist
+/// RoadwayTwist <|.. DirectionalTwist
+/// 
+/// TrackBuilder o-- "0..*" Sensor : triggers
+/// TrackBuilder o-- "0..*" Signal : dispatches
+/// 
+/// Location --> "1" Track : references
+/// Location ..> Sensor : triggers
+/// Location ..> Signal : receives from
+/// 
+/// note bottom of TrackBuilder
+///   Combines Curve (path) with
+///   RoadwayTwist (orientation)
+///   to provide 3D geometry
+/// end note
+/// 
+/// note right of Location
+///   Travels along Track,
+///   triggering Sensors and
+///   receiving Signals
+/// end note
+/// 
+/// note top of Curve
+///   Arc-length parametrized
+///   3D path (Line, Arc,
+///   Helix, Cubic, etc.)
+/// end note
+/// 
+/// note top of RoadwayTwist
+///   Defines rotation around
+///   tangent (Constant, Linear,
+///   Directional, etc.)
+/// end note
+/// \enduml
 /// 
 /// \section track_examples Examples:
 /// 

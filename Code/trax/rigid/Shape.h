@@ -34,6 +34,10 @@ namespace trax{
 	struct Axis;
 
 	/// \brief A Shape is a collection of Geoms.
+	///
+	/// A Shape forms a more complex geometrical object by combining
+	/// multiple Geoms into a single entity.
+	/// \see trax::Geom for simple shapes.
 	struct Shape{
 
 		// Shape's name:

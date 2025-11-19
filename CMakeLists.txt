@@ -122,6 +122,24 @@ if(BUILD_DOCUMENTATION)
     find_package(Doxygen)
     
     if(DOXYGEN_FOUND)
+        # Try to find Graphviz/DOT for better diagrams
+        find_program(DOT_EXECUTABLE NAMES dot)
+        
+        if(DOT_EXECUTABLE)
+            message(STATUS "Graphviz found: ${DOT_EXECUTABLE}")
+            message(STATUS "  Documentation will use DOT for high-quality diagrams")
+            set(DOXYGEN_HAVE_DOT "YES")
+            set(DOXYGEN_CLASS_GRAPH "YES")
+            get_filename_component(DOT_PATH "${DOT_EXECUTABLE}" DIRECTORY)
+            set(DOXYGEN_DOT_PATH "${DOT_PATH}")
+        else()
+            message(STATUS "Graphviz not found - using built-in text diagrams")
+            message(STATUS "  Install Graphviz for better diagrams: winget install graphviz")
+            set(DOXYGEN_HAVE_DOT "NO")
+            set(DOXYGEN_CLASS_GRAPH "BUILTIN")
+            set(DOXYGEN_DOT_PATH "")
+        endif()
+        
         # Set input and output files
         set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doc/TraxAPI/Trax_Doxyfile)
         set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.generated)

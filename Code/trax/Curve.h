@@ -56,6 +56,7 @@
 /// 
 ///
 /// \section curve_detail Details
+/// 
 /// Unless differently stated, all curves are parameterized by their arc lengthes. To work with the 
 /// physics engine, this is a requirement. Even if no physics engine in the strong sense is applied 
 /// it is required to get physically meaningfull values for the track paramer. You might want to 
@@ -68,7 +69,6 @@
 /// rotate around T in all so fancy ways. Since this is often not acceptable for tracks, which typically
 /// maintain strong ideas about what is supposed to be 'up', we provide a trax::RoadwayTwist for fixing 
 /// that. Curve and twist define the inner geometry of a track.
-/// \image html CurvesInterfaces.png
 /// 
 /// A single Curve can be shared with several tracks. So some standardized tracks could be created the 
 /// same way like it is done in model railroading.

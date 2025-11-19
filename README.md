@@ -17,17 +17,22 @@ The mathematical foundations for the railroad dynamics are described <a href="ht
 Install these tools prior to following the installation instructions for 
 the project.
 
-<ul>
-	<li><b><a href="https://git-scm.com/">Git</a></b>: A version control system. Needed to get the source code from the repository.</li>
-	<li>Register a <b><a href="https://github.com/">GitHub Account</a></b>: Here the 'Trend Trax Library' resides.</li>
-	<li><b><a href="http://visualstudio.com/">Visual Studio 2022 Community Edition</a></b>: Download and install the community edition. We will
+**Required:**
+- **<a href="https://git-scm.com/">Git</a>**: A version control system. Needed to get the source code from the repository.
+- Register a **<a href="https://github.com/">GitHub Account</a>**: Here the 'Trend Trax Library' resides.
+- **<a href="http://visualstudio.com/">Visual Studio 2022 Community Edition</a>**: Download and install the community edition. We will
 		only need the 'workload' called Desktop Development with C++.
-	</li>
-	<li><b><a href="https://cmake.org/">CMake</a></b>, a project configuration tool, will also be used by the PhysX SDK.</li>
-	<li><b><a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a></b>: A documentation generator.</li>
-	<li><b><a href="https://www.python.org/">Python</a></b> will be used by the PhysX SDK.</li>
-	<li><b><a href="https://developer.nvidia.com/physx-visual-debugger">PhysX Visual Debugger</a></b>: A tool that renders a PhysX simulated scene. Can be used with the trax tests.</li>
-</ul>
+- **<a href="https://cmake.org/">CMake</a>**: A project configuration tool, will also be used by the PhysX SDK.
+- **<a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a>**: A documentation generator.
+- **<a href="https://www.python.org/">Python</a>** will be used by the PhysX SDK.
+- **<a href="https://developer.nvidia.com/physx-visual-debugger">PhysX Visual Debugger</a>**: A tool that renders a PhysX simulated scene. Can be used with the trax tests.
+
+**Optional (for better diagrams in documentation):**
+- **<a href="https://graphviz.org/">Graphviz</a>** - for class hierarchy and include graphs
+  - Without Graphviz: Basic text diagrams will be generated instead
+- **<a href="https://www.java.com">Java Runtime (JRE 8+)</a>** - required for PlantUML diagrams in documentation
+  - PlantUML JAR is included in `Tools/plantuml-mit-1.2025.10.jar`
+  - No separate PlantUML installation needed
 
 ## 2. Dependencies
 

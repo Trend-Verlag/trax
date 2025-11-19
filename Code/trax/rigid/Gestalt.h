@@ -41,6 +41,47 @@
 /// \link trax::Gestalt Gestalt \endlink, that can be used in a physics simulation
 /// as a dynamic object with collision detection.
 /// 
+/// @startuml
+/// skinparam classAttributeIconSize 0
+/// left to right direction
+/// 
+/// together {
+/// interface Body {
+///   +SetFrame(Frame&)
+///   +GetFrame(Frame&)
+///   +SetMass(Mass)
+///   +GetMass() : Mass
+/// }
+/// 
+/// interface Shape {
+///   +Attach(Geom*) : int
+///   +Count() : int
+///   +Clear()
+/// }
+/// 
+/// interface Geom {
+///   +SetFrame(Frame&)
+///   +GetGeomType() : GeomType
+///   +SetMaterial(Material&)
+/// }
+/// }
+/// 
+/// interface Gestalt {
+///   +SetName(char*)
+///   +Attach(Geom*, Mass) : int
+///   +GeomMass(int) : Mass
+/// }
+/// 
+/// Shape o-right- "0..*" Geom
+/// Body <|-down- Gestalt
+/// Shape <|-down- Gestalt
+/// 
+/// note bottom of Gestalt
+///   Combines physical and
+///   geometric properties
+/// end note
+/// @enduml
+///
 
 #include "Body.h"
 #include "Shape.h"
@@ -49,6 +90,11 @@ namespace trax
 {
 
 	/// \brief A Gestalt is a Body with a Shape.
+	///
+	/// A Gestalt combines the physical properties of a Body with the geometric
+	/// properties of a Shape. The latter combines multiple Geoms into a single
+	/// collision shape.
+	/// \see Geom
 	struct Gestalt : virtual Body,
 					 virtual Shape
 	{

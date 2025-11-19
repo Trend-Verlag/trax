@@ -1,0 +1,2 @@
+# Treat JAR files as binary
+*.jar binary

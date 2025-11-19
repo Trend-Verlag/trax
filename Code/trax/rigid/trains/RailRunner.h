@@ -35,8 +35,8 @@
 /// coupling and for steering something on a track system like thrust 
 /// and brake. 
 /// 
-/// \image html RailRunner.png
-///  
+/// \image html RailRunner.png "RailRunner Class Hierarchy"
+/// 
 /// \section railrunners_anchor WheelFrames and Anchors
 /// 
 /// The anchor is the position of the TrackJoint in a \link trax::WheelFrame 
@@ -132,6 +132,180 @@
 /// and vTarget values properly. To that end the library provides a 
 /// \link trax::TractionForceCharacteristic TractionForceCharacteristic \endlink
 /// that models the motor/gear arrangement of a real locomotive.
+/// 
+/// \section railrunners_details Details
+///
+/// @startuml
+/// skinparam classAttributeIconSize 0
+/// 
+/// interface RailRunner <<interface>> {
+///   +Rail(Location&, bool)
+///   +DeRail()
+///   +IsRailed() : bool
+///   +GetLocation() : Location
+///   +GetGlobalAnchor() : Frame
+///   +SetVelocity(Velocity)
+///   +GetVelocity() : Velocity
+///   +TargetVelocity(Velocity)
+///   +Thrust(One)
+///   +Brake(One)
+///   +Couple(EndType, RailRunner&, EndType)
+///   +Uncouple(EndType)
+///   +IsCoupled(EndType) : bool
+/// }
+/// 
+/// interface TrainComponent <<interface>> {
+///   +GetTrain() : Train*
+///   +GetOrientation() : Orientation
+///   +GetTipAt(EndType) : Bogie&
+///   +GetOverhang(EndType) : Length
+///   +GetLength() : Length
+///   +GetTotalMass() : Mass
+/// }
+/// 
+/// interface Bogie <<interface>> {
+///   +Attach(Bogie*, EndType)
+///   +GetChild(EndType) : Bogie*
+///   +GetParent(EndType) : Bogie*
+///   +GetGestalt() : Gestalt&
+///   +Couple(EndType, Bogie&, EndType)
+///   +SetCouplingProps(EndType, CouplingProps&)
+/// }
+/// 
+/// interface WheelFrame <<interface>> {
+///   +Attach(Wheelset&) : int
+///   +CntWheelsets() : int
+///   +GetWheelset(int) : Wheelset&
+///   +Limits(TrackJointLimits&)
+///   +Anchor(Frame&)
+///   +SetTractionForceCharacteristic()
+///   +EnableDerailing(bool)
+/// }
+/// 
+/// interface RollingStock <<interface>> {
+///   +Attach(Bogie&) : bool
+///   +GetNumberOfBogies() : int
+///   +GetBogie(int) : Bogie&
+///   +GetNumberOfWheelFrames() : int
+///   +GetWheelFrame(int) : WheelFrame&
+/// }
+/// 
+/// interface Train <<interface>> {
+///   +GetNumberOfComponents() : int
+///   +GetComponent(int) : TrainComponent*
+///   +Create(TrainComponent&)
+///   +Append(EndType, TrainComponent*)
+///   +SplitAfter(int) : Train*
+///   +Reduce()
+///   +Clear()
+/// }
+/// 
+/// class Location {
+///   +Location(Track*, TrackLocation&)
+///   +PutOn(Track*, TrackLocation&)
+///   +GetTrack() : Track*
+///   +Param() : Length
+///   +Orient() : Orientation
+///   +Move(Length) : pair<Length,bool>
+///   +Transition(Frame&)
+/// }
+/// 
+/// interface Track <<interface>> {
+///   +IsValid() : bool
+///   +GetLength() : Length
+///   +Curvature(Length) : AnglePerLength
+///   +Torsion(Length) : AnglePerLength
+///   +Transition(Length, Frame&)
+///   +DoTrigger(range, Event&)
+///   +DoSignal(range, Orientation, SignalTarget&)
+/// }
+/// 
+/// interface Sensor <<interface>> {
+///   +Trigger(Event&)
+///   +Attach(TrackBuilder*)
+/// }
+/// 
+/// interface Signal <<interface>> {
+///   +Set(Status) : Status
+///   +GetLocation() : Location
+/// }
+/// 
+/// class Wheelset {
+///   +Radius : Length
+///   +Gauge : Length
+///   +MaxMotorTorque : Torque
+///   +MaxBrakingTorque : Torque
+/// }
+/// 
+/// class TractionForceCharacteristic {
+///   +operator()(Velocity) : One
+///   +MaximumVelocity() : Velocity
+/// }
+/// 
+/// interface Gestalt <<interface>> {
+///   +SetFrame(Frame&)
+///   +GetFrame(Frame&)
+/// }
+/// 
+/// RailRunner <|-- TrainComponent
+/// RailRunner <|-- Bogie
+/// TrainComponent <|-- RollingStock
+/// TrainComponent <|-- Train
+/// Bogie <|-- WheelFrame
+/// 
+/// Bogie --> Gestalt : uses
+/// 
+/// WheelFrame o-- "0..*" Wheelset : drives with
+/// WheelFrame o-- "0..1" TractionForceCharacteristic : modulates
+/// 
+/// RollingStock o-- "1..*" Bogie : manages
+/// Train o-- "1..*" TrainComponent : maintains list
+/// 
+/// WheelFrame ..> Location : rails on
+/// Location --> "1" Track : references
+/// 
+/// Track o-- "0..*" Sensor : triggers
+/// Track o-- "0..*" Signal : dispatches
+/// 
+/// WheelFrame ..> Sensor : triggers via\nLocation::Move()
+/// WheelFrame ..> Signal : receives via\nLocation::Move()
+/// 
+/// note right of WheelFrame
+///   WheelFrame.Rail() creates
+///   a Location on the Track.
+///   
+///   WheelFrame maintains this
+///   Location and moves it via
+///   Location::Move() according 
+///   to its TrackJoint during
+///   simulation.
+///   
+///   As Location moves, it
+///   triggers Sensors and
+///   receives Signals.
+/// end note
+/// 
+/// note bottom of Location
+///   Travels along Track,
+///   triggering Sensors and
+///   receiving Signals when
+///   moved by WheelFrame
+/// end note
+/// 
+/// note top of RailRunner
+///   Base interface for all
+///   objects that can travel
+///   on tracks (trains, 
+///   rolling stock, bogies)
+/// end note
+/// 
+/// note left of Train
+///   Maintains ordered list
+///   of TrainComponents
+///   (RollingStock, sub-Trains)
+/// end note
+/// 
+/// @enduml
 /// 
 
 #include "trax/Units.h"
