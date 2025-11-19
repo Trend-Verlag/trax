@@ -156,8 +156,17 @@
 /// \section dim_dimension_one Dimension One and Angles
 /// 
 /// A Dimensionated Value with no dimension is still a Dimensionated 
-/// Value and is to distinguish conceptionally from a stark naked number
-/// like float, int or double.
+/// Value (\link dim::One One \endlink) and is to be distinguished 
+/// conceptionally from a stark naked number like float, int or double. 
+/// \link dim::Angle Angles \endlink are of dimension one as well. Both
+/// convert seamlessly to each other and to stark naked numbers, but 
+/// are still different types:
+/// 
+/// \code
+/// AngularVelocity w = 1_radIs; // 1 radian per second
+/// Time dt = 2_s;
+/// One sina = sin( w * dt ); // sin expects a dimension One or Angle value
+/// \endcode
 /// 
 
 #include <cmath>

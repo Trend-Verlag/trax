@@ -225,8 +225,9 @@ namespace trax{
 		virtual bool Couple( EndType thisEnd, Train& with, EndType withEnd ) noexcept = 0;
 
 
-		/// \returns true if all the internal couplings of this Train (inluding 
-		/// that of sub-Trains) are coupled propery.
+		/// \returns false if all the internal couplings of this Train (inluding 
+		/// that of sub-Trains) are coupled propery. True if one such coupling
+		/// is broken or uncoupled.
 		virtual bool IsUnCoupledInternally() const noexcept = 0;
 
 

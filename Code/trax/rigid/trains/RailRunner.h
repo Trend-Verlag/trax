@@ -31,38 +31,87 @@
 /// 
 /// \section railrunners_intro Introduction
 /// A rail runner can be railed on a track. The \link trax::RailRunner 
-/// RailRunner \endlink interface provides all means for Railing/Derailing, 
+/// RailRunner \endlink interface provides all means for railing/derailing, 
 /// coupling and for steering something on a track system like thrust 
 /// and brake. 
 /// 
 /// \image html RailRunner.png
+///  
+/// \section railrunners_anchor WheelFrames and Anchors
 /// 
-/// \section railrunners_coupling Coupling
-/// \link trax::Bogie Bogies \endlink provide couplings at their tip ends 
-/// that can form a stable connection to other Bogies. Those coupling 
+/// The anchor is the position of the TrackJoint in a \link trax::WheelFrame 
+/// WheelFrame \endlink. It will define the Location of the RailRunner on a 
+/// Track. For a RollingStock, which is built up from several WheelFrames 
+/// and Bogies, the anchor will be the northmost WheelFrame's anchor; for a 
+/// Train it will be the northmost RollingStock's anchor.
+/// 
+/// A WheelFrame can hold \link trax::Wheelset Wheelsets \endlink that determine 
+/// the driving and braking torques that can get applied in a simulation.
+/// 
+/// \section railrunners_bogies Bogies
+/// 
+/// A \link trax::Bogie Bogie \endlink can be connected to up to two parent
+/// Bogies. It itself can hold up to two child Bogies. Since a WheelFrame is
+/// a Bogie with a TrackJoint, a typical configuration will be e.g. a Bogie 
+/// with two child WheelFrames. Also a Jakobs bogie arrangement can be 
+/// realised by connecting two Bogies to a common child WheelFrame.
+/// 
+/// \section railrunners_rollingstock RollingStocks
+/// 
+/// In principle a Bogie/WheelFrame assembly can be railed on a track
+/// and used in the simulation. However it is recommended to wrap such an
+/// arrangement in a \link trax::RollingStock RollingStock \endlink. A
+/// RollingStock manages the Bogie/WheelFrame arrangement if it comes to 
+/// railing or steering. It also is the basic building block for Trains.
+/// 
+/// \section railrunners_train Couplings and Trains
+/// 
+/// \link trax::Bogie Bogies\endlink provide couplings at their tip ends 
+/// that can form a stable connection to other Bogies. Those couplings
 /// relay to \link trax::RollingStock RollingStock \endlink and
-/// \link trax::Train Trains \endlink. Automatic couplings are realised 
-/// in the trax library. Those couplings can be switched to active, passive 
-/// or beeing coupled. An active coupling would couple another active one, 
-/// as soon as their trigger spheres intersect. If one of the two couplings 
-/// is passive, nothing would happen.
+/// \link trax::Train Trains\endlink, that therefore can get coupled, too.
 /// 
-/// \section railrunners_anchor Anchor
-/// The anchor is the position of the TrackJoint in a 
-/// \link trax::WheelFrame WheelFrame \endlink. It will define the Location 
-/// of the RailRunner on a Track. For a RollingStock, which is built up 
-/// from several WheelFrames and Bogies, the anchor will be the northmost 
-/// WheelFrame's anchor; for a Train it will be the northmost RollingStock's 
-/// anchor.
+/// A \link trax::Train Train \endlink is a RailRunner that maintains an 
+/// ordered list of \link trax::TrainComponent TrainComponents\endlink. 
+/// RollingStock and Train itself qualify as TrainComponents. That way a 
+/// train might be composed from other trains. 
 /// 
-/// \section railrunners_train Train
-/// A Train is a RailRunner that maintains an ordered list of 
-/// \link trax::TrainComponent TrainComponents \endlink. RollingStock and Train 
-/// itself qualify as TrainComponents. That way a Train might be composed 
-/// from other Trains. On splitting a Train, a new Train might be created 
-/// automatically.
+/// \link trax::Train::SplitAfter Splitting \endlink a train at a certain 
+/// position means creating two new sub-trains, which from that moment on 
+/// make up the original train. This alone would not decouple the two new 
+/// trains; only the parent train now consists of the two new trains as 
+/// components. To decouple them, the original train additionally has to 
+/// be \link trax::Train::Clear Clear()\endlink ed. This will decouple all 
+/// components from each other and remove them from the train.
+/// 
+/// The opposite process to splitting is to \link trax::Train::Reduce 
+/// Reduce()\endlink the sub-trains again, so their direct members become 
+/// direct members of their parent train. The reduced - and now empty - 
+/// trains are removed from their parent and have become invalid.
+/// 
+/// Despite this handling pattern it might be necessary to \link 
+/// trax::RailRunner::Uncouple uncouple \endlink two TrainComponents. This 
+/// will keep the parent train intact, only that it shows up as being 
+/// \link trax::Train::IsUnCoupledInternally IsUnCoupledInternally() \endlink. 
+/// This also might happen if a coupling breaks during simulation. In this 
+/// case \link trax::Train::Separate Separate() \endlink can be used to 
+/// remove all components south of the broken coupling from the train 
+/// and return them as a new train.
+/// 
+/// Rolling stock and trains can get coupled without having a parent train, 
+/// albeit it is easy to \link trax::Train::Create Create() \endlink one from 
+/// already coupled components. The use of trains is optional, but 
+/// recommended for easier handling of railing and steering.
+/// 
+/// Automatic couplings are realised in the trax library. Those couplings 
+/// can be switched to active, passive or beeing coupled. An active coupling 
+/// would couple another active one, as soon as their spheres of influence 
+/// intersect. If one of the two couplings is passive, nothing would happen.
+/// To make this work, a \link trax::Fleet Fleet \endlink is needed that 
+/// holds the trains to be considered for automatic coupling.
 /// 
 /// \section railrunners_drivemodel Drive Model
+/// 
 /// Moving a RailRunner might look a little odd, since the velocity of a 
 /// WheelFrame is a constraint for the physics engine: first the Wheelsets 
 /// have to specify the maximum available braking and driving forces as 
@@ -70,16 +119,19 @@
 /// what fraction to actually apply at a given moment by the 
 /// \link trax::RailRunner::Thrust() Thrust() \endlink and the 
 /// \link trax::RailRunner::Brake() Brake() \endlink methods. Secondly there 
-/// is a target velocity to be set for a RailRunner by the 
+/// is a target velocity (vTarget) to be set for a RailRunner by the 
 /// \link trax::RailRunner::TargetVelocity() TargetVelocity() \endlink method, 
 /// so the physics engine knows what velocity to head for. It is clear that 
 /// these limits might not be sufficient to actually reach vTarget. If they 
 /// would, vTarget would be reached immediately and be kept that way. In 
 /// practice the braking and driving forces will compete with other forces 
-/// like gravity or mass inertia and friction, as they in reality do. To 
-/// simulate the behaviour of real locomotive controls, as handled by an 
+/// like gravity or mass inertia and friction, as they in reality do. 
+/// 
+/// To simulate the behaviour of real locomotive controls, as handled by an 
 /// engineer, it is necessary to map those controls to the braking, thrust 
-/// and vTarget values properly.
+/// and vTarget values properly. To that end the library provides a 
+/// \link trax::TractionForceCharacteristic TractionForceCharacteristic \endlink
+/// that models the motor/gear arrangement of a real locomotive.
 /// 
 
 #include "trax/Units.h"

@@ -147,6 +147,7 @@ namespace trax{
 		const Jack& _GetJack( int idx ) const override;
 	//	const Plug& _GetPlug( int idx ) const override;
 
+		virtual void ConnectJacks() override;
 	private:
 		//ordered by track position (north to south):
 		std::vector<std::shared_ptr<Bogie_Imp>>		m_Bogies;

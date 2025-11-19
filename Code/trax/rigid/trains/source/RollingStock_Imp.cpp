@@ -433,15 +433,7 @@ bool RollingStock_Imp::Attach( Bogie& bogie ) noexcept
 
 	CalculateOverhangs();
 
-	ConnectJacks();
-
-	m_PlugRail.Clear();
-	m_PlugDerail.Clear();
-	for( auto& pWheelFrames : m_WheelFrames )
-	{
-		pWheelFrames->JackOnRail().InsertAndAppend( &m_PlugRail.Make() );
-		pWheelFrames->JackOnDerail().InsertAndAppend( &m_PlugDerail.Make() );
-	}
+	ReconnectJacks();
 
 	if( !IsValid() )
 	{
@@ -533,6 +525,17 @@ const Jack& trax::RollingStock_Imp::_GetJack( int idx ) const
 	stream << "Out of range!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
 	throw std::range_error( stream.str() );
+}
+
+void RollingStock_Imp::ConnectJacks()
+{
+	RollingStock_Base::ConnectJacks();
+
+	for( auto& pWheelFrames : m_WheelFrames )
+	{
+		pWheelFrames->JackOnRail().InsertAndAppend( &m_PlugRail.Make() );
+		pWheelFrames->JackOnDerail().InsertAndAppend( &m_PlugDerail.Make() );
+	}
 }
 
 void RollingStock_Imp::CalculateOverhangs() noexcept

@@ -27,7 +27,7 @@
 
 #pragma once
 
-/// \page docu_joints Connectors
+/// \page docu_joints Joints
 /// 
 /// \section joints_intro Introduction
 /// A Joint connects two Bodies together, restricting relative movement 
