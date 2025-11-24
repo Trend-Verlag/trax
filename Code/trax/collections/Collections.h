@@ -26,17 +26,51 @@
 
 #pragma once
 
-/// \page docu_collections Collections
-///
-/// \section collections_intro Introduction
-/// There is an abundance of different objects provided by the trax library. Typically
-/// they are created with smart pointers, managing their lifetimes automatically. However,
-/// who is holding these smart pointers? The answer is: Collections. 
-/// 
-/// \section collections_tracksystem Track Systems
-/// \section collections_fleet Fleets
-/// \section collections_Modules Modules
-/// 
+/**
+\page docu_collections Collections
+
+\section collections_intro Introduction
+There is an abundance of different objects provided by the trax library. 
+Typically they are created with smart pointers, managing their lifetimes 
+automatically. However, who is holding these smart pointers? The answer 
+is: Collections. 
+
+The master of all collections is the ModuleCollection. It holds Module 
+objects that in turn hold one TrackSystem and one Fleet. A TrackSystem 
+maintains TrackCollection objects that are used to group and locate tracks 
+inside of a TrackSystem. A frame is understood as to be relative to it's 
+parent in the following transformation hierarchy (classes in braces do not 
+apply a transformation):
+ 
+\verbatim
+
+(ModuleCollection)
+	   |
+	Module ____________________________________________________________________
+       |                                                                       |
+(TrackSystem)------------------------------------------------               (Fleet)
+	   |                               |                     |                 |
+(TrackCollectionContainer)   (ConnectorCollection)   (SignalCollection)     (Train)
+       |                               |                     |                 |
+       |                          (Connector)             (Signal)      ---------------
+TrackCollection									                        |              |
+       |                                                           (RollingStock)    (Train)
+       |                                                                |              
+       |                                                              Bogie     
+     Track                                                              |
+       |                                                            ChildBogie
+    (Curve)
+
+\endverbatim 
+
+\note A track will deliver module relative coordinates with its Transition()
+methods, taking into account the TrackCollection's frame of reference.
+
+The Fleet solely holds Trains, which in turn hold RollingStocks and other Trains.
+A RollingStock holds Bogies and WheelFrames. A Bogie can hold child Bogies, which
+most probably will be WheelFrames.
+*/
+
 
 #include "Collection.h"
 #include "CollectionDecorator.h"

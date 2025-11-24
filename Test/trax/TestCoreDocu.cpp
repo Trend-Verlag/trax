@@ -45,6 +45,25 @@ BOOST_AUTO_TEST_SUITE(CoreDocu)
 
 BOOST_AUTO_TEST_CASE( test_docu_units )
 {
+	{
+		Position<Length> P1 = Origin3D<Length>;		// or any other point in the Frame's local coordinates
+		Frame<Length,One> F = Identity<Length,One>; // or any other orthonormal Frame in global coordinates
+	
+		Position<Length> Pglobal = F.P + P1.x * F.T + P1.y * F.N + P1.z * F.B;
+	
+		BOOST_CHECK( Pglobal == F.ToParent( P1 ) );
+		BOOST_CHECK( Pglobal == F * P1  );
+		BOOST_CHECK( P1 == F.FromParent( Pglobal ) );
+
+		Position<Length> P2{ 1_m, 2_m, 3_m };	// pointin the Frame's local coordinates
+		Vector<Length> V = P2 - P1;				// distance vector in local coordinates
+		Vector<Length> Vglobal = V.dx * F.T + V.dy * F.N + V.dz * F.B;
+		
+		BOOST_CHECK( Vglobal == F.ToParent( V ) );
+		BOOST_CHECK( Vglobal == F * V  );
+		BOOST_CHECK( V == F.FromParent( Vglobal ) );
+	}
+
 	Mass m = 130_kg;
 	Vector<Acceleration> a = G;	// acceleration due to gravity
 	Vector<Force> F = m * a;

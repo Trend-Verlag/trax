@@ -35,7 +35,8 @@
 /// coupling and for steering something on a track system like thrust 
 /// and brake. 
 /// 
-/// \image html RailRunner.png "RailRunner Class Hierarchy"
+/// \image html RailRunner.png "RailRunner Class Hierarchy" width=750px
+/// 
 /// 
 /// \section railrunners_anchor WheelFrames and Anchors
 /// 
@@ -136,6 +137,7 @@
 /// \section railrunners_details Details
 ///
 /// @startuml
+/// scale 750 width
 /// skinparam classAttributeIconSize 0
 /// 
 /// interface RailRunner <<interface>> {

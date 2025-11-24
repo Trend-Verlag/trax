@@ -29,7 +29,7 @@
 
 /// \page docu_units Space
 /// \section units_intro Introduction
-/// The spat and the dim libraries work seemlessly together to provide for 
+/// The spat and the dim libraries work together seemlessly to provide for 
 /// our railway simulation what it calls 'the space'. A Position<Length>
 /// represents a point in this space; a Vector<One> represents a direction.
 /// Together they form a Frame<Length,One> that represents a complete frame 
@@ -38,7 +38,40 @@
 /// A force might be a VectorBundle<Length,Force>, giving us both the point
 /// of application and the force vector itself.
 ///
-/// You get the idea.
+/// \section units_details Details
+/// 
+/// In general the trax library uses Frame<Length,One> as a frame of reference,
+/// instead of matrices. This makes it possible to work with dimensionated values:
+/// 
+/// \image html Frame.jpg "A Frame<Length,One> representing a frame of reference in space."
+/// 
+/// The Frame maintains a Position of dimension 'Length' and three Vectors 
+/// of dimension 'One'. The three vectors are of unit length and orthogonal 
+/// to each other, representing the three axes of our frame of reference. If
+/// you have a point P1, defined relative to a Frame F, it converts to global
+/// coordinates by:
+/// 
+/// \code
+/// Position<Length> P1 = Origin3D<Length>;		// or any other point in the Frame's local coordinates
+/// Frame<Length,One> F = Identity<Length,One>; // or any other orthonormal Frame in global coordinates
+/// 
+/// Position<Length> Pglobal = F.P + P1.x * F.T + P1.y * F.N + P1.z * F.B;
+/// 
+/// BOOST_CHECK( Pglobal == F.ToParent( P1 ) );
+/// BOOST_CHECK( Pglobal == F * P1  );
+/// BOOST_CHECK( P1 == F.FromParent( Pglobal ) );
+/// \endcode
+/// 
+/// A distance vector V betweent two points in space would transform like this:
+/// \code
+/// Position<Length> P2{ 1_m, 2_m, 3_m };	// pointin the Frame's local coordinates
+/// Vector<Length> V = P2 - P1;				// distance vector in local coordinates
+/// Vector<Length> Vglobal = V.dx * F.T + V.dy * F.N + V.dz * F.B;
+/// 
+/// BOOST_CHECK( Vglobal == F.ToParent( V ) );
+/// BOOST_CHECK( Vglobal == F * V  );
+/// BOOST_CHECK( V == F.FromParent( Vglobal ) );
+/// \endcode
 ///
 /// \section units_examples Examples
 /// 

@@ -12,25 +12,30 @@ It also is part of the <a href="https://eepshopping.de/eep_eisenbahn_exe_profess
 There is a <a href="https://www.trendverlag.com/Trax/Doc/BlogArticle/traxLibrary.html">whitepaper</a> that describes the basic ideas behind the library. 
 The mathematical foundations for the railroad dynamics are described <a href="https://www.trendverlag.com/Trax/Doc/TrackConstraint.pdf">here</a>.</p>
 
+The [Trax GitHub Project](https://github.com/Trend-Verlag) produces a documentation from the 
+source code using Doxygen. It contains a medium level overview as well as detailed description 
+of the API. A ready generated version is available online: 
+[Trax Library Documentation](https://www.trendverlag.com/Trax/Doc/API/html/index.html).
+
 ## 1. Tools
 
 Install these tools prior to following the installation instructions for 
 the project.
 
 **Required:**
-- **<a href="https://git-scm.com/">Git</a>**: A version control system. Needed to get the source code from the repository.
-- Register a **<a href="https://github.com/">GitHub Account</a>**: Here the 'Trend Trax Library' resides.
-- **<a href="http://visualstudio.com/">Visual Studio 2022 Community Edition</a>**: Download and install the community edition. We will
+- <a href="https://git-scm.com/">Git</a>: A version control system. Needed to get the source code from the repository.
+- Register a <a href="https://github.com/">GitHub Account</a>: Here the 'Trend Trax Library' resides.
+- <a href="https://cmake.org/">CMake</a>: A project configuration tool, will also be used by the PhysX SDK.
+- <a href="http://visualstudio.com/">Visual Studio 2022 Community Edition</a>: Download and install the community edition. We will
 		only need the 'workload' called Desktop Development with C++.
-- **<a href="https://cmake.org/">CMake</a>**: A project configuration tool, will also be used by the PhysX SDK.
-- **<a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a>**: A documentation generator.
-- **<a href="https://www.python.org/">Python</a>** will be used by the PhysX SDK.
-- **<a href="https://developer.nvidia.com/physx-visual-debugger">PhysX Visual Debugger</a>**: A tool that renders a PhysX simulated scene. Can be used with the trax tests.
-
-**Optional (for better diagrams in documentation):**
-- **<a href="https://graphviz.org/">Graphviz</a>** - for class hierarchy and include graphs
+- <a href="https://www.python.org/">Python</a> will be used by the PhysX SDK.
+		
+**Optional:**
+- <a href="https://developer.nvidia.com/physx-visual-debugger">PhysX Visual Debugger</a>: A tool that renders a PhysX simulated scene. Can be used with the trax tests.
+- <a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a>: A documentation generator.
+- <a href="https://graphviz.org/">Graphviz</a> - for class hierarchy and include graphs in generated documentation
   - Without Graphviz: Basic text diagrams will be generated instead
-- **<a href="https://www.java.com">Java Runtime (JRE 8+)</a>** - required for PlantUML diagrams in documentation
+- <a href="https://www.java.com">Java Runtime (JRE 8+)</a> - required for PlantUML diagrams in documentation
   - PlantUML JAR is included in `Tools/plantuml-mit-1.2025.10.jar`
   - No separate PlantUML installation needed
 
@@ -99,16 +104,19 @@ select the 'ALL_TESTS' project and build and run it.
 
 ## 4. External Resources
 
-### Whitepaper
+### Documentation
+
+- The [Trax GitHub Project](https://github.com/Trend-Verlag) produces a documentation from the 
+source code using Doxygen. It contains a medium level overview as well as detailed description 
+of the API.
+- A ready generated (maybe slightly outdated) version of the documentation is available online: 
+[Trax Library Documentation](https://www.trendverlag.com/Trax/Doc/API/html/index.html).
+
+### Whitepapers 
 - The [Trax Library Whitepaper](https://www.trendverlag.com/Trax/Doc/BlogArticle/traxLibrary.html) 
 provides an overview of the basic concepts and architecture.
 - The [Trax Library Book](https://www.trendverlag.com/Trax/Doc/Book/start.html) offers a more 
 in-depth exploration.
-- The [Trax GitHub Project](https://github.com/Trend-Verlag) produces a documentation from the 
-source code using Doxygen. It contains a medium level overview as well 
-as detailed description of the API.
-
-### Mathematical Foundations
 - Detailed mathematical descriptions of the track constraint solver can be found in the 
 [Track Constraint PDF](https://www.trendverlag.com/Trax/Doc/TrackConstraint.pdf).
 

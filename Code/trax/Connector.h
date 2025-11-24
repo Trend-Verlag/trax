@@ -41,7 +41,166 @@
 /// way. To deal with the many intricacies of specific switches we also provide a (two way)
 /// Switch, a ThreeWaySwitch, SingleSlipSwitch, DoubleSlipSwitch and the like. This way, 
 /// what is called a switch in reality, would be made up e.g. from three tracks and a 
-/// connector. 
+/// connector.
+/// 
+/// @startuml
+/// skinparam classAttributeIconSize 0
+/// 
+/// ' Core base class
+/// class "Identified<Connector>" <<interface>> {
+/// }
+/// 
+/// ' Main Connector interface
+/// interface Connector {
+///   + Toggle(pulse: bool): void
+///   + Slot(slot: int, pTrack: shared_ptr<TrackBuilder>, trackend: EndType, connectAnonymous: bool): int
+///   + Slot(slot: int): pair<shared_ptr<TrackBuilder>,EndType>
+///   + CntSlots(): int
+///   + SwapSlots(slotA: int, slotB: int): void
+///   + IsComplete(): bool
+///   + RegisterSockets(modul: SocketRegistry&): void
+///   + UnregisterSockets(modul: SocketRegistry&): void
+/// }
+/// 
+/// ' NarrowSwitch interface
+/// interface NarrowSwitch {
+///   + {static} Make(numBranches: unsigned char): unique_ptr<NarrowSwitch>
+///   + Set(to: Status, pulse: bool): Status
+///   + Get(): Status
+///   + NarrowTrack(pNarrowTrack: shared_ptr<TrackBuilder>, trackEnd: EndType): void
+///   + NarrowTrack(): pair<shared_ptr<TrackBuilder>,EndType>
+///   + StraightTrack(pStaightTrack: shared_ptr<TrackBuilder>, trackEnd: EndType): void
+///   + StraightTrack(): pair<shared_ptr<TrackBuilder>,EndType>
+///   + DivergedTrack(divTrackID: int, pDivergedTrack: shared_ptr<TrackBuilder>, trackEnd: EndType): void
+///   + DivergedTrack(divTrackID: int): pair<shared_ptr<TrackBuilder>,EndType>
+/// }
+/// 
+/// ' Switch interface
+/// interface Switch {
+///   + {static} Make(): unique_ptr<Switch>
+///   + DivergedTrack(pDivergedTrack: shared_ptr<TrackBuilder>, trackEnd: EndType): void
+///   + DivergedTrack(): pair<shared_ptr<TrackBuilder>,EndType>
+///   + SwapTracks(): void
+///   + IsNormal(bStopAtFirstTrack: bool, maxDistance: Length): bool
+///   + Normalize(): bool
+///   --
+///   {static} slot_count = 3
+///   {static} status_count = 2
+///   {static} branch_count = 1
+/// }
+/// 
+/// ' ThreeWaySwitch interface
+/// interface ThreeWaySwitch {
+///   + {static} Make(): unique_ptr<ThreeWaySwitch>
+///   + DivergedTrack1(pDivergedTrack1: shared_ptr<TrackBuilder>, trackEnd: EndType): void
+///   + DivergedTrack1(): pair<shared_ptr<TrackBuilder>,EndType>
+///   + DivergedTrack2(pDivergedTrack2: shared_ptr<TrackBuilder>, trackEnd: EndType): void
+///   + DivergedTrack2(): pair<shared_ptr<TrackBuilder>,EndType>
+///   --
+///   {static} slot_count = 4
+///   {static} status_count = 3
+///   {static} branch_count = 2
+/// }
+/// 
+/// ' SingleSlipSwitch interface
+/// interface SingleSlipSwitch {
+///   + {static} Make(): unique_ptr<SingleSlipSwitch>
+///   + Set(to: Status, pulse: bool): Status
+///   + Get(): Status
+///   + SetCenter(center: Frame<Length,One>&): void
+/// }
+/// 
+/// ' DoubleSlipSwitch interface
+/// interface DoubleSlipSwitch {
+///   + {static} Make(): unique_ptr<DoubleSlipSwitch>
+///   + Set(to: Status, pulse: bool): Status
+///   + Get(): Status
+///   + SetCenter(center: Frame<Length,One>&): void
+/// }
+/// 
+/// ' Track-related classes - positioned at bottom
+/// interface Track {
+/// }
+/// 
+/// enum Track_EndType {
+///   none
+///   front
+///   back
+///   any
+/// }
+/// 
+/// interface TrackBuilder {
+///   + Couple(thisEnd: pair<shared_ptr<TrackBuilder>,EndType>, othersEnd: pair<shared_ptr<TrackBuilder>,EndType>): void
+/// }
+/// 
+/// ' Layout directives to position Track/TrackBuilder at bottom
+/// Switch -[hidden]down- Track
+/// ThreeWaySwitch -[hidden]down- Track
+/// SingleSlipSwitch -[hidden]down- TrackBuilder
+/// DoubleSlipSwitch -[hidden]down- TrackBuilder
+/// Track -[hidden]down- TrackBuilder
+/// Track_EndType -[hidden]down- TrackBuilder
+/// 
+/// ' Inheritance relationships
+/// "Identified<Connector>" <|-- Connector
+/// Connector <|.. NarrowSwitch : <<virtual>>
+/// NarrowSwitch <|.. Switch : <<virtual>>
+/// NarrowSwitch <|.. ThreeWaySwitch : <<virtual>>
+/// Connector <|.. SingleSlipSwitch : <<virtual>>
+/// Connector <|.. DoubleSlipSwitch : <<virtual>>
+/// Track <|-- TrackBuilder
+/// 
+/// ' Collaboration relationships
+/// Connector o-- "0..*" TrackBuilder : manages slots
+/// Switch ..> Track_EndType : uses
+/// ThreeWaySwitch ..> Track_EndType : uses
+/// SingleSlipSwitch ..> Track_EndType : uses
+/// DoubleSlipSwitch ..> Track_EndType : uses
+/// TrackBuilder ..> Track_EndType : uses
+/// Track +-- Track_EndType
+/// 
+/// note right of Connector
+///   Base interface for all
+///   track reconnectors.
+///   Manages slots for track ends.
+/// end note
+/// 
+/// note right of NarrowSwitch
+///   Common interface for switches
+///   with one narrow (incoming) track,
+///   one straight track, and
+///   diverging branch tracks.
+/// end note
+/// 
+/// note right of Switch
+///   Standard two-way switch:
+///   - 1 narrow track
+///   - 1 straight track
+///   - 1 diverged track
+/// end note
+/// 
+/// note top of ThreeWaySwitch
+///   Three-way switch:
+///   - 1 narrow track
+///   - 1 straight track
+///   - 2 diverged tracks
+/// end note
+/// 
+/// note right of SingleSlipSwitch
+///   Single slip crossing:
+///   - 2 narrow tracks
+///   - 2 straight crossing tracks
+///   - 1 diverging track
+/// end note
+/// 
+/// note top of DoubleSlipSwitch
+///   Double slip crossing:
+///   - 4 narrowing tracks
+///   - 2 crossing tracks
+///   - 2 diverging tracks
+/// end note
+/// 
+/// @enduml
 /// 
 /// Also mind the Indicator - system that trax provide. 
 

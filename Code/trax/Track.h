@@ -618,6 +618,8 @@ namespace trax
 	/// \param track Track to get the segment for.
 	/// \param s Parameter to evaluate the situation for [0,length].
 	/// \param e Distance failure that is assumed not to matter visibly.
+	/// \param w maximum width of the track model. For asymmetric tracks take two times the widest side.
+	/// \param h maximum height of the track model. For asymmetric tracks take two times the highest side.
 	/// \param segmentLimits The minimum and maximum segment length to deliver. The last segment returned might be 
 	/// shorter, to go to the track's end.
 	/// \param ignoreCuvesTorsion If true the torsion of the curve is not taken into consideration (but the twist still is). 
@@ -659,6 +661,7 @@ namespace trax
 	/// \throws std::range_error if s is outside the [0,Length()] range.
 	///@{
 
+	/// \brief Calculates a segment length ds so that the visible failure in a track would become smaller than some marginal distance of e.
 	dclspc Length Segment( const Track& track, Length s, Length e, common::Interval<Length> segmentLimits, bool ignoreCuvesTorsion = false );
 
 
@@ -673,8 +676,6 @@ namespace trax
 	/// (6) => ds <= 2*e/(h*|t|)
 	/// \endverbatim
 	///
-	/// \param w maximum width of the track model. For asymmetric tracks take two times the widest side.
-	/// \param h maximum height of the track model. For asymmetric tracks take two times the highest side.
 	dclspc Length Segment( const Track& track, Length s, Length e, Length w, Length h, common::Interval<Length> segmentLimits, bool ignoreCuvesTorsion = false );
 
 

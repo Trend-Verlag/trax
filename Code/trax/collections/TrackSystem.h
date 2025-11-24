@@ -46,30 +46,10 @@ namespace trax{
 
 	/// \brief A track system is the container for tracks. 
 	/// 
-	/// A track can only be member of one track system at a time. The TrackSystem maintains 
-	/// TrackCollection objects that are used to group and locate tracks inside of a TrackSystem.
-	/// A frame is understood as to be relative to it's parent in the following
-	/// transformation hierarchy (classes in braces do not apply a transformation):
-	/// \verbatim
-	///
-	///	  (ModuleSet)
-	///		  |
-	///		Module __________________________________________
-	///       |                                             |
-	///  (TrackSystem)                                    (Fleet)
-	///	      |                                             |
-	/// (TrackCollectionContainer)                    (TrainComponent)
-	///       |                                             |---------------
-	///   TrackCollection									|              |
-	///       |                                        (RollingStock)   (Train)
-	///       |                                             |              |
-	///       |                                            Bogie     (TrainComponent)
-	///     Track                                           |
-	///       |                                         ChildBogie
-	///    (Curve)
-	///
-	/// \endverbatim
-	/// \remarks A track will deliver module relative coordinates with its Transition() methods.
+	/// The TrackSystem maintains TrackCollection objects that are used to group 
+	/// and locate tracks inside of a TrackSystem. A track will deliver module 
+	/// relative coordinates with its Transition() methods, taking into account
+	/// the TrackCollection's frame of reference.
 	struct TrackSystem :	Collection<TrackSystem,TrackBuilder>,
 							Simulated,
 							Identified<TrackSystem>

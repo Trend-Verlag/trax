@@ -42,6 +42,7 @@ PhysX_Body_ImpBase::PhysX_Body_ImpBase(
 #ifdef _DEBUG
 	Actor().setActorFlag( physx::PxActorFlag::eVISUALIZATION, true );
 #endif
+	Actor().userData = static_cast<Body*>(this);
 }
 
 PhysX_Body_ImpBase::~PhysX_Body_ImpBase() noexcept{
