@@ -48,7 +48,7 @@ using namespace trax;
 
 BOOST_AUTO_TEST_SUITE(trax_tests)
 BOOST_AUTO_TEST_SUITE(TrainCreationTests)
-/*
+
 BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixture )
 //BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixtureVisualDebugger )
 {
@@ -362,7 +362,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation7, TrainFixtureVisualDebugger )
 }
 
 BOOST_AUTO_TEST_SUITE_END() // TrainCreationTests
-*/BOOST_AUTO_TEST_SUITE(TrainRunningTests)
+BOOST_AUTO_TEST_SUITE(TrainRunningTests)
 
 //BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixtureVisualDebugger )
 BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture )
