@@ -256,6 +256,10 @@ namespace trax{
 		virtual void Release( TrackJointFeeder& feeder ) noexcept = 0;
 
 
+		/// \brief Dumps information about all tasks to the given stream.
+		virtual void DumpTasksTo( std::ostream& stream ) const noexcept = 0;
+
+
 		/// \brief A Jack that triggers a pulse once a simulation step.
 		///
 		/// Use this to create a timer.

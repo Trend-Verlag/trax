@@ -142,6 +142,8 @@ namespace trax
 
 		void Release( TrackJointFeeder& feeder ) noexcept override;
 
+		void DumpTasksTo( std::ostream& stream ) const noexcept override;
+
 		//physx::PxSimulationEventCallback:
 		void onConstraintBreak( physx::PxConstraintInfo* constraints, physx::PxU32 count) override;
 
@@ -190,7 +192,7 @@ namespace trax
 
 			void JoinAllTasks() noexcept;
 
-			void DumpTasks() const;
+			void DumpTasksTo( std::ostream & stream ) const noexcept;
 		private:
 
 			struct ThreadInfo{
@@ -226,7 +228,7 @@ namespace trax
 
 				bool IsWorking() const noexcept;
 
-				void DumpTasks() const;
+				void DumpTasksTo( std::ostream& stream ) const noexcept;
 			};
 
 			std::vector<ThreadInfo*> m_Threads;

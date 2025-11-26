@@ -8,17 +8,16 @@ Principles
 - Use Milestones for releases and a Project board for active work.
 
 ## Now / Next (next milestone)
-- Improved curved-track interpolation — better handling of tight radii. (status: planned) — issue: #<link> — owner: @alice — target: v0.2.0
+- 
 
 ## Short term (next release)
-- Add logging and debug visualization for track layout parsing. (status: planned) — owner: @bob — milestone: v0.2.0
+-
 
 ## Long term
-- Multi-train distributed simulation with synchronized physics stepping. (status: idea) — no owner
+-
 
 ## Wishlist
-- Import/export of real-world track formats (GPX/OSM).
-- Support for custom vehicle controllers as plugins.
+- 
 
 ## How to request a feature
 - Open an Issue using the “feature” template and add label `roadmap`.

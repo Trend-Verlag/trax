@@ -312,6 +312,11 @@ void PhysX_Scene::Release( TrackJointFeeder& feeder ) noexcept
 	}
 }
 
+void PhysX_Scene::DumpTasksTo( std::ostream & stream ) const noexcept
+{
+	m_CpuDispatcher.DumpTasksTo( stream );
+}
+
 void PhysX_Scene::onConstraintBreak( physx::PxConstraintInfo* /*constraints*/, physx::PxU32 /*count*/ )
 {
 }
@@ -577,9 +582,9 @@ void PhysX_Scene::Dispatcher::JoinAllTasks() noexcept{
 			;
 }
 
-void PhysX_Scene::Dispatcher::DumpTasks() const{
+void PhysX_Scene::Dispatcher::DumpTasksTo( std::ostream& stream ) const noexcept{
 	for( auto pThreadInfo : m_Threads )
-		pThreadInfo->DumpTasks();
+		pThreadInfo->DumpTasksTo( stream );
 }
 
 PhysX_Scene::Dispatcher::ThreadInfo::ThreadInfo()
@@ -603,7 +608,8 @@ PhysX_Scene::Dispatcher::ThreadInfo::~ThreadInfo(){
 		delete m_pThread;
 	}
 
-	std::clog << Verbosity::verbose << "PhysX Dispatcher shut down. Number of PhysX Tasks processed: " << m_nTasksAccepted << std::endl; 
+	if( GetReportVerbosity() >= Verbosity::verbose )
+		DumpTasksTo( std::clog );
 }
 
 void PhysX_Scene::Dispatcher::ThreadInfo::ThreadFunc( ThreadInfo* pTI ){
@@ -657,8 +663,9 @@ bool PhysX_Scene::Dispatcher::ThreadInfo::IsWorking() const noexcept{
 	return m_bWorking;
 }
 
-void PhysX_Scene::Dispatcher::ThreadInfo::DumpTasks() const{
-	std::clog << "PhysX Dispatcher number of PhysX Tasks processed: " << m_nTasksAccepted << std::endl;
+void PhysX_Scene::Dispatcher::ThreadInfo::DumpTasksTo( std::ostream& stream ) const noexcept
+{
+	stream << "PhysX Dispatcher number of PhysX Tasks processed: " << m_nTasksAccepted << std::endl;
 }
 
 }

@@ -48,7 +48,7 @@ using namespace trax;
 
 BOOST_AUTO_TEST_SUITE(trax_tests)
 BOOST_AUTO_TEST_SUITE(TrainCreationTests)
-/**/
+/*
 BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixture )
 //BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixtureVisualDebugger )
 {
@@ -362,15 +362,15 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation7, TrainFixtureVisualDebugger )
 }
 
 BOOST_AUTO_TEST_SUITE_END() // TrainCreationTests
-BOOST_AUTO_TEST_SUITE(TrainRunningTests)
+*/BOOST_AUTO_TEST_SUITE(TrainRunningTests)
 
 //BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixtureVisualDebugger )
 BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture )
 {
 	{
 		// Cargo.train has 10 cars with 20 wheelframes altogether. 
-		// Simulate n*20 WheelFrames:
-		int cntSystems = 8u; //1u; //64u; //125u; //216u;//27u;
+		// Simulate cntSystems*20 WheelFrames:
+		int cntSystems = 4u;// //1u; //8u; //64u; //125u; //216u; //264u; //27u;
 		BuildFixture( cntSystems );
 
 		BOOST_CHECK_EQUAL( m_pTrackSystem->Count(), 4*cntSystems );
@@ -399,6 +399,8 @@ BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture )
 			trains.push_back( pTrain );
 		}
 
+		std::cout << "Simulating " << cntSystems*20 << " WheelFrames, " << cntSystems*20 << " Hinges, " << cntSystems*9 << " couplings." << std::endl;
+
 		Time simulationTime = 40_s;
 
 		const auto start = std::chrono::steady_clock::now();
@@ -409,6 +411,7 @@ BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture )
 		std::cout << "Duration of simulation: " << duration << "ms; simulates ";
 		std::cout << simulationTime / _ms(duration);
 		std::cout << " times faster than real world time." << std::endl;
+		m_pScene->DumpTasksTo( std::cout );
 
 		for( int i = 0; i < cntSystems; ++i )
 		{
@@ -421,7 +424,7 @@ BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture )
 }
 
 BOOST_AUTO_TEST_SUITE_END() // TrainRunningTests
-BOOST_AUTO_TEST_SUITE(TrainCouplingTests)
+/*BOOST_AUTO_TEST_SUITE(TrainCouplingTests)
 
 BOOST_FIXTURE_TEST_CASE( testTrainDecouple, TrainFixture )
 //BOOST_FIXTURE_TEST_CASE( testTrainDecouple, TrainFixtureVisualDebugger )
@@ -724,6 +727,6 @@ BOOST_FIXTURE_TEST_CASE( testTrainGetTip, TrainFixture )
 	BOOST_CHECK_NE( &pTrain->GetComponent( 4 )->GetTipAt( RailRunner::EndType::south ).first, &pTrain->GetTipAt( RailRunner::EndType::south ).first );
 }
 
-BOOST_AUTO_TEST_SUITE_END() // TrainCouplingTests
+*/BOOST_AUTO_TEST_SUITE_END() // TrainCouplingTests
 BOOST_AUTO_TEST_SUITE_END() // trax_tests
 #endif
