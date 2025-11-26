@@ -1,23 +1,38 @@
 # trax
 
-The trax library implements the logic of track guided vehicles together
-with a signaling and sensor system as well as cargo transportation. It makes use
-of the NVIDIA PhysX engine to simulate the dynamics of trains moving along tracks 
-and beyond. 
+The trax library implements the logic of track-guided vehicles, signaling, 
+sensors, and cargo transportation. It leverages the NVIDIA PhysX engine to 
+simulate train dynamics—on tracks and beyond. 
+
+This repository contains the mature core of trax version 3.0.0. Our mission: 
+a physically realistic railroad simulation, built to last - with open ideas, 
+better code, and shared success.
 
 The library was used to build the railroad simulators 
-<a href="https://eepshopping.de/eep_train_simulator_mission_v1_122|7683.html">EEP Train Simulator Mission</a> 
-and <a href="https://eepshopping.de/eep_tsm_gotthardbahn_nordrampe_modul_erstfeld|8235.html"> EEP TSM Gotthardbahn Nordrampe Modul Erstfeld</a>. 
-It also is part of the <a href="https://eepshopping.de/eep_eisenbahn_exe_professional_18_download_version|11927.html">Eisenbahn.exe Professional (EEP)</a> product line.
-There is a <a href="https://www.trendverlag.com/Trax/Doc/BlogArticle/traxLibrary.html">whitepaper</a> that describes the basic ideas behind the library. 
-The mathematical foundations for the railroad dynamics are described <a href="https://www.trendverlag.com/Trax/Doc/TrackConstraint.pdf">here</a>.</p>
+<a href="https://eepshopping.de/eep_train_simulator_mission_v1_122|7683.html">
+EEP Train Simulator Mission</a> and 
+<a href="https://eepshopping.de/eep_tsm_gotthardbahn_nordrampe_modul_erstfeld|8235.html"> 
+EEP TSM Gotthardbahn Nordrampe Modul Erstfeld</a>. It also is part of the 
+<a href="https://eepshopping.de/eep_eisenbahn_exe_professional_18_download_version|11927.html">
+Eisenbahn.exe Professional (EEP)</a> product line. There is a 
+<a href="https://www.trendverlag.com/Trax/Doc/BlogArticle/traxLibrary.html">
+whitepaper</a> that describes the basic ideas behind the library. The mathematical 
+foundations for the railroad dynamics are described 
+<a href="https://www.trendverlag.com/Trax/Doc/TrackConstraint.pdf">here</a>.</p>
 
-The [Trax GitHub Project](https://github.com/Trend-Verlag) produces a documentation from the 
-source code using Doxygen. It contains a medium level overview as well as detailed description 
-of the API. A ready generated version is available online: 
-[Trax Library Documentation](https://www.trendverlag.com/Trax/Doc/API/html/index.html).
+The [Trax GitHub Project](https://github.com/Trend-Verlag) produces a 
+documentation from the source code using Doxygen. It contains a medium level 
+overview as well as detailed description of the API. A ready generated version 
+is available online: [Trax Library Documentation](https://www.trendverlag.com/Trax/Doc/API/html/index.html).
 
-## 1. Tools
+## 1. Highlights
+
+- Support for arbitrary track geometries and complex layouts.
+- Realistic physics-based simulation of railroad vehicles using NVIDIA PhysX.
+- Signaling and sensor systems for train operations.
+- Modular architecture for easy integration and extension.
+
+## 2. Tools
 
 Install these tools prior to following the installation instructions for 
 the project.
@@ -39,7 +54,7 @@ the project.
   - PlantUML JAR is included in `Tools/plantuml-mit-1.2025.10.jar`
   - No separate PlantUML installation needed
 
-## 2. Dependencies
+## 3. Dependencies
 
 Currently there are two dependencies of the library:
 
@@ -83,7 +98,7 @@ NV_USE_STATIC_WINCRT should be set to 'False':
 Open the generated solution and build all the targets ('Release', 'Debug', 'Checked', 
 'Profile') for the 'INSTALL' project.
 
-## 3. Installation
+## 4. Installation
 
 The first step would be to install the tools from the list (see above);
 download, build and install the dependencies and then get the latest version of
@@ -102,7 +117,7 @@ the documentation:
 Open the solution in the ./_Build folder, select 'Release' as a configuration,
 select the 'ALL_TESTS' project and build and run it.
 
-## 4. External Resources
+## 5. External Resources
 
 ### Documentation
 
@@ -129,4 +144,6 @@ An article discussing the integration of Trax with OpenUSD for railroad simulati
 - [Eisenbahn.exe Professional (EEP)](https://eepshopping.de/eep_eisenbahn_exe_professional_18_download_version|11927.html)
 - [EEP Train Simulator Mission](https://eepshopping.de/eep_train_simulator_mission_v1_122|7683.html)
 - [EEP TSM Gotthardbahn Nordrampe](https://eepshopping.de/eep_tsm_gotthardbahn_nordrampe_modul_erstfeld|8235.html)
+- [rail for Unreal](https://www.fab.com/listings/0ae4f16d-5eb5-408f-8d57-9ff5ca77b5bd)
+- [railOmniverse](https://www.trendverlag.com/Trax/Doc/Book/chapter12.html)
 - [Building a Digital Twin of the German Rail Network](https://www.nvidia.com/en-us/on-demand/session/gtcspring23-s51560/)

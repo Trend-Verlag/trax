@@ -18,9 +18,9 @@ The format is based on "Keep a Changelog" and this project follows Semantic Vers
 ### Security
 - 
 
-## [0.1.0] - 2025-11-24
+## [3.1.0] - 2025-11-24
 ### Added
-- Initial changelog file.
+- Initial repository setup.
 
 ---
 
