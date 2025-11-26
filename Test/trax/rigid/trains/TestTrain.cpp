@@ -368,6 +368,8 @@ BOOST_AUTO_TEST_SUITE(TrainRunningTests)
 BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture )
 {
 	{
+		// Cargo.train has 10 cars with 20 wheelframes altogether. 
+		// Simulate n*20 WheelFrames:
 		int cntSystems = 8u; //1u; //64u; //125u; //216u;//27u;
 		BuildFixture( cntSystems );
 

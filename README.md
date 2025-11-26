@@ -126,6 +126,8 @@ source code using Doxygen. It contains a medium level overview as well as detail
 of the API.
 - A ready generated (maybe slightly outdated) version of the documentation is available online: 
 [Trax Library Documentation](https://www.trendverlag.com/Trax/Doc/API/html/index.html).
+- The [Frequently Asked Questions (FAQ)](https://github.com/Trend-Verlag/trax/tree/main/Doc/FAQ.md)
+answers some common questions regarding the library.
 
 ### Whitepapers 
 - The [Trax Library Whitepaper](https://www.trendverlag.com/Trax/Doc/BlogArticle/traxLibrary.html) 
