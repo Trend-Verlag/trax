@@ -55,7 +55,7 @@ Plug_Imp::Plug_Imp( PlugEnumerator& parent, Plug_Imp&& plug )
 }
 
 Plug_Imp::~Plug_Imp() noexcept{
-	Remove();
+	Plug_Imp::Remove();
 }
 
 Jack* Plug_Imp::Plugged() const noexcept{

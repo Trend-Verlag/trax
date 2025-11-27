@@ -424,7 +424,7 @@ BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture )
 }
 
 BOOST_AUTO_TEST_SUITE_END() // TrainRunningTests
-/*BOOST_AUTO_TEST_SUITE(TrainCouplingTests)
+BOOST_AUTO_TEST_SUITE(TrainCouplingTests)
 
 BOOST_FIXTURE_TEST_CASE( testTrainDecouple, TrainFixture )
 //BOOST_FIXTURE_TEST_CASE( testTrainDecouple, TrainFixtureVisualDebugger )
@@ -727,6 +727,6 @@ BOOST_FIXTURE_TEST_CASE( testTrainGetTip, TrainFixture )
 	BOOST_CHECK_NE( &pTrain->GetComponent( 4 )->GetTipAt( RailRunner::EndType::south ).first, &pTrain->GetTipAt( RailRunner::EndType::south ).first );
 }
 
-*/BOOST_AUTO_TEST_SUITE_END() // TrainCouplingTests
+BOOST_AUTO_TEST_SUITE_END() // TrainCouplingTests
 BOOST_AUTO_TEST_SUITE_END() // trax_tests
 #endif

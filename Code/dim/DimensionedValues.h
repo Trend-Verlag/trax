@@ -256,7 +256,7 @@ namespace dim
 		/// units of 'X'.
 		/// \returns the value as used with internal units.
 		inline constexpr Real Units() const noexcept {
-			return starkNakedNumber;
+			return starkNakedNumber; // NOLINT(clang-analyzer-cplusplus.NewDelete)
 		}
 		/// \brief Explicit conversion to Real for static_cast<Real> and operator (Real)
 		///
@@ -273,10 +273,6 @@ namespace dim
 		/// \brief Explicit conversion to bool for logical expressions like if( !value ) etc.
 		inline explicit constexpr operator bool() const noexcept {
 			return starkNakedNumber != 0 ? true : false;
-		}
-		/// \returns a const reference to the underlying value.
-		inline constexpr const Real& Ref() const noexcept {
-			return starkNakedNumber;
 		}
 	};
 
@@ -312,10 +308,6 @@ namespace dim
 		}
 		/// \brief Implicit conversion to Real.
 		inline constexpr operator Real() const noexcept {
-			return starkNakedNumber;
-		}
-		/// \returns a const reference to the underlying value.
-		inline constexpr const Real& Ref() const noexcept {
 			return starkNakedNumber;
 		}
 	};

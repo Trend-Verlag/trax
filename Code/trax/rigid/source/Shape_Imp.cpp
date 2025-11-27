@@ -25,7 +25,6 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
 
 #include "Shape_Imp.h"
 

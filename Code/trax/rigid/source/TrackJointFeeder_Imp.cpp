@@ -92,7 +92,7 @@ bool TrackJointFeeder::Update( Time dt )
 	return true;
 }
 
-bool TrackJointFeeder::Rail( std::shared_ptr<Track> pTrack, const TrackLocation& tl, bool doPulse )
+bool TrackJointFeeder::Rail( std::shared_ptr<const Track> pTrack, const TrackLocation& tl, bool doPulse )
 {
 	try{
 		m_Location.PutOn( pTrack, tl );

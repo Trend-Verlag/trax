@@ -194,7 +194,7 @@ Angle TotalAngle( const Curve& curve, common::Interval<Length> range, Angle accu
 	range.Normalize();
 
 	return _rad(boost::math::quadrature::gauss_kronrod<Real, 15>::integrate(
-		[&curve,&range]( Real s ){ return _1Im(curve.Curvature(_m(s))); },
+		[&curve]( Real s ){ return _1Im(curve.Curvature(_m(s))); },
 		_m(range.Near()), 
 		_m(range.Far()), 
 		5, 

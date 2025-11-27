@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_SUITE(common_tests)
 
 BOOST_AUTO_TEST_CASE( NarrowCastTest )
 {
-	std::size_t i = std::numeric_limits<int>::max();// + 1u;
+	constexpr std::size_t i = std::numeric_limits<int>::max();// + 1u;
 	BOOST_CHECK_THROW( common::narrow_cast<float>(i), std::runtime_error );
 }
 

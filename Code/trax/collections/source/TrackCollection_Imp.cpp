@@ -157,17 +157,17 @@ std::vector<std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>> Fin
 		
 			track.Transition( 0_m, trackEndPos );
 			if( area.Includes(trackEndPos) )
-				retval.push_back( { track.This(), Track::EndType::front, (trackEndPos-area.c).Length() } );
+				retval.push_back( { std::const_pointer_cast<TrackBuilder>(track.This()), Track::EndType::front, (trackEndPos-area.c).Length() } );
 
 			track.Transition( track.GetLength(), trackEndPos );
 			if( area.Includes(trackEndPos) )
-				retval.push_back( { track.This(), Track::EndType::end, (trackEndPos-area.c).Length() } );
+				retval.push_back( { std::const_pointer_cast<TrackBuilder>(track.This()), Track::EndType::end, (trackEndPos-area.c).Length() } );
 		}
 	}
 
 	if( sort )
 		std::sort( retval.begin(), retval.end(), 
-			[]( const std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& a, const std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& b ) -> bool { return std::get<2>(a) < std::get<2>(b); } );
+			[]( const std::tuple<std::shared_ptr<const TrackBuilder>,Track::EndType,Length>& a, const std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& b ) -> bool { return std::get<2>(a) < std::get<2>(b); } );
 
 	return retval;
 }

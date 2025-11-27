@@ -10,7 +10,6 @@
 //
 //								Peter Gabriel
 
-#pragma once
 
 #include "PhysX_Scene.h"
 #include "PhysX_Adapter.h"

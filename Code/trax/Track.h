@@ -329,15 +329,31 @@ namespace trax
 
 
 		/// \brief Gets a shared pointer to this.
-		virtual std::shared_ptr<TrackBuilder> This() const noexcept = 0;
+		///@{
+	
+		/// \returns A shared const pointer to the track interface.
+		virtual std::shared_ptr<const TrackBuilder> This() const noexcept = 0;
+
+		/// \returns A shared pointer to the track interface.
+		virtual std::shared_ptr<TrackBuilder> This() noexcept = 0;
+		///@}
 
 
 		/// \returns A shared pointer to the movable track interface or nullptr, if none.
-		virtual std::shared_ptr<MovableTrack> GetMovableTrack() const noexcept = 0;
+		///@{
+		
+		virtual std::shared_ptr<const MovableTrack> GetMovableTrack() const noexcept = 0;
 
+		virtual std::shared_ptr<MovableTrack> GetMovableTrack() noexcept = 0;
+		///@}
 
 		/// \returns A shared pointer to the parallel track interface or nullptr, if none.
-		virtual std::shared_ptr<ParallelizableTrack> GetParallelizableTrack() const noexcept = 0;
+		///@{
+		
+		virtual std::shared_ptr<const ParallelizableTrack> GetParallelizableTrack() const noexcept = 0;
+
+		virtual std::shared_ptr<ParallelizableTrack> GetParallelizableTrack() noexcept = 0;
+		///@}
 
 
 		/// \returns Returns the body a track is assigned to or nullptr.

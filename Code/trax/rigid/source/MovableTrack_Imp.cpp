@@ -35,12 +35,7 @@ namespace trax{
 std::shared_ptr<MovableTrack> trax::MovableTrack::Make() noexcept
 {
 	try{
-		if( std::shared_ptr<MovableTrack_Imp> pRetval = std::make_shared<MovableTrack_Imp>() ){
-			pRetval->SetWeakPointerToSelf( pRetval );
-			return pRetval;
-		}
-
-		return nullptr;
+		return std::make_shared<MovableTrack_Imp>();
 	}
 	catch( const std::bad_alloc& ){
 		return nullptr;
@@ -56,7 +51,11 @@ Track::TrackType MovableTrack_Imp::GetTrackType() const noexcept{
 	return TrackType::movable;
 }
 
-std::shared_ptr<MovableTrack> MovableTrack_Imp::GetMovableTrack() const noexcept{
+std::shared_ptr<const MovableTrack> MovableTrack_Imp::GetMovableTrack() const noexcept{
+	return std::dynamic_pointer_cast<const MovableTrack>(This());
+}
+
+std::shared_ptr<MovableTrack> MovableTrack_Imp::GetMovableTrack() noexcept{
 	return std::dynamic_pointer_cast<MovableTrack>(This());
 }
 

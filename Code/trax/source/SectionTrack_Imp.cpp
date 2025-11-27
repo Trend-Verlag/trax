@@ -33,7 +33,7 @@ std::shared_ptr<SectionTrack> SectionTrack::Make() noexcept
 	try{
 		if( std::shared_ptr<SectionTrack_Imp> pRetval = std::make_shared<SectionTrack_Imp>(); pRetval )
 		{
-			pRetval->SetWeakPointerToSelf( pRetval );
+	//		pRetval->SetWeakPointerToSelf( pRetval );
 			return pRetval;
 		}
 	}

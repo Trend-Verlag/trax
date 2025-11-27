@@ -1864,7 +1864,7 @@ BOOST_AUTO_TEST_CASE( connect_tests )
 		BOOST_CHECK( frame1.Equals( frame2, epsilon__length, 0.001f ) );
 
 		Loc.Move( pTrack1->GetLength() + pTrack2->GetLength() + pTrack3->GetLength()/2 );
-		shared_ptr<trax::Track> pTrack = Loc.GetTrack();
+		shared_ptr<const trax::Track> pTrack = Loc.GetTrack();
 		BOOST_CHECK( pTrack == pTrack3 );
 		Loc.Transition( frame1 );
 		Loc.Move( pTrack1->GetLength() + pTrack2->GetLength() + pTrack3->GetLength() + pTrack4->GetLength() );

@@ -44,7 +44,8 @@ namespace trax{
 
 	class Track_Imp : public TrackBase,
 					  public JackEnumerator,
-					  public PlugEnumerator
+					  public PlugEnumerator,
+					  public std::enable_shared_from_this<Track_Imp>
 	{
 	public:
 		Track_Imp() noexcept;
@@ -58,7 +59,7 @@ namespace trax{
 
 		/// \brief to return correct shared_ptr to this, this object have 
 		/// to know about the use count structure.
-		void SetWeakPointerToSelf( std::weak_ptr<Track_Imp> pThis ) noexcept;
+	//	void SetWeakPointerToSelf( std::weak_ptr<Track_Imp> pThis ) noexcept;
 		
 		void AddConnector( Connector* pConnector, EndType atend ) noexcept;
 		
@@ -70,11 +71,17 @@ namespace trax{
 
 		TrackType GetTrackType() const noexcept override;
 
-		std::shared_ptr<TrackBuilder> This() const noexcept override;
+		std::shared_ptr<const TrackBuilder> This() const noexcept override;
 
-		std::shared_ptr<MovableTrack> GetMovableTrack() const noexcept override;
+		std::shared_ptr<TrackBuilder> This() noexcept override;
 
-		std::shared_ptr<ParallelizableTrack> GetParallelizableTrack() const noexcept override;
+		std::shared_ptr<const MovableTrack> GetMovableTrack() const noexcept override;
+
+		std::shared_ptr<MovableTrack> GetMovableTrack() noexcept override;
+
+		std::shared_ptr<const ParallelizableTrack> GetParallelizableTrack() const noexcept override;
+
+		std::shared_ptr<ParallelizableTrack> GetParallelizableTrack() noexcept override;
 
 		const std::string& Reference( const std::string& name ) const override{
 			return TrackBase::Reference( name );
@@ -222,7 +229,7 @@ namespace trax{
 
 		virtual void OnGeometryChanged() noexcept{}; // called by Attach/Detach Curve and Twist.
 	private:
-		std::weak_ptr<Track_Imp>						m_pThis;
+	//	std::weak_ptr<Track_Imp>						m_pThis;
 		std::pair<std::shared_ptr<Track_Imp>,EndType>	m_TrackFront;
 		std::pair<std::shared_ptr<Track_Imp>,EndType>	m_TrackEnd;
 

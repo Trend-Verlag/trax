@@ -40,8 +40,9 @@ namespace trax{
 
 		TrackType GetTrackType() const noexcept override;
 
-		std::shared_ptr<MovableTrack> GetMovableTrack() const noexcept override;
+		std::shared_ptr<const MovableTrack> GetMovableTrack() const noexcept override;
 
+		std::shared_ptr<MovableTrack> GetMovableTrack() noexcept override;
 
 		// Inherited via MovableTrack:
 		void SetBody( std::shared_ptr<const Body> pBody ) noexcept override;

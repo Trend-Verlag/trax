@@ -39,12 +39,7 @@ namespace trax{
 ///////////////////////////////////////
 std::shared_ptr<StaticTrack> StaticTrack::Make( const Scene& scene ) noexcept{
 	try{
-		std::shared_ptr<StaticTrack_Imp> pRetval = std::make_shared<StaticTrack_Imp>( scene );
-
-		if( pRetval )
-			pRetval->SetWeakPointerToSelf( pRetval );
-
-		return pRetval;
+		return std::make_shared<StaticTrack_Imp>( scene );
 	}
 	catch( const std::bad_alloc& ){
 		return nullptr;

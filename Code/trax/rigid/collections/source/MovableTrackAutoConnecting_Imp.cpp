@@ -37,12 +37,7 @@ namespace trax{
 
 std::shared_ptr<MovableTrackAutoConnecting> MovableTrackAutoConnecting::Make() noexcept{
 	try{
-		if( std::shared_ptr<MovableTrackAutoConnecting_Imp> pRetval = std::make_shared<MovableTrackAutoConnecting_Imp>() ){
-			pRetval->SetWeakPointerToSelf( pRetval );
-			return pRetval;
-		}
-
-		return nullptr;
+		return std::make_shared<MovableTrackAutoConnecting_Imp>();
 	}
 	catch( const std::bad_alloc& ){
 		return nullptr;

@@ -48,32 +48,24 @@ namespace trax{
 std::shared_ptr<TrackBuilder> TrackBuilder::Make( TrackType type ) noexcept
 {
 	try{
-		std::shared_ptr<Track_Imp> pRetval;
-
 		switch( type ){
-		case TrackType::standard:
-			pRetval = std::make_shared<Track_Imp>();
-			break;
-		case TrackType::movable:
-	//		pRetval = std::make_shared<MovableTrack_Imp>();
-			break;
-		case TrackType::withGeoms:
-			pRetval = std::make_shared<SectionTrack_Imp>();
-			break;
-		case TrackType::parallel:
-		//	pRetval = std::make_shared<ParallelizableTrack_Imp>();
-			break;
 		case TrackType::unknown:
 		case TrackType::none:
+			return nullptr;
+		case TrackType::standard:
+			return std::make_shared<Track_Imp>();
+		case TrackType::movable:
+	//		return std::make_shared<MovableTrack_Imp>();
+			return nullptr;
+		case TrackType::withGeoms:
+			return std::make_shared<SectionTrack_Imp>();
+		case TrackType::parallel:
+		//	return std::make_shared<ParallelizableTrack_Imp>();
+			return nullptr;
 		case TrackType::movable_autoconnecting:
 		default:
-			break;
+			return nullptr;
 		}
-		
-		if( pRetval )
-			pRetval->SetWeakPointerToSelf( pRetval );
-	
-		return pRetval;
 	}
 	catch( const std::bad_alloc& ){
 		return nullptr;
@@ -110,10 +102,6 @@ Track_Imp::Track_Imp( const Track_Imp& ti )
 	// no copy of m_pThis or the couplings etc.
 }
 
-void Track_Imp::SetWeakPointerToSelf( std::weak_ptr<Track_Imp> pThis ) noexcept{
-	m_pThis = pThis;
-}
-
 void Track_Imp::AddConnector( Connector* pConnector, EndType atend ) noexcept{
 	switch( atend ){
 	case EndType::any:
@@ -148,15 +136,36 @@ Track::TrackType Track_Imp::GetTrackType() const noexcept{
 	return TrackType::standard;
 }
 
-std::shared_ptr<TrackBuilder> Track_Imp::This() const noexcept{
-	return m_pThis.lock();
+std::shared_ptr<const TrackBuilder> Track_Imp::This() const noexcept{
+	try{
+		return shared_from_this();
+	} catch ( const std::bad_weak_ptr& ) {
+		return nullptr;
+	}
 }
 
-std::shared_ptr<MovableTrack> Track_Imp::GetMovableTrack() const noexcept{
+std::shared_ptr<TrackBuilder> Track_Imp::This() noexcept
+{
+	try{
+		return shared_from_this();
+	} catch ( const std::bad_weak_ptr& ) {
+		return nullptr;
+	}
+}
+
+std::shared_ptr<const MovableTrack> Track_Imp::GetMovableTrack() const noexcept{
 	return nullptr;
 }
 
-std::shared_ptr<ParallelizableTrack> Track_Imp::GetParallelizableTrack() const noexcept{
+std::shared_ptr<MovableTrack> Track_Imp::GetMovableTrack() noexcept{
+	return nullptr;
+}
+
+std::shared_ptr<const ParallelizableTrack> Track_Imp::GetParallelizableTrack() const noexcept{
+	return nullptr;
+}
+
+std::shared_ptr<ParallelizableTrack> Track_Imp::GetParallelizableTrack() noexcept{
 	return nullptr;
 }
 
@@ -442,7 +451,7 @@ bool Track_Imp::DoSignal( const Interval<Length>& range, Orientation orientation
 		if( pair.first.m_Orientation == orientation && IntersectingClosed( pair.first, range ) ){
 			if( !signalTarget.Notify( 
 				*pair.second,
-				-pair.second->GetLocation().Distance( Location{ m_pThis.lock(), TrackLocation{ range.m_Far, orientation } }, -1_km ) ) )
+				-pair.second->GetLocation().Distance( Location{ shared_from_this(), TrackLocation{ range.m_Far, orientation } }, -1_km ) ) )
 				return false;
 		}
 
@@ -967,9 +976,9 @@ void Track_Imp::Attach( std::shared_ptr<Signal> pSignal, const TrackLocation& lo
 		throw std::invalid_argument( "Invalid Signal pointer." );
 
 	Location loc;
-	loc.PutOn( m_pThis.lock(), location ); // implicitly resolves the track location
+	loc.PutOn( shared_from_this(), location ); // implicitly resolves the track location
 
-	if( auto pTrack = dynamic_cast<Track_Imp*>(loc.GetTrack().get()) ){
+	if( auto pTrack = dynamic_cast<Track_Imp*>(loc.GetMutableTrack().get()) ){
 		if( pTrack->Attached( *pSignal ) )
 			throw std::logic_error( "Cannot attach a signal to the same track twice." );
 
@@ -1761,7 +1770,8 @@ std::shared_ptr<TrackBuilder> CopyTrack(
 	bool cloneCurve )
 {
 	//Todo: make copied track same type...
-	return CopyTrack( originalTrack, *TrackBuilder::Make(), copyRange, cloneCurve );
+	std::shared_ptr<TrackBuilder> pNewTrack = TrackBuilder::Make();
+	return CopyTrack( originalTrack, *pNewTrack, copyRange, cloneCurve );
 }
 
 std::vector<std::shared_ptr<TrackBuilder>> SplitTrack( const TrackBuilder& track, const int numPieces, const bool cloneCurve )

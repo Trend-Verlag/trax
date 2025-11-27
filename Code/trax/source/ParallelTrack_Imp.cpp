@@ -34,19 +34,18 @@ namespace trax{
 ///////////////////////////////////////
 std::shared_ptr<ParallelizableTrack> ParallelizableTrack::Make() noexcept{
 	try{
-		if( std::shared_ptr<ParallelizableTrack_Imp> pRetval = std::make_shared<ParallelizableTrack_Imp>() ){
-			pRetval->SetWeakPointerToSelf( pRetval );
-			return pRetval;
-		}
-
-		return nullptr;
+		return std::make_shared<ParallelizableTrack_Imp>();
 	}
 	catch( const std::bad_alloc& ){
 		return nullptr;
 	}
 }
 
-std::shared_ptr<ParallelizableTrack> ParallelizableTrack_Imp::GetParallelizableTrack() const noexcept{
+std::shared_ptr<const ParallelizableTrack> ParallelizableTrack_Imp::GetParallelizableTrack() const noexcept{
+	return std::dynamic_pointer_cast<const ParallelizableTrack>(This());
+}
+
+std::shared_ptr<ParallelizableTrack> ParallelizableTrack_Imp::GetParallelizableTrack() noexcept{
 	return std::dynamic_pointer_cast<ParallelizableTrack>(This());
 }
 

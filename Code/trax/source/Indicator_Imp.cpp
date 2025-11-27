@@ -464,6 +464,7 @@ std::unique_ptr<BinaryIndicator> BinaryIndicator::Make( Type type ) noexcept{
 			case Type::switch_multi:
 			case Type::velocity_control:
 				std::cerr << "BinaryIndicator::Make: Invalid IndicatorType! (" << ToString(type) << ")" << std::endl;
+				[[fallthrough]];
 			case Type::unknown:
 			case Type::none:
 			default:

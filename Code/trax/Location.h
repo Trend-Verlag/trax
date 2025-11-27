@@ -118,7 +118,7 @@ namespace trax
 		dclspc Location() noexcept = default;
 		dclspc Location( const Location& location ) noexcept = default;
 		dclspc Location( Location&& location ) noexcept = default;
-		dclspc Location( std::shared_ptr<Track> pTrack, const TrackLocation& tl );
+		dclspc Location( std::shared_ptr<const Track> pTrack, const TrackLocation& tl );
 		dclspc Location( const Track& track, const TrackLocation& tl );
 		///@}
 
@@ -142,7 +142,7 @@ namespace trax
 		/// \param tl Parameter value and orientation on the track.
 		/// \throws std::invalid_argument if pTrack is nullptr or the track is invalid.
 		/// \throws std::out_of_range if the location could not get resolved.
-		dclspc void PutOn( std::shared_ptr<Track> pTrack, const TrackLocation& tl );
+		dclspc void PutOn( std::shared_ptr<const Track> pTrack, const TrackLocation& tl );
 
 
 		/// \brief Removes the Location from its position on the track.
@@ -156,7 +156,7 @@ namespace trax
 		/// \brief Gets the track this Location is on.
 		///
 		/// \returns The track or nullptr if no track is assigned.
-		dclspc std::shared_ptr<Track> GetTrack() const noexcept;
+		dclspc std::shared_ptr<const Track> GetTrack() const noexcept;
 
 
 		/// \returns the arc length of the location.
@@ -336,9 +336,13 @@ namespace trax
 		dclspc std::vector<Track::Overlap> Overlaps( IDType forID ) const;
 		///@}
 
+
+		/// \brief Gets mutable track access.
+		/// \returns Non-const track pointer or nullptr if unavailable.
+		dclspc std::shared_ptr<Track> GetMutableTrack() const noexcept;
 	private:
-		std::shared_ptr<Track>	m_pTrack;
-		TrackLocation			m_TLocation;
+		std::shared_ptr<const Track>	m_pTrack;
+		TrackLocation					m_TLocation;
 
 		// Calculates this track location relative to the coupled track at front or end.
 		// This might lead to a parameter out of track ranges.
@@ -387,5 +391,5 @@ namespace trax
 	/// \returns If an end of the line is found in the range of maxDistance, the track and its end is returned. These
 	/// represent the end of the line. With Track::GetConnector, a Connector can be retrieved, if any. If the maxDistance
 	/// is exceeded the track pointer would be nullptr and the returned length would equal maxDistance.
-	dclspc std::tuple<std::shared_ptr<Track>,Track::EndType,Length> EndOfLine( const Location& location, Length maxDistance, bool bDeadConnectorOnly = false );
+	dclspc std::tuple<std::shared_ptr<const Track>,Track::EndType,Length> EndOfLine( const Location& location, Length maxDistance, bool bDeadConnectorOnly = false );
 }

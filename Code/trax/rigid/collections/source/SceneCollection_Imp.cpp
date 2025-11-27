@@ -24,7 +24,6 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
 
 #include "SceneCollection_Imp.h"
 

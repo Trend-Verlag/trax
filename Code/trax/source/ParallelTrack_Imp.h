@@ -39,8 +39,9 @@ namespace trax{
 	{
 	public:
 		// Track:
-		std::shared_ptr<ParallelizableTrack> GetParallelizableTrack() const noexcept override;
+		std::shared_ptr<const ParallelizableTrack> GetParallelizableTrack() const noexcept override;
 
+		std::shared_ptr<ParallelizableTrack> GetParallelizableTrack() noexcept override;
 
 
 		// ParallelTrack:

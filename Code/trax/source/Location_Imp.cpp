@@ -41,7 +41,7 @@ namespace trax{
 
 using namespace spat;
 
-Location::Location( std::shared_ptr<Track> pTrack, const TrackLocation& tl ){
+Location::Location( std::shared_ptr<const Track> pTrack, const TrackLocation& tl ){
 	PutOn( pTrack, tl );
 }
 
@@ -49,7 +49,7 @@ Location::Location( const Track& track, const TrackLocation& tl ){
 	PutOn( track.This(), tl );
 }
 
-void Location::PutOn( std::shared_ptr<Track> pTrack, const TrackLocation& tl ){
+void Location::PutOn( std::shared_ptr<const Track> pTrack, const TrackLocation& tl ){
 	if( !pTrack || !pTrack->IsValid() )
 		throw std::invalid_argument( "Tried to put a location on an invalid track!" );
 
@@ -83,7 +83,7 @@ bool Location::IsOnTrack() const noexcept{
 	return m_pTrack ? true : false;
 }
 
-std::shared_ptr<Track> Location::GetTrack() const noexcept{
+std::shared_ptr<const Track> Location::GetTrack() const noexcept{
 	return m_pTrack;
 }
 
@@ -369,15 +369,23 @@ Length Location::Distance( const Location& loc, const Length maxdistance ) const
 void Location::Reserve( common::Interval<Length> range, IDType forID ){
 	if( !m_pTrack )
 		throw std::logic_error( "Tried to reserve with uninitialized Location" );
-	
-	m_pTrack->Reserve( m_TLocation.parameter + (m_TLocation.orientation ? +range : -range), forID  );
+	   
+    if( auto pMutableTrack = std::const_pointer_cast<Track>(m_pTrack); pMutableTrack )
+		pMutableTrack->Reserve( m_TLocation.parameter + (m_TLocation.orientation ? +range : -range), forID  );
+	else
+        throw std::logic_error( "Track doesn't support reservation." );
 }
 
 void Location::DeleteReservation( IDType forID ){
 	if( !m_pTrack )
 		throw std::logic_error( "Tried to reserve with uninitialized Location" );
-	
-	m_pTrack->DeleteReservation( m_TLocation.orientation ? common::Interval<Length>{0_m,m_pTrack->GetLength()} : common::Interval<Length>{m_pTrack->GetLength(),0_m}, forID );
+	  
+    if( auto pMutableTrack = std::const_pointer_cast<Track>(m_pTrack); pMutableTrack )
+ 		pMutableTrack->DeleteReservation( m_TLocation.orientation ? 
+							common::Interval<Length>{0_m,m_pTrack->GetLength()} : 
+							common::Interval<Length>{m_pTrack->GetLength(),0_m}, forID );
+	else
+		throw std::logic_error( "Track doesn't support reservation." );
 }
 
 std::vector<Track::Overlap> Location::Overlaps(IDType forID) const{
@@ -385,6 +393,10 @@ std::vector<Track::Overlap> Location::Overlaps(IDType forID) const{
 		throw std::logic_error( "Tried to reserve with uninitialized Location" );
 
 	return m_pTrack->Overlaps( forID );
+}
+
+std::shared_ptr<Track> Location::GetMutableTrack() const noexcept{
+	return std::const_pointer_cast<Track>(m_pTrack);
 }
 
 bool Location::TrackTransition( Track::EndType frontend, const Event* pEvent ) noexcept{
@@ -494,7 +506,7 @@ Length ParameterDistanceFrom3DDistance(
 	throw std::out_of_range( "Encountered an open track end!" );
 }
 
-std::tuple<std::shared_ptr<Track>,Track::EndType,Length> EndOfLine( 
+std::tuple<std::shared_ptr<const Track>,Track::EndType,Length> EndOfLine( 
 	const Location& _location, 
 	const Length maxDistance, 
 	const bool bDeadConnectorOnly )

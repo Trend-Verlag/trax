@@ -48,7 +48,7 @@ namespace trax{
 		/// after a simulation step is finished.
 		bool dclspc virtual Update( Time dt );
 
-		bool dclspc Rail( std::shared_ptr<Track> pTrack, const TrackLocation& tl, bool doPulse = true );
+		bool dclspc Rail( std::shared_ptr<const Track> pTrack, const TrackLocation& tl, bool doPulse = true );
 
 		bool dclspc Rail( const Location& location, bool doPulse = true );
 
