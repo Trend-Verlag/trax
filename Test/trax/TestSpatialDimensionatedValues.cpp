@@ -25,7 +25,7 @@
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
 #if defined( WITH_BOOST_TESTS )
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp> // NOLINT 
 
 #include "common/Interval.h"
 #include "dim/support/DimSupportStream.h"
@@ -175,8 +175,8 @@ BOOST_AUTO_TEST_CASE ( testDimensions )
 	BOOST_CHECK_EQUAL( e.Units(), std::numeric_limits<Real>::epsilon() );
 
 
-	Length l = 3_m;
-	Time t = 2_s;
+	//Length l = 3_m;
+	//Time t = 2_s;
 	//auto r = l + t;		// does not compile!
 	//auto r2 = l + 4;	// does not compile!
 
@@ -195,7 +195,7 @@ BOOST_AUTO_TEST_CASE ( testDimensions )
 
 	auto p1 = pow<2>(v1.dx);
 	auto p2 = pow<2>(v2.dx);
-	//BOOST_CHECK_EQUAL( p1, p2 );
+	BOOST_CHECK_CLOSE_DIMENSION( p1, p2, 0.0001_mIs );
 
 
 	Velocity v3{0};
@@ -210,6 +210,7 @@ BOOST_AUTO_TEST_CASE ( testDimensions )
 	Mass m = 10_kg;
 	Vector<Velocity> v{ -1_mIs, 2_mIs, 3_mIs };
 	Energy E = m * v*v/2;
+	std::cout << E << std::endl;
 	}
 
 	//BOOST_CHECK( E, 18.708f );
@@ -220,7 +221,8 @@ BOOST_AUTO_TEST_CASE ( testDimensions )
 
 	constexpr spat::Vector<AngularVelocity> w{ spat::Ez<One> * 20_deg / 1_s };
 	constexpr spat::Vector<Length> d{ spat::Ex<One> * 2.8_m };
-	constexpr spat::Vector<Velocity> v = w % d; // the momentary velocity of a point rotating around w at distance d.
+	constexpr spat::Vector<Velocity> v = w % d; 
+	std::cout << "The momentary velocity of a point rotating around " << w << " at distance " << d << " is " << v << std::endl;
 }
 
 BOOST_AUTO_TEST_CASE ( testDimensionalEquality )
@@ -287,7 +289,7 @@ BOOST_AUTO_TEST_CASE ( testDimensionalVectorMultiplication )
 	auto length1 = Distance.Length();
 	BOOST_CHECK_CLOSE_DIMENSION( length1, 5_m, 0.001f );
 
-	Vector<Length> Distance2 = T * distance;
+	//Vector<Length> Distance2 = T * distance;
 	auto length2 = Distance.Length();
 	BOOST_CHECK_CLOSE_DIMENSION( length2, 5_m, 0.001f );
 
@@ -359,6 +361,7 @@ BOOST_AUTO_TEST_CASE ( testDimensionalPositionAlgebra )
 
 	Position<Length> P5 = P4 / r;
 	P4 /= r;
+	BOOST_CHECK_EQUAL( P4, P5 );
 	BOOST_CHECK_EQUAL( P4, P2 );
 }
 

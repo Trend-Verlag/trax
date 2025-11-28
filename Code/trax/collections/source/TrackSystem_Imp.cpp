@@ -420,12 +420,9 @@ void TrackSystem_Imp::CoupleAll( Length maxDistance, Angle maxKink, bool bSilent
 	}
 }
 
-void TrackSystem_Imp::DeCoupleAll(){
-	std::for_each( m_Container.begin(), m_Container.end(),
-		[]( const std::pair<IDType,std::shared_ptr<TrackBuilder>>& pair  )
-	{ 
-		pair.second->DeCouple();
-	});
+void TrackSystem_Imp::DeCoupleAll()
+{
+	DoDeCoupleAll();
 }
 
 bool TrackSystem_Imp::Start( Scene& /*scene*/ ) noexcept
@@ -494,8 +491,16 @@ const Jack& TrackSystem_Imp::_GetJack( int idx ) const{
 	throw std::range_error( stream.str() );
 }
 
+void TrackSystem_Imp::DoDeCoupleAll(){
+	std::for_each( m_Container.begin(), m_Container.end(),
+		[]( const std::pair<IDType,std::shared_ptr<TrackBuilder>>& pair  )
+	{ 
+		pair.second->DeCouple();
+	});
+}
+
 void TrackSystem_Imp::DoClear(){
-	DeCoupleAll();
+	DoDeCoupleAll();
 
 	if( m_pTrackCollectionContainer )
 		m_pTrackCollectionContainer->Clear();

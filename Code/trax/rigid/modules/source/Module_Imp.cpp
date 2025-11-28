@@ -326,7 +326,6 @@ const Jack& Module_Imp::_GetJack( int idx ) const
 		const int countJacks = pJackEnumerator->CountJacks();
 		if( idx < countJacks )
 			return pJackEnumerator->GetJack( idx );
-		idx -= countJacks;
 	}
 
 	std::ostringstream stream;

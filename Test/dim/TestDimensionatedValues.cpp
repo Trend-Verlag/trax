@@ -26,7 +26,7 @@
 
 #if defined( WITH_BOOST_TESTS )
 
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp> // NOLINT 
 
 #include "BoostTestDimensionedValuesHelpers.h"
 #include "dim/support/DimSupportStream.h"
@@ -212,7 +212,7 @@ BOOST_AUTO_TEST_CASE( anglePerLengthAndOne )
 	AnglePerLength a = sto_noexcept<AnglePerLength>( "10deg/m" );
 	One o = sto_noexcept<One>( "1.f" );
 
-//	BOOST_CHECK_EQUAL( a, 10_degIm );
+	BOOST_CHECK_CLOSE_DIMENSION( a, 10_degIm, 0.0001_degIm );
 	BOOST_CHECK_EQUAL( o, 1.f );
 }
 

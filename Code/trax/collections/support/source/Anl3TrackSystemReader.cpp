@@ -274,7 +274,7 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 	if( std::shared_ptr<SectionTrack> pTrack = SectionTrack::Make(); pTrack )
 	{
 		pTrack->ID( pt.get( "<xmlattr>.GleisID", 0 ) );
-		pTrack->Reference( "name", pt.get( "<xmlattr>.name", "Track_" + std::to_string(pTrack->ID()) ) );
+		pTrack->Reference( "name", pt.get( "<xmlattr>.name", "Track_" + to_string(pTrack->ID()) ) );
 		pTrack->Reference( "reference", pt.get( "<xmlattr>.gsbname", "" ) );
 		pTrack->Reference( "scale", pt.get( "<xmlattr>.scale", "1.0" ) );
 

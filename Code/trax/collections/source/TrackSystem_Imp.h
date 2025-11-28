@@ -160,6 +160,7 @@ namespace trax{
 
 		std::shared_ptr<ConnectorCollection>						m_pConnectorCollection;
 
+		void DoDeCoupleAll();
 		void DoClear();
 	};
 

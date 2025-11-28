@@ -36,7 +36,7 @@ namespace trax{
 	using namespace spat;
 
 Simulator_Imp::Simulator_Imp()
-	: m_VersionString{std::string{TypeName()} + ": " + Version::Readable()}
+	: m_VersionString{std::string{Simulator_Imp::TypeName()} + ": " + Version::Readable()}
 {
 }
 

@@ -1130,6 +1130,14 @@ namespace dim{
 		constexpr AngularVelocity operator"" _radIs( const long double value ){
 			return AngularVelocity{ static_cast<Real>(value) * seconds_per_unit };
 		}
+
+		constexpr AngularVelocity operator"" _radIm( const unsigned long long int value ){
+			return AngularVelocity{ static_cast<Real>(value) * meters_per_unit };
+		}
+
+		constexpr AngularVelocity operator"" _radIm( const long double value ){
+			return AngularVelocity{ static_cast<Real>(value) * meters_per_unit };
+		}
 		///@}
 	} // inline namespace literals
 
@@ -1158,6 +1166,14 @@ namespace dim{
 
 		constexpr AngularVelocity operator"" _degIs( const long double value ){
 			return AngularVelocity{ static_cast<Real>(value) * pi/180  * seconds_per_unit };
+		}
+
+		constexpr AnglePerLength operator"" _degIm( const unsigned long long int value ){
+			return AnglePerLength{ static_cast<Real>(value) * pi/180  * meters_per_unit };
+		}
+
+		constexpr AnglePerLength operator"" _degIm( const long double value ){
+			return AnglePerLength{ static_cast<Real>(value) * pi/180  * meters_per_unit };
 		}
 		///@}
 	} // inline namespace literals
@@ -1318,6 +1334,14 @@ namespace dim{
 
 	constexpr inline AngularVelocity _radIs( Real l ) noexcept{
 		return AngularVelocity{ l / units_per_second };
+	}
+
+	constexpr inline Real _radIm( AnglePerLength dadm ) noexcept{
+		return dadm.Units() / meters_per_unit;
+	}
+
+	constexpr inline AnglePerLength _radIm( Real l ) noexcept{
+		return AnglePerLength{ l / units_per_meter };
 	}
 
 	constexpr inline Real _1Im( AnglePerLength a ) noexcept{

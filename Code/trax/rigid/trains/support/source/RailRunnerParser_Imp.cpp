@@ -42,7 +42,7 @@
 #	pragma warning(push)
 #	pragma warning(disable: 6313) //  Incorrect operator:  zero-valued flag cannot be tested with bitwise-and.  Use an equality test to check for zero-valued flags.
 #endif
-#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/xml_parser.hpp> // NOLINT 
 #include "../RailRunnerParser.h"
 #if defined(_MSC_VER)
 #	pragma warning(pop)
@@ -267,7 +267,7 @@ void ParseWheelFrameAxisArrangement( const boost::property_tree::ptree& pt, Roll
 
 void ParseBogieContentAxisArrangement( const boost::property_tree::ptree& pt, RollingStockParser& callback )
 {
-	Length height = get( pt, "<xmlattr>.height", 1.5_m, _m );
+	//Length height = get( pt, "<xmlattr>.height", 1.5_m, _m );
 	Length length = get( pt, "<xmlattr>.length", 10_m, _m );
 
 	if( auto centerShift = get_optional( pt, "<xmlattr>.centerShift", _m ); centerShift )

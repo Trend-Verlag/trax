@@ -33,7 +33,7 @@
 /// The dim library provides support for reading and writing dimensionated 
 /// values in XML format, using the Boost Property Tree library.
 
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree.hpp> // NOLINT 
 
 #include "dim/support/DimSupportStream.h"
 

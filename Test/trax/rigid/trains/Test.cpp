@@ -29,7 +29,7 @@
 
 #define BOOST_TEST_MODULE TraxTrainTests
 #define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp> // NOLINT 
 
 //#if defined _WIN32
 //#	define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers

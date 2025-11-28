@@ -28,7 +28,7 @@
 
 #include "trax/Parser.h"
 
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree.hpp> // NOLINT 
 
 namespace trax{
 	namespace ptreesupport{

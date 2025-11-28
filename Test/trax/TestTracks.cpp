@@ -26,7 +26,7 @@
 
 #if defined( WITH_BOOST_TESTS )
 
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp> // NOLINT 
 
 #include "trax/Track.h"
 #include "trax/ParallelTrack.h"
@@ -955,28 +955,28 @@ BOOST_AUTO_TEST_CASE( flippedTrackWithCombinedUpTwists )
 	BOOST_CHECK_GT( frame.B * Up, 0 );
 }
 
-BOOST_AUTO_TEST_CASE( twistDerivativeAtTrackEnds )
-{
-	auto pBuildTrack = TrackBuilder::Make();
-	auto pCubic = Cubic::Make();
-	common::Interval<Length> length = pCubic->Create( {
-		{8.90087700_m, -35.9992676_m, 4.30014849_m }, 
-		{32.7477417_m, 27.5992641_m, 5.54985237_m },
-		{0.000188340622_m, -0.000736197224_m, -0.000148288440_m },
-		{2.35119486_m, -9.19926357_m, -1.84985185_m } } );
-
-	pBuildTrack->Attach( std::move(pCubic), length );
-	pBuildTrack->Attach( DirectionalTwist::Make() );
-
-	Length ds = epsilon__length / 10000;
-	AnglePerLength dwIds1 = (pBuildTrack->GetTwist().Twist( 0_m + ds ) - pBuildTrack->GetTwist().Twist( 0_m )) / ds;
-	AnglePerLength dwIds2 = pBuildTrack->GetTwist().D1( 0_m );
-
-	auto k = pBuildTrack->Curvature( 0_m );
-	auto set = pBuildTrack->GetCurve().first->ZeroSet();
-
+//BOOST_AUTO_TEST_CASE( twistDerivativeAtTrackEnds )
+//{
+//	auto pBuildTrack = TrackBuilder::Make();
+//	auto pCubic = Cubic::Make();
+//	common::Interval<Length> length = pCubic->Create( {
+//		{8.90087700_m, -35.9992676_m, 4.30014849_m }, 
+//		{32.7477417_m, 27.5992641_m, 5.54985237_m },
+//		{0.000188340622_m, -0.000736197224_m, -0.000148288440_m },
+//		{2.35119486_m, -9.19926357_m, -1.84985185_m } } );
+//
+//	pBuildTrack->Attach( std::move(pCubic), length );
+//	pBuildTrack->Attach( DirectionalTwist::Make() );
+//
+//	Length ds = epsilon__length / 10000;
+//	AnglePerLength dwIds1 = (pBuildTrack->GetTwist().Twist( 0_m + ds ) - pBuildTrack->GetTwist().Twist( 0_m )) / ds;
+//	AnglePerLength dwIds2 = pBuildTrack->GetTwist().D1( 0_m );
+//
+//	//auto k = pBuildTrack->Curvature( 0_m );
+//	//auto set = pBuildTrack->GetCurve().first->ZeroSet();
+//
 //	BOOST_CHECK_CLOSE_DIMENSION( dwIds1, dwIds2, 5 );
-}
+//}
 
 BOOST_AUTO_TEST_CASE( TwistMirror1 )
 {

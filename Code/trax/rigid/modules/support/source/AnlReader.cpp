@@ -21,8 +21,8 @@
 #	pragma warning(push)
 #	pragma warning(disable: 6313) //  Incorrect operator:  zero-valued flag cannot be tested with bitwise-and.  Use an equality test to check for zero-valued flags.
 #endif
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ptree.hpp> // NOLINT 
+#include <boost/property_tree/xml_parser.hpp> // NOLINT
 #if defined(_MSC_VER)
 #	pragma warning(pop)
 #endif

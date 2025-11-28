@@ -25,7 +25,8 @@
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
 #if defined( WITH_BOOST_TESTS )
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp> // NOLINT 
+
 #include "trax/Curve.h"
 #include "trax/support/TraxSupportStream.h"
 #include "trax/support/Fixtures.h"
@@ -125,7 +126,7 @@ BOOST_AUTO_TEST_CASE( test_HelixWriteRead )
 {
 	auto pHelix = HelixP::Make();
 	HelixP::Data data{ {{0_m,-36.47577_m,0_m}, {0,1,0}, {1,0,0}}, 36.47577_m, -6.74914_m };
-	auto range = pHelix->Create( data );
+	pHelix->Create( data );
 
 	BOOST_CHECK_EQUAL( pHelix->GetData().center, data.center );
 	BOOST_CHECK_EQUAL( pHelix->GetData().a, data.a );
@@ -317,7 +318,7 @@ BOOST_AUTO_TEST_CASE( cubicZeroSet ){
 	auto pCurve = Cubic::Make();
 	spat::VectorBundle<Length,Length> start{{10_m, 10_m, 10_m},{250_m,0_m,0_m}};
 	spat::VectorBundle<Length,Length> end{{10_m,70_m,10_m},{250_m,0_m,0_m}};
-	auto length = pCurve->Create( start, end );
+	pCurve->Create( start, end );
 
 	std::vector<Length> zeroSet = pCurve->ZeroSet();
 	BOOST_CHECK_EQUAL( zeroSet.size(), 1u );
@@ -952,7 +953,7 @@ BOOST_AUTO_TEST_CASE( splineInterpolateByClampedC2MatchEndTangents ){
 	};
 
 	auto pCurve = Spline::Make();
-	auto length = pCurve->Create( controlPoints, true, {100_m,0_m,0_m}, true, {100_m,0_m,0_m} );
+	pCurve->Create( controlPoints, true, {100_m,0_m,0_m}, true, {100_m,0_m,0_m} );
 	BOOST_CHECK( pCurve->IsValid() );
 
 	VectorBundle<Length,One> pointAndTangent;
@@ -1123,7 +1124,7 @@ BOOST_AUTO_TEST_CASE( splineZeroTangent2 ){
 	};
 
 	auto pCurve = Spline::Make();
-	auto length = pCurve->Create( controlPoints );
+	pCurve->Create( controlPoints );
 
 	VectorBundle2<Length,One> frame;
 	pCurve->Transition( pCurve->GetParameter( 2 ), frame );
@@ -1204,7 +1205,7 @@ BOOST_AUTO_TEST_CASE( splineShortenInsideOneCubic ){
 	};
 
 	auto pCurve = Spline::Make();
-	common::Interval<Length> length = pCurve->Create( controlPoints );
+	pCurve->Create( controlPoints );
 
 	common::Interval<Length> newInterval{ pCurve->GetParameter( 1 ), pCurve->GetParameter( 2 ) };
 	newInterval.Deflate( newInterval.Length() / 4 );
@@ -1223,7 +1224,7 @@ BOOST_AUTO_TEST_CASE( splineShortenExactCubicMatch ){
 	};
 
 	auto pCurve = Spline::Make();
-	common::Interval<Length> length = pCurve->Create( controlPoints );
+	pCurve->Create( controlPoints );
 
 	common::Interval<Length> newInterval{ pCurve->GetParameter( 1 ), pCurve->GetParameter( 2 ) };
 

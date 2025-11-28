@@ -19,5 +19,5 @@
 
 #if defined( WITH_BOOST_TESTS )
 #define BOOST_TEST_MODULE TestsCommon
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp> // NOLINT 
 #endif

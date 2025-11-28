@@ -17,9 +17,9 @@
 #include "PhysX_TrackJoint.h"
 
 #ifdef _BOOST_THREAD
-#include <boost/thread/thread.hpp>
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/recursive_mutex.hpp>
+#include <boost/thread/thread.hpp> // NOLINT 
+#include <boost/thread/mutex.hpp> // NOLINT 
+#include <boost/thread/recursive_mutex.hpp> // NOLINT 
 #else
 #include <thread>
 #include <mutex>

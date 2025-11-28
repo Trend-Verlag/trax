@@ -27,7 +27,7 @@
 
 #if defined( WITH_BOOST_TESTS )
 
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp> // NOLINT 
 
 #include "common/Helpers.h"
 
@@ -83,10 +83,6 @@ BOOST_AUTO_TEST_CASE( test_pod )
 	//BOOST_CHECK( (pos.x || !pos.x) );
 	Position<Real> posInt{};
 	BOOST_CHECK( !posInt.x );
-
-	float trace = 4.f;
-	auto result = std::sqrt( trace );
-	BOOST_CHECK( typeid(trace) == typeid(result) );
 }
 
 BOOST_AUTO_TEST_SUITE(Position_tests)
@@ -159,6 +155,7 @@ BOOST_AUTO_TEST_CASE( constexpression )
 	constexpr Vector<Real> v2 = Ey<Real>;
 	constexpr Vector<Real> v3 = Ez<Real>;
 
+	BOOST_CHECK_EQUAL( v0[0], 0 );
 	BOOST_CHECK_EQUAL( v1[0], 1 );
 	BOOST_CHECK_EQUAL( v2[1], 1 );
 	BOOST_CHECK_EQUAL( v3[2], 1 );
@@ -388,7 +385,7 @@ BOOST_AUTO_TEST_CASE( frame_lookat3 )
 		Ez<Real>, 
 		Ex<Real>, 
 		Ey<Real> };
-	Frame<Real> reference = frame;
+//	Frame<Real> reference = frame;
 
 	frame.LookAt( Ez<Real>, Ey<Real> );
 	BOOST_CHECK( frame.B.Equals( Ey<Real>, 0.01f ) );
@@ -484,6 +481,18 @@ BOOST_AUTO_TEST_CASE( matrixConstruction )
 	BOOST_CHECK( R.IsEqual( R3 ) );
 	BOOST_CHECK( S.IsIdentity() );
 	BOOST_CHECK( R.IsIdentity() );
+}
+
+BOOST_AUTO_TEST_CASE( matrixConstructionShortInitializerList )
+{
+	SquareMatrix<Real,2> S1{ 1.f, 2.f, 3.f };
+	BOOST_CHECK( S1.IsEqual( SquareMatrix<Real,2>{ 1.f, 2.f, 3.f, 0.f } ) );
+}
+
+BOOST_AUTO_TEST_CASE( matrixConstructionLongInitializerList )
+{
+	SquareMatrix<Real,2> S1{ 1.f, 2.f, 3.f, 4.f, 5.f };
+	BOOST_CHECK( S1.IsEqual( SquareMatrix<Real,2>{ 1.f, 2.f, 3.f, 4.f } ) );
 }
 
 BOOST_AUTO_TEST_CASE( matrixMove )
@@ -880,6 +889,9 @@ BOOST_AUTO_TEST_CASE ( testMultiplicationOperator )
 	Matrix<Real,4,4> matrix3;
 	Matrix<Real,6,6> matrix4;
 
+	matrix1.SetNull();
+	matrix2.SetNull();
+
 	matrix4 = matrix1 * matrix2;
 	matrix3 = matrix2 * matrix1;
 
@@ -902,7 +914,7 @@ BOOST_AUTO_TEST_CASE ( testMultiplicationOperator )
 
 	matrix13 = matrix11 * matrix12;
 
-	auto row = Row( matrix13, 2 );
+//	auto row = Row( matrix13, 2 );
 
 	matrix13 = Rotation<Real>{ 0,0,0,
 								0,0,0,

@@ -26,7 +26,7 @@
 
 #if defined( WITH_BOOST_TESTS )
 
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp> // NOLINT 
 
 #include "spat/Spatial.h"
 #include "spat/support/SpatSupportStream.h"
@@ -37,7 +37,7 @@ using namespace spat;
 BOOST_AUTO_TEST_CASE( streaming )
 {
 	Vector<float> v1(5434,975,476);
-	Vector<float> copy = v1;
+	//Vector<float> copy = v1;
 
 	std::stringstream strgstr;
 

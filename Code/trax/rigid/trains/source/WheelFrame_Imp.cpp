@@ -74,7 +74,7 @@ WheelFrame_Imp::WheelFrame_Imp(
 		throw std::runtime_error( "WheelFrame_Imp::WheelFrame_Imp: failed to create TrackJointFeederMotorModel!" );
 
 	for( Jack& jack : *this )
-		jack.Reference( "parent", TypeName() );
+		jack.Reference( "parent", WheelFrame_Imp::TypeName() );
 }
 
 WheelFrame_Imp::~WheelFrame_Imp()

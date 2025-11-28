@@ -29,7 +29,7 @@
 #include "common/Helpers.h"
 #include "spat/Position.h"
 
-#include <boost/math/quadrature/gauss_kronrod.hpp>
+#include <boost/math/quadrature/gauss_kronrod.hpp> // NOLINT 
 
 namespace trax{
 ///////////////////////////////////////

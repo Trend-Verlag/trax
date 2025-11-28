@@ -31,8 +31,6 @@
 
 #include "trax/support/TraxSupportXML.h"
 
-#include <boost/property_tree/ptree.hpp>
-
 namespace trax{
 
 	namespace ptreesupport{

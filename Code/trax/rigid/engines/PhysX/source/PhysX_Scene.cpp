@@ -136,7 +136,7 @@ std::unique_ptr<Shape> PhysX_Scene::CreateShape( physx::PxRigidStatic& actor ) c
 }
 
 std::unique_ptr<Gestalt> PhysX_Scene::CreateGestalt() const{
-	return std::make_unique<PhysX_Gestalt_Imp>( Scene(), m_EngineMetersPerUnit, m_EngineKilogramsPerUnit );
+	return std::unique_ptr<Gestalt>{ std::make_unique<PhysX_Gestalt_Imp>( Scene(), m_EngineMetersPerUnit, m_EngineKilogramsPerUnit ) };
 }
 
 std::unique_ptr<GeomCuboid> PhysX_Scene::CreateGeomCuboid() const{

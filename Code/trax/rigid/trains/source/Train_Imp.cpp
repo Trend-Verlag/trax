@@ -380,6 +380,8 @@ std::pair<Bogie&,RailRunner::EndType> Train_Imp::GetTipAt( EndType end )
 			return m_Train.back()->GetTipAt( m_Train.back()->GetOrientation() ? EndType::south : EndType::north );
 		case EndType::any:
 			return GetTipAt(EndType::north );
+		default:
+			break;
 	}
 
 	throw std::invalid_argument( "Train_Imp::GetTipAt: invalid end type" );
@@ -397,6 +399,8 @@ std::pair<const Bogie&,RailRunner::EndType> Train_Imp::GetTipAt( EndType end ) c
 			return m_Train.back()->GetTipAt( m_Train.back()->GetOrientation() ? EndType::south : EndType::north );
 		case EndType::any:
 			return GetTipAt(EndType::north );
+		default:
+			break;
 	}
 
 	throw std::invalid_argument( "Train_Imp::GetTipAt: invalid end type" );

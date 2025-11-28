@@ -514,6 +514,8 @@ void Bogie_Imp::ActivateCoupling( EndType end )
 {
 	switch( end )
 	{
+		case EndType::none:
+			break;
 		case EndType::north:
 			if( m_CouplingNorth.pCoupling )
 				throw std::runtime_error( "Bogie_Imp::ActivateCoupling: Coupling already is coupled!" );
@@ -546,6 +548,8 @@ void Bogie_Imp::DeactivateCoupling( EndType end )
 {
 	switch( end )
 	{
+		case EndType::none:
+			break;
 		case EndType::north:
 			if( m_CouplingNorth.pCoupling )
 				throw std::runtime_error( "Bogie_Imp::DeactivateCoupling: Coupling already is coupled!" );
@@ -570,6 +574,8 @@ bool Bogie_Imp::IsActivated( EndType end ) const noexcept
 {
 	switch( end )
 	{
+		case EndType::none:
+			break;
 		case EndType::north:
 			return m_CouplingNorth.bActivated;
 		case EndType::south:
@@ -587,6 +593,8 @@ bool Bogie_Imp::Uncouple( EndType end, bool btriggerPulses ) noexcept
 {
 	switch( end )
 	{
+		case EndType::none:
+			break;
 		case EndType::north:
 			return m_CouplingNorth.Uncouple( btriggerPulses );
 		case EndType::south:
@@ -613,6 +621,8 @@ bool Bogie_Imp::IsCoupled( EndType end ) const noexcept
 {
 	switch( end )
 	{
+		case EndType::none:
+			break;
 		case EndType::north:
 			return m_CouplingNorth.pCoupling != nullptr;
 		case EndType::south:
@@ -961,18 +971,20 @@ void Bogie_Imp::SetCouplingProps( EndType atEnd, const CouplingProps& props )
 {
 	switch( atEnd )
 	{
-	case EndType::north:
-		if( m_CouplingNorth.pCoupling )
-			throw std::runtime_error( "Bogie_Imp::SetCouplingProps: Coupling already is coupled!" );
-		m_CouplingNorth = props;
-		break;
-	case EndType::south:
-		if( m_CouplingSouth.pCoupling )
-			throw std::runtime_error( "Bogie_Imp::SetCouplingProps: Coupling already is coupled!" );
-		m_CouplingSouth = props;
-		break;
-	case EndType::any:
-		throw std::invalid_argument( "Bogie_Imp::SetCouplingProps: Invalid end type!" );
+		case EndType::none:
+			break;
+		case EndType::north:
+			if( m_CouplingNorth.pCoupling )
+				throw std::runtime_error( "Bogie_Imp::SetCouplingProps: Coupling already is coupled!" );
+			m_CouplingNorth = props;
+			break;
+		case EndType::south:
+			if( m_CouplingSouth.pCoupling )
+				throw std::runtime_error( "Bogie_Imp::SetCouplingProps: Coupling already is coupled!" );
+			m_CouplingSouth = props;
+			break;
+		default:
+			throw std::invalid_argument( "Bogie_Imp::SetCouplingProps: Invalid end type!" );
 	}
 }
 
@@ -1001,6 +1013,8 @@ spat::Sphere<Length> Bogie_Imp::GetCoupling( EndType end ) const noexcept
 			return bogieFrame * m_CouplingNorth.Position;
 		case EndType::south:
 			return bogieFrame * m_CouplingSouth.Position;
+		default:
+			break;
 	}
 
 	return {};
@@ -1027,6 +1041,8 @@ void Bogie_Imp::SetCouplingHeight( EndType end, Length height )
 	case EndType::any:
 		SetCouplingHeight( EndType::north, height );
 		SetCouplingHeight( EndType::south, height );
+		break;
+	default:
 		break;
 	}
 }
@@ -1456,6 +1472,8 @@ bool Bogie_Imp::CouplingProps_Ext::CheckCoupling( Time dt ) noexcept
 			case onMomentumConsumed:
 				ActualBreakingSpareMomentum -= (force - BreakingForce) * dt;
 				return ActualBreakingSpareMomentum < 0_Ns;
+			default:
+				break;
 			}
 		}
 	}

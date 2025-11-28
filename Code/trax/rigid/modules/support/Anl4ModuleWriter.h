@@ -15,8 +15,6 @@
 
 #include "trax/collections/support/CollectionSupportXML.h"
 
-#include <boost/property_tree/ptree.hpp>
-
 namespace trax{
 
 	struct Camera;

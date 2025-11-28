@@ -258,7 +258,7 @@ void Fleet_Imp::SeparateTrains()
 	for( Train* pSeparated : m_TrainsSeparated )
 	{
 		if( std::shared_ptr<trax::Train> pNewTrain = pSeparated->Separate(); pNewTrain )
-			pNewTrain->Reference ( "Name", "Train_" + std::to_string( Add( pNewTrain ) ) );
+			pNewTrain->Reference ( "Name", "Train_" + to_string( Add( pNewTrain ) ) );
 	}
 	m_TrainsSeparated.clear();
 }
@@ -319,7 +319,7 @@ void Fleet_Imp::ProduceCommonTrain(
 		{
 			pNewTrain->Append( RailRunner::EndType::south, trainA.first->ThisTrainComponent(), orientationA + trainA.second );
 			pNewTrain->Append( RailRunner::EndType::south, trainB.first->ThisTrainComponent(), orientationB + trainB.second );
-			pNewTrain->Reference( "Name", "Train_" + std::to_string( Add( pNewTrain ) ) );
+			pNewTrain->Reference( "Name", "Train_" + to_string( Add( pNewTrain ) ) );
 		}
 		else
 		{

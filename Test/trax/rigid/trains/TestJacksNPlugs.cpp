@@ -26,7 +26,7 @@
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
 #if defined( WITH_BOOST_TESTS )
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp> // NOLINT 
 
 #include "trax/Jack.h"
 #include "trax/LogicElements.h"

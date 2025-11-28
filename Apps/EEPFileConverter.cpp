@@ -7,7 +7,7 @@
 #include "trax/rigid/modules/support/AnlWriter.h"
 #include "trax/collections/TrackSystem.h"
 
-#include <boost/program_options.hpp>
+#include <boost/program_options.hpp> // NOLINT 
 
 #include <filesystem>
 #include <iostream>

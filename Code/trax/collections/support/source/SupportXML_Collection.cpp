@@ -78,10 +78,10 @@ PTreeReader::PTreeReader( SocketRegistry& socketRegistry, const char* pLocale )
 //}
 
 PTreeReader::PTreeReader( PTreeReader&& reader ) noexcept
-	: m_pImpl			{ reader.m_pImpl }
+	: m_pSocketRegistry	{ std::move(reader.m_pSocketRegistry) }
+	, m_pImpl			{ reader.m_pImpl }
 	, m_pLocale			{ reader.m_pLocale }
 	, m_SocketRegistry	{ reader.m_SocketRegistry }
-	, m_pSocketRegistry	{ std::move(reader.m_pSocketRegistry) }
 {
 	reader.m_pImpl = nullptr;
 	reader.m_pLocale = nullptr;

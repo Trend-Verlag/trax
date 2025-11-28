@@ -3,7 +3,7 @@
 //
 
 
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp> // NOLINT 
 
 #include "trax/support/Fixtures.h"
 

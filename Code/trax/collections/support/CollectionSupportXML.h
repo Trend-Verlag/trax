@@ -30,8 +30,6 @@
 #include "trax/support/TraxSupportXML.h"
 #include "trax/Curve.h"
 
-#include <boost/property_tree/ptree.hpp>
-
 
 /// \verbatim
 ///				ptree::front()									ptree::end()	

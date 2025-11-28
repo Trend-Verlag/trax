@@ -27,7 +27,6 @@
 #include "PhysX_TrackJoint.h"
 
 #include "PhysX_Adapter.h"
-#include "PhysX_Imp.h"
 #include "PhysX_Body_Imp.h"
 
 

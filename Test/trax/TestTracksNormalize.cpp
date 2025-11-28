@@ -25,7 +25,7 @@
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
 #if defined( WITH_BOOST_TESTS )
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp> // NOLINT 
 
 #include "trax/Track.h"
 #include "trax/Curve.h"
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE( tests_trax_NormalizeArcRotatedFlipped )
 	{
 		auto pTrack = TrackBuilder::Make();
 		auto pCurve = ArcP::Make();
-		auto range = pCurve->Create( {{10_m,0_m,0_m},{0,1,0}}, {-10_m,0_m,0_m} );
+		pCurve->Create( {{10_m,0_m,0_m},{0,1,0}}, {-10_m,0_m,0_m} );
 		pTrack->Attach( std::move(pCurve), { 0_m, 20_m } );
 		Frame<Length,One> startFrame, midFrame, endFrame, testFrame;
 		startFrame.Init();
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_CASE( tests_trax_NormalizeArcRotatedFlippedWithFrozenDirectional
 	{
 		auto pTrack = TrackBuilder::Make();
 		auto pCurve = ArcP::Make();
-		auto range = pCurve->Create( {{10_m,0_m,0_m},{0,1,0}}, {-10_m,0_m,0_m} );
+		pCurve->Create( {{10_m,0_m,0_m},{0,1,0}}, {-10_m,0_m,0_m} );
 		pTrack->Attach( std::move(pCurve), { 0_m, 20_m } );
 		pTrack->Attach( DirectionalTwist::Make() );
 		pTrack->GetTwist().Freeze();
@@ -200,7 +200,7 @@ BOOST_AUTO_TEST_CASE( tests_trax_NormalizeHelix )
 	{
 		auto pTrack = TrackBuilder::Make();
 		auto pCurve = HelixP::Make();
-		auto range = pCurve->Create( {{10_m,0_m,0_m},{0,1,0}}, {-10_m,0_m,10_m} );
+		pCurve->Create( {{10_m,0_m,0_m},{0,1,0}}, {-10_m,0_m,10_m} );
 		pTrack->Attach( std::move(pCurve), {20_m, 40_m} );
 		Frame<Length,One> frame;
 		frame.Init();
@@ -230,7 +230,7 @@ BOOST_AUTO_TEST_CASE( tests_trax_NormalizeHelixFlipped )
 	{
 		auto pTrack = TrackBuilder::Make();
 		auto pCurve = HelixP::Make();
-		auto range = pCurve->Create( {{10_m,0_m,0_m},{0,1,0}}, {-10_m,0_m,10_m} );
+		pCurve->Create( {{10_m,0_m,0_m},{0,1,0}}, {-10_m,0_m,10_m} );
 		pTrack->Attach( std::move(pCurve), {30_m, 10_m} );
 
 		Frame<Length,One> startFrame, midFrame, endFrame, testFrame;

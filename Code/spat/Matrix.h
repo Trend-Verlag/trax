@@ -29,9 +29,9 @@
 #include "Position.h"
 #include "PositionH.h"
 
-//#include <boost/numeric/ublas/matrix.hpp>
-//#include <boost/numeric/ublas/vector.hpp>
-//#include <boost/numeric/ublas/lu.hpp>
+//#include <boost/numeric/ublas/matrix.hpp> // NOLINT 
+//#include <boost/numeric/ublas/vector.hpp> // NOLINT 
+//#include <boost/numeric/ublas/lu.hpp> // NOLINT 
 
 // TODO: watch MPL2 license.
 #ifdef TRAX_OPEN_SOURCE
@@ -71,7 +71,7 @@ namespace spat{
 		Matrix();
 		Matrix( const Matrix& matrix );
 		Matrix( Matrix&& matrix ) noexcept;
-		explicit Matrix( const std::initializer_list<const Valtype>& elements );
+		explicit Matrix( const std::initializer_list<Valtype>& elements );
 		~Matrix() noexcept = default;
 		///@}
 
@@ -84,7 +84,7 @@ namespace spat{
 
 		Matrix&	operator=( Matrix&& matrix ) noexcept;
 
-		Matrix&	operator=( const std::initializer_list<const Valtype>& elements ) noexcept;
+		Matrix&	operator=( const std::initializer_list<Valtype>& elements ) noexcept;
 		///@}
 
 
@@ -156,16 +156,17 @@ namespace spat{
 
 	/// \returns The idx column of matrix r as a Vector.
 	template<typename Valtype,const unsigned short nCols> inline
-	constexpr Vector<Valtype> Column( const Matrix<Valtype,nCols,3>& matrix, unsigned short idx ) noexcept;
+	constexpr Vector<Valtype> Column( const Matrix<Valtype,nCols,3>& m, unsigned short idx ) noexcept;
 
 
 	/// \returns The idx row of matrix r as a Vector.
 	template<typename Valtype,const unsigned short nRows> inline
-	constexpr Vector<Valtype> Row( const Matrix<Valtype,3,nRows>& matrix, unsigned short idx ) noexcept;
+	constexpr Vector<Valtype> Row( const Matrix<Valtype,3,nRows>& m, unsigned short idx ) noexcept;
 
 
+	/// \returns The transposed matrix (i.e. rows become columns and vice versa).
 	template<typename Valtype, const unsigned short nCols, const unsigned short nRows >
-	constexpr Matrix<Valtype,nRows,nCols> Transposed( const Matrix<Valtype,nCols,nRows>& matrix );
+	constexpr Matrix<Valtype,nRows,nCols> Transposed( const Matrix<Valtype,nCols,nRows>& m ) noexcept;
 
 
 	/// \name Mathematical Operators for Matrix
@@ -287,7 +288,7 @@ namespace spat{
 		SquareMatrix( const SquareMatrix& ) = default;
 		SquareMatrix( const Basetype& matrix );
 		SquareMatrix( Basetype&& matrix ) noexcept;
-		explicit SquareMatrix( const std::initializer_list<const Valtype>& elements );
+		explicit SquareMatrix( const std::initializer_list<Valtype>& elements );
 		///@}
 
 		/// \name Assignment
@@ -404,7 +405,7 @@ namespace spat{
 					Transformation( const Rotation<Valtype2>& rot );
 		template<typename Valtype2,typename ValtypeT2>
 		explicit	Transformation( const Frame<Valtype2,ValtypeT2>& frame );
-		explicit	Transformation( const std::initializer_list<const Valtype>& elements );
+		explicit	Transformation( const std::initializer_list<Valtype>& elements );
  		///@}
 
 
@@ -698,7 +699,10 @@ namespace spat{
 template<typename Valtype, const unsigned short nCols, const unsigned short nRows >
 inline Matrix<Valtype,nCols,nRows>::Matrix()
 	: m{ std::make_unique<Valtype[]>(nCols*nRows) }
-{}
+{
+	static_assert( nCols, "Matrix: Number columes can not be zero" );
+	static_assert( nRows, "Matrix: Number of rows can not be zero" );
+}
 
 template<typename Valtype, const unsigned short nCols, const unsigned short nRows >
 Matrix<Valtype,nCols,nRows>::Matrix( const Matrix& matrix )
@@ -716,9 +720,12 @@ inline Matrix<Valtype,nCols,nRows>::Matrix( Matrix&& matrix ) noexcept
 }
 
 template<typename Valtype,unsigned short nCols,unsigned short nRows>
-inline Matrix<Valtype,nCols,nRows>::Matrix( const std::initializer_list<const Valtype>& elements )
+inline Matrix<Valtype,nCols,nRows>::Matrix( const std::initializer_list<Valtype>& elements )
 	: m{ std::make_unique<Valtype[]>(nCols*nRows) }
 {
+	static_assert( nCols, "Matrix: Number columes can not be zero" );
+	static_assert( nRows, "Matrix: Number of rows can not be zero" );
+
 	operator=( elements );
 }
 
@@ -743,33 +750,29 @@ inline Matrix<Valtype,nCols,nRows>& Matrix<Valtype,nCols,nRows>::operator=(
 
 template<typename Valtype,unsigned short nCols,unsigned short nRows>
 inline Matrix<Valtype,nCols,nRows>& Matrix<Valtype,nCols,nRows>::operator=(
-	const std::initializer_list<const Valtype>& elements ) noexcept
+	const std::initializer_list<Valtype>& elements ) noexcept
 {
-	assert( elements.size() == nCols * nRows );
-	auto iter = elements.begin();
+	auto it  = elements.begin();
+	const auto end = elements.end();
+
+	// Fill in row-major order into column-major storage
 	for( size_t Row = 0; Row < nRows; ++Row ){
 		for( size_t Col = 0; Col < nCols; ++Col ){
-			if( iter == elements.end() )
-				return *this;
-			else{
-				m[nRows * Col + Row] = *iter;
-				++iter;
-			}
+			m[nRows * Col + Row] = (it != end) ? *it++ : Valtype{0};
 		}
 	}
-
 	return *this;
 }
 
 template<typename Valtype, const unsigned short nCols, const unsigned short nRows >
 inline const Valtype& Matrix<Valtype,nCols,nRows>::operator()( unsigned short col, unsigned short row ) const noexcept{
-	assert( col < nCols && row < nRows );
+//	assert( col < nCols && row < nRows );
 	return m[nRows * static_cast<size_t>(col) + row];
 }
 
 template<typename Valtype, const unsigned short nCols, const unsigned short nRows >
 inline Valtype& Matrix<Valtype,nCols,nRows>::operator()( unsigned short col, unsigned short row ) noexcept{
-	assert( col < nCols && row < nRows );
+//	assert( col < nCols && row < nRows );
 	return m[nRows * static_cast<size_t>(col) + row];
 }
 
@@ -882,11 +885,11 @@ inline constexpr Vector<Valtype> Row( const Matrix<Valtype,3,nRows>& m, unsigned
 }
 
 template<typename Valtype, unsigned short nCols, unsigned short nRows>
-constexpr Matrix<Valtype,nRows,nCols> Transposed( const Matrix<Valtype,nCols,nRows>& matrix ){
+constexpr Matrix<Valtype,nRows,nCols> Transposed( const Matrix<Valtype,nCols,nRows>& m ) noexcept{
 	Matrix<Valtype,nRows,nCols> Result;
 	for( unsigned short c = 0; c < nCols; ++c )
 		for( unsigned short r = 0; r < nRows; ++r )
-			Result(r,c) = matrix(c,r);
+			Result(r,c) = m(c,r);
  
 	return Result;
 }
@@ -1043,7 +1046,7 @@ inline SquareMatrix<Valtype,nColsAndRows>::SquareMatrix( Basetype&& matrix ) noe
 }
 
 template<typename Valtype,unsigned short nColsAndRows>
-inline SquareMatrix<Valtype,nColsAndRows>::SquareMatrix( const std::initializer_list<const Valtype>& elements )
+inline SquareMatrix<Valtype,nColsAndRows>::SquareMatrix( const std::initializer_list<Valtype>& elements )
 	: Basetype{elements}
 {
 }
@@ -1216,7 +1219,7 @@ inline Transformation<Valtype>::Transformation( const Frame<Valtype2,ValtypeT2>&
 }
 
 template<typename Valtype>
-inline Transformation<Valtype>::Transformation( const std::initializer_list<const Valtype>& elements )
+inline Transformation<Valtype>::Transformation( const std::initializer_list<Valtype>& elements )
 	: SquareMatrix<Valtype,4>{elements}
 {
 }

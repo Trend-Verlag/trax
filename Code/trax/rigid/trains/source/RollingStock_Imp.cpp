@@ -60,7 +60,7 @@ RollingStock_Imp::RollingStock_Imp() noexcept
 	, m_Overhangs		{ 0_m, 0_m }
 {
 	for( Jack& jack : *static_cast<JackEnumerator*>(this) )
-		jack.Reference( "parent", TypeName() );
+		jack.Reference( "parent", RollingStock_Imp::TypeName() );
 }
 
 RollingStock_Imp::~RollingStock_Imp()

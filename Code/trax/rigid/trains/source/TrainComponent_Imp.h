@@ -149,10 +149,11 @@ namespace trax{
 
 template<class Base>
 TrainComponent_Imp<Base>::TrainComponent_Imp() noexcept
-	: m_pTrain		{ nullptr }
-	, m_bRailed		{ false }
-	, m_PlugRail	{ *this, &TrainComponent_Imp<Base>::OnRail }
-	, m_PlugDerail	{ *this, &TrainComponent_Imp<Base>::OnDerail }
+	: m_PlugRail		{ *this, &TrainComponent_Imp<Base>::OnRail }
+	, m_PlugDerail		{ *this, &TrainComponent_Imp<Base>::OnDerail }
+	, m_pTrain			{ nullptr }
+	, m_TrainOrientation{ Orientation::Value::para }
+	, m_bRailed			{ false }
 {
 	m_PlugRail.Reference( "name", "PlugRail" );
 	m_PlugDerail.Reference( "name", "PlugDerail" );
@@ -321,6 +322,8 @@ Length TrainComponent_Imp<Base>::GetCouplingHeight( RailRunner::EndType end ) co
 			return std::min( GetCouplingHeight( RailRunner::EndType::north ), GetCouplingHeight( RailRunner::EndType::south ) );
 		case RailRunner::EndType::all:
 			return std::max( GetCouplingHeight( RailRunner::EndType::north ), GetCouplingHeight( RailRunner::EndType::south ) );
+		default:
+			break;
 	}
 
 	try{
