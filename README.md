@@ -20,6 +20,9 @@ whitepaper</a> that describes the basic ideas behind the library. The mathematic
 foundations for the railroad dynamics are described 
 <a href="https://www.trendverlag.com/Trax/Doc/TrackConstraint.pdf">here</a>.</p>
 
+Note: This project is source-available under a custom, non-OSS license. See the 
+[LICENSE](LICENSE) for details.
+
 The [Trax GitHub Project](https://github.com/Trend-Verlag) produces a 
 documentation from the source code using Doxygen. It contains a medium level 
 overview as well as detailed description of the API. A ready generated version 

@@ -20,7 +20,7 @@
 //
 // 3. All copies of the Software must retain this license notice.
 //
-// For additional permissions, please contact: horstmann.marc@trendverlag.de
+// For further information, please contact: horstmann.marc@trendverlag.de
 
 #include "Module_Imp.h"
 
