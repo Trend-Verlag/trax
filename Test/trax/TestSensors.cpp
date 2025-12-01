@@ -18,7 +18,7 @@
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
 #if defined( WITH_BOOST_TESTS )
-#include <boost/test/unit_test.hpp> // NOLINT 
+#include <boost/test/unit_test.hpp>
 
 #include "trax/Plug.h"
 #include "trax/Jack.h"
@@ -138,7 +138,7 @@ BOOST_FIXTURE_TEST_CASE( trigger_test4, SensorFixture )
 BOOST_FIXTURE_TEST_CASE( twosensors_trigger_right_order, SensorFixture )
 	// going over two sensors assuming they are triggered in the correct order. 
 {		 
-	std::shared_ptr<Sensor> pSensor2 = SensorFilterJack::Make();
+	std::shared_ptr<Sensor> pSensor2 = Sensor::Make();
 	pSensor2->JackOnTrigger().Insert( &m_pPulseCounter->PlugToCountDown() );
 
 	m_pTrack1->Attach( m_pSensor, { m_pTrack1->GetLength() / 2, Orientation::Value::para } );
@@ -157,7 +157,7 @@ BOOST_FIXTURE_TEST_CASE( twosensors_trigger_right_order, SensorFixture )
 BOOST_FIXTURE_TEST_CASE( twosensors_trigger_right_order2, SensorFixture )
 	// going over two sensors against the track direction, assuming they are triggered in the correct order. 
 {		 
-	std::shared_ptr<Sensor> pSensor2 = SensorFilterJack::Make();
+	std::shared_ptr<Sensor> pSensor2 = Sensor::Make();
 	pSensor2->JackOnTrigger().Insert( &m_pPulseCounter->PlugToCountDown() );
 
 	m_pTrack1->Attach( m_pSensor, { m_pTrack1->GetLength() / 2, Orientation::Value::anti } );

@@ -75,7 +75,7 @@ namespace trax{
 			std::shared_ptr<Signal> CreateSignal( const boost::property_tree::ptree& pt, 
 				IndicatorCollection& indicatorCollection, common::Interval<Length>& trackRange, std::map<IDType,Velocity>& travelVelocities, std::vector<int>& functionMap, bool bCreateSignalSemaphore, bool bCreateVorsignalSemaphore ) const;
 			
-			std::unique_ptr<SensorFilterJack> CreateKontakt( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<Sensor> CreateKontakt( const boost::property_tree::ptree& pt, 
 				TimerCollection& timerCollection, PulseCounterCollection& pulseCounterCollection, TrackLocation& trackLocation, IDType& maxSensorID ) const;
 
 			Track::EndType From( const std::string& name ) const;

@@ -27,6 +27,7 @@
 
 #include "WheelFrame_Imp.h"
 
+#include "trax/Event.h"
 #include "trax/rigid/Gestalt.h"
 #include "trax/rigid/Material.h"
 #include "trax/rigid/Scene.h"
@@ -73,14 +74,18 @@ WheelFrame_Imp::WheelFrame_Imp(
 		GetGestalt(), anchor ); !m_pTrackJointFeederMotorModel )
 		throw std::runtime_error( "WheelFrame_Imp::WheelFrame_Imp: failed to create TrackJointFeederMotorModel!" );
 
+	m_pTrackJointFeederMotorModel->AttachEvent( std::make_shared<Event_Imp>( *this ) );
+
 	for( Jack& jack : *this )
 		jack.Reference( "parent", WheelFrame_Imp::TypeName() );
 }
 
 WheelFrame_Imp::~WheelFrame_Imp()
 {
-	if( m_pTrackJointFeederMotorModel )
+	if( m_pTrackJointFeederMotorModel ){
+		m_pTrackJointFeederMotorModel->AttachEvent( nullptr );
 		m_Scene.Release( *m_pTrackJointFeederMotorModel );
+	}
 }
 
 const char* WheelFrame_Imp::TypeName() const noexcept{
@@ -518,6 +523,16 @@ Length WheelFrame_Imp::AnchorToChildSouth() const noexcept{
 Vector<One> WheelFrame_Imp::LocalHorizontalDirection() const noexcept{
 	return UnflippedAnchor().T;
 }
+
+WheelFrame_Imp::Event_Imp::Event_Imp( WheelFrame_Imp& wheelFrame )
+	: m_Parent{ wheelFrame }
+{
+}
+
+WheelFrame& WheelFrame_Imp::Event_Imp::GetWheelFrame() const noexcept{
+	return m_Parent;
+}
+
 ///////////////////////////////////////
 //std::shared_ptr<Bogie> RemoveUnusedWheelFrames( std::shared_ptr<Bogie> pBogie )
 //{

@@ -28,6 +28,7 @@
 #pragma once
 
 #include "Bogie.h"
+#include "trax/Event.h"
 
 namespace trax{
 
@@ -40,7 +41,8 @@ namespace trax{
 	/// attached to a track. It also is responsible for managing
 	/// a TractionForceCharacteristic and feeding the TrackJoint
 	/// with data. 
-	struct WheelFrame : virtual Bogie{
+	struct WheelFrame : virtual Bogie
+	{
 
 		/// \brief Makes a WheelFrame object.
 		/// \param scene The scene to insert the WheelFrame into.
@@ -125,6 +127,11 @@ namespace trax{
 		/// \param idx Index of the Wheelset 0 <= idx < CntWheelsets()
 		virtual const Wheelset& GetWheelset( int idx ) const = 0;
 
+
+		struct Event : trax::Event{
+
+			virtual WheelFrame& GetWheelFrame() const noexcept = 0;
+		};
 
 		// Jacks 'N Plugs:
 

@@ -168,6 +168,16 @@ const Location& TrackJointFeeder::GetLocation() const noexcept{
 	return m_Location;
 }
 
+std::shared_ptr<Event> TrackJointFeeder::AttachEvent( std::shared_ptr<Event> pEvent ) noexcept{
+	m_pEvent.swap(pEvent);
+	return pEvent;
+}
+
+std::shared_ptr<SignalTarget> TrackJointFeeder::AttachSignal( std::shared_ptr<SignalTarget> pSignalTarget ) noexcept{
+	m_pSignalTarget.swap(pSignalTarget);
+	return pSignalTarget;
+}
+
 Jack& trax::TrackJointFeeder::JackOnRail() noexcept{
 	return m_JackOnRail;
 }
@@ -202,7 +212,7 @@ std::pair<Length,bool> TrackJointFeeder::MoveBy( Length ds )
 	if( IsRailed() )
 	{
 		const Orientation oldOrientation = m_Location.Orient();
-		auto retval = m_Location.Move( ds );
+		auto retval = m_Location.Move( ds, oldOrientation, m_pEvent.get(), m_pSignalTarget.get() );
 		if( retval.second ){
 			if( m_Location.Orient() != oldOrientation )
 				TurnAnchor();

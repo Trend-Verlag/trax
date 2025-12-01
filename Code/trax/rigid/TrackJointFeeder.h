@@ -89,6 +89,28 @@ namespace trax{
 		virtual void Anchor( const spat::Frame<Length,One>& frame ) = 0;
 
 
+		// Sensor and Signal:
+
+		/// \brief Attaches the sensor event to this TrackJointFeeder.
+		///
+		/// The event will trigger qualified Sensors. There is only one 
+		/// Event to be attached at a time. To detach the event, attach 
+		/// a nullptr.
+		/// \param pEvent The sensor event to attach.
+		/// \returns The previously attached event.
+		dclspc std::shared_ptr<Event> AttachEvent( std::shared_ptr<Event> pEvent ) noexcept;
+
+
+		/// \brief Attaches the signal target to this TrackJointFeeder.
+		/// 
+		/// The target will receive information from Signals. There is only
+		/// one SignalTarget to be attached at a time. To detach the target,
+		/// attach a nullptr.
+		/// \param pSignalTarget The signal target to attach.
+		/// \returns The previously attached signal target.
+		dclspc std::shared_ptr<SignalTarget> AttachSignal( std::shared_ptr<SignalTarget> pSignalTarget ) noexcept;
+
+
 		// Jacks 'N Plugs:
 
 		/// \brief Gets a Jack that pulses its Plug if the WheelFrame
@@ -157,6 +179,9 @@ namespace trax{
 
 			return (AP - wF.P) * wF.T;
 		}
+
+		std::shared_ptr<Event> m_pEvent;
+		std::shared_ptr<SignalTarget> m_pSignalTarget;
 
 		Jack_Imp m_JackOnRail			{ "JackOnRail" };
 		Jack_Imp m_JackOnDerail			{ "JackOnDerail" };

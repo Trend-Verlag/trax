@@ -38,9 +38,10 @@
 #include "trax/Jack.h"
 #include "trax/Plug.h"
 #include "trax/Section.h"
-#include "trax/Sensor.h"
 #include "trax/SocketRegistry.h"
 #include "trax/Switch.h"
+
+#include "trax/rigid/trains/WheelFrameSensors.h"
 
 #include "trax/support/TraxSupportXML.h"
 
@@ -190,25 +191,25 @@ std::shared_ptr<TrackBuilder> Anl4TrackSystemReader::CreateTrack(
 
 			else if( pair.first == "Sensor" ){
 				TrackLocation location;
-				std::shared_ptr<SensorFilterJack> pSensor = CreateSensor( pair.second, location );
+				std::shared_ptr<Sensor> pSensor = CreateSensor( pair.second, location );
 				pTrack->Attach( pSensor, location );
 			}
 
 			else if( pair.first == "VelocitySensor" ){
 				TrackLocation location;
-				std::shared_ptr<SensorFilterJack> pSensor = CreateVelocitySensor( pair.second, location );
+				std::shared_ptr<Sensor> pSensor = CreateVelocitySensor( pair.second, location );
 				pTrack->Attach( pSensor, location );
 			}
 
 			else if( pair.first == "WeighSensor" ){
 				TrackLocation location;
-				std::shared_ptr<SensorFilterJack> pSensor = CreateWeighSensor( pair.second, location );
+				std::shared_ptr<Sensor> pSensor = CreateWeighSensor( pair.second, location );
 				pTrack->Attach( pSensor, location );
 			}
 
 			else if( pair.first == "TractionSensor" ){
 				TrackLocation location;
-				std::shared_ptr<SensorFilterJack> pSensor = CreateTractionSensor( pair.second, location );
+				std::shared_ptr<Sensor> pSensor = CreateTractionSensor( pair.second, location );
 				pTrack->Attach( pSensor, location );
 			}		
 		}
@@ -521,11 +522,11 @@ std::unique_ptr<Indicator> Anl4TrackSystemReader::CreateVelocityControlSemaphore
 	return nullptr;
 }
 
-std::unique_ptr<SensorFilterJack> Anl4TrackSystemReader::CreateSensor( 
+std::unique_ptr<Sensor> Anl4TrackSystemReader::CreateSensor( 
 	const boost::property_tree::ptree& pt, 
 	TrackLocation& trackLocation ) const
 {
-	if( std::unique_ptr<SensorFilterJack> pSensor = SensorFilterJack::Make(); pSensor )
+	if( std::unique_ptr<Sensor> pSensor = Sensor::Make(); pSensor )
 	{
 		ReadSensor( pt, *pSensor, trackLocation );
 		return pSensor;
@@ -823,7 +824,7 @@ void Anl4TrackSystemReader::ReadJumpSignalTarget(
 
 void Anl4TrackSystemReader::ReadSensor(
 	const boost::property_tree::ptree& pt,
-	SensorFilterJack& sensor,
+	Sensor& sensor,
 	TrackLocation& trackLocation ) const
 {
 	sensor.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
@@ -831,10 +832,10 @@ void Anl4TrackSystemReader::ReadSensor(
 
 	for( const auto& pair : pt )
 	{
-		if( pair.first == "Effect" )
-			sensor.SetEffect( sensor.GetEffect() | SensorEffectFromString( pair.second.get( "<xmlattr>.type", "" ) ) );
+		//if( pair.first == "Effect" )
+		//	sensor.SetEffect( sensor.GetEffect() | SensorEffectFromString( pair.second.get( "<xmlattr>.type", "" ) ) );
 
-		else if( pair.first == "TrackLocation" )
+		if( pair.first == "TrackLocation" )
 			ReadTrackLocation( pair.second, trackLocation );
 
 		else if( pair.first == "Jack" )

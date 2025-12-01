@@ -26,7 +26,6 @@
 
 #pragma once
 
-// NOLINTBEGIN
 #ifdef TRAX_UNREAL
 //#include "E:\Program Files\Epic Games\UE_5.5\Engine\Source\Runtime\Core\Public\GenericPlatform\GenericPlatformCompilerPreSetup.h"
 //#include "E:\Program Files\Epic Games\UE_5.5\Engine\Source\Runtime\Core\Public\MSVC\MSVCPlatformCompilerPreSetup.h"
@@ -36,7 +35,7 @@
 #pragma warning( push )
 #pragma warning(disable: 4324) // 'structname': structure was padded due to alignment specifier
 #endif
-//#include "PxPhysicsAPI.h" // NOLINT 
+//#include "PxPhysicsAPI.h"
 #include "extensions/PxExtensionsAPI.h"
 
 #include "foundation/PxMat44.h"
@@ -65,7 +64,6 @@
 //PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 //THIRD_PARTY_INCLUDES_END
 #endif
-// NOLINTEND
 
 namespace trax{
 

@@ -177,9 +177,9 @@ TrackCircle::~TrackCircle(){
 /////////////////////////////////////
 SensorFixture::SensorFixture()
 	:	TrackCircle		(),
-		m_pSensor		( trax::SensorFilterJack::Make() ),
+		m_pSensor		( trax::Sensor::Make() ),
 		m_pPulseCounter	( trax::PulseCounter::Make() ),
-		m_pEvent		( trax::EventFilter::Make() )
+		m_pEvent		( trax::Event::Make() )
 {
 	m_pSensor->JackOnTrigger().Insert( &m_pPulseCounter->PlugToCountUp() );
 }

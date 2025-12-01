@@ -180,7 +180,18 @@ namespace trax{
 		Length AnchorToParentSouth() const noexcept override;
 		Length AnchorToChildSouth() const noexcept override;
 
-		spat::Vector<One> LocalHorizontalDirection() const noexcept override;
+		spat::Vector<One> LocalHorizontalDirection() const noexcept override;	
+
+
+		// Event sent with the track joint (anchor) position, to trigger Sensors.
+		class Event_Imp : public Event
+		{
+			WheelFrame_Imp& m_Parent;
+		public:
+			Event_Imp( WheelFrame_Imp& wheelFrame );
+
+			WheelFrame& GetWheelFrame() const noexcept override;	
+		};
 	};
 
 }

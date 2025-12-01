@@ -83,7 +83,7 @@ namespace trax{
 			std::unique_ptr<Indicator> CreateVelocityControlSemaphore( const boost::property_tree::ptree& pt, 
 				const SignalCollection& signalCollection ) const;
 
-			std::unique_ptr<SensorFilterJack> CreateSensor( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<Sensor> CreateSensor( const boost::property_tree::ptree& pt, 
 				TrackLocation& trackLocation ) const;
 
 			std::unique_ptr<VelocitySensor> CreateVelocitySensor( const boost::property_tree::ptree& pt, 
@@ -117,7 +117,7 @@ namespace trax{
 			/// \name Explicit XML Reading
 			///@{
 			void ReadJumpSignalTarget( const boost::property_tree::ptree& pt, std::shared_ptr<JumpSite> pSignal, const TrackSystem& trackSystem/*, const Fleet& fleet*/ ) const;
-			void ReadSensor( const boost::property_tree::ptree& pt, SensorFilterJack& sensor, TrackLocation& trackLocation ) const;
+			void ReadSensor( const boost::property_tree::ptree& pt, Sensor& sensor, TrackLocation& trackLocation ) const;
 			void ReadSignal( const boost::property_tree::ptree& pt, std::shared_ptr<Signal> pSignal, const TrackSystem& trackSystem ) const;
 			void ReadIndicator( const boost::property_tree::ptree& pt, Indicator& indicator, const ConnectorCollection& connectorCollection ) const;
 			void ReadJack( const boost::property_tree::ptree& pt, Jack& jack ) const;

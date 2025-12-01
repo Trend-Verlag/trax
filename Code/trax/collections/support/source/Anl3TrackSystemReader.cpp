@@ -539,12 +539,12 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 			else if( pair.first == "Kontakt" ){
 				TrackLocation trackLocation;
 				if( pair.second.get( "<xmlattr>.fireOnPara", false ) ){
-					if( std::shared_ptr<SensorFilterJack> pSensor = CreateKontakt( pair.second, timerCollection, pulseCounterCollection, trackLocation, maxSensorID ) )
+					if( std::shared_ptr<Sensor> pSensor = CreateKontakt( pair.second, timerCollection, pulseCounterCollection, trackLocation, maxSensorID ) )
 						pTrack->Attach( pSensor, trackLocation );
 				}
 
 				if( pair.second.get( "<xmlattr>.fireOnAnti", false ) ){
-					if( std::shared_ptr<SensorFilterJack> pSensor = CreateKontakt( pair.second, timerCollection, pulseCounterCollection, trackLocation, maxSensorID ) ){
+					if( std::shared_ptr<Sensor> pSensor = CreateKontakt( pair.second, timerCollection, pulseCounterCollection, trackLocation, maxSensorID ) ){
 						trackLocation.orientation.Flip();
 						pTrack->Attach( pSensor, trackLocation );
 					}
@@ -802,7 +802,7 @@ std::shared_ptr<Signal> Anl3TrackSystemReader::CreateSignal(
 	return nullptr;
 }
 
-std::unique_ptr<SensorFilterJack> Anl3TrackSystemReader::CreateKontakt( 
+std::unique_ptr<Sensor> Anl3TrackSystemReader::CreateKontakt( 
 	const boost::property_tree::ptree& pt, 
 	TimerCollection& timerCollection, 
 	PulseCounterCollection& pulseCounterCollection,
@@ -811,7 +811,7 @@ std::unique_ptr<SensorFilterJack> Anl3TrackSystemReader::CreateKontakt(
 {
 	if( pt.get( "<xmlattr>.KontaktZiel", "0" ) == "0" )
 		return nullptr; // Lost contact.
-
+/*
 	if( std::unique_ptr<SensorFilterJack> pSensor = SensorFilterJack::Make( pt.get<bool>( "<xmlattr>.TrainSide", false ) ? SensorFilterJack::train_end : SensorFilterJack::train_tip ); pSensor )
 	{
 		pSensor->ID( ++maxSensorID );
@@ -921,7 +921,7 @@ std::unique_ptr<SensorFilterJack> Anl3TrackSystemReader::CreateKontakt(
 
 		return pSensor;
 	 }
-
+*/
 	return nullptr;
 }
 

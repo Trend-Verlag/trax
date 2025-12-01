@@ -225,15 +225,15 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	move_child( pt, "TrackRange", ptTrackRange );
 	return pt;
 }
-
-boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const SensorFilterJack::Effect& effect ){
-	boost::property_tree::ptree ptEffect;
-
-	ptEffect.add<std::string>( "<xmlattr>.type", ToString( effect ) );
-
-	move_child( pt, "Effect", ptEffect );
-	return pt;
-}
+//
+//boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const SensorFilterJack::Effect& effect ){
+//	boost::property_tree::ptree ptEffect;
+//
+//	ptEffect.add<std::string>( "<xmlattr>.type", ToString( effect ) );
+//
+//	move_child( pt, "Effect", ptEffect );
+//	return pt;
+//}
 
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Sensor& sensor ){
 	boost::property_tree::ptree ptSensor;
@@ -254,22 +254,22 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	//	ptSensor.add( "<xmlattr>.weighTrain", pWeighSensor->WeighTrain() );
 	//}
 
-	if( auto pSensorFilterJack = dynamic_cast<const SensorFilterJack*>(&sensor) ){
-		if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::train_tip )
-			ptSensor << SensorFilterJack::Effect::train_tip;
-		if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::train_end )
-			ptSensor << SensorFilterJack::Effect::train_end;
-		if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::train_north )
-			ptSensor << SensorFilterJack::Effect::train_north;
-		if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::train_south )
-			ptSensor << SensorFilterJack::Effect::train_south;
-		if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::wheelframe )
-			ptSensor << SensorFilterJack::Effect::wheelframe;
-		if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::name )
-			ptSensor << SensorFilterJack::Effect::name;
-		if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::not_name )
-			ptSensor << SensorFilterJack::Effect::not_name;
-	}
+	//if( auto pSensorFilterJack = dynamic_cast<const SensorFilterJack*>(&sensor) ){
+	//	if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::train_tip )
+	//		ptSensor << SensorFilterJack::Effect::train_tip;
+	//	if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::train_end )
+	//		ptSensor << SensorFilterJack::Effect::train_end;
+	//	if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::train_north )
+	//		ptSensor << SensorFilterJack::Effect::train_north;
+	//	if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::train_south )
+	//		ptSensor << SensorFilterJack::Effect::train_south;
+	//	if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::wheelframe )
+	//		ptSensor << SensorFilterJack::Effect::wheelframe;
+	//	if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::name )
+	//		ptSensor << SensorFilterJack::Effect::name;
+	//	if( pSensorFilterJack->GetEffect() & SensorFilterJack::Effect::not_name )
+	//		ptSensor << SensorFilterJack::Effect::not_name;
+	//}
 
 	TrackLocation trackLocation;
 	assert( sensor.TrackAttached() );
