@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Chapter 14 Signals</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        body {
+            font-size: 1.2em;
+            line-height: 1.5em;
+            text-indent: 4em;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chapter 14 Signals</h1>
+    <p style="text-align: center;"></p>
+
+    <blockquote style="text-align: right; font-size: 0.9em;"><i>""</i><br /> - </blockquote>
+
+    <p>
+        <b>A Signal is a directed range along the tracks that provides information </b>to 
+        be send to a SignalTarget, while moving a Location along the track inside that range 
+        and according to the ranges direction. Clearly this can be used in the way modern 
+        Linienzugbeeinflussung[<a href="#[1]">1</a>] works, where along a track range time 
+        varying information is sent to a train. But also old style signalisation applies, 
+        if one takes into account that there always is a range from a pre signal to a main 
+        signal in which the conductor of the train is expected to read the meaning of the 
+        signal and act accordingly - say to stop in front of the main signal after passing 
+        the pre signal. Once the train passed the main signal, its state does no longer 
+        apply to the train:
+    </p>
+    <img src="images/Chapter14Image1.png" width="283" height="300" alt="A Location relaying Signal information." />
+
+    <p>
+        Punktf&ouml;rmige Zugbeeinflussung[<a href="#[2]">2</a>] is only slightly more tricky,
+        since it requires a non zero range, long enough to have the Location not jump over 
+        it in one simulation step, given the maximum expected speed:
+    </p>
+    <pre><code>
+        Range.Length() >= MaxSpeed * MaxSimulationStep;
+    </code></pre>
+    <p>
+        Note that Signal ranges can not include switches (see Chapter 4) that branch in 
+        their direction. So it is best avoided to strech the range of a Signal over any 
+        switch at all.
+    </p>
+    <p>
+        Also there is an important issue with Locations that 'happen to inadvertently 
+        roll backwards'. This might seem like an occurence, best ruled out by definition, 
+        but with trackjoints in a physical simulation environment, it happens to happen 
+        quite often. To guarantee the Location relaying the information from the correct 
+        Signals, there has to be supplied a principal direction of the movement which might 
+        differ from the direction of the actual movement.
+    </p>
+
+    <h2>References</h2>
+    <a name="[1]"></a>[1] <a href="https://en.wikipedia.org/wiki/Linienzugbeeinflussung">Wikipedia, Linienzugbeeinflussung</a><br />
+    <a name="[2]"></a>[2] <a href="https://en.wikipedia.org/wiki/Punktf%C3%B6rmige_Zugbeeinflussung">Wikipedia, Punktf&ouml;rmige Zugbeeinflussung</a><br />
+
+
+    <p style="text-align: center;"><a href="chapter13.html"><<< previous</a> | <a href="contents.html">contents</a> | <a href="appendixA.html">next >>></a></p>
+</body>
+</html>

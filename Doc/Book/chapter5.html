@@ -1,0 +1,423 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Chapter 5 - Bodies</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        body {
+            font-size: 1.2em;
+            line-height: 1.5em;
+            text-indent: 4em;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chapter 5 - Bodies</h1>
+    <p style="text-align: center;"></p>
+
+    <blockquote style="text-align: right; font-size: 0.9em;">
+        <i>
+            "A method is more important than a discovery, <br />since the right method will lead to new <br />and even more important discoveries."
+        </i><br /> - Lev Landau
+    </blockquote>
+
+    <p>
+        <b>A body is some thing that has a position and a mass</b> - or a body is a rigid composition of other bodies. By rigid composition we mean
+        that several bodies of a simpler type might stick together really tight and form a more complex body. Some english kniggit - let's call
+        him Sir Newton - had figured out, that a force is actually not causing a velocity of a simple body directly, but just an acceleration of it:
+    </p>
+    <pre><code>
+        Mass m = mass of the body;
+        Vector&lt;Force&gt; f = force applied to the body for whatever reason;
+        Vector&lt;Acceleration&gt; a = f / m;
+    </code></pre>
+    <p>
+        in fact, the force will cause an acceleration with respect of the mass of the body. This acceleration by definition ( the acceleration is a
+        change in velocity per time - never mind about squared seconds, it is ((length per time) per time) - will in turn cause a
+        change in velocity:
+    </p>
+    <pre><code>
+        Vector&lt;Velocity&gt; dv = a * dt
+        Vector&lt;Velocity&gt; v = v + dv;
+    </code></pre>
+    <p>
+        while a certain time span dt is passing. This gives a v(t+dt) for a v(t), and only that in turn will by definition cause a displacement of our body:
+    </p>
+    <pre><code>
+        Position&lt;Length&gt; P += v * dt;
+    </code></pre>
+    <h2>Critique</h2>
+    <p>
+        <b>That's quite some result, we call it 'Sir Newton's Algorithm'</b>, and it comes in handy, since we want to simulate bodies on their curves in space. Basically all we have to do is to figure out what
+        forces we need, to keep our trains in track. Great! - And exactly that is the tautology in here: if we see a body moving in the Universe, we are able to
+        determine the forces applied to it by the formula and whoops, we know what f is and all of a sudden from a = f/m again we determine that it moves correctly, according
+        to the 'theory'. That is because f can not be determined any other way as by watching bodies moving. Since f might depend on time, it gets pretty crowdy for
+        different bodies to move at the same place at the same time. Even if Galilei would have found out that level rolling balls
+        would stop after 10_m, this 'theory' would make a 'force' accountable for it. A body can do only a single thing to refute this theory: it would
+        have to relocate instantaniously, and that could not be measured - and by the way this was not solved by Einstein; Einstein got it even worse.
+        As a scientist this really would bother me; as a programmer, I'm completely happy
+        with it. I regard it as a method, not as a discovery. I don't know, wether Landau is right, but it is with the whole book of this: there is not one
+        single physical discovery in it, I promise: it is all method! So never mistake this for reality: "The Truth Is Out There".
+    </p>
+    <h2>Compositions</h2>
+    <p>
+        <b>After this rant about Newton's dynamics</b> you might take it more easy that there is one other catch: and that's the thing with the composition:
+    </p>
+    <img src="images/Chapter5Image1.jpg" alt="Rigid Body" />
+    <p>
+        In the image we see a rigid composition of masses concentrated in single points, their positions. For whatever reason, the
+        relative distances of these masses are unchangable, but the whole body can move and rotate in space. If by any chance we remember Archimedes'
+        principle of the lever it says that if you have two masses you can bring them into equilibrum around a fixed point if you
+        place them at the following distances:
+    </p>
+    <pre><code>
+        Mass m0,m1;
+        Length d0,d1;
+
+        m0 * d0 == m1 * d1;
+    </code></pre>
+    <p>
+        Meaning as lighter a mass is, as farther out you have to put it (that's how many scales are build). We can define a 'torque' T being a force f applied over a lever
+        of length d. So with g being the acceleration of earth's gravity, the above equation would become:
+    </p>
+    <pre><code>
+        g * m0 * d0 == g * m1 * d1;
+            f0 * d0 == f1 * d1;
+                T0 == T1;
+    </code></pre>
+    <p>
+        So if the torques are equal, the lever would be in equilibrum and won't start to move. In the example we have forces that are both
+        directed down, since they are gravitational. But any force would have a component that runs through the lever into the
+        fixed point and will be therefore doing nothing and the rest being a component perpendicular to the lever. So with |T| = |f| * |d| = |f| * |r| * sin(a)
+        with r being the distance vector from the fixed point to the mass m and a being the angle between the force vector f and the distance vector r,
+        we see (take a look at Chapter2) that:
+    </p>
+    <pre><code>
+        Vector&lt;Length&gt; r = ...;
+        Vector&lt;Force&gt; f = ...;
+        Vector&lt;Torque&gt; T = r % f;
+    </code></pre>
+    <p>
+        <b>Let us generalize this a little bit for our body:</b> there will be a point, the 'center of mass' C, for which all the terms
+        mi * ri added up will result in 0, with ri now being the vector distances from that point to the positions of the masses:
+    </p>
+    <pre><code>
+        Mass m0, m1, m2, ...;                                   // Masses i.
+        Vector&lt;Length&gt; r0, r1, r2, ...;                         // Distances from the 'center of mass' C to the mass i.
+        &sum;(mi * ri) = m0 * r0 + m1 * r1, + m2 * r2 + ...;        // We use the &sum; symbol to make clear that the term is the
+                                                                // addition over all occuring indices like i,j,k,l
+        &sum;(mi * ri) == Null&lt;decltype(Mass{}*Length{})&gt;;
+    </code></pre>
+    <img src="images/Chapter5Image2.jpg" alt="Rigid Body With Center" />
+    <p>
+        In this case also the torques due to gravity, T = &sum;Ti = &sum;(ri%fi) = &sum;(ri%mi*g) = &sum;(mi * ri) % g, would be zero;
+        hence the body would not move if we support it under C. But what would happen if we rotate the body? Would it be the rotated ri
+        and therefore the same C, that would make up our center of mass? Or will the body start to turn and maybe even fall down? Let's
+        suppose we have a rotation around some line that runs through our old C and we rotate the body some angle a. The masses will
+        stay the same, but the ri and therefore their components, the ri.dx, ri.dy, ri.dz would change. Will &sum;(mi * ri) still sum up to Null? Well,
+        instead of rotating the body, we might go to a Frame that sits in the center C and then rotate it in the opposite direction. That
+        would yield the same components. Now we know from Chapter2 that we can evaluate a vector equation in any Frame we like, and it
+        will still be valid. So still the sum will add up to the Null vector, the only vector whiches components will never change on Frame
+        transformation.
+    </p>
+
+
+    <h2>The Center of Mass</h2>
+    <p>
+        <b>To calculate the center of mass:</b>
+    </p>
+    <pre><code>
+    Position&lt;Length&gt; C;                             // Center of mass.
+    Mass mi;                                        // Masses i.
+    Position&lt;Length&gt; Pi = C + ri;                   // Positions of masses i.
+    using O = Origin3D&lt;Length&gt;;                       // Origin of our Frame
+
+    &sum;(mi * (Pi - O)) == &sum;mi * (C - O) + &sum;(mi * ri);
+    &sum;(mi * (Pi - O)) == m * (C - O);                // m is the total mass of the body, the sum of all mi.
+
+    --> C = O + &sum;(mi * (Pi - O)) / m;
+    </code></pre>
+    <p>
+        From the position of a single mass i, Pi, we can calculate the vi and the ai of its position by derivations:
+    </p>
+    <pre><code>
+        Position&lt;Length&gt; Pi(t) = C(t) + ri(t);
+        Vector&lt;Velocity&gt; vi = dPi/dt = vC + dri/dt;
+
+        Vector&lt;AnglePerTime&gt; w;                                 // With a rotational velocity w we can write:
+        dri/dt = w % ri;                                        // This is, because ri is fixed in length, it only rotates (see Chapter2)
+
+        --> vi = vC + w % ri;
+    </code></pre>
+    <p>
+        w is a vector, describing a rotational velocity around the line defined by it and C; its length is the angle of rotation per time.
+        So, the velocity of the mass is the sum of the velocity of the center point and the effect of the rotation of the total body. Since we are
+        talking about a rigid body, we always assume that |ri| is constant. The second derivative gives:
+    </p>
+    <pre><code>
+        Vector&lt;Acceleration&gt; ai = dvi/dt = aC + dw/dt % ri + w % dri/dt;
+
+        --> ai = aC + dw/dt % ri + w % (w % ri);
+    </code></pre>
+
+    <p>
+        So if we would knew, how the center of mass C(t) is moving and how the body rotates around it with w(t), then we comparably easy
+        could calculate the positions, velocities and accelerations of all the masses that make up our body.
+        The question is, how do we calculate C(t) and w(t)? We would like to have a nice straightforward and easy approach like the one for a single
+        mass point at the beginning of this chapter, that we called 'Sir Newton's Algorithm'. Each mass mi can be subject to a force fi, what happens then? Technically each
+        mass point would start to move according to the above algorithm, but our condition is, that the body be rigid and the |ri| do not change.
+        To guarantee that, we have no other means as to apply additional forces to make the condition hold. But we include these in fi, so
+        still ai = fi / mi must hold, after all it's a law of physics! So, how does C move?
+    </p>
+    <pre><code>
+        Vector&lt;Velocity&gt; vC  = dC/dt = d/dt(O + &sum;(mi * (Pi - O)) / &sum;mi);
+                                     = &sum;(mi * dPi/dt) / &sum;mi;
+                                     = &sum;(mi * vi) / &sum;mi;
+
+        Vector&lt;Acceleration&gt; aC = dvC/dt = &sum;(mi * ai) / &sum;mi;
+                                         = &sum;(mi * fi/mi) / &sum;mi;     // ai = fi/mi must hold: to keep our body rigid we have to use forces and that are included in fi.
+                                         = &sum;fi / &sum;mi;
+                                         = f / m
+    </code></pre>
+    <p>
+        Looks familiar? The center of mass is just moving in a way governed by the same laws as are valid for the single mass, if you take f =  &sum;fi for the force
+        and m = &sum;mi for the mass! So we can use 'Sir Newton's Algorithm' to figure out C(t). That was easy! Let's try the rotation:
+        We want something like: dw/dt = &sum;(ri % fi) / inertia with the torque, we defined earlier, but that would be a guess. Let us define
+        the angular momentum L in a way so that dL/dt == T:
+    </p>
+    <pre><code>
+        Vector&lt;AngularMomentum&gt; L = &sum;(ri % mi*vi);
+
+        dL/dt == &sum;(dri/dt % mi*vi + ri % mi*dvi/dt);
+              == &sum;((vi-vC) % mi*vi + ri % mi*ai);
+              == &sum;(-vC % mi*vi + ri % fi);
+              == -vC % &sum;(mi*vi) + &sum;(ri % fi);           // since &sum;(mi*ri) is 0 and stays so, its derivative &sum;(mi*vi) also is null
+              == T;
+    </code></pre>
+    <p>
+        This is a definition and we define it that way, because we want it to mimic the f = m * a = m * dv/dt = d(m*v)/dt = dp/dt relationship, where
+        p == m*v is the linear momentum of an object. Let's try to formulate L in terms of w:
+    </p>
+    <pre><code>
+        L   = &sum;(ri % mi*vi);
+            = &sum;(mi*(ri % vi));
+            = &sum;(mi*(ri % (vC + w % ri)));
+            = &sum;(mi*(ri % (w % ri)));
+            = &sum;(mi*((ri*ri)*w - (ri*w)*ri)));            // vector triple product, see Chapter2    
+    </code></pre>
+    <p>
+        let us calculate this by the components, ri = { xi, yi, zi }, w = { wx, wy, wz }:
+    </p>
+    <pre><code>
+        L   = &sum;(mi*((xi²+yi²+zi²)*{ wx, wy, wz } - (xi*wx+yi*wy+zi*wz)*{ xi, yi, zi })));
+
+                     { (xi²+yi²+zi²) * wx - (xi*wx+yi*wy+zi*wz) * xi }
+            = &sum;(mi * { (xi²+yi²+zi²) * wy - (xi*wx+yi*wy+zi*wz) * yi } )
+                     { (xi²+yi²+zi²) * wz - (xi*wx+yi*wy+zi*wz) * zi }
+
+                     { (yi²+zi²) * wx - (yi*wy+zi*wz)*xi }
+            = &sum;(mi * { (xi²+zi²) * wy - (xi*wx+zi*wz)*yi } )
+                     { (xi²+yi²) * wz - (xi*wx+yi*wy)*zi }
+
+                      { (yi²+zi²),  -yi*xi,    -zi*xi }   { wx }
+            = &sum;( mi * { -xi*yi,    (xi²+zi²),  -zi*yi } * { wy } )
+                      { -xi*zi,    -yi*zi ,  (xi²+yi²)}   { wz }
+
+              { &sum;(mi*(yi²+zi²)),  -&sum;(mi*yi*xi),    -&sum;(mi*zi*xi) }   { wx }
+            = { -&sum;(mi*xi*yi),    &sum;(mi*(xi²+zi²)),  -&sum;(mi*zi*yi) } * { wy }
+              { -&sum;(mi*xi*zi),    -&sum;(mi*yi*zi),   &sum;(mi*(xi²+yi²))}   { wz }
+
+            = <b>I</b> * w;
+    </code></pre>
+    <p>
+        <b>I is called the inertia tensor</b>[<a href="#[1]">1</a>] and it makes our formula for the relation between (angular) velocity
+        and (angular) momentum quite simple and similar to the linear case. But note that in general the angular
+        velocity will not have the same direction as the angular momentum. Formally I is a 3x3 matrix, but we call
+        it 'tensor' since L = I * w actually is a vector equation, that can be evaluated with the above formular in
+        any Frame. Only if you consider Frames that move with respect to each other, you will have to be carefull,
+        since angular velocities like linear ones get not preserved when changing inertia systems.
+    </p>
+    <p>
+        Great. So with our linear momentum p = m*v we can do the following:
+    </p>
+    <pre><code>
+        Vector&lt;Momentum&gt; p = m * v
+        Vector&lt;Force&gt; f = m * a = m * dv/dt = d/dt(m*v) = dp/dt;
+    </code></pre>
+    <p>
+        That rises the curiosity about what dL/dt in terms of dw/dt might be:
+    </p>
+    <pre><code>
+        dL/dt   = d/dt&sum;(mi*((ri*ri)*w - (ri*w)*ri)));
+                = &sum;(mi*(d/dt(ri*ri)*w + mi*((ri*ri)*dw/dt - (dri/dt*w)*ri - (ri*dw/dt)*ri - (ri*w)*dri/dt)));
+                = &sum;(mi*( 0 + mi*((ri*ri)*dw/dt - 0 - (ri*dw/dt)*ri - (ri*w)*(w % ri))));          // ri² does not change with time, dri/dt and w are orthogonal
+                = &sum;(mi*( mi*((ri*ri)*dw/dt - (ri*dw/dt)*ri - (ri*w)*(w % ri)));
+                = &sum;(mi*( mi*((ri*ri)*dw/dt - (ri*dw/dt)*ri) - w % &sum;(mi*(ri*w)*ri);
+                = <b>I</b> * dw/dt + w % &sum;(mi*((ri*ri)*w - (ri*w)*ri));                                    // w % w == Null
+                = <b>I</b> * dw/dt + w % L;
+    </code></pre>
+    <p>
+        Well, since dL/dt is the change of angular momentum with time, it is by definition our torque T. So we get:
+    </p>
+    <pre><code>
+        Vector&lt;Torque&gt; T = <b>I</b> * dw/dt + w % L;
+    </code></pre>
+    <p>
+        and the good news is, that for w == 0 it quite mimics f = m * a, if we ignore the fact that the acceleration of the rotation
+        and the torque do not necessarilly have the same direction (known as the tennis racket phenomenon).
+        If the body happens to already have a rotation, then all moose are loose, as can be seen with several kinds of spinning tops.
+        Even if T == 0 - so there is no torque and we have a free spinning body - that does not necessarily mean that w will be constant!
+        As dw/dt == Inverse(I) * (L % w) is not necessarily zero, nor is it guaranteed that it keeps
+        direction[<a href="#[2]">2</a>]. Should you english kniggits dare[<a href="#[3]">3</a>] to apply a serious torque to an already
+        spinning body to impose your will on it, it might react in funny ways with changes of its rotational axis, which you probably will not survive
+        unhurt as can be seen from the formular.
+    </p>
+    <p>
+        But anyway, we did this for a reason: we want to have our algorithm be workable. And indeed, if we have a body and it has
+        an initial C and vC of the center of mass as well as angle a and w, and we have a force f for the center of mass and a torque T - or calculate f, T from some fi
+        that react on the body at distances ri from the center, we can calculate:
+    </p>
+    <pre><code>
+        Vector&lt;Velocity&gt; dvC = aC * dt = f/m * dt;
+        Vector&lt;Velocity&gt; vC += dvC
+
+        Vector&lt;AngularVelocity&gt; dw = Inv(<b>I</b>)(T + L % w) * dt;
+        Vector&lt;AngularVelocity&gt; w += dw;
+    </code></pre>
+    <p>
+        Finally we update the positions and angles by:
+    </p>
+    <pre><code>
+        Position&lt;Length&gt; C += vC * dt;
+        Vector&lt;Length&gt; a += w * dt;
+    </code></pre>
+    <p>Finished! Lastly let us discuss the practicall calculation of I a little:</p>
+
+
+    <h2>The Inertia Tensor</h2>
+    <p>
+        The formula for I gives a clear answere, about how to calculate I if you have a set of discrete masses and their locations in a body. But what
+        would be the I of - say - a sphere with a uniform mass distribution? Or a cube or a cylinder? That's right! We have to transition to the
+        infinitesimal case of really tiny mass elements dm in really tiny volumes dV that are part of our object and integrate over them:
+    </p>
+    <pre><code>
+              { &int;(y²+z²)*dm,    -&int;y*x*dm,    -&int;z*x*dm }
+        I   = {    -&int;x*y*dm, &int;(x²+z²)*dm,    -&int;z*y*dm }
+              {    -&int;x*z*dm,    -&int;y*z*dm, &int;(x²+y²)*dm }
+    </code></pre>
+    <p>
+        The integrals go over the mass, x, y, z are function of the masses positions. With the introduction of the uniform mass
+        density &rho;, we can make a relationship to dV:
+    </p>
+    <pre><code>
+       dm   = &rho; * dV;
+
+                    { y²+z²,  -y*x,    -z*x }
+        I   = &rho; * &int; { -x*y,    x²+z²,  -z*y } * dV
+                    { -x*z,    -y*z,   x²+y²}
+    </code></pre>
+    <p>
+        These are basically three integrals over the three dimensions of space. Since the &rho; is constant it can go in front
+        of the integral. So for a cube lets say, this would compute as:
+    </p>
+    <pre><code>
+                     { y²+z²,  -y*x,    -z*x }
+        I   = &rho;*&int;*&int;*&int;{ -x*y,    x²+z²,  -z*y } * dx*dy*dz
+                     { -x*z,    -y*z,   x²+y²}
+    </code></pre>
+    <p>where every single integral goes over the cube's extents Dx, Dy, Dz:</p>
+    <pre><code>
+                   { (y²+z²)*x,  -y*x²/2,   -z*x²/2 }
+        I   = &rho;*&int;*&int;{ -x²/2*y,    x³/3+z²*x, -z*y*x  } *dy*dz |Dx
+                   { -x²/2*z,    -y*z*x,     x³/3+y²}
+
+                  { (y²+z²)/3,  -y*x*/4,   -z*x/4     }
+            = &rho; * { -x*y/4,    (x²+z²)/3,  -z*y/4     } *x*y*z |Dx|Dy|Dz
+                  { -x*z/4,     -y*z/4,     (x²+y²)/3 }
+    </code></pre>
+    <p>
+        Let's assume, the axis aligned cube is placed in the center, so e.g. x runs from -Dx/2 to +Dx/2. We see that
+        every term square in one coordinate would be multiplied by 0, so all of them vanish:
+    </p>
+    <pre><code>
+                  { (y²+z²)/3,         0,         0 }
+        I   = &rho; * {         0, (x²+z²)/3,         0 } *x*y*z |Dx|Dy|Dz
+                  {         0,         0, (x²+y²)/3 }
+
+                  { (y²+z²)*Dx/3,               0,               0 }
+            = &rho; * {            0, (Dx²/4+z²)*Dx/3,               0 } *y*z |Dy|Dz
+                  {            0,               0, (Dx²/4+y²)*Dx/3 }
+
+                    { (y²+z²),   0,                      0 }
+            = &rho;/3 * {            0, (Dx²/4+z²),          0 } *Dx*y*z |Dy|Dz
+                    {            0,          0, (Dx²/4+y²) }
+
+                     { Dy²+Dz², 0,                0 }
+            = &rho;/12 * {          0, Dx²+Dz²,       0 }*Dx*Dy*Dz
+                     {          0,       0, Dx²+Dy² }
+
+                     { Dy²+Dz², 0,                0 }
+            = m/12 * {          0, Dx²+Dz²,       0 }
+                     {          0,       0, Dx²+Dy² }
+    </code></pre>
+    <p>
+        To do this calculation for different shapes it is advisable to choose matching coordinate systems. E.g, calculate
+        the I of a sphere in spherical or the I of a cylinder in polar coordinates. Trax also supplies functions that calculate
+        I for certain shapes, or just look the results up here: [<a href="#[4]">4</a>].
+    </p>
+    <p>
+        Please note that we calculated the boxes inertial tensor I in a specific frame, to make calculations simpler. If I
+        is part of a vector equation, you might need it in a different - typically rotated - frame. If you have a rotation matrix
+        R, to describe the rotation of the target frame from our axis aligned frame, then the inertia tensor would transform like
+        this:
+    </p>
+    <pre><code>
+        I' = Transposed(R) * I * R;
+    </code></pre>
+    <p>
+        Generally, if you have an axis Vector<One> A, the scalar inertia for rotations along this axis would be:
+    </p>
+    <pre><code>
+        ia = I * A * A;
+    </code></pre>
+
+
+    <h2>The Actio Equals Reactio Problem</h2>
+    <p>
+        <b>On combining a physics simulation</b> with bodies that are not ruled by it, like static or somehow otherwise
+        moving objects - often attributed as 'kinematic' - that nevertheless can collide with the dynamic bodies, special problems 
+        arise on the dynamic side. The reason for those is Sir Newton's Third law of motion: on any force excerted by a body, it 
+        encounters an equal force, but of opposite direction. Now this law is broken and the kinematic body does not encounter any 
+        force. So it does not give way. Due to a = f / m it behaves like a body with infinite mass, or a wall - a non movable but
+        moving wall, to be precise. There are different possibilities to solve this problem, but our solution here is, to calculate 
+        everything, including the train movement, inside the physics engine; so the problem does not show up in the first place.
+    </p>
+
+
+    <h2>References</h2>
+    <a name="[1]"></a>[1] Landau/Lifschitz, Lehrbuch der Theoretischen Physik, Akademie-Verlag Berlin, 1990.<br />
+    <a name="[2]"></a>[2] <a href="https://youtu.be/1VPfZ_XzisU">Veritasium, Derek Muller, YouTube 09.19.2019</a>
+    The Bizarre Behavior of Rotating Bodies, Explained.<br />
+    <a name="[3]"></a>[3] <a href="https://youtu.be/GeyDf4ooPdo">Veritasium, Derek Muller, YouTube 03.17.2014</a>
+    Anti-Gravity Wheel?<br />
+    <a name="[4]"></a>[4] <a href="https://en.wikipedia.org/wiki/List_of_moments_of_inertia">Wikipedia, List of moments of inertia.</a>
+
+
+    <p style="text-align: center;"><a href="chapter4.html"><<< previous</a> | <a href="contents.html">contents</a> | <a href="chapter6.html">next >>></a></p>
+</body>
+</html>

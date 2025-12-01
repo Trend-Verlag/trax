@@ -1,0 +1,286 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Chapter 3 - Curves</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        body {
+            font-size: 1.2em;
+            line-height: 1.5em;
+            text-indent: 4em;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chapter 3 - Curves</h1>
+    <p style="text-align: center;"></p>
+
+    <blockquote style="text-align: right; font-size: 0.9em;"><i>"Do not disturb my curves!"</i><br /> - Archimedes</blockquote>
+
+    <p>
+        <b>As far as we are concerned</b>, a Curve is a path in three dimensional euclidean space so that it can be written as:
+    </p>    
+    <pre><code class="language-c++">
+        Position&lt;Length&gt; C(s) = { x(s), y(s), z(s) };
+    </code></pre>
+    <p>
+        with x, y, z being functions (from s) of Length to Length that can be differentiated at least three times. This makes C a
+        function (from s) of Length to Position&lt;Length&gt;. Note that we assert that the parameter s is a valid Length. With this
+        we want to make clear that s measures the length of the curve up to that point:
+    </p>
+    <pre>
+        |C'| = |dC/ds| == |C(s + ds) - C(s)| / ds == ds/ds == 1;
+    </pre>
+    <p>
+        for reasonable small ds and everywhere along the curve (the single ''' stands for the first derivative). Or, for those of
+        you English kniggits, who are not afraid of an integral:
+    </p>
+    <pre>
+
+                  s1              s1              s1
+        Length L = S |C'(s)| ds == S |dC/ds| ds == S ds == s1 - s0;
+                  s0              s0              s0</pre>
+    <p>
+        From everywhere (s0) to anywhere (s1) inside the valid range of the curve and L being the total length along that curve segment.
+        The above written dC = C(s+ds) - C(ds) is a secant Vector&lt;Length&gt; whiches direction would approach the tangent of the
+        curve at s if ds approaches 0.
+    </p>
+    <img src="images/Chapter3Image1.jpg" alt="A Curve and its tangent." />
+    <p>
+        <b>Therefore we define the unit vector:</b>
+    </p>
+    <pre>
+
+        Vector&lt;One&gt; T(s) = dC(s)/ds;</pre>
+    <p>
+        to point along the tangent of our curve at parameter s. Note that it is of unit length.
+    </p>
+    <pre>
+
+        dT/ds = d²C(s)/ds² = C''(s);</pre>
+    <p>
+        The change of T along the proceeding curve would no doubt be a pure rotation of T,
+        since T stays to be of unit length along the whole curve. So the change dT will be perpendicular to T at least for
+        small enough ds. Let's call this direction in which the tip of T moves 'N', then:
+    </p>
+    <pre>
+
+        dT/ds == &kappa;(s)*N(s);</pre>
+    <p>
+        With N being defined to be a unit vector and &kappa;(s) >= 0 being defined to take care that |N(s)| is so. &kappa;(s) then happens to be
+        calculated by &kappa;(s) = |C''|. N(s) would be C''/|C''|. So these values are nothing we couldn't calculate, since we asserted
+        that our Curve C would be differentiable at least three times (only two used, one to go). In fact &kappa;(s) is called the curvature
+        of the curve at s and it happens to be the rotation angle, the vector T rotates per parameter length. It actually rotates
+        around B = T % N, since with from the following image one sees, that |dT| = 1 * da is the rotational angle. That makes also
+        &kappa;(s) == |&kappa;(s)| == |&kappa;*N| == |dT/ds| == da/ds an angle but related to the progress of s.
+    </p>
+    <img src="images/Chapter3Image2.jpg" alt="Rotation of a vector." />
+    <p>
+        B is per definition orthogonal to T and N and since they are orthogonal unit vectors themselves, B is also.
+    </p>
+    <pre>
+
+    dB/ds == d(T % N)/ds 
+          == dT/ds % N + T % dN/ds 
+          == &kappa;*N % N + T % d(C''/&kappa;(s))/ds
+          == T % (C'''/&kappa; - C''/&kappa;² * dk/ds)
+          == T % (C'''/&kappa; - N/&kappa; * d&kappa;/ds)
+          == ((T % C''') - B * d&kappa;/ds) / &kappa;;</pre>
+    <p>
+        It might not be obvious, but think about it this way: dB/ds is orthogonal to T: since T is in the cross product, so the cross
+        product is orthogonal to T; B is orthogonal to T anyway, so adding two vectors orthogonal to T gives a result orthogonal to T.
+        Hence it lays in the B/N plane. Also B is a unit vector and stays so along the whole curve, so dB/ds has no direction in B itself,
+        which would not only rotate it, but change its length (let not irritate you by the B * d&kappa;/ds term, it has to be compensated
+        by the subtraction). So dB/ds can only have the direction of N! Thus we have to be able to write it this way:
+    </p>
+    <pre>
+
+    dB/ds = -&tau;(s) * N(s);</pre>
+    <p>
+        with some proper t(s) and the minus - why not? What would that t(s) - let us call it torsion - be? Multiplied by N, we see:
+    </p>
+    <pre>
+
+    -&tau;(s) == dB/ds * N 
+          == ((T % C''') - B*d&kappa;/ds) / &kappa; * N
+          == (T % C''') / &kappa; * N 
+          == (C' % C''') * C'' / &kappa;²;
+
+    &tau;(s) == (C''' % C') * C'' / &kappa;²;</pre>
+
+    <p>
+        That funny %* - thing on the right side is the triple product of which can be proven, that: (V3%V1)*V2 == (V1%V2)*V3, (see Chapter 2) so:
+    </p>
+    <pre>
+
+    &tau;(s) == (C' % C'') * C''' / &kappa;²
+         == (C' % C'') * C''' / C''²;</pre>
+    <p>
+        which might be a little bit complex, but can be perfectly computed, since we have the spat vector library at our fingertips.
+        Now that we have dT/ds and dB/ds, what would dN/ds be?
+    </p>
+    <pre>
+
+    dN/ds == d(B % T) / ds == dB/ds % T + B % dT/ds
+          == -&tau;(s)*N(s) % T + B % &kappa;(s)*N(s)
+          == &tau;(s)*B(s) - &kappa;(s) * T;</pre>
+    <p>
+        Easy peasy. Let's summarize our results so far: For any Curve C(s) parametrized by its own arc length s and being available
+        up to the third derivative, we can define a comoving Frame, where
+    </p>
+    <pre>
+
+    F(s).P = C;
+    F(s).T = C';
+    F(s).N = C''/|C''|;
+    F(s).B = (C' % C'') / |C''|;
+
+    AnglePerlength &kappa;(s) = |C''|;
+    AnglePerlength &tau;(s) = (C' % C'') * C''' / C''²;</pre>
+
+    <p>
+        The vectors are unit vectors and orthogonal to each other and they are this at every point along our curve. Furthermore, their
+        changes follow the following differential equations:
+    </p>
+    <pre>
+
+    dT/ds ==            +&kappa; * N;
+    dN/ds ==  -&kappa; * T               +&tau; * B;
+    dB/ds ==            -&tau; * N;</pre>
+    <p>
+        This is a major result, originally discovered by two french guys, monsieur Frenet and monsieur Serret, some 160 years ago.
+    </p>
+    <p>
+        <b>&kappa; is a rotation of the whole Frame around B</b> since we defined it that way. But one can see it also from the equations, since it doesn't affect B
+        in the third one - the only vectors not affected by a rotation are those along the axis of the rotation; &tau; is a rotation around T for the same
+        reason. The &kappa; and &tau; are scalars calculated from vector equations; they are intrinsic properties of the curve itself and will not depend
+        on the coordinate system.
+    </p>
+    <img src="images/Chapter3Image3.jpg" alt="The comoving TNB - Frame." />
+
+    <p>
+        <b><a href="../../Code/trax/unreal/traxBook/">In the Unreal project</a></b> you'll find a level called: traxBookChapter3_ACurve (see Appendix E, about how to install). It shows an arbitrary curve that
+        runs in three dimensions and a Frame at the start of it. Play the level and note, how the tangent T is always pointing along the curve, while 
+        the main normal N is pointing in the direction of the change of T. The frame is constantly rotating around the curve.
+    </p>
+    <p>
+        <b>There is sometimes the question, why &kappa; can not be negative</b>, like &tau; very well can. This seems to be particular usefull in order to bend a
+        curve to the other side. But other than the torsion, the curvature 'has no direction'. This is because it can have any direction orthogonal to T,
+        which was, why we had to invent the vector N, which then became the direction of the curvature. Locally 1/&kappa;(s) would be the (of course positive)
+        radius of a circle, that would meet the curve in s with the same curvature and tangent; N would point to its center.
+    </p>
+    <p>
+        <b>If &kappa; == 0, the above formulas break down somehow.</b> The level traxBookChapter3_ACurveWithCurvatureZero shows an example of the situation: dT/ds would 
+        become zero, which means we not only go but stay on a straight line locally. This makes our choice
+        of N arbitrary and can lead to sudden 'uncontinuos redefinitions' of N along a curve. We provide a method Curve::ZeroSet() for calculating the
+        parameters of these points. If &kappa; stays 0 for more than one consecutive point along the curve, however we define it, we would tend to stick with an N,
+        and therefor an B. This would mean dB/ds == 0 and therefore from the third Serret/Frenet equation: &tau; == 0, but this is not really neccessary.
+    </p>
+    <p>
+        <b>The TNB-Frame sometimes makes people identify the B vector with some Up direction.</b> This is very tempting, since a curve that completely runs inside a
+        plane would be one that if T and N are inside that plane once, to make them stay the dT and dN can not have any component in B direction,
+        which from the second Serret/Frenet equation means &tau; == 0 and then from the third dB == 0, hence B being constant. Great Up direction! But first this does not
+        work with different planar curves, since each might have its own idea of what is Up, and secondly in general, with nonzero &tau; the B might happily rotate
+        around the curve in any way imaginable. See the next chapter, about how to maintain a stable Up direction with arbitrary curves.
+    </p>
+
+
+    <h2>Some curves</h2>
+   
+    <br />
+    <p>
+        <b>A Line</b> is the shortest curve that connects two arbitrary points in space. Albeit this is a very powerfull 
+        feature, it might turn out to be a little bit cumbersome on the edges as well as in the middle.
+   </p>
+
+    <img src="../TraxAPI/CurveLine.jpg" />
+
+    <br />
+    <p>
+        <b>When Giotto was asked by the Pope</b> for a sample of his artisanship, he drew a perfect Arc - freehand. 
+        The Arc is regarded by many people as the most beautiful of all curves; others worship it because of 
+        its capability to avoid obstacles by circumventing them. The Arc is very well able to connect two points, 
+        even while maintaining one of the tangents, but the second tangent then would be given - all beauty 
+        suffers from limited flexibility. Since the Arc is a plane curve, it performes very poorly when dealing 
+        with three dimensions. 
+    </p>
+    <img src="../TraxAPI/CurveArc.jpg" />
+
+    <br />
+    <p>
+        <b>The Helix</b> is the first choice when it comes to climbing from one level to another, or - when tilted - 
+        to build a looping. It can connect two nearly arbitrarily situated points and albeit it is a little bit 
+        restrictive with its tangents, a full loop has two parallel tangents at the ends - a feature that in many 
+        situations comes in handy.
+    </p>
+    <img src="../TraxAPI/CurveHelix.jpg" />
+
+    <br />
+    <p>
+        <b>The Cubic</b> is a most powerful curve, when it comes to connecting two points and maintaining both tangents. 
+        With railways this is an important feature if it comes to close a gap or make a clean change in level, 
+        since it can work in all three dimensions. On top of this there exist two parameters that allow to further 
+        fine tune the exact path of the curve.On the other hand, since the Cubic maintains very wild ideas about its up direction it is essential to 
+        use it in conjunction with a directional twist.
+    </p>
+
+    <img src="../TraxAPI/CurveCubic.jpg" />
+
+    <br />
+    <p>
+        <b>The Clothoid</b> is a curve with linearly (with respect to its arc length) varying curvature. This is a most 
+        usefull feature in traffic systems, when it comes to smoothly transition between curves of different 
+        curvature. Since it happens to be a plane curve, it is somewhat inflexible if it has to deal with more then 
+        two dimensions.
+    </p>
+
+    <img src="../TraxAPI/CurveClothoide.jpg" />
+
+
+    <br />
+    <p>
+        <b>The Rotator</b> is a curve that constantly rotates (with respect to its arc length) in the plane and 
+        perpendicular to it. Its strong side is the ability to determine the direction of the start and end tangents 
+        as well as its simplicity of concept. It works in a predictable manner especially if the rotation into the 
+        up direction stays reasonably small. On the other hand it can be a very cumbersome curve if used for tasks 
+        that it aint made for.
+    </p>
+
+    <img src="../TraxAPI/CurveRotator.jpg" />
+    <img src="../TraxAPI/CurveRotatorWithOffset.jpg" />
+
+    <p>
+        The Rotator raises the question, wether Rotators can be appended to each other, so that the total rotating 
+        angles add up in a straightforeward manner. Unfortunately in general the answere is: no. The RotatorChain 
+        cures that, since it defines a series of Rotators with respect to the same rotational axes.
+    </p>
+
+    <img src="../TraxAPI/CurveRotatorChain.jpg" />
+
+
+    <h2>References</h2>
+
+
+    <pre><code class="language-c++">
+    </code></pre>
+
+
+
+    <p style="text-align: center;"><a href="chapter2.html"><<< previous</a> | <a href="contents.html">contents</a> | <a href="chapter4.html">next >>></a></p>
+</body>
+</html>

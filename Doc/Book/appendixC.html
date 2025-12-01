@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Appendix C - Parallel Tracks</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        body {
+            font-size: 1.2em;
+            line-height: 1.5em;
+            text-indent: 4em;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Appendix C - Parallel Tracks</h1>
+    <p style="text-align: center;"></p>
+
+    <blockquote style="text-align: right; font-size: 0.9em;">
+        <i>
+            "That, if a straight line falling on two straight lines makes the interior<br />
+            angles on the same side less than two right angles, the two straight<br /> lines, if produced indefinitely, meet on that side on which<br />
+            the angles are less than two right angles."
+        </i><br /> - Euclid
+    </blockquote>
+
+    <p>
+        <b>Let us define a parallel track</b> to a given one, by shifting the position of the original in its twisted TNB-Frame Fw by some
+        constant 2D vector {h,v} in the NB-plane at every point:
+    </p>
+    <pre><code>
+        Cp(s) = Fw.P(s) + h * Fw.N(s) + v * Fw.B(s);
+    </code></pre>
+    <p>
+        Here Cp(s) would make a new, parallel curve for Fw(s) (Fw.P(s) == C(s), the original track's curve). Note that in
+        general s is not the arc length for the parallel curve! Its the arc length of the original. So we have to implement
+        it using our integrator trax::Curve_Imp with the ParallelFunction being our template parameter:
+    </p>
+    <pre><code>
+        class ParallelFunction{
+        public:
+            Position&lt;Length&gt; P( Real u ) const;
+            Vector&lt;Length&gt; D1( Real u ) const;
+            Vector&lt;Length&gt; D2( Real u ) const;
+            Vector&lt;Length&gt; D3( Real u ) const;
+        };
+    </code></pre>
+    <p>
+        For such a function we call the parameter 'u' and not 's' to make clear it is not the arc length of the curve in
+        question. For the intergrator we will need the first, D1, second, D2, and third, D3 derivative for the function's
+        parameter. The difficulty here originates in the fact that the twist w will not be constant over the original curve
+        but will vary with s, so be w(s). The twisted Frame Fw is gotten from the untwisted one F by:
+    </p>
+    <pre><code>
+        Fw.P = F.P;
+        Fw.T = F.T;
+        Fw.N =  cos(w) * F.N + sin(w) * F.B;
+        Fw.B = -sin(w) * F.N + cos(w) * F.B;
+    </code></pre>
+    <p>
+        This makes Cp(s):
+    </p>
+    <pre><code>
+        Cp(s) = C(s) + (h*cos(w) - v*sin(w))*F.N + (h*sin(w) + v*cos(w)) * F.B;
+    </code></pre>
+    <p>
+        Using Frenet-Serret, the first derivative dCp(s)/ds would calculate as:
+    </p>
+    <pre><code>
+        dCp(s)/ds = F.T(s) + dw/ds * (-h*sin(w) - v*cos(w)) * F.N
+                           + (h*cos(w) - v*sin(w)) * (-k*F.T + t*F.B)
+                           + dw/ds * (h*cos(w) - v*sin(w)) * F.B
+                           + (h*sin(w) + v*cos(w)) * (-t*F.N);
+
+                  = (1 - k * (h*cos(w) - v*sin(w))) * F.T
+                    + dw/ds * ((-h*sin(w) - v*cos(w)) * F.N + (h*cos(w) - v*sin(w)) * F.B)
+                    + t * ((h*cos(w) - v*sin(w)) * F.B - (h*sin(w) + v*cos(w)) * F.N;
+
+                  = (1 - k * (h*cos(w) - v*sin(w))) * F.T
+                    + dw/ds * (-v * (cos(w) * F.N + sin(w) * F.B) + h * (-sin(w) * F.N + cos(w) * F.B)
+                    + t *     (-v * (cos(w) * F.N + sin(w) * F.B) + h * (-sin(w) * F.N + cos(w) * F.B);                
+
+                  = (1 - k * (h*cos(w) - v*sin(w))) * F.T
+                    + dw/ds * (-v*Fw.N + h*Fw.B)
+                    + t * (-v*Fw.N + h*Fw.B);
+
+                  = (1 + k * (v*sin(w) - h*cos(w))) * Fw.T
+                    - v * (dw/ds + t)               * Fw.N
+                    + h * (dw/ds + t)               * Fw.B;
+
+                  = (1 + k * (v*sin(w) - h*cos(w))) * Fw.T - (t + dw/ds) * (v*Fw.N - h*Fw.B);
+    </code></pre>
+    <p>
+        Do not think that the (t + dw/ds) deviation of the 'parallel' tangent, Fp.T = dCp(s)/ds / |dCp(s)/ds|,
+        from the parallelity to Fw.T might be a calculation error, or even being small and neglectable in
+        general: imagine a straight track with some real amount of twist around it, say a screw track. There
+        would be no parallelity whatsoever; in fact Fp.T might become close to orthogonal to Fw.T. But even
+        with dw/ds being 0, you recognize that the curve's torsion itself prevents those vectors from being
+        parallel. This is quite surprising a result: the point-to-point parallel to a curve in three
+        dimensional space and that curve in general will not have parallel tangent vectors in the respective
+        points. This is owed to the three dimensionality of our problem: while in two dimensions a 'parallel'
+        would have to be orthoparallel or antiparallel - see quote, which is clearly wrong in three dimensions -
+        the truth is, that lines can be unparallel without intersecting. It is called 'windschief' (crooked).
+    </p>
+    <p>
+        Note that we get parallel tangents if and only if the twist balances the torsion, so (t + dw/ds) == 0.
+        That would be for a twist of w(s) = -&#8747;t(s)ds, being the total torsion angle along the original track's curve.
+    </p>
+    <p>
+        Also note that for suitable v, h the first term becomes even antiparallel to Fw.T. This for instance
+        happens when the horizontal distance gets bigger than the curve's radius: in that case the mapping goes
+        through a focal point (see below). So there is virtually no direction that Fp.T can not show up with.
+    </p>
+    <p>
+        Now we face a serious problem: we have to calculate D2 and even D3. After the tour de force to calculate
+        D1 that seems - well not impossible, you always can derive functions - but somehow damaging our brains.
+        So before we go where it really hurts, we should ask ourselves: isn't there a simpler way?
+    </p>
+    <p>
+        <b>A simpler way</b> is to yield the second and third derivatives by numerical computation. But that
+        approach is ill fated as we found out when we actually calculated the D2 and tried to calculate the
+        curvature kp with it, by:
+    </p>
+    <pre><code>
+        kp = sqrt(D2² - (D1D2)²/D1²)/D1²;
+    </code></pre>
+    <p>
+        For some important curves like the Cubics in some cases, the minus in this equation evaluates
+        a very small value by subtracting two very big ones and that makes the result unsignificant
+        on computing machines, even if we use double precision for our floating-point arithmetic. If
+        we could compute D2 exactly, be it by an analytic formula or by numerics, we would not be able
+        to get a reasonable kp from it, leave alone that we still would not have a D3 and if we would,
+        might encounter similar problems with calculating the torsion tp. As always if it comes to
+        curves and we dug deep into a hole of doubt and desperation: remember the Frenet–Serret formulas!
+    </p>
+    <p>
+        There it is, written in clear letters, what kp and tp are supposed to be:
+    </p>
+    <pre><code>
+       Np = dTp/ds / |dTp/ds|;
+       Bp = Tp % Np;
+       kp =  dTp/ds * Np;
+       tp = -dBp/ds * Np;
+    </code></pre>
+    <p>
+        so we only have to evaluate dTp/ds and dBp/ds numerically, using our CurveTInterpolator_Imp
+        integrator. This integrator takes a curve P(u) and it's tangent T(u), samples the curve to
+        parametrize it with its arc length s, and then numerically computes the Np, Bp, kp, tp from
+        the above formulas.
+    </p>
+    <p>
+        There are two potential problems with this approach, depending on the situation in which
+        it gets applied: first it needs the original curve being permanently available. That might
+        not be a problem or be even a feature when the parallel is changing dynamically with the
+        original. But sometimes it only adds complexity to a system. Secondly, this approach might
+        become computational demanding, especially when parallels of parallels are taken. To
+        overcome these issues, the parallel curve can be sampled (see Approximations, below).
+    </p>
+    <p>
+        <b>There is another definition of parallelity</b> that makes sense especially in railroading: the
+        parallel relative to the plane that can be gotten by rotating the frame to the Up vector, like a
+        directional twist does, and then moving the corresponding point along Fw.N and Up:
+    </p>
+    <pre><code>
+        w = -atan( Up*F.N / Up*F.B ); // directional twist
+
+        Cp(s) = Fw.P(s) + h * Fw.N(s) + v * Up;
+
+        dCp(s)/ds   = F.T(s) + h * dFw.N(s)/ds;
+                    = F.T(s) + h * d( cos(w) * F.N + sin(w) * F.B )/ds;
+                    = F.T(s) + h * ( -sin(w)*dw/ds * F.N + cos(w)*dw/ds * F.B + cos(w) * dF.N/ds + sin(w) * dF.B/ds );
+                    = F.T(s) + h * ( -sin(w)*dw/ds * F.N + cos(w)*dw/ds * F.B + cos(w) * (-k*F.T + t* F.B) + sin(w) * (-t*F.N) );
+                    = F.T(s) + h * ( -k*cos(w) * F.T - (dw/ds+t)*sin(w) * F.N + (dw/ds+t)*cos(w) * F.B)  );
+                    = (1 - k * h*cos(w)) * F.T + (t + dw/ds) * h * (-sin(w) * F.N + cos(w) * F.B);
+
+                    = (1 - k * h*cos(w)) * Fw.T + (t + dw/ds) * h * Fw.B;
+    </code></pre>
+    <p>
+        The t + dw/ds might be suspected to be null. The twist w's purpose is to counterbalance the curve's twist t after all. 
+        But that is actually not true:
+    </p>
+    <pre><code>
+    dw/ds   = d/ds (-atan( Up*F.N / Up*F.B ));
+            = - 1 / (1 + ( Up*F.N / Up*F.B )²) * d/ds (Up*F.N / Up*F.B);
+            = ...
+            = k * ( Up*F.T / Up*F.B ) / (1 + ( Up*F.N / Up*F.B )²) - t;
+
+        ->    t + dw/ds = k * ( Up*F.T / Up*F.B ) / (1 + ( Up*F.N / Up*F.B )²);
+    </code></pre>
+    <p>
+        In the case of Up*F.B == 0 it follows w = -pi/2 and t + dw/ds = 0. If Up*F.B == 1, we also have w = 0 and t + dw/ds = 0.
+    </p>
+    <p>
+        This also can be used with our CurveTInterpolator_Imp integrator.
+    </p>
+    <p>
+        <b>If we have no torsion and no twist</b>, the curve would be flat in the plane and therefore its parallel, too. We can calculate the
+    </p>
+    <pre><code>
+        D1 = dCp(s)/ds = (1-k*h) * F.T;
+
+        D2 = d²Cp(s)/ds = dk/ds * h * F.T + (1-k*h) * dF.T/ds;
+                        = dk/ds * h * F.T + (1-k*h) * k * F.N;
+    </code></pre>
+    <p>
+        this way we can calculate the curvature kp to be;
+    </p>
+    <pre><code>
+        kp  = sqrt(D2² - (D1D2)²/D1²)/D1²;
+
+        D1² = (1-k*h)²;
+        D2² = (dk/ds)² * h² + (1-k*h)² * k²;
+        D1D2² = (1-k*h)²*(dk/ds)² * h²;
+
+        kp  = sqrt( (dk/ds)² * h² + (1-k*h)² * k² - (dk/ds)² * h²) / (1-k*h)²;
+            = sqrt( (1-k*h)² * k² ) / (1-k*h)²;
+            = |((1-k*h) * k )| / (1-k*h)²;
+            = |k / (1 - k*h)|;  
+    </code></pre>
+    <p>
+        A relationship that is very plausible for plane curves. It shows, how the curvature of the
+        parallel grows infinitely big while approaching a focal point for k*h == 1, after which a
+        somehow mirrored curve with finite curvature would make up the 'parallel'.
+    </p>
+
+   <p>
+        <b>There is an important consequence</b> for the curvature of a parallel: if 
+        the original curve has a directional twist and has a zero point with curvature k == 0_1Im, then 
+        the corresponding point of the point-to-point parallel will also be such a zero point with 
+        kp == 0_1Im.
+    </p>
+
+    <p>
+        Proof: since k always is >= 0, if at one point of a curve it holds k == 0, then the dk/ds 
+        has to be 0 at that point, too. For a directional twist it also holds (t + dw/ds) == 0 
+        and d(t + dw/ds)/ds == 0 at that point (see Chapter Curves). So D1 at that point 
+        will become Fw.T and D2 will be dFw.T/ds = dF.T/ds = k*F.N == 0. From the above 
+        formular for the curvature it follows kp == 0 at the corresponding point. Note that as 
+        soon as another twist than a constant one is added to the directional twist, this 
+        relationship no longer holds.
+    </p>
+
+
+    <h2>The Up Direction</h2>
+
+    <p>
+        <b>Just having the parallel curve</b> does not mean that it comes with a satisfying up
+        direction. For any cuve C(s), curve theory develops its very own ideas about how it directs
+        T,N,B (see Chapter Curves). So we will have to come up with our own definition about what
+        is 'up' for a parallel track. Our solution here is to apply a twist that rotates the B to
+        what is closest to the original track's Fw.B direction. Seems reasonable, but note that
+        it is another stipulation about what a parallel track actually is.
+    </p>
+
+    <p>
+        Parallels to curves with zero points (k=0) in some situations will have such a distinct 
+        zero point, too (see above). But even if they do not, and just come close to it, the 
+        parallel tends to rotate its TNB frame by 180deg over a short length of the track. This 
+        will cause problems when the original track is not available:
+    </p>
+
+    <h2>Approximations</h2>
+    <p>
+        If for some reason we are not able to maintain the original track of a parallel, or - generally speaking - 
+        the evaluation of a track is not an option, we might want to sample it. Meaning, we take track data
+        at distinct points along its path and later try to restore the original track by interpolating 
+        between those samples somehow. We also have to sample the necessary twist.
+    </p>
+
+    <p>
+        <b>Spline Interpolation</b> is a textbook technique of curve interpolation, if a series of points
+        that lay on the curve is given. It delivers a C2 differentiable curve, and we might take the total
+        angle from the curvature as a threshold for where to set the control points for the segments:
+    </p>
+
+    <pre><code>
+       seg_end
+       &#8747; k(s)*ds <= maxDeltaAnglePerSection;
+       seg_start
+    </code></pre>
+
+    <p>
+        over the curvature k of the parallel, which we can calculate from the tangents by |T(s+ds) - T(s)| == k(s) * ds (see above).
+    </p>
+
+    <p>
+        <b>A Sampled Curve</b> in general would take all the values { Fi, si, ki, ti } at respective points
+        along a given curve and then interpolate these values for any s in between the samples. During sampling,
+        we can constantly check the quality of the approximation; i.e., wether the interpolated position and
+        normal direction deviate less then some thresholds and take the next sample at just the point, so the thresholds
+        are kept.
+    </p>
+
+    <p>    
+        The interpolation
+        is done best by linearly interpolating the k and t and then using Frenet–Serret in an integration to
+        calculate the F:
+    </p>
+
+    <pre><code>
+    F = Fi;
+    ds = integrator_step;
+    s = si;
+    while( s < s(i+1) )
+    {
+        F.P += F.T * ds;
+        F.T += k(s) * F.N * ds;
+        F.N += (-k(s) * F.T + t(s) * F.B) * ds;
+        F.B += -t(s) * F.N * ds;
+
+        s += ds;
+    }
+    </code></pre>
+
+    <p>
+        This approach uses a maximum of information available about curves. The drawback of the method 
+        is that as with the spline solution it is hard to interpolate the up direction of the parallel 
+        track correctly, since around turning points heavy rotations might occure in the curve, which 
+        are not interpolated correctly by a sampled twist. So both the methods, we described so far will
+        tend to fail on some curves, especially when the curvature becomes small. If this is an issue, we 
+        provide a somewhat less elegant but more stable method:
+    </p>
+
+    <p>
+        <b>A Polygonal Chain</b> is an ordered series of points Pi in space connected by straight lines.
+        It can interpolate any curve by taking these points as samples of the original curve. This is especially
+        sensible since on rendering a track we resort to such linear segments anyway (see Appendix A).
+    </p>
+    <p>
+        Between the vertices the positions along the curve get linearly interpolated, i.e. the curve
+        is a series of line segments. The curve by definition is parametrized by arc length; we also
+        provide the tangents T of the curve to approximate, since that can be calculated for parallels
+        in closed form (see above). To make the curve more usable for dynamics, we keep calculating
+        curvatures ki and torsions ti at the vertices by (see Serret-Frenet):
+    </p>
+
+    <pre><code>
+	    Pi = (Fw.P + h * Fw.N + v * Fw.B)|si;
+	    Ti = Normalize( (((1 - k * h*cos(w)) * Fw.T + (t + dw/ds) * h * Fw.B)|si ).second;
+	    Ni = Normalize( (Ti+1 - Ti) - (Ti+1 - Ti) * Ti * Ti ).second = Normalize( Ti+1 - Ti+1*Ti * Ti ).second;
+	    Bi = Ti % Ni;
+	    dsi = |Pi+1 - Pi|;
+	    ki = |Ti+1 - Ti| / dsi;
+	    ti = (Bi - Bi+1) * Ni / dsi;
+    </code></pre>
+
+    <p>
+        We sample the parallel curve at a rate given by some 'minPointDistance' - along the parallel, of course -
+        using the sum of the ds between the samples as a value to compare with that threshold. And then we use
+        the Douglas-Peucker-Algorithm [<a href="#[1]">1</a>] to reduce the number of vertices without violating
+        some 'maxDeviation' threshold from the original parallel. For each surviving sample, we calculate the
+        above data that make up our PolygonalChain. To get smooth values in between the sample point, e.g. for
+        dynamics, we (linearly) interpolate the dynamic values between the sample points.
+    </p>
+    <p>
+        Note that parallels to an already approximated parallel pretty fast deteriorate in some cases.
+    </p>
+
+    <p>
+        <b>A Cubic Hermite Spline</b>
+    </p>
+
+    <h2>References</h2>
+    <a name="[1]"></a>[1]  <a href="https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm">"Ramer-Douglas-Peucker Algorithm"</a>, Wikipedia.
+
+    <p style="text-align: center;"><a href="appendixB.html"><<< previous</a> | <a href="contents.html">contents</a> | <a href="appendixD.html">next >>></a></p>
+</body>
+</html>

@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Appendix E - Getting Visual Studio and the Unreal Engine</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        body {
+            font-size: 1.2em;
+            line-height: 1.5em;
+            text-indent: 4em;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Appendix E - Getting Visual Studio and the Unreal Engine</h1>
+    <p style="text-align: center;"></p>
+
+    <blockquote style="text-align: right; font-size: 0.9em;"><i>"It ain't a song until you sing it."</i><br /> - Elvis Presley</blockquote>
+
+    <p>
+        <b>Throughout this book</b> we use the Microsoft Visual Studio / Epic's Unreal Engine / NVidia PhysX [<a href="#[1]">1</a>][<a href="#[2]">2</a>][<a href="#[3]">3</a>] toolchain; it does not require
+        to pay a license fee at least for learning and for development as individual developer or as a small team (see the respective licenses for
+        details). We describe
+        the situation on a Windows10 desktop computer, but it is perfectly possible to set up this toolchain for other platforms.
+        For serious development of especially a new simulation project, we strongly recommend to stay up to date to the latest stable releases
+        of these tools. So if this document shows version numbers that are slightly out of date they are understood to to substituted by
+        the most recent ones if not explicitely stated otherwise.
+    </p>
+
+    <p>
+        <b>Getting Microsoft Visual Studio 2019</b>:
+        <ol>
+            <li>
+                Download Microsoft Visual Studio Community 2019 installer from [<a href="#[1]">1</a>].
+            </li>
+            <li>
+                In the installer specify the workloads: 'Desktop development with C++' and 'Game development with C++'.
+                In the details make sure that the latest buildtools (e.g. 'MSVC v142 - VS 2019 C++-x64/x86 (v14.24)' or later), 
+                the latest Windows 10 SDK and 'C#' are activated.             
+            </li>
+            <li>
+                Install Visual Studio, preferrably on your fastest SSD drive.
+            </li>
+        </ol>
+    </p>
+
+    <p>
+        <b>Getting Epic's Unreal Engine</b>: the Unreal Engine is an engine and editor for producing games. One can use it as binary
+        programm, downloadable from [<a href="#[2]">2</a>], or one can download its source code from [<a href="#[4]">4</a>] and compile
+        it by ones own. We recommend the latter. Within the editor C++ scripts can be written in C++ language (using a precompiler to 
+        expand some crucial macros). Compiling the engine gives the advantage of having debug access to the engines source files from 
+        user created scripts and to be able to compile a whole debug version of the engine for testing purposes.
+    </p>
+    <p>
+        To be able to compile the engine and the user projects with the latest VS2019 some tweaks have to be applied, which we will descripe 
+        in the following [<a href="#[5]">5</a>]:
+
+        <ol>
+            <li>
+                Download Epic's Unreal Engine from [<a href="#[4]">4</a>]. If you use GitHub for Windows as explained there, you can 
+                update the project lateron easily.
+            </li>
+            <li>
+                Execute Setup.bat.
+            </li>
+            <li>
+                Run GenerateProjectFiles.bat with the -2019 flag, i.e. GenerateProjectFiles.bat -2019.
+            </li>
+            <li>
+                Open the generated UE4.sln file: VisualStudioVersion should be set to 16. Look for this:
+                <pre><code>
+                    # Visual Studio Version 16
+                    VisualStudioVersion = 16.0.28315.86
+                </code></pre>
+            </li>
+            <li>
+                Open the UE4.sln file in Visual Studio 2019.
+            </li>
+            <li>
+                Set configuration to Development Editor, 64-bit, Windows.
+            </li>
+            <li>
+                Build the engine.
+            </li>
+            <li>
+                Run the editor and make sure that under Edit->Editor Preferences->General->Source Code it shows 'Visual Studio 2019'. Hit 
+                'Set as Standard' button.
+            </li>
+        </ol>
+
+
+    </p>
+    <p>
+
+
+    </p>
+
+
+    <p>
+        If Intellisense sqiggles do not work correctly, go to the traxBook - project folder
+        and right-click on 'traxBook.uproject', hit 'Generate Visual Studio project files'.
+        This will put all the include pathes to your project's NMake -> Include Search Path
+        section.
+    </p>
+
+    <br />
+    <p>
+    </p>
+
+    <h2>References</h2>
+    <a name="[1]"></a>[1] <a href="https://visualstudio.microsoft.com/">Microsoft Visual Studio</a>, Microsoft Corporation, 2020.<br />
+    <a name="[2]"></a>[2] <a href="https://www.unrealengine.com">Unreal Engine</a>, Epic Games, Inc., 2010.<br />
+    <a name="[3]"></a>[3] <a href="https://developer.nvidia.com/physx-sdk">NVidia PhysX</a>, NVIDIA Corporation, 2020<br />
+    <a name="[4]"></a>[4] <a href="https://github.com/EpicGames/UnrealEngine/">Unreal Engine on GitHub.</a><br />
+    <a name="[5]"></a>[5] <a href="https://horugame.com/unreal-engine-4-22-with-visual-studio-2019/">Unreal Engine 4.22 with Visual Studio 2019</a> David Nadaski © 2019.<br />
+
+
+    <p style="text-align: center;"><a href="appendixD.html"><<< previous</a> | <a href="contents.html">contents</a> | <a href="appendixF.html">next >>></a></p>
+</body>
+</html>

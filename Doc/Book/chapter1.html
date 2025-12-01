@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Chapter 1 - Numbers</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        body {
+            font-size: 1.2em;
+            line-height: 1.5em;
+            text-indent: 4em;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chapter 1 - Numbers</h1>
+    <p style="text-align: center;"></p>
+
+    <blockquote style="text-align: right; font-size: 0.9em;"><i>"Never be so sure about your goals that you don't accept something better."</i><br /> - Chris Voss</blockquote>
+
+    <p>
+        <b>Calculations in physics</b> not only deal with stark-naked numbers (for tranquility of mind we call them 'values'),
+        but they are generally also connected with two other aspects: dimension and unit. The dimension is the
+        quality that is dealt with, be it a length in space, a time span or an inertial mass or any combination of these.
+        The units on the other hand specify the quantity we are measuring, telling us that 1000 are actually 1000kg, not 1000t.
+        Basically the trax library automated the lecture of our old physics teacher, who said: check the dimensions of your result and
+        then reason about its magnitude.
+    </p>
+    <p>
+        One wouldn't believe how much can go wrong on adding up two numbers.[<a href="#[1]">1</a>],[<a href="#[2]">2</a>] There were several 
+        very costly accidents due to software failure in the past (luckily nobody got hurt). As it turned out, calculations are a common
+        source of bugs due to mistaken units or dimensions of values. This brought the luminaries of our field to suggest a way for typesafe
+        handling of physical values. We make use of that partly for bug reduction, partly because it looks neat, but mostly because it
+        gives us the possibility to adjust the range of the actual floating point calculations lateron.
+    </p>
+    <p>
+        For EEP, the smallest value in length that would make any difference to the user, trax::epsilon__length, would be something 
+        about 1cm. From this the trax::plausible_maximum_length can be estimated to be about 10km for 32bit trax::Real values, since these 
+        have 7 digits precision and 1.000.000cm are 10km. At that distance from the origin, the calculations would start to produce 
+        inaccurate results with respect to the 1cm difference. It is not accidential, that the biggest layouts ever build in EEP are 
+        about 20km in diameter.
+    </p>
+    <p>
+        <b>The units that are actually used by the trax library</b> are specified by trax::meters_per_unit; as it turned out,
+        for optimal results, it does not matter whether this value is 0.01 or 1 or rather something like 15 - the floating point arithmetic
+        always gives us the same precision with our 1cm epsilon as long as we use a 32bit floating point value. Even if we would 
+        calculate in lightyears, a high negative exponent would shift all the values into our 1cm to 10km range and the accuracy stays the same.
+        Since we deal with locomotives, I tend to use meters rather than centimeters as unit value. I also thought about 10, to avoid multiplications 
+        when it comes to the generation of graphical data. But for example with Unreal we align to the game engines centimeter interpretation.        
+    </p>
+    <p>
+        We tend to call the units that trax actually uses 'units'.
+    </p>
+
+
+    <h2>Literals</h2>
+    <p>
+        <b>In code you can specify a dimensionated value</b> by using their names like Mass, Length, Velocity and so on. Specify a mass of 60.4kg like this:
+    </p>
+    <pre><code class="language-c++">
+        using namespace trax;
+
+        Mass mass1 = 60.4_kg; [<a href="#[3]">3</a>]
+    </code></pre>
+    <p>
+        the underscore followed by a typical units abbreviation is a user defined literal, as possible from C++11 on.[<a href="#[4]">4</a>] There are plenty of them defined in
+        the trax namespace. With this it is also possible to mix units in an addition (but of course not dimensions):
+    </p>
+    <pre><code class="language-c++">
+        Mass mass2 = 60_kg + 400_g;
+    </code></pre>
+    <p>
+        all of the expectable mathematical operators are defined for dimensionated values, preserving their respective dimensions:
+    </p>
+    <pre><code class="language-c++">
+        Mass mass3 = mass1 + mass2;
+        assert( common::Equals( mass3, 120.8_kg, 1_g ) );
+
+        One ratio = mass1 / mass2;
+        assert( common::Equals( ratio, 1_1, _1(epsilon) ) );
+    </code></pre>
+    <p>
+        One is the dimensionated value type for a value with no dimensions. This has to be distinguished from a simple Real, albeit it converts
+        smoothly with it: the One is a dimensionated value with dimension none; a Real is a value without dimensionated value support. The _1 is
+        the literal for a value with dimension One.
+    </p>
+    <p>
+        <b>The important point about dimensionated values</b> is not how many operators and type conversions or math functions like abs(), pow() or sqrt() are
+        defined for them - be assured, there are plenty - the important point in general is not what they allow you to calculate, but what they don't:
+    </p>
+    <pre><code class="language-c++">
+        Mass mass = 3_kg + 10_cm;  // compiler error, or:
+
+        Length length = mass + mass2; // compiler error
+    </code></pre>
+    <p>
+        All these endeavours to calculate something that will clearly be wrong are prohibited by the compiler with unnerving compiler errors; admittetly heavy to read, but
+        what would that be a punishment if it would be otherwise? So if you get pages of compiler errors, start with the first one and you'll soon find out that you
+        did something of the above. On the other hand if a complicated calculation - maybe even including Vectors<> and Positions<> (see Chapter2) - passes the compiler
+        cleanly, you can be assured that it calculates something reasonable.
+    </p>
+    <p>
+        <b>English kniggit's units</b> combine seamlessly:
+    </p>
+    <pre><code class="language-c++">
+        Length length1 = 7_m;
+        Length length2 = length1 + 10_cm + 100_yd - 1_mi;
+    </code></pre>
+
+    <h2>Output</h2>
+    <p>
+        <b>The 'put to' and 'get from' operators</b> operator<< and operator>> are supplied for dimensionated values to handle simple output and input.
+        They will deal with units correctly:
+    </p>
+    <pre><code class="language-c++">
+        std::cout << length2 << std::endl;
+        // prints: -1510.80m
+    </code></pre>
+    <p>
+        The fact that it prints meters is due to the default settings of the units that will be used by the trax library. This can be changed like this:
+    </p>
+    <pre><code class="language-c++">
+        std::cout << as(_km,length2) << ", " << length1 << std::endl;
+        // prints: -1.51080km, 7m
+    </code></pre>
+    <p>
+        To change units for all subsequent outputs to a stream, do this:
+    </p>
+    <pre><code class="language-c++">
+        std::cout << _km << length2 << ", " << length1 << std::endl;
+        // prints: -1.51080km, 0.00700km
+        // but:
+        ostringstream stream;
+        stream << length2;
+        assert( stream.str() == "-1510.80m" );
+    </code></pre>
+    <p>
+        so only the one stream the _km was sent to will be affected. To restore a stream to make it use the default units again, call:
+    </p>
+    <pre><code class="language-c++">
+        std::cout << _Length;
+    </code></pre>
+    <p>
+        <b>To change the global default output units</b> of the trax library, use the respective SetDefaultStreamOf() function. Note that this concerns the default
+        for the output only, neither the input default nor the units used for internal computations are changed by that:
+    </p>
+    <pre><code class="language-c++">
+        SetDefaultStreamOfLength( _yd );
+
+        std::cout << length2 << ", " << length1 << std::endl;
+        // prints: -1652yd -8.5in, 7yd 23.6in
+ 
+        std::ostringstream stream2;
+        stream2 << length2;
+        assert( stream2.str() == "-1652yd -8.5in" );
+    </code></pre>
+
+    <h2>Input</h2>
+    <p>
+        <b>Input is handled accordingly:</b> if the system encounters a valid dimension for a value it will use that; if not it will assume the unit
+        to be the default stream reading unit. Try to input 3 meters in several ways: 3m, 300cm, 3:
+    </p>
+    <pre><code class="language-c++">
+        Length length3;
+        std::cin >> length3;
+        assert( length3 == 3_m );
+        std::cout << length3 << std::endl;
+        // prints: 3yd 10in
+    </code></pre>
+    <p>
+        It prints the yards since we set them to be the default output unit for length. This raises a question: what if we want to put in the value
+        as 3yd 10in? With the above code only the first value will be taken into account and the assertion fails. The solution here is to get a whole
+        line from std::cin and then use an input string stream to add up all the numbers:
+    </p>
+    <pre><code class="language-c++">
+        std::cin >> std::ws;
+        std::string str;
+        std::getline( std::cin, str );
+        std::istringstream stream3{ str };
+        length3 = 0_m;
+        for( Length val; stream3 >> val; length3 += val )
+            ;
+        std::cout << length3 << std::endl;
+        // prints: 3yd 10in
+    </code></pre>
+    <p>
+        This would then work for 2m 5cm also. To make getline()[<a href="#[5]">5</a>] wait for input, we had to remove some white spaces from the stream first. Note the for-loop,
+        which is a common pattern in input stream handling.
+    </p>
+    <p>
+        <b>But what if we have a naked number</b>, but we know that it is of a certain unit which is not the default input unit of the trax library? We do not
+        want to provide the corresponding _X() and as() functions, since their behaviour would be ambiguous:
+    </p>
+    <pre><code class="language-c++">
+        std::cin >> as(_km,length3); // won't compile
+    </code></pre>
+    <p>
+        Would this read an input of 3m as 3_m or 3_km? One can argue for both. Instead to read a naked number one has to reset the default input unit. There
+        are helpers available to make sure that the default is propperly reset after being used. Try input a naked 3:
+    </p>
+    <pre><code class="language-c++">
+        SetDefaultStreamOfLength( _m );
+        {
+            common::Resetter&lt;StreamInLength&gt; resetter{ DefaultStreamInLength, _km };
+            std::cin >> length3;
+            std::cout << length3 << std::endl;
+            // prints: 3000m
+        }
+    </code></pre>
+    <p>
+        The Resetter takes care that the default will be reset to the original value after leaving the scope. Resetters are especially usefull 
+        when dealing with angles; since they have dimension One, the streaming methods would also apply to One, streaming a literal '1' as pi/180 
+        if DefaultStreamInAngle is set to _deg. The resetter pattern of course might also be used for output.
+    </p>
+    <p><b>For simple string conversion</b> stl - like methods like trax::to_string and trax::sto are given. Note that with Unreal we use this system to make the railUNREAL
+    library dimensions aware.</p>
+
+    <h2>Dealing with non dimensionated values</h2>
+    <p>
+        <b>With indroducing a new system</b>, the difficulty comes with the question of how it combines with the existing world. In an existing source code you might have a Real
+        value, named 'myLength' with a value of 18.0f; you know it is a length in centimeters and you wonder how to read it into a Length variable. This is how:
+    </p>
+    <pre><code class="language-c++">
+        Real myLength = 18.f;
+        Length length4 = _cm(myLength);
+        assert( common::Equals( _m(length4), 0.18f, epsilon ) );
+        std::cout << "My length: " << _cm << length4 << std::endl; 
+        // prints: My length: 18cm 
+    </code></pre>
+    <p>
+        The assert statement shows how to read it out again in arbritray units (meters in this case), to meet the expectations. Every time you use these _X() functions
+        it should trigger you to consider making your system units and dimensions aware instead. In a probiotic environment dimensionated values are viral.
+    </p>
+
+    <h2>References</h2>
+    <a name="[1]"></a>[1] <a href="https://www.nytimes.com/1983/07/30/us/jet-s-fuel-ran-out-after-metric-conversion-errors.html">"Jet's Fuel Ran Out After Metric Conversion Errors", The New York Times, July 30, 1983</a>
+    The mechanic was supposed not only to do a calculation from volume to wheight, but at the same time from imperial to metric units. Better leave this to the programmer of your trust.<br />
+    <a name="[2]"></a>[2] <a href="http://edition.cnn.com/TECH/space/9909/30/mars.metric.02/">"Metric mishap caused loss of NASA orbiter", CNN September 30, 1999</a> The very fact that the probe reached
+    an orbit around Mars after all, shows that astronavigation does not prove Newton's laws.<br />
+    <a name="[3]"></a>[3] <a href="code/Chapter1Program1.cpp">Chapter1Program1.cpp</a>
+    A sample program that runs the code from this chapter.<br />
+    <a name="[4]"></a>[4] <a href="https://en.cppreference.com/w/cpp/language/user_literal">"User-defined literals (since C++11)", cppreference.com</a><br />
+    <a name="[5]"></a>[5] <a href="https://en.cppreference.com/w/cpp/string/basic_string/getline">"std::getline", cppreference.com</a><br />
+
+    <p style="text-align: center;"><a href="contents.html"><<< previous</a> | <a href="contents.html">contents</a> | <a href="chapter2.html">next >>></a></p>
+</body>
+</html>

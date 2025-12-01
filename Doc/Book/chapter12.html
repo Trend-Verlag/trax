@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Chapter 12 railOmniverse</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        body {
+            font-size: 1.2em;
+            line-height: 1.5em;
+            text-indent: 4em;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chapter 12 railOmniverse</h1>
+    <p style="text-align: center;"></p>
+
+    <blockquote style="text-align: right; font-size: 0.9em;"><i>"Trend is happy to provide for your wants<br /> - under a license suited to your needs."</i><br /> - Trend Verlag</blockquote>
+
+    <br>
+    <h2>Introduction</h2>
+
+    <p>
+        <b>railOmniverse is an extension</b> to the <a href="https://developer.nvidia.com/omniverse">NVIDIA Omniverse Environment</a> [<a href="#[1]">1</a>].
+        railOmniverse makes available railroad simulation functionality from the Trend trax library to Windows and Linux platforms.
+    </p>
+
+    <p>
+        The general functionality, the trax library provides, is described in this book; an overview
+        is given with the article <a href="https://www.trendverlag.com/Trax/Doc/BlogArticle/traxLibrary.html">'Trax Track Library'</a> [<a href="#[3]">3</a>]
+    </p>
+
+    <p>
+        An overview about the actual content of the railOmniverse extension, you'll find on the main page of the <a href="https://www.trendverlag.com/Trax/Doc/railDocumentation/Html/index.html">railOmniverse Manual</a> [<a href="#[9]">9</a>].
+    </p>
+    <br>
+
+    <h2>Demo Version</h2>
+
+    <p>
+        <b>The demo version of railOmniverse</b> [<a href="#[10]">10</a>] is a free version of the extension. It is limited in functionality and
+        is intended to give an impression of the capabilities of the full version. The demo version is available
+        for <a href="https://www.trendverlag.com/rail/railOmniverse0_13_4-Demo.zip">download</a>.
+    </p>
+    <br>
+
+
+    <h2>Manual</h2>
+
+    <p>
+        <b>The manual</b> of the railOmniverse extension you'll find online with the <a href="https://www.trendverlag.com/Trax/Doc/railDocumentation/Html/index.html">railOmniverse Manual</a> [<a href="#[9]">9</a>].
+    </p>
+    <br>
+
+
+    <h2>Tutorials</h2>
+
+    <p>
+        <b>The tutorials</b> for the railOmniverse extension you'll find in the 'Tutorials' section of the
+        <a href="https://www.trendverlag.com/Trax/Doc/railDocumentation/Html/index.html">railOmniverse Manual</a> [<a href="#[9]">9</a>].
+    </p>
+
+    <p>
+        <b>The videos</b> of the tutorials will apear in the <a href="https://youtube.com/playlist?list=PLvSXZtqqeOvBoA_W5E5gI6Hz2sxWsNI45&si=MDgvXsvM8kbBZEPy">railOmniverse Youtube playlist</a> [<a href="#[13]">13</a>].
+    </p>
+    <br>
+
+
+    <h2>What's new?</h2>
+
+    <p>2025-02-21: railOmniverse 0.13.4.-Demo, Windows (Kit-106.5-physx-5.5.1.) / railOmniverse 0.13.3.-Demo, Linux (Kit-106.4-physx-5.5.0)</p>
+
+    <p>2025-02-05: railOmniverse 0.13.1.-Demo, Windows/Linux</p>
+
+    <p>2024-09-24: railOmniverse 0.13.0.-Demo, Windows</p>
+
+    <p>2024-05-16: railOmniverse 0.12.0.</p>
+
+    <p>2024-05-16: railOmniverse 0.12.0.-Demo</p>
+
+    <p>2024-05-16: ANLFileConverter[<a href="#[11]">11</a>] can be used with EEPFileConverter[<a href="#[12]">12</a>] to convert EEP layouts to usda.</p>
+
+    <p>2024-01-17: NVIDIA Developer Technical Blog article: 'Simulating Railroads with OpenUSD'[<a href="#[2]">2</a>].</p>
+
+    <p>2023-12-13: Overview article about railOmniverse: 'railOmniverse'[<a href="#[4]">4</a>].</p>
+
+    <p>2023-11-27: Overview article about the trax library: 'The Trax Track Library'[<a href="#[3]">3</a>].</p>
+
+    <p>2023-10-16: Started development of trax library 2.0.</p>
+
+    <p>2023-10-09: railOmniverse 0.11.0.</p>
+
+
+
+    <h2>TODO</h2>
+    <p>
+        <b>Railroading is a never ending endeavour.</b> So we maintain a list
+        of planned features to be realised in upcomming versions of the plugin. The list is alive and
+        roughly ordered by priority;
+    </p>
+    <ol>
+        <li><b>TFC:</b> Create a library of standard traction force characteristics. Or even better: some generator.</li>
+        <li>
+            <b>BasisCurves:</b> implement support for more than cubic Bezier curves. Support different
+            curve types like BSpline and CatmullRom etc ...
+        </li>
+        <li>
+            <b>RollingStock</b>: a management class for assembling rolling stock with track joint,
+            hinges and couplings. Railing the object automatically and exactly at arbitrary track locations;
+            spinning wheel 3D-models (animated); targeting all WheelFrames by one steering input, etc ...
+        </li>
+        <li>
+            <b>Train</b>: a management class for maintaining coupled rolling stock. Rail/unrail;
+            targeting all rolling stock by one steering input. Coupling and uncoupling, etc ...
+        </li>
+        <li><b>Sensor system</b>: relay several events that happen along the tracks.</li>
+        <li><b>Signal system</b>: communicate with a train from outside over a track interval.</li>
+        <li>
+            <b>Jacks &#38; Plugs system</b>: logically connecting elements like switches, signals and sensors.
+            Receving events e.g. to play sounds or to trigger animations.
+        </li>
+
+        <li>...</li>
+    </ol>
+
+    <p>This does not mean we will do it any time soon. It all depends on demand. So if you have a demand, please let us know ...</p>
+
+    <h2>Frequently Asked Questions</h2>
+    <ul>
+        <li>...</li>
+    </ul>
+
+
+    <h2>Known Issues</h2>
+    <ul>
+        <li>...</li>
+    </ul>
+
+
+    <h2>Support and Newsletter</h2>
+
+    <p><b>On problems, ideas, suggestions and things you desire</b> contact us at: horstmann.marc@trendverlag.de. 
+    To sign up for the railOmniverse newsletter, include ‘railNewsletter’ in the subject line.</p>
+
+
+    <h2>References</h2>
+
+    <a name="[1]"></a>[1] <a href="https://developer.nvidia.com/omniverse">NVIDIA Omniverse</a> <br />
+    <a name="[2]"></a>[2] <a href="https://developer.nvidia.com/blog/simulating-railroads-with-openusd/">Simulating Railroads with OpenUSD, Marc-Michael Horstmann</a> <br />
+    <a name="[3]"></a>[3] <a href="https://www.trendverlag.com/Trax/Doc/BlogArticle/traxLibrary.html">The Trax Track Library, Marc-Michael Horstmann</a> <br />
+    <a name="[4]"></a>[4] <a href="https://www.trendverlag.com/Trax/Doc/BlogArticle/railOmniverse.html">railOmniverse, Marc-Michael Horstmann</a> <br />
+    <a name="[5]"></a>[5] <a href="https://docs.omniverse.nvidia.com/">NVIDIA Omniverse Documentation Hub.</a> <br />
+    <a name="[6]"></a>[6] <a href="https://graphics.pixar.com/usd/release/index.html">Pixar's USD Home</a> <br />
+    <a name="[9]"></a>[9] <a href="https://www.trendverlag.com/Trax/Doc/railDocumentation/Html/index.html">railOmniverse's Documentation</a> <br />
+    <a name="[10]"></a>[10] <a href="https://www.trendverlag.com/rail/railOmniverse0_13_4-Demo.zip">Demo Version of railOmniverse</a> <br />
+    <a name="[11]"></a>[11] <a href="https://www.trendverlag.com/rail/ANLFileConverter.rar">ANLFileConverter: Converter *.anl4 to *.usd</a> <br />
+    <a name="[12]"></a>[12] <a href="https://www.trendverlag.com/rail/EEPFileConverter_v1_09.rar">EEPFileConverter: Converter *.anl3 to *.anl4</a> <br />
+    <a name="[13]"></a>[13] <a href="https://youtube.com/playlist?list=PLvSXZtqqeOvBoA_W5E5gI6Hz2sxWsNI45&si=MDgvXsvM8kbBZEPy">railOmniverse Playlist on YouTube</a> <br />
+
+    <p style="text-align: center;"><a href="chapter11.html"><<< previous</a> | <a href="contents.html">contents</a> | <a href="chapter13.html">next >>></a></p>
+</body>
+</html>

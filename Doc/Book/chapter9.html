@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Chapter 9 - Trains</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        body {
+            font-size: 1.2em;
+            line-height: 1.5em;
+            text-indent: 4em;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chapter 9 - Trains</h1>
+    <p style="text-align: center;"></p>
+
+    <blockquote style="text-align: right; font-size: 0.9em;"><i>"And tell me, did Venus blow your mind?"</i><br /> - Train</blockquote>
+
+    <p>
+        <b>A Train</b> consists of one or more RailRunners that are coupled together as a chain. The Train
+        itself is a RailRunner:
+    </p>
+    <img src="images/Chapter9Image1.png" alt="RailRunners" />
+    <p>
+        Railroad companies treat a single locomotive or waggon on a yourney as to be a train. 
+        Also trains might be considered as being constituted from two or more subtrains. While 
+        this is mostly semantics and coupled rolling stocks or bogies will behave properly, 
+        without knowing to be a train, it turned out to be useful to have a train object in 
+        order to handle such a configuration as a whole: e.g., steering all the locomotive in 
+        it at once, or deploy all the brakes. Railing a whole train is another application.
+    </p>
+    <p>
+        One problem with trains is the question, what should happen when two trains couple and
+        from where to get a new train if one splits. Eventually we discarded all ideas about
+        one Train succing up the content of the other, or recycling Train objects as much as
+        possible. Instead we did it in the most clear and simple way, that allows for any policy 
+        to be implemented by the user himself:
+        <ul>
+            <li>Railing a RollingStock emits a Train object, containing it.</li>
+            <li>Coupling two RollingStock or Trains emits a Train object, containing the two as members.</li>
+            <li>A Train::Reduce() method would remove all sub-Train objects.</li>
+            <li>Splitting a Train discardes Train objects down the tree as invalid, until the two RailRunners 
+            north and south the split coupling are no longer part of the same Train. Everything 
+            on one side respectively is consumed by a new Train object, unless it is a single 
+            Train object already. The Train objects for the two halves are emitted.</li>
+            <li>Loosing the last shared reference to a Train object will release the shared references
+            to its members, thereby deleting them, too, if the references are not held elsewhere.</li>
+        </ul>
+    <p>
+        Note that there is no way to have a valid Train object with fewer than one member. Also note that,
+        since emitting a Train object means returning a shared pointer, if the return value is ignored,
+        the Train object will be deleted immediately. This way one can use RollingStock without bothering
+        about Trains; Bogies would never emit a Train object.
+    </p>
+
+
+
+    <br />
+    <p>
+    </p>
+
+    <h2>References</h2>
+
+
+
+    <p style="text-align: center;"><a href="chapter8.html"><<< previous</a> | <a href="contents.html">contents</a> | <a href="chapter10.html">next >>></a></p>
+</body>
+</html>
