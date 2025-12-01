@@ -29,9 +29,9 @@
 #include "Position.h"
 #include "PositionH.h"
 
-//#include <boost/numeric/ublas/matrix.hpp> // NOLINT 
-//#include <boost/numeric/ublas/vector.hpp> // NOLINT 
-//#include <boost/numeric/ublas/lu.hpp> // NOLINT 
+//#include <boost/numeric/ublas/matrix.hpp>
+//#include <boost/numeric/ublas/vector.hpp>
+//#include <boost/numeric/ublas/lu.hpp>
 
 // TODO: watch MPL2 license.
 #ifdef TRAX_OPEN_SOURCE

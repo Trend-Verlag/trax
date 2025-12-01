@@ -207,10 +207,10 @@ std::pair<Length,bool> Location::Move( Length dParam, Orientation principalDirec
 
 	if( pEvent )
 	{
-		if( !pEvent->Moving( *this, range ) ){
-			retval.first = dParam;
-			return retval;
-		}
+		//if( !pEvent->Moving( *this, range ) ){
+		//	retval.first = dParam;
+		//	return retval;
+		//}
 
 		m_pTrack->DoTrigger( range, *pEvent );
 	}
@@ -405,8 +405,8 @@ bool Location::TrackTransition( Track::EndType frontend, const Event* pEvent ) n
 	if( !nextTrackEnd.first )
 		return false;
 
-	if( pEvent ) 
-		pEvent->Transitioning( *m_pTrack, frontend, *nextTrackEnd.first, nextTrackEnd.second );
+	//if( pEvent ) 
+	//	pEvent->Transitioning( *m_pTrack, frontend, *nextTrackEnd.first, nextTrackEnd.second );
 
 	if( frontend == Track::EndType::front )
 	{

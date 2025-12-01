@@ -30,7 +30,7 @@
 #include "common/Interval.h"
 
 //#define BOOST_MATH_INSTRUMENT
-#include <boost/math/tools/roots.hpp> // NOLINT 
+#include <boost/math/tools/roots.hpp>
 
 namespace common{
 	template<typename> struct Interval;

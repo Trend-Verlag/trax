@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include <boost/property_tree/ptree.hpp> // NOLINT 
+#include <boost/property_tree/ptree.hpp>
 
 #include "common/Interval.h"
 

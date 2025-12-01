@@ -28,7 +28,17 @@
 #include <sstream>
 
 namespace trax{
-	
+///////////////////////////////////////
+std::unique_ptr<Event> Event::Make() noexcept{
+	try{
+		return std::make_unique<Enevt_Imp>();
+	}
+	catch( ... ){
+		return nullptr;
+	}
+}
+///////////////////////////////////////
+/*
 std::unique_ptr<EventFilter> EventFilter::Make( EventFilter::Type type ) noexcept{
 	return std::make_unique<EventType>( type, "" );
 }
@@ -70,5 +80,5 @@ EventFilter::Type EventFilter::From( const std::string& type ){
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
 	throw std::range_error( stream.str() );
 }
-
+*/
 }

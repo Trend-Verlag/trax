@@ -25,7 +25,7 @@
 //
 // For additional permissions, please contact: horstmann.marc@trendverlag.de
 
-#include <boost/test/unit_test.hpp> // NOLINT 
+#include <boost/test/unit_test.hpp>
 
 #include "trax/collections/support/FixturesCollections.h"
 #include "trax/rigid/Scene.h"

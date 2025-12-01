@@ -427,7 +427,7 @@ namespace trax{
 		return StreamInVector( is, data );
 	}
 
-	inline std::ostream& operator << ( std::ostream& os, const EventFilter::Type& type ){
+	/*inline std::ostream& operator << ( std::ostream& os, const EventFilter::Type& type ){
 		os << "EventFilter::Type( " << EventFilter::From( type ) << " )";
 		return os;
 	}
@@ -444,7 +444,7 @@ namespace trax{
 
 		type = EventFilter::From( token );
 		return is;
-	}
+	}*/
 
 	inline std::ostream& operator<<( std::ostream& os, const JackEnumerator& jackenumerator )
 	{

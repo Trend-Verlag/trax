@@ -12,7 +12,7 @@
 
 #define BOOST_TEST_MODULE TraxModuleTests
 #define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp> // NOLINT 
+#include <boost/test/unit_test.hpp>
 
 //#if defined _WIN32
 //#	define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers

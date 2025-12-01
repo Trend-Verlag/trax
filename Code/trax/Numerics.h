@@ -30,14 +30,14 @@
 
 #pragma once
 
-#include <boost/version.hpp> // NOLINT 
+#include <boost/version.hpp>
 
 //static_assert(BOOST_VERSION >= 107000, "Boost version too old");
 
 #if BOOST_VERSION < 107000
-#   include <boost/math/tools/numerical_differentiation.hpp> // NOLINT 
+#   include <boost/math/tools/numerical_differentiation.hpp>
 #else
-#   include <boost/math/differentiation/finite_difference.hpp> // NOLINT 
+#   include <boost/math/differentiation/finite_difference.hpp>
 #endif // BOOST_VERSION < 107000
 
 

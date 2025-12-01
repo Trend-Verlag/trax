@@ -39,13 +39,8 @@ namespace trax{
 
 	struct Event{
 
-		/// \brief Method that gets called before a location is moved along a specific track.
-		/// \returns true to let the move actually happen, false if the moving should get suppressed.
-		virtual bool Moving( const Location& _location, const common::Interval<Length>& range ) const noexcept = 0;
-
-
-		/// \brief Method that gets called before a location is changing from one track to another.
-		virtual void Transitioning( const Track& fromTrack, Track::EndType fromEnd, const Track& toTrack, Track::EndType toEnd ) const noexcept = 0;
+		/// \brief Makes a simple unqualified Event object.
+		static dclspc std::unique_ptr<Event> Make() noexcept;
 
 
 		virtual ~Event() = default;

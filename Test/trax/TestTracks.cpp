@@ -26,7 +26,7 @@
 
 #if defined( WITH_BOOST_TESTS )
 
-#include <boost/test/unit_test.hpp> // NOLINT 
+#include <boost/test/unit_test.hpp>
 
 #include "trax/Track.h"
 #include "trax/ParallelTrack.h"

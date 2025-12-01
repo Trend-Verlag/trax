@@ -9,7 +9,7 @@
 //								Peter Gabriel
 
 #if defined( WITH_BOOST_TESTS )
-#include <boost/test/unit_test.hpp> // NOLINT 
+#include <boost/test/unit_test.hpp>
 
 #include "trax/collections/support/FixturesCollections.h"
 #include "trax/Track.h"

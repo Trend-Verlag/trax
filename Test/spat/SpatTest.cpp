@@ -26,6 +26,6 @@
 
 #if defined( WITH_BOOST_TESTS )
 #define BOOST_TEST_MODULE TestsSpat
-#include <boost/test/unit_test.hpp> // NOLINT 
+#include <boost/test/unit_test.hpp>
 #endif
 

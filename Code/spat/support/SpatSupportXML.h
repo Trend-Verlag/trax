@@ -27,7 +27,7 @@
 #pragma once
 
 #include "common/Helpers.h"
-#include <boost/property_tree/ptree.hpp> // NOLINT 
+#include <boost/property_tree/ptree.hpp>
 
 
 namespace spat{
