@@ -183,7 +183,7 @@ std::unique_ptr<Gestalt> Scene_Imp::CreateGestalt( Box<Length> box, Mass mass ) 
 		{
 			dynamic_cast<GeomCuboid*>(pGeom.get())->SetFromBox( box );
 			pGestalt->SetMass( mass );
-			pGestalt->InertiaTensor( SpecificInertiaTensorFor( box ) );
+			pGestalt->SpecificInertiaTensor( SpecificInertiaTensorFor( box ) );
 			pGestalt->Attach( std::move(pGeom) );
 			pGestalt->SetFrame( bodyFrame );
 			return pGestalt;

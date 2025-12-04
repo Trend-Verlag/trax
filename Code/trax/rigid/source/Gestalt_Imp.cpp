@@ -27,16 +27,67 @@
 
 #include "Gestalt_Imp.h"
 
+#include <numeric>
+
 namespace trax
 {
 
 int Gestalt_Imp::Attach( std::unique_ptr<Geom> pGeom )
 {
-	return Attach( std::move( pGeom ), 0_kg );
+	Mass residue = GetMass() - std::accumulate( m_Masses.begin(), m_Masses.end(), 0_kg );
+	if( residue < 0_kg )
+		residue = 0_kg;
+
+	return Attach( std::move( pGeom ), residue );
+}
+
+int Gestalt_Imp::Attach( std::vector<std::unique_ptr<Geom>>& geoms )
+{
+	if( geoms.size() == 0 )
+		return -1;
+
+	Mass residue = GetMass() - std::accumulate( m_Masses.begin(), m_Masses.end(), 0_kg );
+	if( residue < 0_kg )
+		residue = 0_kg;
+
+	Volume totalVolume = std::accumulate( geoms.begin(), geoms.end(), 0_m3,
+		[]( Volume sum, const std::unique_ptr<Geom>& pGeom ){
+			if( pGeom == nullptr )
+				return sum;
+			return sum + pGeom->GetVolume();
+	} );
+
+	int retval = -1;
+
+	for( auto iter = geoms.begin(); iter != geoms.end(); ++iter )
+	{
+		if( *iter == nullptr )
+			continue;
+
+		Mass mass = residue * (*iter)->GetVolume() / totalVolume;
+		if( int idx = Shape_ImpBase::Attach( std::move( *iter ) ); idx >= 0 )
+		{
+			if( retval < 0 )
+				retval = idx;
+			m_Masses.push_back( mass );
+		}
+	}
+
+	if( retval >= 0 )
+		DoCalculateMassProperties();
+
+	return retval;
 }
 
 int Gestalt_Imp::Attach( std::unique_ptr<Geom> pGeom, Mass mass )
 {
+	if( pGeom == nullptr )
+		return -1;
+	if( mass < 0_kg )
+		throw std::invalid_argument( "Gestalt_Imp::Attach(): mass must not be negative." );
+	if( pGeom->GetVolume() <= 0_m3 )
+		throw std::invalid_argument( "Gestalt_Imp::Attach(): Geom must have a volume > 0." );
+
 	if( int idx = Shape_ImpBase::Attach( std::move( pGeom ) ); idx >= 0 )
 	{
 		m_Masses.push_back( mass );

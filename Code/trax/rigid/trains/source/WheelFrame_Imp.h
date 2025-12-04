@@ -95,7 +95,6 @@ namespace trax{
 
 		Force MaxBrake() const noexcept override;
 
-		
 		// Bogie:
 
 

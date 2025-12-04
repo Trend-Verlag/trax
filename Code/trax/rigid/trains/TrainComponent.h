@@ -182,12 +182,6 @@ namespace trax{
 		virtual Length GetLength( DistanceType distance = DistanceType::actual ) const noexcept = 0;
 
 
-		// Dynamics:
-
-		/// \returns the total mass of this TrainComponent.
-		virtual Mass GetTotalMass() const noexcept = 0;
-
-
 		// Jacks 'N Plugs:
 
 		/// \brief Gets a Jack that pulses its Plug if the RailRunner

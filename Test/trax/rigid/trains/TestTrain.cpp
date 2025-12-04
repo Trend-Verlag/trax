@@ -78,7 +78,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixture )
 	BOOST_CHECK_EQUAL( pTrain->Thrust(), 1 );
 	BOOST_CHECK( pTrain->ThrustAbsolute() );
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::max ), theoreticalLength, 0.1 );
-	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetTotalMass(), 73_t + 9 * 26_t, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->TotalMass(), 73_t + 9 * 26_t, 0.1 );
 
 	Time simulationTime = 25_s;
 
@@ -121,7 +121,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation2, TrainFixture )
 	BOOST_CHECK_EQUAL( pTrain->Thrust(), 0.75 );
 	BOOST_CHECK( pTrain->ThrustAbsolute() < 220_kNm / 50_cm );
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::max ), 79_m, 0.1 );
-	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetTotalMass(), 143_t , 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->TotalMass(), 143_t , 0.1 );
 
 	Time simulationTime = 40_s;
 
@@ -164,7 +164,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation3, TrainFixture )
 	BOOST_CHECK_EQUAL( pTrain->Thrust(), 0.75 );
 	BOOST_CHECK( pTrain->ThrustAbsolute() < 220_kNm / 50_cm );
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::max ), 79_m, 0.1 );
-	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetTotalMass(), 143_t , 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->TotalMass(), 143_t , 0.1 );
 
 	Time simulationTime = 10_s;
 
@@ -207,7 +207,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation4, TrainFixture )
 	BOOST_CHECK_EQUAL( pTrain->Thrust(), 0.75 );
 	BOOST_CHECK( pTrain->ThrustAbsolute() );
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::max ), theoreticalLength, 0.1 );
-	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetTotalMass(), 2*143_t , 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->TotalMass(), 2*143_t , 0.1 );
 
 	Time simulationTime = 40_s;
 
@@ -255,7 +255,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation5, TrainFixture )
 	BOOST_CHECK_EQUAL( pTrain->Thrust(), 0.75 );
 	BOOST_CHECK( pTrain->ThrustAbsolute() );
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::max ), theoreticalLength, 0.1 );
-	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetTotalMass(), 2*73_t + 9 * 26_t, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->TotalMass(), 2*73_t + 9 * 26_t, 0.1 );
 
 	Time simulationTime = 40_s;
 
@@ -299,7 +299,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation6, TrainFixture )//VisualDebugger
 	BOOST_CHECK_EQUAL( pTrain->Brake(), 0.5 );
 	BOOST_CHECK( pTrain->ThrustAbsolute() );
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::max ), theoreticalLength, 0.1 );
-	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetTotalMass(), 3*143_t + (73_t + 9 * 26_t) + (2*73_t + 9 * 26_t), 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->TotalMass(), 3*143_t + (73_t + 9 * 26_t) + (2*73_t + 9 * 26_t), 0.1 );
 
 	Time simulationTime = 40_s;
 

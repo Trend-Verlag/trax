@@ -327,6 +327,16 @@ Force RollingStock_Imp::MaxBrake() const noexcept
 	return maxBrake;
 }
 
+Mass RollingStock_Imp::TotalMass() const noexcept
+{
+	Mass totalMass = 0_kg;
+
+	for( const auto& pBogie : m_Bogies )
+		totalMass += pBogie->TotalMass();
+
+	return totalMass;
+}
+
 bool RollingStock_Imp::IsFinal() const noexcept{
 	return true;
 }
@@ -395,16 +405,6 @@ std::pair<const Bogie&,RailRunner::EndType> RollingStock_Imp::GetTipAt( EndType 
 	stream << "RollingStock_Imp::GetTipAt: No tip found at end " << static_cast<int>(end) << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
 	throw std::invalid_argument( stream.str() );
-}
-
-Mass RollingStock_Imp::GetTotalMass() const noexcept
-{
-	Mass totalMass = 0_kg;
-
-	for( const auto& pBogie : m_Bogies )
-		totalMass += pBogie->GetGestalt().GetMass();
-
-	return totalMass;
 }
 
 std::shared_ptr<RollingStock> RollingStock_Imp::ThisRollingStock() const noexcept

@@ -69,9 +69,9 @@ namespace trax
 
 		spat::Position<Length> CenterOfMass() const noexcept override;
 
-		void InertiaTensor( const spat::SquareMatrix<Area,3>& tensor ) override;
+		void SpecificInertiaTensor( const spat::SquareMatrix<Area,3>& tensor ) override;
 
-		spat::SquareMatrix<Area,3> InertiaTensor() const override;
+		spat::SquareMatrix<Area,3> SpecificInertiaTensor() const override;
 
 
 		void SetLinearVelocity( const spat::Vector<Velocity>& v ) override;

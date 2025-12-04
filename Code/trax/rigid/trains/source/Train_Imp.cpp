@@ -340,6 +340,16 @@ Force Train_Imp::MaxBrake() const noexcept
 	return maxBrake;
 }
 
+Mass Train_Imp::TotalMass() const noexcept
+{
+	Mass totalMass = 0_kg;
+
+	for( auto& pTrainComponent : m_Train )
+		totalMass += pTrainComponent->TotalMass();
+
+	return totalMass;
+}
+
 Length Train_Imp::GetOverhang( EndType end, DistanceType distance ) const noexcept
 {
 	switch( end ){
@@ -404,16 +414,6 @@ std::pair<const Bogie&,RailRunner::EndType> Train_Imp::GetTipAt( EndType end ) c
 	}
 
 	throw std::invalid_argument( "Train_Imp::GetTipAt: invalid end type" );
-}
-
-Mass Train_Imp::GetTotalMass() const noexcept
-{
-	Mass totalMass = 0_kg;
-
-	for( auto& pTrainComponent : m_Train )
-		totalMass += pTrainComponent->GetTotalMass();
-
-	return totalMass;
 }
 
 std::shared_ptr<Train> Train_Imp::ThisTrain() const noexcept

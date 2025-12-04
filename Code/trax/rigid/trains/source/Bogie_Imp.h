@@ -129,6 +129,8 @@ namespace trax{
 
 		Force MaxBrake() const noexcept override;
 
+		Mass TotalMass() const noexcept override;
+
 		void ActivateCoupling( EndType end ) override;
 
 		void DeactivateCoupling( EndType end ) override;

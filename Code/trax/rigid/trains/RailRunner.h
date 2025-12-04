@@ -470,7 +470,7 @@ namespace trax{
 		/// the target velocity. E.g. on a hill the RailRunner might roll back due to
 		/// too few thrust but the brake will not get applied in this case.
 		/// \param velocity Signed target velocity to aim for. This very well might 
-		/// be set to extreme high values, wich can never be reached by the motor. 
+		/// be set to extreme high values, which can never be reached by the motor. 
 		virtual void TargetVelocity( Velocity velocity ) = 0;
 
 
@@ -565,9 +565,13 @@ namespace trax{
 
 
 		/// \brief Gets the maximal available braking. This value is determined by the 
-		/// properties of the Wheelsets attached to WheelFrames wich in turn are attached
+		/// properties of the Wheelsets attached to WheelFrames which in turn are attached
 		/// to a bogie.
 		virtual Force MaxBrake() const noexcept = 0;
+
+
+		/// \brief Gets the total mass of all the elements making up this RailRunner.
+		virtual Mass TotalMass() const noexcept = 0;
 
 
 		// Coupling:

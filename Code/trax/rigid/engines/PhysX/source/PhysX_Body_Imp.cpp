@@ -106,12 +106,12 @@ decltype(Velocity{}*Velocity{}) PhysX_Body_ImpBase::GetSleepThreshold() const no
 void PhysX_Body_ImpBase::SetMass( Mass mass ){
 	Body_Imp::SetMass(mass);
 
-	SquareMatrix<Area,3> iTensor{ InertiaTensor() };
+	SquareMatrix<Area,3> iTensor{ SpecificInertiaTensor() };
 
 	SceneLockWrite lock{ Actor().getScene() };
 	Actor().setMass( static_cast<physx::PxReal>(_kg(mass)/m_EngineKilogramsPerUnit) );
 
-	InertiaTensor( iTensor );
+	SpecificInertiaTensor( iTensor );
 }
 
 Mass PhysX_Body_ImpBase::GetMass() const noexcept{
@@ -133,7 +133,7 @@ Position<Length> PhysX_Body_ImpBase::CenterOfMass() const noexcept{
 	return PosFrom( Actor().getCMassLocalPose(), m_EngineMetersPerUnit );
 }
 
-void PhysX_Body_ImpBase::InertiaTensor( const SquareMatrix<Area,3>& specificInertiaTensor ){
+void PhysX_Body_ImpBase::SpecificInertiaTensor( const SquareMatrix<Area,3>& specificInertiaTensor ){
 	if( !specificInertiaTensor.IsDiagonal() )
 	// pick mass space transformation, so that tensor get diagonal...
 	{
@@ -175,7 +175,7 @@ void PhysX_Body_ImpBase::InertiaTensor( const SquareMatrix<Area,3>& specificIner
 	}
 }
 
-SquareMatrix<Area,3> PhysX_Body_ImpBase::InertiaTensor() const{
+SquareMatrix<Area,3> PhysX_Body_ImpBase::SpecificInertiaTensor() const{
 	SceneLockRead lock{ Actor().getScene() };
 	physx::PxVec3 diag{ Actor().getMassSpaceInertiaTensor() };
 	SquareMatrix<Area,3> tensor;

@@ -65,7 +65,7 @@ WheelFrame_Imp::WheelFrame_Imp(
 	// Body was created with shape by Bogie_Imp
 	{
 		spat::Box<Length> shape{ 2_m, 1_m, 1_m };
-		GetGestalt().InertiaTensor( SpecificInertiaTensorFor( shape ) );
+		GetGestalt().SpecificInertiaTensor( SpecificInertiaTensorFor( shape ) );
 		dynamic_cast<GeomCuboid*>(&GetGestalt().Get())->SetFromBox( shape );
 		anchor.TransportBin( -0.5_m );
 	}

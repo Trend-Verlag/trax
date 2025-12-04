@@ -47,6 +47,8 @@ namespace trax
 		// Shape:
 		int Attach( std::unique_ptr<Geom> pGeom ) override;
 
+		int Attach( std::vector<std::unique_ptr<Geom>>& geoms ) override;
+
 		using Shape::Attach;
 
 		std::unique_ptr<Geom> Remove( int idx ) override;

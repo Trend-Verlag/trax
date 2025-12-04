@@ -59,6 +59,10 @@ spat::Box<Length> PhysX_Cuboid_Imp::GetExtent() const noexcept
 	return frame.ToParent( extent );
 }
 
+Volume PhysX_Cuboid_Imp::GetVolume() const noexcept{
+	return m_Diagonal.dx * m_Diagonal.dy * m_Diagonal.dz;
+}
+
 void PhysX_Cuboid_Imp::Diagonal( const Vector<Length>& diagonal ){
 	m_Diagonal = diagonal;
 
@@ -150,6 +154,12 @@ spat::Box<Length> PhysX_Capsule_Imp::GetExtent() const noexcept
 	return frame.ToParent( extent );
 }
 
+Volume PhysX_Capsule_Imp::GetVolume() const noexcept
+{
+	Length r = Radius();
+	return pi*pow<2>(r) * (GetLength() + (4_1/3_1)*r);
+}
+
 void PhysX_Capsule_Imp::OnAttach( physx::PxRigidActor& actor ){
 	PhysX_GeomBase_Imp::OnAttach(actor);
 
@@ -209,6 +219,11 @@ spat::Box<Length> PhysX_Sphere_Imp::GetExtent() const noexcept
 	return frame.ToParent( extent );
 }
 
+Volume PhysX_Sphere_Imp::GetVolume() const noexcept
+{
+	return (4_1/3_1) * pi * pow<3>( Radius() );
+}
+
 void PhysX_Sphere_Imp::Radius( Length radius ){
 	assert( radius > 0_m );
 	m_SphereGeometry.radius = static_cast<physx::PxReal>(_m(radius)/m_EngineMetersPerUnit);
@@ -259,6 +274,11 @@ spat::Box<Length> PhysX_Cylinder_Imp::GetExtent() const noexcept
 	GetFrame( frame );
 	spat::Box<Length> extent{ 2*Radius(), 2*Radius(), GetLength()/2 };
 	return frame.ToParent( extent );
+}
+
+Volume PhysX_Cylinder_Imp::GetVolume() const noexcept
+{
+	return pi * pow<2>( Radius() ) * GetLength();
 }
 
 void PhysX_Cylinder_Imp::Radius( Length radius ){
@@ -384,6 +404,11 @@ void PhysX_HeightField::GetFrame( Frame<Length,One>& frame ) const noexcept{
 spat::Box<Length> PhysX_HeightField::GetExtent() const noexcept
 {
 	return spat::Box<Length>();
+}
+
+Volume PhysX_HeightField::GetVolume() const noexcept
+{
+	return 0_m3;
 }
 
 bool PhysX_HeightField::Create( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale )
@@ -535,6 +560,13 @@ spat::Box<Length> PhysX_ConvexMesh::GetExtent() const noexcept{
 		PosFrom<Length>( m_ConvexMesGeometry.convexMesh->getLocalBounds().maximum ) };
 }
 
+Volume PhysX_ConvexMesh::GetVolume() const noexcept
+{
+	assert( !"PhysX_ConvexMesh::GetVolume(): Not implemented yet!" );
+	std::cout << Verbosity::verbose << "PhysX_ConvexMesh::GetVolume(): Not implemented yet!" << std::endl;
+	return 0_m3;
+}
+
 bool PhysX_ConvexMesh::Create( const std::vector<Position<Length>>& points ){
 	if( points.size() > 2 ){
 		if( CookConvexMesh( points ) ){
@@ -658,6 +690,13 @@ GeomType PhysX_TriangleMesh::GetGeomType() const noexcept{
 spat::Box<Length> PhysX_TriangleMesh::GetExtent() const noexcept
 {
 	return spat::Box<Length>();
+}
+
+Volume PhysX_TriangleMesh::GetVolume() const noexcept
+{
+	assert( !"PhysX_TriangleMesh::GetVolume(): Not implemented yet!" );
+	std::cout << Verbosity::verbose << "PhysX_TriangleMesh::GetVolume(): Not implemented yet!" << std::endl;
+	return 0_m3;
 }
 
 bool PhysX_TriangleMesh::Create( const std::vector<Position<Length>>& /*points*/ ){

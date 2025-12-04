@@ -510,6 +510,10 @@ Force Bogie_Imp::MaxBrake() const noexcept
 	return maxBrake;
 }
 
+Mass Bogie_Imp::TotalMass() const noexcept{
+	return m_pGestalt ? m_pGestalt->GetMass() : 0_t;
+}
+
 void Bogie_Imp::ActivateCoupling( EndType end )
 {
 	switch( end )

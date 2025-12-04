@@ -91,6 +91,10 @@ namespace trax{
 		virtual spat::Box<Length> GetExtent() const noexcept = 0;
 
 
+		/// \returns The volume of the Geom.
+		virtual Volume GetVolume() const noexcept = 0;
+
+
 		/// \brief Sets the material to be applied with the Geom.
 		virtual void SetMaterial( const Material& material ) noexcept = 0;
 

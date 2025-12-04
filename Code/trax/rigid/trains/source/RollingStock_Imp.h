@@ -97,6 +97,7 @@ namespace trax{
 
 		Force MaxBrake() const noexcept override;
 
+		Mass TotalMass() const noexcept override;
 
 		// TrainComponent:
 		bool IsFinal() const noexcept override;
@@ -108,8 +109,6 @@ namespace trax{
 		std::pair<Bogie&,EndType> GetTipAt( EndType end ) override;
 
 		std::pair<const Bogie&,EndType> GetTipAt( EndType end ) const override;
-
-		Mass GetTotalMass() const noexcept override;
 
 
 		// RollingStock:
@@ -150,7 +149,7 @@ namespace trax{
 		virtual void ConnectJacks() override;
 	private:
 		//ordered by track position (north to south):
-		std::vector<std::shared_ptr<Bogie_Imp>>		m_Bogies;
+		std::vector<std::shared_ptr<Bogie_Imp>>		m_Bogies; // all bogies including wheelframes
 		std::vector<std::shared_ptr<Bogie>>			m_TopmostBogies;
 		std::vector<std::shared_ptr<WheelFrame>>	m_WheelFrames;
 

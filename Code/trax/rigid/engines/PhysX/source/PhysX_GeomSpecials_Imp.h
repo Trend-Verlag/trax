@@ -31,6 +31,8 @@ namespace trax{
 
 		spat::Box<Length> GetExtent() const noexcept override;
 
+		Volume GetVolume() const noexcept override;
+
 		void Diagonal( const Vector<Length>& diagonal ) override;
 
 		const Vector<Length>& Diagonal() const override;
@@ -62,6 +64,8 @@ namespace trax{
 		void GetFrame( Frame<Length,One>& frame ) const noexcept override;
 
 		spat::Box<Length> GetExtent() const noexcept override;
+
+		Volume GetVolume() const noexcept override;
 
 		void OnAttach( physx::PxRigidActor& actor ) override;
 
@@ -95,6 +99,8 @@ namespace trax{
 
 		spat::Box<Length> GetExtent() const noexcept override;
 
+		Volume GetVolume() const noexcept override;
+
 		void Radius( Length radius ) override;
 
 		Length Radius() const override;
@@ -120,6 +126,8 @@ namespace trax{
 		GeomType GetGeomType() const noexcept override;
 
 		spat::Box<Length> GetExtent() const noexcept override;
+
+		Volume GetVolume() const noexcept override;
 
 		void Radius( Length radius ) override;
 
@@ -158,6 +166,8 @@ namespace trax{
 
 		spat::Box<Length> GetExtent() const noexcept override;
 
+		Volume GetVolume() const noexcept override;
+
 		bool Create( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale ) override;
 
 		bool CreateEEPStyle( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale ) override;
@@ -194,6 +204,8 @@ namespace trax{
 
 		spat::Box<Length> GetExtent() const noexcept override;
 
+		Volume GetVolume() const noexcept override;
+
 		bool Create( const std::vector<Position<Length>>& points ) override;
 
 		bool Create( const std::vector<Position<Length>>& points, const std::vector<int>& indices ) override;
@@ -223,6 +235,8 @@ namespace trax{
 		GeomType GetGeomType() const noexcept override;
 
 		spat::Box<Length> GetExtent() const noexcept override;
+
+		Volume GetVolume() const noexcept override;
 
 		bool Create( const std::vector<Position<Length>>& points ) override;
 

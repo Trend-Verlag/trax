@@ -123,15 +123,11 @@ namespace trax{
 		/// There exist helper funtions for calculating the tensor.
 		/// \see CalculateMassPropertiesFromShapes
 		/// \see SpecificInertiaTensorFor
-		virtual void InertiaTensor( const spat::SquareMatrix<Area,3>& specificInertiaTensor ) = 0;
+		virtual void SpecificInertiaTensor( const spat::SquareMatrix<Area,3>& specificInertiaTensor ) = 0;
 
 
 		/// \returns the inertia tensor of the Body.
-		virtual spat::SquareMatrix<Area,3> InertiaTensor() const = 0;
-
-
-
-
+		virtual spat::SquareMatrix<Area,3> SpecificInertiaTensor() const = 0;
 
 
 

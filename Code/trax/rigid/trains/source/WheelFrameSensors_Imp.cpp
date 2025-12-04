@@ -191,11 +191,11 @@ Mass WeighSensor_Imp::GetMassFrom( const WheelFrame& wheelFrame ) const noexcept
 	{
 		if( !m_bTrain )
 		{
-			return wheelFrame.GetRollingStock()->GetTotalMass();
+			return wheelFrame.GetRollingStock()->TotalMass();
 		}
 		else if( wheelFrame.GetRollingStock()->GetTrain() )
 		{
-			return wheelFrame.GetRollingStock()->GetTrain()->GetTotalMass();
+			return wheelFrame.GetRollingStock()->GetTrain()->TotalMass();
 		}
 	}
 

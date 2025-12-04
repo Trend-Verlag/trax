@@ -94,6 +94,7 @@ namespace trax{
 
 		Force MaxBrake() const noexcept override;
 
+		Mass TotalMass() const noexcept override;
 
 		// TrainComponent:
 		Length GetOverhang( EndType end, DistanceType distance = DistanceType::actual ) const noexcept override;
@@ -103,8 +104,6 @@ namespace trax{
 		std::pair<Bogie&,EndType> GetTipAt( EndType end ) override;
 
 		std::pair<const Bogie&,EndType> GetTipAt( EndType end ) const override;
-
-		Mass GetTotalMass() const noexcept override;
 
 
 		// Train:
