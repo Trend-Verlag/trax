@@ -27,6 +27,8 @@ PhysX_GeomBase_Imp::PhysX_GeomBase_Imp( Real engineMetersPerUnit ) noexcept
 }
 
 PhysX_GeomBase_Imp::~PhysX_GeomBase_Imp(){
+	//if( m_pShape )
+	//	m_pShape->setName( nullptr );
 }
 
 void PhysX_GeomBase_Imp::SetName( const char* name ) noexcept{

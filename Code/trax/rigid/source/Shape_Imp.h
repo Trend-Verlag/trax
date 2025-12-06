@@ -42,6 +42,10 @@ namespace trax{
 
 
 		//Shape:
+		void SetName( const char* name ) noexcept override;
+
+		const char* GetName() const noexcept override;
+
 		spat::Box<Length> GetExtent() const noexcept override;
 
 		int Attach( std::unique_ptr<Geom> pGeom ) override;
@@ -57,5 +61,6 @@ namespace trax{
 		Geom& Get( int idx ) const override;
 	private:
 		std::vector<std::unique_ptr<Geom>> m_Geoms;
+		std::string m_Name;
 	};
 }

@@ -28,8 +28,6 @@ namespace trax{
 		// Shape:
 		void SetName( const char* name ) noexcept override;
 
-		const char* GetName() const noexcept override;
-
 
 		// Shape:
 		void SetFrame( const spat::Frame<Length,One>& frame ) noexcept override;

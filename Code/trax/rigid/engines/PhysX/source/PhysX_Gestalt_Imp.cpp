@@ -25,11 +25,11 @@ PhysX_Gestalt_ImpBase::PhysX_Gestalt_ImpBase( physx::PxRigidDynamic& actor, Real
 }
 
 void PhysX_Gestalt_ImpBase::SetName( const char* name ) noexcept{
-	PhysX_Body_ImpBase::SetName( name );
+	PhysX_Shape_ImpBase::SetName( name );
 }
 
 const char* PhysX_Gestalt_ImpBase::GetName() const noexcept{
-	return PhysX_Body_ImpBase::GetName();
+	return PhysX_Shape_ImpBase::GetName();
 }
 
 void PhysX_Gestalt_ImpBase::SetFrame( const spat::Frame<Length,One>& frame ) noexcept{

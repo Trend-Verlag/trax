@@ -37,6 +37,19 @@ Shape_ImpBase::Shape_ImpBase() noexcept
 {
 }
 
+void Shape_ImpBase::SetName( const char* name ) noexcept
+{
+	if( name )
+		m_Name = name;
+	else
+		m_Name.clear();
+}
+
+const char* Shape_ImpBase::GetName() const noexcept
+{
+	return m_Name.c_str();
+}
+
 spat::Box<Length> Shape_ImpBase::GetExtent() const noexcept
 {
 	spat::Box<Length> extent{ -infinite__length, -infinite__length, -infinite__length };

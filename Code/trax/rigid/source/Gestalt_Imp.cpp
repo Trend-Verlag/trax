@@ -32,6 +32,16 @@
 namespace trax
 {
 
+void Gestalt_Imp::SetName( const char* name ) noexcept
+{
+	Shape_ImpBase::SetName( name );
+}
+
+const char* Gestalt_Imp::GetName() const noexcept
+{
+	return Shape_ImpBase::GetName();
+}
+
 int Gestalt_Imp::Attach( std::unique_ptr<Geom> pGeom )
 {
 	Mass residue = GetMass() - std::accumulate( m_Masses.begin(), m_Masses.end(), 0_kg );

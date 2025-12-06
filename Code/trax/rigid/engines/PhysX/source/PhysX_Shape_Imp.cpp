@@ -22,19 +22,11 @@ PhysX_Shape_ImpBase::PhysX_Shape_ImpBase( physx::PxRigidActor& actor, Real engin
 {
 }
 
-void PhysX_Shape_ImpBase::SetName( const char * name ) noexcept{
+void PhysX_Shape_ImpBase::SetName( const char* name ) noexcept{
+	Shape_ImpBase::SetName( name );
 	SceneLockWrite lock{ Actor().getScene() };
-	Actor().setName( name );
+	Actor().setName( Shape_ImpBase::GetName() );
 }
-
-const char* PhysX_Shape_ImpBase::GetName() const noexcept{
-	SceneLockRead lock{ Actor().getScene() };
-	return Actor().getName();
-}
-
-//const char* PhysX_Shape_ImpBase::TypeName() const noexcept{
-//	return "PhysXShapeBase";
-//}
 
 void PhysX_Shape_ImpBase::SetFrame( const spat::Frame<Length, One>& frame ) noexcept{
 	SceneLockWrite lock{ Actor().getScene() };
@@ -61,9 +53,5 @@ PhysX_Shape_Imp::~PhysX_Shape_Imp() noexcept
 	SceneLockWrite lock{ Actor().getScene() };
 	Actor().release();
 }
-//
-//const char* PhysX_Shape_Imp::TypeName() const noexcept{
-//	return "PhysXShape";
-//}
 ///////////////////////////////////////
 } // namespace trax

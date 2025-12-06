@@ -43,9 +43,6 @@ namespace trax{
 		// Shape's name:
 
 		/// \brief Sets the name of the Shape.
-		/// 
-		/// This is for debug purposes; the string is not copied,
-		/// only the pointer is stored.
 		virtual void SetName( const char* name ) noexcept = 0;
 
 
