@@ -36,7 +36,7 @@ is available online: [Trax Library Documentation](https://www.trendverlag.com/Tr
 - [Sample application](https://www.trendverlag.com/rail/EEPNew0_1_0.rar) and test cases to demonstrate library capabilities:
 
 <p align="center">
-  <img src="Doc/Images/EEPNew.jpg" alt="EEPNew (v.0.1.0) using trax library" style="max-width:90%; height:auto;">
+  <img src="Doc/Images/EEPNew.jpg" alt="EEPNew (v.0.1.0) using trax library" style="max-width:80%; height:auto;">
 </p>
 <p><em>Figure: EEPNew (v.0.1.0) using trax library</em></p>
 
