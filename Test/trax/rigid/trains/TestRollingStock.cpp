@@ -33,6 +33,7 @@
 
 #include "trax/rigid/trains/RollingStock.h"
 #include "trax/rigid/trains/WheelFrame.h"
+#include "trax/rigid/Wheelset.h"
 #include "trax/rigid/trains/support/RollingStockFileReader.h"
 #include "trax/rigid/trains/support/RollingStockCreator.h"
 
@@ -48,53 +49,7 @@ using namespace trax;
 
 BOOST_AUTO_TEST_SUITE(trax_tests)
 BOOST_AUTO_TEST_SUITE(TestRollingStock)
-//BOOST_FIXTURE_TEST_CASE( testWheelArrangementCreation, TrackFixture )
-//{
-//	PhysX_SimulatorTrain simulator{};
-//
-//	{
-//		Location location{ m_pTrack, TrackLocation{ m_pTrack->GetLength()/2 } };
-//		std::shared_ptr<RollingStock> pRS = RollingStock::Make( simulator );
-//
-//		BOOST_REQUIRE( pRS );
-//		BOOST_REQUIRE_EQUAL( pRS->GetNumberOfWheelFrames(), 2 );
-//		BOOST_CHECK_EQUAL( pRS->GetWheelFrame( 0 ).CntWheelsets(), 2 );
-//		BOOST_CHECK_EQUAL( pRS->GetWheelFrame( 1 ).CntWheelsets(), 2 );
-//
-//		pRS->Rail( location );
-//		pRS->TargetVelocity( 10_mIs );
-//		pRS->Thrust( 0.5 );
-//
-//		BOOST_REQUIRE( pRS->IsRailed() );
-//		BOOST_CHECK_EQUAL( pRS->TargetVelocity(), 10_mIs );
-//		BOOST_CHECK_EQUAL( pRS->Thrust(), 0.5 );
-//		BOOST_CHECK( pRS->ThrustAbsolute() );
-//		BOOST_CHECK_EQUAL( pRS->GetLength(), 14_m );
-//
-//		BOOST_CHECK_CLOSE_DIMENSION( pRS->GetCouplingHeight( RailRunner::EndType::north ), 1_m, 0.0001 );
-//		BOOST_CHECK_CLOSE_DIMENSION( pRS->GetCouplingHeight( RailRunner::EndType::south ), 1_m, 0.0001 );
-//
-//		Frame<Length,One> globalAnchor = pRS->GetWheelFrame( 0 ).Anchor(), bodyFrame, trackLocationFrame;
-//		pRS->GetWheelFrame( 0 ).GetGestalt().GetFrame( bodyFrame );
-//		bodyFrame.ToParent( globalAnchor );
-//		location.Transition( trackLocationFrame );
-//		BOOST_CHECK_CLOSE_SPATIAL2( globalAnchor, trackLocationFrame, epsilon__length, epsilon__angle );
-//
-//		globalAnchor = pRS->GetWheelFrame( 1 ).Anchor();
-//		pRS->GetWheelFrame( 1 ).GetGestalt().GetFrame( bodyFrame );
-//		bodyFrame.ToParent( globalAnchor );
-//		location.Move( -7_m );
-//		location.Transition( trackLocationFrame );
-//		BOOST_CHECK_CLOSE_SPATIAL2( globalAnchor, trackLocationFrame, epsilon__length, epsilon__angle );
-//
-//		pRS->JackOnDerail().Insert( &simulator.PlugToStop() );
-//
-//		simulator.Loop();
-//
-//		BOOST_CHECK( !pRS->IsRailed() );
-//	}
-//}
-
+ 
 //BOOST_FIXTURE_TEST_CASE( testWheelArrangementJacobsBogies1, TrainFixtureVisualDebugger )
 BOOST_FIXTURE_TEST_CASE( testWheelArrangementJacobsBogies1, TrainFixture )
 {
@@ -345,6 +300,41 @@ BOOST_FIXTURE_TEST_CASE( testRollingStockReader4, TrainFixture )
 
 	// on a straight track all wheelframes must roll in the same direction:
 	BOOST_CHECK_CLOSE_SPATIAL( globalLocationWF1.T, globalLocationWF2.T, epsilon__angle );
+}
+
+BOOST_FIXTURE_TEST_CASE( testRollingStockLevitating, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testRollingStockLevitating, TrainFixtureVisualDebugger )
+{
+	RollingStockCreator creator{ *m_pScene };
+	RollingStockFileReader reader{ creator, FixturePath() };
+	BOOST_REQUIRE( reader( "Okmm38Limits.rollingstock" ) );
+	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
+	BOOST_REQUIRE( pRollingStock );
+
+	Frame<Length,One> frame;
+	m_Location.Transition( frame );
+	frame.P.z += 10_m; // make it levitate
+	pRollingStock->ResetToGlobalAnchor( frame );
+	pRollingStock->Rail( m_Location, false );
+	BOOST_REQUIRE( pRollingStock->IsValid() );
+	BOOST_REQUIRE( pRollingStock->IsRailed() );
+
+	Frame<Length,One> frame2;
+	m_Location.Transition( frame2 );
+	BOOST_REQUIRE( reader( "Okmm38Limits.rollingstock" ) );
+	std::shared_ptr<RollingStock> pRollingStock2 = creator.GetRollingStock();
+	BOOST_REQUIRE( pRollingStock2 );
+	frame2.P.y -= 400_cm;
+	frame2.P.z += 10_m; // make it levitate
+	pRollingStock2->ResetToGlobalAnchor( frame2 );
+
+	Length Flange = pRollingStock->GetWheelFrame( 0 ).GetWheelset( 0 ).Flange;
+	m_pScene->Loop( sqrt( 2*(10_m-Flange)/abs(g) ) - fixed_timestep );
+
+	BOOST_CHECK( pRollingStock->IsRailed() );
+	Frame<Length,One> globalLocation1 = pRollingStock->GetGlobalAnchor();
+	Frame<Length,One> globalLocation2 = pRollingStock2->GetGlobalAnchor();
+	BOOST_CHECK_SMALL( globalLocation1.P.z - globalLocation2.P.z, epsilon__length );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

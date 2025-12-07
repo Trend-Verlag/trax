@@ -68,6 +68,8 @@ namespace trax{
 
 		virtual void SetLimits( const TrackJointLimits& wfl ) = 0;
 
+		virtual void SetFlange( Length flange ) noexcept = 0;
+
 		virtual void SetMotorForceLimits( Force min, Force max ) noexcept = 0;
 
 		virtual void SetMotorTarget( Velocity ) noexcept = 0;
@@ -384,6 +386,8 @@ namespace trax{
 
 		void SetLimits( const TrackJointLimits& wfl ) override;
 
+		void SetFlange( Length flange ) noexcept override;
+
 		void SetMotorForceLimits( Force min, Force max ) noexcept override;
 
 		void SetMotorTarget( Velocity ) noexcept override;
@@ -444,6 +448,12 @@ inline void TrackJointFeeder_Imp<Valtype, Base>::SetLimits( const TrackJointLimi
 	m_TrackJoint.ThresholdN( wfl.ThresholdNormal );
 	m_TrackJoint.ThresholdB( wfl.ThresholdBinormal );
 	m_TrackJoint.ErrorReductionParameter( wfl.ErrorReduction );
+}
+
+template<typename Valtype, class Base>
+inline void TrackJointFeeder_Imp<Valtype, Base>::SetFlange( Length flange ) noexcept
+{
+	m_TrackJoint.Flange( _m(flange) / Base::EngineMetersPerUnit() );
 }
 
 template<typename Valtype,class Base>

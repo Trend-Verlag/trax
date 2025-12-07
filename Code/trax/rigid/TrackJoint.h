@@ -822,7 +822,7 @@ inline bool TrackJoint<Valtype>::SetMovingBody( const spat::Frame<Valtype>& body
 	{
 		m_Dims = 0;
 		m_LimDims = 0;
-		std::clog << Verbosity::detailed << "Trackjoint: levitating!" << std::endl;
+		std::clog << Verbosity::verbose << "Trackjoint: levitating!" << std::endl;
 	}
 
 	if( bDerailed )

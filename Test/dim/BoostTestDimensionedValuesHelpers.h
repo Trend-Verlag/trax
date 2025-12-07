@@ -17,4 +17,3 @@
 
 #define BOOST_CHECK_CLOSE_DIMENSION( a, b, percentage ) BOOST_CHECK_CLOSE( (a).Units(), (b).Units(), percentage );
 
-

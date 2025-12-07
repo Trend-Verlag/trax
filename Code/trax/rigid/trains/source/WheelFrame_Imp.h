@@ -166,6 +166,7 @@ namespace trax{
 	private:
 		std::shared_ptr<class TrackJointFeederMotorModel>	m_pTrackJointFeederMotorModel;
 		TrackJointLimits 									m_TrackJointLimits;
+		Length												m_Flange;
 		bool												m_bEnableDerailing;
 
 		void SetLimits( const TrackJointLimits& wfl );

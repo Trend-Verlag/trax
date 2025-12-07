@@ -57,6 +57,7 @@ WheelFrame_Imp::WheelFrame_Imp(
 	Scene& scene, 
 	std::shared_ptr<Gestalt> pGestalt )
 	: Bogie_Imp			{ scene, pGestalt }
+	, m_Flange			{ 0_m }
 	, m_bEnableDerailing{ true }
 {
 	spat::Frame<Length,One> anchor = spat::Identity<Length,One>;
@@ -294,6 +295,8 @@ int WheelFrame_Imp::Attach( const Wheelset& ws )
 	assert( !IsRailed() );
 
 	int retval = m_pTrackJointFeederMotorModel->Attach( ws );
+	m_Flange = (std::max)( m_Flange, ws.Flange );
+	m_pTrackJointFeederMotorModel->SetFlange( m_Flange );
 
 	if( std::unique_ptr<GeomCapsule> pWheelsetGeom = m_Scene.CreateGeomCapsule(); pWheelsetGeom )
 	{
@@ -325,6 +328,8 @@ void WheelFrame_Imp::DetachAllWheelsets(){
 		if( GetGestalt().Get( idx ).TypeFilter() == Geom::fWheelset )
 			GetGestalt().Remove( idx-- );
 	}
+
+	m_Flange = 0_m;
 
 	return m_pTrackJointFeederMotorModel->DetachAllWheelsets();
 }

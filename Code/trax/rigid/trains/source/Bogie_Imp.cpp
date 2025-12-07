@@ -924,7 +924,7 @@ bool Bogie_Imp::Couple( EndType end, Bogie& with, EndType withEnd, bool btrigger
 	thisCoupling.pCoupling->SetLength( GetCouplingDistance( {*this,end}, {with,withEnd} ) );
 	Length couplinglength = thisCoupling.pCoupling->GetLength();
 	if( couplinglength > 5_m )
-		std::clog << "Very long coupling length: " << couplinglength << " is this intended?" << std::endl;
+		std::clog << Verbosity::normal << "Very long coupling length: " << couplinglength << " is this intended?" << std::endl;
 
 	thisCoupling.bActivated = false;
 	thatCoupling.bActivated = false;
@@ -1464,7 +1464,7 @@ bool Bogie_Imp::CouplingProps_Ext::CheckCoupling( Time dt ) noexcept
 		Force force = pCoupling->GetForce().Length();
 		if( force > BreakingForce )
 		{
-			std::cout << "Coupling force: " << force << std::endl;
+			std::clog << Verbosity::detailed << "Coupling force: " << force << std::endl;
 			m_JackOnForceLimitExceeded.Pulse();
 
 			switch( Type ){
