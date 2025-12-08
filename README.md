@@ -33,7 +33,7 @@ is available online: [Trax Library Documentation](https://www.trendverlag.com/Tr
 - Realistic physics-based simulation of railroad vehicles using NVIDIA PhysX.
 - Signaling and sensor systems for train operations.
 - Modular architecture for easy integration and extension.
-- [Sample application](https://www.trendverlag.com/rail/EEPNew0_1_0.rar) and test cases to demonstrate library capabilities:
+- [Sample application](../../releases/tag/v3.2.0) and test cases to demonstrate library capabilities:
 
 <p align="center">
   <img src="Doc/Images/EEPNew.jpg" alt="EEPNew (v.0.1.0) using trax library" style="max-width:80%; height:auto;">
@@ -129,12 +129,12 @@ select the 'ALL_TESTS' project and build and run it.
 
 ### Documentation
 
-- The [Trax GitHub Project](https://github.com/Trend-Verlag) produces a documentation from the 
+- The [Trax GitHub Project](https://github.com/Trend-Verlag/trax) produces a documentation from the 
 source code using Doxygen. It contains a medium level overview as well as detailed description 
 of the API.
 - A ready generated (maybe slightly outdated) version of the documentation is available online: 
 [Trax Library Documentation](https://www.trendverlag.com/Trax/Doc/API/html/index.html).
-- The [Frequently Asked Questions (FAQ)](https://github.com/Trend-Verlag/trax/tree/main/Doc/FAQ.md)
+- The [Frequently Asked Questions (FAQ)](Doc/FAQ.md)
 answers some common questions regarding the library.
 
 ### Whitepapers 
