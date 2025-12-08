@@ -33,7 +33,7 @@ is available online: [Trax Library Documentation](https://www.trendverlag.com/Tr
 - Realistic physics-based simulation of railroad vehicles using NVIDIA PhysX.
 - Signaling and sensor systems for train operations.
 - Modular architecture for easy integration and extension.
-- [Sample application](../../releases/tag/v3.2.0) and test cases to demonstrate library capabilities:
+- [Sample application](https://github.com/Trend-Verlag/trax/releases/tag/v3.2.0) and test cases to demonstrate library capabilities:
 
 <p align="center">
   <img src="Doc/Images/EEPNew.jpg" alt="EEPNew (v.0.1.0) using trax library" style="max-width:80%; height:auto;">
