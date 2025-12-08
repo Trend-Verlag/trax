@@ -350,6 +350,9 @@ OPTIMIZE_OUTPUT_SLICE  = NO
 
 EXTENSION_MAPPING      = 
 
+# Treat extension-less files (e.g., LICENSE) as Markdown
+EXTENSION_MAPPING += no_extension=md
+
 # If the MARKDOWN_SUPPORT tag is enabled then doxygen pre-processes all comments
 # according to the Markdown format, which allows for more readable
 # documentation. See https://daringfireball.net/projects/markdown/ for details.
@@ -951,7 +954,10 @@ WARN_LOGFILE           =
 
 INPUT                  = @DOXYGEN_INPUT_PATHS@
 						 
-						 
+# Ensure the linked files are included in the input set
+INPUT += @CMAKE_CURRENT_SOURCE_DIR@/LICENSE \
+         @CMAKE_CURRENT_SOURCE_DIR@/Doc/FAQ.md
+         
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
 # libiconv (or the iconv built into libc) for the transcoding. See the libiconv

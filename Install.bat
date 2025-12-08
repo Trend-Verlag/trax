@@ -16,7 +16,5 @@ setx TRAX3_ROOT "%cd%"
 cmake -S . -B .\_Build
 cmake --build .\_Build --target ALL_DOCUMENTATION
 cmake --build .\_Build --config Release
-cmake --build .\_Build --config Release --target ALL_TESTS
-
 popd
 pause
