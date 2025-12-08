@@ -2,9 +2,10 @@
 
 The trax library implements the logic of track-guided vehicles, signaling, 
 sensors, and cargo transportation; it leverages the NVIDIA PhysX engine to 
-simulate train dynamics - on tracks and beyond. Our mission: a physically 
-realistic railroad simulation, built to last - with open ideas, better code, 
-and shared success.
+simulate train dynamics - on tracks and beyond. 
+
+Our mission: a physically realistic railroad simulation, built to last - with 
+open ideas, better code, and shared success.
 
 This repository contains the mature core of trax library version 3.0.0. The 
 library was used to build the railroad simulators 
