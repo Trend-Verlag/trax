@@ -1,8 +1,8 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file. The format is based on 
+"Keep a Changelog" and this project follows Semantic Versioning.
 
-The format is based on "Keep a Changelog" and this project follows Semantic Versioning.
 
 ## [Unreleased]
 
@@ -16,7 +16,18 @@ The format is based on "Keep a Changelog" and this project follows Semantic Vers
 - 
 
 ### Security
-- 
+-
+
+
+## [3.2.0] - 2025-12-08
+
+### Added
+- Sample application demonstrating core features.
+- GetVolume() for Geoms.
+
+### Fixed
+- Wheelset's 'Flange' was ignored on levitating. Fixed.
+
 
 ## [3.1.0] - 2025-12-01
 ### Added
