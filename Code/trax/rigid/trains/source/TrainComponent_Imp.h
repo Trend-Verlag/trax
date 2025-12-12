@@ -75,11 +75,11 @@ namespace trax{
 
 		bool IsParent( const Train& train ) const noexcept override;
 
-		bool Couple( RailRunner::EndType end, TrainComponent& with, RailRunner::EndType withEnd, bool btriggerPulses = true ) noexcept override;
+		bool Couple( RailRunner::EndType end, TrainComponent& with, RailRunner::EndType withEnd, bool btriggerPulses = true ) override;
 
-		std::pair<std::shared_ptr<TrainComponent>,RailRunner::EndType> GetCoupledTrainComponent( RailRunner::EndType end ) const noexcept override;
+		std::pair<std::shared_ptr<TrainComponent>,RailRunner::EndType> GetCoupledTrainComponent( RailRunner::EndType end ) const override;
 		
-		Length GetCouplingLength( RailRunner::EndType end, TrainComponent::DistanceType type = TrainComponent::DistanceType::max ) const noexcept override;
+		Length GetCouplingLength( RailRunner::EndType end, TrainComponent::DistanceType type = TrainComponent::DistanceType::max ) const override;
 
 		
 		// Jacks 'N Plugs:
@@ -400,7 +400,7 @@ bool TrainComponent_Imp<Base>::Couple(
 	RailRunner::EndType end, 
 	TrainComponent& with, 
 	RailRunner::EndType withEnd, 
-	bool btriggerPulses ) noexcept
+	bool btriggerPulses )
 {
 	if( end == RailRunner::EndType::none || withEnd == RailRunner::EndType::none )
 		return false;
@@ -427,7 +427,7 @@ bool TrainComponent_Imp<Base>::Couple(
 
 template<class Base>
 std::pair<std::shared_ptr<TrainComponent>,RailRunner::EndType> 
-TrainComponent_Imp<Base>::GetCoupledTrainComponent( RailRunner::EndType end ) const noexcept
+TrainComponent_Imp<Base>::GetCoupledTrainComponent( RailRunner::EndType end ) const
 {
 	if( end == RailRunner::EndType::north ||
 		end == RailRunner::EndType::south )
@@ -460,7 +460,7 @@ TrainComponent_Imp<Base>::GetCoupledTrainComponent( RailRunner::EndType end ) co
 }
 
 template<class Base>
-Length TrainComponent_Imp<Base>::GetCouplingLength( RailRunner::EndType end, TrainComponent::DistanceType distance ) const noexcept
+Length TrainComponent_Imp<Base>::GetCouplingLength( RailRunner::EndType end, TrainComponent::DistanceType distance ) const
 {
 	switch( end )
 	{

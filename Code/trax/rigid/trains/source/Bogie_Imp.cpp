@@ -1340,7 +1340,7 @@ trax::Bogie_Imp::BogieCoupling::BogieCoupling(
 	Bogie_Imp& bogieParent, 
 	const spat::Frame<Length,One>& poseParent, 
 	Bogie_Imp& bogieChild, 
-	const spat::Frame<Length,One>& poseChild )
+	const spat::Frame<Length,One>& poseChild ) noexcept
 	: BogieJoint<DistanceJoint>{ 
 		scene.CreateDistanceJoint( &bogieParent.GetGestalt(), poseParent, &bogieChild.GetGestalt(), poseChild ),
 		bogieParent, 

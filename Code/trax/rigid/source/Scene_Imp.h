@@ -43,11 +43,11 @@ namespace trax{
 			return "Scene";
 		}
 
-		void Register( Simulated& simulated ) override;
+		void Register( Simulated& simulated ) noexcept override;
 
-		void Unregister( const Simulated& simulated ) override;
+		void Unregister( const Simulated& simulated ) noexcept override;
 
-		void UnregisterAllSimulated() override;
+		void UnregisterAllSimulated() noexcept override;
 
 		void Simulate() override;
 

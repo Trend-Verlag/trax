@@ -112,9 +112,11 @@ namespace trax{
 
 		/// \brief Get the coupled RollingStock.
 		/// \param end End type of this RollingStock.
-		/// \returns A pointer to the other RollingStock coupled at end, or  
-		/// nullptr if none and the other RollingStock's end type.	
-		virtual std::pair<std::shared_ptr<RollingStock>,EndType> GetCoupledRollingStock( EndType end ) const noexcept = 0;
+		/// \throws std::logic_error if this object is not valid.
+		/// \returns A pointer to the other RollingStock coupled at 
+		/// end or nullptr if none, and the other RollingStock's end 
+		/// type.	
+		virtual std::pair<std::shared_ptr<RollingStock>,EndType> GetCoupledRollingStock( EndType end ) const = 0;
 
 
 		// Jacks 'N Plugs:

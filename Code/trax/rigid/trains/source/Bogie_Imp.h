@@ -235,7 +235,7 @@ namespace trax{
 		public:
 			BogieJoint(	std::unique_ptr<JointType> pJoint,
 						Bogie_Imp& bogieParent, 
-						Bogie_Imp& bogieChild )
+						Bogie_Imp& bogieChild ) noexcept
 				: m_pJoint( std::move( pJoint ) )
 				, m_BogieA( bogieParent )
 				, m_BogieB( bogieChild )
@@ -291,7 +291,7 @@ namespace trax{
 							Bogie_Imp& bogieParent, 
 							const spat::Frame<Length, One>& poseParent, 
 							Bogie_Imp& bogieChild, 
-							const spat::Frame<Length, One>& poseChild );
+							const spat::Frame<Length, One>& poseChild ) noexcept;
 
 			std::shared_ptr<Bogie_Imp> GetCoupledBogie( const Bogie_Imp& toBogie ) const noexcept;
 

@@ -122,9 +122,9 @@ namespace trax{
 			bool bMoveTo = true,
 			DistanceType distance = DistanceType::actual ) override;
 
-		void Align( EndType atEnd, TrainComponent& component, EndType withEnd ) const noexcept override;
+		void Align( EndType atEnd, TrainComponent& component, EndType withEnd ) const override;
 
-		void Align( EndType atEnd, TrainComponent& component, Orientation orientation ) const noexcept override;
+		void Align( EndType atEnd, TrainComponent& component, Orientation orientation ) const override;
 
 		void Append( EndType atEnd, std::shared_ptr<TrainComponent> pComponent, EndType withEnd, bool bCouple = true ) override;
 
@@ -140,7 +140,7 @@ namespace trax{
 
 		void Clear() noexcept override;
 
-		bool Couple( EndType end, Train& with, EndType withEnd ) noexcept override;
+		bool Couple( EndType end, Train& with, EndType withEnd ) override;
 				
 		bool IsUnCoupledInternally() const noexcept override;
 		
@@ -158,7 +158,7 @@ namespace trax{
 	private:
 		std::deque<std::shared_ptr<TrainComponent>> m_Train;
  
-		std::pair<std::shared_ptr<TrainComponent>,EndType> GetTipAt( const TrainComponent& trainComponent, EndType end ) const noexcept;
+		std::pair<std::shared_ptr<TrainComponent>,EndType> GetTipAt( const TrainComponent& trainComponent, EndType end ) const;
 
 		void Recouple() noexcept;
 

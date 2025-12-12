@@ -112,9 +112,10 @@ namespace trax{
 		/// \param with Other TrainComponent.
 		/// \param withEnd Other TrainComponent's end to couple with.
 		/// \param btriggerPulses If true the respective JackOnCouple jacks are pulsing.
+		/// \throws std::logic_error if there are no bogies in a TrainComponent.
 		/// \returns true if a new coupling was established or the two TrainComponent
 		/// were already properly coupled. 
-		virtual bool Couple( EndType end, TrainComponent& with, EndType withEnd, bool btriggerPulses = true ) noexcept = 0;
+		virtual bool Couple( EndType end, TrainComponent& with, EndType withEnd, bool btriggerPulses = true ) = 0;
 
 
 		/// \brief Get the coupled TrainComponent.
@@ -123,9 +124,11 @@ namespace trax{
 		/// TrainComponent's tip Bogie, that is topmost in its hierarchy of TrainComponents,
 		/// but not also a parent to this TrainComponent.
 		/// \param end End type of this TrainComponent.
+		/// \throws std::logic_error if there are no bogies in the 
+		/// TrainComponent.
 		/// \returns A pointer to the other TrainComponent coupled at end, or  
 		/// nullptr if none and the other TrainComponent's end type.	
-		virtual std::pair<std::shared_ptr<TrainComponent>,EndType> GetCoupledTrainComponent( EndType end ) const noexcept = 0;
+		virtual std::pair<std::shared_ptr<TrainComponent>,EndType> GetCoupledTrainComponent( EndType end ) const = 0;
 
 
 		/// \brief Gets the length of the coupling from TrainComponent edge to
@@ -136,29 +139,32 @@ namespace trax{
 		/// trigger spheres; or 0_m if not coupled.
 		/// \param end End of this TrainComponent to get the coupling length for.
 		/// \param distance The type of the data of the coupling to get the length for.
+		/// \throws std::logic_error if there are no bogies in the 
+		/// TrainComponent.
 		/// \returns The length of the coupling at the denoted end.
-		virtual Length GetCouplingLength( EndType end, DistanceType distance = DistanceType::max ) const noexcept = 0;
+		virtual Length GetCouplingLength( EndType end, DistanceType distance = DistanceType::max ) const = 0;
 
 
 		/// \name Train Tip
 		/// \brief Gets a reference to the Bogie which makes the 
-		/// outmost tip of this RailRunner.
-		/// 
-		/// For a RollingStock and a Train it would get the Bogie
-		/// with the coupling that reaches out the furthest in the 
-		/// denoted direction.
+		/// outmost tip of this TrainComponent with the coupling 
+		/// that reaches out the furthest in the denoted direction.
 		///@{
 		
-		/// \param end Denotes the Railrunner's end to search for 
+		/// \param end Denotes the TrainComponent's end to search for 
 		/// the outmost Bogie.
-		/// \throws std::invalid_argument if end is none.
+		/// \throws std::invalid_argument if end is none or all.
+		/// \throws std::logic_error if there are no bogies in the 
+		/// TrainComponent.
 		/// \returns The Bogie at the tip, and the end type of the 
 		/// coupling at the tip.
 		virtual std::pair<Bogie&,EndType> GetTipAt( EndType end ) = 0;
 
-		/// \param end Denotes the Railrunner's end to search for 
+		/// \param end Denotes the TrainComponent's end to search for 
 		/// the outmost Bogie.
-		/// \throws std::invalid_argument if end is none.
+		/// \throws std::invalid_argument if end is none or all.
+		/// \throws std::logic_error if there are no bogies in the 
+		/// TrainComponent.
 		/// \returns The Bogie at the tip, and the end type of the 
 		/// coupling at the tip.
 		virtual std::pair<const Bogie&,EndType> GetTipAt( EndType end ) const = 0;

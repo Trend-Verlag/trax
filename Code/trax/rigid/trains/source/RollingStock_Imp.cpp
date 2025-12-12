@@ -379,10 +379,12 @@ std::pair<Bogie&,RailRunner::EndType> RollingStock_Imp::GetTipAt( EndType end ){
 		throw std::invalid_argument( "RollingStock_Imp::GetTipAt: Invalid end type!" );
 	}
 
+	assert( !"RollingStock_Imp::GetTipAt: No tip found" );
+
 	std::ostringstream stream;
 	stream << "RollingStock_Imp::GetTipAt: No tip found at end " << static_cast<int>(end) << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::invalid_argument( stream.str() );
+	throw std::logic_error( stream.str() );
 }
 
 std::pair<const Bogie&,RailRunner::EndType> RollingStock_Imp::GetTipAt( EndType end ) const{
@@ -401,10 +403,12 @@ std::pair<const Bogie&,RailRunner::EndType> RollingStock_Imp::GetTipAt( EndType 
 		throw std::invalid_argument( "RollingStock_Imp::GetTipAt: Invalid end type!" );
 	}
 
+	assert( !"RollingStock_Imp::GetTipAt: No tip found" );
+
 	std::ostringstream stream;
 	stream << "RollingStock_Imp::GetTipAt: No tip found at end " << static_cast<int>(end) << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::invalid_argument( stream.str() );
+	throw std::logic_error( stream.str() );
 }
 
 std::shared_ptr<RollingStock> RollingStock_Imp::ThisRollingStock() const noexcept
@@ -469,7 +473,7 @@ WheelFrame& RollingStock_Imp::GetWheelFrame( int idx ) const{
 }
 
 std::pair<std::shared_ptr<RollingStock>,RailRunner::EndType> 
-RollingStock_Imp::GetCoupledRollingStock( EndType end ) const noexcept
+RollingStock_Imp::GetCoupledRollingStock( EndType end ) const
 {
 	if( end == EndType::north ||
 		end == EndType::south )

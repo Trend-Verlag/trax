@@ -128,7 +128,7 @@ namespace trax{
 
 		WheelFrame& GetWheelFrame( int idx ) const override;
 
-		std::pair<std::shared_ptr<RollingStock>,EndType> GetCoupledRollingStock( EndType end ) const noexcept override;
+		std::pair<std::shared_ptr<RollingStock>,EndType> GetCoupledRollingStock( EndType end ) const override;
 
 
 		// Jacks 'N Plugs:

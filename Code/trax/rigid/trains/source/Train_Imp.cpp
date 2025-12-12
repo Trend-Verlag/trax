@@ -88,10 +88,10 @@ bool Train_Imp::IsValid() const noexcept
 
 		if( (*iter)->GetTrain() != this )
 			return false;
+	}
 
-		if( iter == m_Train.end() - 1 )
-			break; // Last element has no next element.
-
+	for( auto iter = m_Train.begin(); iter != m_Train.end() - 1; ++iter )
+	{
 		if( (*iter)->GetCoupledTrainComponent( Back( **iter ) ) != std::make_pair( *(iter + 1), Front( **(iter + 1) ) ) )
 			return false;
 	}
@@ -505,7 +505,7 @@ bool Train_Imp::Create(
 void Train_Imp::Align( 
 	EndType atEnd, 
 	TrainComponent& component, 
-	EndType withEnd ) const noexcept
+	EndType withEnd ) const
 {
 	if( m_Train.empty() )
 		return; // Nothing to align with.
@@ -548,7 +548,7 @@ void Train_Imp::Align(
 void Train_Imp::Align( 
 	EndType atEnd, 
 	TrainComponent& component, 
-	Orientation orientation ) const noexcept
+	Orientation orientation ) const
 {
 	Align( atEnd, 
 		   component, 
@@ -764,7 +764,7 @@ void Train_Imp::Clear() noexcept
 	m_Train.clear();
 }
 
-bool Train_Imp::Couple( EndType end, Train& with, EndType withEnd ) noexcept{
+bool Train_Imp::Couple( EndType end, Train& with, EndType withEnd ){
 	std::pair<Bogie&,RailRunner::EndType> coupling = GetTipAt( end );
 	std::pair<Bogie&,RailRunner::EndType> withcoupling = with.GetTipAt( withEnd );
 	return coupling.first.Couple( coupling.second, withcoupling.first, withcoupling.second );
@@ -846,7 +846,7 @@ void Train_Imp::ConnectJacks()
 
 std::pair<std::shared_ptr<TrainComponent>,RailRunner::EndType> Train_Imp::GetTipAt( 
 	const TrainComponent& trainComponent, 
-	EndType end ) const noexcept
+	EndType end ) const
 {
 	// Search for train tip:
 	std::pair<std::shared_ptr<TrainComponent>,EndType> trainTip = 

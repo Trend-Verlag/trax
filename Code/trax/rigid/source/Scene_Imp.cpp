@@ -41,13 +41,13 @@ Scene_Imp::Scene_Imp()
 	m_PlugToStop.Reference( "name", "PlugToStop" );
 }
 
-void Scene_Imp::Register( Simulated& simulated )
+void Scene_Imp::Register( Simulated& simulated ) noexcept
 {
 	if( std::find( m_Simulated.begin(), m_Simulated.end(), &simulated ) == m_Simulated.end() )
 		m_Simulated.push_back( &simulated );
 }
 
-void Scene_Imp::Unregister( const Simulated& simulated )
+void Scene_Imp::Unregister( const Simulated& simulated ) noexcept
 {
 	auto it = std::find( m_Simulated.begin(), m_Simulated.end(), &simulated );
 
@@ -60,7 +60,7 @@ void Scene_Imp::Unregister( const Simulated& simulated )
 	}
 }
 
-void Scene_Imp::UnregisterAllSimulated()
+void Scene_Imp::UnregisterAllSimulated() noexcept
 {
 	if( m_bSimulationRunning )
 	{

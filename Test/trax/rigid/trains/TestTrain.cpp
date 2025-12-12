@@ -37,6 +37,7 @@
 #include "trax/rigid/trains/support/RollingStockCreator.h"
 #include "trax/rigid/trains/Train.h"
 #include "trax/rigid/trains/support/TrainFileReader.h"
+#include "trax/rigid/trains/collections/Fleet.h"
 
 #include "dim/DimLimits.h"
 #include "dim/support/DimSupportStream.h"
@@ -725,6 +726,88 @@ BOOST_FIXTURE_TEST_CASE( testTrainGetTip, TrainFixture )
 	BOOST_CHECK_EQUAL( &pTrain->GetComponent( 9 )->GetTipAt( RailRunner::EndType::south ).first, &pTrain->GetTipAt( RailRunner::EndType::south ).first );
 	BOOST_CHECK_NE( &pTrain->GetComponent( 4 )->GetTipAt( RailRunner::EndType::north ).first, &pTrain->GetTipAt( RailRunner::EndType::north ).first );
 	BOOST_CHECK_NE( &pTrain->GetComponent( 4 )->GetTipAt( RailRunner::EndType::south ).first, &pTrain->GetTipAt( RailRunner::EndType::south ).first );
+}
+
+BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixtureVisualDebugger )
+// Uncouple in the middle; couple opposite ends:
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "Cargo.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+	pTrain->Rail( m_Location );
+
+	std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> Split = 
+		pTrain->SplitAfter( pTrain->GetNumberOfComponents() / 2 );
+	pTrain->Clear();
+
+	BOOST_CHECK( Split.first->Couple( RailRunner::EndType::north, *Split.second, RailRunner::EndType::south ) );
+}
+
+BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple2, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple2, TrainFixtureVisualDebugger )
+// Uncouple in the middle; drive around, let auto couple:
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "Cargo.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+
+	std::unique_ptr<Fleet> pFleet = Fleet::Make();
+	m_pScene->Register( *pFleet );
+	pFleet->Add( pTrain );
+
+	pTrain->Rail( m_Location );
+	BOOST_CHECK( !pTrain->IsActivated( RailRunner::EndType::north ) );
+	BOOST_CHECK( !pTrain->IsActivated( RailRunner::EndType::south ) );
+	pTrain->ActivateCoupling( RailRunner::EndType::north );
+	pTrain->ActivateCoupling( RailRunner::EndType::south );
+
+	std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> Split = 
+		pTrain->SplitAfter( pTrain->GetNumberOfComponents() / 2 );
+	pFleet->Add( Split.first );
+	pFleet->Add( Split.second );
+
+	pTrain->Clear();
+
+	Velocity v = 25_kmIh;
+	Split.first->TargetVelocity( v );
+	Split.first->Thrust( 0.75 );
+	Split.first->Brake( 0.75 );
+
+	BOOST_CHECK( Split.first->IsValid() );
+	BOOST_CHECK( Split.first->IsRailed() );
+	BOOST_CHECK( Split.first->IsActivated( RailRunner::EndType::north ) );
+	BOOST_CHECK( !Split.first->IsActivated( RailRunner::EndType::south ) );
+	BOOST_CHECK( Split.second->IsValid() );
+	BOOST_CHECK( Split.second->IsRailed() );
+	BOOST_CHECK( !Split.second->IsActivated( RailRunner::EndType::north ) );
+	BOOST_CHECK( Split.second->IsActivated( RailRunner::EndType::south ) );
+	BOOST_CHECK( !Split.first->GetTrain() && !Split.second->GetTrain() );
+
+	Split.first->ActivateCoupling( RailRunner::EndType::south );
+	BOOST_CHECK( Split.first->IsActivated( RailRunner::EndType::south ) );
+	Split.second->ActivateCoupling( RailRunner::EndType::north );
+	BOOST_CHECK( Split.second->IsActivated( RailRunner::EndType::north ) );
+
+	Length l = m_pTrack1->GetLength() +
+	m_pTrack2->GetLength() +
+	m_pTrack3->GetLength() +
+	m_pTrack4->GetLength();
+
+	Time simulationTime = l / v + 5_s;
+
+	const auto start = std::chrono::steady_clock::now();
+	m_pScene->Loop( simulationTime );
+	const auto end = std::chrono::steady_clock::now();
+
+	const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
+	std::cout << "Duration of simulation: " << duration << "ms; simulates ";
+	std::cout << simulationTime / _ms(duration);
+	std::cout << " times faster than real world time." << std::endl;
+
+	BOOST_CHECK( Split.first->GetTrain() || Split.second->GetTrain() );
 }
 
 BOOST_AUTO_TEST_SUITE_END() // TrainCouplingTests

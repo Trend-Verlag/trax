@@ -220,9 +220,11 @@ namespace trax{
 		/// \param thisEnd End of this Train.
 		/// \param with Other Train.
 		/// \param withEnd Other Train's end to couple with.
+		/// \throws std::logic_error if there are no bogies in the 
+		/// Trains.
 		/// \returns true if a new coupling was established or the two Trains
 		/// were already properly coupled.
-		virtual bool Couple( EndType thisEnd, Train& with, EndType withEnd ) noexcept = 0;
+		virtual bool Couple( EndType thisEnd, Train& with, EndType withEnd ) = 0;
 
 
 		/// \returns false if all the internal couplings of this Train (inluding 
