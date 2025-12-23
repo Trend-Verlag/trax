@@ -84,10 +84,12 @@ inline int geti() {
 
 typedef std::ostream& (*StreamOutAngle)( std::ostream&, Angle );
 
-StreamOutAnglePerLength DefaultStreamOutAnglePerLength = _1Im;
-StreamInAnglePerLength DefaultStreamInAnglePerLength = _1Im;
+StreamOutAngle DefaultStreamOutOne = _1;
+StreamInAngle DefaultStreamInOne = _1;
 StreamOutAngle DefaultStreamOutAngle = _rad;
 StreamInAngle DefaultStreamInAngle = _rad;
+StreamOutAnglePerLength DefaultStreamOutAnglePerLength = _1Im;
+StreamInAnglePerLength DefaultStreamInAnglePerLength = _1Im;
 StreamOutLength DefaultStreamOutLength = _m;
 StreamInLength DefaultStreamInLength = _m;
 StreamOutVelocity DefaultStreamOutVelocity = _kmIh;
@@ -596,12 +598,12 @@ std::ostream& _deg( std::ostream& ostr ){
 	return ostr;
 }
 
-std::ostream& _deg0(std::ostream& ostr, Angle angle){
-	return _streamValue( ostr, angle, _deg, Angle{infinite}, epsilon__angle, "" );
+std::ostream& _1(std::ostream& ostr, Angle angle){
+	return _streamValue( ostr, angle, _1, Angle{infinite}, epsilon__angle, "" );
 }
 
-std::ostream& _deg0( std::ostream& ostr ){
-	std::ostream& (*pf)( std::ostream&, Angle ) = _deg0;
+std::ostream& _1( std::ostream& ostr ){
+	std::ostream& (*pf)( std::ostream&, Angle ) = _1;
 	ostr.pword(geti<Angle>()) = reinterpret_cast<void*>(pf);
 	return ostr;
 }
@@ -1408,6 +1410,13 @@ StreamInAnglePerLength StreamInAnglePerLengthFrom( std::string unit ){
 	return nullptr;
 }
 
+StreamInAngle dclspc_dim StreamInOneFrom( std::string unit ){
+	if( unit == "_1" )
+		return _1;
+
+	return nullptr;
+}
+
 StreamInAngle StreamInAngleFrom( std::string unit ){
 	if( unit == "deg" )
 		return _deg;
@@ -1578,9 +1587,9 @@ std::string to_string_deg( Angle val ){
 	return stream.str();
 }
 
-std::string to_string_deg0( Angle val ){
+std::string to_string_1( Angle val ){
 	std::ostringstream stream;
-	stream << _deg0 << val;
+	stream << _1 << val;
 	return stream.str();
 }
 

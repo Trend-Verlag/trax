@@ -40,7 +40,7 @@ std::unique_ptr<Section> Section::Make(
 {
 	try{
 		if( auto pSection = std::make_unique<Section_Imp>() ){
-			pSection->Create(type);
+			pSection->Create( type );
 			return pSection;
 		}
 
@@ -52,9 +52,9 @@ std::unique_ptr<Section> Section::Make(
 }
 ///////////////////////////////////////
 Section_Imp::Section_Imp() noexcept
-	:	m_SectionType	{SpecialSections::unknown},
-		m_GaugeLeft		{0},
-		m_GaugeRight	{0}
+	: m_SectionType	{SpecialSections::unknown}
+	, m_GaugeLeft	{0}
+	, m_GaugeRight	{0}
 {}
 
 std::string	Section_Imp::TypeName() const noexcept{
@@ -81,6 +81,9 @@ void Section_Imp::Create( SpecialSections specialSection )
 		break;
 	case SpecialSections::vignol_UIC60:
 		CreateVignolProfile_UIC60( *this );
+		break;
+	case SpecialSections::vignol_EB63T_rod:
+		CreateVignolProfile_EB63T_Rod( *this );
 		break;
 	case SpecialSections::eepv7_grooved_convextread:
 		SetCntPoints( 37 );
@@ -501,6 +504,17 @@ void Section_Imp::Create( SpecialSections specialSection )
 		CalculateNormals();
 		CalculateTextureCoordinates();
 		break;
+	case SpecialSections::embankment:
+		SetCntPoints( 7 );
+		Set( 0, { {-1.800_m, -.900_m}	, {0,1}, 1.0f - 0.0f } );
+		Set( 1, { {-1.700_m, -.600_m}	, {0,1}, 1.0f - 0.01f } );
+		Set( 2, { {-1.240_m, -.200_m}	, {0,1}, 1.0f - 0.3f } );
+		Set( 3, { {0.0_m, -.170_m}		, {0,1}, 1.0f - 1.0f } );
+		Set( 4, { {1.240_m, -.200_m}	, {0,1}, 1.0f - 0.3f } );
+		Set( 5, { {1.700_m, -.600_m}	, {0,1}, 1.0f - 0.01f } );
+		Set( 6, { {1.800_m, -.900_m}	, {0,1}, 1.0f - 0.0f } );
+		CalculateNormals();
+		break;
 	case SpecialSections::square:
 		CreatePipeline(*this, 4 );
 		break;
@@ -579,6 +593,12 @@ void Section_Imp::Set( int id, const SectionPoint& pt, bool bGaugeLeft, bool bGa
 		m_GaugeRight = id;
 }
 
+void Section_Imp::Shift( const spat::Vector2D<Length>& delta ) noexcept
+{
+	for( SectionPoint& point : m_SectionPoints )
+		point += delta;
+}
+
 void Section_Imp::Scale( One x_scale, One y_scale ){
 	for( auto piter = m_SectionPoints.begin(); 
 				piter != m_SectionPoints.end(); ++piter )
@@ -649,6 +669,8 @@ std::string ToString( Section::SpecialSections specialSection ){
 		return "standard";
 	case Section::SpecialSections::vignol_UIC60:
 		return "vignol_UIC60";
+	case Section::SpecialSections::vignol_EB63T_rod:
+		return "vignol_EB63T_rod";
 	case Section::SpecialSections::eepv7_grooved_convextread:
 		return "eepv7_grooved_convextread";
 	case Section::SpecialSections::eep_embankment_simple:
@@ -673,6 +695,8 @@ std::string ToString( Section::SpecialSections specialSection ){
 		return "eep_simple3";
 	case Section::SpecialSections::eep_flatballast_rods:
 		return "eep_flatballast_rods";
+	case Section::SpecialSections::embankment:
+		return "embankment";
 	case Section::SpecialSections::square:
 		return "square";
 	case Section::SpecialSections::hexagon:
@@ -694,6 +718,8 @@ Section::SpecialSections SpecialSection( const std::string& string ){
 		return Section::SpecialSections::eep_embankment_simple;
 	else if( string == "vignol_UIC60" )
 		return Section::SpecialSections::vignol_UIC60;
+	else if( string == "vignol_EB63T_rod" )
+		return Section::SpecialSections::vignol_EB63T_rod;
 	else if( string == "custom" )
 		return Section::SpecialSections::custom;
 	else if( string == "empty" )
@@ -720,6 +746,8 @@ Section::SpecialSections SpecialSection( const std::string& string ){
 		return Section::SpecialSections::eep_simple3;
 	else if( string == "eep_flatballast_rods" )
 		return Section::SpecialSections::eep_flatballast_rods;
+	else if( string == "embankment" )
+		return Section::SpecialSections::embankment;
 	else if( string == "square" )
 		return Section::SpecialSections::square;
 	else if( string == "hexagon" )
@@ -799,6 +827,50 @@ void CreateVignolProfile_UIC60( Section& section ){
 	section.Set( 34, { {1.800_m, -.900_m}	, {0,1}, 1.0f - 0.0f } );
 
 	section.CalculateNormals();
+}
+
+void CreateVignolProfile_EB63T_Rod( Section& section )
+{
+	section.SetCntPoints( 33 );
+
+	section.Set( 0, { { -70_mm, -151_mm } } );
+	section.Set( 1, { { -70_mm, -141_mm } } );
+	section.Set( 2, { { -66_mm, -137_mm } } );
+	section.Set( 3, { { -40_mm, -135_mm } } );
+	section.Set( 4, { { -24_mm, -128.2_mm } } );
+	section.Set( 5, { { -18_mm, -123_mm } } );
+	section.Set( 6, { { -15_mm, -116_mm } } );
+	section.Set( 7, { { -15_mm, -47_mm } } );
+	section.Set( 8, { { -20_mm, -38_mm } } );
+	section.Set( 9, { { -26_mm, -33_mm } } );
+	section.Set( 10, { { -37_mm, -29_mm } } );
+	section.Set( 11, { { -36_mm, -9_mm } } );
+	section.Set( 12, { { -34_mm, -7_mm } } );
+	section.Set( 13, { { -32_mm, -5_mm } } );
+	section.Set( 14, { { -28_mm, -3_mm } } );
+	section.Set( 15, { { -20_mm, -1_mm } } );
+
+	section.Set( 16, { { +0_mm, -0_mm } } );
+
+	section.Set( 17, { { +20_mm, -1_mm } } );
+	section.Set( 18, { { +28_mm, -3_mm } } );
+	section.Set( 19, { { +32_mm, -5_mm } } );
+	section.Set( 20, { { +34_mm, -7_mm } } );
+	section.Set( 21, { { +36_mm, -9_mm } } );
+	section.Set( 22, { { +37_mm, -29_mm } } );
+	section.Set( 23, { { +26_mm, -33_mm } } );
+	section.Set( 24, { { +20_mm, -38_mm } } );
+	section.Set( 25, { { +15_mm, -47_mm } } );
+	section.Set( 26, { { +15_mm, -116_mm } } );
+	section.Set( 27, { { +18_mm, -123_mm } } );
+	section.Set( 28, { { +24_mm, -128.2_mm } } );
+	section.Set( 29, { { +40_mm, -135_mm } } );
+	section.Set( 30, { { +66_mm, -137_mm } } );
+	section.Set( 31, { { +70_mm, -141_mm } } );
+	section.Set( 32, { { +70_mm, -151_mm } } );
+
+	section.CalculateNormals();
+	section.CalculateTextureCoordinates();
 }
 
 void CreatePipeline( Section& section, int segments ){

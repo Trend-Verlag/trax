@@ -210,9 +210,9 @@ namespace dim
 
 	dclspc_dim std::ostream& _deg( std::ostream& ostr );
 
-	dclspc_dim std::ostream& _deg0( std::ostream& ostr, Angle angle );
+	dclspc_dim std::ostream& _1( std::ostream& ostr, Angle angle );
 
-	dclspc_dim std::ostream& _deg0( std::ostream& ostr );
+	dclspc_dim std::ostream& _1( std::ostream& ostr );
 
 	dclspc_dim std::ostream& _rad( std::ostream& ostr, Angle angle );
 
@@ -493,10 +493,12 @@ namespace dim
 	/// If changing the default temporarily, use of common::Resetter
 	/// is recommended.
 	///@{
-	extern dclspc_dim StreamOutAnglePerLength DefaultStreamOutAnglePerLength;
-	extern dclspc_dim StreamInAnglePerLength DefaultStreamInAnglePerLength;
+	extern dclspc_dim StreamOutAngle DefaultStreamOutOne;
+	extern dclspc_dim StreamInAngle DefaultStreamInOne;
 	extern dclspc_dim StreamOutAngle DefaultStreamOutAngle;
 	extern dclspc_dim StreamInAngle DefaultStreamInAngle;
+	extern dclspc_dim StreamOutAnglePerLength DefaultStreamOutAnglePerLength;
+	extern dclspc_dim StreamInAnglePerLength DefaultStreamInAnglePerLength;
 	extern dclspc_dim StreamOutLength DefaultStreamOutLength;
 	extern dclspc_dim StreamInLength DefaultStreamInLength;
 	extern dclspc_dim StreamOutVelocity DefaultStreamOutVelocity;
@@ -554,6 +556,7 @@ namespace dim
 
 	///@{
 	StreamInAnglePerLength dclspc_dim StreamInAnglePerLengthFrom( std::string unit );
+	StreamInAngle dclspc_dim StreamInOneFrom( std::string unit );
 	StreamInAngle dclspc_dim StreamInAngleFrom( std::string unit );
 	StreamInLength dclspc_dim StreamInLengthFrom( std::string unit );
 	StreamInVelocity dclspc_dim StreamInVelocityFrom( std::string unit );
@@ -602,6 +605,22 @@ namespace dim
 		static StreamInDimension& GetDefaultStreamInDimension();
 
 		static StreamInDimensionFrom GetStreamInDimensionFrom();
+	};
+
+	template<>
+	class DefaultUnit<0,0,0>{
+	public:
+		typedef Value<Dimension<0,0,0>> (*StreamInDimension)( Real );
+		typedef StreamInDimension (*StreamInDimensionFrom)( std::string );
+
+		static StreamInDimension& GetDefaultStreamInDimension() noexcept{
+			return DefaultStreamInOne;
+		}
+
+		static StreamInDimensionFrom GetStreamInDimensionFrom() noexcept{
+			return StreamInOneFrom;
+		}
+
 	};
 
 	template<>
@@ -752,7 +771,7 @@ namespace dim
 	}
 
 	dclspc_dim std::string to_string_deg( Angle val );				/// < \brief Writes the suffix 'deg' after the value.
-	dclspc_dim std::string to_string_deg0( Angle val );				/// < \brief Does'nt write a suffix after the value.
+	dclspc_dim std::string to_string_1( Angle val );				/// < \brief Does'nt write a suffix after the value.
 	dclspc_dim std::string to_string_degIm( AnglePerLength val );
 	dclspc_dim std::string to_string_degIcm( AnglePerLength val );
 

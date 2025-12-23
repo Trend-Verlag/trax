@@ -61,6 +61,8 @@ namespace trax{
 
 		void Set( int id, const SectionPoint& pt, bool bGaugeLeft = false, bool bGaugeRight = false ) override;
 
+		void Shift( const spat::Vector2D<Length>& delta ) noexcept override;
+			
 		void Scale( One x_scale, One y_scale ) override;
 
 		void CalculateNormals() noexcept override;
@@ -73,11 +75,11 @@ namespace trax{
 		int							m_GaugeLeft, m_GaugeRight;
 	};
 
-	void CreateStandardProfile		( Section& section );
+	void CreateStandardProfile( Section& section );
 
-	void CreateVignolProfile_UIC60	( Section& section );
+	void CreateVignolProfile_UIC60( Section& section );
 
-	void CreatePipeline				( Section& section, int segments );
+	void CreateVignolProfile_EB63T_Rod( Section& section );
 
-
+	void CreatePipeline	( Section& section, int segments );
 }

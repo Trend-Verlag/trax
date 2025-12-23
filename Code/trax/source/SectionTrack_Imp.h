@@ -41,13 +41,15 @@ namespace trax{
 
 
 		// SectionTrack:
-		void Attach( std::shared_ptr<const Section> pSection ) noexcept override;
+		int Attach( std::shared_ptr<const Section> pSection ) override;
 
-		std::shared_ptr<const Section> DetachSection() noexcept override;
+		std::shared_ptr<const Section> DetachSection( int index = 0 ) noexcept override;
 
-		std::shared_ptr<const Section> GetSection() const noexcept override;
+		std::shared_ptr<const Section> GetSection( int index = 0 ) const noexcept override;
+
+		int CntSections() const noexcept override;
 	private:
-		std::shared_ptr<const Section> m_pSection;
+		std::vector<std::shared_ptr<const Section>> m_Sections;
 	};
 
 }

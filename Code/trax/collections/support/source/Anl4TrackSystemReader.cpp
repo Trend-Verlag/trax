@@ -797,6 +797,8 @@ std::unique_ptr<Section> Anl4TrackSystemReader::CreateSection( const boost::prop
 			}
 		}
 
+		pSection->Shift( Vector2D<Length>{ get( pt, "<xmlattr>.shiftX", 0_m, _m ), get( pt, "<xmlattr>.shiftY", 0_m, _m ) } );
+		pSection->Scale( get( pt, "<xmlattr>.scaleX", 1_1, _1 ), get( pt, "<xmlattr>.scaleY", 1_1, _1 ) );
 		return pSection;
 	}
 

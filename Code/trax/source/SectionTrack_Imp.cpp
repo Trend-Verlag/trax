@@ -25,6 +25,7 @@
 // For further information, please contact: horstmann.marc@trendverlag.de
 
 #include "SectionTrack_Imp.h"
+#include "trax/Section.h"
 
 namespace trax{
 ///////////////////////////////////////
@@ -51,29 +52,49 @@ bool SectionTrack_Imp::IsValid() const noexcept
 {
 	if( !Track_Imp::IsValid() )
 		return false;
-	if( !m_pSection )
+	if( CntSections() <= 0 )
 		return false;
 
 	return true;
 }
 
-void SectionTrack_Imp::Attach( std::shared_ptr<const Section> pSection ) noexcept{
-	if( !pSection )
-		return;
+int SectionTrack_Imp::Attach( std::shared_ptr<const Section> pSection ){
+	if( CntSections() == maxCntSections )
+		throw std::length_error{ "SectionTrack_Imp::Attach: maximum number of sections exceeded." };
 
-	m_pSection = pSection;
+	if( !pSection )
+		throw std::invalid_argument{ "SectionTrack_Imp::Attach: pSection is nullptr." };
+
+	if( pSection->CountPoints() < 3 )
+		throw std::invalid_argument{ "SectionTrack_Imp::Attach: pSection has less than 3 section points." };
+
+	if( auto iter = std::find( m_Sections.begin(), m_Sections.end(), pSection ); iter != m_Sections.end() )
+		return std::distance( m_Sections.begin(), iter );
+
+	m_Sections.push_back(pSection);
 	OnGeometryChanged();
+	return static_cast<int>(m_Sections.size()) - 1;
 }
 
-std::shared_ptr<const Section> SectionTrack_Imp::DetachSection() noexcept{
-	std::shared_ptr<const Section> retval(m_pSection);
-	m_pSection.reset();
+std::shared_ptr<const Section> SectionTrack_Imp::DetachSection( int index ) noexcept{
+	if( index < 0 || index >= static_cast<int>(m_Sections.size()) )
+		return nullptr;
+
+	std::shared_ptr<const Section> retval{ m_Sections[index] };
+	m_Sections.erase( m_Sections.begin() + index );
 	OnGeometryChanged();
 	return retval;
 }
 
-std::shared_ptr<const Section> SectionTrack_Imp::GetSection() const noexcept{
-	return m_pSection;
+std::shared_ptr<const Section> SectionTrack_Imp::GetSection( int index ) const noexcept{
+	if( index < 0 || index >= static_cast<int>(m_Sections.size()) )
+		return nullptr;
+
+	return m_Sections[index];
+}
+
+int SectionTrack_Imp::CntSections() const noexcept{
+	return m_Sections.size();
 }
 ///////////////////////////////////////
 }

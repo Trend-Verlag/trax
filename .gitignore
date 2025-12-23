@@ -47,3 +47,7 @@
 
 # ctest created ...
 /Testing/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt

@@ -243,7 +243,7 @@ BOOST_AUTO_TEST_CASE( StreamAngleDegree )
 	Angle a = 90_deg;
 
 	std::ostringstream ostream;
-	ostream << as(_deg,a) << ' ' << as(_deg0,a) << std::flush;
+	ostream << as(_deg,a) << ' ' << as(_1,a) << std::flush;
 	BOOST_CHECK_EQUAL( ostream.str(), "90deg 90" );
 
 	Angle b = 0_deg;
