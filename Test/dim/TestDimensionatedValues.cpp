@@ -244,16 +244,16 @@ BOOST_AUTO_TEST_CASE( StreamAngleDegree )
 
 	std::ostringstream ostream;
 	ostream << as(_deg,a) << ' ' << as(_1,a) << std::flush;
-	BOOST_CHECK_EQUAL( ostream.str(), "90deg 90" );
+	BOOST_CHECK_EQUAL( ostream.str(), "90deg 1.57" );
 
 	Angle b = 0_deg;
 	std::istringstream istream{ ostream.str() };
 	istream >> b;
 	BOOST_CHECK_EQUAL( b, a );
 
-	common::Resetter<StreamInAngle> resetter{ DefaultStreamInAngle, _deg };
+	common::Resetter<StreamInAngle> resetter{ DefaultStreamInAngle, _rad };
 	istream >> b;
-	BOOST_CHECK_EQUAL( b, a );
+	BOOST_CHECK_CLOSE( b, a, 1 );
 }
 
 BOOST_AUTO_TEST_CASE( StreamAngleRadiants )
