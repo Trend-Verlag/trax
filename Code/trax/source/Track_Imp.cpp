@@ -45,33 +45,6 @@
 namespace trax{
 	using namespace spat;
 
-std::shared_ptr<TrackBuilder> TrackBuilder::Make( TrackType type ) noexcept
-{
-	try{
-		switch( type ){
-		case TrackType::unknown:
-		case TrackType::none:
-			return nullptr;
-		case TrackType::standard:
-			return std::make_shared<Track_Imp>();
-		case TrackType::movable:
-	//		return std::make_shared<MovableTrack_Imp>();
-			return nullptr;
-		case TrackType::withGeoms:
-			return std::make_shared<SectionTrack_Imp>();
-		case TrackType::parallel:
-		//	return std::make_shared<ParallelizableTrack_Imp>();
-			return nullptr;
-		case TrackType::movable_autoconnecting:
-		default:
-			return nullptr;
-		}
-	}
-	catch( const std::bad_alloc& ){
-		return nullptr;
-	}
-}
-
 //TrackBuilder& TrackBuilder::operator=( const TrackBuilder& source ) noexcept
 //{
 //	SetFrame( source.GetFrame() );
@@ -1302,6 +1275,8 @@ const char* ToString( Track::TrackType type ){
 		return "withGeoms";
 	case Track::TrackType::movable:
 		return "movable";
+	case Track::TrackType::movable_withGeoms:
+		return "movable_withGeoms";
 	case Track::TrackType::movable_autoconnecting:
 		return "movable_autoconnecting";
 	case Track::TrackType::parallel:
@@ -1319,6 +1294,8 @@ Track::TrackType TrackType( const std::string& type ) noexcept{
 		return Track::TrackType::withGeoms;
 	else if( type == "movable" )
 		return Track::TrackType::movable;
+	else if( type == "movable_withGeoms" )
+		return Track::TrackType::movable_withGeoms;
 	else if( type == "movable_autoconnecting" )
 		return Track::TrackType::movable_autoconnecting;
 	else if( type == "parallel" )

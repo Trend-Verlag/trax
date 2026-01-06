@@ -88,14 +88,23 @@ namespace trax{
 		virtual decltype(Velocity{}*Velocity{}) GetSleepThreshold() const noexcept = 0;
 
 
-		//Mass and inertia:
+		/// \name Mass and inertia
+		/// \brief The behaviour of a rigid body under forces is determined
+		/// by its mass: the amount and the distribution, given by the inertia tensor
+		/// and the barycenter of mass (CoM). There is a local 'mass space' in which 
+		/// the inertia tensor is diagonal, meaning the main axes of the inertia ellipsoid 
+		/// are aligned with the axes of the 'mass space' frame, with the CoM at its origin.
+		///@{
 
 		/// \brief Sets the mass of the Body.
 		///
-		/// This only sets the mass but lets the distribution
-		/// of it unchanged.
-		/// \param mass Mass to set for the Body. Must be > 0.
-		/// \throws std::invalid_argument if the mass is < 0kg.
+		/// This only sets the mass but lets the distribution of it, given by 
+		/// CenterOfMassLocalPose and PrincipalMomentsOfInertia unchanged.
+		/// 
+		/// \see CenterOfMassLocalPose
+		/// \see PrincipalMomentsOfInertia
+		/// \param mass Mass to set for the Body. Must be > 0_kg.
+		/// \throws std::invalid_argument if the mass is < 0_kg.
 		virtual void SetMass( Mass mass ) = 0;
 
 
@@ -111,24 +120,32 @@ namespace trax{
 		virtual spat::Position<Length> CenterOfMass() const noexcept = 0;
 
 
-		/// \brief Sets the specific inertia tensor of the Body.
+		/// \brief Sets the local pose and the center of mass in Body space.
 		///
-		/// The elements of the tensor are assumed to be calculated relative to
-		/// the center of mass but in Body space regarding the rotations (so a
-		/// frame of reference parallel to the Body's but with CoM as its origin).
-		/// Furthermore the tensor is assumed to be calculated for a body of total mass 1,
-		/// i.e. we need the intertia tensor divided by the total mass of the body.
-		/// This way mass, CoM and inertia tensor can get specified independently of 
-		/// each other.
-		/// There exist helper funtions for calculating the tensor.
-		/// \see CalculateMassPropertiesFromShapes
-		/// \see SpecificInertiaTensorFor
-		virtual void SpecificInertiaTensor( const spat::SquareMatrix<Area,3>& specificInertiaTensor ) = 0;
+		/// This sets both the position of the center of mass and the orientation
+		/// of the main inertia axes body space.
+		/// \see CenterOfMass
+		/// \see PrincipalMomentsOfInertia
+		virtual void CenterOfMassLocalPose( const spat::Frame<Length,One>& frame ) noexcept = 0;
 
 
-		/// \returns the inertia tensor of the Body.
-		virtual spat::SquareMatrix<Area,3> SpecificInertiaTensor() const = 0;
+		/// \returns the local pose of the center of mass in Body space.
+		virtual spat::Frame<Length,One> CenterOfMassLocalPose() const noexcept = 0;
 
+
+		/// \brief Sets the principal moments of inertia for the Body in local mass space.
+		///
+		/// The inertia tensor in body space is a symmetrical 3x3 matrix I'. It can be
+		/// transformed from a diagonal matrix I by a proper rotation of the frame of
+		/// reference R: I' = R*I*Transposed(R). The diagonal elements are
+		/// called the principal moments of inertia. R is then the rotational part 
+		/// of the mass local pose.
+		virtual void PrincipalMomentsOfInertia( const spat::Vector<MomentOfInertia>& principalMoments ) noexcept = 0;
+
+
+		/// \returns the principal moments of inertia for the Body in local mass space.
+		virtual spat::Vector<MomentOfInertia> PrincipalMomentsOfInertia() const noexcept = 0;
+		///@}
 
 
 		/// \brief Sets the velocity of the barycenter of this Body.
@@ -167,14 +184,14 @@ namespace trax{
 
 	/// \brief Calculates the specific inertia tensor for a special shape.
 	///
-	/// \returns the inertial tensor for a shape of mass 1. This can be used 
-	/// with the Body interface.
+	/// \returns the inertial tensor diagonal for a shape of mass 1. For shapes with
+	/// uniform density this can be multiplied with the mass to get the actual inertia.
 	///@{
-	dclspc spat::SquareMatrix<Area,3> SpecificInertiaTensorFor( const spat::Box<Length>& box );
+	dclspc spat::Vector<Area> SpecificInertiaTensorFor( const spat::Box<Length>& box );
 
-	dclspc spat::SquareMatrix<Area,3> SpecificInertiaTensorFor( const spat::Sphere<Length>& sphere );
+	dclspc spat::Vector<Area> SpecificInertiaTensorFor( const spat::Sphere<Length>& sphere );
 
-	dclspc spat::SquareMatrix<Area,3> SpecificInertiaTensorForCylinder( Length radius, Length length );
+	dclspc spat::Vector<Area> SpecificInertiaTensorForCylinder( Length radius, Length length );
 	///@}
 }
 

@@ -282,6 +282,7 @@ namespace trax
 			standard,
 			withGeoms,
 			movable,
+			movable_withGeoms,
 			movable_autoconnecting,
 			parallel
 		};

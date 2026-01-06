@@ -93,12 +93,12 @@ void PhysX_GeomBase_Imp::OnAttach( physx::PxRigidActor& actor )
 		static_cast<physx::PxReal>(GetMaterial().dynamicFriction),
 		static_cast<physx::PxReal>(GetMaterial().restitution) );
 	if( !m_pMaterial )
-		throw std::runtime_error("createMaterial failed!");
+		throw std::runtime_error("trax::PhysX_GeomBase_Imp: physx::PxPhysics::createMaterial failed!");
 
 	m_pShape = physx::PxRigidActorExt::createExclusiveShape( actor, Geometry(), *m_pMaterial );
 	//m_pShape = actor.createShape( Geometry(), *m_pMaterial );
 	if( !m_pShape )
-		throw std::runtime_error("createShape failed!");
+		throw std::runtime_error("trax::PhysX_GeomBase_Imp: physx::PxRigidActorExt::createExclusiveShape failed!");
 
 	m_pShape->setName( GetName() ? nullptr : GetName() );
 	m_pShape->setLocalPose( PoseFrom( Normalize(m_Frame).second ) );

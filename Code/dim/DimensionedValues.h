@@ -334,6 +334,7 @@ namespace dim
 	using Pressure = Value<Dimension<-1, 1, -2>>;			///< Pressure.
 	using Momentum = Value<Dimension<1, 1, -1>>;			///< Momentum.
 	using AngularMomentum = Value<Dimension<2, 1, -1>>;		///< Angular momentum.
+	using MomentOfInertia = Value<Dimension<2, 1, 0>>;		///< Moment of inertia.
 	using Torque = Value<Dimension<2, 1, -2>>;				///< Torque.
 	using Energy = Value<Dimension<2, 1, -2>>;				///< Energy.
 	using Power = Value<Dimension<2, 1, -3>>;				///< Power.
@@ -1650,6 +1651,22 @@ namespace dim{
 
 	constexpr inline AngularMomentum _tm2Is( Real am ) noexcept{
 		return AngularMomentum{ am * units_per_kilogram * units_per_meter * units_per_meter / units_per_second * 1000 };
+	}
+
+	constexpr inline Real _kgcm2( MomentOfInertia moi ) noexcept{
+		return moi.Units() * kilograms_per_unit * 100 * meters_per_unit * 100 * meters_per_unit;
+	}
+
+	constexpr inline MomentOfInertia _kgcm2( Real moi ) noexcept{
+		return MomentOfInertia{ moi * units_per_kilogram * units_per_meter / 100 * units_per_meter / 100 };
+	}
+
+	constexpr inline Real _kgm2( MomentOfInertia moi ) noexcept{
+		return moi.Units() * kilograms_per_unit * meters_per_unit * meters_per_unit;
+	}
+
+	constexpr inline MomentOfInertia _kgm2( Real moi ) noexcept{
+		return MomentOfInertia{ moi * units_per_kilogram * units_per_meter * units_per_meter };
 	}
 
 	constexpr inline Real _Nm( Torque t ) noexcept{

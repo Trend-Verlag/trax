@@ -40,34 +40,22 @@ void Body_Imp::SetMass( Mass mass ){
 //	return *this;
 //}
 ///////////////////////////////////////
-SquareMatrix<Area,3> SpecificInertiaTensorFor( const Box<Length>& box ){
-	SquareMatrix<Area,3> iTensor;
-	iTensor.SetIdentity();
-
-	iTensor(0,0) = (pow<2>(box.EdgeY()) + pow<2>(box.EdgeZ())) / 12;
-	iTensor(1,1) = (pow<2>(box.EdgeX()) + pow<2>(box.EdgeZ())) / 12;
-	iTensor(2,2) = (pow<2>(box.EdgeY()) + pow<2>(box.EdgeX())) / 12;
-
-	return iTensor;
+Vector<Area> SpecificInertiaTensorFor( const Box<Length>& box ){
+	return {	(pow<2>(box.EdgeY()) + pow<2>(box.EdgeZ())) / 12,
+				(pow<2>(box.EdgeX()) + pow<2>(box.EdgeZ())) / 12,
+				(pow<2>(box.EdgeY()) + pow<2>(box.EdgeX())) / 12 };
 }
 
-SquareMatrix<Area,3> SpecificInertiaTensorFor( const Sphere<Length>& sphere ){
-	SquareMatrix<Area,3> iTensor;
-	iTensor.SetIdentity();
-
-	iTensor(0,0) = iTensor(1,1) = iTensor(2,2) = 0.4f * pow<2>(sphere.r);
-
-	return iTensor;
+Vector<Area> SpecificInertiaTensorFor( const Sphere<Length>& sphere ){
+	return {	0.4f * pow<2>(sphere.r),
+				0.4f * pow<2>(sphere.r),
+				0.4f * pow<2>(sphere.r) };
 }
 
-SquareMatrix<Area,3> SpecificInertiaTensorForCylinder( Length radius, Length length ){
-	SquareMatrix<Area,3> iTensor;
-	iTensor.SetIdentity();
-
-	iTensor(0,0) = iTensor(1,1) = 0.25f*pow<2>(radius) + pow<2>(length)/12;
-	iTensor(2,2) = 0.5f*pow<2>(radius);
-
-	return iTensor;
+Vector<Area> SpecificInertiaTensorForCylinder( Length radius, Length length ){
+	return {	0.25f*pow<2>(radius) + (1.0f/12.0f)*pow<2>(length),
+				0.25f*pow<2>(radius) + (1.0f/12.0f)*pow<2>(length),
+				0.5f *pow<2>(radius) };
 }
 ///////////////////////////////////////
 }

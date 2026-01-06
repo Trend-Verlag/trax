@@ -99,6 +99,7 @@ namespace dim
 	constexpr Pressure			epsilon__pressure			= 1_Pa;
 	constexpr Momentum			epsilon__momentum			= epsilon__mass * epsilon__velocity;
 	constexpr AngularMomentum	epsilon__angularMomentum	= epsilon__momentum * epsilon__length;
+	constexpr MomentOfInertia	epsilon__momentOfInertia	= epsilon__mass * epsilon__length * epsilon__length;
 	constexpr Torque			epsilon__torque				= 1_Nm;
 	constexpr Energy			epsilon__energy				= 1_J;
 	constexpr Power				epsilon__power				= 1_W;

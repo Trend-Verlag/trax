@@ -32,7 +32,7 @@
 namespace trax{
 
 	class MovableTrack_Imp :	public virtual MovableTrack,
-								public Track_Imp
+								public virtual Track_Imp
 							 
 	{
 	public:

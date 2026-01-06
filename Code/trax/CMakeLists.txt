@@ -24,6 +24,7 @@ add_library(trax_core
         "./source/Switch_Imp.cpp"
         "./source/Timer_Imp.cpp"
         "./source/TrackCreators_Imp.cpp"
+        "./source/Track_Make_Imp.cpp"
         "./source/TrackPainter.cpp"
         "./source/TrackTools_Imp.cpp"
         "./source/Track_Imp.cpp"

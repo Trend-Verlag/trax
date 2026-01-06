@@ -33,7 +33,7 @@
 
 constexpr int TRAX_VERSION_MAJOR = 3;
 constexpr int TRAX_VERSION_MINOR = 2;
-constexpr int TRAX_VERSION_PATCH = 1;
+constexpr int TRAX_VERSION_PATCH = 2;
 
 namespace trax{
 	

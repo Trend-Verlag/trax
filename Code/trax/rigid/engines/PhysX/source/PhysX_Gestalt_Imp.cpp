@@ -49,6 +49,8 @@ std::unique_ptr<Geom> PhysX_Gestalt_ImpBase::Remove( int idx ) noexcept
 }
 
 void PhysX_Gestalt_ImpBase::DoCalculateMassProperties()
+// Recalculates mass properties from attached shapes.
+// 
 {
 	std::vector<physx::PxMassProperties> shapeMasses;
 	std::vector<physx::PxTransform> shapeTransforms;

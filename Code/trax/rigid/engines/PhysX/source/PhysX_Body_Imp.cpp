@@ -105,13 +105,8 @@ decltype(Velocity{}*Velocity{}) PhysX_Body_ImpBase::GetSleepThreshold() const no
 
 void PhysX_Body_ImpBase::SetMass( Mass mass ){
 	Body_Imp::SetMass(mass);
-
-	SquareMatrix<Area,3> iTensor{ SpecificInertiaTensor() };
-
 	SceneLockWrite lock{ Actor().getScene() };
 	Actor().setMass( static_cast<physx::PxReal>(_kg(mass)/m_EngineKilogramsPerUnit) );
-
-	SpecificInertiaTensor( iTensor );
 }
 
 Mass PhysX_Body_ImpBase::GetMass() const noexcept{
@@ -133,61 +128,34 @@ Position<Length> PhysX_Body_ImpBase::CenterOfMass() const noexcept{
 	return PosFrom( Actor().getCMassLocalPose(), m_EngineMetersPerUnit );
 }
 
-void PhysX_Body_ImpBase::SpecificInertiaTensor( const SquareMatrix<Area,3>& specificInertiaTensor ){
-	if( !specificInertiaTensor.IsDiagonal() )
-	// pick mass space transformation, so that tensor get diagonal...
-	{
-		assert( 0 );
-		//SquareMatrix<Real,3> iTensor( specificInertiaTensor );
-
-		//Frame<Real> pose( iTensor );
-		//pose.Normalize();
-		//pose.P = PosFrom<Real>(m_pActor->getCMassLocalPose());
-
-		//pose.FromParent( iTensor );
-		//assert( iTensor.IsDiagonal() );
-
-		//m_pActor->setCMassLocalPose( PoseFrom(pose) );
-		physx::PxVec3 diagonal{ 
-			static_cast<float>(_m2(specificInertiaTensor(0,0))/m_EngineMetersPerUnit/m_EngineMetersPerUnit), 
-			static_cast<float>(_m2(specificInertiaTensor(1,1))/m_EngineMetersPerUnit/m_EngineMetersPerUnit), 
-			static_cast<float>(_m2(specificInertiaTensor(2,2))/m_EngineMetersPerUnit/m_EngineMetersPerUnit) };
-
-		SceneLockWrite lock{ Actor().getScene() };
-		diagonal *= Actor().getMass();
-		Actor().setMassSpaceInertiaTensor( diagonal );
-	}
-	else{
-		//Frame<Real> pose;
-		//pose.Init();
-		//pose.P = PosFrom<Real>(m_pActor->getCMassLocalPose());
-
-		//m_pActor->setCMassLocalPose( PoseFrom(pose) );
-
-		physx::PxVec3 diagonal{ 
-			static_cast<float>(_m2(specificInertiaTensor(0,0))/m_EngineMetersPerUnit/m_EngineMetersPerUnit), 
-			static_cast<float>(_m2(specificInertiaTensor(1,1))/m_EngineMetersPerUnit/m_EngineMetersPerUnit), 
-			static_cast<float>(_m2(specificInertiaTensor(2,2))/m_EngineMetersPerUnit/m_EngineMetersPerUnit) };
-
-		SceneLockWrite lock{ Actor().getScene() };
-		diagonal *= Actor().getMass();
-		Actor().setMassSpaceInertiaTensor( diagonal );
-	}
+void PhysX_Body_ImpBase::CenterOfMassLocalPose( const spat::Frame<Length,One>& frame ) noexcept{
+	SceneLockWrite lock{ Actor().getScene() };
+	Actor().setCMassLocalPose( PoseFrom( frame, m_EngineMetersPerUnit ) );
 }
 
-SquareMatrix<Area,3> PhysX_Body_ImpBase::SpecificInertiaTensor() const{
+spat::Frame<Length,One> PhysX_Body_ImpBase::CenterOfMassLocalPose() const noexcept{
 	SceneLockRead lock{ Actor().getScene() };
-	physx::PxVec3 diag{ Actor().getMassSpaceInertiaTensor() };
-	SquareMatrix<Area,3> tensor;
-	tensor.SetIdentity();
-	tensor(0,0) = _m2(diag.x/Actor().getMass()*m_EngineMetersPerUnit*m_EngineMetersPerUnit);
-	tensor(1,1) = _m2(diag.y/Actor().getMass()*m_EngineMetersPerUnit*m_EngineMetersPerUnit);
-	tensor(2,2) = _m2(diag.z/Actor().getMass()*m_EngineMetersPerUnit*m_EngineMetersPerUnit);
+	Frame<Length,One> frame{ From( Actor().getCMassLocalPose(), m_EngineMetersPerUnit ) };
+	return frame;
+}
 
-	//Frame<Real> pose(From<Real>(m_pActor->getCMassLocalPose()));
-	//pose.ToParent(tensor);
+void PhysX_Body_ImpBase::PrincipalMomentsOfInertia( 
+	const spat::Vector<MomentOfInertia>& principalMoments ) noexcept{
+	SceneLockWrite lock{ Actor().getScene() };
+	physx::PxVec3 diagonal{
+		_kgm2( principalMoments.dx ) / m_EngineMetersPerUnit / m_EngineMetersPerUnit / m_EngineKilogramsPerUnit,
+		_kgm2( principalMoments.dy ) / m_EngineMetersPerUnit / m_EngineMetersPerUnit / m_EngineKilogramsPerUnit,
+		_kgm2( principalMoments.dz ) / m_EngineMetersPerUnit / m_EngineMetersPerUnit / m_EngineKilogramsPerUnit };
+	Actor().setMassSpaceInertiaTensor( diagonal );
+}
 
-	return tensor;
+spat::Vector<MomentOfInertia> PhysX_Body_ImpBase::PrincipalMomentsOfInertia() const noexcept{
+	SceneLockRead lock{ Actor().getScene() };
+	physx::PxVec3 diagonal = Actor().getMassSpaceInertiaTensor();
+	return Vector<MomentOfInertia>{
+		_kgm2( diagonal.x * m_EngineMetersPerUnit * m_EngineMetersPerUnit * m_EngineKilogramsPerUnit ),
+		_kgm2( diagonal.y * m_EngineMetersPerUnit * m_EngineMetersPerUnit * m_EngineKilogramsPerUnit ),
+		_kgm2( diagonal.z * m_EngineMetersPerUnit * m_EngineMetersPerUnit * m_EngineKilogramsPerUnit ) };
 }
 
 void PhysX_Body_ImpBase::SetLinearVelocity( const spat::Vector<Velocity>& v ){

@@ -16,4 +16,5 @@
 #pragma once
 
 #define BOOST_CHECK_CLOSE_DIMENSION( a, b, percentage ) BOOST_CHECK_CLOSE( (a).Units(), (b).Units(), percentage );
+#define BOOST_CHECK_CLOSE_FRACTION_DIMENSION( a, b, frac ) BOOST_CHECK_CLOSE_FRACTION( (a).Units(), (b).Units(), (frac).Units() );
 

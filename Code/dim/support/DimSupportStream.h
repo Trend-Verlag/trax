@@ -153,6 +153,10 @@ namespace dim
 
 	dclspc_dim std::istream& operator >> ( std::istream& istr, Value<Dimension<2, 1, -1>>& angularmomentum );
 
+	dclspc_dim std::ostream& operator << ( std::ostream& ostr, const Value<Dimension<2, 1, 0>>& momentOfInertia );
+
+	dclspc_dim std::istream& operator >> ( std::istream& istr, Value<Dimension<2, 1, 0>>& momentOfInertia );
+
 	dclspc_dim std::ostream& operator << ( std::ostream& ostr, const Value<Dimension<2,1,-2>>& torque );
 
 	dclspc_dim std::istream& operator >> ( std::istream& istr, Value<Dimension<2,1,-2>>& torque );

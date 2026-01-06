@@ -1,5 +1,5 @@
 //	trax track library
-//	AD 2024 
+//	AD 2026 
 //
 //  "the resolution of all the fruitless searches"
 //
@@ -24,32 +24,32 @@
 //
 // For further information, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
-
-#include "trax/SectionTrack.h"
-#include "Track_Imp.h"
+#include "SectionTrack_Imp.h"
+#include "ParallelTrack_Imp.h"
 
 namespace trax{
 
-	class SectionTrack_Imp : public virtual SectionTrack,
-							 public virtual Track_Imp{
-	public:
-		// Track:
-		TrackType GetTrackType() const noexcept override;
-
-		bool IsValid() const noexcept override;
-
-
-		// SectionTrack:
-		int Attach( std::shared_ptr<const Section> pSection ) override;
-
-		std::shared_ptr<const Section> DetachSection( int index = 0 ) noexcept override;
-
-		std::shared_ptr<const Section> GetSection( int index = 0 ) const noexcept override;
-
-		int CntSections() const noexcept override;
-	private:
-		std::vector<std::shared_ptr<const Section>> m_Sections;
-	};
-
+std::shared_ptr<TrackBuilder> TrackBuilder::Make( TrackType type ) noexcept
+{
+	try{
+		switch( type ){
+		case TrackType::unknown:
+		case TrackType::none:
+			return nullptr;
+		case TrackType::standard:
+			return std::make_shared<Track_Imp>();
+		case TrackType::withGeoms:
+			return std::make_shared<SectionTrack_Imp>();
+		case TrackType::parallel:
+			return std::make_shared<ParallelizableTrack_Imp>();
+		default:
+			std::cerr << "TrackBuilder::Make(): Unsupported track type requested: " << ToString(type) << ". Try more specific Make() method." << std::endl;
+			return nullptr;
+		}
+	}
+	catch( const std::bad_alloc& ){
+		return nullptr;
+	}
 }
+
+} // namespace trax

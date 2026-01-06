@@ -471,6 +471,27 @@ StreamInPower DefaultStreamInPower = _kW;
 		return istr;
 	}
 
+	std::ostream& operator << ( std::ostream& ostr, const Value<Dimension<2, 1, 0>>& momentOfInertia ){
+		ostr << _kgm2(momentOfInertia);
+		if( abs(momentOfInertia).Units() != infinite )		
+			ostr << "kgm2";
+
+		return ostr;
+	}
+
+	std::istream& operator >> ( std::istream& istr, Value<Dimension<2, 1, 0>>& momentOfInertia ){
+		auto pair = ReadValueAndAppendix( istr );
+
+		if( pair.second == "kgm2" )
+			momentOfInertia = _kgm2(pair.first);
+		else if( pair.second == "kgcm2" )
+			momentOfInertia = _kgcm2(pair.first);
+		else
+			momentOfInertia = _kgm2(pair.first);
+
+		return istr;
+	}
+
 	std::ostream& operator << ( std::ostream& ostr, const Value<Dimension<2,1,-2>>& torque ){
 		ostr << _kNm(torque);
 		if( abs(torque).Units() != infinite )		

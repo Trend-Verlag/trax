@@ -310,6 +310,15 @@ namespace spat{
 		bool IsIdentity( Valtype epsilon = 0 ) const noexcept;
 
 
+		/// \brief Diagonalizes the matrix using eigenvalue decomposition.
+		/// \param D Output diagonal matrix containing eigenvalues
+		/// \param V Output matrix containing eigenvectors as columns
+		/// \returns true if diagonalization was successful, false otherwise
+		/// \note This method requires TRAX_OPEN_SOURCE to be defined (uses Eigen library)
+		/// \note After successful diagonalization: (*this) = V * D * V^(-1)
+		bool Diagonalize( SquareMatrix& D, SquareMatrix& V ) const;
+
+
 		/// \returns true if the matrix is diagonal.
 		bool IsDiagonal() const noexcept;
 
@@ -1065,6 +1074,50 @@ bool SquareMatrix<Valtype,nColsAndRows>::IsIdentity( Valtype epsilon_ ) const no
 			if( !common::Equals( (*this)(x,y), (Valtype)((x == y) ? 1 : 0), epsilon_ ) )
 				return false;
 	return true;
+}
+
+template<typename Valtype, const unsigned short nColsAndRows>
+bool SquareMatrix<Valtype,nColsAndRows>::Diagonalize( SquareMatrix& D, SquareMatrix& V ) const
+{
+#ifdef TRAX_OPEN_SOURCE
+	// Create Eigen matrix from this matrix
+	Eigen::Matrix<Valtype, nColsAndRows, nColsAndRows> eigenMat;
+	for( unsigned short r = 0; r < nColsAndRows; ++r )
+		for( unsigned short c = 0; c < nColsAndRows; ++c )
+			eigenMat(r, c) = (*this)(c, r);
+
+	// Compute eigenvalues and eigenvectors
+	Eigen::EigenSolver<Eigen::Matrix<Valtype, nColsAndRows, nColsAndRows>> solver(eigenMat);
+	
+	if( solver.info() != Eigen::Success )
+		return false;
+
+	// Check if eigenvalues are real (required for real diagonalization)
+	auto eigenvalues = solver.eigenvalues();
+	for( unsigned short i = 0; i < nColsAndRows; ++i )
+	{
+		if( std::abs(eigenvalues(i).imag()) > std::numeric_limits<Valtype>::epsilon() * 100 )
+			return false; // Complex eigenvalues - cannot diagonalize to real matrix
+	}
+
+	// Fill diagonal matrix D with eigenvalues
+	D.SetNull();
+	for( unsigned short i = 0; i < nColsAndRows; ++i )
+		D(i, i) = eigenvalues(i).real();
+
+	// Fill V with eigenvectors (as columns)
+	auto eigenvectors = solver.eigenvectors();
+	for( unsigned short c = 0; c < nColsAndRows; ++c )
+		for( unsigned short r = 0; r < nColsAndRows; ++r )
+			V(c, r) = eigenvectors(r, c).real();
+
+	return true;
+#else
+	// Diagonalization requires Eigen library
+	D.SetNull();
+	V.SetIdentity();
+	return false;
+#endif
 }
 
 template<typename Valtype, const unsigned short nColsAndRows>

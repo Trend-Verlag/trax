@@ -31,17 +31,7 @@
 
 namespace trax{
 	using namespace spat;
-///////////////////////////////////////
-std::shared_ptr<MovableTrack> trax::MovableTrack::Make() noexcept
-{
-	try{
-		return std::make_shared<MovableTrack_Imp>();
-	}
-	catch( const std::bad_alloc& ){
-		return nullptr;
-	}
-}
-///////////////////////////////////////
+
 MovableTrack_Imp::MovableTrack_Imp() noexcept
 	:	m_pBody{nullptr}
 {

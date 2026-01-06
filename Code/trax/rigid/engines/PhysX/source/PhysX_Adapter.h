@@ -64,6 +64,8 @@ namespace trax{
 
 	physx::PxVec3 From( const spat::Vector<AngularMomentum>& v, Real engine_meters_per_unit, Real engine_kilograms_per_unit ) noexcept;
 
+	physx::PxVec3 From( const spat::Vector<Area>& area, Real engine_meters_per_unit ) noexcept;
+
 	template<typename Valtype,typename ValtypeT=Valtype>
 	physx::PxMat44 From( const spat::Frame<Valtype,ValtypeT>& frame ) noexcept;
 
@@ -119,6 +121,8 @@ namespace trax{
 	spat::Vector<Valtype> From( const physx::PxVec3& pxv ) noexcept;
 
 	spat::Vector<Velocity> VelocityFrom( const physx::PxVec3& pxv, Real engine_meters_per_unit ) noexcept;
+	
+	spat::Vector<Area> AreaFrom( const physx::PxVec3& pxv, Real engine_meters_per_unit ) noexcept;
 
 ///////////////////////////////////////
 // inlines:
@@ -202,6 +206,13 @@ inline physx::PxVec3 From( const spat::Vector<AngularMomentum>& v, Real engine_m
 		static_cast<float>(_kgm2Is(v.dx) / engine_meters_per_unit / engine_meters_per_unit / engine_kilograms_per_unit), 
 		static_cast<float>(_kgm2Is(v.dy) / engine_meters_per_unit / engine_meters_per_unit / engine_kilograms_per_unit), 
 		static_cast<float>(_kgm2Is(v.dz) / engine_meters_per_unit / engine_meters_per_unit / engine_kilograms_per_unit) };
+}
+
+inline physx::PxVec3 From( const spat::Vector<Area>& area, Real engine_meters_per_unit ) noexcept{
+	return physx::PxVec3{ 
+		static_cast<float>(_m2(area.dx) / (engine_meters_per_unit * engine_meters_per_unit)), 
+		static_cast<float>(_m2(area.dy) / (engine_meters_per_unit * engine_meters_per_unit)), 
+		static_cast<float>(_m2(area.dz) / (engine_meters_per_unit * engine_meters_per_unit)) };
 }
 
 inline physx::PxVec3 From( const spat::Vector<Real>& v ) noexcept{
@@ -344,6 +355,12 @@ inline spat::Vector<Velocity> VelocityFrom( const physx::PxVec3& pxv, Real engin
 	return { _mIs(engine_meters_per_unit*pxv.x),
 			 _mIs(engine_meters_per_unit*pxv.y),
 			 _mIs(engine_meters_per_unit*pxv.z) };
+}
+
+inline spat::Vector<Area> AreaFrom( const physx::PxVec3& pxv, Real engine_meters_per_unit ) noexcept{
+	return { _m2(engine_meters_per_unit*engine_meters_per_unit*pxv.x),
+			 _m2(engine_meters_per_unit*engine_meters_per_unit*pxv.y),
+			 _m2(engine_meters_per_unit*engine_meters_per_unit*pxv.z) };
 }
 
 }

@@ -37,7 +37,7 @@ namespace trax{
 	struct MovableTrack : virtual TrackBuilder{
 
 		/// \brief Makes a MovableTrack object.
-		static dclspc std::shared_ptr<MovableTrack> Make() noexcept;
+		static dclspc std::shared_ptr<TrackBuilder> Make( TrackType type = TrackType::movable ) noexcept;
 
 
 		/// \brief Sets a body the track is attached to (if any).
