@@ -35,6 +35,7 @@
 #include "spat/Frame.h"
 #include "spat/Box.h"
 #include "spat/Position2D.h"
+#include "spat/Matrix.h"
 
 #include <memory>
 #include <vector>
@@ -93,6 +94,18 @@ namespace trax{
 
 		/// \returns The volume of the Geom.
 		virtual Volume GetVolume() const noexcept = 0;
+
+
+		/// \brief The specific inertia tensor of the Geom's geometry.
+		///
+		/// This is the inertia tensor for a shape of mass 1 with uniform density
+		/// in the Geom's space. It can be multiplied with the actual mass to get 
+		/// the inertia tensor.
+		/// \returns The inertial tensor for the geom of mass 1 with uniform 
+		/// density.
+		/// \throws std::runtime_error if the Geom has no valid volume or the
+		/// inerta tensor is not diagonal.
+		virtual spat::SquareMatrix<Area,3> SpecificInertiaTensor() const = 0;
 
 
 		/// \brief Sets the material to be applied with the Geom.
@@ -165,6 +178,12 @@ namespace trax{
 
 		/// \returns the collision bitfield.
 		virtual unsigned int CollisionFilter() const noexcept = 0;
+
+
+		/// \brief Tests for overlap with another Geom in gloabel space.
+		/// \param other The other Geom to test against.
+		/// \returns true if there is an overlap.
+		virtual bool IsOverlapping( const Geom& other ) const noexcept = 0;
 
 
 		virtual ~Geom() = default;

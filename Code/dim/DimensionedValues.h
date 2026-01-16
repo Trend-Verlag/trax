@@ -1052,6 +1052,14 @@ namespace dim{
 			return Value<Dimension<-1, 1, -2>>{ static_cast<Real>(value) * 100 * 1000 * units_per_pascal };
 		}
 
+		constexpr Value<Dimension<2,1,0>> operator"" _kgm2( const unsigned long long int value ){
+			return Value<Dimension<2,1,0>>{ static_cast<Real>(value) * units_per_kilogram * units_per_meter * units_per_meter };
+		}
+
+		constexpr Value<Dimension<2,1,0>> operator"" _kgm2( const long double value ){
+			return Value<Dimension<2,1,0>>{ static_cast<Real>(value) * units_per_kilogram * units_per_meter * units_per_meter };
+		}
+
 		constexpr Value<Dimension<2,1,-2>> operator"" _Nm( const unsigned long long int value ){
 			return Value<Dimension<2,1,-2>>{ static_cast<Real>(value) * units_per_newton * units_per_meter };
 		}

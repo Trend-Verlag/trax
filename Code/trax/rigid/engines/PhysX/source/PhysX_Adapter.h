@@ -124,6 +124,10 @@ namespace trax{
 	
 	spat::Vector<Area> AreaFrom( const physx::PxVec3& pxv, Real engine_meters_per_unit ) noexcept;
 
+	spat::SquareMatrix<Area,3> AreaMatrixFrom( const physx::PxMat33& pxm, Real engine_meters_per_unit ) noexcept;
+
+	const physx::PxMat33 From( const spat::SquareMatrix<MomentOfInertia,3>& pxm, Real engine_meters_per_unit, Real engine_kilograms_per_unit ) noexcept;
+
 ///////////////////////////////////////
 // inlines:
 template<typename Valtype>
@@ -361,6 +365,25 @@ inline spat::Vector<Area> AreaFrom( const physx::PxVec3& pxv, Real engine_meters
 	return { _m2(engine_meters_per_unit*engine_meters_per_unit*pxv.x),
 			 _m2(engine_meters_per_unit*engine_meters_per_unit*pxv.y),
 			 _m2(engine_meters_per_unit*engine_meters_per_unit*pxv.z) };
+}
+
+inline spat::SquareMatrix<Area,3> AreaMatrixFrom( const physx::PxMat33& pxm, Real engine_meters_per_unit ) noexcept{	
+	return spat::SquareMatrix<Area,3>{
+		_m2( engine_meters_per_unit * engine_meters_per_unit * pxm( 0, 0 ) ), _m2( engine_meters_per_unit * engine_meters_per_unit * pxm( 0, 1 ) ), _m2( engine_meters_per_unit * engine_meters_per_unit * pxm( 0, 2 ) ),
+		_m2( engine_meters_per_unit * engine_meters_per_unit * pxm( 1, 0 ) ), _m2( engine_meters_per_unit * engine_meters_per_unit * pxm( 1, 1 ) ), _m2( engine_meters_per_unit * engine_meters_per_unit * pxm( 1, 2 ) ),
+		_m2( engine_meters_per_unit * engine_meters_per_unit * pxm( 2, 0 ) ), _m2( engine_meters_per_unit * engine_meters_per_unit * pxm( 2, 1 ) ), _m2( engine_meters_per_unit * engine_meters_per_unit * pxm( 2, 2 ) ) };
+}
+
+inline const physx::PxMat33 From( const spat::SquareMatrix<MomentOfInertia,3>& pxm, Real engine_meters_per_unit, Real engine_kilograms_per_unit ) noexcept
+{
+	physx::PxMat33 result;
+	for( size_t r=0; r<3; ++r ){
+		for( size_t c = 0; c < 3; ++c ){
+			result(r,c) = static_cast<physx::PxReal>( _kgm2( pxm(c,r) ) / ( engine_meters_per_unit * engine_meters_per_unit * engine_kilograms_per_unit ) );
+		}
+	}
+
+	return result;
 }
 
 }

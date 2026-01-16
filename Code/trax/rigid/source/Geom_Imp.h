@@ -61,7 +61,7 @@ namespace trax{
 
 		virtual void OnAttach( const Shape_ImpBase& ){};
 
-		virtual void OnDetach(){};
+		virtual void OnDetach() noexcept{};
 	private:
 		std::string		m_Name;
 		Material		m_Material;

@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE( testBodyParameters2 )
 	pGestalt->GetFrame( bodyFrame );
 	BOOST_CHECK_CLOSE_SPATIAL2( bodyFrame, (Identity<Length, One>), epsilon__length, epsilon__angle );
 
-	BOOST_CHECK_EQUAL( pGestalt->GetMass(), mass1 + mass2 );
+	BOOST_CHECK_CLOSE_FRACTION_DIMENSION( pGestalt->GetMass(), mass1 + mass2, epsilon__mass );
 	Position<Length> expectedCOM = Origin3D<Length> + (mass1 * (P1 - Origin3D<Length>) + mass2 * (P2 - Origin3D<Length>)) / (mass1 + mass2);
 	BOOST_CHECK_CLOSE_SPATIAL( pGestalt->CenterOfMass(), expectedCOM, epsilon__length );
 
@@ -200,7 +200,7 @@ BOOST_AUTO_TEST_CASE( testBodyParameters2 )
 	BOOST_CHECK_CLOSE_SPATIAL( CoMPose, CoMPose2, epsilon__length );
 
 	Position<Length> COMWord{ bodyFrame.P + (expectedCOM - Origin3D<Length>).Length() * bodyFrame.T };
-	BOOST_CHECK_EQUAL( bodyFrame.ToParent(pGestalt->CenterOfMass()), COMWord );
+	BOOST_CHECK_CLOSE_SPATIAL( bodyFrame.ToParent(pGestalt->CenterOfMass()), COMWord, epsilon__length );
 }
 
 

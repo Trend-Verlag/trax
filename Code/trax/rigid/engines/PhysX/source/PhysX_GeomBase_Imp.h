@@ -53,6 +53,8 @@ namespace trax{
 
 		void GetFrame( Frame<Length,One>& frame ) const noexcept override;
 
+		spat::SquareMatrix<Area,3> SpecificInertiaTensor() const override;
+
 		void SetMaterial( const Material& material ) noexcept override;
 
 		using Geom_Imp::TypeFilter;
@@ -63,11 +65,13 @@ namespace trax{
 
 		void CollisionFilter( unsigned int collideWith ) noexcept override;
 
+		bool IsOverlapping( const Geom& other ) const noexcept override;
+
 
 		// Implementation:
 		virtual void OnAttach( const Shape_ImpBase& shape ) override;
 
-		void OnDetach() override;
+		void OnDetach() noexcept override;
 
 		physx::PxShape* Shape() const noexcept{
 			return m_pShape;

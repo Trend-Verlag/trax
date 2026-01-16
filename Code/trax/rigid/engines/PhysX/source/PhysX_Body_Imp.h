@@ -95,9 +95,9 @@ namespace trax
 			return m_Actor;
 		}
 
-		//inline Real EngineMetersPerUnit() const noexcept{
-		//	return m_EngineMetersPerUnit;
-		//}
+		inline Real EngineMetersPerUnit() const noexcept{
+			return m_EngineMetersPerUnit;
+		}
 
 		inline Real EngineKilogramsPerUnit() const noexcept{
 			return m_EngineKilogramsPerUnit;

@@ -694,7 +694,6 @@ spat::Box<Length> PhysX_TriangleMesh::GetExtent() const noexcept
 
 Volume PhysX_TriangleMesh::GetVolume() const noexcept
 {
-	assert( !"PhysX_TriangleMesh::GetVolume(): Not implemented yet!" );
 	std::cout << Verbosity::verbose << "PhysX_TriangleMesh::GetVolume(): Not implemented yet!" << std::endl;
 	return 0_m3;
 }

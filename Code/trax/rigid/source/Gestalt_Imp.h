@@ -49,25 +49,21 @@ namespace trax
 
 		const char* GetName() const noexcept override;
 
-		int Attach( std::unique_ptr<Geom> pGeom ) override;
-
-		int Attach( std::vector<std::unique_ptr<Geom>>& geoms ) override;
-
 		using Shape::Attach;
-
-		std::unique_ptr<Geom> Remove( int idx ) override;
 
 
 		// Gestalt:
 		int Attach( std::unique_ptr<Geom> pGeom, Mass mass ) override;
 
-		Mass GeomMass( int idx = 0 ) const override;
+		int Attach( std::unique_ptr<Geom> pGeom, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) override;
+		
+		int Attach( std::vector<std::pair<std::unique_ptr<Geom>,Mass>>& geoms ) noexcept override;
 
+		int Attach( std::vector<std::unique_ptr<Geom>>& geoms, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) override;
 
 	protected:
-
-		virtual void DoCalculateMassProperties() = 0;
+		virtual void AddMassProperties( Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) noexcept = 0;
+	
 	private:
-		std::vector<Mass> m_Masses;
 	};
 }

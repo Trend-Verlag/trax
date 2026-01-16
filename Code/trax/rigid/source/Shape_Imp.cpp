@@ -63,13 +63,16 @@ spat::Box<Length> Shape_ImpBase::GetExtent() const noexcept
 
 int Shape_ImpBase::Attach( std::unique_ptr<Geom> pGeom ){
 	if( pGeom )
-	// due to the fact that we take an unique_pointer, that geom can not be already attached.
+	// due to the fact that we take an unique_pointer, that geom can not be attached already.
 	{
+		if( pGeom->GetVolume() < 0_m3 )
+			throw std::invalid_argument( "Shape_ImpBase::Attach(): Geom must have a volume >= 0." );
+
 		if( Geom_Imp* pGeom_Imp = dynamic_cast<Geom_Imp*>(pGeom.get()); pGeom_Imp )
 		{
 			pGeom_Imp->OnAttach( *this );
 			m_Geoms.push_back( std::move(pGeom) );
-			return common::narrow_cast<int>(m_Geoms.size()) - 1;
+			return Count() - 1;
 		}
 		else{
 			throw std::invalid_argument( "Unknown Geom object type!" );
@@ -79,19 +82,26 @@ int Shape_ImpBase::Attach( std::unique_ptr<Geom> pGeom ){
 	return -1;
 }
 
-int Shape_ImpBase::Attach( std::vector<std::unique_ptr<Geom>>& geoms ){
-	for( auto& pGeom : geoms )
+int Shape_ImpBase::Attach( std::vector<std::unique_ptr<Geom>>& geoms ) noexcept
+{
+	int idx = Count();
+
+	while( geoms.size() )
 	{
 		try{
-			Attach( std::move( pGeom ) );
+			Attach( std::move( geoms.front() ) );
+			geoms.erase( geoms.begin() );
 		}
-		catch( const std::exception& e ){
+		catch( const std::exception& e ){	
 			std::cerr << "Can not attach a geom to shape: " << (GetName() ? GetName() : "unknown") << ". Exception: " << e.what() << std::endl;
+
+			// rollback:
+			while( Count() > idx + 1 )
+				geoms.insert( geoms.begin(), Remove( Count() - 1 ) );
 		}
 	}
 
-	geoms.clear();
-	return common::narrow_cast<int>(m_Geoms.size()) - 1;
+	return idx < Count() ? idx : - 1;
 }
 
 std::unique_ptr<Geom> Shape_ImpBase::Remove( int idx ){
@@ -117,6 +127,21 @@ int Shape_ImpBase::Count() const{
 
 Geom& Shape_ImpBase::Get( int idx ) const{
 	return *m_Geoms.at(idx);
+}
+
+bool Shape_ImpBase::IsOverlapping( const Shape& other ) const noexcept
+{
+	for( const auto& pGeomThis : m_Geoms )
+	{
+		for( int i = 0; i < other.Count(); ++i )
+		{
+			const Geom& geomOther = other.Get(i);
+			if( pGeomThis->IsOverlapping( geomOther ) )
+				return true;
+		}
+	}
+
+	return false;
 }
 ///////////////////////////////////////
 } // namespace trax

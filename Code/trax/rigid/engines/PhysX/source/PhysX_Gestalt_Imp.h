@@ -45,9 +45,9 @@ namespace trax
 		inline physx::PxRigidDynamic& Actor() const noexcept{
 			return PhysX_Body_ImpBase::Actor();
 		}
-	protected:
 
-		void DoCalculateMassProperties() override;
+	protected:
+		void AddMassProperties( Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) noexcept override;
 	};
 
 

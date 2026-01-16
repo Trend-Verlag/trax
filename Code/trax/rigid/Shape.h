@@ -72,18 +72,25 @@ namespace trax{
 		/// \brief Attach a Geom to the Shape.
 		///
 		/// This will be used for collision testing. The Geom carries a
-		/// frame of reference to specify it's pose relative to the Shape's pose.
+		/// frame of reference to specify its pose relative to the Shape's pose.
 		///@{
 
 		/// \param pGeom A Geom to be attached to the Shape.
-		/// \returns The zero based index of the first Geom attached; the 
-		/// consecutive geoms will be assigned indexes from that in increasing order.
+		/// \returns The zero based index of the Geom attached; -1 if
+		/// no geom was attached.
+		/// \throws std::invalid_argument if pGeom is of negative volume
+		/// or invalid otherwise.
+		/// \throws std::runtime_error if pGeom could not be attached
+		/// due to system issues including range errors.
 		virtual int Attach( std::unique_ptr<Geom> pGeom ) = 0;
 
-		/// \param geoms A list of Geoms to be attached to the Shape.
+		/// \param geoms A list of Geoms to be attached to the Shape. Will
+		/// be empty after the call if successful, untouched if not.
 		/// \returns The zero based index of the first Geom attached; the 
-		/// consecutive geoms will be assigned indexes from that in increasing order.
-		virtual int Attach( std::vector<std::unique_ptr<Geom>>& geoms ) = 0;
+		/// consecutive geoms will be assigned indexes from that in increasing 
+		/// order. There will be all geoms attached or none, in which case -1 is
+		/// returned. nullptr gets ignored.
+		virtual int Attach( std::vector<std::unique_ptr<Geom>>& geoms ) noexcept = 0;
 		///@}
 
 
@@ -102,13 +109,23 @@ namespace trax{
 		virtual void Clear() noexcept = 0;
 
 
+		/// \brief Counts the Geoms attached to this Shape.
 		/// \returns the number of Geoms attached to this Shape.
 		virtual int Count() const = 0;
 
 
+		/// \brief Accesses the Geom at index idx.
+		/// The geoms indices are consecutive zero based,
+		/// so [0,Count()[ are valid indexes.
 		/// \param idx zero based index of the Geom.
 		/// \returns a reference to the Geom at index idx.
 		virtual Geom& Get( int idx = 0 ) const = 0;
+
+
+		/// \brief Tests for overlap with another Shape in global space.
+		/// \param other The other Shape to test against.
+		/// \returns true if there is an overlap.
+		virtual bool IsOverlapping( const Shape& other ) const noexcept = 0;
 
 
 		///// \returns The number of axes, this is the dominant shape for.

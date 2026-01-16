@@ -324,7 +324,7 @@ namespace spat{
 
 
 		/// \returns true if the matrix is symmetric, i.e m(i,j) == m(j,i)
-		bool IsSymmetric( Valtype epsilon = 0 ) const noexcept;
+		bool IsSymmetric( Valtype epsilon = Valtype{0} ) const noexcept;
 
 
 		///	\brief Change colums and rows.
@@ -369,22 +369,26 @@ namespace spat{
 	/// \name Adjungated
 	///	\brief Adjungate value for element
 	///@{
-	template<typename Valtype, const unsigned short nColsAndRows > constexpr 
+	template<typename Valtype, const unsigned short nColsAndRows> constexpr 
 	auto Adjungated( const SquareMatrix<Valtype,nColsAndRows>& m, unsigned short c, unsigned short r ) -> decltype(pow<nColsAndRows-1>(Valtype{}));
 
 
-	template<typename Valtype > constexpr 
+	template<typename Valtype> constexpr 
 	auto Adjungated( const SquareMatrix<Valtype,1>& m, unsigned short c, unsigned short r ) noexcept -> decltype(pow<0>(Valtype{}));
 	///@}
 
 
 	///	\brief Matrix of adjungated values
-	template<typename Valtype, const unsigned short nColsAndRows >
+	template<typename Valtype, const unsigned short nColsAndRows>
 	SquareMatrix<Valtype,nColsAndRows> AdjungatedMatrix( const SquareMatrix<Valtype,nColsAndRows>& m );
 
 
 	template<typename Valtype1,typename Valtype2>
 	auto operator*( const SquareMatrix<Valtype1,2>& m, const Vector2D<Valtype2>& v ) noexcept -> Vector2D<decltype(Valtype1{}*Valtype2{})>;
+
+
+	template<typename Valtype> inline
+	SquareMatrix<Valtype,3> DiagonalMatrixFrom( const Vector<Valtype>& diagValues );
 
 
 	template<typename Valtype> class Rotation;
@@ -1229,6 +1233,16 @@ SquareMatrix<Valtype,nColsAndRows> AdjungatedMatrix( const SquareMatrix<Valtype,
 template<typename Valtype1,typename Valtype2>
 inline auto operator*( const SquareMatrix<Valtype1,2>& m, const Vector2D<Valtype2>& v ) noexcept -> Vector2D<decltype(Valtype1{}*Valtype2{})>{
 	return { m(0,0) * v.dx + m(1,0) * v.dy, m(0,1) * v.dx + m(1,1) * v.dy };
+}
+
+template<typename Valtype>
+inline SquareMatrix<Valtype,3> DiagonalMatrixFrom( const Vector<Valtype>& diagValues )
+{
+	return SquareMatrix<Valtype,3>{
+		diagValues.dx,  Valtype{0},     Valtype{0},
+		Valtype{0},     diagValues.dy,  Valtype{0},
+		Valtype{0},     Valtype{0},     diagValues.dz
+	};
 }
 ///////////////////////////////////////
 template<typename Valtype>

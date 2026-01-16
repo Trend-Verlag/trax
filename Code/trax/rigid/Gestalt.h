@@ -125,20 +125,35 @@ namespace trax
 
 		using Shape::Attach;
 		
-		/// \brief Attach a Geom with a dedicated mass to the Gestalt.
+		/// \brief Attach Geoms with dedicated mass properties to the Gestalt.
 		///
 		/// This will be used for collision testing. The Geom carries a
-		/// frame of reference to specify it's pose relative to the Body's pose.
-		/// \param pGeom A Geom to be attached to the Body.
-		/// \param mass A mass to be used when calculating the mass properties 
-		/// for the Body by CalculateMassPropertiesFromShapes().
-		/// \returns The zero based index of the Geom.
+		/// frame of reference to specify its pose relative to the Body's pose.
+		/// The geoms are added to already existing attached geoms; mass 
+		/// properties are added to the existing mass properties of the Body.
+		/// \param pGeom A single Geom to be attached to the Body.
+		/// \param mass A mass to be used when calculating the mass properties.
+		/// \param massLocalPose The local pose of the mass in Body space.
+		/// \param inertiaTensor The inertia tensor for the mass local to 
+		/// massLocalPose.
+		/// \param geoms A vector of Geoms or Geom/Mass pairs to be attached to 
+		/// the Body.Will be empty after the call if successful, untouched if not.
+		/// \returns The zero based index of the Geom that was attached first; the 
+		/// consecutive geoms will be assigned indexes from that in increasing 
+		/// order. There will be all geoms attached or none, in which case -1 is
+		/// returned. nullptr gets ignored.
+		/// \throws std::invalid_argument if a pGeom is not of positive volume
+		/// or the mass is <= 0_kg or invalid otherwise.
+		/// \throws std::runtime_error if pGeom could not be attached due to 
+		/// system issues including range errors.
+		///@{
 		virtual int Attach( std::unique_ptr<Geom> pGeom, Mass mass ) = 0;
 
+		virtual int Attach( std::unique_ptr<Geom> pGeom, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) = 0;
+		
+		virtual int Attach( std::vector<std::pair<std::unique_ptr<Geom>,Mass>>& geoms ) noexcept = 0;
 
-		/// \param idx zero based index of the Geom.
-		/// \returns a pointer to the Geom at index idx.
-		virtual Mass GeomMass( int idx = 0 ) const = 0;
-
+		virtual int Attach( std::vector<std::unique_ptr<Geom>>& geoms, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) = 0;
+		///@}
 	};
 }

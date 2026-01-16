@@ -48,43 +48,59 @@ std::unique_ptr<Geom> PhysX_Gestalt_ImpBase::Remove( int idx ) noexcept
 	return Gestalt_Imp::Remove(idx);
 }
 
-void PhysX_Gestalt_ImpBase::DoCalculateMassProperties()
-// Recalculates mass properties from attached shapes.
-// 
+void PhysX_Gestalt_ImpBase::AddMassProperties(
+	Mass mass,
+	const spat::Frame<Length,One>& massLocalPose,
+	const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) noexcept
 {
-	std::vector<physx::PxMassProperties> shapeMasses;
-	std::vector<physx::PxTransform> shapeTransforms;
+	assert( mass >= 0_kg );
+	assert( massLocalPose.IsOrthoNormal() );
+	assert( inertiaTensor(0,0) >= 0_kgm2 );
+	assert( inertiaTensor(1,1) >= 0_kgm2 );
+	assert( inertiaTensor(2,2) >= 0_kgm2 );
+	assert( inertiaTensor.IsSymmetric() );
 
-	for( int idx = 0; idx < Count(); ++idx ){
-		if( GeomMass( idx ) == 0_kg )
-			continue;	// Zero mass shapes are not considered for mass calculation.
+	// --- Build current(body) mass properties in ACTOR LOCAL space ---
+	const physx::PxReal bodyMass = Actor().getMass();
 
-		if( const PhysX_GeomBase_Imp* pPhysXGeom = dynamic_cast<const PhysX_GeomBase_Imp*>(&Get(idx)); pPhysXGeom ){
-			shapeMasses.push_back( physx::PxMassProperties{ pPhysXGeom->Geometry() } );
-			physx::PxReal mass = static_cast<physx::PxReal>(_kg(GeomMass( idx ))/EngineKilogramsPerUnit());
-			shapeMasses.back().inertiaTensor *= mass / shapeMasses.back().mass;
-			shapeMasses.back().mass = mass;
+	const physx::PxTransform bodyCM = Actor().getCMassLocalPose(); // actor -> COM frame
+	const physx::PxMat33 Rbody(bodyCM.q);
 
-			Frame<Length,One> frame;
-			pPhysXGeom->GetFrame( frame );
-			shapeTransforms.push_back( PoseFrom( frame ) );
-		}
-	}
+	// full inertia about COM, expressed in actor-local axes
+	const physx::PxMat33 Dbody = physx::PxMat33::createDiagonal( Actor().getMassSpaceInertiaTensor() );
+	const physx::PxMat33 Ibody_actor = Rbody * Dbody * Rbody.getTranspose();
 
-	if( !shapeMasses.empty() ){
-		physx::PxMassProperties massProp = physx::PxMassProperties::sum( 
-			shapeMasses.data(), 
-			shapeTransforms.data(), 
-			common::narrow_cast<physx::PxU32>(shapeMasses.size()) );
+	physx::PxMassProperties bodyProps{ bodyMass, Ibody_actor, bodyCM.p };
 
-		physx::PxQuat massFrame;
-		physx::PxVec3 massSpaceInertia = physx::PxMassProperties::getMassSpaceInertia( massProp.inertiaTensor, massFrame );
+	// --- Build additional mass properties in ACTOR LOCAL space ---
+	const physx::PxReal addMass = static_cast<physx::PxReal>(_kg(mass) / EngineKilogramsPerUnit());
 
-		SceneLockWrite lock{ Actor().getScene() };
-		Actor().setMass( massProp.mass );
-		Actor().setMassSpaceInertiaTensor( massSpaceInertia );
-		Actor().setCMassLocalPose( physx::PxTransform{ massProp.centerOfMass, massFrame } );
-	}
+	// principal moments are given in the additional mass's local principal axes
+	const physx::PxMat33 Dadd = From( inertiaTensor, EngineMetersPerUnit(), EngineKilogramsPerUnit() );
+
+	// massLocalPose is (actor -> additional-mass frame)
+	const physx::PxTransform addPose = PoseFrom( massLocalPose, EngineMetersPerUnit() );
+	const physx::PxMat33 Radd(addPose.q);
+
+	// rotate inertia into actor-local axes (still about the additional mass COM)
+	const physx::PxMat33 Iadd_actor = Radd * Dadd * Radd.getTranspose();
+
+	physx::PxMassProperties addProps{ addMass, Iadd_actor, addPose.p };
+
+	// --- Sum them (both defined in actor-local reference frame) ---
+	physx::PxMassProperties props[2]{ bodyProps, addProps };
+	physx::PxTransform poses[2]{ physx::PxTransform(physx::PxIdentity), physx::PxTransform(physx::PxIdentity) };
+
+	physx::PxMassProperties total = physx::PxMassProperties::sum( props, poses, 2 );
+
+	// Convert full inertia tensor to (diag + massFrame) expected by rigid body API
+	physx::PxQuat massFrame;
+	physx::PxVec3 massSpaceInertia = physx::PxMassProperties::getMassSpaceInertia(total.inertiaTensor, massFrame);
+
+	SceneLockWrite lock{ Actor().getScene() };
+	Actor().setMass( total.mass );
+	Actor().setMassSpaceInertiaTensor( massSpaceInertia );
+	Actor().setCMassLocalPose( physx::PxTransform{ total.centerOfMass, massFrame } );
 }
 ///////////////////////////////////////
 PhysX_Gestalt_Imp::PhysX_Gestalt_Imp( physx::PxScene& scene, Real engine_meters_per_unit, Real engine_kilograms_per_unit ) noexcept

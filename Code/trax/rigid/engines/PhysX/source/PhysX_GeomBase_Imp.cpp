@@ -15,6 +15,7 @@
 #include "PhysX_Body_Imp.h"
 #include "PhysX_Shape_Imp.h"
 
+#include <iostream>
 
 namespace trax{
 ///////////////////////////////////////
@@ -54,6 +55,15 @@ void PhysX_GeomBase_Imp::GetFrame( Frame<Length,One>& frame ) const noexcept{
 	frame = m_Frame;
 }
 
+spat::SquareMatrix<Area,3> PhysX_GeomBase_Imp::SpecificInertiaTensor() const{
+	physx::PxMassProperties massProps{ Geometry() };
+	if( massProps.mass <= physx::PxReal{0} )
+		throw std::runtime_error( "trax::PhysX_GeomBase_Imp::SpecificInertiaTensor: Geometry has no valid mass!" );
+
+	massProps.inertiaTensor *= physx::PxReal{1} / massProps.mass;
+	return AreaMatrixFrom( massProps.inertiaTensor, m_EngineMetersPerUnit );
+}
+
 void PhysX_GeomBase_Imp::SetMaterial( const Material& material ) noexcept{
 	Geom_Imp::SetMaterial( material );
 
@@ -76,6 +86,49 @@ void PhysX_GeomBase_Imp::CollisionFilter( unsigned int collideWith ) noexcept{
 	Geom_Imp::CollisionFilter(collideWith);
 
 	SetFilter();
+}
+
+bool PhysX_GeomBase_Imp::IsOverlapping( const Geom& other ) const noexcept
+{
+	if( const PhysX_GeomBase_Imp* pOther = dynamic_cast<const PhysX_GeomBase_Imp*>(&other); pOther )
+	{
+		physx::PxTransform thisPose;
+		if( m_pShape )
+		{	thisPose = m_pShape->getLocalPose();
+			if( physx::PxRigidActor* pThisActor = m_pShape->getActor(); pThisActor )
+			{
+				physx::PxTransform thisGlobal = pThisActor->getGlobalPose();
+				thisPose = thisGlobal * m_pShape->getLocalPose();
+			}
+			else
+				thisPose = m_pShape->getLocalPose();
+		}
+		else
+			thisPose = PoseFrom( m_Frame );
+
+		physx::PxTransform thatPose;
+		if( pOther->m_pShape )
+		{
+			thatPose = pOther->m_pShape->getLocalPose();
+			if( physx::PxRigidActor* pThatActor = pOther->m_pShape->getActor(); pThatActor )
+			{
+				physx::PxTransform thatGlobal = pThatActor->getGlobalPose();
+				thatPose = thatGlobal * pOther->m_pShape->getLocalPose();
+			}
+			else
+				thatPose = pOther->m_pShape->getLocalPose();
+		}
+		else
+			thatPose = PoseFrom( pOther->m_Frame );
+
+		return physx::PxGeometryQuery::overlap( Geometry(), 
+												thisPose,
+												pOther->Geometry(), 
+												thatPose );
+	}
+
+	std::cerr << "trax::PhysX_GeomBase_Imp::IsOverlapping: other geom is not a PhysX_GeomBase_Imp!" << std::endl;
+	return false;
 }
 
 void PhysX_GeomBase_Imp::OnAttach( const Shape_ImpBase& shape )
@@ -110,7 +163,7 @@ void PhysX_GeomBase_Imp::OnAttach( physx::PxRigidActor& actor )
 	SetFilter();
 }
 
-void PhysX_GeomBase_Imp::OnDetach(){
+void PhysX_GeomBase_Imp::OnDetach() noexcept{
 	if( m_pMaterial ){
 		m_pMaterial->release();
 		m_pMaterial = nullptr;

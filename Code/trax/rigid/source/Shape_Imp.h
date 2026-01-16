@@ -50,7 +50,7 @@ namespace trax{
 
 		int Attach( std::unique_ptr<Geom> pGeom ) override;
 
-		int Attach( std::vector<std::unique_ptr<Geom>>& geoms ) override;
+		int Attach( std::vector<std::unique_ptr<Geom>>& geoms ) noexcept override;
 
 		std::unique_ptr<Geom> Remove( int idx ) override;
 
@@ -59,6 +59,8 @@ namespace trax{
 		int Count() const override;
 
 		Geom& Get( int idx ) const override;
+
+		bool IsOverlapping( const Shape& other ) const noexcept override;
 	private:
 		std::vector<std::unique_ptr<Geom>> m_Geoms;
 		std::string m_Name;

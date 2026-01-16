@@ -28,6 +28,7 @@
 #include "Gestalt_Imp.h"
 
 #include <numeric>
+#include <iostream>
 
 namespace trax
 {
@@ -41,7 +42,7 @@ const char* Gestalt_Imp::GetName() const noexcept
 {
 	return Shape_ImpBase::GetName();
 }
-
+/*
 int Gestalt_Imp::Attach( std::unique_ptr<Geom> pGeom )
 {
 	Mass residue = GetMass() - std::accumulate( m_Masses.begin(), m_Masses.end(), 0_kg );
@@ -89,30 +90,6 @@ int Gestalt_Imp::Attach( std::vector<std::unique_ptr<Geom>>& geoms )
 	return retval;
 }
 
-int Gestalt_Imp::Attach( std::unique_ptr<Geom> pGeom, Mass mass )
-{
-	if( pGeom == nullptr )
-		return -1;
-	if( mass < 0_kg )
-		throw std::invalid_argument( "Gestalt_Imp::Attach(): mass must not be negative." );
-	if( pGeom->GetVolume() <= 0_m3 )
-		throw std::invalid_argument( "Gestalt_Imp::Attach(): Geom must have a volume > 0." );
-
-	if( int idx = Shape_ImpBase::Attach( std::move( pGeom ) ); idx >= 0 )
-	{
-		m_Masses.push_back( mass );
-		DoCalculateMassProperties();
-		return idx;
-	}
-	else
-		return idx;
-}
-
-Mass Gestalt_Imp::GeomMass( int idx ) const
-{
-	return m_Masses.at(idx);
-}
-
 std::unique_ptr<Geom> Gestalt_Imp::Remove( int idx )
 {
 	if( std::unique_ptr<Geom> pRetval = Shape_ImpBase::Remove(idx); pRetval )
@@ -123,6 +100,106 @@ std::unique_ptr<Geom> Gestalt_Imp::Remove( int idx )
 	}
 
 	return nullptr;
+}
+*/
+
+int Gestalt_Imp::Attach( std::unique_ptr<Geom> pGeom, Mass mass )
+{
+	if( mass < 0_kg )
+		throw std::invalid_argument( "Gestalt_Imp::Attach(): mass must not be negative." );
+
+	spat::Frame<Length,One> frame;
+	pGeom->GetFrame( frame );
+	const spat::SquareMatrix<MomentOfInertia,3> inertialTensor = mass * pGeom->SpecificInertiaTensor();
+
+	int idx = Attach( std::move( pGeom ) );
+	if( idx >= 0 )
+		AddMassProperties( mass, frame, inertialTensor );
+
+	return idx;
+}
+
+int Gestalt_Imp::Attach(
+	std::unique_ptr<Geom> pGeom, 
+	Mass mass, 
+	const spat::Frame<Length,One>& massLocalPose, 
+	const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor )
+{
+	if( mass < 0_kg )
+		throw std::invalid_argument( "Gestalt_Imp::Attach(): mass must not be negative." );
+	if( !massLocalPose.IsOrthoNormal() )
+		throw std::invalid_argument( "Gestalt_Imp::Attach(): massLocalPose must be orthonormal." );
+	if( inertiaTensor(0,0) < 0_kgm2 ||
+		inertiaTensor(1,1) < 0_kgm2 ||
+		inertiaTensor(2,2) < 0_kgm2 )
+		throw std::invalid_argument("Gestalt_Imp::Attach(): diagonal elements of inertial tensor must not be negative.");
+	if( !inertiaTensor.IsSymmetric() )
+		throw std::invalid_argument( "Gestalt_Imp::Attach(): inertial tensor must be symmetric." );
+
+	int idx = Attach( std::move( pGeom ) );
+	if( idx >= 0 )
+		AddMassProperties( mass, massLocalPose, inertiaTensor );
+
+	return idx;
+}
+
+int Gestalt_Imp::Attach( std::vector<std::pair<std::unique_ptr<Geom>,Mass>>& geoms ) noexcept
+{
+	int idx = Count();
+
+	Mass mass = Mass();
+	spat::Frame<Length, One> massLocalPose = CenterOfMassLocalPose();
+	spat::Vector<MomentOfInertia> principalMoments = PrincipalMomentsOfInertia();
+	std::vector<Mass> addedMasses;
+
+	while( geoms.size() )
+	{
+		try{
+			Attach( std::move( geoms.front().first ), geoms.front().second );
+			addedMasses.push_back( geoms.front().second );
+			geoms.erase( geoms.begin() );
+		}
+		catch( const std::exception& e ){	
+			std::cerr << "Can not attach a geom to gestalt: " << (GetName() ? GetName() : "unknown") << ". Exception: " << e.what() << std::endl;
+
+			// rollback:
+			while( Count() > idx + 1 ){
+				geoms.insert( geoms.begin(), std::make_pair( Remove( Count() - 1 ), addedMasses.back() ) );
+				addedMasses.pop_back();
+			}
+
+			// restore mass properties:
+			SetMass( mass );
+			CenterOfMassLocalPose( massLocalPose );
+			PrincipalMomentsOfInertia( principalMoments );
+		}
+	}
+
+	return idx < Count() ? idx : - 1;
+}
+
+int Gestalt_Imp::Attach(
+	std::vector<std::unique_ptr<Geom>>& geoms, 
+	Mass mass, 
+	const spat::Frame<Length,One>& massLocalPose, 
+	const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor )
+{
+	if( mass < 0_kg )
+		throw std::invalid_argument( "Gestalt_Imp::Attach(): mass must not be negative." );
+	if( !massLocalPose.IsOrthoNormal() )
+		throw std::invalid_argument( "Gestalt_Imp::Attach(): massLocalPose must be orthonormal." );
+	if( inertiaTensor(0,0) < 0_kgm2 ||
+		inertiaTensor(1,1) < 0_kgm2 ||
+		inertiaTensor(2,2) < 0_kgm2 )
+		throw std::invalid_argument("Gestalt_Imp::Attach(): diagonal elements of inertial tensor must not be negative.");
+	if( !inertiaTensor.IsSymmetric() )
+		throw std::invalid_argument( "Gestalt_Imp::Attach(): inertial tensor must be symmetric." );
+	
+	int idx = Attach( geoms );
+	if( idx >= 0 )
+		AddMassProperties( mass, massLocalPose, inertiaTensor );
+
+	return idx;
 }
 
 }
