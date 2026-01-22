@@ -44,6 +44,7 @@ namespace trax{
 	struct Fleet;
 	struct IndicatorCollection;
 	struct PulseCounterCollection;
+	struct Scene;
 	struct SignalCollection;
 	struct TimerCollection;
 	struct TrackSystem;
@@ -69,6 +70,12 @@ namespace trax{
 		/// \brief Checks whether the elements in this module are valid 
 		/// \returns true if all the elements are valid build.
 		virtual bool IsValid() const noexcept = 0;
+
+
+		virtual void RegisterCollections( Scene& withScene ) const noexcept = 0;
+
+
+		virtual void UnregisterCollections( Scene& withScene ) const noexcept = 0;
 
 
 		/// \brief Set frame of reference.

@@ -40,7 +40,7 @@ namespace trax{
 						public JackEnumerator
 	{
 	public:
-		Module_Imp( bool bCreateCollections = true );
+		Module_Imp( bool bCreateCollections = true ) noexcept;
 
 
 		//Module:
@@ -49,6 +49,10 @@ namespace trax{
 		}
 
 		bool IsValid() const noexcept override;
+
+		void RegisterCollections( Scene& withScene ) const noexcept override;
+
+		void UnregisterCollections( Scene& withScene ) const noexcept override;
 
 		void SetFrame( const spat::Frame<Length,One>& frame ) noexcept override;
 
@@ -114,7 +118,5 @@ namespace trax{
 		std::shared_ptr<TimerCollection>		m_pTimerCollection;
 		std::shared_ptr<PulseCounterCollection> m_pPulseCounterCollection;
 		std::shared_ptr<CameraCollection>		m_pCameraCollection;
-
-
 	};
 }

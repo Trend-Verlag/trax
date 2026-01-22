@@ -25,9 +25,23 @@
 // For further information, please contact: horstmann.marc@trendverlag.de
 
 #include "TrackSystemMovable_Imp.h"
+#include "trax/collections/TrackCollectionContainer.h"
+#include "trax/collections/ConnectorCollection.h"
 #include "../MovableTrackAutoConnecting.h"
 
 namespace trax{
+
+std::unique_ptr<TrackSystem> TrackSystemMovable_Imp::Make() noexcept
+{
+	return std::make_unique<TrackSystemMovable_Imp>( TrackCollectionContainer::Make(), ConnectorCollection::Make() );
+}
+
+TrackSystemMovable_Imp::TrackSystemMovable_Imp( 
+	std::unique_ptr<TrackCollectionContainer> pTrackCollectionContainer, 
+	std::unique_ptr<ConnectorCollection> pConnectorCollection ) noexcept
+	: TrackSystem_Imp{ std::move( pTrackCollectionContainer ), std::move( pConnectorCollection ) }
+{
+}
 
 IDType TrackSystemMovable_Imp::Add( std::shared_ptr<TrackBuilder> pTrack )
 {

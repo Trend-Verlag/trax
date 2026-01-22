@@ -35,6 +35,13 @@ namespace trax{
 	class TrackSystemMovable_Imp : public TrackSystem_Imp
 	{
 	public:
+		static std::unique_ptr<TrackSystem> Make() noexcept;
+
+		TrackSystemMovable_Imp( 
+			std::unique_ptr<TrackCollectionContainer> pTrackCollectionContainer,
+			std::unique_ptr<ConnectorCollection> pConnectorCollection ) noexcept;
+
+
 		IDType Add( std::shared_ptr<TrackBuilder> pTrack ) override;
 
 		bool Remove( TrackBuilder* pTrack, bool zeroIDs = false ) override;

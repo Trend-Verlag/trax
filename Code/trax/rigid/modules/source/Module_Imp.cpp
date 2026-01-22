@@ -28,7 +28,8 @@
 #include "trax/collections/PulseCounterCollection.h"
 #include "trax/collections/SignalCollection.h"
 #include "trax/collections/TimerCollection.h"
-#include "trax/collections/TrackSystem.h"
+#include "trax/rigid/Scene.h"
+#include "trax/rigid/collections/source/TrackSystemMovable_Imp.h"
 #include "trax/rigid/modules/Camera.h"
 #include "trax/rigid/trains/collections/CargoCollection.h"
 #include "trax/rigid/trains/collections/Fleet.h"
@@ -39,27 +40,21 @@ namespace trax{
 
 std::unique_ptr<Module> Module::Make( bool bCreateCollections ) noexcept
 {
-	try{
-		std::unique_ptr<Module_Imp> pRetval = std::make_unique<Module_Imp>(
-			bCreateCollections );
-
-		return pRetval;
-	}
-	catch( const std::bad_alloc& ){
-		return nullptr;
-	}
+	return std::make_unique<Module_Imp>( bCreateCollections );
 }
 
-Module_Imp::Module_Imp( bool bCreateCollections )
-	: m_Frame{ spat::Identity<Length,One> }
+Module_Imp::Module_Imp( bool bCreateCollections ) noexcept
+	: m_Frame{ Identity<Length,One> }
 {
 	if( bCreateCollections )
 	{
-		m_pTrackSystem = trax::TrackSystem::Make();
-		m_pFleet = trax::Fleet::Make();
-		m_pSignalCollection = trax::SignalCollection::Make();
-		m_pIndicatorCollection = trax::IndicatorCollection::Make();
-		m_pCargoCollection = trax::CargoCollection::Make();
+		if( m_pTrackSystem = TrackSystemMovable_Imp::Make(); m_pTrackSystem )
+			m_pTrackSystem->CreateCollection();
+
+		m_pFleet = Fleet::Make();
+		m_pSignalCollection = SignalCollection::Make();
+		m_pIndicatorCollection = IndicatorCollection::Make();
+		m_pCargoCollection = CargoCollection::Make();
 	}
 }
 
@@ -118,6 +113,22 @@ bool Module_Imp::IsValid() const noexcept
 		return false;
 
 	return true;
+}
+
+void Module_Imp::RegisterCollections( Scene& withScene ) const noexcept
+{
+	if( m_pTrackSystem )
+		withScene.Register( *m_pTrackSystem );
+	if( m_pFleet )
+		withScene.Register( *m_pFleet );
+}
+
+void Module_Imp::UnregisterCollections( Scene& withScene ) const noexcept
+{
+	if( m_pFleet )
+		withScene.Unregister( *m_pFleet );
+	if( m_pTrackSystem )
+		withScene.Unregister( *m_pTrackSystem );
 }
 
 void Module_Imp::SetFrame( const spat::Frame<Length,One>& frame ) noexcept{

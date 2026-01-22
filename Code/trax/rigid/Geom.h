@@ -171,7 +171,7 @@ namespace trax{
 		/// possible that the other collides with the geom. I.e. the collision
 		/// happens if:
 		/// \verbatim
-		/// (typeA & collionB) || (typeB & collisionA)
+		/// (typeA & collideWithB) || (typeB & collideWithA)
 		/// \endverbatim
 		virtual void CollisionFilter( unsigned int collideWith ) noexcept = 0;
 
@@ -197,7 +197,7 @@ namespace trax{
 	dclspc unsigned int CollisionFilterFor( Geom::Filters filter ) noexcept;
 
 	constexpr bool IsTrigger( unsigned int filter ) noexcept{
-		return (filter & (Geom::fHook | Geom::fHookFixed | Geom::fCouplingNorth | Geom::fCouplingSouth)) ? true : false;
+		return (filter & (Geom::fTriggerShape | Geom::fHook | Geom::fHookFixed | Geom::fCouplingNorth | Geom::fCouplingSouth)) ? true : false;
 	}
 
 
