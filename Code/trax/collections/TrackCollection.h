@@ -100,19 +100,20 @@ namespace trax{
 	/// \param maxDistance A threshold for the distance to search track ends around the to be snapped end.
 	/// \param bUncoupled If true only uncoupled track ends are taken into consideration.
 	/// \return The other track end, the track was snapped to, or { nullptr, Track::EndType::none } if no suitable track end was found.
-	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> dclspc Snap( const TrackCollection& collection, TrackBuilder& track, Track::EndType endType, Length maxDistance, bool bUncoupled = true );
+	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> dclspc Snap( const TrackCollection& collection, Track::TrackEnd trackEnd, Length maxDistance, bool bUncoupled = true );
 
 
 	/// \brief Searches open track ends inside an area around a given track end and couples to the closest.
 	/// \param collection The track collection to search track ends in.
-	/// \param track The track to couple.
-	/// \param endType The track's end to couple
+	/// \param trackEnd The track end to couple. trackEnd.second == Track::EndType::any and Track::EndType::both 
+	/// are supported.
 	/// \param maxDistance A threshold for the distance to search track ends around the to be coupled end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
 	/// \param bSilent If true no log messages are emitted.
-	/// \return The other track end, the track was coupled to, or { nullptr, Track::EndType::none } if no suitable track end was found.
-	/// \throws std::invalid_argument If the end type is not recocnised.
-	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> dclspc Couple( const TrackCollection& collection, TrackBuilder& track, Track::EndType endType, Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true );
+	/// \return The other track ends, the track was coupled to, or { nullptr, Track::EndType::none } if no suitable 
+	/// track end was found. For a coupling with front the result is in pair.first, for a coupling with end in pair.second.
+	/// \throws std::invalid_argument If the end type is not recocnized.
+	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc Couple( const TrackCollection& collection, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true );
 
 
 	/// \brief A decorator for TrackCollection.

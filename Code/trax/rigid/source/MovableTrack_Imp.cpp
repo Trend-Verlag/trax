@@ -33,8 +33,21 @@ namespace trax{
 	using namespace spat;
 
 MovableTrack_Imp::MovableTrack_Imp() noexcept
-	:	m_pBody{nullptr}
+	: m_pBody								{ nullptr }
+	, m_bFramePropagationToBodyOnSetFrame	{ true }
 {
+}
+
+void MovableTrack_Imp::PropagateAbsoluteFrameToClients() noexcept
+{
+	Track_Imp::PropagateAbsoluteFrameToClients();
+
+	if( m_bFramePropagationToBodyOnSetFrame && m_pBody )
+	{
+		Frame<Length,One> bodyFrame = GetFrame();
+		m_RelativePose.ToParent( bodyFrame );
+		m_pBody->SetFrame( bodyFrame );
+	}
 }
 
 Track::TrackType MovableTrack_Imp::GetTrackType() const noexcept{
@@ -49,7 +62,7 @@ std::shared_ptr<MovableTrack> MovableTrack_Imp::GetMovableTrack() noexcept{
 	return std::dynamic_pointer_cast<MovableTrack>(This());
 }
 
-void MovableTrack_Imp::SetBody( std::shared_ptr<const Body> pBody ) noexcept{
+void MovableTrack_Imp::SetBody( std::shared_ptr<Body> pBody ) noexcept{
 	m_pBody = pBody;
 
 	if( m_pBody )
@@ -61,7 +74,7 @@ void MovableTrack_Imp::SetBody( std::shared_ptr<const Body> pBody ) noexcept{
 	}
 }
 
-std::shared_ptr<const Body> MovableTrack_Imp::GetBody() const noexcept{
+std::shared_ptr<Body> MovableTrack_Imp::GetBody() const noexcept{
 	return m_pBody;
 }
 
@@ -72,6 +85,7 @@ void MovableTrack_Imp::UpdateTrackPose() noexcept
 		Frame<Length,One> bodyFrame, trackFrame = m_RelativePose;
 		m_pBody->GetFrame( bodyFrame );
 		bodyFrame.ToParent( trackFrame );
+		common::FlagBlocker fb{ m_bFramePropagationToBodyOnSetFrame };
 		SetFrame( trackFrame );
 	}
 }

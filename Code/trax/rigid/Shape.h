@@ -128,6 +128,9 @@ namespace trax{
 		virtual bool IsOverlapping( const Shape& other ) const noexcept = 0;
 
 
+		virtual void EnableSimulation( bool enable = true ) noexcept = 0;
+		virtual bool IsSimulationEnabled() const noexcept = 0;
+
 		///// \returns The number of axes, this is the dominant shape for.
 		//virtual int CountAxes() const = 0;
 

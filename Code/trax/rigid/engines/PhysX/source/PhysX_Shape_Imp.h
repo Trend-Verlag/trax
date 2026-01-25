@@ -32,7 +32,12 @@ namespace trax{
 		// Shape:
 		void SetFrame( const spat::Frame<Length,One>& frame ) noexcept override;
 
-		void GetFrame( spat::Frame<Length,One>& frame ) const noexcept override;	
+		void GetFrame( spat::Frame<Length,One>& frame ) const noexcept override;
+
+		void EnableSimulation( bool enable = true ) noexcept override;
+		
+		bool IsSimulationEnabled() const noexcept override;
+
 
 		inline physx::PxRigidActor& Actor() const noexcept{
 			return m_Actor;

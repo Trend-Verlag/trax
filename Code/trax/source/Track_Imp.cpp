@@ -1478,6 +1478,26 @@ bool SetFrame( TrackBuilder& track, const spat::Frame<Length, One>& start, Lengt
 	}
 }
 
+bool Snap( Track::TrackEnd trackEnd, Track::cTrackEnd toTrackEnd ) noexcept
+{
+	if( IsConcreteEnd( trackEnd ) &&
+		IsConcreteEnd( toTrackEnd ) )
+	{
+		spat::Frame<dim::Length,dim::One> frameAtEnd;
+		toTrackEnd.first->Transition( toTrackEnd.second == Track::EndType::front ? trackEnd.first->Range().Near() : trackEnd.first->Range().Far(), frameAtEnd );
+		if( trackEnd.second == toTrackEnd.second )
+		{
+			frameAtEnd.T *= -1;
+			frameAtEnd.N *= -1;
+		}
+
+		trackEnd.first->This()->SetFrame( frameAtEnd, trackEnd.second == trax::Track::EndType::front ? trackEnd.first->Range().Near() : trackEnd.first->Range().Far() );
+		return true;
+	}
+
+	return false;
+}
+
 bool Mirror( 
 	TrackBuilder& track, 
 	VectorBundle<Length,One> mirrorPlane, 

@@ -294,7 +294,8 @@ namespace trax
 			none	= -1,
 			front	= 0,	///< Designates the front end.
 			end		= 1,	///< Designates the far end.
-			any				///< Denotes the north or south end of a Railrunner.
+			any,			///< Denotes the north or south end of a Railrunner.
+			both			///< Denotes both ends.
 		};
 
 		typedef std::pair<std::shared_ptr<Track>,EndType> TrackEnd;
@@ -358,7 +359,7 @@ namespace trax
 
 
 		/// \returns Returns the body a track is assigned to or nullptr.
-		virtual std::shared_ptr<const Body> GetBody() const noexcept = 0;
+		virtual std::shared_ptr<Body> GetBody() const noexcept = 0;
 
 
 		/// Tests wether a valid curve and twist are attached.
@@ -834,6 +835,10 @@ namespace trax
 		static dclspc std::shared_ptr<TrackBuilder> Make( TrackType type = TrackType::standard ) noexcept;
 
 
+		//typedef std::pair<std::shared_ptr<TrackBuilder>,EndType> TrackEnd;
+		//typedef std::pair<std::shared_ptr<const TrackBuilder>,const EndType> cTrackEnd;
+
+
 		/// \name Set Frame
 		/// \brief Sets the Frame the geometry is transformed with.
 		///
@@ -1041,10 +1046,20 @@ namespace trax
 		virtual void DestroyEndTransitionSignal( EndType atend ) = 0;
 	};
 
+	/// \brief Tests whether the end is a concrete end (front or end)
+	/// on an existing track.
+	template<class EndType>
+	bool IsConcreteEnd( EndType end ) noexcept;
+
 
 	/// \brief Same as track.SetFrame( start, s ), but does not throw.
 	/// \returns true on success, false if the frame could not be set.
 	bool dclspc SetFrame( TrackBuilder& track, const spat::Frame<Length,One>& start, Length s ) noexcept;
+
+
+	/// \brief Changes the frame of the first track, so that trackEnd 
+	/// snaps to toTrackEnd.
+	bool dclspc Snap( Track::TrackEnd trackEnd, Track::cTrackEnd toTrackEnd ) noexcept;
 
 
 	/// \brief Creates a matching Curve, Twist and Frame from an EEPCurve.
@@ -1433,5 +1448,11 @@ inline bool operator<( const Track::Overlap& a, const Track::Overlap& b ) noexce
 //inline bool operator!=( const TrackBuilder& tbA, const TrackBuilder& tbB ){
 //		return !(tbA == tbB);
 //}
+
+template<class EndType> inline
+bool IsConcreteEnd( EndType end ) noexcept
+{
+	return end.first && (end.second == Track::EndType::front || end.second == Track::EndType::end);
+}
 
 }

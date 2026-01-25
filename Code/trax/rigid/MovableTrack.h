@@ -41,11 +41,11 @@ namespace trax{
 
 
 		/// \brief Sets a body the track is attached to (if any).
-		virtual void SetBody( std::shared_ptr<const Body> pBody ) noexcept = 0;
+		virtual void SetBody( std::shared_ptr<Body> pBody ) noexcept = 0;
 
 
 		/// \returns Returns the body a track is assigned to or nullptr.
-		virtual std::shared_ptr<const Body> GetBody() const noexcept = 0;
+		virtual std::shared_ptr<Body> GetBody() const noexcept = 0;
 
 
 		/// \brief Updates the track's position from the moving body.

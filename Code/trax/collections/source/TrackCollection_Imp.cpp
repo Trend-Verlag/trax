@@ -245,30 +245,37 @@ std::vector<std::pair<Location,Length>> FindTrackLocations(
 
 std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Snap(
 	const TrackCollection& collection,
-	TrackBuilder& track,
-	Track::EndType endType,
+	Track::TrackEnd trackEnd,
 	Length maxDistance,
 	bool bUncoupled )
 {
-	if( maxDistance <= 0_m )
+	if( !trackEnd.first || maxDistance <= 0_m )
 		return { nullptr, Track::EndType::none };
 
 	Length s;
-	switch( endType )
+	switch( trackEnd.second )
 	{
 	case Track::EndType::front:
-	case Track::EndType::any:
 		s = 0_m;
 		break;
 	case Track::EndType::end:
-		s = track.GetLength();
+		s = trackEnd.first->GetLength();
 		break;
+	case Track::EndType::any:
+	{
+		auto retval = Snap( collection, {trackEnd.first,Track::EndType::front}, maxDistance, bUncoupled );
+		if( !retval.first )
+			return Snap( collection, {trackEnd.first,Track::EndType::end}, maxDistance, bUncoupled );
+		else
+			return retval;
+	}
+	case Track::EndType::both:
 	default:
 		return { nullptr, Track::EndType::none };
 	};
 
 	spat::Position<trax::Length> trackEndPosition;
-	track.Transition( s, trackEndPosition );
+	trackEnd.first->Transition( s, trackEndPosition );
 	const spat::Sphere<trax::Length> searchArea{ trackEndPosition, maxDistance };
 
 	auto TrackEnds = trax::FindTrackEnds( collection, searchArea, true );
@@ -276,7 +283,7 @@ std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Snap(
 		std::remove_if( 
 			TrackEnds.begin(), 
 			TrackEnds.end(), 
-			[&track]( std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& tuple ) noexcept { return std::get<0>(tuple).get() == &track; }
+			[&trackEnd]( std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& tuple ) noexcept { return std::get<0>(tuple) == trackEnd.first; }
 		), 
 		TrackEnds.end() 
 	);
@@ -303,7 +310,7 @@ std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Snap(
 			alignTo.N *= -1;
 		}
 
-		track.SetFrame( alignTo, s );
+		trackEnd.first->This()->SetFrame( alignTo, s );
 
 		return retval;
 	}
@@ -311,34 +318,42 @@ std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Snap(
 	return { nullptr, Track::EndType::none };
 }
 
-std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Couple(
-	const TrackCollection& collection,
-	TrackBuilder& track,
-	Track::EndType endType,
+std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
+	const TrackCollection& collection, 
+	Track::TrackEnd trackEnd,
 	Length maxDistance, 
 	Angle maxKink,
 	bool bSilent )
 {
-	if( maxDistance <= 0_m || maxKink <= 0_deg )
-		return { nullptr, Track::EndType::none };
+	if( !trackEnd.first || maxDistance <= 0_m || maxKink <= 0_deg )
+		return {};
 
 	Length s;
-	switch( endType )
+	switch( trackEnd.second )
 	{
 	case Track::EndType::front:
-	case Track::EndType::any:
 		s = 0_m;
 		break;
 	case Track::EndType::end:
-		s = track.GetLength();
+		s = trackEnd.first->GetLength();
 		break;
+	case Track::EndType::any:
+	{
+		TrackBuilder::TrackEnd retval = Couple( collection, {trackEnd.first,Track::EndType::front}, maxDistance, maxKink, bSilent ).first;
+		if( !retval.first )
+			return Couple( collection, {trackEnd.first,Track::EndType::end}, maxDistance, maxKink, bSilent );
+		else
+			return { retval, {} };
+	}
+	case Track::EndType::both:
+		return { Couple( collection, {trackEnd.first,Track::EndType::front}, maxDistance, maxKink, bSilent ).first,
+				 Couple( collection, {trackEnd.first,Track::EndType::end}, maxDistance, maxKink, bSilent ).second };
 	default:
-		return { nullptr, Track::EndType::none };
+		return {};
 	};
 
-	Track::End trackEnd{ track.ID(), endType };
 	spat::Frame<Length,One> trackEndFrame;
-	track.Transition( s, trackEndFrame );
+	trackEnd.first->Transition( s, trackEndFrame );
 	const spat::Sphere<Length> searchArea{ trackEndFrame.P, maxDistance };
 
 	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>> TrackEnds = FindTrackEnds( collection, searchArea, true );
@@ -346,7 +361,7 @@ std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Couple(
 		std::remove_if( 
 			TrackEnds.begin(), 
 			TrackEnds.end(), 
-			[&track]( std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& tuple ) noexcept { return std::get<0>(tuple).get() == &track; }
+			[&trackEnd]( std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& tuple ) noexcept { return std::get<0>(tuple) == trackEnd.first; }
 		), 
 		TrackEnds.end() 
 	);
@@ -355,12 +370,12 @@ std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Couple(
 		std::remove_if( 
 			TrackEnds.begin(), 
 			TrackEnds.end(), 
-			[trackEnd,maxKink,&trackEndFrame,bSilent]( std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& tuple ) noexcept 
+			[&trackEnd,maxKink,&trackEndFrame,bSilent]( std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& tuple ) noexcept 
 			{ 
 				const Track& otherTrack = *std::get<0>( tuple );
 				spat::Frame<Length,One> otherFrame;
 				otherTrack.Transition( std::get<Track::EndType>(tuple) == Track::EndType::front ? 0_m : otherTrack.GetLength(), otherFrame );
-				if( trackEnd.type == std::get<Track::EndType>(tuple) )
+				if( trackEnd.second == std::get<Track::EndType>(tuple) )
 				// if front and front or end and end hit, the T's are antiparallel
 				{
 					otherFrame.T *= -1_1;
@@ -421,20 +436,35 @@ std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Couple(
 
 	if( !TrackEnds.empty() )
 	{
-		std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> retval{ std::get<0>(TrackEnds.front()), std::get<1>(TrackEnds.front()) };
-
-		trax::Couple( std::make_pair( track.This(), endType ), retval );
+		std::pair<TrackBuilder::TrackEnd,TrackBuilder::TrackEnd> retval;
+		if( trackEnd.second == Track::EndType::front ){
+			retval.first = { std::get<0>(TrackEnds.front()), std::get<1>(TrackEnds.front()) };
+			Couple( trackEnd, retval.first );
+		}
+		else
+		{
+			retval.second = {std::get<0>(TrackEnds.front()), std::get<1>(TrackEnds.front()) };
+			Couple( trackEnd, retval.second );
+		}
 
 		if( !bSilent ){
 			spat::Position<dim::Length> trackAt, trackOtherAt;
-			track.Transition( s, trackAt );
-			const Length s2 = (retval.second == Track::EndType::front) ? 0_m : retval.first->GetLength();
-			retval.first->Transition( s2, trackOtherAt );
+			trackEnd.first->Transition( s, trackAt );
+			Length s2;
+			if( retval.first.first )
+			{
+				s2 = (retval.first.second == Track::EndType::front) ? 0_m : retval.first.first->GetLength();
+				retval.first.first->Transition( s2, trackOtherAt );
+			}
+			else{
+				s2 = (retval.second.second == Track::EndType::front ) ? 0_m : retval.second.first->GetLength();
+				retval.second.first->Transition( s2, trackOtherAt );
+			}
 
 			std::cout	<< "Coupled: "
 				<< " trackEnd=" << trackEnd 
 				<< " at " << trackAt
-				<< " otherEnd=" << retval
+				<< " otherEnd=" << (retval.first.first ? retval.first.second : retval.second.second)
 				<< " at " << trackOtherAt
 				<< " distance=" << (trackAt - trackOtherAt).Length()
 				<< std::endl;
@@ -443,7 +473,7 @@ std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Couple(
 		return retval;
 	}
 
-	return { nullptr, Track::EndType::none };
+	return {};
 }
 ///////////////////////////////////////
 }

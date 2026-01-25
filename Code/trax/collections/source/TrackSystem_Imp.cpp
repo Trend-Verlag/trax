@@ -411,10 +411,10 @@ void TrackSystem_Imp::CoupleAll( Length maxDistance, Angle maxKink, bool bSilent
 			for( TrackBuilder& track : trackCollection )
 			{
 				if( !track.IsCoupled( Track::EndType::front ) )
-					trax::Couple( trackCollection, track, Track::EndType::front, maxDistance, maxKink, bSilent );
+					trax::Couple( trackCollection, {track.This(), Track::EndType::front}, maxDistance, maxKink, bSilent );
 
 				if( !track.IsCoupled( Track::EndType::end ) )
-					trax::Couple( trackCollection, track, Track::EndType::end, maxDistance, maxKink, bSilent );
+					trax::Couple( trackCollection, {track.This(), Track::EndType::end}, maxDistance, maxKink, bSilent );
 			}
 		}
 	}
@@ -584,6 +584,75 @@ std::vector<std::pair<Location,Length>>dclspc FindTrackLocations(
 			[]( const std::pair<Location, Length>& a, const std::pair<Location, Length>& b ){ return a.second < b.second; } );
 
 	return locations;
+}
+
+std::pair<Track::TrackEnd,Track::TrackEnd> Couple( 
+	const TrackSystem& system, 
+	Track::TrackEnd trackEnd, 
+	Length maxDistance, 
+	Angle maxKink, 
+	bool bSilent )
+{	
+	if( system.IsMember( *trackEnd.first->This() ) )
+	{
+		for( const TrackCollection& collection : *system.GetCollectionContainer() )
+		{
+			if( collection.IsMember( *trackEnd.first->This() ) )
+			{
+				return Couple( 
+					collection, 
+					trackEnd,
+					maxDistance,
+					maxKink,
+					bSilent );
+			}
+		}
+	}
+
+	for( const TrackCollection& collection : *system.GetCollectionContainer() )
+	{
+		std::pair<Track::TrackEnd,Track::TrackEnd> coupledTo = Couple( 
+			collection, 
+			trackEnd,
+			maxDistance,
+			maxKink,
+			bSilent );
+
+		if( coupledTo.first.first || coupledTo.second.first )
+			return coupledTo;
+	}
+
+	return {};
+}
+
+std::pair<Track::TrackEnd,Track::TrackEnd> CoupleAndSnap( 
+	const TrackSystem& system, 
+	Track::TrackEnd trackEnd, 
+	Length maxDistance, 
+	Angle maxKink, 
+	bool bSilent )
+{
+	std::pair<trax::Track::TrackEnd,trax::Track::TrackEnd> CoupledTo = Couple( 
+		system, 
+		trackEnd,
+		maxDistance,
+		maxKink,
+		bSilent );
+
+	if( CoupledTo.first.first )
+	{
+		trax::Snap( 
+			std::make_pair( trackEnd.first, trax::Track::EndType::front ), 
+			CoupledTo.first );
+	}
+	else if( CoupledTo.second.first )
+	{
+		trax::Snap( 
+			std::make_pair( trackEnd.first, trax::Track::EndType::end ), 
+			CoupledTo.second );
+	}
+
+	return CoupledTo;
 }
 ///////////////////////////////////////
 }

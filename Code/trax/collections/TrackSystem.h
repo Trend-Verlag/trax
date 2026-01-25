@@ -194,12 +194,50 @@ namespace trax{
 	/// 
 	/// \param system Track system with tracks to evaluate.
 	/// \param ray A line starting at ray.P and running in the ray.T direction ad infinitum.
-	/// \param gauge If this is > 0_m it is used as the width of a ribbon to hit, also defined by the track's up direction. 
+	/// \param gauge If this is > 0_m it is used as the width of a ribbon to hit, also defined 
+	/// by the track's up direction. 
 	/// If <= 0_m the track's Section gauge is evaluated for a width of the track.
 	/// \param sort If true the list gets sorted by distance to ray.P (closest first). 
-	/// \return A list with track Locations as well as their distance from the ray's starting point.
+	/// \return A list with track Locations as well as their distance from the ray's starting 
+	/// point.
 	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackSystem& system, const spat::VectorBundle<Length,One>& ray, Length gauge = 0_m, bool sort = false );
 	
+
+	/// \brief Searches open track ends inside an area around a given track end and couples to 
+	/// the closest.
+	/// 
+	/// The function will couple tracks from one collection only, so it will not happen that
+	/// tracks from different collections get coupled to both ends. If the track itself is part
+	/// of a collection, only tracks from that collection will be considered.
+	/// \param system The track system to search track ends in.
+	/// \param trackEnd The track end to couple.
+	/// \param maxDistance A threshold for the distance to search track ends around the to be 
+	/// coupled end.
+	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
+	/// \param bSilent If true no log messages are emitted.
+	/// \return The other track ends, the track was coupled to, pair.first for front and 
+	/// pair.second for back end; or { nullptr, Track::EndType::none } if no suitable track 
+	/// end was found.
+	/// \throws std::invalid_argument If the end type is not recocnised.
+	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc Couple( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true );
+
+
+	/// \brief Searches open track ends inside an area around a given track end and couples 
+	/// and snaps to the closest.
+	/// 
+	/// The method will snap only once.
+	/// \param system The track system to search track ends in.
+	/// \param trackEnd The track end to couple.
+	/// \param maxDistance A threshold for the distance to search track ends around the to be 
+	/// coupled end.
+	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
+	/// \param bSilent If true no log messages are emitted.
+	/// \return The other track ends, the track was coupled to, pair.first for front and 
+	/// pair.second for back end; or { nullptr, Track::EndType::none } if no suitable track 
+	/// end was found.
+	/// \throws std::invalid_argument If the end type is not recocnised.
+	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc CoupleAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true );
+
 
 	/// \brief A decorator for TrackSystems.
 	///

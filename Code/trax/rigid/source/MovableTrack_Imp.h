@@ -38,23 +38,30 @@ namespace trax{
 	public:
 		MovableTrack_Imp() noexcept;
 
+		// Pose_Imp:
+		void PropagateAbsoluteFrameToClients() noexcept override;
+
+
+		// Track:
 		TrackType GetTrackType() const noexcept override;
 
 		std::shared_ptr<const MovableTrack> GetMovableTrack() const noexcept override;
 
 		std::shared_ptr<MovableTrack> GetMovableTrack() noexcept override;
 
-		// Inherited via MovableTrack:
-		void SetBody( std::shared_ptr<const Body> pBody ) noexcept override;
 
-		std::shared_ptr<const Body> GetBody() const noexcept override;
+		// Inherited via MovableTrack:
+		void SetBody( std::shared_ptr<Body> pBody ) noexcept override;
+
+		std::shared_ptr<Body> GetBody() const noexcept override;
 
 		void UpdateTrackPose() noexcept override;
 
 		bool IsMoving() const noexcept override;
 	private:
-		spat::Frame<Length,One>		m_RelativePose;
-		std::shared_ptr<const Body>	m_pBody;
+		spat::Frame<Length,One>	m_RelativePose;
+		std::shared_ptr<Body>	m_pBody;
+		bool 					m_bFramePropagationToBodyOnSetFrame;
 	};
 
 }
