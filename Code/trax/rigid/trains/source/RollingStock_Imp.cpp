@@ -337,6 +337,24 @@ Mass RollingStock_Imp::TotalMass() const noexcept
 	return totalMass;
 }
 
+void RollingStock_Imp::EnableSimulation( bool enable ) noexcept
+{
+	for( auto& pBogie : m_Bogies )
+		pBogie->EnableSimulation( enable );
+}
+
+bool RollingStock_Imp::IsSimulationEnabled() const noexcept
+{
+	if( m_Bogies.empty() )
+		return false;
+
+	for( auto& pBogie : m_Bogies )
+		if( !pBogie->IsSimulationEnabled() )
+			return false;
+
+	return true;
+}
+
 bool RollingStock_Imp::IsFinal() const noexcept{
 	return true;
 }

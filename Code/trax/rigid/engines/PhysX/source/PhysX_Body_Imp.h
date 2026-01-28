@@ -90,6 +90,10 @@ namespace trax
 
 		void GetAngularVelocity( spat::Vector<AngularVelocity>& w ) const override;
 
+		void EnableSimulation( bool enable = true ) noexcept override;
+		
+		bool IsSimulationEnabled() const noexcept override;
+
 
 		inline physx::PxRigidDynamic& Actor() const noexcept{
 			return m_Actor;

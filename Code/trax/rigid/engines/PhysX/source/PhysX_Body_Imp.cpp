@@ -177,6 +177,16 @@ void PhysX_Body_ImpBase::GetAngularVelocity( spat::Vector<AngularVelocity>& w ) 
 	SceneLockRead lock{ Actor().getScene() };
 	w = From<AngularVelocity>( Actor().getAngularVelocity() );
 }
+
+void PhysX_Body_ImpBase::EnableSimulation( bool enable ) noexcept{
+	SceneLockWrite lock{ Actor().getScene() };
+	Actor().setActorFlag( physx::PxActorFlag::eDISABLE_SIMULATION, !enable );
+}
+
+bool PhysX_Body_ImpBase::IsSimulationEnabled() const noexcept{
+	SceneLockRead lock{ Actor().getScene() };
+	return !Actor().getActorFlags().isSet( physx::PxActorFlag::eDISABLE_SIMULATION );
+}
 ///////////////////////////////////////
 PhysX_Body_Imp::PhysX_Body_Imp( physx::PxPhysics& physics, Real engine_meters_per_unit, Real engine_kilograms_per_unit ) noexcept
 	: PhysX_Body_ImpBase{ *physics.createRigidDynamic( physx::PxTransform{physx::PxIdentity} ), engine_meters_per_unit, engine_kilograms_per_unit }

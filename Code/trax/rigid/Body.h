@@ -174,9 +174,20 @@ namespace trax{
 		virtual void GetAngularVelocity( spat::Vector<AngularVelocity>& w ) const = 0;
 
 
+		/// \brief Enables or disables the simulation of this Body.
+		///
+		/// While simulation is disabled, the Body will not be affected by forces,
+		/// and not be moved by the simulator; connected joints will not influence
+		/// the simulation.
+		/// \param enable If true, the simulation is enabled; if false it is 
+		/// disabled.
+		virtual void EnableSimulation( bool enable = true ) noexcept = 0;
 
-	//	virtual Shape& GetGeomList() noexcept = 0;
-		//...
+
+		/// \returns true if the simulation of this Body is enabled; false if disabled.
+		virtual bool IsSimulationEnabled() const noexcept = 0;
+
+
 
 		virtual ~Body() = default;
 	};

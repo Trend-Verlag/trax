@@ -32,6 +32,10 @@ namespace trax
 
 		const char* GetName() const noexcept override;
 
+		void EnableSimulation( bool enable = true ) noexcept override;
+		
+		bool IsSimulationEnabled() const noexcept override;
+
 
 		//Gestalt:
 		void SetFrame( const spat::Frame<Length,One>& frame ) noexcept override;

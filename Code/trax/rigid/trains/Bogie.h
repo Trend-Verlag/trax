@@ -158,7 +158,7 @@ namespace trax{
 
 
 		/// \brief Detaches a bogie from its parent(s).
-		virtual void Detach( EndType atEnd = EndType::all ) noexcept = 0;
+		virtual void Detach( EndType atEnd = EndType::both ) noexcept = 0;
 
 
 

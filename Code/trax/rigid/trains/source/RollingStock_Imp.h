@@ -99,6 +99,11 @@ namespace trax{
 
 		Mass TotalMass() const noexcept override;
 
+		void EnableSimulation( bool enable = true ) noexcept override;
+
+		bool IsSimulationEnabled() const noexcept override;
+
+
 		// TrainComponent:
 		bool IsFinal() const noexcept override;
 

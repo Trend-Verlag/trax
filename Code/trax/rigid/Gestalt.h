@@ -155,5 +155,10 @@ namespace trax
 
 		virtual int Attach( std::vector<std::unique_ptr<Geom>>& geoms, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) = 0;
 		///@}
+
+
+		using Body::EnableSimulation;
+
+		using Body::IsSimulationEnabled;
 	};
 }

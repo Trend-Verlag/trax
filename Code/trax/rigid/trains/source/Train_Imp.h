@@ -96,6 +96,11 @@ namespace trax{
 
 		Mass TotalMass() const noexcept override;
 
+		void EnableSimulation( bool enable = true ) noexcept override;
+
+		bool IsSimulationEnabled() const noexcept override;
+
+
 		// TrainComponent:
 		Length GetOverhang( EndType end, DistanceType distance = DistanceType::actual ) const noexcept override;
 

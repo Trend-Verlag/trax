@@ -187,7 +187,7 @@ void TrainComponent_Imp<Base>::ActivateCoupling( RailRunner::EndType end )
 	{
 		case RailRunner::EndType::none:
 			return;
-		case RailRunner::EndType::all:
+		case RailRunner::EndType::both:
 		case RailRunner::EndType::any:
 			ActivateCoupling( RailRunner::EndType::north );
 			ActivateCoupling( RailRunner::EndType::south );
@@ -205,7 +205,7 @@ void TrainComponent_Imp<Base>::DeactivateCoupling( RailRunner::EndType end )
 	{
 		case RailRunner::EndType::none:
 			return;
-		case RailRunner::EndType::all:
+		case RailRunner::EndType::both:
 		case RailRunner::EndType::any:
 			DeactivateCoupling( RailRunner::EndType::north );
 			DeactivateCoupling( RailRunner::EndType::south );
@@ -226,7 +226,7 @@ bool TrainComponent_Imp<Base>::IsActivated( RailRunner::EndType end ) const noex
 		case RailRunner::EndType::any:
 			return IsActivated( RailRunner::EndType::north ) ||
 				IsActivated( RailRunner::EndType::south );
-		case RailRunner::EndType::all:
+		case RailRunner::EndType::both:
 			return IsActivated( RailRunner::EndType::north ) &&
 				IsActivated( RailRunner::EndType::south );
 	}	
@@ -255,7 +255,7 @@ bool TrainComponent_Imp<Base>::Uncouple( RailRunner::EndType end, bool btriggerP
 		case RailRunner::EndType::any:
 			return Uncouple( RailRunner::EndType::north, btriggerPulses ) ||
 				Uncouple( RailRunner::EndType::south, btriggerPulses );
-		case RailRunner::EndType::all:
+		case RailRunner::EndType::both:
 		{
 			bool retval = false;
 
@@ -292,7 +292,7 @@ bool TrainComponent_Imp<Base>::IsCoupled( RailRunner::EndType end ) const noexce
 		case RailRunner::EndType::any:
 			return IsCoupled( RailRunner::EndType::north ) ||
 				IsCoupled( RailRunner::EndType::south );
-		case RailRunner::EndType::all:
+		case RailRunner::EndType::both:
 			return IsCoupled( RailRunner::EndType::north ) &&
 				IsCoupled( RailRunner::EndType::south );
 	}
@@ -320,7 +320,7 @@ Length TrainComponent_Imp<Base>::GetCouplingHeight( RailRunner::EndType end ) co
 			return 0_m;
 		case RailRunner::EndType::any:
 			return std::min( GetCouplingHeight( RailRunner::EndType::north ), GetCouplingHeight( RailRunner::EndType::south ) );
-		case RailRunner::EndType::all:
+		case RailRunner::EndType::both:
 			return std::max( GetCouplingHeight( RailRunner::EndType::north ), GetCouplingHeight( RailRunner::EndType::south ) );
 		default:
 			break;
@@ -406,7 +406,7 @@ bool TrainComponent_Imp<Base>::Couple(
 		return false;
 	if( end == RailRunner::EndType::any || withEnd == RailRunner::EndType::any )
 		return false;
-	if( end == RailRunner::EndType::all || withEnd == RailRunner::EndType::all )
+	if( end == RailRunner::EndType::both || withEnd == RailRunner::EndType::both )
 		return false;
 	// No self coupling:
 	if( &with == this )
@@ -468,7 +468,7 @@ Length TrainComponent_Imp<Base>::GetCouplingLength( RailRunner::EndType end, Tra
 			return 0_m;
 		case RailRunner::EndType::any:
 			return std::min( GetCouplingLength( RailRunner::EndType::north ), GetCouplingLength( RailRunner::EndType::south ) );
-		case RailRunner::EndType::all:
+		case RailRunner::EndType::both:
 			return std::max( GetCouplingLength( RailRunner::EndType::north ), GetCouplingLength( RailRunner::EndType::south ) );
 	}
 

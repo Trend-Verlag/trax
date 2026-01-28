@@ -353,7 +353,7 @@ namespace trax{
 			north,		///< Denotes the front end of a RailRunner.
 			south,		///< Denotes the back end of a RailRunner.
 			any,		///< Denotes the north or south end of a Railrunner.
-			all			///< Denotes both ends of a RailRunner.
+			both		///< Denotes both ends of a RailRunner.
 		};
 
 		/// \brief Gets a shared pointer to this.
@@ -583,7 +583,7 @@ namespace trax{
 		/// \param end Denotes the coupling.
 		/// \throws std::runtime_error if coupling is coupled already or has no valid 
 		/// couling index.
-		virtual void ActivateCoupling( EndType end ) = 0;
+		virtual void ActivateCoupling( EndType end = EndType::both ) = 0;
 
 
 		/// \brief Deactivates the coupling at the respective end of the RailRunner.
@@ -592,13 +592,13 @@ namespace trax{
 		/// be activated nor deactivated.
 		/// \param end Denotes the coupling.
 		/// \throws std::runtime_error if coupling is coupled.
-		virtual void DeactivateCoupling( EndType end ) = 0;
+		virtual void DeactivateCoupling( EndType end = EndType::both ) = 0;
 
 
 		/// \returns True if the coupling is active (coupled or not). False for a 
 		/// deactivated coupling.
 		/// \param end Denotes the coupling.
-		virtual bool IsActivated( EndType end ) const noexcept = 0;
+		virtual bool IsActivated( EndType end = EndType::any ) const noexcept = 0;
 
 
 		/// \brief Uncouples the RailRunner at the specified end.
@@ -606,7 +606,7 @@ namespace trax{
 		/// \param end End of this RailRunner.
 		/// \param btriggerPulses If true the respective JackOnUnCouple jacks are pulsing.
 		/// \returns True if actually some uncoupling happened.
-		virtual bool Uncouple( EndType end = EndType::all, bool btriggerPulses = true ) noexcept = 0;
+		virtual bool Uncouple( EndType end = EndType::both, bool btriggerPulses = true ) noexcept = 0;
 
 
 		/// \brief Is the coupling coupled?
@@ -619,7 +619,21 @@ namespace trax{
 		/// \brief Gets the height of the coupling over the track.
 		/// \param end End of this TrainComponent to get the coupling height for.
 		/// \returns The height of the coupling over the track.
-		virtual Length GetCouplingHeight( EndType end ) const noexcept = 0;
+		virtual Length GetCouplingHeight( EndType end = EndType::any ) const noexcept = 0;
+
+
+		/// \brief Enables or disables simulation for this RailRunner.
+		///
+		/// While simulation is disabled, the complete RailRunner assembly will 
+		/// not be affected by forces, and not be moved by the simulator.
+		/// Enabling the simulation will also wake up the Bodies involved.
+		/// \param enable If true, the simulation is enabled; if false it is 
+		/// disabled.
+		virtual void EnableSimulation( bool enable = true ) noexcept = 0;
+
+
+		/// \returns true if the simulation of this RailRunner is enabled; false if disabled.
+		virtual bool IsSimulationEnabled() const noexcept = 0;
 
 
 		// Jacks 'N Plugs:

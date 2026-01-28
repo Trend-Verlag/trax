@@ -32,6 +32,14 @@ const char* PhysX_Gestalt_ImpBase::GetName() const noexcept{
 	return PhysX_Shape_ImpBase::GetName();
 }
 
+void PhysX_Gestalt_ImpBase::EnableSimulation( bool enable ) noexcept{
+	PhysX_Body_ImpBase::EnableSimulation( enable );
+}
+
+bool PhysX_Gestalt_ImpBase::IsSimulationEnabled() const noexcept{
+	return PhysX_Body_ImpBase::IsSimulationEnabled();
+}
+
 void PhysX_Gestalt_ImpBase::SetFrame( const spat::Frame<Length,One>& frame ) noexcept{
 	PhysX_Body_ImpBase::SetFrame( frame );
 }

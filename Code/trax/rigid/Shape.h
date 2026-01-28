@@ -128,8 +128,17 @@ namespace trax{
 		virtual bool IsOverlapping( const Shape& other ) const noexcept = 0;
 
 
+		/// \brief Enables or disables the simulation of this Shape.
+		/// 
+		/// If simulation is switched off, the Shape will not collide 
+		/// with with other shapes, until it is enabled again.
+		/// \param enable If true the simulation is enabled; if false it is disabled.
 		virtual void EnableSimulation( bool enable = true ) noexcept = 0;
+
+
+		/// \returns true if the simulation of this Shape is enabled.
 		virtual bool IsSimulationEnabled() const noexcept = 0;
+
 
 		///// \returns The number of axes, this is the dominant shape for.
 		//virtual int CountAxes() const = 0;

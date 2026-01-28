@@ -540,7 +540,7 @@ void Bogie_Imp::ActivateCoupling( EndType end )
 			m_CouplingSouth.bActivated = true;
 			m_CouplingSouth.m_JackOnCouplingActivated.Pulse();
 			break;
-		case EndType::all:
+		case EndType::both:
 		case EndType::any:
 			ActivateCoupling( EndType::north );
 			ActivateCoupling( EndType::south );
@@ -567,7 +567,7 @@ void Bogie_Imp::DeactivateCoupling( EndType end )
 			m_CouplingSouth.m_JackOnCouplingDeactivated.Pulse();
 			break;
 		case EndType::any:
-		case EndType::all:
+		case EndType::both:
 			DeactivateCoupling( EndType::north );
 			DeactivateCoupling( EndType::south );
 			break;
@@ -586,7 +586,7 @@ bool Bogie_Imp::IsActivated( EndType end ) const noexcept
 			return m_CouplingSouth.bActivated;
 		case EndType::any:
 			return IsActivated( EndType::north ) || IsActivated( EndType::south );
-		case EndType::all:
+		case EndType::both:
 			return IsActivated( EndType::north ) && IsActivated( EndType::south );
 	}
 
@@ -605,7 +605,7 @@ bool Bogie_Imp::Uncouple( EndType end, bool btriggerPulses ) noexcept
 			return m_CouplingSouth.Uncouple( btriggerPulses );
 		case EndType::any:
 			return Uncouple( EndType::north, btriggerPulses ) || Uncouple( EndType::south, btriggerPulses );
-		case EndType::all:
+		case EndType::both:
 		{
 			bool retval = false;
 
@@ -633,7 +633,7 @@ bool Bogie_Imp::IsCoupled( EndType end ) const noexcept
 			return m_CouplingSouth.pCoupling != nullptr;
 		case EndType::any:
 			return IsCoupled( EndType::north ) || IsCoupled( EndType::south );
-		case EndType::all:
+		case EndType::both:
 			return IsCoupled( EndType::north ) && IsCoupled( EndType::south );
 	}
 
@@ -650,11 +650,29 @@ Length Bogie_Imp::GetCouplingHeight( EndType end ) const noexcept
 			return (m_CouplingSouth.Position.Center() - GetLocalAnchor()) * LocalVerticalDirection();
 		case EndType::any:
 			return std::min( GetCouplingHeight( EndType::north ), GetCouplingHeight( EndType::south ) );
-		case EndType::all:
+		case EndType::both:
 			return std::max( GetCouplingHeight( EndType::north ), GetCouplingHeight( EndType::south ) );
 		default:
 			return 0_m;
 	}
+}
+
+void Bogie_Imp::EnableSimulation( bool enable ) noexcept
+{
+	if( m_pGestalt ){
+		m_pGestalt->EnableSimulation( enable );
+
+		if( enable )
+			m_pGestalt->WakeUp();
+	}
+}
+
+bool Bogie_Imp::IsSimulationEnabled() const noexcept
+{
+	if( m_pGestalt )
+		return m_pGestalt->IsSimulationEnabled();
+
+	return false;
 }
 
 std::shared_ptr<Bogie> Bogie_Imp::ThisBogie() const noexcept{
@@ -868,7 +886,7 @@ void Bogie_Imp::Detach( EndType atEnd ) noexcept
 		else
 			Detach( EndType::south );
 		break;
-	case EndType::all:
+	case EndType::both:
 		Detach( EndType::north );
 		Detach( EndType::south );
 		break;
@@ -1060,7 +1078,7 @@ bool Bogie_Imp::BreakCoupling( EndType atEnd, bool btriggerPulses ) noexcept
 		return m_CouplingNorth.Break( btriggerPulses );
 	case EndType::south:
 		return m_CouplingSouth.Break( btriggerPulses );
-	case EndType::all:
+	case EndType::both:
 		{
 			bool retval = false;
 			if( m_CouplingNorth.Break( btriggerPulses ) )

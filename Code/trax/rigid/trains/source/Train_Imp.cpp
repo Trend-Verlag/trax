@@ -350,6 +350,24 @@ Mass Train_Imp::TotalMass() const noexcept
 	return totalMass;
 }
 
+void Train_Imp::EnableSimulation( bool enable ) noexcept
+{
+	for( auto& pTrainComponent : m_Train )
+		pTrainComponent->EnableSimulation( enable );
+}
+
+bool Train_Imp::IsSimulationEnabled() const noexcept
+{
+	if( m_Train.empty() )
+		return false;
+
+	for( auto& pTrainComponent : m_Train )
+		if( !pTrainComponent->IsSimulationEnabled() )
+			return false;
+
+	return true;
+}
+
 Length Train_Imp::GetOverhang( EndType end, DistanceType distance ) const noexcept
 {
 	switch( end ){

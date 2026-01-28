@@ -143,6 +143,11 @@ namespace trax{
 
 		Length GetCouplingHeight( EndType end ) const noexcept override;
 
+		void EnableSimulation( bool enable = true ) noexcept override;
+
+		bool IsSimulationEnabled() const noexcept override;
+
+
 		// Bogie:
 		std::shared_ptr<Bogie> ThisBogie() const noexcept override;
 
@@ -166,7 +171,7 @@ namespace trax{
 
 		std::shared_ptr<Bogie> GetLast() const noexcept override;
 
-		void Detach( EndType atEnd = EndType::all ) noexcept override;
+		void Detach( EndType atEnd = EndType::both ) noexcept override;
 				
 		bool Couple( EndType end, Bogie& with, EndType withEnd, bool btriggerPulses = true ) noexcept override;
 
