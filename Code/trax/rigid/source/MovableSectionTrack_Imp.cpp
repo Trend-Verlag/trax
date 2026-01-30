@@ -62,5 +62,27 @@ std::shared_ptr<TrackBuilder> MovableTrack::Make( TrackType type ) noexcept
 Track::TrackType MovableSectionTrack_Imp::GetTrackType() const noexcept{
 	return Track::TrackType::movable_withGeoms;
 }
+
+bool MovableSectionTrack_Imp::IsValid() const noexcept
+{
+	if( !MovableTrack_Imp::IsValid() )
+		return false;
+
+	if( !SectionTrack_Imp::IsValid() )
+		return false;
+
+	return true;
+}
+
+bool MovableSectionTrack_Imp::Diagnose( std::ostream& os ) const noexcept
+{
+	if( !MovableTrack_Imp::Diagnose( os ) )
+		return false;
+
+	if( !SectionTrack_Imp::Diagnose( os ) )
+		return false;
+
+	return true;
+}
 ///////////////////////////////////////
 } // namespace trax

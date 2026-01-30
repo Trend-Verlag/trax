@@ -52,8 +52,22 @@ bool SectionTrack_Imp::IsValid() const noexcept
 {
 	if( !Track_Imp::IsValid() )
 		return false;
+
 	if( CntSections() <= 0 )
 		return false;
+
+	return true;
+}
+
+bool SectionTrack_Imp::Diagnose( std::ostream & os ) const noexcept
+{
+	if( !Track_Imp::Diagnose( os ) )
+		return false;
+
+	if( CntSections() <= 0 ){
+		os << "SectionTrack_Imp::Diagnose: No sections attached." << std::endl;
+		return false;
+	}
 
 	return true;
 }

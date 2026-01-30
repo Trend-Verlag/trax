@@ -367,6 +367,11 @@ namespace trax
 		virtual bool IsValid() const noexcept = 0;
 
 
+		/// \brief Diagnoses the track and writes the result to the output stream.
+		/// \returns true if the track is valid.
+		virtual bool Diagnose( std::ostream& os ) const noexcept = 0;
+
+
 		///	\returns the maximum valid parameter value of the track.
 		virtual Length GetLength() const noexcept = 0;
 
@@ -1059,7 +1064,9 @@ namespace trax
 
 	/// \brief Changes the frame of the first track, so that trackEnd 
 	/// snaps to toTrackEnd.
-	bool dclspc Snap( Track::TrackEnd trackEnd, Track::cTrackEnd toTrackEnd ) noexcept;
+	/// \throws std::runtime_error If snapping failed (e.g. due to invalid track).
+	/// \returns true on success, false if snapping was not possible.
+	bool dclspc Snap( Track::TrackEnd trackEnd, Track::cTrackEnd toTrackEnd );
 
 
 	/// \brief Creates a matching Curve, Twist and Frame from an EEPCurve.

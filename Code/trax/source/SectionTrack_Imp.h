@@ -39,6 +39,8 @@ namespace trax{
 
 		bool IsValid() const noexcept override;
 
+		bool Diagnose( std::ostream& os ) const noexcept override;
+
 
 		// SectionTrack:
 		int Attach( std::shared_ptr<const Section> pSection ) override;

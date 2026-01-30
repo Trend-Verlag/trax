@@ -62,6 +62,45 @@ std::shared_ptr<MovableTrack> MovableTrack_Imp::GetMovableTrack() noexcept{
 	return std::dynamic_pointer_cast<MovableTrack>(This());
 }
 
+bool MovableTrack_Imp::IsValid() const noexcept
+{
+	if( !Track_Imp::IsValid() )
+		return false;
+
+	if( m_pBody )
+	{
+		Frame<Length,One> bodyFrame, relative = m_RelativePose;
+		m_pBody->GetFrame( bodyFrame );
+		bodyFrame.ToParent( relative );
+		return relative.Equals( GetFrame(), epsilon__length, epsilon__angle );
+	}
+
+	return true;
+}
+
+bool MovableTrack_Imp::Diagnose( std::ostream& os ) const noexcept
+{
+	if( !Track_Imp::Diagnose( os ) )
+		return false;
+
+	if( !m_pBody )
+	{
+		os << "MovableTrack_Imp::Diagnose: No body assigned." << std::endl;
+	}
+	else{
+		Frame<Length, One> bodyFrame, relative = m_RelativePose;
+		m_pBody->GetFrame( bodyFrame );
+		bodyFrame.ToParent( relative );
+		if( !relative.Equals( GetFrame(), epsilon__length, epsilon__angle ) )
+		{
+			os << "MovableTrack_Imp::Diagnose: Track frame does not match body frame + relative pose." << std::endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
 void MovableTrack_Imp::SetBody( std::shared_ptr<Body> pBody ) noexcept{
 	m_pBody = pBody;
 

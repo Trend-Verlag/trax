@@ -159,8 +159,12 @@ void Track_Imp::SetFrame(
 //
 // Tf = Inv(Tg) o S o Inv(Tt o F)
 {
-	if( !IsValid() )
-		throw std::runtime_error( "Track not valid!" );
+	if( !IsValid() ){
+		std::ostringstream err;
+		Diagnose( err );
+		throw std::runtime_error( "Invalid track! " + err.str() );
+	}
+
 	//spat::OrthogonalityDump( std::cout, start );
 	assert( S.IsOrthoNormal(epsilon__length/Length{1},epsilon__angle) );
 
@@ -220,6 +224,43 @@ bool Track_Imp::IsValid() const noexcept{
 			GetAbsoluteFrame().IsOrthoNormal() &&
 			m_pCurve && m_pCurve->IsValid() &&
 			m_pTwist && m_pTwist->IsValid();
+}
+
+bool Track_Imp::Diagnose( std::ostream& os ) const noexcept
+{
+	if( !GetFrame().IsOrthoNormal() ){
+		Frame<Length,One> F = GetFrame();
+		os << "Track ID " << ID() << " has a non orthonormal local frame"
+			<< ". |T| == " << F.T.Length()
+			<< ", |N| == " << F.N.Length()
+			<< ", |B| == " << F.B.Length()
+			<< ", T*N == " << F.T*F.N 
+			<< ", T*B == " << F.T*F.B 
+			<< ", N*B == " << F.N*F.B << std::endl;
+		return false;
+	}
+	if( !GetAbsoluteFrame().IsOrthoNormal() ){
+		os << "Track ID " << ID() << " has a non orthonormal absolute frame.\n";
+		return false;
+	}
+	if( !m_pCurve ){
+		os << "Track ID " << ID() << " has no curve attached.\n";
+		return false;
+	}
+	if( !m_pCurve->IsValid() ){
+		os << "Track ID " << ID() << " has an invalid curve attached.\n";
+		return false;
+	}
+	if( !m_pTwist ){
+		os << "Track ID " << ID() << " has no twist attached.\n";
+		return false;
+	}
+	if( !m_pTwist->IsValid() ){
+		os << "Track ID " << ID() << " has an invalid twist attached.\n";
+		return false;
+	}
+
+	return true;
 }
 
 Length Track_Imp::GetLength() const noexcept{
@@ -1478,7 +1519,7 @@ bool SetFrame( TrackBuilder& track, const spat::Frame<Length, One>& start, Lengt
 	}
 }
 
-bool Snap( Track::TrackEnd trackEnd, Track::cTrackEnd toTrackEnd ) noexcept
+bool Snap( Track::TrackEnd trackEnd, Track::cTrackEnd toTrackEnd )
 {
 	if( IsConcreteEnd( trackEnd ) &&
 		IsConcreteEnd( toTrackEnd ) )

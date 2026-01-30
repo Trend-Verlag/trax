@@ -40,6 +40,9 @@ namespace trax{
 		// Track:
 		TrackType GetTrackType() const noexcept override;
 
+		bool IsValid() const noexcept override;
+
+		bool Diagnose( std::ostream& os ) const noexcept override;
 	};
 
 } 

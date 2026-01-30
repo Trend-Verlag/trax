@@ -105,6 +105,8 @@ namespace trax{
 
 		bool IsValid() const noexcept override;
 
+		bool Diagnose( std::ostream& os ) const noexcept override;
+
 		Length GetLength() const noexcept override;
 		
 		Interval<Length> Range() const noexcept override;

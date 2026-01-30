@@ -50,6 +50,8 @@ namespace trax{
 	/// and locate tracks inside of a TrackSystem. A track will deliver module 
 	/// relative coordinates with its Transition() methods, taking into account
 	/// the TrackCollection's frame of reference.
+	/// 
+	/// Tracks can only get added if valid. \see Track::IsValid().
 	struct TrackSystem :	Collection<TrackSystem,TrackBuilder>,
 							Simulated,
 							Identified<TrackSystem>
@@ -236,6 +238,7 @@ namespace trax{
 	/// pair.second for back end; or { nullptr, Track::EndType::none } if no suitable track 
 	/// end was found.
 	/// \throws std::invalid_argument If the end type is not recocnised.
+	/// \throws std::runtime_error If snapping failed (e.g. due to invalid track).
 	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc CoupleAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true );
 
 

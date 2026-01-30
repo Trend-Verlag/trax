@@ -55,8 +55,11 @@ std::pair<bool,Length> Foot(
 //
 // A being the target point, F(s) being the track's frame at s.
 {
-	if( !toTrack.IsValid() )
-		throw std::runtime_error( "Invalid track!" );
+	if( !toTrack.IsValid() ){
+		std::ostringstream err;
+		toTrack.Diagnose( err );
+		throw std::runtime_error( "Invalid track! " + err.str() );
+	}
 
 	inRange.Intersection( toTrack.Range() );
 	if( !inRange.Touches( bestGuess ) )
@@ -124,8 +127,11 @@ std::pair<bool,Length> Foot( const VectorBundle<Length,One>& R, const Track& toT
 // dD(s)/ds   = F.T - (F.T * R.T) * R.T;
 // d2D(s)/ds2 = k * (F.N - (F.N * R.T) * R.T);
 {
-	if( !toTrack.IsValid() )
-		throw std::runtime_error( "Invalid track!" );
+	if( !toTrack.IsValid() ){
+		std::ostringstream err;
+		toTrack.Diagnose( err );
+		throw std::runtime_error( "Invalid track! " + err.str() );
+	}
 
 	inRange.Intersection( toTrack.Range() );
 	if( !inRange.Touches( bestGuess ) )

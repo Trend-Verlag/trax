@@ -49,6 +49,10 @@ namespace trax{
 
 		std::shared_ptr<MovableTrack> GetMovableTrack() noexcept override;
 
+		bool IsValid() const noexcept override;
+
+		bool Diagnose( std::ostream& os ) const noexcept override;
+
 
 		// Inherited via MovableTrack:
 		void SetBody( std::shared_ptr<Body> pBody ) noexcept override;
