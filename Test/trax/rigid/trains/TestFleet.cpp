@@ -60,7 +60,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixture )
 	pTrain->TargetVelocity( 10_mIs );
 	pTrain->Thrust( 0.75 );
 	pTrain->Brake( 0.75 );
-	pTrain->GetComponent( 4 )->GetTipAt( RailRunner::EndType::north ).first.BreakCoupling( RailRunner::EndType::north );
+	pTrain->GetComponent( 4 )->GetTipAt( EndType::north ).first.BreakCoupling( EndType::north );
 
 	m_pScene->Loop( 2_s );
 
@@ -70,8 +70,8 @@ BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixture )
 
 	pTrain->TargetVelocity( -1_mIs );
 	pFleet->GetActive()->TargetVelocity( 0_mIs );
-	pTrain->ActivateCoupling( RailRunner::EndType::south );
-	pFleet->GetActive()->ActivateCoupling( RailRunner::EndType::north );
+	pTrain->ActivateCoupling( EndType::south );
+	pFleet->GetActive()->ActivateCoupling( EndType::north );
 
 	m_pScene->Loop( 10_s );
 
@@ -103,7 +103,7 @@ BOOST_FIXTURE_TEST_CASE( testTwoRollingStockCouple, TrainFixture )
 	std::shared_ptr<Train> pWaggonTrain = Train::Make();
 	BOOST_REQUIRE( pWaggonTrain );
 	pWaggonTrain->Create( *pWaggon );
-	pWaggonTrain->ActivateCoupling( RailRunner::EndType::north );
+	pWaggonTrain->ActivateCoupling( EndType::north );
 
 	m_Location.PutOn( m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - 50_m, true } );	
 	pLoco->Rail( m_Location );
@@ -122,7 +122,7 @@ BOOST_FIXTURE_TEST_CASE( testTwoRollingStockCouple, TrainFixture )
 	pLocoTrain->TargetVelocity( -5_mIs );
 	pLocoTrain->Thrust( 0.75 );
 	pLocoTrain->Brake( 0.75 );
-	pLocoTrain->ActivateCoupling( RailRunner::EndType::south );
+	pLocoTrain->ActivateCoupling( EndType::south );
 
 	BOOST_CHECK_EQUAL( pFleet->Count(), 2 );
 	m_pScene->Loop( 5_s );

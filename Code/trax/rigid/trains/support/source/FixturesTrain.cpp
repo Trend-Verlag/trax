@@ -85,12 +85,12 @@ TrainFixture::TrainFixture( bool bVisualDebugger )
 	frame.N *= -1;
 	m_pTrack6->SetFrame( frame );
 
-	m_pTrack1->Couple( std::make_pair(m_pTrack1, trax::Track::EndType::end), std::make_pair(m_pTrack2, trax::Track::EndType::front) );
-	m_pTrack2->Couple( std::make_pair(m_pTrack2, trax::Track::EndType::end), std::make_pair(m_pTrack3, trax::Track::EndType::front) );
-	m_pTrack3->Couple( std::make_pair(m_pTrack3, trax::Track::EndType::end), std::make_pair(m_pTrack4, trax::Track::EndType::front) );
-	m_pTrack4->Couple( std::make_pair(m_pTrack4, trax::Track::EndType::end), std::make_pair(m_pTrack1, trax::Track::EndType::front) );
+	m_pTrack1->Couple( std::make_pair(m_pTrack1, trax::EndType::south), std::make_pair(m_pTrack2, trax::EndType::north) );
+	m_pTrack2->Couple( std::make_pair(m_pTrack2, trax::EndType::south), std::make_pair(m_pTrack3, trax::EndType::north) );
+	m_pTrack3->Couple( std::make_pair(m_pTrack3, trax::EndType::south), std::make_pair(m_pTrack4, trax::EndType::north) );
+	m_pTrack4->Couple( std::make_pair(m_pTrack4, trax::EndType::south), std::make_pair(m_pTrack1, trax::EndType::north) );
 
-	m_pTrack5->Couple( std::make_pair( m_pTrack5, trax::Track::EndType::front ), std::make_pair( m_pTrack6, trax::Track::EndType::front ) );
+	m_pTrack5->Couple( std::make_pair( m_pTrack5, trax::EndType::north ), std::make_pair( m_pTrack6, trax::EndType::north ) );
 
 	m_Location.PutOn( m_pTrack1, trax::TrackLocation{ 0_m, true } );
 }
@@ -172,10 +172,10 @@ void MultiTrackSystemFixture::BuildFixture( int nTrackCollections )
 		pTrack4->Attach( pArc4, {0_m,R*dim::pi/2} );
 		pTrack4->Attach( trax::LinearTwist::Make() );
 
-		pTrack1->Couple( std::make_pair(pTrack1, trax::Track::EndType::end), std::make_pair(pTrack2, trax::Track::EndType::front) );
-		pTrack2->Couple( std::make_pair(pTrack2, trax::Track::EndType::end), std::make_pair(pTrack3, trax::Track::EndType::front) );
-		pTrack3->Couple( std::make_pair(pTrack3, trax::Track::EndType::end), std::make_pair(pTrack4, trax::Track::EndType::front) );
-		pTrack4->Couple( std::make_pair(pTrack4, trax::Track::EndType::end), std::make_pair(pTrack1, trax::Track::EndType::front) );
+		pTrack1->Couple( std::make_pair(pTrack1, trax::EndType::south), std::make_pair(pTrack2, trax::EndType::north) );
+		pTrack2->Couple( std::make_pair(pTrack2, trax::EndType::south), std::make_pair(pTrack3, trax::EndType::north) );
+		pTrack3->Couple( std::make_pair(pTrack3, trax::EndType::south), std::make_pair(pTrack4, trax::EndType::north) );
+		pTrack4->Couple( std::make_pair(pTrack4, trax::EndType::south), std::make_pair(pTrack1, trax::EndType::north) );
 
 		m_pTrackSystem->Add( pTrack1 );
 		m_pTrackSystem->Add( pTrack2 );

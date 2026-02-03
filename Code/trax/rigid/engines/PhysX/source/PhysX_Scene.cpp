@@ -403,10 +403,10 @@ void PhysX_Scene::StartStep( Time dt ) noexcept
 
 void PhysX_Scene::Update( Time dt ) noexcept
 {
-	Scene_Imp::Update( dt );
-
 	for( const auto& jnf : m_TrackJoints )
 		jnf->Update( dt );
+
+	Scene_Imp::Update( dt );
 }
 
 bool PhysX_Scene::EndStep() noexcept

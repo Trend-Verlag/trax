@@ -78,10 +78,10 @@ Track_Imp::Track_Imp( const Track_Imp& ti )
 void Track_Imp::AddConnector( Connector* pConnector, EndType atend ) noexcept{
 	switch( atend ){
 	case EndType::any:
-	case EndType::front:
+	case EndType::north:
 		m_pConnectorFront = pConnector;
 		break;
-	case EndType::end:
+	case EndType::south:
 		m_pConnectorEnd = pConnector;
 		break;
 	case EndType::none:
@@ -272,20 +272,20 @@ Interval<Length> Track_Imp::Range() const noexcept{
 }
 
 Track::TrackEnd Track_Imp::TransitionEnd( EndType thisEnd ) const noexcept{
-	if( thisEnd == EndType::front )
-		return m_TrackFront;
+	if( thisEnd == EndType::north )
+		return { m_TrackFront.first, m_TrackFront.second };
 
-	if( thisEnd == EndType::end )
-		return m_TrackEnd;
+	if( thisEnd == EndType::south )
+		return { m_TrackEnd.first, m_TrackEnd.second };
 
-	return std::make_pair( nullptr, EndType::none );
+	return { nullptr, EndType::none };
 }
 
 bool Track_Imp::IsCoupled( EndType atend ) const noexcept{
 	if( atend == EndType::any )
-		return IsCoupled( EndType::front ) || IsCoupled( EndType::end );
+		return IsCoupled( EndType::north ) || IsCoupled( EndType::south );
 
-	return (atend == EndType::front && m_TrackFront.first) || (atend == EndType::end && m_TrackEnd.first);
+	return (atend == EndType::north && m_TrackFront.first) || (atend == EndType::south && m_TrackEnd.first);
 }
 
 void Track_Imp::TNBFrame( Length s, Frame<Length,One>& frame ) const{
@@ -482,9 +482,9 @@ Signal* Track_Imp::GetSignal( const TrackLocation& loc ) const noexcept{
 		if( pair.first.m_Orientation == loc.orientation && Intersecting( pair.first, Interval<Length>{ loc.parameter, loc.orientation ? GetLength() : 0_m } ) )
 			return pair.second.get();
 
-	if( TrackEnd nextTrackEnd = TransitionEnd( loc.orientation ? EndType::end : EndType::front ); nextTrackEnd.first ){
+	if( TrackEnd nextTrackEnd = TransitionEnd( loc.orientation ? EndType::south : EndType::north ); nextTrackEnd.pTrack ){
 		m_LoopBraker = true;
-		Signal* pSignal = nextTrackEnd.first->GetSignal( nextTrackEnd.second == EndType::front ? TrackLocation{ 0_m, Orientation::Value::para } : TrackLocation{ nextTrackEnd.first->GetLength(), Orientation::Value::anti } );
+		Signal* pSignal = nextTrackEnd.pTrack->GetSignal( nextTrackEnd.end == EndType::north ? TrackLocation{ 0_m, Orientation::Value::para } : TrackLocation{ nextTrackEnd.pTrack->GetLength(), Orientation::Value::anti } );
 		m_LoopBraker = false;
 		return pSignal;
 	}
@@ -530,17 +530,17 @@ void Track_Imp::ReserveConnected( const Reservation& reservation )
 {
 	if( std::get<1>(reservation).Includes(0_m) && !m_ReserveLoopBrakerFront ){
 		common::FlagBlocker block(m_ReserveLoopBrakerFront);
-		if( TrackEnd trackEnd = TransitionEnd( EndType::front ); trackEnd.first )
-			trackEnd.first->Reserve( 
-				trackEnd.second == EndType::front ? -std::get<1>(reservation) : trackEnd.first->GetLength() + std::get<1>(reservation),
+		if( TrackEnd trackEnd = TransitionEnd( EndType::north ); trackEnd.pTrack )
+			trackEnd.pTrack->Reserve( 
+				trackEnd.end == EndType::north ? -std::get<1>(reservation) : trackEnd.pTrack->GetLength() + std::get<1>(reservation),
 				std::get<0>(reservation) );
 	}
 
 	if( std::get<1>(reservation).Includes(GetLength()) && !m_ReserveLoopBrakerEnd ){
 		common::FlagBlocker block(m_ReserveLoopBrakerEnd);
-		if( TrackEnd trackEnd = TransitionEnd( EndType::end ); trackEnd.first )
-			trackEnd.first->Reserve( 
-				trackEnd.second == EndType::front ? std::get<1>(reservation) - GetLength() : GetLength() + trackEnd.first->GetLength() - std::get<1>(reservation),
+		if( TrackEnd trackEnd = TransitionEnd( EndType::south ); trackEnd.pTrack )
+			trackEnd.pTrack->Reserve( 
+				trackEnd.end == EndType::north ? std::get<1>(reservation) - GetLength() : GetLength() + trackEnd.pTrack->GetLength() - std::get<1>(reservation),
 				std::get<0>(reservation) );
 	}
 }
@@ -629,14 +629,14 @@ void Track_Imp::DeleteConnected( const Reservation& reservation ) noexcept
 				if( slotContent.first && 
 					slotContent.first.get() != this )
 					slotContent.first->DeleteReservation( 				
-						slotContent.second == EndType::front ? -std::get<1>(reservation) : slotContent.first->GetLength() + std::get<1>(reservation), 			
+						slotContent.second == EndType::north ? -std::get<1>(reservation) : slotContent.first->GetLength() + std::get<1>(reservation), 			
 						std::get<0>(reservation) );
 			}
 		}
 		else{
-			if( TrackEnd trackEnd = TransitionEnd( EndType::front ); trackEnd.first )
-				trackEnd.first->DeleteReservation( 
-					trackEnd.second == EndType::front ? -std::get<1>(reservation) : trackEnd.first->GetLength() + std::get<1>(reservation),
+			if( TrackEnd trackEnd = TransitionEnd( EndType::north ); trackEnd.pTrack )
+				trackEnd.pTrack->DeleteReservation( 
+					trackEnd.end == EndType::north ? -std::get<1>(reservation) : trackEnd.pTrack->GetLength() + std::get<1>(reservation),
 					std::get<0>(reservation) );
 		}
 	}
@@ -653,14 +653,14 @@ void Track_Imp::DeleteConnected( const Reservation& reservation ) noexcept
 				if( slotContent.first && 
 					slotContent.first.get() != this )
 					slotContent.first->DeleteReservation( 				
-						slotContent.second == EndType::front ? std::get<1>(reservation) - GetLength() : GetLength() + slotContent.first->GetLength() - std::get<1>(reservation),			
+						slotContent.second == EndType::north ? std::get<1>(reservation) - GetLength() : GetLength() + slotContent.first->GetLength() - std::get<1>(reservation),			
 						std::get<0>(reservation) );
 			}
 		}
 		else{
-			if( TrackEnd trackEnd = TransitionEnd( EndType::end ); trackEnd.first )
-				trackEnd.first->DeleteReservation( 
-					trackEnd.second == EndType::front ? std::get<1>(reservation) - GetLength() : GetLength() + trackEnd.first->GetLength() - std::get<1>(reservation),
+			if( TrackEnd trackEnd = TransitionEnd( EndType::south ); trackEnd.pTrack )
+				trackEnd.pTrack->DeleteReservation( 
+					trackEnd.end == EndType::north ? std::get<1>(reservation) - GetLength() : GetLength() + trackEnd.pTrack->GetLength() - std::get<1>(reservation),
 					std::get<0>(reservation) );
 		}
 	}
@@ -696,13 +696,13 @@ std::vector<Track::Overlap> Track_Imp::Overlaps( IDType withID ) const
 
 				common::FlagBlocker block{m_LoopBraker};
 
-				if( TrackEnd lastTrack = TransitionEnd( EndType::front ); lastTrack.first ){
-					std::vector<Track::Overlap> overlapsLast = lastTrack.first->Overlaps( withID );
+				if( TrackEnd lastTrack = TransitionEnd( EndType::north ); lastTrack.pTrack ){
+					std::vector<Track::Overlap> overlapsLast = lastTrack.pTrack->Overlaps( withID );
 					overlaps.insert( overlaps.end(), overlapsLast.begin(), overlapsLast.end() );
 				}
 
-				if( TrackEnd nextTrack = TransitionEnd( EndType::end ); nextTrack.first ){
-					std::vector<Track::Overlap> overlapsNext = nextTrack.first->Overlaps( withID );
+				if( TrackEnd nextTrack = TransitionEnd( EndType::south ); nextTrack.pTrack ){
+					std::vector<Track::Overlap> overlapsNext = nextTrack.pTrack->Overlaps( withID );
 					overlaps.insert( overlaps.end(), overlapsNext.begin(), overlapsNext.end() );
 				}
 			}
@@ -716,8 +716,8 @@ std::vector<Track::Overlap> Track_Imp::Overlaps( IDType withID ) const
 }
 
 void Track_Imp::Couple( 
-	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> thisEnd, 
-	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> othersEnd  )
+	std::pair<std::shared_ptr<TrackBuilder>,EndType> thisEnd, 
+	std::pair<std::shared_ptr<TrackBuilder>,EndType> othersEnd  )
 {
 	if( thisEnd.first.get() != this )
 		throw std::logic_error( "pThisTrack has to point to this." );
@@ -725,21 +725,21 @@ void Track_Imp::Couple(
 	if( thisEnd == othersEnd )
 		throw std::logic_error( "Can not couple track coupling to itself!" );
 
-	if( thisEnd.second == Track::EndType::any || othersEnd.second == Track::EndType::any )
-		throw std::invalid_argument( "Unspecific end type to couple; use Track::EndType::front or Track::EndType::end." );
+	if( thisEnd.second == EndType::any || othersEnd.second == EndType::any )
+		throw std::invalid_argument( "Unspecific end type to couple; use EndType::north or EndType::south." );
 
-	if( thisEnd.second == EndType::front ){
+	if( thisEnd.second == EndType::north ){
 		if( (m_TrackFront.first = std::dynamic_pointer_cast<Track_Imp>(othersEnd.first)) != nullptr ){
-			if( othersEnd.second == EndType::front ){
+			if( othersEnd.second == EndType::north ){
 				m_TrackFront.first->m_TrackFront.first = std::dynamic_pointer_cast<Track_Imp>(thisEnd.first);
-				m_TrackFront.first->m_TrackFront.second = EndType::front;
+				m_TrackFront.first->m_TrackFront.second = EndType::north;
 
 				if( m_TrackFront.first->m_pTETFront )
 					m_TrackFront.first->CreateEndTransitionSignal( othersEnd.second );
 			}
-			else if( othersEnd.second == EndType::end ){
+			else if( othersEnd.second == EndType::south ){
 				m_TrackFront.first->m_TrackEnd.first = std::dynamic_pointer_cast<Track_Imp>(thisEnd.first);
-				m_TrackFront.first->m_TrackEnd.second = EndType::front;
+				m_TrackFront.first->m_TrackEnd.second = EndType::north;
 
 				if( m_TrackFront.first->m_pTETEnd )
 					m_TrackFront.first->CreateEndTransitionSignal( othersEnd.second );
@@ -748,85 +748,85 @@ void Track_Imp::Couple(
 			m_TrackFront.second = othersEnd.second;
 
 			if( m_pTETFront )
-				CreateEndTransitionSignal( EndType::front );
+				CreateEndTransitionSignal( EndType::north );
 		}
 	}
-	else if( thisEnd.second == EndType::end ){
+	else if( thisEnd.second == EndType::south ){
 		if( (m_TrackEnd.first = std::dynamic_pointer_cast<Track_Imp>(othersEnd.first)) != nullptr ){
-			if( othersEnd.second == EndType::front ){
+			if( othersEnd.second == EndType::north ){
 				m_TrackEnd.first->m_TrackFront.first = std::dynamic_pointer_cast<Track_Imp>(thisEnd.first);
-				m_TrackEnd.first->m_TrackFront.second = EndType::end;
+				m_TrackEnd.first->m_TrackFront.second = EndType::south;
 
 				if( m_TrackEnd.first->m_pTETFront )
-					m_TrackEnd.first->CreateEndTransitionSignal( EndType::front );
+					m_TrackEnd.first->CreateEndTransitionSignal( EndType::north );
 			}
-			else if( othersEnd.second == EndType::end ){
+			else if( othersEnd.second == EndType::south ){
 				m_TrackEnd.first->m_TrackEnd.first = std::dynamic_pointer_cast<Track_Imp>(thisEnd.first);
-				m_TrackEnd.first->m_TrackEnd.second = EndType::end;
+				m_TrackEnd.first->m_TrackEnd.second = EndType::south;
 
 				if( m_TrackEnd.first->m_pTETEnd )
-					m_TrackEnd.first->CreateEndTransitionSignal( EndType::end );
+					m_TrackEnd.first->CreateEndTransitionSignal( EndType::south );
 			}
 
 			m_TrackEnd.second = othersEnd.second;
 
 			if( m_pTETEnd )
-				CreateEndTransitionSignal( EndType::end );
+				CreateEndTransitionSignal( EndType::south );
 		}
 	}
 }
 
 void Track_Imp::DeCouple( EndType thisend, bool oneSided ){
 	if( thisend == EndType::any ){
-		DeCouple( EndType::front, oneSided );
-		DeCouple( EndType::end, oneSided );
+		DeCouple( EndType::north, oneSided );
+		DeCouple( EndType::south, oneSided );
 		return;
 	}
 
-	if( thisend == EndType::front ){
+	if( thisend == EndType::north ){
 		if( m_TrackFront.first ){
 			if( !oneSided ){
-				if( m_TrackFront.second == EndType::front ){
+				if( m_TrackFront.second == EndType::north ){
 					m_TrackFront.first->m_TrackFront.first.reset();
 
 					if( m_TrackFront.first->m_pTETFront )
-						m_TrackFront.first->CreateEndTransitionSignal( EndType::front );
+						m_TrackFront.first->CreateEndTransitionSignal( EndType::north );
 				}
-				else if( m_TrackFront.second == EndType::end ){
+				else if( m_TrackFront.second == EndType::south ){
 					m_TrackFront.first->m_TrackEnd.first.reset();
 
 					if( m_TrackFront.first->m_pTETEnd )
-						m_TrackFront.first->CreateEndTransitionSignal( EndType::end );
+						m_TrackFront.first->CreateEndTransitionSignal( EndType::south );
 				}
 			}
 
 			m_TrackFront.first.reset();
 
 			if( m_pTETFront )
-				CreateEndTransitionSignal( EndType::front );
+				CreateEndTransitionSignal( EndType::north );
 		}
 	}
-	else if( thisend == EndType::end ){
+	else if( thisend == EndType::south ){
 		if( m_TrackEnd.first ){
 			if( !oneSided ){
-				if( m_TrackEnd.second == EndType::front ){
+				if( m_TrackEnd.second == EndType::north ){
 					m_TrackEnd.first->m_TrackFront.first.reset();
 
 					if( m_TrackEnd.first->m_pTETFront )
-						m_TrackEnd.first->CreateEndTransitionSignal( EndType::front );
+						m_TrackEnd.first->CreateEndTransitionSignal( EndType::north );
 				}
-				else if( m_TrackEnd.second == EndType::end ){
+				else if( m_TrackEnd.second == EndType::south ){
 					m_TrackEnd.first->m_TrackEnd.first.reset();
 
 					if( m_TrackEnd.first->m_pTETEnd )
-						m_TrackEnd.first->CreateEndTransitionSignal( EndType::end );
+						m_TrackEnd.first->CreateEndTransitionSignal( EndType::south );
 				}
 			}
 
 			m_TrackEnd.first.reset();
 
 			if( m_pTETEnd )
-				CreateEndTransitionSignal( EndType::end );
+				CreateEndTransitionSignal( EndType::south );
 		}
 	}
 }
@@ -1046,25 +1046,25 @@ void Track_Imp::Flip( bool flipAttached )
 
 	std::swap( m_TrackFront, m_TrackEnd );
 	if( m_TrackFront.first )
-		(m_TrackFront.second == EndType::front ? m_TrackFront.first->m_TrackFront.second : m_TrackFront.first->m_TrackEnd.second) = EndType::front;
+		(m_TrackFront.second == EndType::north ? m_TrackFront.first->m_TrackFront.second : m_TrackFront.first->m_TrackEnd.second) = EndType::north;
 	if( m_TrackEnd.first )
-		(m_TrackEnd.second == EndType::front ? m_TrackEnd.first->m_TrackFront.second : m_TrackEnd.first->m_TrackEnd.second) = EndType::end;
+		(m_TrackEnd.second == EndType::north ? m_TrackEnd.first->m_TrackFront.second : m_TrackEnd.first->m_TrackEnd.second) = EndType::south;
 
 	if( flipAttached ){
 		std::swap( m_pConnectorFront, m_pConnectorEnd );
 		if( m_pConnectorFront ){
-			const int slot = m_pConnectorFront->Slot( *this, EndType::end );
+			const int slot = m_pConnectorFront->Slot( *this, EndType::south );
 			m_pConnectorFront->Clear( slot );
 			Connector* pCaller = nullptr;
 			std::swap( pCaller, m_pConnectorFront );
-			pCaller->Slot( slot, This(), EndType::front );
+			pCaller->Slot( slot, This(), EndType::north );
 		}
 		if( m_pConnectorEnd ){
-			const int slot = m_pConnectorEnd->Slot( *this, EndType::front );
+			const int slot = m_pConnectorEnd->Slot( *this, EndType::north );
 			m_pConnectorEnd->Clear( slot );
 			Connector* pCaller = nullptr;
 			std::swap( pCaller, m_pConnectorEnd );
-			pCaller->Slot( slot, This(), EndType::end );
+			pCaller->Slot( slot, This(), EndType::south );
 		}
 
 		std::swap( m_pTETFront, m_pTETEnd );
@@ -1088,40 +1088,40 @@ void Track_Imp::Flip( bool flipAttached )
 	{
 		const bool bTSEnd = m_pTETFront != nullptr;
 		const bool bTSFront = m_pTETEnd != nullptr;
-		DestroyEndTransitionSignal( EndType::front );
-		DestroyEndTransitionSignal( EndType::end );
+		DestroyEndTransitionSignal( EndType::north );
+		DestroyEndTransitionSignal( EndType::south );
 		if( bTSFront )
-			CreateEndTransitionSignal( EndType::front );
+			CreateEndTransitionSignal( EndType::north );
 		if( bTSEnd )
-			CreateEndTransitionSignal( EndType::end );
+			CreateEndTransitionSignal( EndType::south );
 	}
 }
 
 void Track_Imp::CreateEndTransitionSignal( EndType atend ){
-	if( atend == EndType::front ){
+	if( atend == EndType::north ){
 		if( m_pTETFront )
-			DestroyEndTransitionSignal( EndType::front );
+			DestroyEndTransitionSignal( EndType::north );
 
-		m_pTETFront = TrackEndTransition::Make( this, EndType::front );
+		m_pTETFront = TrackEndTransition::Make( this, EndType::north );
 		Attach( m_pTETFront, TrackLocation{ 0_m, Orientation::Value::para } );
 	}
-	else if( atend == EndType::end ){
+	else if( atend == EndType::south ){
 		if( m_pTETEnd )
-			DestroyEndTransitionSignal( EndType::end );
+			DestroyEndTransitionSignal( EndType::south );
 
-		m_pTETEnd = TrackEndTransition::Make( this, EndType::end );
+		m_pTETEnd = TrackEndTransition::Make( this, EndType::south );
 		Attach( m_pTETEnd, TrackLocation( GetLength(), Orientation::Value::anti ) );
 	}
 }
 
 void Track_Imp::DestroyEndTransitionSignal( EndType atend ){
-	if( atend == EndType::front ){
+	if( atend == EndType::north ){
 		if( m_pTETFront ){
 			Detach( *m_pTETFront );
 			m_pTETFront = nullptr;
 		}
 	}
-	else if( atend == EndType::end ){
+	else if( atend == EndType::south ){
 		if( m_pTETEnd ){
 			Detach( *m_pTETEnd );
 			m_pTETEnd = nullptr;
@@ -1132,9 +1132,9 @@ void Track_Imp::DestroyEndTransitionSignal( EndType atend ){
 Connector* Track_Imp::GetConnector( EndType atend ) const noexcept{
 	switch( atend ){
 	case EndType::any:
-	case EndType::front:
+	case EndType::north:
 		return m_pConnectorFront;
-	case EndType::end:
+	case EndType::south:
 		return m_pConnectorEnd;
 	case EndType::none:
 	default:
@@ -1148,12 +1148,12 @@ Connector* Track_Imp::GetConnector( const Orientation& inDirection ) const noexc
 		return nullptr;
 	}
 
-	if( Connector* pConnector = GetConnector( inDirection ? EndType::end : EndType::front ) )
+	if( Connector* pConnector = GetConnector( inDirection ? EndType::south : EndType::north ) )
 		return pConnector;
 
-	if( TrackEnd nextTrack = TransitionEnd( inDirection ? EndType::end : EndType::front ); nextTrack.first ){
+	if( TrackEnd nextTrack = TransitionEnd( inDirection ? EndType::south : EndType::north ); nextTrack.pTrack ){
 		m_LoopBraker = true;
-		Connector* pConnector = nextTrack.first->GetConnector( nextTrack.second == EndType::front ? Orientation::Value::para : Orientation::Value::anti );
+		Connector* pConnector = nextTrack.pTrack->GetConnector( nextTrack.end == EndType::north ? Orientation::Value::para : Orientation::Value::anti );
 		m_LoopBraker = false;
 		return pConnector;
 	}
@@ -1257,14 +1257,14 @@ std::vector<std::pair<Track_Imp&,common::Interval<Length>>> Track_Imp::GetRanges
 	std::vector<std::pair<Track_Imp&,common::Interval<Length>>> list;
 	if( IntersectingClosed( range, Range() ) ){
 		list.push_back( std::pair<Track_Imp&,common::Interval<Length>>{ *this, range } );
-		RangeAt( EndType::front, range, list );
-		RangeAt( EndType::end, range, list );
+		RangeAt( EndType::north, range, list );
+		RangeAt( EndType::south, range, list );
 	}
 
 	return list;
 }
 
-void Track_Imp::RangeAt( Track::EndType theEnd, Interval<Length> range, std::vector<std::pair<Track_Imp&,Interval<Length>>>& list ){
+void Track_Imp::RangeAt( EndType theEnd, Interval<Length> range, std::vector<std::pair<Track_Imp&,Interval<Length>>>& list ){
 	if( auto pTrack = dynamic_cast<Track_Imp*>(Transform( range, theEnd )) ){
 		if( IntersectingOpen( range, pTrack->Range() ) ){
 			list.push_back( { *pTrack, range } );
@@ -1273,32 +1273,32 @@ void Track_Imp::RangeAt( Track::EndType theEnd, Interval<Length> range, std::vec
 	}
 }
 
-Track* Track_Imp::Transform( Interval<Length>& range, Track::EndType& toTrackAtEnd ) const noexcept{
-	if( TrackEnd trackEnd = TransitionEnd( toTrackAtEnd ); trackEnd.first )
+Track* Track_Imp::Transform( Interval<Length>& range, EndType& toTrackAtEnd ) const noexcept{
+	if( TrackEnd trackEnd = TransitionEnd( toTrackAtEnd ); trackEnd.pTrack )
 	{
-		if( toTrackAtEnd == EndType::front ){
-			if( trackEnd.second == EndType::front ){
+		if( toTrackAtEnd == EndType::north ){
+			if( trackEnd.end == EndType::north ){
 				range.m_Near= -range.m_Near;
 				range.m_Far	= -range.m_Far;
 			}
 			else{
-				range.m_Near+= trackEnd.first->GetLength();
-				range.m_Far += trackEnd.first->GetLength();
+				range.m_Near+= trackEnd.pTrack->GetLength();
+				range.m_Far += trackEnd.pTrack->GetLength();
 			}
 		}
 		else{
-			if( trackEnd.second == EndType::front ){
+			if( trackEnd.end == EndType::north ){
 				range.m_Near -= GetLength();
 				range.m_Far -= GetLength();
 			}
 			else{
-				range.m_Near = GetLength() + trackEnd.first->GetLength() - range.m_Near;
-				range.m_Far = GetLength() + trackEnd.first->GetLength() - range.m_Far;
+				range.m_Near = GetLength() + trackEnd.pTrack->GetLength() - range.m_Near;
+				range.m_Far = GetLength() + trackEnd.pTrack->GetLength() - range.m_Far;
 			}
 		}
 
-		toTrackAtEnd = trackEnd.second == EndType::front ? EndType::end : EndType::front;
-		return trackEnd.first.get();
+		toTrackAtEnd = trackEnd.end == EndType::north ? EndType::south : EndType::north;
+		return trackEnd.pTrack.get();
 	}
 
 	return nullptr;
@@ -1345,35 +1345,6 @@ Track::TrackType TrackType( const std::string& type ) noexcept{
 		return Track::TrackType::none;
 	else
 		return Track::TrackType::unknown;
-}
-
-std::string ToString( Track::EndType end ){
-	switch(end){
-	case Track::EndType::none:
-		return "none";
-	case Track::EndType::front:
-		return "front";
-	case Track::EndType::end:
-		return "end";
-	case Track::EndType::any:
-		return "any";
-	default:
-		assert( !"Unknown Track::EndType enumerator!" );
-		return "unknown";
-	}
-}
-
-Track::EndType ToEndType( const std::string& end ){
-	if( end == "front" )
-		return Track::EndType::front;
-	else if( end == "end" )
-		return Track::EndType::end;
-	else if( end == "any" )
-		return Track::EndType::any;
-	else if( end == "none" )
-		return Track::EndType::none;
-
-	throw std::invalid_argument( "Invalid Track::EndType string!" );
 }
 
 static inline Length Calculate_ds( const Track& track, Length s, Length e, bool ignoreCuvesTorsion ){
@@ -1525,14 +1496,14 @@ bool Snap( Track::TrackEnd trackEnd, Track::cTrackEnd toTrackEnd )
 		IsConcreteEnd( toTrackEnd ) )
 	{
 		spat::Frame<dim::Length,dim::One> frameAtEnd;
-		toTrackEnd.first->Transition( toTrackEnd.second == Track::EndType::front ? trackEnd.first->Range().Near() : trackEnd.first->Range().Far(), frameAtEnd );
-		if( trackEnd.second == toTrackEnd.second )
+		toTrackEnd.pTrack->Transition( toTrackEnd.end == EndType::north ? trackEnd.pTrack->Range().Near() : trackEnd.pTrack->Range().Far(), frameAtEnd );
+		if( trackEnd.end == toTrackEnd.end )
 		{
 			frameAtEnd.T *= -1;
 			frameAtEnd.N *= -1;
 		}
 
-		trackEnd.first->This()->SetFrame( frameAtEnd, trackEnd.second == trax::Track::EndType::front ? trackEnd.first->Range().Near() : trackEnd.first->Range().Far() );
+		trackEnd.pTrack->This()->SetFrame( frameAtEnd, trackEnd.end == trax::EndType::north ? trackEnd.pTrack->Range().Near() : trackEnd.pTrack->Range().Far() );
 		return true;
 	}
 

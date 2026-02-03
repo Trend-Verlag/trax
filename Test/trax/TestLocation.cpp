@@ -137,7 +137,7 @@ BOOST_FIXTURE_TEST_CASE( measureDistanceOverOpenTrackEnds, TrackAndLocation )
 	BOOST_CHECK_EQUAL( m_LocationOnTrack.Distance( otherLocation, -m_pTrack->GetLength()/2 ), -m_pTrack->GetLength()/2 );
 	BOOST_CHECK_EQUAL( m_LocationOnTrack.Distance( otherLocation, m_pTrack->GetLength()/2 ), m_pTrack->GetLength()/2 );
 
-	m_pTrack->Couple( std::make_pair(m_pTrack,Track::EndType::front), std::make_pair(pOther, Track::EndType::end) );
+	m_pTrack->Couple( std::make_pair(m_pTrack,EndType::north), std::make_pair(pOther, EndType::south) );
 	BOOST_CHECK_EQUAL( m_LocationOnTrack.Distance( otherLocation, -m_pTrack->GetLength()/2 - pOther->GetLength()), -m_pTrack->GetLength()/2 - pOther->GetLength()/2 );
 }
 

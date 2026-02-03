@@ -64,21 +64,27 @@ namespace trax{
 		virtual bool IsParent( const Train& train ) const noexcept = 0;
 
 
+		/// \brief Types of distances between components.
 		enum class DistanceType{
-			actual,
-			min,
-			max,
-			half,
+			actual,		//< Uses the actual distances of the components.
+			min,		//< Uses the smallest distances (no coupling lengthes).
+			max,		//< Uses the largest distances (including coupling lengthes).
+			half,		//< Uses the half way between min and max distances.
 		};
 
 		using RailRunner::Rail;
 
 		/// \brief Rails this TrainComponent at the given location.
 		///
-		/// If bMoveTo is true, the TrainComponent will be moved to the location,
-		/// the internal distances of coupled components are resolved by 'distance'
+		/// \param bMoveTo If bMoveTo is true, the TrainComponent will be moved to the location.
+		/// \param distance The internal distances of coupled components are resolved by 'distance'
 		/// if this happens to be a Train.
-		virtual void Rail( const Location& location, bool bMoveTo, DistanceType distance ) = 0;
+		/// \throws std::invalid_argument If location is not on a track.
+		/// \throws std::out_of_range If the railrunner would end up off the track system.
+		/// \throws std::logic_error If the present configuration does not allow railing.
+		/// \throws std::logic_error If bFailOnReservationConflicts was true and a reservation 
+		/// overlap with an already existing reservation occured.
+		virtual void Rail( const Location& location, bool bMoveTo, DistanceType distance, bool bFailOnReservationConflicts = false ) = 0;
 
 
 		using RailRunner::ResetToGlobalAnchor;
@@ -188,15 +194,31 @@ namespace trax{
 		virtual Length GetLength( DistanceType distance = DistanceType::actual ) const noexcept = 0;
 
 
+		/// \brief Makes a reservation on the track for this TrainComponent
+		/// at its current location, using its ID().
+		/// \returns true if a reservation actually was made, false if the 
+		/// ID() is zero or the train component was not railed.
+		virtual bool MakeReservation() const noexcept = 0;
+
+
+		/// \brief Deletes a reservation on the track for this TrainComponent.
+		/// \returns true if a reservation actually was deleted.
+		virtual bool DeleteReservation() const noexcept = 0;
+
+
 		// Jacks 'N Plugs:
 
 		/// \brief Gets a Jack that pulses its Plug if the RailRunner
 		/// gets railed on a track.
+		/// 
+		/// On pulsing IsRailed() will return true, already.
 		virtual Jack& JackOnRail() noexcept = 0;
 
 
 		/// \brief Gets a Jack that pulses its Plug if the RailRunner
 		/// derails.
+		/// 
+		/// On pulsing IsRailed() will return false, already.
 		virtual Jack& JackOnDerail() noexcept = 0;
 
 
@@ -209,6 +231,20 @@ namespace trax{
 	};
 
 
+	/// \brief Get the front end of a TrainComponent according to its orientation in its Train.
+	/// \ingroup Group_RailRunnerEndHelpers
+	/// \param trainComponent The TrainComponent to get the end for according to its orientation in its Train.
+	/// \returns The end type corresponding to the given orientation.
+	EndType North( const TrainComponent& trainComponent ) noexcept;
+
+	/// \brief Get the back end of a TrainComponent according to its orientation in its Train.
+	/// \ingroup Group_RailRunnerEndHelpers
+	/// \param trainComponent The TrainComponent to get the end for according to its orientation in its Train.
+	/// \returns The end type corresponding to the given orientation.
+	EndType South( const TrainComponent& trainComponent ) noexcept;
+
+
+
 	/// \brief Couples two TrainComponents.
 	dclspc bool Couple( const TrainComponent::Coupling& coupling ) noexcept;
 
@@ -217,4 +253,12 @@ namespace trax{
 	dclspc Train* CommonParent( const TrainComponent& a, const TrainComponent& b ) noexcept;
 
 
+// inlines:
+	inline EndType North( const TrainComponent& trainComponent ) noexcept{
+		return North( trainComponent.GetOrientation() );
+	}
+
+	inline EndType South( const TrainComponent& trainComponent ) noexcept{
+		return South( trainComponent.GetOrientation() );
+	}
 }

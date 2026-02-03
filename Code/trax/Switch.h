@@ -86,11 +86,11 @@ namespace trax{
 		/// The narrow track is the incomming track of a switch.
 		/// \param pNarrowTrack Shared pointer to track.
 		/// \param trackEnd End of track to connect.
-		virtual void NarrowTrack( std::shared_ptr<TrackBuilder> pNarrowTrack, Track::EndType trackEnd ) = 0;
+		virtual void NarrowTrack( std::shared_ptr<TrackBuilder> pNarrowTrack, EndType trackEnd ) = 0;
 
 
 		/// \returns the track and the end type in the narrow slot.
-		virtual std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> NarrowTrack() const = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> NarrowTrack() const = 0;
 
 
 		/// \brief Clears the slot for the narrow track.
@@ -102,11 +102,11 @@ namespace trax{
 		/// The straight track is the go through track of a switch.
 		/// \param pStaightTrack Shared pointer to track.
 		/// \param trackEnd End of track to connect.
-		virtual void StraightTrack( std::shared_ptr<TrackBuilder> pStaightTrack, Track::EndType trackEnd ) = 0;
+		virtual void StraightTrack( std::shared_ptr<TrackBuilder> pStaightTrack, EndType trackEnd ) = 0;
 
 
 		/// \returns the track and the end type in the straight slot.
-		virtual std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> StraightTrack() const = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> StraightTrack() const = 0;
 
 
 		/// \brief Clears the slot for the straight track.
@@ -119,11 +119,11 @@ namespace trax{
 		/// \param divTrackID zero based id of the diverging track to set.
 		/// \param pDivergedTrack Shared pointer to track.
 		/// \param trackEnd End of track to connect.
-		virtual void DivergedTrack( int divTrackID, std::shared_ptr<TrackBuilder> pDivergedTrack, Track::EndType trackEnd ) = 0;
+		virtual void DivergedTrack( int divTrackID, std::shared_ptr<TrackBuilder> pDivergedTrack, EndType trackEnd ) = 0;
 
 
 		/// \returns the track and the end type in the straight slot.
-		virtual std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> DivergedTrack( int divTrackID ) const = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack( int divTrackID ) const = 0;
 
 
 		/// \brief Clears the slot for the straight track.
@@ -199,11 +199,11 @@ namespace trax{
 		/// The diverged track is the branching track of a switch.
 		/// \param pDivergedTrack Shared pointer to track.
 		/// \param trackEnd End of track to connect.
-		virtual void DivergedTrack( std::shared_ptr<TrackBuilder> pDivergedTrack, Track::EndType trackEnd ) = 0;
+		virtual void DivergedTrack( std::shared_ptr<TrackBuilder> pDivergedTrack, EndType trackEnd ) = 0;
 
 
 		/// \returns the track and the end type in the diverged slot.
-		virtual std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> DivergedTrack() const = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack() const = 0;
 
 
 		using NarrowSwitch::ClearDivergedTrack;
@@ -339,11 +339,11 @@ namespace trax{
 		/// The diverged track is the branching track of a switch.
 		/// \param pDivergedTrack1 Shared pointer to track.
 		/// \param trackEnd End of track to connect.
-		virtual void DivergedTrack1( std::shared_ptr<TrackBuilder> pDivergedTrack1, Track::EndType trackEnd ) = 0;
+		virtual void DivergedTrack1( std::shared_ptr<TrackBuilder> pDivergedTrack1, EndType trackEnd ) = 0;
 
 
 		/// \returns the track and the end type in the diverged slot.
-		virtual std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> DivergedTrack1() const = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack1() const = 0;
 
 
 		/// \brief Clears the slot for the diverged1 track.
@@ -355,11 +355,11 @@ namespace trax{
 		/// The diverged track is the branching track of a switch.
 		/// \param pDivergedTrack2 Shared pointer to track.
 		/// \param trackEnd End of track to connect.
-		virtual void DivergedTrack2( std::shared_ptr<TrackBuilder> pDivergedTrack2, Track::EndType trackEnd ) = 0;
+		virtual void DivergedTrack2( std::shared_ptr<TrackBuilder> pDivergedTrack2, EndType trackEnd ) = 0;
 
 
 		/// \returns the track and the end type in the diverged slot.
-		virtual std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> DivergedTrack2() const = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack2() const = 0;
 
 
 		/// \brief Clears the slot for the diverged2 track.

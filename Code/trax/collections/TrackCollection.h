@@ -71,7 +71,7 @@ namespace trax{
 	/// \param area Spherical area to detect track ends in.
 	/// \param sort If true the list gets sorted by distance to the center of the area (closest first). 
 	/// \return A list with track ends as well as their distance from the area center. If both track ends are inside the area, the track will be listed twice.
-	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>> dclspc FindTrackEnds( const TrackCollection& collection, const spat::Sphere<Length>& area, bool sort = false );
+	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> dclspc FindTrackEnds( const TrackCollection& collection, const spat::Sphere<Length>& area, bool sort = false );
 
 
 	/// \brief Finds all tracks that run trough an area.
@@ -99,18 +99,18 @@ namespace trax{
 	/// \param endType The track's end to snap.
 	/// \param maxDistance A threshold for the distance to search track ends around the to be snapped end.
 	/// \param bUncoupled If true only uncoupled track ends are taken into consideration.
-	/// \return The other track end, the track was snapped to, or { nullptr, Track::EndType::none } if no suitable track end was found.
-	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> dclspc Snap( const TrackCollection& collection, Track::TrackEnd trackEnd, Length maxDistance, bool bUncoupled = true );
+	/// \return The other track end, the track was snapped to, or { nullptr, EndType::none } if no suitable track end was found.
+	std::pair<std::shared_ptr<TrackBuilder>,EndType> dclspc Snap( const TrackCollection& collection, Track::TrackEnd trackEnd, Length maxDistance, bool bUncoupled = true );
 
 
 	/// \brief Searches open track ends inside an area around a given track end and couples to the closest.
 	/// \param collection The track collection to search track ends in.
-	/// \param trackEnd The track end to couple. trackEnd.second == Track::EndType::any and Track::EndType::both 
+	/// \param trackEnd The track end to couple. trackEnd.second == EndType::any and EndType::both 
 	/// are supported.
 	/// \param maxDistance A threshold for the distance to search track ends around the to be coupled end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
 	/// \param bSilent If true no log messages are emitted.
-	/// \return The other track ends, the track was coupled to, or { nullptr, Track::EndType::none } if no suitable 
+	/// \return The other track ends, the track was coupled to, or { nullptr, EndType::none } if no suitable 
 	/// track end was found. For a coupling with front the result is in pair.first, for a coupling with end in pair.second.
 	/// \throws std::invalid_argument If the end type is not recocnized.
 	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc Couple( const TrackCollection& collection, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true );

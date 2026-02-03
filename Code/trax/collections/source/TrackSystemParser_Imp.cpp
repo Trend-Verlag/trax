@@ -365,12 +365,12 @@ bool ParseTrack( const boost::property_tree::ptree& pt, TrackSystemParser& callb
 	for( const auto& pair : pt )
 	{
 		if( pair.first == "Begin" ){
-			if( !ParseTrackEnd( { pt.get<IDType>( "<xmlattr>.id", 0 ), Track::EndType::front }, pair.second, callback ) )
+			if( !ParseTrackEnd( { pt.get<IDType>( "<xmlattr>.id", 0 ), EndType::north }, pair.second, callback ) )
 				return false;
 		}
 
 		else if( pair.first == "End" ){
-			if( !ParseTrackEnd( { pt.get<IDType>( "<xmlattr>.id", 0 ), Track::EndType::end },pair.second, callback ) )
+			if( !ParseTrackEnd( { pt.get<IDType>( "<xmlattr>.id", 0 ), EndType::south },pair.second, callback ) )
 				return false;
 		}
 

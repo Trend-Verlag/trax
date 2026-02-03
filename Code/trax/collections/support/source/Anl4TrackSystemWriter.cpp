@@ -98,7 +98,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	boost::property_tree::ptree ptTrackEnd;
 
 	ptTrackEnd.add( "<xmlattr>.refid", end.id );
-	ptTrackEnd.add( "<xmlattr>.type", end.type == Track::EndType::front ? "front" : "end" );
+	ptTrackEnd.add( "<xmlattr>.type", end.type == EndType::north ? "front" : "end" );
 
 	move_child( pt, "TrackEnd", ptTrackEnd );
 	return pt;
@@ -125,7 +125,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 		if( !track.Reference( "electrificationShiftBegin" ).empty() )
 			ptBegin.add( "<xmlattr>.electrificationShift", track.Reference( "electrificationShiftBegin" ) );
 
-		const Track::End frontend = track.TransitionEnd( Track::EndType::front );
+		const Track::End frontend = track.TransitionEnd( EndType::north );
 		if( frontend.id ){
 			boost::property_tree::ptree ptConnection;
 			ptConnection << frontend;
@@ -148,7 +148,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 		if( !track.Reference( "electrificationShiftEnd" ).empty() )
 			ptEnd.add( "<xmlattr>.electrificationShift", track.Reference( "electrificationShiftEnd" ) );
 
-		const Track::End backend = track.TransitionEnd( Track::EndType::end );
+		const Track::End backend = track.TransitionEnd( EndType::south );
 		if( backend.id ){
 			boost::property_tree::ptree ptConnection;
 			ptConnection << backend;

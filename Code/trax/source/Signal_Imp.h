@@ -295,26 +295,26 @@ namespace trax{
 	class TrackEndTransition_Imp :	public TrackEndTransition,
 									public SignalClear_Imp{
 	public:
-		TrackEndTransition_Imp( Track* pToTrack, Track::EndType toEnd );
+		TrackEndTransition_Imp( Track* pToTrack, EndType toEnd );
 
 		int CountStatus() const noexcept override;
 
-		void Set( Track* pToTrack, Track::EndType toEnd ) noexcept;
+		void Set( Track* pToTrack, EndType toEnd ) noexcept;
 
 		using TrackEndTransition::Set;
 
-		Track* From( Track::EndType& end ) const noexcept override;
+		Track* From( EndType& end ) const noexcept override;
 
 		Track* From() const noexcept override;
 
-		Track* To( Track::EndType& end ) const noexcept override;
+		Track* To( EndType& end ) const noexcept override;
 
 		Track* To() const noexcept override;
 	private:
-		Track*			m_pFromTrack;
-		Track::EndType	m_FromEnd;
-		Track*			m_pToTrack;
-		Track::EndType	m_ToEnd;
+		Track*	m_pFromTrack;
+		EndType	m_FromEnd;
+		Track*	m_pToTrack;
+		EndType	m_ToEnd;
 	};
 }
 

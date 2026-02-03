@@ -51,10 +51,6 @@ namespace trax{
 
 		bool IsValid() const noexcept override;
 
-		void Rail( const Location& location, bool bMoveTo = true ) override;
-
-		void Rail( const Location& location, bool bMoveTo, DistanceType data ) override;
-
 		Location GetLocation() const noexcept override;
 		
 		void DeRail() noexcept override;
@@ -106,6 +102,8 @@ namespace trax{
 
 		// TrainComponent:
 		bool IsFinal() const noexcept override;
+
+		void Rail( const Location& location, bool bMoveTo, DistanceType data, bool bFailOnReservationConflicts = false ) override;
 
 		Length GetOverhang( EndType end, DistanceType distance = DistanceType::actual ) const noexcept override;
 

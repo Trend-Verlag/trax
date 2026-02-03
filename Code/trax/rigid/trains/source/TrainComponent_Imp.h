@@ -46,20 +46,28 @@ namespace trax{
 	public:
 		TrainComponent_Imp() noexcept;
 
+		// Identified:
+		using RailRunner_Imp<Base>::ID;
+
+		void ID( IDType id ) noexcept override;
+
+
 		// RailRunner:
 		bool IsValid() const noexcept override;
 
-		void ActivateCoupling( RailRunner::EndType end ) override;
+		void Rail( const class Location& location, bool bMoveTo = true ) override;
 
-		void DeactivateCoupling( RailRunner::EndType end ) override;
+		void ActivateCoupling( EndType end ) override;
 
-		bool IsActivated( RailRunner::EndType end ) const noexcept override;
+		void DeactivateCoupling( EndType end ) override;
 
-		bool Uncouple( RailRunner::EndType end, bool btriggerPulses = true ) noexcept override;
+		bool IsActivated( EndType end ) const noexcept override;
 
-		bool IsCoupled( RailRunner::EndType end = RailRunner::EndType::any ) const noexcept override;
+		bool Uncouple( EndType end, bool btriggerPulses = true ) noexcept override;
+
+		bool IsCoupled( EndType end = EndType::any ) const noexcept override;
 		
-		Length GetCouplingHeight( RailRunner::EndType end ) const noexcept override;
+		Length GetCouplingHeight( EndType end ) const noexcept override;
 
 
 		// TrainComponent:
@@ -75,26 +83,32 @@ namespace trax{
 
 		bool IsParent( const Train& train ) const noexcept override;
 
-		bool Couple( RailRunner::EndType end, TrainComponent& with, RailRunner::EndType withEnd, bool btriggerPulses = true ) override;
+		void Rail( const Location& location, bool bMoveTo, TrainComponent::DistanceType distance, bool bFailOnReservationConflicts = false ) override;
 
-		std::pair<std::shared_ptr<TrainComponent>,RailRunner::EndType> GetCoupledTrainComponent( RailRunner::EndType end ) const override;
-		
-		Length GetCouplingLength( RailRunner::EndType end, TrainComponent::DistanceType type = TrainComponent::DistanceType::max ) const override;
+		bool Couple( EndType end, TrainComponent& with, EndType withEnd, bool btriggerPulses = true ) override;
 
+		std::pair<std::shared_ptr<TrainComponent>,EndType> GetCoupledTrainComponent( EndType end ) const override;
 		
+		Length GetCouplingLength( EndType end, TrainComponent::DistanceType type = TrainComponent::DistanceType::max ) const override;
+
+		bool MakeReservation() const noexcept override;
+
+		bool DeleteReservation() const noexcept override;
+
+	
 		// Jacks 'N Plugs:
 
 		Jack& JackOnRail() noexcept override;
 
 		Jack& JackOnDerail() noexcept override;
 
-		Jack& JackOnCouple( RailRunner::EndType end ) override;
+		Jack& JackOnCouple( EndType end ) override;
 
-		Jack& JackOnUnCouple( RailRunner::EndType end ) override;
+		Jack& JackOnUnCouple( EndType end ) override;
 
-		Jack& JackOnCouplingActivated( RailRunner::EndType end ) override;
+		Jack& JackOnCouplingActivated( EndType end ) override;
 
-		Jack& JackOnCouplingDeactivated( RailRunner::EndType end ) override;
+		Jack& JackOnCouplingDeactivated( EndType end ) override;
 
 		// Inherited via JackEnumerator
 		int CountJacks() const noexcept override;
@@ -123,8 +137,9 @@ namespace trax{
 		MultiPlug_Imp<Plug_Imp_ParentPointer<TrainComponent_Imp<Base>>> m_PlugRail;
 		MultiPlug_Imp<Plug_Imp_ParentPointer<TrainComponent_Imp<Base>>> m_PlugDerail;
 	private:
-		Train*		m_pTrain;
-		Orientation m_TrainOrientation;
+		Train*			m_pTrain;
+		Orientation		m_TrainOrientation;
+		mutable bool	m_bMadeReservation;
 
 		bool m_bRailed;
 		void OnRail() noexcept;
@@ -153,6 +168,7 @@ TrainComponent_Imp<Base>::TrainComponent_Imp() noexcept
 	, m_PlugDerail		{ *this, &TrainComponent_Imp<Base>::OnDerail }
 	, m_pTrain			{ nullptr }
 	, m_TrainOrientation{ Orientation::Value::para }
+	, m_bMadeReservation{ false }
 	, m_bRailed			{ false }
 {
 	m_PlugRail.Reference( "name", "PlugRail" );
@@ -169,6 +185,15 @@ TrainComponent_Imp<Base>::TrainComponent_Imp() noexcept
 }
 
 template<class Base>
+inline void TrainComponent_Imp<Base>::ID( IDType id ) noexcept
+{
+	if( ID() != id )
+		DeleteReservation();
+
+	RailRunner_Imp<Base>::ID( id );
+}
+
+template<class Base>
 bool TrainComponent_Imp<Base>::IsValid() const noexcept
 {
 	if( !RailRunner_Imp<Base>::IsValid() )
@@ -181,58 +206,64 @@ bool TrainComponent_Imp<Base>::IsValid() const noexcept
 }
 
 template<class Base>
-void TrainComponent_Imp<Base>::ActivateCoupling( RailRunner::EndType end )
+void TrainComponent_Imp<Base>::Rail( const Location& location, bool bMoveTo )
+{
+	Rail( location, bMoveTo, TrainComponent::DistanceType::actual );
+}
+
+template<class Base>
+void TrainComponent_Imp<Base>::ActivateCoupling( EndType end )
 {
 	switch( end )
 	{
-		case RailRunner::EndType::none:
+		case EndType::none:
 			return;
-		case RailRunner::EndType::both:
-		case RailRunner::EndType::any:
-			ActivateCoupling( RailRunner::EndType::north );
-			ActivateCoupling( RailRunner::EndType::south );
+		case EndType::both:
+		case EndType::any:
+			ActivateCoupling( EndType::north );
+			ActivateCoupling( EndType::south );
 			return;
 	}
 
-	std::pair<Bogie&,RailRunner::EndType> coupling = this->GetTipAt( end );
+	std::pair<Bogie&,EndType> coupling = this->GetTipAt( end );
 	coupling.first.ActivateCoupling( coupling.second );
 }
 
 template<class Base>
-void TrainComponent_Imp<Base>::DeactivateCoupling( RailRunner::EndType end )
+void TrainComponent_Imp<Base>::DeactivateCoupling( EndType end )
 {
 	switch( end )
 	{
-		case RailRunner::EndType::none:
+		case EndType::none:
 			return;
-		case RailRunner::EndType::both:
-		case RailRunner::EndType::any:
-			DeactivateCoupling( RailRunner::EndType::north );
-			DeactivateCoupling( RailRunner::EndType::south );
+		case EndType::both:
+		case EndType::any:
+			DeactivateCoupling( EndType::north );
+			DeactivateCoupling( EndType::south );
 			return;
 	}
 
-	std::pair<Bogie&,RailRunner::EndType> coupling = this->GetTipAt( end );
+	std::pair<Bogie&,EndType> coupling = this->GetTipAt( end );
 	coupling.first.DeactivateCoupling( coupling.second );
 }
 
 template<class Base>
-bool TrainComponent_Imp<Base>::IsActivated( RailRunner::EndType end ) const noexcept
+bool TrainComponent_Imp<Base>::IsActivated( EndType end ) const noexcept
 {
 	switch( end )
 	{
-		case RailRunner::EndType::none:
+		case EndType::none:
 			return false;
-		case RailRunner::EndType::any:
-			return IsActivated( RailRunner::EndType::north ) ||
-				IsActivated( RailRunner::EndType::south );
-		case RailRunner::EndType::both:
-			return IsActivated( RailRunner::EndType::north ) &&
-				IsActivated( RailRunner::EndType::south );
+		case EndType::any:
+			return IsActivated( EndType::north ) ||
+				IsActivated( EndType::south );
+		case EndType::both:
+			return IsActivated( EndType::north ) &&
+				IsActivated( EndType::south );
 	}	
 
 	try{
-		std::pair<const Bogie&, RailRunner::EndType> coupling = this->GetTipAt( end );
+		std::pair<const Bogie&, EndType> coupling = this->GetTipAt( end );
 		return coupling.first.IsActivated( coupling.second );
 	}
 	catch( const std::exception& e ){
@@ -246,22 +277,22 @@ bool TrainComponent_Imp<Base>::IsActivated( RailRunner::EndType end ) const noex
 }
 
 template<class Base>
-bool TrainComponent_Imp<Base>::Uncouple( RailRunner::EndType end, bool btriggerPulses ) noexcept
+bool TrainComponent_Imp<Base>::Uncouple( EndType end, bool btriggerPulses ) noexcept
 {
 	switch( end )
 	{
-		case RailRunner::EndType::none:
+		case EndType::none:
 			return false;
-		case RailRunner::EndType::any:
-			return Uncouple( RailRunner::EndType::north, btriggerPulses ) ||
-				Uncouple( RailRunner::EndType::south, btriggerPulses );
-		case RailRunner::EndType::both:
+		case EndType::any:
+			return Uncouple( EndType::north, btriggerPulses ) ||
+				Uncouple( EndType::south, btriggerPulses );
+		case EndType::both:
 		{
 			bool retval = false;
 
-			if( Uncouple( RailRunner::EndType::north, btriggerPulses ) )
+			if( Uncouple( EndType::north, btriggerPulses ) )
 				retval = true;
-			if( Uncouple( RailRunner::EndType::south, btriggerPulses ) )
+			if( Uncouple( EndType::south, btriggerPulses ) )
 				retval = true;
 
 			return retval;
@@ -269,7 +300,7 @@ bool TrainComponent_Imp<Base>::Uncouple( RailRunner::EndType end, bool btriggerP
 	}
 
 	try{
-		std::pair<Bogie&, RailRunner::EndType> coupling = this->GetTipAt( end );
+		std::pair<Bogie&, EndType> coupling = this->GetTipAt( end );
 		return coupling.first.Uncouple( coupling.second, btriggerPulses );
 	}
 	catch( const std::exception& e ){
@@ -283,22 +314,22 @@ bool TrainComponent_Imp<Base>::Uncouple( RailRunner::EndType end, bool btriggerP
 }
 
 template<class Base>
-bool TrainComponent_Imp<Base>::IsCoupled( RailRunner::EndType end ) const noexcept
+bool TrainComponent_Imp<Base>::IsCoupled( EndType end ) const noexcept
 {
 	switch( end )
 	{
-		case RailRunner::EndType::none:
+		case EndType::none:
 			return false;
-		case RailRunner::EndType::any:
-			return IsCoupled( RailRunner::EndType::north ) ||
-				IsCoupled( RailRunner::EndType::south );
-		case RailRunner::EndType::both:
-			return IsCoupled( RailRunner::EndType::north ) &&
-				IsCoupled( RailRunner::EndType::south );
+		case EndType::any:
+			return IsCoupled( EndType::north ) ||
+				IsCoupled( EndType::south );
+		case EndType::both:
+			return IsCoupled( EndType::north ) &&
+				IsCoupled( EndType::south );
 	}
 
 	try{
-		std::pair<const Bogie&, RailRunner::EndType> coupling = this->GetTipAt( end );
+		std::pair<const Bogie&, EndType> coupling = this->GetTipAt( end );
 		return coupling.first.IsCoupled( coupling.second );
 	}
 	catch( const std::exception& e ){
@@ -312,22 +343,22 @@ bool TrainComponent_Imp<Base>::IsCoupled( RailRunner::EndType end ) const noexce
 }
 
 template<class Base>
-Length TrainComponent_Imp<Base>::GetCouplingHeight( RailRunner::EndType end ) const noexcept
+Length TrainComponent_Imp<Base>::GetCouplingHeight( EndType end ) const noexcept
 {
 	switch( end )
 	{
-		case RailRunner::EndType::none:
+		case EndType::none:
 			return 0_m;
-		case RailRunner::EndType::any:
-			return std::min( GetCouplingHeight( RailRunner::EndType::north ), GetCouplingHeight( RailRunner::EndType::south ) );
-		case RailRunner::EndType::both:
-			return std::max( GetCouplingHeight( RailRunner::EndType::north ), GetCouplingHeight( RailRunner::EndType::south ) );
+		case EndType::any:
+			return std::min( GetCouplingHeight( EndType::north ), GetCouplingHeight( EndType::south ) );
+		case EndType::both:
+			return std::max( GetCouplingHeight( EndType::north ), GetCouplingHeight( EndType::south ) );
 		default:
 			break;
 	}
 
 	try{
-		std::pair<const Bogie&, RailRunner::EndType> coupling = this->GetTipAt( end );
+		std::pair<const Bogie&, EndType> coupling = this->GetTipAt( end );
 		return coupling.first.GetCouplingHeight( coupling.second );
 	}
 	catch( const std::exception& e ){
@@ -396,24 +427,46 @@ bool TrainComponent_Imp<Base>::IsParent( const Train& train ) const noexcept
 }
 
 template<class Base>
+void TrainComponent_Imp<Base>::Rail( 
+	const Location& location, 
+	bool bMoveTo, 
+	TrainComponent::DistanceType distance, 
+	bool bFailOnReservationConflicts )
+{
+	if( bFailOnReservationConflicts )
+	{
+		location.Reserve( 
+			{ -this->GetOverhang( EndType::south ), 
+			   this->GetOverhang( EndType::north ) }, 
+			ID() 
+		);
+
+		bool bOverlaps = !location.Overlaps( ID() ).empty();
+		location.DeleteReservation( ID() );
+		if( bOverlaps )
+			throw std::logic_error( "TrainComponent_Imp::Rail: reservation conflict detected." );
+	}
+}
+
+template<class Base>
 bool TrainComponent_Imp<Base>::Couple( 
-	RailRunner::EndType end, 
+	EndType end, 
 	TrainComponent& with, 
-	RailRunner::EndType withEnd, 
+	EndType withEnd, 
 	bool btriggerPulses )
 {
-	if( end == RailRunner::EndType::none || withEnd == RailRunner::EndType::none )
+	if( end == EndType::none || withEnd == EndType::none )
 		return false;
-	if( end == RailRunner::EndType::any || withEnd == RailRunner::EndType::any )
+	if( end == EndType::any || withEnd == EndType::any )
 		return false;
-	if( end == RailRunner::EndType::both || withEnd == RailRunner::EndType::both )
+	if( end == EndType::both || withEnd == EndType::both )
 		return false;
 	// No self coupling:
 	if( &with == this )
 		return false;
 
-	std::pair<Bogie&,RailRunner::EndType> couplingA = this->GetTipAt( end );
-	std::pair<Bogie&,RailRunner::EndType> couplingB = with.GetTipAt( withEnd );
+	std::pair<Bogie&,EndType> couplingA = this->GetTipAt( end );
+	std::pair<Bogie&,EndType> couplingB = with.GetTipAt( withEnd );
 
 	if( couplingA.first.IsCoupled( couplingA.second ) ||
 		couplingB.first.IsCoupled( couplingB.second ) )
@@ -426,18 +479,18 @@ bool TrainComponent_Imp<Base>::Couple(
 }
 
 template<class Base>
-std::pair<std::shared_ptr<TrainComponent>,RailRunner::EndType> 
-TrainComponent_Imp<Base>::GetCoupledTrainComponent( RailRunner::EndType end ) const
+std::pair<std::shared_ptr<TrainComponent>,EndType> 
+TrainComponent_Imp<Base>::GetCoupledTrainComponent( EndType end ) const
 {
-	if( end == RailRunner::EndType::north ||
-		end == RailRunner::EndType::south )
+	if( end == EndType::north ||
+		end == EndType::south )
 	{
-		std::pair<const Bogie&,RailRunner::EndType> coupling = this->GetTipAt( end );
-		if( std::pair<std::shared_ptr<Bogie>,RailRunner::EndType> coupled = coupling.first.GetCoupledBogie( coupling.second ); coupled.first )
+		std::pair<const Bogie&,EndType> coupling = this->GetTipAt( end );
+		if( std::pair<std::shared_ptr<Bogie>,EndType> coupled = coupling.first.GetCoupledBogie( coupling.second ); coupled.first )
 		{
 			if( TrainComponent* pTopMostTrainComponent = coupled.first->GetRollingStock(); pTopMostTrainComponent )
 			{
-				RailRunner::EndType TopMostTrainEnd = coupled.second;
+				EndType TopMostTrainEnd = coupled.second;
 				while( pTopMostTrainComponent->GetTrain() && !IsParent( *pTopMostTrainComponent->GetTrain() ) )
 				{
 					TopMostTrainEnd = pTopMostTrainComponent->GetOrientation() == Orientation::Value::para ? TopMostTrainEnd : !TopMostTrainEnd;
@@ -448,32 +501,32 @@ TrainComponent_Imp<Base>::GetCoupledTrainComponent( RailRunner::EndType end ) co
 			}
 		}
 	}
-	else if( end == RailRunner::EndType::any )
+	else if( end == EndType::any )
 	{
-		if( IsCoupled( RailRunner::EndType::north ) )
-			return GetCoupledTrainComponent( RailRunner::EndType::north );
-		if( IsCoupled( RailRunner::EndType::south ) )
-			return GetCoupledTrainComponent( RailRunner::EndType::south );
+		if( IsCoupled( EndType::north ) )
+			return GetCoupledTrainComponent( EndType::north );
+		if( IsCoupled( EndType::south ) )
+			return GetCoupledTrainComponent( EndType::south );
 	}
 
-	return { nullptr, RailRunner::EndType::none };
+	return { nullptr, EndType::none };
 }
 
 template<class Base>
-Length TrainComponent_Imp<Base>::GetCouplingLength( RailRunner::EndType end, TrainComponent::DistanceType distance ) const
+Length TrainComponent_Imp<Base>::GetCouplingLength( EndType end, TrainComponent::DistanceType distance ) const
 {
 	switch( end )
 	{
-		case RailRunner::EndType::none:
+		case EndType::none:
 			return 0_m;
-		case RailRunner::EndType::any:
-			return std::min( GetCouplingLength( RailRunner::EndType::north ), GetCouplingLength( RailRunner::EndType::south ) );
-		case RailRunner::EndType::both:
-			return std::max( GetCouplingLength( RailRunner::EndType::north ), GetCouplingLength( RailRunner::EndType::south ) );
+		case EndType::any:
+			return std::min( GetCouplingLength( EndType::north ), GetCouplingLength( EndType::south ) );
+		case EndType::both:
+			return std::max( GetCouplingLength( EndType::north ), GetCouplingLength( EndType::south ) );
 	}
 
-	std::pair<const Bogie&,RailRunner::EndType> coupling = this->GetTipAt( end );
-	if( std::pair<std::shared_ptr<Bogie>,RailRunner::EndType> coupled = coupling.first.GetCoupledBogie( coupling.second ); coupled.first )
+	std::pair<const Bogie&,EndType> coupling = this->GetTipAt( end );
+	if( std::pair<std::shared_ptr<Bogie>,EndType> coupled = coupling.first.GetCoupledBogie( coupling.second ); coupled.first )
 	{
 		switch( distance )
 		{
@@ -492,6 +545,41 @@ Length TrainComponent_Imp<Base>::GetCouplingLength( RailRunner::EndType end, Tra
 }
 
 template<class Base>
+bool TrainComponent_Imp<Base>::MakeReservation() const noexcept
+{
+	if( m_bRailed && ID() )
+	{
+		this->GetLocation().Reserve( 
+			{ -this->GetOverhang( EndType::south ), 
+			   this->GetOverhang( EndType::north ) }, 
+			ID() 
+		);
+
+		m_bMadeReservation = true;
+
+		return true;
+	}
+
+	return false;
+}
+
+template<class Base>
+bool TrainComponent_Imp<Base>::DeleteReservation() const noexcept
+{
+	if( m_bRailed && ID() )
+	{
+		if( m_bMadeReservation )
+		{		
+			this->GetLocation().DeleteReservation( ID() );
+			m_bMadeReservation = false;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+template<class Base>
 Jack& TrainComponent_Imp<Base>::JackOnRail() noexcept{
 	return m_JackOnRail;
 }
@@ -502,15 +590,15 @@ Jack& TrainComponent_Imp<Base>::JackOnDerail() noexcept{
 }
 
 template<class Base>
-Jack& TrainComponent_Imp<Base>::JackOnCouple( RailRunner::EndType end )
+Jack& TrainComponent_Imp<Base>::JackOnCouple( EndType end )
 {
 	switch( end )
 	{
-		case RailRunner::EndType::north:
+		case EndType::north:
 			return m_JackOnCoupleNorth;
-		case RailRunner::EndType::south:
+		case EndType::south:
 			return m_JackOnCoupleSouth;
-		case RailRunner::EndType::any:
+		case EndType::any:
 			return m_JackOnCouple;
 		default:
 			throw std::invalid_argument( "TrainComponent_Imp::JackOnCouple: end is none." );
@@ -518,15 +606,15 @@ Jack& TrainComponent_Imp<Base>::JackOnCouple( RailRunner::EndType end )
 }
 
 template<class Base>
-Jack& TrainComponent_Imp<Base>::JackOnUnCouple( RailRunner::EndType end )
+Jack& TrainComponent_Imp<Base>::JackOnUnCouple( EndType end )
 {
 	switch( end )
 	{
-		case RailRunner::EndType::north:
+		case EndType::north:
 			return m_JackOnUnCoupleNorth;
-		case RailRunner::EndType::south:
+		case EndType::south:
 			return m_JackOnUnCoupleSouth;
-		case RailRunner::EndType::any:
+		case EndType::any:
 			return m_JackOnUnCouple;
 		default:
 			throw std::invalid_argument( "TrainComponent_Imp::JackOnUnCouple: end is none." );
@@ -534,15 +622,15 @@ Jack& TrainComponent_Imp<Base>::JackOnUnCouple( RailRunner::EndType end )
 }
 
 template<class Base>
-Jack& TrainComponent_Imp<Base>::JackOnCouplingActivated( RailRunner::EndType end )
+Jack& TrainComponent_Imp<Base>::JackOnCouplingActivated( EndType end )
 {
 	switch( end )
 	{
-		case RailRunner::EndType::north:
+		case EndType::north:
 			return m_JackOnCouplingActivatedNorth;
-		case RailRunner::EndType::south:
+		case EndType::south:
 			return m_JackOnCouplingActivatedSouth;
-		case RailRunner::EndType::any:
+		case EndType::any:
 			return m_JackOnCouplingActivated;
 		default:
 			throw std::invalid_argument( "TrainComponent_Imp::JackOnCouplingActivated: end is none." );
@@ -550,15 +638,15 @@ Jack& TrainComponent_Imp<Base>::JackOnCouplingActivated( RailRunner::EndType end
 }
 
 template<class Base>
-inline Jack& TrainComponent_Imp<Base>::JackOnCouplingDeactivated( RailRunner::EndType end )
+inline Jack& TrainComponent_Imp<Base>::JackOnCouplingDeactivated( EndType end )
 {
 	switch( end )
 	{
-		case RailRunner::EndType::north:
+		case EndType::north:
 			return m_JackOnCouplingDeactivatedNorth;
-		case RailRunner::EndType::south:
+		case EndType::south:
 			return m_JackOnCouplingDeactivatedSouth;
-		case RailRunner::EndType::any:
+		case EndType::any:
 			return m_JackOnCouplingDeactivated;
 		default:
 			throw std::invalid_argument( "TrainComponent_Imp::JackOnUnCouplingDeactivated: end is none." );
@@ -651,8 +739,8 @@ void TrainComponent_Imp<Base>::DisconnectJacks()
 template<class Base>
 void TrainComponent_Imp<Base>::ConnectJacks()
 {
-	std::pair<Bogie&,RailRunner::EndType> couplingTipNorth = this->GetTipAt( RailRunner::EndType::north );
-	std::pair<Bogie&,RailRunner::EndType> couplingTipSouth = this->GetTipAt( RailRunner::EndType::south );
+	std::pair<Bogie&,EndType> couplingTipNorth = this->GetTipAt( EndType::north );
+	std::pair<Bogie&,EndType> couplingTipSouth = this->GetTipAt( EndType::south );
 
 	couplingTipNorth.first.JackOnCouple( couplingTipNorth.second ).InsertAndAppend( &m_JackOnCoupleNorth.PlugToPulse().Make() );
 	couplingTipSouth.first.JackOnCouple( couplingTipSouth.second ).InsertAndAppend( &m_JackOnCoupleSouth.PlugToPulse().Make() );
@@ -684,8 +772,12 @@ void TrainComponent_Imp<Base>::OnRail() noexcept
 template<class Base>
 void TrainComponent_Imp<Base>::OnDerail() noexcept
 {
-	if( m_bRailed ){
+	if( m_bRailed )
+	{
+		DeleteReservation();
+
 		m_bRailed = false;
+
 		m_JackOnDerail.Pulse();
 	}
 }
@@ -693,7 +785,10 @@ void TrainComponent_Imp<Base>::OnDerail() noexcept
 template<class Base>
 void TrainComponent_Imp<Base>::Clear() noexcept
 {	
+	DeleteReservation();
+
 	m_bRailed = false;
+
 	DisconnectJacks();
 }
 

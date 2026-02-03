@@ -288,8 +288,8 @@ ConnectorCollection* TrackSystem_Imp::GetConnectorCollection() const noexcept{
 }
 
 void TrackSystem_Imp::Couple(	
-	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> trackEnd1, 
-	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> trackEnd2 ) const
+	std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd1, 
+	std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd2 ) const
 {
 	if( trackEnd1.first && trackEnd2.first ){
 		trackEnd1.first->Couple( trackEnd1, trackEnd2 );
@@ -348,16 +348,16 @@ std::vector<Track::End> TrackSystem_Imp::GetUncoupledIn( const Sphere<Length>& a
 	std::vector<Track::End> ends;
 	Position<Length> trackEndPos;
 	for( const auto& track : *this ){
-		if( !track.IsCoupled( Track::EndType::front ) ){
+		if( !track.IsCoupled( EndType::north ) ){
 			track.Transition( 0_m, trackEndPos );
 			if( area.Includes(trackEndPos) )
-				ends.push_back( {track.ID(),Track::EndType::front} );
+				ends.push_back( {track.ID(),EndType::north} );
 		}
 
-		if( !track.IsCoupled( Track::EndType::end ) ){
+		if( !track.IsCoupled( EndType::south ) ){
 			track.Transition( track.GetLength(), trackEndPos );
 			if( area.Includes(trackEndPos) )
-				ends.push_back( {track.ID(),Track::EndType::end} );
+				ends.push_back( {track.ID(),EndType::south} );
 		}
 	}
 
@@ -367,38 +367,38 @@ std::vector<Track::End> TrackSystem_Imp::GetUncoupledIn( const Sphere<Length>& a
 void TrackSystem_Imp::Connection( Track::Coupling& coupling ) const{
 	if( !coupling.theOther.id ){
 		if( auto pTrackA = Get( coupling.theOne.id ) )
-			if( Track::TrackEnd trackEndB = pTrackA->TransitionEnd( coupling.theOne.type ); trackEndB.first ){
-				coupling.theOther.id = trackEndB.first->ID();
-				coupling.theOther.type = trackEndB.second;
+			if( Track::TrackEnd trackEndB = pTrackA->TransitionEnd( coupling.theOne.type ); trackEndB.pTrack ){
+				coupling.theOther.id = trackEndB.pTrack->ID();
+				coupling.theOther.type = trackEndB.end;
 			}
 	}
 	else if( !coupling.theOne.id ){
 		if( auto pTrackB = Get( coupling.theOther.id ) )
-			if( Track::TrackEnd trackEndA = pTrackB->TransitionEnd( coupling.theOther.type ); trackEndA.first ){
-				coupling.theOne.id = trackEndA.first->ID();
-				coupling.theOne.type = trackEndA.second;
+			if( Track::TrackEnd trackEndA = pTrackB->TransitionEnd( coupling.theOther.type ); trackEndA.pTrack ){
+				coupling.theOne.id = trackEndA.pTrack->ID();
+				coupling.theOne.type = trackEndA.end;
 			}
 	}
 }
 
 void TrackSystem_Imp::Connection( const Track::End& end, Track::End& coupled ) const{
 	if( auto pTrack = Get( end.id ) )
-		if( Track::TrackEnd otherTrackEnd = pTrack->TransitionEnd( end.type ); otherTrackEnd.first ){
-			coupled.id = otherTrackEnd.first->ID();
-			coupled.type = otherTrackEnd.second;
+		if( Track::TrackEnd otherTrackEnd = pTrack->TransitionEnd( end.type ); otherTrackEnd.pTrack ){
+			coupled.id = otherTrackEnd.pTrack->ID();
+			coupled.type = otherTrackEnd.end;
 		}
 }
 
 void TrackSystem_Imp::Connection( const Track::Coupling& couplings, Track::Coupling& active ) const{
 	if( auto pTrack = Get( couplings.theOne.id ) )
-		if( Track::TrackEnd otherTrackEnd = pTrack->TransitionEnd( couplings.theOne.type ); otherTrackEnd.first ){
-			active.theOne.id = otherTrackEnd.first->ID();
-			active.theOne.type = otherTrackEnd.second;
+		if( Track::TrackEnd otherTrackEnd = pTrack->TransitionEnd( couplings.theOne.type ); otherTrackEnd.pTrack ){
+			active.theOne.id = otherTrackEnd.pTrack->ID();
+			active.theOne.type = otherTrackEnd.end;
 		}
 	if( auto pTrack = Get( couplings.theOther.id ) )
-		if( Track::TrackEnd otherTrackEnd = pTrack->TransitionEnd( couplings.theOther.type ); otherTrackEnd.first ){
-			active.theOther.id = otherTrackEnd.first->ID();
-			active.theOther.type = otherTrackEnd.second;
+		if( Track::TrackEnd otherTrackEnd = pTrack->TransitionEnd( couplings.theOther.type ); otherTrackEnd.pTrack ){
+			active.theOther.id = otherTrackEnd.pTrack->ID();
+			active.theOther.type = otherTrackEnd.end;
 		}
 }
 
@@ -410,11 +410,11 @@ void TrackSystem_Imp::CoupleAll( Length maxDistance, Angle maxKink, bool bSilent
 		{
 			for( TrackBuilder& track : trackCollection )
 			{
-				if( !track.IsCoupled( Track::EndType::front ) )
-					trax::Couple( trackCollection, {track.This(), Track::EndType::front}, maxDistance, maxKink, bSilent );
+				if( !track.IsCoupled( EndType::north ) )
+					trax::Couple( trackCollection, {track.This(), EndType::north}, maxDistance, maxKink, bSilent );
 
-				if( !track.IsCoupled( Track::EndType::end ) )
-					trax::Couple( trackCollection, {track.This(), Track::EndType::end}, maxDistance, maxKink, bSilent );
+				if( !track.IsCoupled( EndType::south ) )
+					trax::Couple( trackCollection, {track.This(), EndType::south}, maxDistance, maxKink, bSilent );
 			}
 		}
 	}
@@ -431,6 +431,10 @@ bool TrackSystem_Imp::Start( Scene& /*scene*/ ) noexcept
 }
 
 void TrackSystem_Imp::Idle() noexcept
+{
+}
+
+void TrackSystem_Imp::PreUpdate()
 {
 }
 
@@ -509,12 +513,12 @@ void TrackSystem_Imp::DoClear(){
 		m_pConnectorCollection->Clear();
 }
 ///////////////////////////////////////
-std::vector<std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>> FindTrackEnds( 
+std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> FindTrackEnds( 
 	const TrackSystem& system, 
 	const spat::Sphere<Length>& area, 
 	bool sort )
 {
-	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>> retval;
+	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> retval;
 
 	if( auto pCollectionContainer = system.GetCollectionContainer() ){
 		for( const auto& trackCollection : *pCollectionContainer ){
@@ -525,7 +529,7 @@ std::vector<std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>> Fin
 
 	if( sort )
 		std::sort( retval.begin(), retval.end(), 
-			[]( const std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& a, const std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>& b ){ return std::get<2>(a) < std::get<2>(b); } );
+			[]( const std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& a, const std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& b ){ return std::get<2>(a) < std::get<2>(b); } );
 
 	return retval; 
 }
@@ -593,11 +597,11 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 	Angle maxKink, 
 	bool bSilent )
 {	
-	if( system.IsMember( *trackEnd.first->This() ) )
+	if( system.IsMember( *trackEnd.pTrack->This() ) )
 	{
 		for( const TrackCollection& collection : *system.GetCollectionContainer() )
 		{
-			if( collection.IsMember( *trackEnd.first->This() ) )
+			if( collection.IsMember( *trackEnd.pTrack->This() ) )
 			{
 				return Couple( 
 					collection, 
@@ -618,7 +622,7 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 			maxKink,
 			bSilent );
 
-		if( coupledTo.first.first || coupledTo.second.first )
+		if( coupledTo.first.pTrack || coupledTo.second.pTrack )
 			return coupledTo;
 	}
 
@@ -632,23 +636,23 @@ std::pair<Track::TrackEnd,Track::TrackEnd> CoupleAndSnap(
 	Angle maxKink, 
 	bool bSilent )
 {
-	std::pair<trax::Track::TrackEnd,trax::Track::TrackEnd> CoupledTo = Couple( 
+	std::pair<Track::TrackEnd,Track::TrackEnd> CoupledTo = Couple( 
 		system, 
 		trackEnd,
 		maxDistance,
 		maxKink,
 		bSilent );
 
-	if( CoupledTo.first.first )
+	if( CoupledTo.first.pTrack )
 	{
-		trax::Snap( 
-			std::make_pair( trackEnd.first, trax::Track::EndType::front ), 
+		Snap( 
+			{ trackEnd.pTrack, EndType::north }, 
 			CoupledTo.first );
 	}
-	else if( CoupledTo.second.first )
+	else if( CoupledTo.second.pTrack )
 	{
-		trax::Snap( 
-			std::make_pair( trackEnd.first, trax::Track::EndType::end ), 
+		Snap( 
+			{ trackEnd.pTrack, EndType::south }, 
 			CoupledTo.second );
 	}
 

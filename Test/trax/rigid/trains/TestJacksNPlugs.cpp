@@ -116,11 +116,11 @@ BOOST_FIXTURE_TEST_CASE( testTrainUncouple, TrainFixture ) //
 
 	std::unique_ptr<PulseCounter> pCounter = PulseCounter::Make();
 
-	pTrain->GetComponent( 1 )->GetTipAt( RailRunner::EndType::south ).first.JackOnUnCouple( RailRunner::EndType::south ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
-	pTrain->GetComponent( 1 )->JackOnUnCouple( RailRunner::EndType::south ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pTrain->GetComponent( 1 )->GetTipAt( EndType::south ).first.JackOnUnCouple( EndType::south ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pTrain->GetComponent( 1 )->JackOnUnCouple( EndType::south ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
 	pTrain->JackOnUnCoupleInternal().InsertAtTail( &pCounter->PlugToCountUp().Make() );
 
-	pTrain->GetComponent( 1 )->Uncouple( RailRunner::EndType::south );
+	pTrain->GetComponent( 1 )->Uncouple( EndType::south );
 	BOOST_CHECK_EQUAL( pCounter->Counter(), 3 );
 
 	std::shared_ptr<Train> pNewTrain = pTrain->Separate();
@@ -138,16 +138,16 @@ BOOST_FIXTURE_TEST_CASE( testOnCouplingActivated, TrainFixture ) //
 	std::shared_ptr<Train> pTrain = reader.GetTrain();
 	BOOST_REQUIRE( pTrain );
 	BOOST_CHECK( pTrain->IsValid() );
-	BOOST_CHECK( !pTrain->IsActivated( RailRunner::EndType::north ) );
-	BOOST_CHECK( !pTrain->IsActivated( RailRunner::EndType::south ) );
+	BOOST_CHECK( !pTrain->IsActivated( EndType::north ) );
+	BOOST_CHECK( !pTrain->IsActivated( EndType::south ) );
 
 	std::unique_ptr<PulseCounter> pCounter = PulseCounter::Make();
 
-	pTrain->GetComponent( 0 )->GetTipAt( RailRunner::EndType::north ).first.JackOnCouplingActivated( RailRunner::EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
-	pTrain->GetComponent( 0 )->JackOnCouplingActivated( RailRunner::EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
-	pTrain->JackOnCouplingActivated( RailRunner::EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pTrain->GetComponent( 0 )->GetTipAt( EndType::north ).first.JackOnCouplingActivated( EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pTrain->GetComponent( 0 )->JackOnCouplingActivated( EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pTrain->JackOnCouplingActivated( EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
 
-	pTrain->ActivateCoupling( RailRunner::EndType::north );
+	pTrain->ActivateCoupling( EndType::north );
 	BOOST_CHECK_EQUAL( pCounter->Counter(), 3 );
 }
 
@@ -158,16 +158,16 @@ BOOST_FIXTURE_TEST_CASE( testOnUnCouplingCoupling, TrainFixture )
 	std::shared_ptr<Train> pTrain = reader.GetTrain();
 	BOOST_REQUIRE( pTrain );
 	BOOST_CHECK( pTrain->IsValid() );
-	BOOST_CHECK( !pTrain->IsActivated( RailRunner::EndType::north ) );
-	BOOST_CHECK( !pTrain->IsActivated( RailRunner::EndType::south ) );
+	BOOST_CHECK( !pTrain->IsActivated( EndType::north ) );
+	BOOST_CHECK( !pTrain->IsActivated( EndType::south ) );
 
 	std::unique_ptr<PulseCounter> pCounter = PulseCounter::Make();
 
 	Plug* pNamedPlug = &pCounter->PlugToCountUp().Make();
 	pNamedPlug->Reference( "parent", "PlugOnUncouple" );
-	pTrain->GetComponent( 0 )->GetTipAt( RailRunner::EndType::north ).first.JackOnUnCouple( RailRunner::EndType::north ).InsertAtTail( pNamedPlug );
-	pTrain->GetComponent( 0 )->JackOnUnCouple( RailRunner::EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
-	pTrain->GetComponent( 0 )->Uncouple( RailRunner::EndType::north );
+	pTrain->GetComponent( 0 )->GetTipAt( EndType::north ).first.JackOnUnCouple( EndType::north ).InsertAtTail( pNamedPlug );
+	pTrain->GetComponent( 0 )->JackOnUnCouple( EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pTrain->GetComponent( 0 )->Uncouple( EndType::north );
 	BOOST_CHECK_EQUAL( pCounter->Counter(), 2 );
 	pCounter->PlugToCountUp().Clear();
 	pCounter->Counter( 0 );
@@ -179,15 +179,15 @@ BOOST_FIXTURE_TEST_CASE( testOnUnCouplingCoupling, TrainFixture )
 	BOOST_CHECK( pTrain->IsValid() );
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 1 );
 
-	pTrain->GetComponent( 0 )->GetTipAt( RailRunner::EndType::north ).first.JackOnCouple( RailRunner::EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
-	pTrain->GetComponent( 0 )->JackOnCouple( RailRunner::EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
-	pTrain->JackOnCouple( RailRunner::EndType::south ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pTrain->GetComponent( 0 )->GetTipAt( EndType::north ).first.JackOnCouple( EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pTrain->GetComponent( 0 )->JackOnCouple( EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pTrain->JackOnCouple( EndType::south ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
 	
-	pOtherTrain->GetComponent( 0 )->GetTipAt( RailRunner::EndType::north ).first.JackOnCouple( RailRunner::EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
-	pOtherTrain->GetComponent( 0 )->JackOnCouple( RailRunner::EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
-	pOtherTrain->JackOnCouple( RailRunner::EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pOtherTrain->GetComponent( 0 )->GetTipAt( EndType::north ).first.JackOnCouple( EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pOtherTrain->GetComponent( 0 )->JackOnCouple( EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
+	pOtherTrain->JackOnCouple( EndType::north ).InsertAtTail( &pCounter->PlugToCountUp().Make() );
 	
-	BOOST_CHECK( pTrain->Couple( RailRunner::EndType::south, *pOtherTrain, RailRunner::EndType::north ) );
+	BOOST_CHECK( pTrain->Couple( EndType::south, *pOtherTrain, EndType::north ) );
 	BOOST_CHECK_EQUAL( pCounter->Counter(), 6 );
 }
 

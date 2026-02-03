@@ -78,7 +78,7 @@ namespace trax{
 			std::unique_ptr<Sensor> CreateKontakt( const boost::property_tree::ptree& pt, 
 				TimerCollection& timerCollection, PulseCounterCollection& pulseCounterCollection, TrackLocation& trackLocation, IDType& maxSensorID ) const;
 
-			Track::EndType From( const std::string& name ) const;
+			EndType From( const std::string& name ) const;
 
 		};
 

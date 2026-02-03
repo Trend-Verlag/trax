@@ -117,10 +117,14 @@ namespace trax{
 
 		/// \brief Gets a Jack that pulses its Plug if the WheelFrame
 		/// gets railed on a track.
+		/// 
+		/// On pulsing IsRailed() will return true, already.
 		dclspc Jack& JackOnRail() noexcept;
 
 		/// \brief Gets a Jack that pulses its Plug if the WheelFrame
 		/// derails.
+		/// 
+		/// On pulsing IsRailed() will return false, already.
 		dclspc Jack& JackOnDerail() noexcept;
 
 		/// \brief Gets a Jack that pulses its Plug if the WheelFrame

@@ -92,7 +92,7 @@ void Connector_Imp::Disconnect(){
 int Connector_Imp::Slot( 
 	const int slot, 
 	std::shared_ptr<TrackBuilder> pTrack, 
-	Track::EndType trackend, 
+	EndType trackend, 
 	bool connectAnonymous )
 {
 	if( !pTrack ){
@@ -137,7 +137,7 @@ int Connector_Imp::Slot(
 	return slot;
 }
 
-int Connector_Imp::Slot( std::shared_ptr<TrackBuilder> pTrack, Track::EndType trackend, bool connectAnonymous ){
+int Connector_Imp::Slot( std::shared_ptr<TrackBuilder> pTrack, EndType trackend, bool connectAnonymous ){
 	for( int slotID = 0; slotID < CntSlots(); ++slotID )
 		if( !Slot( slotID ).first )
 			return Slot( slotID, pTrack, trackend, connectAnonymous );
@@ -145,7 +145,7 @@ int Connector_Imp::Slot( std::shared_ptr<TrackBuilder> pTrack, Track::EndType tr
 	return -1;
 }
 
-std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Connector_Imp::Slot( int slot ) const noexcept{
+std::pair<std::shared_ptr<TrackBuilder>,EndType> Connector_Imp::Slot( int slot ) const noexcept{
 	assert( m_Slots.size() < static_cast<std::size_t>(std::numeric_limits<int>::max()) );
 	if( 0 <= slot && slot < static_cast<int>(m_Slots.size()) )
 		return m_Slots[slot];
@@ -153,7 +153,7 @@ std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Connector_Imp::Slot( int
 	return {};
 }
 
-int Connector_Imp::Slot( const Track& track, Track::EndType trackend ) const noexcept{
+int Connector_Imp::Slot( const Track& track, EndType trackend ) const noexcept{
 	for( int slot = 0; slot < static_cast<int>(m_Slots.size()); ++slot )
 		if( m_Slots[slot].first.get() == &track && m_Slots[slot].second == trackend )
 			return slot;
@@ -267,8 +267,8 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 			if( e_distance > 0_m ){
 				if( DistanceToCoupled( *pTrack, m_Slots[slot].second ) > e_distance ){
 					os << Verbosity::verbose << "Distance to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
-						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
-						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
+						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
+						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
 						<< " Distance: " << DistanceToCoupled( *pTrack, m_Slots[slot].second ) << std::endl;
 					bOk = false;
 				}
@@ -277,8 +277,8 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 			if( e_kink > 0_deg ){
 				if( KinkToCoupled( *pTrack, m_Slots[slot].second ) > e_kink ){
 					os << Verbosity::verbose << "Kink to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
-						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
-						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
+						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
+						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
 						<< " Kink: " << _deg(KinkToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
 					bOk = false;
 				}
@@ -287,8 +287,8 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 			if( e_twist > 0_deg ){
 				if( TwistToCoupled( *pTrack, m_Slots[slot].second ) > e_twist ){
 					os << Verbosity::verbose << "Twist to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
-						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).first->ID() << "," 
-						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).second) << ")."
+						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
+						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
 						<< " Twist: " << _deg(TwistToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
 					bOk = false;
 				}
@@ -304,8 +304,8 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 }
 ///////////////////////////////////////
 void Couple( 
-	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> trackEndA, 
-	std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> trackEndB, 
+	std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEndA, 
+	std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEndB, 
 	int slotA,
 	int slotB,
 	bool connectAnyway )
@@ -350,16 +350,16 @@ void Couple(
 		trackEndA.first->Couple( trackEndA, trackEndB );
 }
 
-void DeCouple( TrackBuilder& track, Track::EndType trackend, int ownerSlot )
+void DeCouple( TrackBuilder& track, EndType trackend, int ownerSlot )
 {
 	if( auto pConnector = track.GetConnector(trackend) ){
 		int slot = pConnector->Slot(track,trackend);
 		if( slot != ownerSlot )
 			pConnector->Clear( slot );
 
-		if( Track::TrackEnd otherTrack = track.TransitionEnd( trackend ); otherTrack.first ){
+		if( Track::TrackEnd otherTrack = track.TransitionEnd( trackend ); otherTrack.pTrack ){
 			assert( pConnector == otherTrack.first->GetConnector(otherTrack.second) );
-			slot = pConnector->Slot(*otherTrack.first,otherTrack.second);
+			slot = pConnector->Slot(*otherTrack.pTrack,otherTrack.end);
 			if( slot != ownerSlot )
 				pConnector->Clear( slot );
 		}
@@ -372,7 +372,7 @@ Location GetFarEndLocation( const Connector& connector, int slotID )
 {
 	auto trackEnd = connector.Slot(slotID); 
 	if( trackEnd.first )
-		return Location{ trackEnd.first, (trackEnd.second == Track::EndType::front) ? 
+		return Location{ trackEnd.first, (trackEnd.second == EndType::north) ? 
 											TrackLocation{ trackEnd.first->GetLength(), Orientation::Value::para } : 
 											TrackLocation{ 0_m, Orientation::Value::anti } };
 
@@ -383,7 +383,7 @@ Location GetEndLocation( const Connector& connector, int slotID )
 {
 	auto trackEnd = connector.Slot(slotID); 
 	if( trackEnd.first )
-		return Location{ trackEnd.first, (trackEnd.second == Track::EndType::front) ? 
+		return Location{ trackEnd.first, (trackEnd.second == EndType::north) ? 
 											TrackLocation{ 0_m, Orientation::Value::para } : 
 											TrackLocation{ trackEnd.first->GetLength(), Orientation::Value::anti } };
 
@@ -397,7 +397,7 @@ spat::Vector<Length> DistanceToOtherEnd( const Connector& connector, int fromSlo
 		spat::Position<Length> p1, p2;
 		trackEnd.first->Transition( 0_m, p1 );
 		trackEnd.first->Transition( trackEnd.first->GetLength(), p2 );
-		return (trackEnd.second == Track::EndType::front ? +1 : -1) * (p2 - p1);
+		return (trackEnd.second == EndType::north ? +1 : -1) * (p2 - p1);
 	}
 
 	throw std::runtime_error( "Slot not connected!" );

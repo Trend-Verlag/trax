@@ -292,10 +292,10 @@ namespace trax{
 		virtual Jack& JackOnSouthSwivelBendingOut() noexcept = 0;
 	};
 
-	dclspc bool Couple( std::pair<Bogie&,RailRunner::EndType> a, std::pair<Bogie&,RailRunner::EndType> b ) noexcept;
+	dclspc bool Couple( std::pair<Bogie&,EndType> a, std::pair<Bogie&,EndType> b ) noexcept;
 
 	dclspc bool AreCoupled( const Bogie& a, const Bogie& b ) noexcept;
 
-	dclspc Length GetCouplingDistance( std::pair<const Bogie&,RailRunner::EndType> a, std::pair<const Bogie&,RailRunner::EndType> b ) noexcept;
+	dclspc Length GetCouplingDistance( std::pair<const Bogie&,EndType> a, std::pair<const Bogie&,EndType> b ) noexcept;
 }
 

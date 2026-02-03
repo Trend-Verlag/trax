@@ -92,20 +92,17 @@ bool Train_Imp::IsValid() const noexcept
 
 	for( auto iter = m_Train.begin(); iter != m_Train.end() - 1; ++iter )
 	{
-		if( (*iter)->GetCoupledTrainComponent( Back( **iter ) ) != std::make_pair( *(iter + 1), Front( **(iter + 1) ) ) )
+		if( (*iter)->GetCoupledTrainComponent( South( **iter ) ) != std::make_pair( *(iter + 1), North( **(iter + 1) ) ) )
 			return false;
 	}
 
 	return true;
 }
 
-void Train_Imp::Rail( const Location& location, bool bMoveTo )
+void Train_Imp::Rail( const Location& location, bool bMoveTo, DistanceType distance, bool bFailOnReservationConflicts )
 {
-	Rail( location, bMoveTo, TrainComponent::DistanceType::actual );
-}
+	Train_Base::Rail( location, bMoveTo, distance, bFailOnReservationConflicts );
 
-void Train_Imp::Rail( const Location& location, bool bMoveTo, DistanceType distance )
-{
 	std::vector<Location> railLocations;
 	Location componentLocation = location;
 	m_Train.front()->GetOrientation() ?
@@ -142,6 +139,7 @@ void Train_Imp::Rail( const Location& location, bool bMoveTo, DistanceType dista
 }
 
 Location Train_Imp::GetLocation() const noexcept{
+	assert( IsValid() );
 	return m_Train.front()->GetOrientation() ? 
 		m_Train.front()->GetLocation() : m_Train.front()->GetLocation().Flip();
 }
@@ -158,7 +156,7 @@ bool Train_Imp::IsRailed() const noexcept
 		if( !pTrainComponent->IsRailed() )
 			return false;
 
-	return true;
+	return !m_Train.empty();
 }
 
 spat::Frame<Length,One> Train_Imp::GetGlobalAnchor() const{
@@ -244,7 +242,7 @@ Velocity Train_Imp::TargetVelocity() const noexcept
 	return targetVelocity / m_Train.size();
 }
 
-RailRunner::EndType Train_Imp::TargetDirection() const noexcept{
+EndType Train_Imp::TargetDirection() const noexcept{
 	return m_Train.front()->TargetDirection();
 }
 
@@ -396,7 +394,7 @@ Length Train_Imp::GetLength( DistanceType distance ) const noexcept{
 	return length;
 }
 
-std::pair<Bogie&,RailRunner::EndType> Train_Imp::GetTipAt( EndType end )
+std::pair<Bogie&,EndType> Train_Imp::GetTipAt( EndType end )
 {
 	if( m_Train.empty() )
 		throw std::runtime_error( "Train_Imp::GetTipAt: empty train" );
@@ -415,7 +413,7 @@ std::pair<Bogie&,RailRunner::EndType> Train_Imp::GetTipAt( EndType end )
 	throw std::invalid_argument( "Train_Imp::GetTipAt: invalid end type" );
 }
 
-std::pair<const Bogie&,RailRunner::EndType> Train_Imp::GetTipAt( EndType end ) const
+std::pair<const Bogie&,EndType> Train_Imp::GetTipAt( EndType end ) const
 {
 	if( m_Train.empty() )
 		throw std::runtime_error( "Train_Imp::GetTipAt: empty train" );
@@ -432,6 +430,20 @@ std::pair<const Bogie&,RailRunner::EndType> Train_Imp::GetTipAt( EndType end ) c
 	}
 
 	throw std::invalid_argument( "Train_Imp::GetTipAt: invalid end type" );
+}
+
+bool Train_Imp::MakeReservation() const noexcept
+{
+	if( m_Train.empty() )
+		return false;
+
+
+	return false;
+}
+
+bool Train_Imp::DeleteReservation() const noexcept
+{
+	return false;
 }
 
 std::shared_ptr<Train> Train_Imp::ThisTrain() const noexcept
@@ -570,7 +582,7 @@ void Train_Imp::Align(
 {
 	Align( atEnd, 
 		   component, 
-		   orientation ? trax::RailRunner::EndType::north : trax::RailRunner::EndType::south );
+		   orientation ? EndType::north : EndType::south );
 }
 
 void Train_Imp::Append( 
@@ -611,7 +623,7 @@ void Train_Imp::Append(
 {
 	Append( atEnd, 
 			pComponent, 
-			orientation ? trax::RailRunner::EndType::north : trax::RailRunner::EndType::south,
+			orientation ? EndType::north : EndType::south,
 			bCouple );
 }
 
@@ -783,8 +795,8 @@ void Train_Imp::Clear() noexcept
 }
 
 bool Train_Imp::Couple( EndType end, Train& with, EndType withEnd ){
-	std::pair<Bogie&,RailRunner::EndType> coupling = GetTipAt( end );
-	std::pair<Bogie&,RailRunner::EndType> withcoupling = with.GetTipAt( withEnd );
+	std::pair<Bogie&,EndType> coupling = GetTipAt( end );
+	std::pair<Bogie&,EndType> withcoupling = with.GetTipAt( withEnd );
 	return coupling.first.Couple( coupling.second, withcoupling.first, withcoupling.second );
 }
 
@@ -801,7 +813,7 @@ bool Train_Imp::IsUnCoupledInternally() const noexcept
 				return true;
 		}
 
-		if( !(*iter)->IsCoupled( Back( GetOrientation() ) ) )
+		if( !(*iter)->IsCoupled( South( GetOrientation() ) ) )
 			return true;
 	}
 
@@ -852,7 +864,7 @@ void Train_Imp::ConnectJacks()
 		pTrainComponent->JackOnDerail().InsertAtTail( &m_PlugDerail.Make() );
 
 		if( pTrainComponent != m_Train.back() )
-			pTrainComponent->JackOnUnCouple( Back( *pTrainComponent ) ).InsertAtTail( 
+			pTrainComponent->JackOnUnCouple( South( *pTrainComponent ) ).InsertAtTail( 
 					&m_JackOnUnCoupleInternal.PlugToPulse().Make() );
 
 		if( std::shared_ptr<Train> pTrain = std::dynamic_pointer_cast<Train>(pTrainComponent) )
@@ -862,7 +874,7 @@ void Train_Imp::ConnectJacks()
 	}
 }
 
-std::pair<std::shared_ptr<TrainComponent>,RailRunner::EndType> Train_Imp::GetTipAt( 
+std::pair<std::shared_ptr<TrainComponent>,EndType> Train_Imp::GetTipAt( 
 	const TrainComponent& trainComponent, 
 	EndType end ) const
 {

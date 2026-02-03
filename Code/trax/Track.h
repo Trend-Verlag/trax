@@ -289,17 +289,24 @@ namespace trax
 
 		virtual TrackType GetTrackType() const noexcept = 0;
 
-		/// \brief Designates one of the two ends of a track.
-		enum class EndType : char{
-			none	= -1,
-			front	= 0,	///< Designates the front end.
-			end		= 1,	///< Designates the far end.
-			any,			///< Denotes the north or south end of a Railrunner.
-			both			///< Denotes both ends.
+
+		struct TrackEnd {
+			std::shared_ptr<Track> pTrack;
+			EndType end;
+   		};
+
+		struct cTrackEnd {
+			std::shared_ptr<const Track> pTrack;
+			EndType end;
+    
+			// Allow implicit conversion from non-const
+			cTrackEnd( const TrackEnd& other ) noexcept 
+				: pTrack{ other.pTrack }, end{ other.end } {}
+    
+			cTrackEnd( std::shared_ptr<const Track> track, EndType e ) noexcept 
+				: pTrack{ track }, end{ e } {}
 		};
 
-		typedef std::pair<std::shared_ptr<Track>,EndType> TrackEnd;
-		typedef std::pair<std::shared_ptr<const Track>,const EndType> cTrackEnd;
 
 		/// \brief Designates an end at a specific track.
 		struct End{
@@ -310,11 +317,11 @@ namespace trax
 			{}
 
 			End( const TrackEnd& trackEnd ) noexcept
-			: id	{ trackEnd.first ? trackEnd.first->ID() : IDType{0u} },
-			  type	{ trackEnd.second }
+			: id	{ trackEnd.pTrack ? trackEnd.pTrack->ID() : IDType{0u} },
+			  type	{ trackEnd.end }
 			{}
 
-			End( const std::pair<std::shared_ptr<TrackBuilder>,Track::EndType>& trackEnd ) noexcept;
+			End( const std::pair<std::shared_ptr<TrackBuilder>,EndType>& trackEnd ) noexcept;
 
 			IDType	id;						///< Identifier of the track.
 			EndType	type = EndType::none;	///< front or end end of the track.
@@ -621,18 +628,7 @@ namespace trax
 
 
 	/// \brief Makes a string from the status
-	dclspc std::string ToString( Track::EndType end );
-
-
-	/// \brief Makes a status value from a status string.
-	/// \throws std::invalid_argument if the string was not recognized.
-	dclspc Track::EndType ToEndType( const std::string& end );
-
-
-	/// \returns The other end.
-	inline Track::EndType operator!( Track::EndType end ) noexcept{
-		return end == Track::EndType::front ? Track::EndType::end : Track::EndType::front;
-	}
+	dclspc std::string ToString( EndType end );
 
 
 	/// \defgroup Group_Segments Track's Segments
@@ -788,6 +784,9 @@ namespace trax
 
 	/// \brief Closest point on a track to a ray in space.
 	dclspc Length Closest( const spat::VectorBundle<Length,One>& toRay, const Track& onTrack, bool includeEndpoints = true );
+
+	/// \returns the tracks end closest to the given point in space.
+	dclspc EndType ClosestEnd( const spat::Position<Length>& toPoint, const Track& onTrack );
 	///@}
 
 
@@ -801,35 +800,39 @@ namespace trax
 	/// Be aware that tracks coupled to each other will hold cyclic strong references, so 
 	/// they will produce a memory leak if not uncoupled. For this reason make tracks members
 	/// of a TrackSystem.
-	/// \param trackA shared pointer and track end.
-	/// \param trackB track and end trackA is to be coupled with.
+	/// \param trackEndA shared pointer and track end.
+	/// \param trackEndB track and end trackEndA is to be coupled with.
 	/// \throws std::invalid_argument If the end type is not recocnised.
 	/// \throws std::logic_error If the track end could not coupled, e.g. because of self coupling.
-	dclspc void Couple( std::pair<std::shared_ptr<Track>,Track::EndType> trackA, std::pair<std::shared_ptr<Track>,Track::EndType> trackB );
+	dclspc void Couple( Track::TrackEnd trackEndA, Track::TrackEnd trackEndB );
+
+
+	/// \returns true if the two track ends are coupled to each other.
+	dclspc bool Coupled( const Track::cTrackEnd& trackEndA, const Track::cTrackEnd& trackEndB ) noexcept;
 
 
 	/// \returns the 3D distance between two track ends. If 
 	/// the distance can not be calculated, +infinite_length is returned.
 	/// \throws std::invalid_argument if any of the track ends is invalid.
-	dclspc Length DistanceOf( Track::cTrackEnd trackEndA, Track::cTrackEnd trackEndB );
+	dclspc Length DistanceOf( const Track::cTrackEnd& trackEndA, const Track::cTrackEnd& trackEndB );
 
 
 	/// \returns The 3D distance of the coupled track, if any. 
 	/// \throws std::invalid_argument if any of the track ends is invalid.
 	/// \throws std::logic_error if the track end is not coupled.
-	dclspc Length DistanceToCoupled( const Track& track, Track::EndType atEnd );
+	dclspc Length DistanceToCoupled( const Track& track, EndType atEnd );
 
 
 	/// \returns The angle of the tangent of the coupled track, if any. 
 	/// \throws std::invalid_argument if any of the track ends is invalid.
 	/// \throws std::logic_error if the track end is not coupled.
-	dclspc Angle KinkToCoupled( const Track& track, Track::EndType atEnd );
+	dclspc Angle KinkToCoupled( const Track& track, EndType atEnd );
 
 
 	/// \returns The angle of the binormal of the coupled track, if any. 
 	/// \throws std::invalid_argument if any of the track ends is invalid.
 	/// \throws std::logic_error if the track end is not coupled.
-	dclspc Angle TwistToCoupled( const Track& track, Track::EndType atEnd );
+	dclspc Angle TwistToCoupled( const Track& track, EndType atEnd );
 
 
 
@@ -901,7 +904,7 @@ namespace trax
 		/// \param thisEnd Shared pointer to this track and end of this track to be coupled. This is not derivable from this, 
 		/// so it has to be supplied with the function call...
 		/// \param othersEnd track and end this one is to be coupled with.
-		virtual void Couple( std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> thisEnd, std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> othersEnd ) = 0;
+		virtual void Couple( std::pair<std::shared_ptr<TrackBuilder>,EndType> thisEnd, std::pair<std::shared_ptr<TrackBuilder>,EndType> othersEnd ) = 0;
 
 
 		/// \brief Remove coupling from this end.
@@ -1051,10 +1054,18 @@ namespace trax
 		virtual void DestroyEndTransitionSignal( EndType atend ) = 0;
 	};
 
-	/// \brief Tests whether the end is a concrete end (front or end)
+	/// \brief Tests whether the end is a concrete end (north or south)
 	/// on an existing track.
-	template<class EndType>
-	bool IsConcreteEnd( EndType end ) noexcept;
+	template<class TrackEndType>
+	bool IsConcreteEnd( TrackEndType end ) noexcept;
+
+	/// \returns true if end denotes avalid track end.
+	template<class TrackEndType> inline
+	bool IsValid( TrackEndType end ) noexcept;
+
+	/// \returns true if the track end is coupled to another track.
+	template<class TrackEndType> inline
+	bool IsCoupled( TrackEndType end ) noexcept;
 
 
 	/// \brief Same as track.SetFrame( start, s ), but does not throw.
@@ -1381,7 +1392,7 @@ namespace trax
 
 ///////////////////////////////////////
 // inlines:
-inline Track::End::End( const std::pair<std::shared_ptr<TrackBuilder>,Track::EndType>& trackEnd ) noexcept
+inline Track::End::End( const std::pair<std::shared_ptr<TrackBuilder>,EndType>& trackEnd ) noexcept
 	: id	{ trackEnd.first ? trackEnd.first->ID() : IDType{0u} }
 	, type	{ trackEnd.second }
 {}
@@ -1456,10 +1467,22 @@ inline bool operator<( const Track::Overlap& a, const Track::Overlap& b ) noexce
 //		return !(tbA == tbB);
 //}
 
-template<class EndType> inline
-bool IsConcreteEnd( EndType end ) noexcept
+template<class TrackEndType> inline
+bool IsConcreteEnd( TrackEndType end ) noexcept
 {
-	return end.first && (end.second == Track::EndType::front || end.second == Track::EndType::end);
+	return end.pTrack && (end.end == EndType::north || end.end == EndType::south);
+}
+
+template<class TrackEndType> inline
+bool IsValid( TrackEndType end ) noexcept{
+	return IsConcreteEnd(end) && end.pTrack->IsValid();
+}
+
+template<class TrackEndType> inline
+bool IsCoupled( TrackEndType end ) noexcept{
+	if( IsValid(end) ) 
+		return end.pTrack->IsCoupled( end );
+	return false;
 }
 
 }

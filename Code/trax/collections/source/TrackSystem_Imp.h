@@ -95,7 +95,7 @@ namespace trax{
 
 		ConnectorCollection* GetConnectorCollection	() const noexcept override;
 
-		void Couple( std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> trackEnd2 ) const override;
+		void Couple( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd2 ) const override;
 
 		void Couple( const Track::Coupling& coupling, bool bUncoupledOnly = false ) const override;
 
@@ -120,6 +120,8 @@ namespace trax{
 		bool Start( Scene& scene ) noexcept override;
 
 		void Idle() noexcept override;
+
+		void PreUpdate() override;
 
 		void Update( Time dt ) noexcept override;
 

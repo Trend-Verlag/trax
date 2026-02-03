@@ -68,43 +68,43 @@ void MovableTrackAutoConnecting_Imp::Update( const TrackSystem& trackSystem ){
 			Transition( 0_m, posFront );
 			Transition( GetLength(), posEnd );
 
-			if( TrackEnd coupledEnd = TransitionEnd( EndType::front ); coupledEnd.first ){
+			if( TrackEnd coupledEnd = TransitionEnd( EndType::north ); coupledEnd.pTrack ){
 				Position<Length> posOther;
-				coupledEnd.first->Transition( coupledEnd.second == EndType::front ? 0_m : coupledEnd.first->GetLength(), posOther );
+				coupledEnd.pTrack->Transition( coupledEnd.end == EndType::north ? 0_m : coupledEnd.pTrack->GetLength(), posOther );
 				if( (posOther-posFront).Length() > m_AutoConnectingDistance ){
-					DeCouple( EndType::front );
+					DeCouple( EndType::north );
 					std::clog << "trax: Trackfront decoupled!" << std::endl;
 				}
 			}
 
-			if( TrackEnd coupledEnd = TransitionEnd( EndType::end ); coupledEnd.first ){
+			if( TrackEnd coupledEnd = TransitionEnd( EndType::south ); coupledEnd.pTrack ){
 				Position<Length> posOther;
-				coupledEnd.first->Transition( coupledEnd.second == EndType::front ? 0_m : coupledEnd.first->GetLength(), posOther );
+				coupledEnd.pTrack->Transition( coupledEnd.end == EndType::north ? 0_m : coupledEnd.pTrack->GetLength(), posOther );
 				if( (posOther-posEnd).Length() > m_AutoConnectingDistance ){
-					DeCouple( EndType::end );
+					DeCouple( EndType::south );
 					std::clog << "trax: Trackend decoupled!" << std::endl;
 				}
 			}
 	
-			if( !IsCoupled( EndType::front ) ){
+			if( !IsCoupled( EndType::north ) ){
 				std::vector<Track::End> ends = trackSystem.GetUncoupledIn( Sphere<Length>{posFront,m_AutoConnectingDistance} );
 				assert( !ends.empty() );
 				if( ends.size() > 1 )
 					for( const Track::End foundEnd : ends )
 						if( foundEnd.id != ID() ){
-							trackSystem.Couple( Track::Coupling{ {ID(),EndType::front}, foundEnd } );
+							trackSystem.Couple( Track::Coupling{ {ID(),EndType::north}, foundEnd } );
 							std::clog << "trax: Trackfront coupled!" << std::endl;
 							break;
 						}
 			}
 
-			if( !IsCoupled( EndType::end ) ){
+			if( !IsCoupled( EndType::south ) ){
 				std::vector<Track::End> ends = trackSystem.GetUncoupledIn( Sphere<Length>{posEnd,m_AutoConnectingDistance} );
 				assert( !ends.empty() );
 				if( ends.size() > 1 )
 					for( const Track::End foundEnd : ends )
 						if( foundEnd.id != ID() ){
-							trackSystem.Couple( Track::Coupling{ {ID(),EndType::end}, foundEnd } );
+							trackSystem.Couple( Track::Coupling{ {ID(),EndType::south}, foundEnd } );
 							std::clog << "trax: Trackend coupled!" << std::endl;
 							break;
 						}

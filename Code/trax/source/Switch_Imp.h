@@ -48,11 +48,11 @@ namespace trax{
 
 		void Toggle( bool pulse = true ) override;
 
-		void Set( const Track& trackA, Track::EndType trackendA, const Track& trackB, Track::EndType trackendB, bool pulse = true ) override;
+		void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) override;
 
 		using Connector_Imp::Slot;
 
-		int Slot( int slot, std::shared_ptr<TrackBuilder> pTrack, Track::EndType trackend, bool connectAnonymous = false ) override;
+		int Slot( int slot, std::shared_ptr<TrackBuilder> pTrack, EndType trackend, bool connectAnonymous = false ) override;
 
 		bool Check( std::ostream& os, Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
 
@@ -68,21 +68,21 @@ namespace trax{
 
 		Status Get() const noexcept override;
 
-		void NarrowTrack(std::shared_ptr<TrackBuilder> pNarrowTrack,Track::EndType trackend) override;
+		void NarrowTrack(std::shared_ptr<TrackBuilder> pNarrowTrack,EndType trackend) override;
 
-		std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> NarrowTrack() const noexcept override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> NarrowTrack() const noexcept override;
 
 		void ClearNarrowTrack() override;
 
-		void StraightTrack(std::shared_ptr<TrackBuilder> pStaightTrack,Track::EndType trackend) override;
+		void StraightTrack(std::shared_ptr<TrackBuilder> pStaightTrack,EndType trackend) override;
 
-		std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> StraightTrack() const noexcept override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> StraightTrack() const noexcept override;
 
 		void ClearStraightTrack() override;
 
-		void DivergedTrack( int divTrackID, std::shared_ptr<TrackBuilder> pDivergedTrack,Track::EndType trackend) override;
+		void DivergedTrack( int divTrackID, std::shared_ptr<TrackBuilder> pDivergedTrack,EndType trackend) override;
 
-		std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> DivergedTrack( int divTrackID ) const noexcept override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack( int divTrackID ) const noexcept override;
 
 		void ClearDivergedTrack( int divTrackID ) override;
 
@@ -137,9 +137,9 @@ namespace trax{
 		// Switch:
 		using NarrowSwitch_Imp::DivergedTrack;
 
-		void DivergedTrack( std::shared_ptr<TrackBuilder> pDivergedTrack, Track::EndType trackend ) override;
+		void DivergedTrack( std::shared_ptr<TrackBuilder> pDivergedTrack, EndType trackend ) override;
 
-		std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> DivergedTrack() const noexcept override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack() const noexcept override;
 
 		using NarrowSwitch_Imp::ClearDivergedTrack;
 
@@ -187,15 +187,15 @@ namespace trax{
 
 		// ThreeWaySwitch:
 
-		void DivergedTrack1(std::shared_ptr<TrackBuilder> pDivergedTrack,Track::EndType trackend) override;
+		void DivergedTrack1(std::shared_ptr<TrackBuilder> pDivergedTrack,EndType trackend) override;
 
-		std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> DivergedTrack1() const noexcept override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack1() const noexcept override;
 
 		void ClearDivergedTrack1() override;
 
-		void DivergedTrack2(std::shared_ptr<TrackBuilder> pDivergedTrack,Track::EndType trackend) override;
+		void DivergedTrack2(std::shared_ptr<TrackBuilder> pDivergedTrack,EndType trackend) override;
 
-		std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> DivergedTrack2() const noexcept override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack2() const noexcept override;
 
 		void ClearDivergedTrack2() override;
 
@@ -243,7 +243,7 @@ namespace trax{
 
 		void Toggle( bool pulse = true ) override;
 
-		void Set( const Track& trackA, Track::EndType trackendA, const Track& trackB, Track::EndType trackendB, bool pulse = true ) override;
+		void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) override;
 
 		bool Check( std::ostream& os, Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
 
@@ -265,7 +265,7 @@ namespace trax{
 		// Connector
 		using Connector_Imp::Slot;
 
-		int Slot( int slot,std::shared_ptr<TrackBuilder> pTrack, Track::EndType trackend, bool connectAnonymous = false ) override;
+		int Slot( int slot,std::shared_ptr<TrackBuilder> pTrack, EndType trackend, bool connectAnonymous = false ) override;
 
 		void RegisterSockets( SocketRegistry& module ) override;
 
@@ -307,7 +307,7 @@ namespace trax{
 
 		void Toggle( bool pulse = true ) override;
 
-		void Set( const Track& trackA, Track::EndType trackendA, const Track& trackB, Track::EndType trackendB, bool pulse = true ) override;
+		void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) override;
 
 		bool Check( std::ostream& os, Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
 
@@ -330,7 +330,7 @@ namespace trax{
 		// Connector
 		using Connector_Imp::Slot;
 
-		int Slot( int slot,std::shared_ptr<TrackBuilder> pTrack, Track::EndType trackend, bool connectAnonymous = false ) override;
+		int Slot( int slot,std::shared_ptr<TrackBuilder> pTrack, EndType trackend, bool connectAnonymous = false ) override;
 
 		void RegisterSockets( SocketRegistry& module ) override;
 

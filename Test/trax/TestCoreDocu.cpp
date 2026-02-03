@@ -181,10 +181,10 @@ BOOST_AUTO_TEST_CASE( test_docu_location )
 	pArc4->Create( { Origin3D<Length>, { 0, -1, 0 }, { 10, 0, 0 } } );
 	pTrack4->Attach( std::move(pArc4), {0_m, 10_m*pi/2} );
  
-	pTrack1->Couple( std::make_pair(pTrack1, Track::EndType::end), std::make_pair(pTrack2, Track::EndType::front) );
-	pTrack2->Couple( std::make_pair(pTrack2, Track::EndType::end), std::make_pair(pTrack3, Track::EndType::front) );
-	pTrack3->Couple( std::make_pair(pTrack3, Track::EndType::end), std::make_pair(pTrack4, Track::EndType::front) );
-	pTrack4->Couple( std::make_pair(pTrack4, Track::EndType::end), std::make_pair(pTrack1, Track::EndType::front) );
+	pTrack1->Couple( std::make_pair(pTrack1, EndType::south), std::make_pair(pTrack2, EndType::north) );
+	pTrack2->Couple( std::make_pair(pTrack2, EndType::south), std::make_pair(pTrack3, EndType::north) );
+	pTrack3->Couple( std::make_pair(pTrack3, EndType::south), std::make_pair(pTrack4, EndType::north) );
+	pTrack4->Couple( std::make_pair(pTrack4, EndType::south), std::make_pair(pTrack1, EndType::north) );
  
 	Location loc{ pTrack1, { 0_m, Orientation::Value::para } };
  

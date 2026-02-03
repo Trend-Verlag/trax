@@ -78,6 +78,8 @@ namespace trax{
 
 		void Idle() noexcept override;
 
+		void PreUpdate() override;
+
 		void Update( Time dt ) override;
 
 		void Pause() noexcept override;
@@ -92,6 +94,9 @@ namespace trax{
 
 		void RegisterBogies( const Train& train ) noexcept;
 		void UnregisterBogies( const Train& train ) noexcept;
+
+		void MakeReservations() const noexcept;
+		void DeleteReservations() const noexcept;
 
 		class FPlugEnumerator : public trax::PlugEnumerator
 		{
@@ -121,6 +126,6 @@ namespace trax{
 		std::vector<std::unique_ptr<FPlugEnumerator>> m_PlugEnumerators;
 		std::vector<Train*> m_TrainsSeparated;
 		void SeparateTrains();
-		void ProduceCommonTrain( const Bogie& bogieA, RailRunner::EndType endA, const Bogie& bogieB, RailRunner::EndType endB );
+		void ProduceCommonTrain( const Bogie& bogieA, EndType endA, const Bogie& bogieB, EndType endB );
 	};
 }

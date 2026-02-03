@@ -50,9 +50,9 @@ namespace trax{
 	
 	/// \brief Streams trax objects.
 	/// \ingroup Group_StreamingFunctions
-	inline std::ostream& operator << ( std::ostream& os, const Track::EndType& endType );
+	inline std::ostream& operator << ( std::ostream& os, const EndType& endType );
 
-	inline std::istream& operator >> ( std::istream& is, Track::EndType& endType );
+	inline std::istream& operator >> ( std::istream& is, EndType& endType );
 
 	inline std::ostream& operator << ( std::ostream& os, const Track::End& end );
 
@@ -114,16 +114,16 @@ namespace trax{
 
 
 
-	inline std::ostream& operator << ( std::ostream& os, const Track::EndType& endType ){
-		os << "Track::EndType( " << ToString( endType ) << " )";
+	inline std::ostream& operator << ( std::ostream& os, const EndType& endType ){
+		os << "EndType( " << ToString( endType ) << " )";
 		return os;
 	}
 
-	inline std::istream& operator >> ( std::istream& is, Track::EndType& endType ){
+	inline std::istream& operator >> ( std::istream& is, EndType& endType ){
 		std::string token;
 		is >> token;
-		if( token != "Track::EndType(" )
-			throw std::runtime_error( "No Track::EndType" );
+		if( token != "EndType(" )
+			throw std::runtime_error( "No EndType" );
 
 		char c;
 		is >> token;

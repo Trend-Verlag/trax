@@ -153,22 +153,6 @@ bool RollingStock_Imp::IsValid() const noexcept
 	return true;
 }
 
-void RollingStock_Imp::Rail( const Location& location, bool bMoveTo )
-{
-	assert( !m_TopmostBogies.empty() );
-
-	m_TopmostBogies.front()->Rail( location, bMoveTo );
-
-	for( auto iter = m_TopmostBogies.begin() + 1; iter != m_TopmostBogies.end(); ++iter )
-		//The northmost child wheel frame was railed by previous Rail() call.
-		(*iter)->Rail( GetNorthmostChildWheelFrame( **iter ).GetLocation(), bMoveTo ); 																				
-}
-
-void RollingStock_Imp::Rail( const Location& location, bool bMoveTo, DistanceType )
-{
-	Rail( location, bMoveTo );
-}
-
 Location RollingStock_Imp::GetLocation() const noexcept
 {
 	assert( !m_Bogies.empty() );
@@ -187,7 +171,7 @@ bool RollingStock_Imp::IsRailed() const noexcept
 		if( !pWheelFrames->IsRailed() )
 			return false;
 
-	return true;
+	return !m_WheelFrames.empty();
 }
 
 spat::Frame<Length, One> RollingStock_Imp::GetGlobalAnchor() const{
@@ -230,7 +214,7 @@ Velocity RollingStock_Imp::TargetVelocity() const noexcept{
 	return m_TopmostBogies.front()->TargetVelocity();
 }
 
-RailRunner::EndType RollingStock_Imp::TargetDirection() const noexcept{
+EndType RollingStock_Imp::TargetDirection() const noexcept{
 	return m_TopmostBogies.front()->TargetDirection();
 }
 
@@ -359,6 +343,19 @@ bool RollingStock_Imp::IsFinal() const noexcept{
 	return true;
 }
 
+void RollingStock_Imp::Rail( const Location& location, bool bMoveTo, DistanceType distance, bool bFailOnReservationConflicts )
+{
+	RollingStock_Base::Rail( location, bMoveTo, distance, bFailOnReservationConflicts );
+
+	assert( !m_TopmostBogies.empty() );
+
+	m_TopmostBogies.front()->Rail( location, bMoveTo );
+
+	for( auto iter = m_TopmostBogies.begin() + 1; iter != m_TopmostBogies.end(); ++iter )
+		//The northmost child wheel frame was railed by previous Rail() call.
+		(*iter)->Rail( GetNorthmostChildWheelFrame( **iter ).GetLocation(), bMoveTo ); 																				
+}
+
 Length RollingStock_Imp::GetOverhang( EndType end, DistanceType ) const noexcept
 // DistanceType makes no difference here. It determains the internal distances between
 // TrainComponents.
@@ -381,7 +378,7 @@ Length RollingStock_Imp::GetLength( DistanceType ) const noexcept
 	return m_Overhangs.first + m_Overhangs.second;
 }
 
-std::pair<Bogie&,RailRunner::EndType> RollingStock_Imp::GetTipAt( EndType end ){
+std::pair<Bogie&,EndType> RollingStock_Imp::GetTipAt( EndType end ){
 	switch( end )
 	{
 	case EndType::any:
@@ -405,7 +402,7 @@ std::pair<Bogie&,RailRunner::EndType> RollingStock_Imp::GetTipAt( EndType end ){
 	throw std::logic_error( stream.str() );
 }
 
-std::pair<const Bogie&,RailRunner::EndType> RollingStock_Imp::GetTipAt( EndType end ) const{
+std::pair<const Bogie&,EndType> RollingStock_Imp::GetTipAt( EndType end ) const{
 	switch( end )
 	{
 	case EndType::any:
@@ -490,14 +487,14 @@ WheelFrame& RollingStock_Imp::GetWheelFrame( int idx ) const{
 	return *m_WheelFrames.at( idx );
 }
 
-std::pair<std::shared_ptr<RollingStock>,RailRunner::EndType> 
+std::pair<std::shared_ptr<RollingStock>,EndType> 
 RollingStock_Imp::GetCoupledRollingStock( EndType end ) const
 {
 	if( end == EndType::north ||
 		end == EndType::south )
 	{
-		std::pair<const Bogie&,RailRunner::EndType> coupling = GetTipAt( end );
-		if( std::pair<std::shared_ptr<Bogie>,RailRunner::EndType> coupled = coupling.first.GetCoupledBogie( coupling.second ); coupled.first )
+		std::pair<const Bogie&,EndType> coupling = GetTipAt( end );
+		if( std::pair<std::shared_ptr<Bogie>,EndType> coupled = coupling.first.GetCoupledBogie( coupling.second ); coupled.first )
 		{
 			if( RollingStock* pRollingStock = coupled.first->GetRollingStock(); pRollingStock )
 			{
@@ -513,7 +510,7 @@ RollingStock_Imp::GetCoupledRollingStock( EndType end ) const
 			return GetCoupledRollingStock( EndType::south );
 	}
 
-	return { nullptr, RailRunner::EndType::none };
+	return { nullptr, EndType::none };
 }
 
 Jack& RollingStock_Imp::JackOnHoot() noexcept{

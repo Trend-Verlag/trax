@@ -281,10 +281,10 @@ void Anl3ModuleReader::ReadGebaeudesammlung(
 
 						if( iter->m_Tracks.size() >= 4 )
 						{
-							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_0, trackSystem.Get( iter->m_Tracks[0] ), Track::EndType::end, true );
-							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_1, trackSystem.Get( iter->m_Tracks[2] ), Track::EndType::end, true );
-							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_2, trackSystem.Get( iter->m_Tracks[3] ), Track::EndType::end, true );
-							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_3, trackSystem.Get( iter->m_Tracks[1] ), Track::EndType::end, true );
+							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_0, trackSystem.Get( iter->m_Tracks[0] ), EndType::south, true );
+							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_1, trackSystem.Get( iter->m_Tracks[2] ), EndType::south, true );
+							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_2, trackSystem.Get( iter->m_Tracks[3] ), EndType::south, true );
+							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_3, trackSystem.Get( iter->m_Tracks[1] ), EndType::south, true );
 
 							std::pair<Track::End,Track::End> ends = GetEnds( *pDoubleSlipSwitch, DoubleSlipSwitch::SlotNames::slot_0, couplings );
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_4, trackSystem.Get( ends.first.id ), ends.first.type, true );
@@ -352,8 +352,8 @@ void Anl3ModuleReader::ReadGebaeudesammlung(
 
 						if( iter->m_Tracks.size() >= 2 )
 						{
-							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_0, trackSystem.Get( iter->m_Tracks[1] ), Track::EndType::end, true );
-							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_1, trackSystem.Get( iter->m_Tracks[0] ), Track::EndType::end, true );
+							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_0, trackSystem.Get( iter->m_Tracks[1] ), EndType::south, true );
+							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_1, trackSystem.Get( iter->m_Tracks[0] ), EndType::south, true );
 		
 							std::pair<Track::End,Track::End> ends = GetEnds( *pSingleSlipSwitch, SingleSlipSwitch::SlotNames::slot_0, couplings );
 							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_2, trackSystem.Get( ends.first.id ), ends.first.type, true );
@@ -408,7 +408,7 @@ std::pair<Track::End,Track::End> Anl3ModuleReader::GetEnds(
 	{
 		if( coupling.first.theOne.id == connector.Slot( slot ).first->ID() )
 		{
-			if( coupling.first.theOne.type == Track::EndType::end )
+			if( coupling.first.theOne.type == EndType::south )
 			{
 				if( coupling.second == "Ende" )
 					ends.first = coupling.first.theOther;

@@ -122,7 +122,7 @@ void RollingStockCreator::GeomEnd(
 }
 
 void RollingStockCreator::Coupling( 
-	RailRunner::EndType end, 
+	EndType end, 
 	Length bufferLength, 
 	Force maxForce, 
 	IDType typeID, 
@@ -138,11 +138,11 @@ void RollingStockCreator::Coupling(
 }
 
 void RollingStockCreator::Swivel( 
-	RailRunner::EndType slot, 
+	EndType slot, 
 	IDType childID, 
 	const spat::Frame<dim::Length, dim::One>& frame ) noexcept(false)
 {
-	if( slot != RailRunner::EndType::none )
+	if( slot != EndType::none )
 		m_Swivels.push_back( std::make_tuple( m_ActiveBogie.top(), slot, childID, frame ) );
 }
 

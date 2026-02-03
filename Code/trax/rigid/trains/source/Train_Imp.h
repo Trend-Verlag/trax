@@ -48,9 +48,7 @@ namespace trax{
 
 		bool IsValid() const noexcept override;
 
-		void Rail( const class Location& location, bool bMoveTo = true ) override;
-
-		void Rail( const Location& location, bool bMoveTo, DistanceType data ) override;
+		void Rail( const Location& location, bool bMoveTo, DistanceType data, bool bFailOnReservationConflicts = false ) override;
 
 		Location GetLocation() const noexcept override;
 		
@@ -109,6 +107,10 @@ namespace trax{
 		std::pair<Bogie&,EndType> GetTipAt( EndType end ) override;
 
 		std::pair<const Bogie&,EndType> GetTipAt( EndType end ) const override;
+
+		bool MakeReservation() const noexcept override;
+
+		bool DeleteReservation() const noexcept override;
 
 
 		// Train:

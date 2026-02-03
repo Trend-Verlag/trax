@@ -123,7 +123,7 @@ namespace trax{
 		/// \param trackEnd2 Shared pointer to and end of track B.
 		/// \param bUncoupledOnly true if only loose ends should get connected, but existing connections stay untouched.
 		///@{
-		virtual void Couple( std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> trackEnd2 ) const = 0;
+		virtual void Couple( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd2 ) const = 0;
 
 		virtual void Couple( const Track::Coupling& coupling, bool bUncoupledOnly = false ) const = 0;
 		///@}
@@ -178,7 +178,7 @@ namespace trax{
 	/// \param area Spherical area to detect track ends in.
 	/// \param sort If true the list gets sorted by distance to the center of the area (closest first). 
 	/// \return A list with track ends as well as their distance from the area center. If both track ends are inside the area, the track will be listed twice.
-	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,Track::EndType,Length>> dclspc FindTrackEnds( const TrackSystem& system, const spat::Sphere<Length>& area, bool sort = false );
+	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> dclspc FindTrackEnds( const TrackSystem& system, const spat::Sphere<Length>& area, bool sort = false );
 
 
 	/// \brief Finds all tracks that run trough an area.
@@ -218,7 +218,7 @@ namespace trax{
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
 	/// \param bSilent If true no log messages are emitted.
 	/// \return The other track ends, the track was coupled to, pair.first for front and 
-	/// pair.second for back end; or { nullptr, Track::EndType::none } if no suitable track 
+	/// pair.second for back end; or { nullptr, EndType::none } if no suitable track 
 	/// end was found.
 	/// \throws std::invalid_argument If the end type is not recocnised.
 	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc Couple( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true );
@@ -235,7 +235,7 @@ namespace trax{
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
 	/// \param bSilent If true no log messages are emitted.
 	/// \return The other track ends, the track was coupled to, pair.first for front and 
-	/// pair.second for back end; or { nullptr, Track::EndType::none } if no suitable track 
+	/// pair.second for back end; or { nullptr, EndType::none } if no suitable track 
 	/// end was found.
 	/// \throws std::invalid_argument If the end type is not recocnised.
 	/// \throws std::runtime_error If snapping failed (e.g. due to invalid track).
@@ -313,7 +313,7 @@ namespace trax{
 			return m_pComponent->GetConnectorCollection();
 		}
 
-		void Couple( std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> trackEnd2 ) const override{
+		void Couple( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd2 ) const override{
 			return m_pComponent->Couple( trackEnd1, trackEnd2 );
 		}
 

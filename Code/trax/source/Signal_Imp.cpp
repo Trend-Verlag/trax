@@ -748,7 +748,7 @@ int JumpSite_Imp::CountJacks() const noexcept{
 	return SignalClear_Imp::CountJacks() + 2;
 }
 ///////////////////////////////////////
-std::unique_ptr<TrackEndTransition> TrackEndTransition::Make( Track* pToTrack, Track::EndType toEnd ) noexcept{
+std::unique_ptr<TrackEndTransition> TrackEndTransition::Make( Track* pToTrack, EndType toEnd ) noexcept{
 	try{
 		return std::make_unique<TrackEndTransition_Imp>( pToTrack, toEnd );
 	}
@@ -757,16 +757,16 @@ std::unique_ptr<TrackEndTransition> TrackEndTransition::Make( Track* pToTrack, T
 	}
 }
 
-TrackEndTransition_Imp::TrackEndTransition_Imp( Track* pToTrack, Track::EndType toEnd )
+TrackEndTransition_Imp::TrackEndTransition_Imp( Track* pToTrack, EndType toEnd )
 	: m_pFromTrack( nullptr ),
-	m_FromEnd( Track::EndType::front ),
+	m_FromEnd( EndType::north ),
 	m_pToTrack( pToTrack ),
 	m_ToEnd( toEnd )
 {
 	if( m_pToTrack ){
 		Track::TrackEnd fromEnd = m_pToTrack->TransitionEnd( m_ToEnd );
-		m_pFromTrack = fromEnd.first.get();
-		m_FromEnd = fromEnd.second;
+		m_pFromTrack = fromEnd.pTrack.get();
+		m_FromEnd = fromEnd.end;
 	}
 }
 
@@ -774,18 +774,18 @@ int TrackEndTransition_Imp::CountStatus() const noexcept{
 	return 2;
 }
 
-void TrackEndTransition_Imp::Set( Track* pToTrack, Track::EndType toEnd ) noexcept{
+void TrackEndTransition_Imp::Set( Track* pToTrack, EndType toEnd ) noexcept{
 	m_pToTrack = pToTrack;
 	m_ToEnd = toEnd;
 
 	if( m_pToTrack ){
 		Track::TrackEnd fromEnd = m_pToTrack->TransitionEnd( m_ToEnd );
-		m_pFromTrack = fromEnd.first.get();
-		m_FromEnd = fromEnd.second;
+		m_pFromTrack = fromEnd.pTrack.get();
+		m_FromEnd = fromEnd.end;
 	}
 }
 
-Track* TrackEndTransition_Imp::From( Track::EndType& end ) const noexcept{
+Track* TrackEndTransition_Imp::From( EndType& end ) const noexcept{
 	end = m_FromEnd;
 	return m_pFromTrack;
 }
@@ -794,7 +794,7 @@ Track* TrackEndTransition_Imp::From() const noexcept{
 	return m_pFromTrack;
 }
 
-Track* TrackEndTransition_Imp::To( Track::EndType& end ) const noexcept{
+Track* TrackEndTransition_Imp::To( EndType& end ) const noexcept{
 	end = m_ToEnd;
 	return m_pToTrack;
 }

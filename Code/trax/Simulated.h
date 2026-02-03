@@ -56,6 +56,15 @@ namespace trax{
 
 
 		/// \brief Called to update the simulated object after
+		/// the simuation step finishes, but before all other 
+		/// updates are performed. This means that the body poses
+		/// and velocities are already calculated, but e.g., the 
+		/// positions of the track joints are not updated yet. Fleet
+		/// uses this to delete the old reservations.
+		virtual void PreUpdate() = 0;
+
+
+		/// \brief Called to update the simulated object after
 		/// the simuation step finishes.
 		/// \param dt The time step to update the object with.
 		virtual void Update( Time dt = fixed_timestep ) = 0;

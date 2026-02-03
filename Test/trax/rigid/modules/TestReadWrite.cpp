@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE( RoundtripTest )
 	BOOST_WARN_NE( numTracks, 0 );
 	BOOST_CHECK_EQUAL( numTracks, 175 );
 	BOOST_CHECK_NO_THROW( Write( *pModuleCollection, FixtureBase::FixturePath() / "Demo.anl4" ) );
-	BOOST_CHECK_NO_THROW( pModuleCollection = reader.ReadModuleCollection( FixtureBase::FixturePath() / "Demo.anl4" ) );
+	BOOST_CHECK_NO_THROW( { pModuleCollection = reader.ReadModuleCollection( FixtureBase::FixturePath() / "Demo.anl4" ); } );
 
 	BOOST_REQUIRE( pModuleCollection );
 	BOOST_REQUIRE_EQUAL( pModuleCollection->Count(), 1 );

@@ -56,14 +56,14 @@ BOOST_FIXTURE_TEST_CASE( TrackCircle_test, TrackCircle )
 	BOOST_CHECK_CLOSE_DIMENSION( m_pTrack3->GetLength(), R*pi/2, 0.001f );
 	BOOST_CHECK_CLOSE_DIMENSION( m_pTrack4->GetLength(), R*pi/2, 0.001f );
 
-	BOOST_CHECK( m_pTrack1->TransitionEnd( Track::EndType::front ).first == m_pTrack4 );
-	BOOST_CHECK( m_pTrack1->TransitionEnd( Track::EndType::front ).second == Track::EndType::end );
-	BOOST_CHECK( m_pTrack2->TransitionEnd( Track::EndType::front ).first == m_pTrack1 );
-	BOOST_CHECK( m_pTrack2->TransitionEnd( Track::EndType::front ).second == Track::EndType::end );
-	BOOST_CHECK( m_pTrack3->TransitionEnd( Track::EndType::front ).first == m_pTrack2 );
-	BOOST_CHECK( m_pTrack3->TransitionEnd( Track::EndType::front ).second == Track::EndType::end );
-	BOOST_CHECK( m_pTrack4->TransitionEnd( Track::EndType::front ).first == m_pTrack3 );
-	BOOST_CHECK( m_pTrack4->TransitionEnd( Track::EndType::front ).second == Track::EndType::end );
+	BOOST_CHECK( m_pTrack1->TransitionEnd( EndType::north ).pTrack == m_pTrack4 );
+	BOOST_CHECK( m_pTrack1->TransitionEnd( EndType::north ).end == EndType::south );
+	BOOST_CHECK( m_pTrack2->TransitionEnd( EndType::north ).pTrack == m_pTrack1 );
+	BOOST_CHECK( m_pTrack2->TransitionEnd( EndType::north ).end == EndType::south );
+	BOOST_CHECK( m_pTrack3->TransitionEnd( EndType::north ).pTrack == m_pTrack2 );
+	BOOST_CHECK( m_pTrack3->TransitionEnd( EndType::north ).end == EndType::south );
+	BOOST_CHECK( m_pTrack4->TransitionEnd( EndType::north ).pTrack == m_pTrack3 );
+	BOOST_CHECK( m_pTrack4->TransitionEnd( EndType::north ).end == EndType::south );
 }
 
 BOOST_AUTO_TEST_SUITE_END() //Fixture_tests
@@ -81,8 +81,8 @@ BOOST_AUTO_TEST_SUITE(track_creation)
 
 BOOST_AUTO_TEST_CASE( basicTrackTypeTests )
 {
-	BOOST_CHECK_EQUAL( ToString( Track::EndType::front ), "front" );
-	BOOST_CHECK_EQUAL( ToString( Track::EndType::end ), "end" );
+	BOOST_CHECK_EQUAL( ToString( EndType::north ), "north" );
+	BOOST_CHECK_EQUAL( ToString( EndType::south ), "south" );
 }
 
 BOOST_AUTO_TEST_CASE( take_track_length_from_curve )
@@ -1841,19 +1841,19 @@ BOOST_AUTO_TEST_CASE( connect_tests )
 		pTrack4->Attach( pArc4, {0_m,10_m*pi/2} );
 		BOOST_CHECK_SMALL( pTrack4->GetLength() - 10_m*pi/2, 1_mm );
 
-		pTrack1->Couple( std::make_pair(pTrack1, Track::EndType::end), std::make_pair(pTrack2, Track::EndType::front) );
-		pTrack2->Couple( std::make_pair(pTrack2, Track::EndType::end), std::make_pair(pTrack3, Track::EndType::front) );
-		pTrack3->Couple( std::make_pair(pTrack3, Track::EndType::end), std::make_pair(pTrack4, Track::EndType::front) );
-		pTrack4->Couple( std::make_pair(pTrack4, Track::EndType::end), std::make_pair(pTrack1, Track::EndType::front) );
+		pTrack1->Couple( std::make_pair(pTrack1, EndType::south), std::make_pair(pTrack2, EndType::north) );
+		pTrack2->Couple( std::make_pair(pTrack2, EndType::south), std::make_pair(pTrack3, EndType::north) );
+		pTrack3->Couple( std::make_pair(pTrack3, EndType::south), std::make_pair(pTrack4, EndType::north) );
+		pTrack4->Couple( std::make_pair(pTrack4, EndType::south), std::make_pair(pTrack1, EndType::north) );
 
-		BOOST_CHECK( pTrack1->TransitionEnd( Track::EndType::front ).first == pTrack4 );
-		BOOST_CHECK( pTrack1->TransitionEnd( Track::EndType::front ).second == Track::EndType::end );
-		BOOST_CHECK( pTrack2->TransitionEnd( Track::EndType::front ).first == pTrack1 );
-		BOOST_CHECK( pTrack2->TransitionEnd( Track::EndType::front ).second == Track::EndType::end );
-		BOOST_CHECK( pTrack3->TransitionEnd( Track::EndType::front ).first == pTrack2 );
-		BOOST_CHECK( pTrack3->TransitionEnd( Track::EndType::front ).second == Track::EndType::end );
-		BOOST_CHECK( pTrack4->TransitionEnd( Track::EndType::front ).first == pTrack3 );
-		BOOST_CHECK( pTrack4->TransitionEnd( Track::EndType::front ).second == Track::EndType::end );
+		BOOST_CHECK( pTrack1->TransitionEnd( EndType::north ).pTrack == pTrack4 );
+		BOOST_CHECK( pTrack1->TransitionEnd( EndType::north ).end == EndType::south );
+		BOOST_CHECK( pTrack2->TransitionEnd( EndType::north ).pTrack == pTrack1 );
+		BOOST_CHECK( pTrack2->TransitionEnd( EndType::north ).end == EndType::south );
+		BOOST_CHECK( pTrack3->TransitionEnd( EndType::north ).pTrack == pTrack2 );
+		BOOST_CHECK( pTrack3->TransitionEnd( EndType::north ).end == EndType::south );
+		BOOST_CHECK( pTrack4->TransitionEnd( EndType::north ).pTrack == pTrack3 );
+		BOOST_CHECK( pTrack4->TransitionEnd( EndType::north ).end == EndType::south );
 
 		trax::Location Loc( pTrack1, trax::TrackLocation( 0_m, true ) );
 
@@ -1901,7 +1901,7 @@ BOOST_AUTO_TEST_CASE( move_over_paraconnection_tests )
 		pTrack1->Attach( pCurve1, {0_m,200_m} );
 		pTrack2->Attach( pCurve2, {0_m,200_m} );
 
-		pTrack1->Couple( std::make_pair(pTrack1, Track::EndType::front), std::make_pair(pTrack2, Track::EndType::front) );
+		pTrack1->Couple( std::make_pair(pTrack1, EndType::north), std::make_pair(pTrack2, EndType::north) );
 
 		trax::Location Loc{ pTrack1, trax::TrackLocation( 1_m, true ) };
 
@@ -1928,17 +1928,17 @@ BOOST_AUTO_TEST_CASE( ConnectTwoTracksOnBothEnds )
 		std::shared_ptr<trax::TrackBuilder> pTrack2 = TrackBuilder::Make();
 		BOOST_CHECK( pTrack2 != nullptr );
 
-		pTrack1->Couple( std::make_pair(pTrack1, Track::EndType::front), std::make_pair(pTrack2, Track::EndType::end) );
-		pTrack1->Couple( std::make_pair(pTrack1, Track::EndType::end), std::make_pair(pTrack2, Track::EndType::front) );
+		pTrack1->Couple( std::make_pair(pTrack1, EndType::north), std::make_pair(pTrack2, EndType::south) );
+		pTrack1->Couple( std::make_pair(pTrack1, EndType::south), std::make_pair(pTrack2, EndType::north) );
 
-		BOOST_CHECK_EQUAL( pTrack1->TransitionEnd( Track::EndType::front ).first, pTrack2 );
-		BOOST_CHECK_EQUAL( pTrack1->TransitionEnd( Track::EndType::front ).second, Track::EndType::end );
-		BOOST_CHECK_EQUAL( pTrack1->TransitionEnd( Track::EndType::end ).first, pTrack2 );
-		BOOST_CHECK_EQUAL( pTrack1->TransitionEnd( Track::EndType::end ).second, Track::EndType::front );
-		BOOST_CHECK_EQUAL( pTrack2->TransitionEnd( Track::EndType::end ).first, pTrack1 );
-		BOOST_CHECK_EQUAL( pTrack2->TransitionEnd( Track::EndType::end ).second, Track::EndType::front );
-		BOOST_CHECK_EQUAL( pTrack2->TransitionEnd( Track::EndType::front ).first, pTrack1 );
-		BOOST_CHECK_EQUAL( pTrack2->TransitionEnd( Track::EndType::front ).second, Track::EndType::end );
+		BOOST_CHECK_EQUAL( pTrack1->TransitionEnd( EndType::north ).pTrack, pTrack2 );
+		BOOST_CHECK_EQUAL( pTrack1->TransitionEnd( EndType::north ).end, EndType::south );
+		BOOST_CHECK_EQUAL( pTrack1->TransitionEnd( EndType::south ).pTrack, pTrack2 );
+		BOOST_CHECK_EQUAL( pTrack1->TransitionEnd( EndType::south ).end, EndType::north );
+		BOOST_CHECK_EQUAL( pTrack2->TransitionEnd( EndType::south ).pTrack, pTrack1 );
+		BOOST_CHECK_EQUAL( pTrack2->TransitionEnd( EndType::south ).end, EndType::north );
+		BOOST_CHECK_EQUAL( pTrack2->TransitionEnd( EndType::north ).pTrack, pTrack1 );
+		BOOST_CHECK_EQUAL( pTrack2->TransitionEnd( EndType::north ).end, EndType::south );
 
 		pTrack1->DeCouple();
 	}
@@ -1950,12 +1950,12 @@ BOOST_AUTO_TEST_CASE( ConnectSelf )
 		std::shared_ptr<trax::TrackBuilder> pTrack = TrackBuilder::Make();
 		BOOST_CHECK( pTrack != nullptr );
 
-		pTrack->Couple( std::make_pair(pTrack, Track::EndType::front), std::make_pair(pTrack, Track::EndType::end) );
+		pTrack->Couple( std::make_pair(pTrack, EndType::north), std::make_pair(pTrack, EndType::south) );
 
-		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( Track::EndType::front ).first, pTrack );
-		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( Track::EndType::front ).second, Track::EndType::end );
-		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( Track::EndType::end ).first, pTrack );
-		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( Track::EndType::end ).second, Track::EndType::front );
+		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( EndType::north ).pTrack, pTrack );
+		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( EndType::north ).end, EndType::south );
+		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( EndType::south ).pTrack, pTrack );
+		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( EndType::south ).end, EndType::north );
 
 		pTrack->DeCouple();
 	}
@@ -1993,9 +1993,9 @@ BOOST_AUTO_TEST_CASE( normalization_tests )
 
 	unique_ptr<Switch> pSwitch = Switch::Make();
     BOOST_CHECK( pSwitch != nullptr );
-	pSwitch->NarrowTrack( pTrack1, Track::EndType::end );
-	pSwitch->StraightTrack( pTrack2, Track::EndType::front );
-	pSwitch->DivergedTrack( pTrack3, Track::EndType::front );
+	pSwitch->NarrowTrack( pTrack1, EndType::south );
+	pSwitch->StraightTrack( pTrack2, EndType::north );
+	pSwitch->DivergedTrack( pTrack3, EndType::north );
 	pSwitch->Set( Switch::Status::go );
 
 	BOOST_CHECK( pSwitch->IsNormal() );
@@ -2014,44 +2014,44 @@ BOOST_FIXTURE_TEST_CASE( sloReassignmentPropperFreeExisting, SwichFixture )
 {	
 	unique_ptr<Switch> pSwitch = Switch::Make();
     BOOST_CHECK( pSwitch != nullptr );
-	pSwitch->NarrowTrack( m_pTrack1, Track::EndType::end );
-	pSwitch->StraightTrack( m_pTrack2, Track::EndType::front );
-	pSwitch->DivergedTrack( m_pTrack3, Track::EndType::front );
+	pSwitch->NarrowTrack( m_pTrack1, EndType::south );
+	pSwitch->StraightTrack( m_pTrack2, EndType::north );
+	pSwitch->DivergedTrack( m_pTrack3, EndType::north );
 	pSwitch->Set( Switch::Status::go );
 
-	pSwitch->StraightTrack( m_pTrack3, Track::EndType::front );
-	BOOST_CHECK( m_pTrack2->GetConnector(Track::EndType::front) == nullptr );
+	pSwitch->StraightTrack( m_pTrack3, EndType::north );
+	BOOST_CHECK( m_pTrack2->GetConnector(EndType::north) == nullptr );
 }
 
 BOOST_FIXTURE_TEST_CASE( flippingTracksConnectedBySwitch, SwichFixture ){
 	unique_ptr<Switch> pSwitch = Switch::Make();
-	pSwitch->NarrowTrack( m_pTrack1, Track::EndType::end );
-	pSwitch->StraightTrack( m_pTrack2, Track::EndType::front );
-	pSwitch->DivergedTrack( m_pTrack3, Track::EndType::front );
+	pSwitch->NarrowTrack( m_pTrack1, EndType::south );
+	pSwitch->StraightTrack( m_pTrack2, EndType::north );
+	pSwitch->DivergedTrack( m_pTrack3, EndType::north );
 	pSwitch->Set( Switch::Status::go );
 
 	m_pTrack1->Flip(true);
 	BOOST_CHECK_EQUAL( pSwitch->NarrowTrack().first, m_pTrack1 );
-	BOOST_CHECK_EQUAL( pSwitch->NarrowTrack().second, Track::EndType::front );
+	BOOST_CHECK_EQUAL( pSwitch->NarrowTrack().second, EndType::north );
 
 	m_pTrack2->Flip(true);
 	BOOST_CHECK_EQUAL( pSwitch->StraightTrack().first, m_pTrack2 );
-	BOOST_CHECK_EQUAL( pSwitch->StraightTrack().second, Track::EndType::end );
+	BOOST_CHECK_EQUAL( pSwitch->StraightTrack().second, EndType::south );
 
 	m_pTrack3->Flip(true);
 	BOOST_CHECK_EQUAL( pSwitch->DivergedTrack().first, m_pTrack3 );
-	BOOST_CHECK_EQUAL( pSwitch->DivergedTrack().second, Track::EndType::end );
+	BOOST_CHECK_EQUAL( pSwitch->DivergedTrack().second, EndType::south );
 }
 
 BOOST_FIXTURE_TEST_CASE( NarrowSwitchWithFourOutgoingTracksCreationtest, SwichFixture ){
 	unique_ptr<NarrowSwitch> pSwitch = NarrowSwitch::Make( 3 );
-	pSwitch->NarrowTrack( m_pTrack1, Track::EndType::end );
-	pSwitch->StraightTrack( m_pTrack2, Track::EndType::front );
-	pSwitch->DivergedTrack( 2, m_pTrack3, Track::EndType::front );
+	pSwitch->NarrowTrack( m_pTrack1, EndType::south );
+	pSwitch->StraightTrack( m_pTrack2, EndType::north );
+	pSwitch->DivergedTrack( 2, m_pTrack3, EndType::north );
 	pSwitch->Set( Switch::Status::go );
 
 	BOOST_CHECK_EQUAL( pSwitch->NarrowTrack().first, m_pTrack1 );
-	BOOST_CHECK_EQUAL( pSwitch->NarrowTrack().second, Track::EndType::end );
+	BOOST_CHECK_EQUAL( pSwitch->NarrowTrack().second, EndType::south );
 
 	pSwitch->Set( NarrowSwitch::Status::empty );
 	BOOST_CHECK_EQUAL( pSwitch->Get(), NarrowSwitch::Status::branch1 );
@@ -2061,17 +2061,17 @@ BOOST_FIXTURE_TEST_CASE( NarrowSwitchWithFourOutgoingTracksCreationtest, SwichFi
 
 BOOST_FIXTURE_TEST_CASE( NarrowSwitchAccesToNonExistingSlot, SwichFixture ){
 	unique_ptr<NarrowSwitch> pSwitch = NarrowSwitch::Make( 3 );
-	pSwitch->NarrowTrack( m_pTrack1, Track::EndType::end );
-	pSwitch->StraightTrack( m_pTrack2, Track::EndType::front );
-	BOOST_CHECK_THROW( pSwitch->DivergedTrack( 3, m_pTrack3, Track::EndType::front ), std::out_of_range );
+	pSwitch->NarrowTrack( m_pTrack1, EndType::south );
+	pSwitch->StraightTrack( m_pTrack2, EndType::north );
+	BOOST_CHECK_THROW( pSwitch->DivergedTrack( 3, m_pTrack3, EndType::north ), std::out_of_range );
 	pSwitch->Set( Switch::Status::go );
 }
 
 BOOST_FIXTURE_TEST_CASE( switchShapeTest, SwichFixture ){
 	unique_ptr<Switch> pSwitch = Switch::Make();
-	pSwitch->NarrowTrack( m_pTrack1, Track::EndType::end );
-	pSwitch->StraightTrack( m_pTrack2, Track::EndType::front );
-	pSwitch->DivergedTrack( m_pTrack3, Track::EndType::front );
+	pSwitch->NarrowTrack( m_pTrack1, EndType::south );
+	pSwitch->StraightTrack( m_pTrack2, EndType::north );
+	pSwitch->DivergedTrack( m_pTrack3, EndType::north );
 	pSwitch->Set( Switch::Status::go );
 
 	BOOST_CHECK( pSwitch->IsNormal( false, 5_m ) );

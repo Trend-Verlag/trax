@@ -194,6 +194,10 @@ void Bogie_Imp::Idle() noexcept
 {
 }
 
+void Bogie_Imp::PreUpdate()
+{
+}
+
 void Bogie_Imp::Update( Time dt ) noexcept
 {
 	if( m_CouplingNorth.CheckCoupling( dt ) )
@@ -364,7 +368,7 @@ Velocity Bogie_Imp::TargetVelocity() const noexcept
 	return 0_mIs;
 }
 
-RailRunner::EndType Bogie_Imp::TargetDirection() const noexcept{
+EndType Bogie_Imp::TargetDirection() const noexcept{
 	return m_TargetDirection;
 }
 
@@ -956,7 +960,7 @@ bool Bogie_Imp::Couple( EndType end, Bogie& with, EndType withEnd, bool btrigger
 	return true;
 }
 
-std::pair<std::shared_ptr<Bogie>,RailRunner::EndType> Bogie_Imp::GetCoupledBogie( EndType end ) const noexcept
+std::pair<std::shared_ptr<Bogie>,EndType> Bogie_Imp::GetCoupledBogie( EndType end ) const noexcept
 {
 	switch( end )
 	{
@@ -1541,17 +1545,17 @@ bool Bogie_Imp::CouplingProps_Ext::Break( bool btriggerPulses ) noexcept{
 }
 ///////////////////////////////////////
 bool AreCoupled( const Bogie& a, const Bogie& b ) noexcept{
-	return	a.GetCoupledBogie( Bogie::EndType::north ).first.get() == &b ||
-			a.GetCoupledBogie( Bogie::EndType::south ).first.get() == &b;
+	return	a.GetCoupledBogie( EndType::north ).first.get() == &b ||
+			a.GetCoupledBogie( EndType::south ).first.get() == &b;
 }
 
-bool Couple( std::pair<Bogie&,RailRunner::EndType> a, std::pair<Bogie&,RailRunner::EndType> b ) noexcept{
+bool Couple( std::pair<Bogie&,EndType> a, std::pair<Bogie&,EndType> b ) noexcept{
 	return a.first.Couple( a.second, b.first, b.second );
 }
 
 Length GetCouplingDistance( 
-	std::pair<const Bogie&,RailRunner::EndType> a, 
-	std::pair<const Bogie&,RailRunner::EndType> b ) noexcept
+	std::pair<const Bogie&,EndType> a, 
+	std::pair<const Bogie&,EndType> b ) noexcept
 {
 	spat::Frame<Length,One> bodyFrame;
 	a.first.GetGestalt().GetFrame( bodyFrame );
@@ -1561,30 +1565,6 @@ Length GetCouplingDistance(
 	spat::Position<Length> pos2 = b.first.GetCouplingProps( b.second ).Position.Center();
 	bodyFrame.ToParent( pos2 );			
 	return (pos1 - pos2).Length();
-}
-///////////////////////////////////////
-std::string ToString( RailRunner::EndType end ){
-	switch( end ){
-	case RailRunner::EndType::none:
-		return "none";
-	case RailRunner::EndType::north:
-		return "north";
-	case RailRunner::EndType::south:
-		return "south";
-	default:
-		throw std::invalid_argument( "Unknown RailRunner::EndType!" );
-	}
-}
-
-RailRunner::EndType ToRailRunnerEndType( const std::string& endtype ){
-	if( endtype == "none" )
-		return RailRunner::EndType::none;
-	else if( endtype == "north" )
-		return RailRunner::EndType::north;
-	else if( endtype == "south" )
-		return RailRunner::EndType::south;
-	else
-		throw std::invalid_argument( "Unknown RailRunner::EndType!" );
 }
 ///////////////////////////////////////
 }

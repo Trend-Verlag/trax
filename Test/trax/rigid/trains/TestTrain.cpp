@@ -72,8 +72,8 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixture )
 
 	BOOST_REQUIRE( pTrain->IsValid() );
 	BOOST_REQUIRE( pTrain->IsRailed() );
-	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetOverhang( RailRunner::EndType::north, TrainComponent::DistanceType::max ), 2.94_m, 0.1 );
-	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetOverhang( RailRunner::EndType::south, TrainComponent::DistanceType::max ), theoreticalLength - 2.94_m, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetOverhang( EndType::north, TrainComponent::DistanceType::max ), 2.94_m, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetOverhang( EndType::south, TrainComponent::DistanceType::max ), theoreticalLength - 2.94_m, 0.1 );
 
 	BOOST_CHECK_EQUAL( pTrain->TargetVelocity(), 10_mIs );
 	BOOST_CHECK_EQUAL( pTrain->Thrust(), 1 );
@@ -250,8 +250,8 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation5, TrainFixture )
 
 	BOOST_REQUIRE( pTrain->IsValid() );
 	BOOST_REQUIRE( pTrain->IsRailed() );
-	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetOverhang( RailRunner::EndType::north, TrainComponent::DistanceType::max ), 2.94_m, 0.1 );
-	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetOverhang( RailRunner::EndType::south, TrainComponent::DistanceType::max ), theoreticalLength - 2.94_m, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetOverhang( EndType::north, TrainComponent::DistanceType::max ), 2.94_m, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetOverhang( EndType::south, TrainComponent::DistanceType::max ), theoreticalLength - 2.94_m, 0.1 );
 	BOOST_CHECK_EQUAL( pTrain->TargetVelocity(), 5_mIs );
 	BOOST_CHECK_EQUAL( pTrain->Thrust(), 0.75 );
 	BOOST_CHECK( pTrain->ThrustAbsolute() );
@@ -425,6 +425,7 @@ BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture )
 }
 
 BOOST_AUTO_TEST_SUITE_END() // TrainRunningTests
+
 BOOST_AUTO_TEST_SUITE(TrainCouplingTests)
 
 BOOST_FIXTURE_TEST_CASE( testTrainDecouple, TrainFixture )
@@ -467,10 +468,10 @@ BOOST_FIXTURE_TEST_CASE( testTrainDecouple, TrainFixture )
 	BOOST_CHECK_EQUAL( Split.first->GetNumberOfComponents(), 6 );
 	BOOST_CHECK_EQUAL( Split.second->GetNumberOfComponents(), 4 );
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
-	BOOST_CHECK_EQUAL( Split.first->GetCoupledTrainComponent( Train::EndType::south ).first, Split.second );
-	BOOST_CHECK_EQUAL( Split.first->GetCoupledTrainComponent( Train::EndType::north ).first, nullptr );
-	BOOST_CHECK_EQUAL( Split.second->GetCoupledTrainComponent( Train::EndType::north ).first, Split.first );
-	BOOST_CHECK_EQUAL( Split.second->GetCoupledTrainComponent( Train::EndType::south ).first, nullptr );
+	BOOST_CHECK_EQUAL( Split.first->GetCoupledTrainComponent( EndType::south ).first, Split.second );
+	BOOST_CHECK_EQUAL( Split.first->GetCoupledTrainComponent( EndType::north ).first, nullptr );
+	BOOST_CHECK_EQUAL( Split.second->GetCoupledTrainComponent( EndType::north ).first, Split.first );
+	BOOST_CHECK_EQUAL( Split.second->GetCoupledTrainComponent( EndType::south ).first, nullptr );
 	BOOST_CHECK( pTrain->IsValid() );
 	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
 	BOOST_CHECK( !Split.first->IsUnCoupledInternally() );
@@ -486,19 +487,19 @@ BOOST_FIXTURE_TEST_CASE( testTrainDecouple, TrainFixture )
 
 
 	// recouple:
-	BOOST_CHECK( !Split.first->Uncouple( Train::EndType::south ) );
-	BOOST_CHECK( Split.first->Couple( Train::EndType::south, *Split.second, Train::EndType::north ) );
-	BOOST_CHECK( Split.first->IsCoupled( Train::EndType::south ) );
-	BOOST_CHECK( Split.second->IsCoupled( Train::EndType::north ) );
-	BOOST_CHECK( Split.first->Uncouple( Train::EndType::south ) );
-	BOOST_CHECK( !Split.first->IsCoupled( Train::EndType::south ) );
-	BOOST_CHECK( !Split.second->IsCoupled( Train::EndType::north ) );
+	BOOST_CHECK( !Split.first->Uncouple( EndType::south ) );
+	BOOST_CHECK( Split.first->Couple( EndType::south, *Split.second, EndType::north ) );
+	BOOST_CHECK( Split.first->IsCoupled( EndType::south ) );
+	BOOST_CHECK( Split.second->IsCoupled( EndType::north ) );
+	BOOST_CHECK( Split.first->Uncouple( EndType::south ) );
+	BOOST_CHECK( !Split.first->IsCoupled( EndType::south ) );
+	BOOST_CHECK( !Split.second->IsCoupled( EndType::north ) );
 
 
 	// Re-insert to train:
-	BOOST_CHECK_NO_THROW( pTrain->Append( Train::EndType::south, Split.first, Train::EndType::north ) );
+	BOOST_CHECK_NO_THROW( pTrain->Append( EndType::south, Split.first, EndType::north ) );
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 1 );
-	BOOST_CHECK_NO_THROW( pTrain->Append( Train::EndType::south, Split.second, Train::EndType::north ) );
+	BOOST_CHECK_NO_THROW( pTrain->Append( EndType::south, Split.second, EndType::north ) );
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 2 );
 	BOOST_CHECK( pTrain->IsValid() );
 	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
@@ -526,7 +527,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainSplit, TrainFixture )
 	std::shared_ptr<TrainComponent> pTrainComponent = pTrain->GetComponent( 5 );
 	BOOST_REQUIRE( pTrainComponent );
 
-	BOOST_CHECK( pTrainComponent->Uncouple( RailRunner::EndType::north ) );
+	BOOST_CHECK( pTrainComponent->Uncouple( EndType::north ) );
 	BOOST_CHECK( pTrain->IsUnCoupledInternally() );
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
 	std::shared_ptr<Train> pSeparate = pTrain->Separate();
@@ -538,7 +539,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainSplit, TrainFixture )
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 5 );
 	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
 
-	BOOST_CHECK_NO_THROW( pTrain->Append( Train::EndType::south, pSeparate, Train::EndType::north ) );
+	BOOST_CHECK_NO_THROW( pTrain->Append( EndType::south, pSeparate, EndType::north ) );
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 6 );
 	BOOST_CHECK( pTrain->IsValid() );
 
@@ -608,7 +609,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainSeparate, TrainFixture )
 	BOOST_CHECK( !pTrain->Separate() );
 	pTrain->Reduce();
 	
-	BOOST_CHECK_NO_THROW( BOOST_CHECK( pTrain->GetComponent( 5 )->Uncouple( RailRunner::EndType::south ) ) );
+	BOOST_CHECK_NO_THROW( BOOST_CHECK( pTrain->GetComponent( 5 )->Uncouple( EndType::south ) ) );
 	BOOST_CHECK_EQUAL( pPulseCounter->Counter(), 1 );
 	BOOST_CHECK( pTrain->IsUnCoupledInternally() );
 
@@ -618,15 +619,15 @@ BOOST_FIXTURE_TEST_CASE( testTrainSeparate, TrainFixture )
 	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
 	BOOST_CHECK( !pTrain2->IsUnCoupledInternally() );
 
-	BOOST_CHECK_NO_THROW( pTrain->Append( Train::EndType::south, pTrain2, Train::EndType::north ) );
+	BOOST_CHECK_NO_THROW( pTrain->Append( EndType::south, pTrain2, EndType::north ) );
 	BOOST_CHECK( !pTrain->IsUnCoupledInternally() );
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 7 );
 	pTrain->Reduce();
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 10 );
-	BOOST_CHECK( pTrain->GetComponent( 5 )->Uncouple( RailRunner::EndType::south ) );
+	BOOST_CHECK( pTrain->GetComponent( 5 )->Uncouple( EndType::south ) );
 	BOOST_CHECK( pTrain->IsUnCoupledInternally() );
 	BOOST_CHECK_EQUAL( pPulseCounter->Counter(), 2 );
-	BOOST_CHECK( pTrain->GetComponent( 1 )->Uncouple( RailRunner::EndType::south ) );
+	BOOST_CHECK( pTrain->GetComponent( 1 )->Uncouple( EndType::south ) );
 	BOOST_CHECK( pTrain->IsUnCoupledInternally() );
 	BOOST_CHECK_EQUAL( pPulseCounter->Counter(), 3 );
 
@@ -722,10 +723,10 @@ BOOST_FIXTURE_TEST_CASE( testTrainGetTip, TrainFixture )
 	BOOST_REQUIRE( pTrain );
 
 	// don't propagate to Train end:
-	BOOST_CHECK_EQUAL( &pTrain->GetComponent( 0 )->GetTipAt( RailRunner::EndType::north ).first, &pTrain->GetTipAt( RailRunner::EndType::north ).first );
-	BOOST_CHECK_EQUAL( &pTrain->GetComponent( 9 )->GetTipAt( RailRunner::EndType::south ).first, &pTrain->GetTipAt( RailRunner::EndType::south ).first );
-	BOOST_CHECK_NE( &pTrain->GetComponent( 4 )->GetTipAt( RailRunner::EndType::north ).first, &pTrain->GetTipAt( RailRunner::EndType::north ).first );
-	BOOST_CHECK_NE( &pTrain->GetComponent( 4 )->GetTipAt( RailRunner::EndType::south ).first, &pTrain->GetTipAt( RailRunner::EndType::south ).first );
+	BOOST_CHECK_EQUAL( &pTrain->GetComponent( 0 )->GetTipAt( EndType::north ).first, &pTrain->GetTipAt( EndType::north ).first );
+	BOOST_CHECK_EQUAL( &pTrain->GetComponent( 9 )->GetTipAt( EndType::south ).first, &pTrain->GetTipAt( EndType::south ).first );
+	BOOST_CHECK_NE( &pTrain->GetComponent( 4 )->GetTipAt( EndType::north ).first, &pTrain->GetTipAt( EndType::north ).first );
+	BOOST_CHECK_NE( &pTrain->GetComponent( 4 )->GetTipAt( EndType::south ).first, &pTrain->GetTipAt( EndType::south ).first );
 }
 
 BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixture )
@@ -742,7 +743,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple, TrainFixture )
 		pTrain->SplitAfter( pTrain->GetNumberOfComponents() / 2 );
 	pTrain->Clear();
 
-	BOOST_CHECK( Split.first->Couple( RailRunner::EndType::north, *Split.second, RailRunner::EndType::south ) );
+	BOOST_CHECK( Split.first->Couple( EndType::north, *Split.second, EndType::south ) );
 }
 
 BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple2, TrainFixture )
@@ -759,10 +760,10 @@ BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple2, TrainFixture )
 	pFleet->Add( pTrain );
 
 	pTrain->Rail( m_Location );
-	BOOST_CHECK( !pTrain->IsActivated( RailRunner::EndType::north ) );
-	BOOST_CHECK( !pTrain->IsActivated( RailRunner::EndType::south ) );
-	pTrain->ActivateCoupling( RailRunner::EndType::north );
-	pTrain->ActivateCoupling( RailRunner::EndType::south );
+	BOOST_CHECK( !pTrain->IsActivated( EndType::north ) );
+	BOOST_CHECK( !pTrain->IsActivated( EndType::south ) );
+	pTrain->ActivateCoupling( EndType::north );
+	pTrain->ActivateCoupling( EndType::south );
 
 	std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> Split = 
 		pTrain->SplitAfter( pTrain->GetNumberOfComponents() / 2 );
@@ -778,18 +779,18 @@ BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple2, TrainFixture )
 
 	BOOST_CHECK( Split.first->IsValid() );
 	BOOST_CHECK( Split.first->IsRailed() );
-	BOOST_CHECK( Split.first->IsActivated( RailRunner::EndType::north ) );
-	BOOST_CHECK( !Split.first->IsActivated( RailRunner::EndType::south ) );
+	BOOST_CHECK( Split.first->IsActivated( EndType::north ) );
+	BOOST_CHECK( !Split.first->IsActivated( EndType::south ) );
 	BOOST_CHECK( Split.second->IsValid() );
 	BOOST_CHECK( Split.second->IsRailed() );
-	BOOST_CHECK( !Split.second->IsActivated( RailRunner::EndType::north ) );
-	BOOST_CHECK( Split.second->IsActivated( RailRunner::EndType::south ) );
+	BOOST_CHECK( !Split.second->IsActivated( EndType::north ) );
+	BOOST_CHECK( Split.second->IsActivated( EndType::south ) );
 	BOOST_CHECK( !Split.first->GetTrain() && !Split.second->GetTrain() );
 
-	Split.first->ActivateCoupling( RailRunner::EndType::south );
-	BOOST_CHECK( Split.first->IsActivated( RailRunner::EndType::south ) );
-	Split.second->ActivateCoupling( RailRunner::EndType::north );
-	BOOST_CHECK( Split.second->IsActivated( RailRunner::EndType::north ) );
+	Split.first->ActivateCoupling( EndType::south );
+	BOOST_CHECK( Split.first->IsActivated( EndType::south ) );
+	Split.second->ActivateCoupling( EndType::north );
+	BOOST_CHECK( Split.second->IsActivated( EndType::north ) );
 
 	Length l = m_pTrack1->GetLength() +
 	m_pTrack2->GetLength() +

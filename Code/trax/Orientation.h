@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "Configuration.h"
+#include "End.h"
 
 #include <ostream>
 #include <string>
@@ -131,6 +131,18 @@ namespace trax{
 	inline Orientation& operator+=( Orientation& a, const Orientation& b ) noexcept;
 
 
+	/// \brief Get the front end of an oriented element.
+	/// \param orientation The orientation of the element.
+	/// \returns The end type corresponding to the given orientation.
+	inline EndType North( Orientation orientation ) noexcept;
+
+
+	/// \brief Get the back end of an oriented element.
+	/// \param orientation The orientation of the element.
+	/// \returns The end type corresponding to the given orientation.
+	inline EndType South( Orientation orientation ) noexcept;
+
+
 	dclspc std::string ToString( Orientation orient );
 
 	dclspc Orientation ToOrientation( const std::string& orient );
@@ -160,5 +172,13 @@ namespace trax{
 	Orientation& operator+=( Orientation& a, const Orientation& b ) noexcept{
 		a = a + b;
 		return a;
+	}
+
+	inline EndType North( Orientation orientation ) noexcept{
+		return orientation ? EndType::north : EndType::south;
+	}
+
+	inline EndType South( Orientation orientation ) noexcept{
+		return orientation ? EndType::south : EndType::north;
 	}
 }

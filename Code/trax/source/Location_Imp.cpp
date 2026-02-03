@@ -219,7 +219,7 @@ std::pair<Length,bool> Location::Move( Length dParam, Orientation principalDirec
 	{
 		dParam -= common::Sign(dParam) * m_TLocation.parameter;
 		m_TLocation.parameter = 0_m;
-		if( !TrackTransition( Track::EndType::front, pEvent ) ){
+		if( !TrackTransition( EndType::north, pEvent ) ){
 			retval.first = dParam;
 			return retval;
 		}
@@ -231,7 +231,7 @@ std::pair<Length,bool> Location::Move( Length dParam, Orientation principalDirec
 	{
 		dParam -= common::Sign(dParam) * (m_pTrack->GetLength() - m_TLocation.parameter);
 		m_TLocation.parameter = m_pTrack->GetLength();
-		if( !TrackTransition( Track::EndType::end, pEvent ) ){
+		if( !TrackTransition( EndType::south, pEvent ) ){
 			retval.first = dParam;
 			return retval;
 		}
@@ -284,25 +284,25 @@ std::pair<Length,bool> Location::MoveTransit( Orientation direction, const Event
 		throw std::logic_error( "Tried to move uninitialized Location" );
 
 	Length paramlength;
-	Track::EndType toend = Track::EndType::front;
+	EndType toend = EndType::north;
 	if( Orient() ){
 		if( direction ){
 			paramlength = m_pTrack->GetLength() - m_TLocation.parameter;
-			toend = Track::EndType::end;
+			toend = EndType::south;
 		}
 		else{
 			paramlength = -m_TLocation.parameter;
-			toend = Track::EndType::front;
+			toend = EndType::north;
 		}
 	}
 	else{
 		if( direction ){
 			paramlength = m_TLocation.parameter;
-			toend = Track::EndType::front;
+			toend = EndType::north;
 		}
 		else{
 			paramlength = -(m_pTrack->GetLength() - m_TLocation.parameter);
-			toend = Track::EndType::end;
+			toend = EndType::south;
 		}
 	}
 
@@ -327,13 +327,13 @@ bool Location::Equals( const Location& loc, Length _epsilon ) const noexcept{
 	{
 		if( m_TLocation.parameter <= _epsilon ){
 			Location thisLoc( *this );
-			thisLoc.TrackTransition( Track::EndType::front, nullptr );
+			thisLoc.TrackTransition( EndType::north, nullptr );
 			return thisLoc.m_TLocation.Equals( loc.m_TLocation, _epsilon );
 		}
 
 		if( m_pTrack->GetLength() - m_TLocation.parameter <= _epsilon ){
 			Location thisLoc( *this );
-			thisLoc.TrackTransition( Track::EndType::end, nullptr );
+			thisLoc.TrackTransition( EndType::south, nullptr );
 			return thisLoc.m_TLocation.Equals( loc.m_TLocation, _epsilon );
 		}
 	}
@@ -366,7 +366,7 @@ Length Location::Distance( const Location& loc, const Length maxdistance ) const
 	return abs(distance) > abs(maxdistance) ? maxdistance : distance;
 }
 
-void Location::Reserve( common::Interval<Length> range, IDType forID ){
+void Location::Reserve( common::Interval<Length> range, IDType forID ) const{
 	if( !m_pTrack )
 		throw std::logic_error( "Tried to reserve with uninitialized Location" );
 	   
@@ -376,7 +376,7 @@ void Location::Reserve( common::Interval<Length> range, IDType forID ){
         throw std::logic_error( "Track doesn't support reservation." );
 }
 
-void Location::DeleteReservation( IDType forID ){
+void Location::DeleteReservation( IDType forID ) const{
 	if( !m_pTrack )
 		throw std::logic_error( "Tried to reserve with uninitialized Location" );
 	  
@@ -399,18 +399,18 @@ std::shared_ptr<Track> Location::GetMutableTrack() const noexcept{
 	return std::const_pointer_cast<Track>(m_pTrack);
 }
 
-bool Location::TrackTransition( Track::EndType frontend, const Event* pEvent ) noexcept{
+bool Location::TrackTransition( EndType frontend, const Event* pEvent ) noexcept{
 	assert( m_pTrack );
 	Track::TrackEnd nextTrackEnd{ m_pTrack->TransitionEnd( frontend ) };
-	if( !nextTrackEnd.first )
+	if( !nextTrackEnd.pTrack )
 		return false;
 
 	//if( pEvent ) 
 	//	pEvent->Transitioning( *m_pTrack, frontend, *nextTrackEnd.first, nextTrackEnd.second );
 
-	if( frontend == Track::EndType::front )
+	if( frontend == EndType::north )
 	{
-		if( nextTrackEnd.second == Track::EndType::front )
+		if( nextTrackEnd.end == EndType::north )
 			// front coupled with front: change orientation
 		{
 			m_TLocation.orientation.Flip();
@@ -419,16 +419,16 @@ bool Location::TrackTransition( Track::EndType frontend, const Event* pEvent ) n
 		else
 			// front coupled with end
 		{
-			m_TLocation.parameter += nextTrackEnd.first->GetLength();
+			m_TLocation.parameter += nextTrackEnd.pTrack->GetLength();
 		}
 	}
 	else
 	{
-		if( nextTrackEnd.second == Track::EndType::end )
+		if( nextTrackEnd.end == EndType::south )
 			// end coupled with end: change orientation
 		{
 			m_TLocation.orientation.Flip();
-			m_TLocation.parameter = nextTrackEnd.first->GetLength() + m_pTrack->GetLength() - m_TLocation.parameter;
+			m_TLocation.parameter = nextTrackEnd.pTrack->GetLength() + m_pTrack->GetLength() - m_TLocation.parameter;
 		}
 		else
 			// end coupled with front
@@ -437,7 +437,7 @@ bool Location::TrackTransition( Track::EndType frontend, const Event* pEvent ) n
 		}
 	}
 
-	m_pTrack = nextTrackEnd.first;
+	m_pTrack = nextTrackEnd.pTrack;
 	return true;
 }
 
@@ -446,14 +446,14 @@ bool Location::Resolve() noexcept{
 		return true;
 
 	if( m_TLocation.parameter < 0_m ){
-		if( TrackTransition( Track::EndType::front, nullptr ) )
+		if( TrackTransition( EndType::north, nullptr ) )
 			return Resolve();
 		else
 			return false;
 	}
 
 	if( m_TLocation.parameter > m_pTrack->GetLength() ){
-		if( TrackTransition( Track::EndType::end, nullptr ) )
+		if( TrackTransition( EndType::south, nullptr ) )
 			return Resolve();
 		else
 			return false;
@@ -506,13 +506,13 @@ Length ParameterDistanceFrom3DDistance(
 	throw std::out_of_range( "Encountered an open track end!" );
 }
 
-std::tuple<std::shared_ptr<const Track>,Track::EndType,Length> EndOfLine( 
+std::tuple<std::shared_ptr<const Track>,EndType,Length> EndOfLine( 
 	const Location& _location, 
 	const Length maxDistance, 
 	const bool bDeadConnectorOnly )
 {
 	if( !_location.IsOnTrack() )
-		return std::make_tuple( nullptr, Track::EndType::end, 0_m );
+		return std::make_tuple( nullptr, EndType::south, 0_m );
 
 	Location location{_location};
 	Length distance = 0_m;
@@ -520,10 +520,10 @@ std::tuple<std::shared_ptr<const Track>,Track::EndType,Length> EndOfLine(
 	for(;;){
 		distance += location.MoveToEnd();
 		if( distance >= maxDistance )
-			return std::make_tuple( nullptr, Track::EndType::end, maxDistance );
+			return std::make_tuple( nullptr, EndType::south, maxDistance );
 
 		auto pTrack = location.GetTrack();
-		Track::EndType end = location.Orient() ? Track::EndType::end : Track::EndType::front;
+		EndType end = location.Orient() ? EndType::south : EndType::north;
 		if( pTrack->GetConnector( end ) )
 		{
 			if( bDeadConnectorOnly )

@@ -142,6 +142,8 @@ void Scene_Imp::Step( Time dt )
 
 	m_SimulationTime += dt;
 
+	PreUpdate();
+
 	Update( dt );
 
 	m_JackOnSimulationStep.Pulse();
@@ -262,6 +264,14 @@ void Scene_Imp::Idle() const
 	for( auto& pSimulated : m_Simulated )
 	{
 		pSimulated->Idle();
+	}
+}
+
+void Scene_Imp::PreUpdate()
+{
+	for( auto& pSimulated : m_Simulated )
+	{
+		pSimulated->PreUpdate();
 	}
 }
 

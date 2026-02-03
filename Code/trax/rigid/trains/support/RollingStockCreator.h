@@ -71,14 +71,14 @@ namespace trax{
 			Mass mass ) noexcept(false) override;
 
 		void Coupling(
-			RailRunner::EndType end,
+			EndType end,
 			Length bufferLength,
 			Force maxForce,
 		    IDType typeID,
 			const spat::Frame<dim::Length,dim::One>& frame ) noexcept(false) override;
 
 		void Swivel( 
-			RailRunner::EndType slot,
+			EndType slot,
 			IDType childID,
 			const spat::Frame<dim::Length,dim::One>& frame ) noexcept(false) override;
 
@@ -128,7 +128,7 @@ namespace trax{
 		std::shared_ptr<Bogie> GetBogie( int idx ) const;
 
 		std::stack<spat::Frame<dim::Length,dim::One>> m_ActiveFrames;
-		std::vector<std::tuple<std::shared_ptr<Bogie>, RailRunner::EndType, IDType, spat::Frame<dim::Length,dim::One>>> m_Swivels;
+		std::vector<std::tuple<std::shared_ptr<Bogie>, EndType, IDType, spat::Frame<dim::Length,dim::One>>> m_Swivels;
 		std::shared_ptr<struct TractionForceCharacteristic> m_pCharacteristic;
 		trax::Material m_Material;
 

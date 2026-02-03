@@ -118,7 +118,7 @@ void NarrowSwitch_Imp::Toggle( bool pulse ){
 	Set( static_cast<Status>(status), pulse );
 }
 
-void NarrowSwitch_Imp::Set( const Track& trackA, Track::EndType trackendA, const Track& trackB, Track::EndType trackendB, bool pulse ){
+void NarrowSwitch_Imp::Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse ){
 	const int slotA = Slot( trackA, trackendA );
 	const int slotB = Slot( trackB, trackendB );
 
@@ -137,7 +137,7 @@ void NarrowSwitch_Imp::Set( const Track& trackA, Track::EndType trackendA, const
 int NarrowSwitch_Imp::Slot( 
 	int slot, 
 	std::shared_ptr<TrackBuilder> pTrack, 
-	Track::EndType trackend, 
+	EndType trackend, 
 	bool connectAnonymous )
 {
 	const int retval = Connector_Imp::Slot( slot, pTrack, trackend, connectAnonymous );
@@ -175,32 +175,32 @@ bool NarrowSwitch_Imp::Check( std::ostream& os, Length e_distance, Angle e_kink,
 void NarrowSwitch_Imp::GetCenter( Frame<Length, One>& center ) const
 {
 	if( NarrowTrack().first ){
-		if( NarrowTrack().second == Track::EndType::end )
+		if( NarrowTrack().second == EndType::south )
 			NarrowTrack().first->Transition( NarrowTrack().first->GetLength(), center );
-		else if( NarrowTrack().second == Track::EndType::front ){
+		else if( NarrowTrack().second == EndType::north ){
 			NarrowTrack().first->Transition( 0_m, center );
 			center.T *= -1;
 			center.N *= -1;
 		}
 	}
 	else if( StraightTrack().first ){
-		if( StraightTrack().second == Track::EndType::end ){
+		if( StraightTrack().second == EndType::south ){
 			StraightTrack().first->Transition( StraightTrack().first->GetLength(), center );
 			center.T *= -1;
 			center.N *= -1;
 		}
-		else if( StraightTrack().second == Track::EndType::front )
+		else if( StraightTrack().second == EndType::north )
 			StraightTrack().first->Transition( 0_m, center );
 	}
 	else{	
 		for( int i = 0; i < CntDivergedTracks(); ++i )
 			if( DivergedTrack(i).first ){
-				if( DivergedTrack(i).second == Track::EndType::end ){
+				if( DivergedTrack(i).second == EndType::south ){
 					DivergedTrack(i).first->Transition( DivergedTrack(i).first->GetLength(), center );
 					center.T *= -1;
 					center.N *= -1;
 				}
-				else if( DivergedTrack(i).second == Track::EndType::front )
+				else if( DivergedTrack(i).second == EndType::north )
 					DivergedTrack(i).first->Transition( 0_m, center );
 
 				break;
@@ -299,12 +299,12 @@ NarrowSwitch::Status NarrowSwitch_Imp::Get() const noexcept{
 
 void NarrowSwitch_Imp::NarrowTrack( 
 	std::shared_ptr<TrackBuilder> pNarrowTrack, 
-	Track::EndType trackend )
+	EndType trackend )
 {
 	Slot( slot_0, pNarrowTrack, trackend );
 }
 
-std::pair<std::shared_ptr<TrackBuilder>, Track::EndType> NarrowSwitch_Imp::NarrowTrack() const noexcept{
+std::pair<std::shared_ptr<TrackBuilder>, EndType> NarrowSwitch_Imp::NarrowTrack() const noexcept{
 	return Slot(slot_0);
 }
 
@@ -314,12 +314,12 @@ void NarrowSwitch_Imp::ClearNarrowTrack(){
 
 void NarrowSwitch_Imp::StraightTrack( 
 	std::shared_ptr<TrackBuilder> pStaightTrack, 
-	Track::EndType trackend )
+	EndType trackend )
 {
 	Slot( slot_1, pStaightTrack, trackend );
 }
 
-std::pair<std::shared_ptr<TrackBuilder>, Track::EndType> NarrowSwitch_Imp::StraightTrack() const noexcept{
+std::pair<std::shared_ptr<TrackBuilder>, EndType> NarrowSwitch_Imp::StraightTrack() const noexcept{
 	return Slot(slot_1);
 }
 
@@ -329,12 +329,12 @@ void NarrowSwitch_Imp::ClearStraightTrack(){
 
 void NarrowSwitch_Imp::DivergedTrack( 
 	int divTrackID, 
-	std::shared_ptr<TrackBuilder> pDivergedTrack, Track::EndType trackend )
+	std::shared_ptr<TrackBuilder> pDivergedTrack, EndType trackend )
 {
 	Slot( slot_2 + divTrackID, pDivergedTrack, trackend );
 }
 
-std::pair<std::shared_ptr<TrackBuilder>, Track::EndType> NarrowSwitch_Imp::DivergedTrack( int divTrackID ) const noexcept{
+std::pair<std::shared_ptr<TrackBuilder>, EndType> NarrowSwitch_Imp::DivergedTrack( int divTrackID ) const noexcept{
 	return Slot(slot_2 + divTrackID);
 }
 
@@ -351,7 +351,7 @@ Location NarrowSwitch_Imp::Bifurcation() const{
 		return Location{};
 
 	TrackLocation loc;
-	if( NarrowTrack().second == Track::EndType::end ){
+	if( NarrowTrack().second == EndType::south ){
 		loc.parameter	= NarrowTrack().first->GetLength();
 		loc.orientation = Orientation::Value::para;
 	}
@@ -523,12 +523,12 @@ const char* Switch_Imp::TypeName() const noexcept{
 
 void Switch_Imp::DivergedTrack( 
 	std::shared_ptr<TrackBuilder> pDivergedTrack, 
-	Track::EndType trackend )
+	EndType trackend )
 {
 	Slot( slot_2, pDivergedTrack, trackend );
 }
 
-std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Switch_Imp::DivergedTrack() const noexcept{
+std::pair<std::shared_ptr<TrackBuilder>,EndType> Switch_Imp::DivergedTrack() const noexcept{
 	return Slot(slot_2);
 }
 
@@ -711,12 +711,12 @@ const char* ThreeWaySwitch_Imp::TypeName() const noexcept{
 
 void ThreeWaySwitch_Imp::DivergedTrack1(
 	std::shared_ptr<TrackBuilder> pDivergedTrack1,
-	Track::EndType trackend )
+	EndType trackend )
 {
 	Slot( slot_2, pDivergedTrack1, trackend );
 }
 
-std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> ThreeWaySwitch_Imp::DivergedTrack1() const noexcept{
+std::pair<std::shared_ptr<TrackBuilder>,EndType> ThreeWaySwitch_Imp::DivergedTrack1() const noexcept{
 	return Slot(slot_2);
 }
 
@@ -726,12 +726,12 @@ void ThreeWaySwitch_Imp::ClearDivergedTrack1(){
 
 void ThreeWaySwitch_Imp::DivergedTrack2(
 	std::shared_ptr<TrackBuilder> pDivergedTrack,
-	Track::EndType trackend )
+	EndType trackend )
 {
 	Slot( slot_3, pDivergedTrack, trackend );
 }
 
-std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> ThreeWaySwitch_Imp::DivergedTrack2() const noexcept{
+std::pair<std::shared_ptr<TrackBuilder>,EndType> ThreeWaySwitch_Imp::DivergedTrack2() const noexcept{
 	return Slot(slot_3);
 }
 
@@ -942,9 +942,9 @@ void SingleSlipSwitch_Imp::Toggle( bool pulse ){
 
 void SingleSlipSwitch_Imp::Set( 
 	const Track& /*trackA*/, 
-	Track::EndType /*trackendA*/, 
+	EndType /*trackendA*/, 
 	const Track& /*trackB*/, 
-	Track::EndType /*trackendB*/, 
+	EndType /*trackendB*/, 
 	bool /*pulse*/ )
 {
 	assert( !"Not implemented yet!" );
@@ -1061,7 +1061,7 @@ MultiPlug& SingleSlipSwitch_Imp::PlugTo(Status status){
 int SingleSlipSwitch_Imp::Slot(
 	int slot,
 	std::shared_ptr<TrackBuilder> pTrack,
-	Track::EndType trackend, 
+	EndType trackend, 
 	bool connectAnonymous )
 {
 	const int retval = Connector_Imp::Slot( slot, pTrack, trackend, connectAnonymous );
@@ -1246,9 +1246,9 @@ void DoubleSlipSwitch_Imp::Toggle( bool pulse ){
 
 void DoubleSlipSwitch_Imp::Set(
 	const Track& /*trackA*/,
-	Track::EndType /*trackendA*/,
+	EndType /*trackendA*/,
 	const Track& /*trackB*/,
-	Track::EndType /*trackendB*/,
+	EndType /*trackendB*/,
 	bool /*pulse*/)
 {
 	assert( !"Not implemented yet!" );
@@ -1396,7 +1396,7 @@ MultiPlug& DoubleSlipSwitch_Imp::PlugTo(Status status){
 int DoubleSlipSwitch_Imp::Slot(
 	int slot,
 	std::shared_ptr<TrackBuilder> pTrack,
-	Track::EndType trackend, 
+	EndType trackend, 
 	bool connectAnonymous )
 {
 	const int retval = Connector_Imp::Slot( slot, pTrack, trackend, connectAnonymous );

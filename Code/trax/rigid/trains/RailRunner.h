@@ -313,6 +313,7 @@
 #include "trax/Units.h"
 #include "trax/Identified.h"
 #include "trax/Location.h"
+#include "trax/End.h"
 
 #include <memory>
 
@@ -346,15 +347,6 @@ namespace trax{
 		/// \returns the name for the object type that implements this interface. 
 		virtual const char*	TypeName() const noexcept = 0;
 
-
-		/// \brief Types of the RailRunner's end's.
-		enum class EndType : char{
-			none = 0,
-			north,		///< Denotes the front end of a RailRunner.
-			south,		///< Denotes the back end of a RailRunner.
-			any,		///< Denotes the north or south end of a Railrunner.
-			both		///< Denotes both ends of a RailRunner.
-		};
 
 		/// \brief Gets a shared pointer to this.
 		virtual std::shared_ptr<RailRunner> This() const noexcept = 0;
@@ -667,24 +659,6 @@ namespace trax{
 		/// \returns User provided data.
 		virtual RailRunnerUserData* UserData() const noexcept = 0;
 	};
-
-
-	/// \brief Gets the opposite end type.
-	inline RailRunner::EndType operator!( RailRunner::EndType end ) noexcept{
-		switch( end ){
-			case RailRunner::EndType::north:	return RailRunner::EndType::south;
-			case RailRunner::EndType::south:	return RailRunner::EndType::north;
-			default:							return RailRunner::EndType::none;
-		}
-	}
-
-	/// \brief Makes a string from the status
-	dclspc std::string ToString( RailRunner::EndType end );
-
-
-	/// \brief Makes a end type value from a string.
-	/// \throws std::invalid_argument if the string was not recognized.
-	dclspc RailRunner::EndType ToRailRunnerEndType( const std::string& endtype );
 
 }
 

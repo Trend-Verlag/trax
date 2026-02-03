@@ -125,7 +125,7 @@ void MovableTrack_Imp::UpdateTrackPose() noexcept
 		m_pBody->GetFrame( bodyFrame );
 		bodyFrame.ToParent( trackFrame );
 		common::FlagBlocker fb{ m_bFramePropagationToBodyOnSetFrame };
-		SetFrame( trackFrame );
+		SetFrame( trackFrame.OrthoNormalize() );
 	}
 }
 

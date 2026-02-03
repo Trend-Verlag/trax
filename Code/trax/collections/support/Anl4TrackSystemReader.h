@@ -131,7 +131,7 @@ namespace trax{
 
 		/// \name Explicit XML Reading
 		///@{
-		dclspc void ReadEnd( const boost::property_tree::ptree& pt, TrackBuilder& track, Track::EndType endtype, std::vector<trax::Track::Coupling>& couplings );
+		dclspc void ReadEnd( const boost::property_tree::ptree& pt, TrackBuilder& track, EndType endtype, std::vector<trax::Track::Coupling>& couplings );
 		///@}
 
 		/// \brief Reads a track system from a property tree.

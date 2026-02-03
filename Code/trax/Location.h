@@ -322,12 +322,12 @@ namespace trax
 		/// \brief Reserves a range on the track relative to this Location.
 		/// \throws std::logic_error if the location is not on track.
 		/// \throws std::range_error If the range lays completely outside the track.
-		dclspc void Reserve( common::Interval<Length> range, IDType forID );
+		dclspc void Reserve( common::Interval<Length> range, IDType forID ) const;
 
 
 		/// \brief Deletes a reservation.
 		/// \throws std::logic_error if the location is not on track.
-		dclspc void DeleteReservation( IDType forID = anyID );
+		dclspc void DeleteReservation( IDType forID = anyID ) const;
 
 
 		/// \brief Finds overlapping areas for reservations.
@@ -347,7 +347,7 @@ namespace trax
 		// Calculates this track location relative to the coupled track at front or end.
 		// This might lead to a parameter out of track ranges.
 		// Returns false if the track is uncoupled at the specified end.
-		bool TrackTransition( Track::EndType frontend, const Event* pEvent ) noexcept;
+		bool TrackTransition( EndType frontend, const Event* pEvent ) noexcept;
 
 		// Transition tracks until parameter is on track.
 		bool Resolve() noexcept;
@@ -391,5 +391,5 @@ namespace trax
 	/// \returns If an end of the line is found in the range of maxDistance, the track and its end is returned. These
 	/// represent the end of the line. With Track::GetConnector, a Connector can be retrieved, if any. If the maxDistance
 	/// is exceeded the track pointer would be nullptr and the returned length would equal maxDistance.
-	dclspc std::tuple<std::shared_ptr<const Track>,Track::EndType,Length> EndOfLine( const Location& location, Length maxDistance, bool bDeadConnectorOnly = false );
+	dclspc std::tuple<std::shared_ptr<const Track>,EndType,Length> EndOfLine( const Location& location, Length maxDistance, bool bDeadConnectorOnly = false );
 }

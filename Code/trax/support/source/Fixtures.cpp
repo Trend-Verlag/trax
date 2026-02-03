@@ -85,8 +85,8 @@ ThreeTracksInALineFixture::ThreeTracksInALineFixture()
 	frame.TransportTan( 10_m );
 	m_pTrack3->SetFrame( frame );
 
-	m_pTrack1->Couple( std::make_pair( m_pTrack1,trax::Track::EndType::end ), std::make_pair( m_pTrack2, trax::Track::EndType::front ) );
-	m_pTrack2->Couple( std::make_pair( m_pTrack2, trax::Track::EndType::end ), std::make_pair( m_pTrack3, trax::Track::EndType::front ) );
+	m_pTrack1->Couple( std::make_pair( m_pTrack1,trax::EndType::south ), std::make_pair( m_pTrack2, trax::EndType::north ) );
+	m_pTrack2->Couple( std::make_pair( m_pTrack2, trax::EndType::south ), std::make_pair( m_pTrack3, trax::EndType::north ) );
 }
 
 ThreeTracksInALineFixture::~ThreeTracksInALineFixture()
@@ -162,10 +162,10 @@ TrackCircle::TrackCircle()
 	m_pTrack4->Attach( m_pArc4,{0_m, R*dim::pi/2} );
 	m_pTrack4->Attach( trax::LinearTwist::Make() );
 
-	m_pTrack1->Couple( std::make_pair(m_pTrack1, trax::Track::EndType::end), std::make_pair(m_pTrack2, trax::Track::EndType::front) );
-	m_pTrack2->Couple( std::make_pair(m_pTrack2, trax::Track::EndType::end), std::make_pair(m_pTrack3, trax::Track::EndType::front) );
-	m_pTrack3->Couple( std::make_pair(m_pTrack3, trax::Track::EndType::end), std::make_pair(m_pTrack4, trax::Track::EndType::front) );
-	m_pTrack4->Couple( std::make_pair(m_pTrack4, trax::Track::EndType::end), std::make_pair(m_pTrack1, trax::Track::EndType::front) );
+	m_pTrack1->Couple( std::make_pair(m_pTrack1, trax::EndType::south), std::make_pair(m_pTrack2, trax::EndType::north) );
+	m_pTrack2->Couple( std::make_pair(m_pTrack2, trax::EndType::south), std::make_pair(m_pTrack3, trax::EndType::north) );
+	m_pTrack3->Couple( std::make_pair(m_pTrack3, trax::EndType::south), std::make_pair(m_pTrack4, trax::EndType::north) );
+	m_pTrack4->Couple( std::make_pair(m_pTrack4, trax::EndType::south), std::make_pair(m_pTrack1, trax::EndType::north) );
 
 	m_Location.PutOn( m_pTrack1, trax::TrackLocation( 0_m, true ) );
 }

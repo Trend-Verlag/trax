@@ -119,8 +119,8 @@ void TrainCreator::TrainEnd(
 			{
 				for( std::pair<std::shared_ptr<trax::TrainComponent>,trax::Orientation> pair : m_TrainStack.top() )
 				{
-					m_pTrain->Align( trax::RailRunner::EndType::south, *pair.first, pair.second );
-					m_pTrain->Append( trax::RailRunner::EndType::south, pair.first, pair.second );
+					m_pTrain->Align( EndType::south, *pair.first, pair.second );
+					m_pTrain->Append( EndType::south, pair.first, pair.second );
 				}
 
 				m_TrainStack.pop();

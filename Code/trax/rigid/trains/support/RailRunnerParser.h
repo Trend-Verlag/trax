@@ -76,14 +76,14 @@ namespace trax{
 			Mass /*mass*/ ) noexcept(false) {}
 
 		virtual void Coupling(
-			RailRunner::EndType /*end*/,
+			EndType /*end*/,
 			Length /*bufferLength*/,
 			Force /*maxForce*/,
 		    IDType /*typeID*/,
 			const spat::Frame<dim::Length,dim::One>& /*frame*/ ) noexcept(false) {}
 
 		virtual void Swivel( 
-			RailRunner::EndType /*slot*/,
+			EndType /*slot*/,
 			IDType /*childID*/,
 			const spat::Frame<dim::Length,dim::One>& /*frame*/ ) noexcept(false) {}
 

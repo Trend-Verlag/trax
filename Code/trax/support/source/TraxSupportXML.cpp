@@ -38,7 +38,7 @@ namespace trax{
 
 namespace ptreesupport{
 
-void ReadConnection( const boost::property_tree::ptree& pt, Track::End& trackend ) noexcept{
+void ReadConnection( const boost::property_tree::ptree& pt, Track::End& trackend ){
 	for( const auto& pair : pt )
 	{
 		if( pair.first == "TrackEnd" )
@@ -46,7 +46,7 @@ void ReadConnection( const boost::property_tree::ptree& pt, Track::End& trackend
 	}
 }
 
-void ReadTrackEnd( const boost::property_tree::ptree& pt, Track::End& trackend ) noexcept{
+void ReadTrackEnd( const boost::property_tree::ptree& pt, Track::End& trackend ){
 	trackend.id		= pt.get( "<xmlattr>.refid", IDType{0} );
 	trackend.type	= ToEndType( pt.get( "<xmlattr>.type", "front" ) );
 }

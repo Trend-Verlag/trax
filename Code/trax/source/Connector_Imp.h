@@ -41,13 +41,13 @@ namespace trax{
 
 		void Disconnect() override;
 
-		int Slot( int slot, std::shared_ptr<TrackBuilder> pTrack, Track::EndType trackend, bool connectAnonymous = false ) override;
+		int Slot( int slot, std::shared_ptr<TrackBuilder> pTrack, EndType trackend, bool connectAnonymous = false ) override;
 
-		int Slot( std::shared_ptr<TrackBuilder> pTrack, Track::EndType trackend, bool connectAnonymous = false ) override;
+		int Slot( std::shared_ptr<TrackBuilder> pTrack, EndType trackend, bool connectAnonymous = false ) override;
 
-		std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> Slot( int slot ) const noexcept override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> Slot( int slot ) const noexcept override;
 
-		int Slot( const Track& track, Track::EndType trackend ) const noexcept override;
+		int Slot( const Track& track, EndType trackend ) const noexcept override;
 
 		int CntSlots() const noexcept override;
 
@@ -84,7 +84,7 @@ namespace trax{
 
 		bool CheckSlot( int slot, std::ostream& os, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept;
 	private:
-		std::vector<std::pair<std::shared_ptr<TrackBuilder>,Track::EndType>> m_Slots;
+		std::vector<std::pair<std::shared_ptr<TrackBuilder>,EndType>> m_Slots;
 
 		Jack_Imp m_JackOnChange{ "JackOnChange" };
 		MultiPlug_Imp<Toggle_Pug<Connector_Imp>> m_PlugToToggle;

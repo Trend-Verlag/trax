@@ -183,11 +183,11 @@ bool ParseCargoAxisArrangement( const boost::property_tree::ptree& pt, RollingSt
 
 void ParseCouplingAxisArrangement( const boost::property_tree::ptree& pt, RollingStockParser& callback, Length length )
 {
-	RailRunner::EndType end = pt.get( "<xmlattr>.end", "" ) == "south" ? RailRunner::EndType::south : RailRunner::EndType::north;
+	EndType end = pt.get( "<xmlattr>.end", "" ) == "south" ? EndType::south : EndType::north;
 	
 	Frame<Length,One> frame;
 	frame.Init();
-	frame.P.x = (end == RailRunner::EndType::north ? +1_1 : -1_1) * length/2;
+	frame.P.x = (end == EndType::north ? +1_1 : -1_1) * length/2;
 	frame.P.z = get( pt, "<xmlattr>.height", 1_m, _m );
 
 	callback.Coupling( 
@@ -283,11 +283,11 @@ void ParseBogieContentAxisArrangement( const boost::property_tree::ptree& pt, Ro
 	for( auto iter = pt.find( "WheelFrame" ); iter != pt.not_found(); ++iter )
 	{	
 		std::string role = iter->second.get( "<xmlattr>.name", "" );
-		RailRunner::EndType parentEnd = RailRunner::EndType::none;
+		EndType parentEnd = EndType::none;
 		if( role == "_vRadsatz" )
-			parentEnd = RailRunner::EndType::north;
+			parentEnd = EndType::north;
 		else if( role == "_hRadsatz" )
-			parentEnd = RailRunner::EndType::south;
+			parentEnd = EndType::south;
 		else
 			continue;
 
@@ -379,7 +379,7 @@ void ParseGeom( const boost::property_tree::ptree& pt, RollingStockParser& callb
 
 void ParseCoupling( const boost::property_tree::ptree& pt, RollingStockParser& callback )
 {
-	RailRunner::EndType end = ToRailRunnerEndType( pt.get( "<xmlattr>.end", "none" ) );
+	EndType end = ToEndType( pt.get( "<xmlattr>.end", "none" ) );
 	Length bufferLength = get( pt, "<xmlattr>.bufferLength", 0.4_m, _m );
 	Force maxForce = get( pt, "<xmlattr>.maxForce", Force{ +infinite }, _kN );
 	IDType typeID = pt.get( "<xmlattr>.typeID", 0 );
@@ -396,7 +396,7 @@ void ParseCoupling( const boost::property_tree::ptree& pt, RollingStockParser& c
 
 void ParseSwivel( const boost::property_tree::ptree& pt, RollingStockParser& callback )
 {
-	RailRunner::EndType slot = ToRailRunnerEndType( pt.get( "<xmlattr>.slot", "north" ) );
+	EndType slot = ToEndType( pt.get( "<xmlattr>.slot", "north" ) );
 	IDType childID = pt.get( "<xmlattr>.childID", 0 );
 
 	for( const auto& pair : pt )

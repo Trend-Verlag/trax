@@ -264,39 +264,70 @@ Length Closest( const VectorBundle<Length,One>& R, const Track& onTrack, bool in
 			[]( const std::pair<Length,Length>& a, const std::pair<Length,Length>& b ){ return a.second < b.second; } )->first;
 }
 
-void Couple( 
-	std::pair<std::shared_ptr<Track>,Track::EndType> trackA, 
-	std::pair<std::shared_ptr<Track>,Track::EndType> trackB )
+EndType ClosestEnd( const spat::Position<Length>& toPoint, const Track& onTrack )
 {
-	if( TrackBuilder* pTrackBuilder = dynamic_cast<TrackBuilder*>(trackA.first.get()) )
-		pTrackBuilder->Couple(	std::make_pair(std::dynamic_pointer_cast<TrackBuilder>(trackA.first), trackA.second), 
-								std::make_pair(std::dynamic_pointer_cast<TrackBuilder>(trackB.first), trackB.second) );
+	Position<Length> N, S;
+	onTrack.Transition( 0_m, N );
+	onTrack.Transition( onTrack.GetLength(), S );
+	Length dN = ( N - toPoint ).Length();
+	Length dS = ( S - toPoint ).Length();
+	return dN <= dS ? EndType::north : EndType::south;
 }
 
-Length DistanceOf( 
-	const Track::cTrackEnd trackEndA, 
-	const Track::cTrackEnd trackEndB )
+void Couple( 
+	Track::TrackEnd trackEndA, 
+	Track::TrackEnd trackEndB )
 {
-	if( trackEndA.first == nullptr || !trackEndA.first->IsValid() )
+	if( !IsValid(trackEndA) )
+		throw std::invalid_argument( "Couple: trackA is not valid!" );
+	if( !IsValid(trackEndB) )
+		throw std::invalid_argument( "Couple: trackB is not valid!" );
+
+	if( std::shared_ptr<TrackBuilder> pTrackBuilder = trackEndA.pTrack->This() )
+		pTrackBuilder->Couple(	std::make_pair(trackEndA.pTrack->This(), trackEndA.end), 
+								std::make_pair(trackEndB.pTrack->This(), trackEndB.end) );
+}
+
+bool Coupled( 
+	const Track::cTrackEnd& trackEndA, 
+	const Track::cTrackEnd& trackEndB ) noexcept
+{
+	if( !IsValid(trackEndA) || !IsValid(trackEndB) )
+		return false;
+
+	if( Track::cTrackEnd otherEnd = trackEndA.pTrack->TransitionEnd( trackEndA.end );
+		otherEnd.pTrack == trackEndB.pTrack && otherEnd.end == trackEndB.end )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+Length DistanceOf(
+	const Track::cTrackEnd& trackEndA, 
+	const Track::cTrackEnd& trackEndB )
+{
+	if( !IsValid(trackEndA) )
 		throw std::invalid_argument( "CalculateGapSize: trackEndA has no valid track!" );
-	if( trackEndB.first == nullptr || !trackEndB.first->IsValid() )
+	if( !IsValid(trackEndB) )
 		throw std::invalid_argument( "CalculateGapSize: trackEndB has no valid track!" );
 
 	Position<Length> posTheOne, posTheOther;
-	trackEndA.first->Transition( trackEndA.second == Track::EndType::front ? 0_m : trackEndA.first->GetLength(), posTheOne );
-	trackEndB.first->Transition( trackEndB.second == Track::EndType::front ? 0_m : trackEndB.first->GetLength(), posTheOther );
+	trackEndA.pTrack->Transition( trackEndA.end == EndType::north ? 0_m : trackEndA.pTrack->GetLength(), posTheOne );
+	trackEndB.pTrack->Transition( trackEndB.end == EndType::north ? 0_m : trackEndB.pTrack->GetLength(), posTheOther );
 	return (posTheOther - posTheOne).Length();
 }
 
-Length DistanceToCoupled( const Track& track, Track::EndType atEnd )
+Length DistanceToCoupled( const Track& track, EndType atEnd )
 {
 	if( !track.IsCoupled( atEnd ) )
 		throw std::logic_error( "DistanceToCoupled: track end is not coupled!" );
 
-	return DistanceOf( std::make_pair( track.This(), atEnd ), track.TransitionEnd( atEnd ) );
+	return DistanceOf( { track.This(), atEnd }, track.TransitionEnd( atEnd ) );
 }
 
-Angle KinkToCoupled( const Track& track, Track::EndType atEnd )
+Angle KinkToCoupled( const Track& track, EndType atEnd )
 {
 	if( !track.IsCoupled( atEnd ) )
 		throw std::logic_error( "KinkToCoupled: track end is not coupled!" );
@@ -304,39 +335,39 @@ Angle KinkToCoupled( const Track& track, Track::EndType atEnd )
 	Vector<One> t1, t2;
 	Track::TrackEnd otherEnd = track.TransitionEnd( atEnd );
 
-	switch( otherEnd.second ){
-	case Track::EndType::any:
-	case Track::EndType::front:
-		otherEnd.first->Transition( 0_m, t2 );
+	switch( otherEnd.end ){
+	case EndType::any:
+	case EndType::north:
+		otherEnd.pTrack->Transition( 0_m, t2 );
 		break;
-	case Track::EndType::end:
-		otherEnd.first->Transition( otherEnd.first->GetLength(), t2 );
+	case EndType::south:
+		otherEnd.pTrack->Transition( otherEnd.pTrack->GetLength(), t2 );
 		break;
-	case Track::EndType::none:
+	case EndType::none:
 	default:
 		return pi;
 	}
 
 	switch( atEnd ){
-	case Track::EndType::any:
-	case Track::EndType::front:
+	case EndType::any:
+	case EndType::north:
 		track.Transition( 0_m, t1 );
 		break;
-	case Track::EndType::end:
+	case EndType::south:
 		track.Transition( track.GetLength(), t1 );
 		break;
-	case Track::EndType::none:
+	case EndType::none:
 	default:
 		return pi;
 	}
 
-	if( atEnd == otherEnd.second )
+	if( atEnd == otherEnd.end )
 		t2 *= -1;
 
 	return atan2( (t1 % t2).Length(), t1 * t2 );
 }
 
-Angle TwistToCoupled( const Track& track, Track::EndType atEnd )
+Angle TwistToCoupled( const Track& track, EndType atEnd )
 {
 	if( !track.IsCoupled( atEnd ) )
 		throw std::logic_error( "TwistToCoupled: track end is not coupled!" );
@@ -344,28 +375,28 @@ Angle TwistToCoupled( const Track& track, Track::EndType atEnd )
 	Frame<Length,One> b1, b2;
 	Track::TrackEnd otherEnd = track.TransitionEnd( atEnd );
 
-	switch( otherEnd.second ){
-	case Track::EndType::any:
-	case Track::EndType::front:
-		otherEnd.first->Transition( 0_m, b2 );
+	switch( otherEnd.end ){
+	case EndType::any:
+	case EndType::north:
+		otherEnd.pTrack->Transition( 0_m, b2 );
 		break;
-	case Track::EndType::end:
-		otherEnd.first->Transition( otherEnd.first->GetLength(), b2 );
+	case EndType::south:
+		otherEnd.pTrack->Transition( otherEnd.pTrack->GetLength(), b2 );
 		break;
-	case Track::EndType::none:
+	case EndType::none:
 	default:
 		return pi;
 	}
 
 	switch( atEnd ){
-	case Track::EndType::any:
-	case Track::EndType::front:
+	case EndType::any:
+	case EndType::north:
 		track.Transition( 0_m, b1 );
 		break;
-	case Track::EndType::end:
+	case EndType::south:
 		track.Transition( track.GetLength(), b1 );
 		break;
-	case Track::EndType::none:
+	case EndType::none:
 	default:
 		return pi;
 	}

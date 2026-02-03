@@ -182,11 +182,11 @@ std::shared_ptr<TrackBuilder> Anl4TrackSystemReader::CreateTrack(
 			}
 
 			else if( pair.first == "Begin" ){
-				ReadEnd( pair.second, *pTrack, Track::EndType::front, couplings );
+				ReadEnd( pair.second, *pTrack, EndType::north, couplings );
 			}
 
 			else if( pair.first == "End" ){
-				ReadEnd( pair.second, *pTrack, Track::EndType::end, couplings );
+				ReadEnd( pair.second, *pTrack, EndType::south, couplings );
 			}
 
 			else if( pair.first == "Sensor" ){
@@ -945,22 +945,22 @@ void Anl4TrackSystemReader::ReadSection( const boost::property_tree::ptree& pt, 
 ///////////////////////////////////////
 void ReadEnd( const boost::property_tree::ptree& pt,
 	TrackBuilder& track,
-	Track::EndType endtype,
+	EndType endtype,
 	std::vector<Track::Coupling>& couplings )
 {
 	if( !pt.get( "<xmlattr>.electrificationShift", "" ).empty() ){
-		if( endtype == Track::EndType::front )
+		if( endtype == EndType::north )
 			track.Reference( "electrificationShiftBegin", pt.get( "<xmlattr>.electrificationShift", "" ) );
-		else if( endtype == Track::EndType::end )
+		else if( endtype == EndType::south )
 			track.Reference( "electrificationShiftEnd", pt.get( "<xmlattr>.electrificationShift", "" ) );
 	}
 
 	for( const auto& pair : pt )
 	{
 		if( pair.first == "BufferStop" ){
-			if( endtype == Track::EndType::front )
+			if( endtype == EndType::north )
 				track.Reference( "bufferStopBegin", "true" );
-			else if( endtype == Track::EndType::end )
+			else if( endtype == EndType::south )
 				track.Reference( "bufferStopEnd", "true" );
 		}
 

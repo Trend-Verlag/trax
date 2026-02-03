@@ -108,6 +108,9 @@ namespace trax{
 		///
 		/// Objects that are created with a scene reference register automatically,
 		/// others will need manual registration.
+		/// 
+		/// The methods of the Simulated object will be called in order
+		/// of registration. Register container objects before their contents.
 		/// \param simulated The Simulated object to register.
 		virtual void Register( Simulated& simulated ) noexcept = 0;
 

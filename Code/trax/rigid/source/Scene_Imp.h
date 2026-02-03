@@ -94,6 +94,7 @@ namespace trax{
 
 		virtual void StartStep( Time dt = fixed_timestep ) noexcept = 0;
 				void Idle() const;
+				void PreUpdate();
 		virtual void Update( Time dt = fixed_timestep );
 		virtual bool EndStep() noexcept = 0;	
 	private:

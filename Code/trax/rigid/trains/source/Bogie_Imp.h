@@ -63,6 +63,8 @@ namespace trax{
 
 		void Idle() noexcept override;
 
+		void PreUpdate() override;
+
 		void Update( Time dt ) noexcept override;
 
 		void Pause() noexcept override;

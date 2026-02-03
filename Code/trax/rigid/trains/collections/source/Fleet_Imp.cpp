@@ -135,6 +135,7 @@ bool Fleet_Imp::IsTrainGenerationEnabled() const noexcept{
 	return m_bTrainGenerationEnabled;
 }
 
+
 bool Fleet_Imp::Start( Scene& /*scene*/ )
 {
 	return true;
@@ -144,22 +145,27 @@ void Fleet_Imp::Idle() noexcept
 {
 }
 
+void Fleet_Imp::PreUpdate()
+{
+	DeleteReservations();
+}
+
 void Fleet_Imp::Update( Time /*dt*/ )
 {
 	SeparateTrains();
 
-	std::vector<std::tuple<Bogie*,RailRunner::EndType,spat::Sphere<Length>>> activeCouplings;
+	std::vector<std::tuple<Bogie*,EndType,spat::Sphere<Length>>> activeCouplings;
 	for( auto bogie : m_Bogies )
 	// Don't update bogies, they are registered by their own.
 	{
-		if( bogie->IsActivated( RailRunner::EndType::north ) )
+		if( bogie->IsActivated( EndType::north ) )
 		{
-			activeCouplings.push_back( std::make_tuple( bogie, RailRunner::EndType::north, bogie->GetCoupling( RailRunner::EndType::north ) ) );
+			activeCouplings.push_back( std::make_tuple( bogie, EndType::north, bogie->GetCoupling( EndType::north ) ) );
 		}
 
-		if( bogie->IsActivated( RailRunner::EndType::south ) )
+		if( bogie->IsActivated( EndType::south ) )
 		{
-			activeCouplings.push_back( std::make_tuple( bogie, RailRunner::EndType::south, bogie->GetCoupling( RailRunner::EndType::south ) ) );
+			activeCouplings.push_back( std::make_tuple( bogie, EndType::south, bogie->GetCoupling( EndType::south ) ) );
 		}
 	}
 
@@ -191,6 +197,8 @@ void Fleet_Imp::Update( Time /*dt*/ )
 			}
 		}
 	}
+
+	MakeReservations();
 }
 
 void Fleet_Imp::Pause() noexcept
@@ -253,6 +261,22 @@ void Fleet_Imp::UnregisterBogies( const Train& train ) noexcept
 	}
 }
 
+void Fleet_Imp::MakeReservations() const noexcept
+{
+	for( const Train& train : *this )
+	{
+		train.MakeReservation();
+	}
+}
+
+void Fleet_Imp::DeleteReservations() const noexcept
+{
+	for( const Train& train : *this )
+	{
+		train.DeleteReservation();
+	}
+}
+
 void Fleet_Imp::SeparateTrains()
 {
 	for( Train* pSeparated : m_TrainsSeparated )
@@ -265,12 +289,12 @@ void Fleet_Imp::SeparateTrains()
 
 void Fleet_Imp::ProduceCommonTrain( 
 	const Bogie& bogieA, 
-	RailRunner::EndType endA, 
+	EndType endA, 
 	const Bogie& bogieB, 
-	RailRunner::EndType endB )
+	EndType endB )
 {
-	Orientation orientationA = (endA == RailRunner::EndType::south ? Orientation::Value::para : Orientation::Value::anti);
-	Orientation orientationB = (endB == RailRunner::EndType::north ? Orientation::Value::para : Orientation::Value::anti);
+	Orientation orientationA = (endA == EndType::south ? Orientation::Value::para : Orientation::Value::anti);
+	Orientation orientationB = (endB == EndType::north ? Orientation::Value::para : Orientation::Value::anti);
 	std::pair<Train*,Orientation> trainA = bogieA.GetRollingStock()->GetTopmostTrain();
 	std::pair<Train*,Orientation> trainB = bogieB.GetRollingStock()->GetTopmostTrain();
 
@@ -281,18 +305,18 @@ void Fleet_Imp::ProduceCommonTrain(
 			if( trainA.first->MaxThrust() > trainB.first->MaxThrust() )
 			{
 				trainA.first->Take( 
-					Back( orientationA + trainA.second ), 
+					South( orientationA + trainA.second ), 
 					*trainB.first,
-					Front( orientationB + trainB.second ) );
+					North( orientationB + trainB.second ) );
 				assert( trainA.first->IsValid() );
 				Remove( trainB.first );
 			}
 			else
 			{
 				trainB.first->Take( 
-					Front( orientationB + trainB.second ), 
+					North( orientationB + trainB.second ), 
 					*trainA.first,
-					Back( orientationA + trainA.second ) );
+					South( orientationA + trainA.second ) );
 				assert( trainB.first->IsValid() );
 				Remove( trainA.first );
 			}
@@ -300,25 +324,25 @@ void Fleet_Imp::ProduceCommonTrain(
 		else if( trainA.first->GetNumberOfComponents() == 1 )
 		{
 			trainB.first->Take( 
-				Front( orientationB + trainB.second ), 
+				North( orientationB + trainB.second ), 
 				*trainA.first,
-				Back( orientationA + trainA.second ) );
+				South( orientationA + trainA.second ) );
 			assert( trainB.first->IsValid() );
 			Remove( trainA.first );
 		}
 		else if( trainB.first->GetNumberOfComponents() == 1 )
 		{
 			trainA.first->Take( 
-				Back( orientationA + trainA.second ), 
+				South( orientationA + trainA.second ), 
 				*trainB.first,
-				Front( orientationB + trainB.second ) );
+				North( orientationB + trainB.second ) );
 			assert( trainA.first->IsValid() );
 			Remove( trainB.first );
 		}
 		else if( std::shared_ptr<Train> pNewTrain = Train::Make(); pNewTrain )
 		{
-			pNewTrain->Append( RailRunner::EndType::south, trainA.first->ThisTrainComponent(), orientationA + trainA.second );
-			pNewTrain->Append( RailRunner::EndType::south, trainB.first->ThisTrainComponent(), orientationB + trainB.second );
+			pNewTrain->Append( EndType::south, trainA.first->ThisTrainComponent(), orientationA + trainA.second );
+			pNewTrain->Append( EndType::south, trainB.first->ThisTrainComponent(), orientationB + trainB.second );
 			pNewTrain->Reference( "Name", "Train_" + to_string( Add( pNewTrain ) ) );
 		}
 		else

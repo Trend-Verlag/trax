@@ -45,8 +45,8 @@ namespace trax{
 
 		/// \name Explicit XML Reading
 		///@{
-		dclspc void ReadConnection( const boost::property_tree::ptree& pt, Track::End& trackend ) noexcept;
-		dclspc void ReadTrackEnd( const boost::property_tree::ptree& pt, Track::End& trackend ) noexcept;
+		dclspc void ReadConnection( const boost::property_tree::ptree& pt, Track::End& trackend );
+		dclspc void ReadTrackEnd( const boost::property_tree::ptree& pt, Track::End& trackend );
 		dclspc void ReadTrackLocation( const boost::property_tree::ptree& pt, TrackLocation& trackLocation ) noexcept;
 		dclspc void ReadTrackLocationRef( const boost::property_tree::ptree& pt, TrackLocationRef& trackLocationRef ) noexcept;
 		dclspc void ReadTrackRange( const boost::property_tree::ptree& pt, TrackRange& trackRange ) noexcept;

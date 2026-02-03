@@ -168,7 +168,7 @@ namespace trax{
 		}
 
 		// TrackBuilder:
-		void Couple( std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> thisEnd, std::pair<std::shared_ptr<TrackBuilder>,Track::EndType> othersEnd ) override;
+		void Couple( std::pair<std::shared_ptr<TrackBuilder>,EndType> thisEnd, std::pair<std::shared_ptr<TrackBuilder>,EndType> othersEnd ) override;
 
 		void DeCouple( EndType thisendbool = EndType::any, bool oneSided = false ) override;
 
@@ -293,9 +293,9 @@ namespace trax{
 		// with the range resolved for the particular track. vector<> will be 
 		// empty, if range does not touch this track at all.
 		std::vector<std::pair<Track_Imp&,common::Interval<Length>>> GetRanges( const common::Interval<Length>& range );
-		void RangeAt( Track::EndType theEnd, Interval<Length> range, std::vector<std::pair<Track_Imp&,Interval<Length>>>& list );
+		void RangeAt( EndType theEnd, Interval<Length> range, std::vector<std::pair<Track_Imp&,Interval<Length>>>& list );
 		// Recalculates track parameters with respect to a connected track.
-		Track* Transform( Interval<Length>& range, Track::EndType& toTrackAtEnd ) const noexcept;
+		Track* Transform( Interval<Length>& range, EndType& toTrackAtEnd ) const noexcept;
 
 		mutable bool m_LoopBraker; // used by iterations along track chains
 		TrackUserData* m_pData = nullptr;

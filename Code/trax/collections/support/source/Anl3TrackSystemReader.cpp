@@ -302,7 +302,7 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 			{
 				AttributesToReferences( pt, *pSwitch );
 
-				pSwitch->NarrowTrack( pTrack, Track::EndType::end );
+				pSwitch->NarrowTrack( pTrack, EndType::south );
 				pSwitch->Set( SwitchStatusFromEEP( pt.get( "<xmlattr>.weichenstellung", 0 ) ) );
 				pSwitch->RegisterSockets( m_SocketRegistry );
 
@@ -316,7 +316,7 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 			{
 				AttributesToReferences( pt, *pSwitch );
 
-				pSwitch->NarrowTrack( pTrack, Track::EndType::end );
+				pSwitch->NarrowTrack( pTrack, EndType::south );
 				pSwitch->Set( ThreeWaySwitchStatusFromEEP( pt.get( "<xmlattr>.weichenstellung", 0 ) ) );
 				pSwitch->RegisterSockets( m_SocketRegistry );
 
@@ -575,7 +575,7 @@ std::pair<Track::Coupling,std::string> Anl3TrackSystemReader::CreateTrackCouplin
 	coupling.first.theOther.id					= pt.get( "<xmlattr>.GleisID2", 0 );
 	coupling.first.theOther.type				= From( pt.get( "<xmlattr>.Anschluss2", "" ) );
 
-	if( coupling.first.theOne.type == Track::EndType::end )
+	if( coupling.first.theOne.type == EndType::south )
 		// A might be switch
 	{
 		for( auto iter = trackSystem.GetConnectorCollection()->begin(); iter != trackSystem.GetConnectorCollection()->end(); ++iter ){
@@ -591,7 +591,7 @@ std::pair<Track::Coupling,std::string> Anl3TrackSystemReader::CreateTrackCouplin
 		}
 	}
 
-	if( coupling.first.theOther.type == Track::EndType::end )
+	if( coupling.first.theOther.type == EndType::south )
 		// B might be switch
 	{
 		for( auto iter = trackSystem.GetConnectorCollection()->begin(); iter != trackSystem.GetConnectorCollection()->end(); ++iter ){
@@ -925,13 +925,13 @@ std::unique_ptr<Sensor> Anl3TrackSystemReader::CreateKontakt(
 	return nullptr;
 }
 
-Track::EndType Anl3TrackSystemReader::From( const std::string& name ) const{
+EndType Anl3TrackSystemReader::From( const std::string& name ) const{
 	if( name == "Anfang" )
-		return Track::EndType::front;
+		return EndType::north;
 	else if(	name == "Ende" ||
 				name == "EndeAbzweig" ||
 				name == "EndeKoAbzweig" )
-		return Track::EndType::end;
+		return EndType::south;
 
 	throw std::runtime_error( "Unknown track end type in *.anl file: " + name );
 }

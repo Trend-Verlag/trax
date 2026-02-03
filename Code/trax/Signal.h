@@ -369,20 +369,20 @@ namespace trax{
 	struct TrackEndTransition : virtual Signal{
 
 		/// \brief Makes a standard TrackEndTransition object.
-		static dclspc std::unique_ptr<TrackEndTransition> Make( Track* pToTrack, Track::EndType toEnd ) noexcept;
+		static dclspc std::unique_ptr<TrackEndTransition> Make( Track* pToTrack, EndType toEnd ) noexcept;
 
-		/// \param end Reference to Track::EndType to receive the tracks end.
+		/// \param end Reference to EndType to receive the tracks end.
 		/// \returns The origin track at a track transition.
-		virtual Track* From( Track::EndType& end ) const = 0;
+		virtual Track* From( EndType& end ) const = 0;
 
 
 		/// \returns The origin track at a track transition.
 		virtual Track* From() const = 0;
 
 
-		/// \param end Reference to Track::EndType to receive the tracks end.
+		/// \param end Reference to EndType to receive the tracks end.
 		/// \returns The target track at a track transition.
-		virtual Track* To( Track::EndType& end ) const = 0;
+		virtual Track* To( EndType& end ) const = 0;
 
 
 		/// \returns The target track at a track transition.
