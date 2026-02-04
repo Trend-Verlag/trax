@@ -327,6 +327,16 @@ Length DistanceToCoupled( const Track& track, EndType atEnd )
 	return DistanceOf( { track.This(), atEnd }, track.TransitionEnd( atEnd ) );
 }
 
+Length DistanceToCoupled( const Track::cTrackEnd& trackEnd )
+{
+	if( !IsValid( trackEnd ) )
+		throw std::invalid_argument( "DistanceToCoupled: track end has no valid track!" );
+	if( !trackEnd.pTrack->IsCoupled( trackEnd.end ) )
+		throw std::logic_error( "DistanceToCoupled: track end is not coupled!" );
+
+	return DistanceOf( trackEnd, trackEnd.pTrack->TransitionEnd( trackEnd.end ) );	
+}
+
 Angle KinkToCoupled( const Track& track, EndType atEnd )
 {
 	if( !track.IsCoupled( atEnd ) )
@@ -367,6 +377,15 @@ Angle KinkToCoupled( const Track& track, EndType atEnd )
 	return atan2( (t1 % t2).Length(), t1 * t2 );
 }
 
+Angle KinkToCoupled( const Track::cTrackEnd& trackEnd )
+{
+	if( !IsValid( trackEnd ) )
+		throw std::invalid_argument( "KinkToCoupled: track end has no valid track!" );
+	if( !trackEnd.pTrack->IsCoupled( trackEnd.end ) )
+		throw std::logic_error( "KinkToCoupled: track end is not coupled!" );
+	return KinkToCoupled( *trackEnd.pTrack, trackEnd.end );
+}
+
 Angle TwistToCoupled( const Track& track, EndType atEnd )
 {
 	if( !track.IsCoupled( atEnd ) )
@@ -402,6 +421,15 @@ Angle TwistToCoupled( const Track& track, EndType atEnd )
 	}
 
 	return atan2( (b1.B % b2.B).Length(), b1.B * b2.B );
+}
+
+Angle TwistToCoupled( const Track::cTrackEnd& trackEnd )
+{
+	if( !IsValid( trackEnd ) )
+		throw std::invalid_argument( "TwistToCoupled: track end has no valid track!" );
+	if( !trackEnd.pTrack->IsCoupled( trackEnd.end ) )
+		throw std::logic_error( "TwistToCoupled: track end is not coupled!" );
+	return TwistToCoupled( *trackEnd.pTrack, trackEnd.end );
 }
 
 }

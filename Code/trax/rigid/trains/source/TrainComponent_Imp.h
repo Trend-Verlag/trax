@@ -433,7 +433,7 @@ void TrainComponent_Imp<Base>::Rail(
 	TrainComponent::DistanceType distance, 
 	bool bFailOnReservationConflicts )
 {
-	if( bFailOnReservationConflicts )
+	if( bFailOnReservationConflicts && ID() )
 	{
 		location.Reserve( 
 			{ -this->GetOverhang( EndType::south ), 

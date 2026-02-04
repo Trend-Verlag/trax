@@ -1496,7 +1496,7 @@ bool Snap( Track::TrackEnd trackEnd, Track::cTrackEnd toTrackEnd )
 		IsConcreteEnd( toTrackEnd ) )
 	{
 		spat::Frame<dim::Length,dim::One> frameAtEnd;
-		toTrackEnd.pTrack->Transition( toTrackEnd.end == EndType::north ? trackEnd.pTrack->Range().Near() : trackEnd.pTrack->Range().Far(), frameAtEnd );
+		toTrackEnd.pTrack->Transition( toTrackEnd.end == EndType::north ? toTrackEnd.pTrack->Range().Near() : toTrackEnd.pTrack->Range().Far(), frameAtEnd );
 		if( trackEnd.end == toTrackEnd.end )
 		{
 			frameAtEnd.T *= -1;

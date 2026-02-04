@@ -293,6 +293,10 @@ namespace trax
 		struct TrackEnd {
 			std::shared_ptr<Track> pTrack;
 			EndType end;
+
+			TrackEnd operator!() const noexcept{
+				return { pTrack, !end };
+			}
    		};
 
 		struct cTrackEnd {
@@ -305,6 +309,10 @@ namespace trax
     
 			cTrackEnd( std::shared_ptr<const Track> track, EndType e ) noexcept 
 				: pTrack{ track }, end{ e } {}
+
+			cTrackEnd operator!() const noexcept{
+				return { pTrack, !end };
+			}
 		};
 
 
@@ -820,19 +828,31 @@ namespace trax
 	/// \returns The 3D distance of the coupled track, if any. 
 	/// \throws std::invalid_argument if any of the track ends is invalid.
 	/// \throws std::logic_error if the track end is not coupled.
+	///@{
 	dclspc Length DistanceToCoupled( const Track& track, EndType atEnd );
+
+	dclspc Length DistanceToCoupled( const Track::cTrackEnd& trackEnd );
+	///@}
 
 
 	/// \returns The angle of the tangent of the coupled track, if any. 
 	/// \throws std::invalid_argument if any of the track ends is invalid.
 	/// \throws std::logic_error if the track end is not coupled.
+	///@{
 	dclspc Angle KinkToCoupled( const Track& track, EndType atEnd );
+
+	dclspc Angle KinkToCoupled( const Track::cTrackEnd& trackEnd );
+	///@}
 
 
 	/// \returns The angle of the binormal of the coupled track, if any. 
 	/// \throws std::invalid_argument if any of the track ends is invalid.
 	/// \throws std::logic_error if the track end is not coupled.
+	///@{
 	dclspc Angle TwistToCoupled( const Track& track, EndType atEnd );
+
+	dclspc Angle TwistToCoupled( const Track::cTrackEnd& trackEnd );
+	///@}
 
 
 
@@ -1481,7 +1501,7 @@ bool IsValid( TrackEndType end ) noexcept{
 template<class TrackEndType> inline
 bool IsCoupled( TrackEndType end ) noexcept{
 	if( IsValid(end) ) 
-		return end.pTrack->IsCoupled( end );
+		return end.pTrack->IsCoupled( end.end );
 	return false;
 }
 
