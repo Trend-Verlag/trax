@@ -362,10 +362,13 @@ namespace trax{
 		/// \brief Attaches this RailRunner onto the specified track location.
 		///
 		/// The trackjoints of the WheelFrames will be attached to the track at
-		/// locations that might differ from location, depending in the RailRunners
+		/// locations that might differ from location, depending on the RailRunners
 		/// definition of its location on the tracks. If a WheelFrame gets railed,
 		/// in this railing process, its JackOnRail will pulse. If some railing is
 		/// present already it gets overriden.
+		/// The method gives a strong guarantee: if it fails, the RailRunner will 
+		/// be in the same railing state as before the call. If it succeeds, the 
+		/// RailRunner will be railed at the given location.
 		/// \param location The location to rail this RailRunner. If railing is
 		/// successful this location will be returned by GetLocation().
 		/// \param bMoveTo If true the RailRunner will be moved to the transitional

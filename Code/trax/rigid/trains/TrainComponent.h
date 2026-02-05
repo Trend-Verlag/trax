@@ -76,6 +76,9 @@ namespace trax{
 
 		/// \brief Rails this TrainComponent at the given location.
 		///
+		/// The method gives a strong guarantee: if it fails, the RailRunner will 
+		/// be in the same railing state as before the call. If it succeeds, the 
+		/// RailRunner will be railed at the given location.
 		/// \param bMoveTo If bMoveTo is true, the TrainComponent will be moved to the location.
 		/// \param distance The internal distances of coupled components are resolved by 'distance'
 		/// if this happens to be a Train.

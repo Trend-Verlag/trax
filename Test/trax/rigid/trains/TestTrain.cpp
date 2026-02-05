@@ -812,5 +812,50 @@ BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple2, TrainFixture )
 }
 
 BOOST_AUTO_TEST_SUITE_END() // TrainCouplingTests
+
+BOOST_AUTO_TEST_SUITE(TrainRailingTests)
+BOOST_FIXTURE_TEST_CASE( testTrainRailingOnTooShortATrack, TrainFixture )
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "Cargo.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+	BOOST_CHECK( pTrain->IsValid() );
+
+	Location location{ m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - pTrain->GetLength() / 2, Orientation::Value::anti } };
+	BOOST_CHECK_THROW( pTrain->Rail( location ), std::out_of_range );
+	BOOST_CHECK( !pTrain->IsRailed() );
+	for( int i = 0; i < pTrain->GetNumberOfComponents(); ++i )
+	{
+		BOOST_CHECK( !pTrain->GetComponent(i)->IsRailed() );
+	}
+}
+
+BOOST_FIXTURE_TEST_CASE( testTrainReRailingOnTooShortATrack, TrainFixture )
+// strong guarantee : if railing fails, the train is still on the track it was before and all components are still railed
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "Cargo.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+	BOOST_CHECK( pTrain->IsValid() );
+	BOOST_CHECK_NO_THROW( pTrain->Rail( m_Location ) );
+	BOOST_CHECK( pTrain->IsRailed() );
+	for( int i = 0; i < pTrain->GetNumberOfComponents(); ++i )
+	{
+		BOOST_CHECK( pTrain->GetComponent(i)->IsRailed() );
+	}
+
+	Location location{ m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - pTrain->GetLength() / 2, Orientation::Value::anti } };
+	BOOST_CHECK_THROW( pTrain->Rail( location ), std::out_of_range );
+	BOOST_CHECK( pTrain->IsRailed() );
+	BOOST_CHECK_EQUAL( pTrain->GetLocation(), m_Location );
+	for( int i = 0; i < pTrain->GetNumberOfComponents(); ++i )
+	{
+		BOOST_CHECK( pTrain->GetComponent(i)->IsRailed() );
+	}
+}
+
+BOOST_AUTO_TEST_SUITE_END() // TrainRailingTests
 BOOST_AUTO_TEST_SUITE_END() // trax_tests
 #endif
