@@ -129,7 +129,7 @@ namespace trax{
 			m_TrainOrientation = orientation;
 		}
 
-		virtual void DisconnectJacks();
+		virtual void DisconnectJacks() noexcept;
 		virtual void ConnectJacks();
 		void ReconnectJacks();
 		virtual void Clear() noexcept;
@@ -722,7 +722,7 @@ const Plug& TrainComponent_Imp<Base>::_GetPlug( int idx ) const{
 }
 
 template<class Base>
-void TrainComponent_Imp<Base>::DisconnectJacks()
+void TrainComponent_Imp<Base>::DisconnectJacks() noexcept
 {
 	m_PlugRail.Clear();
 	m_PlugDerail.Clear();

@@ -101,6 +101,9 @@ bool Train_Imp::IsValid() const noexcept
 
 void Train_Imp::Rail( const Location& location, bool bMoveTo, DistanceType distance, bool bFailOnReservationConflicts )
 {
+	if( m_Train.empty() )
+		throw std::logic_error( "Train_Imp::Rail: cannot rail an empty train." );
+
 	Train_Base::Rail( location, bMoveTo, distance, bFailOnReservationConflicts );
 
 	std::vector<Location> railLocations;
@@ -139,7 +142,9 @@ void Train_Imp::Rail( const Location& location, bool bMoveTo, DistanceType dista
 }
 
 Location Train_Imp::GetLocation() const noexcept{
-	assert( IsValid() );
+	if( m_Train.empty() )
+		return {};
+
 	return m_Train.front()->GetOrientation() ? 
 		m_Train.front()->GetLocation() : m_Train.front()->GetLocation().Flip();
 }
@@ -160,6 +165,9 @@ bool Train_Imp::IsRailed() const noexcept
 }
 
 spat::Frame<Length,One> Train_Imp::GetGlobalAnchor() const{
+	if( m_Train.empty() )
+		throw std::logic_error( "Train_Imp::GetGlobalAnchor: cannot get global anchor of an empty train." );
+
 	return m_Train.front()->GetOrientation() ? 
 		m_Train.front()->GetGlobalAnchor() : m_Train.front()->GetGlobalAnchor().FlipBin();
 }
@@ -173,7 +181,8 @@ void Train_Imp::ResetToGlobalAnchor(
 	const spat::Frame<Length,One>& anchorPose, 
 	DistanceType distance )
 {
-	assert( !IsRailed() );
+	if( m_Train.empty() )
+		throw std::logic_error( "Train_Imp::ResetToGlobalAnchor: cannot reset an empty train." );
 
 	std::vector<Frame<Length,One>> locFrames;
 	spat::Frame<Length,One> frame = anchorPose;
@@ -218,6 +227,9 @@ void Train_Imp::SetVelocity( Velocity velocity )
 
 Velocity Train_Imp::GetVelocity() const
 {
+	if( m_Train.empty() )
+		return 0_kmIh;
+
 	Velocity velocity = 0_kmIh;
 
 	for( auto& pTrainComponent : m_Train )
@@ -234,6 +246,9 @@ void Train_Imp::TargetVelocity( Velocity tvelocity )
 
 Velocity Train_Imp::TargetVelocity() const noexcept
 {
+	if( m_Train.empty() )
+		return 0_kmIh;
+
 	Velocity targetVelocity = 0_kmIh;
 
 	for( auto& pTrainComponent : m_Train )
@@ -243,6 +258,9 @@ Velocity Train_Imp::TargetVelocity() const noexcept
 }
 
 EndType Train_Imp::TargetDirection() const noexcept{
+	if( m_Train.empty() )
+		return {};
+
 	return m_Train.front()->TargetDirection();
 }
 
@@ -368,6 +386,9 @@ bool Train_Imp::IsSimulationEnabled() const noexcept
 
 Length Train_Imp::GetOverhang( EndType end, DistanceType distance ) const noexcept
 {
+	if( m_Train.empty() )
+		return 0_m;
+
 	switch( end ){
 	case EndType::north:
 		return m_Train.front()->GetOrientation() ?
@@ -436,7 +457,6 @@ bool Train_Imp::MakeReservation() const noexcept
 {
 	if( m_Train.empty() )
 		return false;
-
 
 	return false;
 }
@@ -731,7 +751,7 @@ std::shared_ptr<Train> Train_Imp::Separate()
 	return nullptr;
 }
 
-void Train_Imp::Reduce( bool bRecursive ) noexcept
+void Train_Imp::Reduce( bool bRecursive )
 {
 	if( bRecursive )
 	{
@@ -847,7 +867,7 @@ const Jack& Train_Imp::_GetJack( int idx ) const
 	throw std::range_error( stream.str() );
 }
 
-void Train_Imp::DisconnectJacks()
+void Train_Imp::DisconnectJacks() noexcept
 {
 	m_JackOnUnCoupleInternal.ClearPlugs();
 

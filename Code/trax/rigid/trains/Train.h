@@ -193,7 +193,7 @@ namespace trax{
 		/// \param bRecursive if true, the method will be applied recursively to all 
 		/// sub-components, leaving the Train reduced to its RollingStock components 
 		/// only.
-		virtual void Reduce( bool bRecursive = true ) noexcept = 0;
+		virtual void Reduce( bool bRecursive = true ) = 0;
 
 
 		/// \brief Removes all components from this train.

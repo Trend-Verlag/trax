@@ -431,7 +431,7 @@ std::shared_ptr<RollingStock> RollingStock_Imp::ThisRollingStock() const noexcep
 	return std::dynamic_pointer_cast<RollingStock>(This());
 }
 
-bool RollingStock_Imp::Attach( Bogie& bogie ) noexcept
+bool RollingStock_Imp::Attach( Bogie& bogie )
 {
 	Clear();
 

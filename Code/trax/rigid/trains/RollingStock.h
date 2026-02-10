@@ -63,7 +63,7 @@ namespace trax{
 		/// \param bogie The Bogie arrangement to be managed by the RollingStock. Any Bogie
 		/// out of the arrangement will do here.
 		/// \return true if the Bogie arrangement was successfully attached.
-		virtual bool Attach( Bogie& bogie ) noexcept = 0;
+		virtual bool Attach( Bogie& bogie ) = 0;
 
 
 		/// \returns The number of bogies.

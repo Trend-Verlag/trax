@@ -117,7 +117,7 @@ namespace trax{
 		// RollingStock:
 		std::shared_ptr<RollingStock> ThisRollingStock() const noexcept override;
 
-		bool Attach( Bogie& bogie ) noexcept override;
+		bool Attach( Bogie& bogie ) override;
 
 		int GetNumberOfBogies() const noexcept override;
 

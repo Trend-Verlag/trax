@@ -143,7 +143,7 @@ namespace trax{
 
 		std::shared_ptr<Train> Separate() override;
 	
-		void Reduce( bool bRecursive = true ) noexcept override;
+		void Reduce( bool bRecursive = true ) override;
 
 		void Clear() noexcept override;
 
@@ -160,7 +160,7 @@ namespace trax{
 	protected:
 		const Jack& _GetJack( int idx ) const override;
 
-		void DisconnectJacks() override;
+		void DisconnectJacks() noexcept override;
 		void ConnectJacks() override;
 	private:
 		std::deque<std::shared_ptr<TrainComponent>> m_Train;
