@@ -111,7 +111,7 @@ namespace trax{
 		
 		Interval<Length> Range() const noexcept override;
 
-		Track::TrackEnd TransitionEnd( EndType thisEnd ) const noexcept override;
+		TrackEnd TransitionEnd( EndType thisEnd ) const noexcept override;
 				
 		bool IsCoupled( EndType atend = EndType::any ) const noexcept override;
 

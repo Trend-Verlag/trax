@@ -375,12 +375,12 @@ namespace trax{
 		/// 3D pose of location, prior to railing. If this is a Train, the actual 
 		/// coupling distances will be respected. See \see TrainComponent::Rail for 
 		/// details.
-		/// \throws std::out_of_range if a dead end is encountered on the track system.
-		/// \throws std::logic_error If there are no suitable WheelFrame children in
-		/// the RailRunner to rail.
 		/// \throws std::invalid_argument If location is not on a track.
-		/// \throws std::out_of_range If the railrunner would end up off the track system.
-		/// \throws std::logic_error If the present configuration does not allow railing.
+		/// \throws std::logic_error If the present configuration does not allow 
+		/// railing, e.g. because there are no suitable WheelFrame children in
+		/// the RailRunner to rail.
+		/// \throws std::out_of_range If part of the railrunner would end up off the 
+		/// track system, because a dead end is encountered.
 		virtual void Rail( const Location& location, bool bMoveTo = true ) = 0;
 
 

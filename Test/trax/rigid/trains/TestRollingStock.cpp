@@ -31,6 +31,7 @@
 
 #include "trax/rigid/trains/support/FixturesTrain.h"
 
+#include "trax/support/TraxSupportStream.h"
 #include "trax/rigid/trains/RollingStock.h"
 #include "trax/rigid/trains/WheelFrame.h"
 #include "trax/rigid/Wheelset.h"
@@ -49,7 +50,7 @@ using namespace trax;
 
 BOOST_AUTO_TEST_SUITE(trax_tests)
 BOOST_AUTO_TEST_SUITE(TestRollingStock)
- 
+
 //BOOST_FIXTURE_TEST_CASE( testWheelArrangementJacobsBogies1, TrainFixtureVisualDebugger )
 BOOST_FIXTURE_TEST_CASE( testWheelArrangementJacobsBogies1, TrainFixture )
 {
@@ -337,6 +338,200 @@ BOOST_FIXTURE_TEST_CASE( testRollingStockLevitating, TrainFixture )
 	BOOST_CHECK_SMALL( globalLocation1.P.z - globalLocation2.P.z, epsilon__length );
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_FIXTURE_TEST_CASE( testRollingStockRailFail, TrainFixture )
+{
+	RollingStockCreator creator{ *m_pScene };
+	RollingStockFileReader reader{ creator, FixturePath() };
+	BOOST_REQUIRE( reader( "Commuter.rollingstock" ) );
+	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
+
+	BOOST_REQUIRE( pRollingStock );
+	BOOST_REQUIRE( pRollingStock->IsValid() );
+
+	Frame<Length,One> globalAnchor = pRollingStock->GetGlobalAnchor();
+
+	Location location{  m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - pRollingStock->GetLength() / 2, Orientation::Value::anti  } };
+	BOOST_CHECK_THROW( pRollingStock->Rail( location ), std::out_of_range );
+	BOOST_REQUIRE( !pRollingStock->IsRailed() );
+	for( int i = 0; i < pRollingStock->GetNumberOfWheelFrames(); ++i )
+	{
+		BOOST_CHECK( !pRollingStock->GetWheelFrame( i ).IsRailed() );
+	}
+
+	BOOST_CHECK_CLOSE_SPATIAL2( pRollingStock->GetGlobalAnchor(), globalAnchor, epsilon__length, epsilon__angle );
+}
+
+BOOST_FIXTURE_TEST_CASE( testRollingStockReRailFail, TrainFixture )
+// strong guarantee : if railing fails, the rolling stok is still on the track it was before and all wheelframes are still railed
+{
+	RollingStockCreator creator{ *m_pScene };
+	RollingStockFileReader reader{ creator, FixturePath() };
+	BOOST_REQUIRE( reader( "Commuter.rollingstock" ) );
+	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
+
+	BOOST_REQUIRE( pRollingStock );
+	BOOST_REQUIRE( pRollingStock->IsValid() );
+	BOOST_CHECK_NO_THROW( pRollingStock->Rail( m_Location ) );
+	BOOST_CHECK( pRollingStock->IsRailed() );
+	Frame<Length,One> globalAnchor = pRollingStock->GetGlobalAnchor();
+
+	Location location{ m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - pRollingStock->GetLength() / 2, Orientation::Value::anti } };
+	BOOST_CHECK_THROW( pRollingStock->Rail( location ), std::out_of_range );
+	BOOST_REQUIRE( pRollingStock->IsRailed() );
+	BOOST_CHECK_EQUAL( pRollingStock->GetLocation(), m_Location );
+	for( int i = 0; i < pRollingStock->GetNumberOfWheelFrames(); ++i )
+	{
+		BOOST_CHECK( pRollingStock->GetWheelFrame( i ).IsRailed() );
+	}
+
+	BOOST_CHECK_CLOSE_SPATIAL2( pRollingStock->GetGlobalAnchor(), globalAnchor, epsilon__length, epsilon__angle );
+}
+
+BOOST_FIXTURE_TEST_CASE( testRollingStockRailFail2, TrainFixture )
+{
+	RollingStockCreator creator{ *m_pScene };
+	RollingStockFileReader reader{ creator, FixturePath() };
+	BOOST_REQUIRE( reader( "Commuter.rollingstock" ) );
+	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
+
+	BOOST_REQUIRE( pRollingStock );
+	BOOST_REQUIRE( pRollingStock->IsValid() );
+	Frame<Length,One> globalAnchor = pRollingStock->GetGlobalAnchor();
+
+	Location location{ m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - pRollingStock->GetLength() / 2, Orientation::Value::anti  } };
+	BOOST_CHECK_THROW( pRollingStock->Rail( location, true, trax::TrainComponent::DistanceType::actual ), std::out_of_range );
+	BOOST_REQUIRE( !pRollingStock->IsRailed() );
+	for( int i = 0; i < pRollingStock->GetNumberOfWheelFrames(); ++i )
+	{
+		BOOST_CHECK( !pRollingStock->GetWheelFrame( i ).IsRailed() );
+	}
+
+	BOOST_CHECK_CLOSE_SPATIAL2( pRollingStock->GetGlobalAnchor(), globalAnchor, epsilon__length, epsilon__angle );
+}
+
+BOOST_FIXTURE_TEST_CASE( testRollingStockReRailFail2, TrainFixture )
+// strong guarantee : if railing fails, the rolling stok is still on the track it was before and all wheelframes are still railed
+{
+	RollingStockCreator creator{ *m_pScene };
+	RollingStockFileReader reader{ creator, FixturePath() };
+	BOOST_REQUIRE( reader( "Commuter.rollingstock" ) );
+	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
+
+	BOOST_REQUIRE( pRollingStock );
+	BOOST_REQUIRE( pRollingStock->IsValid() );
+	BOOST_CHECK_NO_THROW( pRollingStock->Rail( m_Location, true, trax::TrainComponent::DistanceType::actual ) );
+	BOOST_CHECK( pRollingStock->IsRailed() );
+	Frame<Length,One> globalAnchor = pRollingStock->GetGlobalAnchor();
+
+	Location location{ m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - pRollingStock->GetLength() / 2, Orientation::Value::anti } };
+	BOOST_CHECK_THROW( pRollingStock->Rail( location, true, trax::TrainComponent::DistanceType::actual ), std::out_of_range );
+	BOOST_REQUIRE( pRollingStock->IsRailed() );
+	BOOST_CHECK_EQUAL( pRollingStock->GetLocation(), m_Location );
+	for( int i = 0; i < pRollingStock->GetNumberOfWheelFrames(); ++i )
+	{
+		BOOST_CHECK( pRollingStock->GetWheelFrame( i ).IsRailed() );
+	}
+
+	BOOST_CHECK_CLOSE_SPATIAL2( pRollingStock->GetGlobalAnchor(), globalAnchor, epsilon__length, epsilon__angle );
+}
+
+BOOST_FIXTURE_TEST_CASE( testStandardRollingStockRailFail, TrainFixture )
+{
+	RollingStockCreator creator{ *m_pScene };
+	RollingStockFileReader reader{ creator, FixturePath() };
+	BOOST_REQUIRE( reader( "DB_212.rollingstock" ) );
+	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
+
+	BOOST_REQUIRE( pRollingStock );
+	BOOST_REQUIRE( pRollingStock->IsValid() );
+
+	Frame<Length,One> globalAnchor = pRollingStock->GetGlobalAnchor();
+
+	Location location{  m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - pRollingStock->GetLength() / 2, Orientation::Value::anti  } };
+	BOOST_CHECK_THROW( pRollingStock->Rail( location ), std::out_of_range );
+	BOOST_REQUIRE( !pRollingStock->IsRailed() );
+	for( int i = 0; i < pRollingStock->GetNumberOfWheelFrames(); ++i )
+	{
+		BOOST_CHECK( !pRollingStock->GetWheelFrame( i ).IsRailed() );
+	}
+
+	BOOST_CHECK_CLOSE_SPATIAL2( pRollingStock->GetGlobalAnchor(), globalAnchor, epsilon__length, epsilon__angle );
+}
+
+BOOST_FIXTURE_TEST_CASE( testStandardRollingStockReRailFail, TrainFixture )
+// strong guarantee : if railing fails, the rolling stok is still on the track it was before and all wheelframes are still railed
+{
+	RollingStockCreator creator{ *m_pScene };
+	RollingStockFileReader reader{ creator, FixturePath() };
+	BOOST_REQUIRE( reader( "DB_212.rollingstock" ) );
+	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
+
+	BOOST_REQUIRE( pRollingStock );
+	BOOST_REQUIRE( pRollingStock->IsValid() );
+	BOOST_CHECK_NO_THROW( pRollingStock->Rail( m_Location ) );
+	BOOST_CHECK( pRollingStock->IsRailed() );
+	Frame<Length,One> globalAnchor = pRollingStock->GetGlobalAnchor();
+
+	Location location{ m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - pRollingStock->GetLength() / 2, Orientation::Value::anti } };
+	BOOST_CHECK_THROW( pRollingStock->Rail( location ), std::out_of_range );
+	BOOST_REQUIRE( pRollingStock->IsRailed() );
+	BOOST_CHECK_EQUAL( pRollingStock->GetLocation(), m_Location );
+	for( int i = 0; i < pRollingStock->GetNumberOfWheelFrames(); ++i )
+	{
+		BOOST_CHECK( pRollingStock->GetWheelFrame( i ).IsRailed() );
+	}
+
+	BOOST_CHECK_CLOSE_SPATIAL2( pRollingStock->GetGlobalAnchor(), globalAnchor, epsilon__length, epsilon__angle );
+}
+
+BOOST_FIXTURE_TEST_CASE( testStandardRollingStockRailFail2, TrainFixture )
+{
+	RollingStockCreator creator{ *m_pScene };
+	RollingStockFileReader reader{ creator, FixturePath() };
+	BOOST_REQUIRE( reader( "DB_212.rollingstock" ) );
+	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
+
+	BOOST_REQUIRE( pRollingStock );
+	BOOST_REQUIRE( pRollingStock->IsValid() );
+	Frame<Length,One> globalAnchor = pRollingStock->GetGlobalAnchor();
+
+	Location location{ m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - pRollingStock->GetLength() / 2, Orientation::Value::anti  } };
+	BOOST_CHECK_THROW( pRollingStock->Rail( location, true, trax::TrainComponent::DistanceType::actual ), std::out_of_range );
+	BOOST_REQUIRE( !pRollingStock->IsRailed() );
+	for( int i = 0; i < pRollingStock->GetNumberOfWheelFrames(); ++i )
+	{
+		BOOST_CHECK( !pRollingStock->GetWheelFrame( i ).IsRailed() );
+	}
+
+	BOOST_CHECK_CLOSE_SPATIAL2( pRollingStock->GetGlobalAnchor(), globalAnchor, epsilon__length, epsilon__angle );
+}
+
+BOOST_FIXTURE_TEST_CASE( testStandardRollingStockReRailFail2, TrainFixture )
+// strong guarantee : if railing fails, the rolling stok is still on the track it was before and all wheelframes are still railed
+{
+	RollingStockCreator creator{ *m_pScene };
+	RollingStockFileReader reader{ creator, FixturePath() };
+	BOOST_REQUIRE( reader( "DB_212.rollingstock" ) );
+	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
+
+	BOOST_REQUIRE( pRollingStock );
+	BOOST_REQUIRE( pRollingStock->IsValid() );
+	BOOST_CHECK_NO_THROW( pRollingStock->Rail( m_Location, true, trax::TrainComponent::DistanceType::actual ) );
+	BOOST_CHECK( pRollingStock->IsRailed() );
+	Frame<Length,One> globalAnchor = pRollingStock->GetGlobalAnchor();
+
+	Location location{ m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - pRollingStock->GetLength() / 2, Orientation::Value::anti } };
+	BOOST_CHECK_THROW( pRollingStock->Rail( location, true, trax::TrainComponent::DistanceType::actual ), std::out_of_range );
+	BOOST_REQUIRE( pRollingStock->IsRailed() );
+	BOOST_CHECK_EQUAL( pRollingStock->GetLocation(), m_Location );
+	for( int i = 0; i < pRollingStock->GetNumberOfWheelFrames(); ++i )
+	{
+		BOOST_CHECK( pRollingStock->GetWheelFrame( i ).IsRailed() );
+	}
+
+	BOOST_CHECK_CLOSE_SPATIAL2( pRollingStock->GetGlobalAnchor(), globalAnchor, epsilon__length, epsilon__angle );
+}
+
+BOOST_AUTO_TEST_SUITE_END() // TestRollingStock
 BOOST_AUTO_TEST_SUITE_END() //trax_tests
 #endif

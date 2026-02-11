@@ -83,8 +83,11 @@ namespace trax{
 		/// \param distance The internal distances of coupled components are resolved by 'distance'
 		/// if this happens to be a Train.
 		/// \throws std::invalid_argument If location is not on a track.
-		/// \throws std::out_of_range If the railrunner would end up off the track system.
-		/// \throws std::logic_error If the present configuration does not allow railing.
+		/// \throws std::logic_error If the present configuration does not allow 
+		/// railing, e.g. because there are no suitable WheelFrame children in
+		/// the RailRunner to rail.
+		/// \throws std::out_of_range If part of the railrunner would end up off the 
+		/// track system, because a dead end is encountered.
 		/// \throws std::logic_error If bFailOnReservationConflicts was true and a reservation 
 		/// overlap with an already existing reservation occured.
 		virtual void Rail( const Location& location, bool bMoveTo, DistanceType distance, bool bFailOnReservationConflicts = false ) = 0;

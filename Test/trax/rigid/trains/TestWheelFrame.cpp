@@ -31,6 +31,7 @@
 
 #include "trax/support/Fixtures.h"
 
+#include "trax/support/TraxSupportStream.h"
 #include "trax/rigid/Simulator.h"
 #include "trax/rigid/Scene.h"
 #include "trax/rigid/trains/WheelFrame.h"
@@ -39,6 +40,7 @@
 
 #include "dim/support/DimSupportStream.h"
 #include "dim/BoostTestDimensionedValuesHelpers.h"
+#include "spat/BoostTestSpatialHelpers.h"
 
 using namespace spat;
 using namespace trax;

@@ -263,6 +263,12 @@ bool Bogie_Imp::IsValid() const noexcept
 		GetChild( EndType::south ).first.get() == this )
 		return false;
 
+	if( m_pBogieChildNorth && !m_pBogieChildNorth->IsValid() )
+		return false;
+
+	if( m_pBogieChildSouth && !m_pBogieChildSouth->IsValid() )
+		return false;
+
 	return true;
 }
 
@@ -1278,8 +1284,10 @@ const Jack& Bogie_Imp::_GetJack( int idx ) const
 
 void Bogie_Imp::RailChildBogies( const trax::Location& location, bool bMoveTo )
 {
-	if( m_pBogieChildNorth )
-		m_pBogieChildNorth->Rail( location, bMoveTo );
+	if( !IsValid() )
+		throw std::logic_error{ "Bogie_Imp::Rail(): invalid bogie state for rail operation." };
+	if( !location.IsOnTrack() )
+		throw std::invalid_argument( "Bogie_Imp::Rail: location is not on track!" );
 
 	if( m_pBogieChildSouth )
 	{
@@ -1288,6 +1296,9 @@ void Bogie_Imp::RailChildBogies( const trax::Location& location, bool bMoveTo )
 
 		m_pBogieChildSouth->Rail( southBogieLocation, bMoveTo );
 	}
+
+	if( m_pBogieChildNorth )
+		m_pBogieChildNorth->Rail( location, bMoveTo );
 }
 
 void Bogie_Imp::SetGlobalAnchorToChildBogies( const Frame<Length,One>& anchor )

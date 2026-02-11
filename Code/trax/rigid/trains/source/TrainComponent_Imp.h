@@ -433,6 +433,13 @@ void TrainComponent_Imp<Base>::Rail(
 	TrainComponent::DistanceType distance, 
 	bool bFailOnReservationConflicts )
 {
+	// This little test might evaluate false positive, if the rolling 
+	// stock is not streched out, but it is better than nothing to 
+	// prevent railing into a dead end.
+	Location endLocation = location;
+	if( endLocation.Move( -this->GetOverhang( EndType::south ) ).first )
+		throw std::out_of_range{ "TrainComponent_Imp::Rail: Location is out of range for this rolling stock!" };
+
 	if( bFailOnReservationConflicts && ID() )
 	{
 		location.Reserve( 

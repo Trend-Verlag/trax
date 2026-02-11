@@ -103,15 +103,14 @@ bool WheelFrame_Imp::IsValid() const noexcept
 
 void WheelFrame_Imp::Rail( const Location& location, bool bMoveTo )
 {
-	if( !location.IsOnTrack() )
-		throw std::invalid_argument( "WheelFrame_Imp::Rail: location is not on track!" );
-
-	if( m_pTrackJointFeederMotorModel->IsRailed() )
-		m_pTrackJointFeederMotorModel->DeRail( false );
-
 	Location wheelFrameLocation = location;
 	if( m_pSwivelChildNorth )
 		MoveLocation( wheelFrameLocation, AnchorToChildNorth() + Anchor().T * Distance( m_pSwivelChildNorth->LocalAxisA(), { Anchor().P, Anchor().B } ).T );
+
+	RailChildBogies( location, bMoveTo );
+
+	if( m_pTrackJointFeederMotorModel->IsRailed() )
+		m_pTrackJointFeederMotorModel->DeRail( false );
 
 	if( bMoveTo ){
 		spat::Frame<Length,One> locationFrame;
@@ -120,8 +119,6 @@ void WheelFrame_Imp::Rail( const Location& location, bool bMoveTo )
 	}
 
 	m_pTrackJointFeederMotorModel->Rail( wheelFrameLocation );
-
-	RailChildBogies( location, bMoveTo );
 }
 
 Location WheelFrame_Imp::GetLocation() const noexcept{

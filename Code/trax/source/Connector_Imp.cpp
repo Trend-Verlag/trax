@@ -358,7 +358,7 @@ void DeCouple( TrackBuilder& track, EndType trackend, int ownerSlot )
 			pConnector->Clear( slot );
 
 		if( Track::TrackEnd otherTrack = track.TransitionEnd( trackend ); otherTrack.pTrack ){
-			assert( pConnector == otherTrack.first->GetConnector(otherTrack.second) );
+			assert( pConnector == otherTrack.pTrack->GetConnector(otherTrack.end) );
 			slot = pConnector->Slot(*otherTrack.pTrack,otherTrack.end);
 			if( slot != ownerSlot )
 				pConnector->Clear( slot );
