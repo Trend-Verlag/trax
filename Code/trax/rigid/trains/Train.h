@@ -86,13 +86,20 @@ namespace trax{
 		/// \param orientation The orientation of the given components in the Train.
 		/// location, prior to coupling.
 		/// \param bMoveTo If true, the TrainComponents will be moved to a proper position.
-		/// \param distance The distance to use between the TrainComponents in moving.
+		/// \param distance The distance to use between the TrainComponents on positioning
+		/// if bMoveTo is true. Using DistanceType::actual will use the actual distances of 
+		/// the components as of now and might result in unexpected results. Using 
+		/// DistanceType::min will ignore the coupling lengthes and use the smallest 
+		/// distances, which might result in collisions. Using DistanceType::max will include 
+		/// the coupling lengthes and use the largest distances, which might result in gaps 
+		/// between the components. Using DistanceType::half will use the half way between 
+		/// min and max distances.
 		/// \returns True if the train was successfully created.
 		virtual bool Create( 
 			const std::vector<std::pair<std::shared_ptr<TrainComponent>,Orientation>>& trainComponents, 
 			Orientation orientation = Orientation::Value::para, 
 			bool bMoveTo = true,
-			DistanceType distance = DistanceType::actual ) = 0;
+			DistanceType distance = DistanceType::max ) = 0;
 		///@}
 
 

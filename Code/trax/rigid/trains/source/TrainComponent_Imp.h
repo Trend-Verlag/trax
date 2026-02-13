@@ -208,7 +208,7 @@ bool TrainComponent_Imp<Base>::IsValid() const noexcept
 template<class Base>
 void TrainComponent_Imp<Base>::Rail( const Location& location, bool bMoveTo )
 {
-	Rail( location, bMoveTo, TrainComponent::DistanceType::actual );
+	Rail( location, bMoveTo, TrainComponent::DistanceType::max );
 }
 
 template<class Base>
