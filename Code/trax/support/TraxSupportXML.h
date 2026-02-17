@@ -52,7 +52,6 @@ namespace trax{
 		dclspc void ReadTrackRange( const boost::property_tree::ptree& pt, TrackRange& trackRange ) noexcept;
 		///@}
 
-
 		template<class Interface>
 		inline void WriteLocalizedTag( 
 			boost::property_tree::ptree& pt, 
@@ -94,6 +93,27 @@ namespace trax{
 			}
 		}
 
+		template<class T>
+		inline void ReferencesToAttributes( boost::property_tree::ptree& pt, const Identified<T>& refInterface ){
+			pt.add( "<xmlattr>.id", refInterface.ID() );
+			const std::vector<char const*>& names = refInterface.ReferenceNames();
+			for( char const* pName : names )
+			{
+				std::string name{ pName };
+				pt.add( "<xmlattr>." + name, refInterface.Reference( name ) );
+			}
+		}
+
+		template<class T>
+		inline void AttributesToReferences( const boost::property_tree::ptree& pt, Identified<T>& refInterface ){
+			const auto iter = pt.find( "<xmlattr>" );
+			if( iter != pt.not_found() )
+				for( const auto& attribute : iter->second )
+					refInterface.Reference( attribute.first, attribute.second.data() );
+
+			auto id = pt.get_optional<IDType>("<xmlattr>.id");
+			if( id ) refInterface.ID(*id);
+		}
 
 		/// \brief Move the node as child to another tree.
 		///

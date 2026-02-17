@@ -1,5 +1,6 @@
 add_library(trax_trains_support 
     STATIC
+        "./source/Anl4RailRunnerWriter.cpp"
         "./source/FixturesTrain.cpp"
         "./source/RailRunnerParser_Imp.cpp"
         "./source/RollingStockCreator.cpp"
@@ -10,6 +11,7 @@ add_library(trax_trains_support
 )
 
 set(PUBLIC_HEADERS
+    "./Anl4RailRunnerWriter.h"
     "./FixturesTrain.h"
     "./RailRunnerParser.h"
     "./RollingStockCreator.h"

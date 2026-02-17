@@ -200,7 +200,7 @@ inline Container_Imp<TraxType, Base>::Container_Imp() noexcept
 template<class TraxType, class Base>
 inline bool Container_Imp<TraxType, Base>::IsValid() const noexcept
 {
-	return false;
+	return true;
 }
 
 template<class TraxType, class Base>

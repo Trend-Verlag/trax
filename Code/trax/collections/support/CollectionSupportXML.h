@@ -27,8 +27,9 @@
 #pragma once
 
 #include "common/support/CommonSupportConsole.h"
-#include "trax/support/TraxSupportXML.h"
 #include "trax/Curve.h"
+#include "trax/collections/Collection.h"
+#include "trax/support/TraxSupportXML.h"
 
 
 /// \verbatim
@@ -138,15 +139,6 @@ namespace trax{
 		protected:
 			SocketRegistry& m_SocketRegistry;
 		};
-
-
-		template<class Interface>
-		inline void AttributesToReferences( const boost::property_tree::ptree& pt, Interface& refInterface ){
-			const auto iter = pt.find( "<xmlattr>" );
-			if( iter != pt.not_found() )
-				for( const auto& attribute : iter->second )
-					refInterface.Reference( attribute.first, attribute.second.data() );
-		}
 
 
 		/// \name Explicit XML Reading

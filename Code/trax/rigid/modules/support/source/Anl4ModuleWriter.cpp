@@ -10,7 +10,6 @@
 
 
 #include "../Anl4ModuleWriter.h"
-#include "trax/collections/support/Anl4TrackSystemWriter.h"
 
 #include "trax/rigid/modules/Module.h"
 #include "trax/rigid/modules/ModuleCollection.h"
@@ -19,7 +18,10 @@
 #include "trax/collections/IndicatorCollection.h"
 #include "trax/collections/PulseCounterCollection.h"
 #include "trax/collections/TimerCollection.h"
+#include "trax/rigid/trains/collections/Fleet.h"
 
+#include "trax/rigid/trains/support/Anl4RailRunnerWriter.h"
+#include "trax/collections/support/Anl4TrackSystemWriter.h"
 
 namespace trax{
 namespace ptreesupport{
@@ -39,10 +41,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Module& _module )
 {
 	boost::property_tree::ptree ptModule;
+	ReferencesToAttributes( ptModule, _module );
 	ptModule.add( "<xmlattr>.id", _module.ID() );
-	ptModule.add( "<xmlattr>.name", _module.Reference( "name" ) );
-	if( _module.Reference( "noAlternativeSteuerdialog" ) == "true" )
-		ptModule.add( "<xmlattr>.noAlternativeSteuerdialog", "true" );
 	ptModule.add( "<xmlattr>.maxValidPlugID", _module.MaxValidPlugID() );
 
 	WriteLocalizedTag( ptModule, "DisplayName", _module );
@@ -61,8 +61,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	//if( const auto* pBatch = _module.GetBatch(); pBatch )
 	//	ptModule << *pBatch;
 
-	//if( const auto pFleet = _module.GetFleet(); pFleet )
-	//	ptModule << *pFleet;
+	if( const auto pFleet = _module.GetFleet(); pFleet )
+		ptModule << *pFleet;
 
 	if( const auto pSignalCollection = _module.GetSignalCollection(); pSignalCollection )
 		ptModule << *pSignalCollection;
@@ -100,8 +100,7 @@ boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const 
 
 boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const Camera& camera ){
 	boost::property_tree::ptree ptCamera;
-
-	ptCamera.add( "<xmlattr>.name", camera.Reference( "name" ) );
+	ReferencesToAttributes( ptCamera, camera );
 	ptCamera.add( "<xmlattr>.id", camera.ID() );
 	ptCamera.add( "<xmlattr>.type", From( camera.GetType() ) );
 	ptCamera << camera.GetFrame();

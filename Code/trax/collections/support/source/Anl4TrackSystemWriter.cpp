@@ -80,10 +80,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackCollection& trackcollection ){
 	boost::property_tree::ptree ptTrackCollection;
-
-	ptTrackCollection.add( "<xmlattr>.id", trackcollection.ID() );
-	if( !trackcollection.Reference( "name" ).empty() )
-		ptTrackCollection.add( "<xmlattr>.name", trackcollection.Reference( "name" ) );
+	ReferencesToAttributes( ptTrackCollection, trackcollection );
 
 	ptTrackCollection << trackcollection.GetFrame();
 
@@ -106,19 +103,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackBuilder& track ){
 	boost::property_tree::ptree ptTrack;
-
-	ptTrack.add( "<xmlattr>.id", track.ID() );
+	ReferencesToAttributes( ptTrack, track );
 	ptTrack.add( "<xmlattr>.type", track.Reference( "type" ).empty() ? ToString( track.GetTrackType() ) : track.Reference( "type" ) );
-	if( !track.Reference( "name" ).empty() )
-		ptTrack.add( "<xmlattr>.name", track.Reference( "name" ) );
-	ptTrack.add( "<xmlattr>.reference", track.Reference( "reference" ) );
-	if( !track.Reference( "scale" ).empty() )
-		ptTrack.add( "<xmlattr>.scale", track.Reference( "scale" ) );
-	if( !track.Reference( "waterDepth" ).empty() )
-		ptTrack.add( "<xmlattr>.waterDepth", track.Reference( "waterDepth" ) );
-
-	if( track.Reference( "electrified" ) == "true" )
-		ptTrack.add( "<xmlattr>.electrified", true );
 
 	{
 		boost::property_tree::ptree ptBegin;
@@ -237,9 +223,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Sensor& sensor ){
 	boost::property_tree::ptree ptSensor;
-
-	ptSensor.add( "<xmlattr>.name", sensor.Reference( "name" ) );
-	ptSensor.add( "<xmlattr>.id", sensor.ID() );
+	ReferencesToAttributes( ptSensor, sensor );
 
 	//if( auto pVelocitySensor = dynamic_cast<const VelocitySensor*>(&sensor) ){
 	//	ptSensor.add( "<xmlattr>.minVelocity", pVelocitySensor->VelocityMin() );
@@ -312,18 +296,9 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Connector& connector ){
 	boost::property_tree::ptree ptConnector;
-
-	ptConnector.add( "<xmlattr>.id", connector.ID() );
-	if( !connector.Reference( "name" ).empty() )
-		ptConnector.add( "<xmlattr>.name", connector.Reference( "name" ) );
-	if( !connector.Reference( "Key_Id" ).empty() )
-		ptConnector.add( "<xmlattr>.Key_Id", connector.Reference( "Key_Id" ) );
-	if( !connector.Reference( "ImmoIdx" ).empty() )
-		ptConnector.add( "<xmlattr>.ImmoIdx", connector.Reference( "ImmoIdx" ) );
+	ReferencesToAttributes( ptConnector, connector );
 	if( !connector.Reference( "kollektorID" ).empty() )
 		ptConnector.add( "<xmlattr>.kollektorID", connector.Reference( "DKWType" ) );
-	if( !connector.Reference( "DKWType" ).empty() )
-		ptConnector.add( "<xmlattr>.DKWType", connector.Reference( "DKWType" ) );
 
 	if( auto pSwitch = dynamic_cast<const Switch*>(&connector) )
 		ptConnector.add( "<xmlattr>.status", ToString(pSwitch->Get()) );
@@ -391,10 +366,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const VelocityControl& signal ){
 	boost::property_tree::ptree ptSignal;
-
-	ptSignal.add( "<xmlattr>.id", signal.ID() );
-	if( !signal.Reference( "name" ).empty() )
-		ptSignal.add( "<xmlattr>.name", signal.Reference( "name" ) );
+	ReferencesToAttributes( ptSignal, signal );
 	ptSignal.add( "<xmlattr>.status", ToString( signal.Get() ) );
 	ptSignal.add( "<xmlattr>.stopDistance", signal.StopDistance() );
 	if( !signal.Reference( "Key_Id" ).empty() )
@@ -445,10 +417,7 @@ boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const 
 
 boost::property_tree::ptree & operator<<( boost::property_tree::ptree& pt, const JumpSite& signal ){
 	boost::property_tree::ptree ptSignal;
-
-	ptSignal.add( "<xmlattr>.id", signal.ID() );
-	if( !signal.Reference( "name" ).empty() )
-		ptSignal.add( "<xmlattr>.name", signal.Reference( "name" ) );
+	ReferencesToAttributes( ptSignal, signal );
 	ptSignal.add( "<xmlattr>.status", ToString( signal.Get() ) );
 
 	TrackRange trackRange;
@@ -477,11 +446,7 @@ boost::property_tree::ptree & operator<<( boost::property_tree::ptree& pt, const
 
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Indicator& indicator ){
 	boost::property_tree::ptree ptIndicator;
-
-	ptIndicator.add( "<xmlattr>.id", indicator.ID() );
-	if( !indicator.Reference( "name" ).empty() )
-		ptIndicator.add( "<xmlattr>.name", indicator.Reference( "name" ) );
-	ptIndicator.add( "<xmlattr>.reference", indicator.Reference( "reference" ) );
+	ReferencesToAttributes( ptIndicator, indicator );
 	ptIndicator.add( "<xmlattr>.status", ToString( indicator.Get() ) );
 	ptIndicator << indicator.GetFrame();
 
@@ -783,9 +748,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Plug& plug ){
 	if( plug.Plugged() || plug.JackOnPulse().Plugged() ){
 		boost::property_tree::ptree ptPlug;
-
+		ReferencesToAttributes( ptPlug, plug );
 		ptPlug.add( "<xmlattr>.plugid", plug.ID() );
-		ptPlug.add( "<xmlattr>.name", plug.Reference( "name" ) );
 
 		if( plug.JackOnPulse().Plugged() )
 			ptPlug << plug.JackOnPulse();
@@ -809,10 +773,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 		if( const Plug* pPlug = GetFirstNonZeroIDPlugInChain( *jack.GetPlug() ) ){
 			boost::property_tree::ptree ptJack;
-
-			if( !jack.Reference( "name" ).empty() )
-				ptJack.add( "<xmlattr>.name", jack.Reference( "name" ) );
-
+			ReferencesToAttributes( ptJack, jack );
 			ptJack.add( "<xmlattr>.plugid", pPlug->ID() );
 
 			move_child( pt, "Jack", ptJack );
@@ -824,10 +785,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 boost::property_tree::ptree & operator<<( boost::property_tree::ptree& pt, const PulseCounter& pulseCounter ){
 	boost::property_tree::ptree ptPulseCounter;
-
-	ptPulseCounter.add( "<xmlattr>.id", pulseCounter.ID() );
-	if( !pulseCounter.Reference( "name" ).empty() )
-		ptPulseCounter.add( "<xmlattr>.name", pulseCounter.Reference( "name" ) );
+	ReferencesToAttributes( ptPulseCounter, pulseCounter );
 	ptPulseCounter.add( "<xmlattr>.threshold", pulseCounter.Threshold() );
 	ptPulseCounter.add( "<xmlattr>.counter", pulseCounter.Counter() );
 
@@ -843,10 +801,7 @@ boost::property_tree::ptree & operator<<( boost::property_tree::ptree& pt, const
 
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Timer& timer ){
 	boost::property_tree::ptree ptTimer;
-
-	ptTimer.add( "<xmlattr>.id", timer.ID() );
-	if( !timer.Reference( "name" ).empty() )
-		ptTimer.add( "<xmlattr>.name", timer.Reference( "name" ) );
+	ReferencesToAttributes( ptTimer, timer );
 	ptTimer.add( "<xmlattr>.lapse", timer.Lapse() );
 	ptTimer.add( "<xmlattr>.periodic", timer.Periodic() );
 	ptTimer.add( "<xmlattr>.started", timer.IsStarted() );

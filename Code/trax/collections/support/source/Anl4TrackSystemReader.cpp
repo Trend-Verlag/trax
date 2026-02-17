@@ -41,6 +41,7 @@
 #include "trax/SocketRegistry.h"
 #include "trax/Switch.h"
 
+#include "trax/rigid/MovableTrack.h"
 #include "trax/rigid/trains/WheelFrameSensors.h"
 
 #include "trax/support/TraxSupportXML.h"
@@ -151,7 +152,7 @@ std::shared_ptr<TrackBuilder> Anl4TrackSystemReader::CreateTrack(
 	const boost::property_tree::ptree& pt, 
 	std::vector<Track::Coupling>& couplings ) const
 {
-	if( auto pTrack = TrackBuilder::Make( TrackType( pt.get( "<xmlattr>.type", "standard" ) ) ); pTrack )
+	if( auto pTrack = MovableTrack::Make( TrackType( pt.get( "<xmlattr>.type", "standard" ) ) ); pTrack )
 	{
 		pTrack->ID( pt.get( "<xmlattr>.id", 0 ) );
 		pTrack->Reference( "name", pt.get( "<xmlattr>.name", "Track" + to_string(pTrack->ID()) ) );

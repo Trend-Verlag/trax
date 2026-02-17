@@ -53,7 +53,10 @@ namespace trax{
 
 
 		/// \brief Searches for all reference names that countain namePart as substring in the name.
-		virtual const std::vector<char const *>& ReferenceNames( const std::string& namePart ) const = 0;
+		virtual const std::vector<char const*>& ReferenceNames( const std::string& namePart ) const = 0;
+
+		/// \brief Searches for all reference names.
+		virtual const std::vector<char const*>& ReferenceNames() const = 0;
 
 
 		/// \returns the object's id.

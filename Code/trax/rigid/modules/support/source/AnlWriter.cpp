@@ -12,6 +12,7 @@
 
 #include "../AnlWriter.h"
 #include "../Anl4ModuleWriter.h"
+#include "trax/support/TraxSupportXML.h"
 
 #if defined(_MSC_VER)
 #	pragma warning(push)

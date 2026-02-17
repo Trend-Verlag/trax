@@ -55,6 +55,19 @@ const char*	Fleet_Imp::TypeName() const noexcept{
 	return "Fleet";
 }
 
+bool Fleet_Imp::IsValid() const noexcept
+{
+	for( auto iter = begin(); iter != end(); ++iter ){
+		if( !iter->IsValid() )
+		{
+			std::cout << Verbosity::verbose << "Train with ID " << iter->ID() << " is not valid!" << std::endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
 IDType Fleet_Imp::Add( std::shared_ptr<Train> pTrain ){
 	if( pTrain ){
 		if( Decorator()->IsMember( *pTrain ) )

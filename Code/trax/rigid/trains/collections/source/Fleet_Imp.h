@@ -46,6 +46,8 @@ namespace trax{
 
 
 		// Collection:
+		bool IsValid() const noexcept override;
+
 		IDType Add( std::shared_ptr<Train> pTrain ) override;
 		
 		IDType AddRelaxed( std::shared_ptr<Train> pTrain ) override;

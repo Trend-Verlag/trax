@@ -62,6 +62,13 @@ namespace trax{
 			return sm_ReferenceNames;
 		}
 
+		const std::vector<char const*>& ReferenceNames() const override{
+			sm_ReferenceNames.clear();
+			for( const auto& pair : m_References )
+				sm_ReferenceNames.push_back( pair.first.c_str() );
+			return sm_ReferenceNames;
+		}
+
 		IDType ID() const noexcept override{
 			return m_ID;
 		}
@@ -70,11 +77,11 @@ namespace trax{
 			m_ID = id;
 		}
 	private:
-		std::unordered_map<std::string, std::string> m_References;
-		static const std::string m_Empty;
-		std::string		m_Name;
-		IDType			m_ID;
-		static std::vector<char const *> sm_ReferenceNames;
+		std::unordered_map<std::string,std::string> m_References;
+		static const std::string					m_Empty;
+		std::string									m_Name;
+		IDType										m_ID;
+		static std::vector<char const *>			sm_ReferenceNames;
 	};
 
 	template<class Base>

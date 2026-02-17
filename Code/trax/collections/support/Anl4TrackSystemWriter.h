@@ -34,6 +34,7 @@
 namespace trax{
 
 	namespace ptreesupport{
+
 		/// \name Property Tree Streaming Support for Trax Classes
 		///@{
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackSystem& trackSystem );
@@ -96,6 +97,8 @@ namespace trax{
 
 			move_child( pt, collection.TypeName(), ptCollection );
 			return pt;
-		}
+		} // do not move away from here, doesn't belong to CollectionSupportXML.h since it is writing code ...
+
+
 	} // namespace ptreesupport
 } // namespace trax
