@@ -1,6 +1,7 @@
 add_library(trax_core_support 
     STATIC
         "./source/Fixtures.cpp"
+        "./source/Parser_Imp.cpp"
         "./source/TraxSupportXML.cpp"
 )
 
@@ -10,9 +11,15 @@ set(PUBLIC_HEADERS
     "./TraxSupportXML.h"
 )
 
+set(PRIVATE_HEADERS
+    "./source/Parser_Imp.h"
+)
+
 target_sources(trax_core_support
     PUBLIC
         ${PUBLIC_HEADERS}
+    PRIVATE
+        ${PRIVATE_HEADERS}
 )
 
 # Create source groups (filters) for Visual Studio

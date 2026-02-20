@@ -203,7 +203,7 @@ namespace trax{
 			Force					BreakingForce = infinite__force;				///< Breaking force of the coupling. infinite for unbreakable.
 			Momentum				BreakingSpareMomentum = 0_Ns;					///< Breaking momentum of the coupling to be consumed, before the coupling breaks.
 			Force  					RecuperationForce = 0_N;						///< Force to recuperate the spare momentum of the coupling.	
-			int						CouplingTypeIdx = 0;							///< Index of the coupling type. Only coupling with same index greater 0 can be coupled.
+			int						CouplingTypeIdx = 1;							///< Index of the coupling type. Only coupling with same index greater 0 can be coupled.
 		};
 
 
@@ -292,10 +292,22 @@ namespace trax{
 		virtual Jack& JackOnSouthSwivelBendingOut() noexcept = 0;
 	};
 
+
+	/// \brief Couples two bogie ends together.
+	///
+	/// The distance of the two couplings will define the coupling thengthes.
+	/// The activity status of the two couplings are ignored, but the coupling 
+	/// indexes must match for success.
+	/// \returns true if the coupling could get established or already was.
 	dclspc bool Couple( std::pair<Bogie&,EndType> a, std::pair<Bogie&,EndType> b ) noexcept;
 
+
+	/// \returns true if the two bogie ends are coupled.
 	dclspc bool AreCoupled( const Bogie& a, const Bogie& b ) noexcept;
 
+
+	/// \returns The distance between two couplings, no matter whether a
+	/// coupling is established between them.
 	dclspc Length GetCouplingDistance( std::pair<const Bogie&,EndType> a, std::pair<const Bogie&,EndType> b ) noexcept;
 }
 

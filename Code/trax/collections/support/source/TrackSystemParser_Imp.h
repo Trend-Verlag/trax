@@ -4,8 +4,7 @@
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
-// 
-// 
+//
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //
@@ -27,20 +26,15 @@
 
 #pragma once
 
-#include "../RailRunnerParser.h"
-
+#include "trax/collections/TrackSystemParser.h"
 #include "trax/support/source/Parser_Imp.h"
+
 
 namespace trax{
 namespace ptreesupport{
 
-	void ParseAxisArrangement( const boost::property_tree::ptree& root, RollingStockParser& callback );
-	
-	void ParseRollingStock( const boost::property_tree::ptree& root, RollingStockParser& callback );
+	bool ParseTrackSystem( const boost::property_tree::ptree& pt, TrackSystemParser& callback );
 
-	void ParseTrain( const boost::property_tree::ptree& pt, TrainParser& callback );
-	
-	bool ParseFleet( const boost::property_tree::ptree& pt, FleetParser& callback );
 
 }	// namespace ptreesupport
 }	// namespace trax

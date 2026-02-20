@@ -7,6 +7,7 @@ add_library(trax_trains_collections
 set(PUBLIC_HEADERS
     "./CargoCollection.h"
     "./Fleet.h"
+    "./FleetParser.h"
 )
 
 set(PRIVATE_HEADERS

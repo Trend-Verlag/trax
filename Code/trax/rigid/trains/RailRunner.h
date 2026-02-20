@@ -573,8 +573,9 @@ namespace trax{
 
 		/// \brief Activates the coupling at the respective end of the RailRunner.
 		/// 
-		/// Non active couplings can not get coupled. Coupled couplings can neither
-		/// be activated nor deactivated. A coupling is deactivated by default. 
+		/// The activation status of a coupling can be used for auto coupling on 
+		/// approach, e.g. Fleet does that with trains. Coupled couplings can not
+		/// ge activated. A coupling is deactivated by default. 
 		/// \param end Denotes the coupling.
 		/// \throws std::runtime_error if coupling is coupled already or has no valid 
 		/// couling index.
@@ -583,8 +584,6 @@ namespace trax{
 
 		/// \brief Deactivates the coupling at the respective end of the RailRunner.
 		/// 
-		/// Non active couplings can not get coupled. Coupled couplings can neither
-		/// be activated nor deactivated.
 		/// \param end Denotes the coupling.
 		/// \throws std::runtime_error if coupling is coupled.
 		virtual void DeactivateCoupling( EndType end = EndType::both ) = 0;

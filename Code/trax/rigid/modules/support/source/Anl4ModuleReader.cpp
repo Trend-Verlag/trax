@@ -10,11 +10,17 @@
 
 
 
-#include "../Anl4ModuleReader.h"
+#include "trax/rigid/modules/support/Anl4ModuleReader.h"
+#include "spat/support/SpatSupportXML.h"
 
+#include "trax/rigid/Gestalt.h"
 #include "trax/rigid/modules/Camera.h"
-#include "trax/rigid/modules/ModuleCollection.h"
 #include "trax/rigid/modules/Module.h"
+#include "trax/rigid/modules/ModuleCollection.h"
+#include "trax/rigid/trains/RollingStock.h"
+#include "trax/rigid/trains/Train.h"
+#include "trax/rigid/trains/WheelFrame.h"
+#include "trax/rigid/trains/collections/Fleet.h"
 
 #include "trax/collections/SignalCollection.h"
 #include "trax/collections/IndicatorCollection.h"
@@ -23,30 +29,33 @@
 #include "trax/collections/TrackSystem.h"
 
 namespace trax{
+namespace ptreesupport{
+
+	using namespace dim::ptreesupport;
 	using namespace spat;
 	using namespace spat::ptreesupport;
-	using namespace dim::ptreesupport;
-
-
-namespace ptreesupport{
 
 
 Anl4ModuleReader::Anl4ModuleReader( 
+	Scene& scene,
 	const char* pLocale )
-	: Anl4TrackSystemReader( pLocale )
+	: Anl4TrackSystemReader{ pLocale }
+	, m_Scene{ scene }
 {
 }
 
 Anl4ModuleReader::Anl4ModuleReader( 
+	Scene& scene,
 	SocketRegistry& socketRegistry, 
 	const char* pLocale )
-	: Anl4TrackSystemReader( socketRegistry, pLocale )
+	: Anl4TrackSystemReader{ socketRegistry, pLocale }
+	, m_Scene{ scene }
 {
 }
 
 std::unique_ptr<ModuleCollection> Anl4ModuleReader::ReadModuleCollection( const boost::property_tree::ptree& pt ) const
 {
-	if( std::unique_ptr<ModuleCollection> pModuleCollection = ModuleCollection::Make(); pModuleCollection )
+	if( std::unique_ptr<ModuleCollection> pModuleCollection = trax::ModuleCollection::Make(); pModuleCollection )
 	{
 		for( const auto& pair : pt )
 		{
@@ -62,7 +71,7 @@ std::unique_ptr<ModuleCollection> Anl4ModuleReader::ReadModuleCollection( const 
 
 std::unique_ptr<Module> Anl4ModuleReader::ReadModule( const boost::property_tree::ptree& pt ) const
 {
-	if( std::unique_ptr<Module> pModule = Module::Make(); pModule )
+	if( std::unique_ptr<Module> pModule = trax::Module::Make(); pModule )
 	{
 		pModule->ID( pt.get( "<xmlattr>.id", 0 ) );
 		pModule->Reference( "name", pt.get( "<xmlattr>.name", "" ) );
@@ -109,8 +118,8 @@ std::unique_ptr<Module> Anl4ModuleReader::ReadModule( const boost::property_tree
 			//else if( pair.first == "Batch" && pSimulator )
 			//	pModule->Attach( CreateBatch( pair.second, *pModule ) );
 
-			//else if( pair.first == "Fleet" && pSimulator && pModule->GetTrackSystem() && pModule->GetBatch() )
-			//	pModule->Attach( CreateFleet( pair.second, *pModule, *pModule->GetTrackSystem(), *pModule->GetBatch(), message ) );
+			else if( pair.first == "Fleet" )
+				pModule->Attach( CreateFleet( pair.second ) );
 
 			else if( pair.first == "SignalCollection" && pModule->GetTrackSystem() /*&& pModule->GetFleet()*/ )
 				pModule->Attach( CreateSignalCollection( pair.second, *pModule->GetTrackSystem()/*, *pModule->GetFleet()*/ ) );
@@ -202,6 +211,152 @@ std::unique_ptr<Camera> Anl4ModuleReader::CreateCamera(
 		//}
 
 		return pCamera;
+	}
+
+	return nullptr;
+}
+
+std::shared_ptr<Fleet> Anl4ModuleReader::CreateFleet( const boost::property_tree::ptree& pt ) const
+{
+	if( auto pFleet = Fleet::Make() )
+	{
+		for( const auto& pair : pt )
+		{
+			if( pair.first == "Train" )
+				pFleet->Add( CreateTrain( pair.second ).first );
+		}
+
+		return pFleet;
+	}
+
+	return nullptr;
+}
+
+std::pair<std::shared_ptr<Train>,Orientation> Anl4ModuleReader::CreateTrain( const boost::property_tree::ptree& pt ) const
+{
+	if( std::shared_ptr<Train> pTrain = Train::Make(); pTrain )
+	{
+		AttributesToReferences( pt, *pTrain );
+
+		for( const auto& pair : pt )
+		{
+			if( pair.first == "Train" ){
+				if( auto [pChildTrain, orientation] = CreateTrain( pair.second ); pChildTrain )
+					pTrain->Append( EndType::south, pChildTrain, orientation );
+			}
+
+			else if( pair.first == "RollingStock" ){
+				if( auto [pRollingStock, orientation] = CreateRollingStock( pair.second ); pRollingStock )
+					pTrain->Append( EndType::south, pRollingStock, orientation );
+			}
+		}
+
+		return { pTrain, ToOrientation( pTrain->Reference( "orientation" ) ) };
+	}
+
+	return { nullptr, Orientation::Value::none };
+}
+
+std::pair<std::shared_ptr<RollingStock>,Orientation> Anl4ModuleReader::CreateRollingStock( const boost::property_tree::ptree& pt ) const
+{
+	if( std::shared_ptr<RollingStock> pRollingStock = RollingStock::Make(); pRollingStock )
+	{
+		AttributesToReferences( pt, *pRollingStock );
+		std::vector<std::shared_ptr<Bogie>> topmostBogies;
+
+		for( const auto& pair : pt )
+		{
+			if( pair.first == "Bogie" ){
+				if( std::shared_ptr<Bogie> pChildBogie = CreateBogie( pair.second ); pChildBogie )
+					topmostBogies.push_back( pChildBogie );
+			}
+
+			else if( pair.first == "WheelFrame" ){
+				if( std::shared_ptr<WheelFrame> pChildWheelFrame = CreateWheelFrame( pair.second ); pChildWheelFrame )
+					topmostBogies.push_back( pChildWheelFrame );
+			}
+		}
+
+		if( !topmostBogies.empty() )
+		{
+			// connect the adjacent south child bogies to their south parents ...
+			for( size_t i = 0; i < topmostBogies.size() - 1; ++i )
+				topmostBogies[i]->Attach( topmostBogies[i + 1]->GetChild( EndType::north ).first, EndType::north );
+
+			pRollingStock->Attach( *topmostBogies.front() );
+			return { pRollingStock, ToOrientation( pRollingStock->Reference( "orientation" ) ) };
+		}
+	}
+
+	return { nullptr, Orientation::Value::none };
+}
+
+void Anl4ModuleReader::ReadBogie( const boost::property_tree::ptree& pt, Bogie& bogie ) const
+{
+	AttributesToReferences( pt, bogie );
+	bogie.TargetVelocity( pt.get( "<xmlattr>.target_velocity", 0_kmIh ) );
+	bogie.Thrust( pt.get( "<xmlattr>.thrust", 0_1 ) );
+	bogie.Brake( pt.get( "<xmlattr>.brake", 0_1 ) );
+	if( pt.get( "<xmlattr>.couplingNorthActivated", false ) )
+		bogie.ActivateCoupling( EndType::north );
+	if( pt.get( "<xmlattr>.couplingSouthActivated", false ) )
+		bogie.ActivateCoupling( EndType::south );
+
+	std::shared_ptr<Bogie> pChildNorthBogie, pChildSouthBogie;
+
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "Frame" ){
+			Frame<Length,One> frame;
+			ReadFrame( pair.second, frame );
+			bogie.GetGestalt().SetFrame( frame );
+		}
+
+		else if( pair.first == "Velocity" ){
+			Vector<Velocity> velocity;
+			ReadVector( pair.second, velocity );
+			bogie.GetGestalt().SetLinearVelocity( velocity );
+		}
+
+		else if( pair.first == "AngularVelocity" ){
+			Vector<AngularVelocity> angularVelocity;
+			ReadVector( pair.second, angularVelocity );
+			bogie.GetGestalt().SetAngularVelocity( angularVelocity );
+		}
+
+		else if( pair.first == "Bogie" ){
+			pChildNorthBogie ? pChildSouthBogie : pChildNorthBogie = CreateBogie( pair.second );
+		}
+
+		else if( pair.first == "WheelFrame" ){
+			pChildNorthBogie ? pChildSouthBogie : pChildNorthBogie = CreateWheelFrame( pair.second );
+		}
+	}
+
+	if( pChildNorthBogie )
+		bogie.Attach( pChildNorthBogie, EndType::north );
+
+	if( pChildSouthBogie )
+		bogie.Attach( pChildSouthBogie, EndType::south );
+}
+
+std::shared_ptr<Bogie> Anl4ModuleReader::CreateBogie( const boost::property_tree::ptree& pt ) const
+{
+	if( std::shared_ptr<Bogie> pBogie = Bogie::Make( m_Scene ); pBogie )
+	{
+		ReadBogie( pt, *pBogie );
+		return pBogie;
+	}
+
+	return nullptr;
+}
+
+std::shared_ptr<WheelFrame> Anl4ModuleReader::CreateWheelFrame( const boost::property_tree::ptree& pt ) const
+{
+	if( std::shared_ptr<WheelFrame> pWheelFrame = WheelFrame::Make( m_Scene ); pWheelFrame )
+	{
+		ReadBogie( pt, *pWheelFrame );
+		return pWheelFrame;
 	}
 
 	return nullptr;

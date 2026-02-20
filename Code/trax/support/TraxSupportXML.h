@@ -126,6 +126,24 @@ namespace trax{
 		{
 			toParent.add_child( path, boost::property_tree::ptree{} ).swap( value );
 		}
+
+		inline boost::property_tree::ptree& operator << ( boost::property_tree::ptree& opt, const spat::Vector<Velocity>& v ){
+			boost::property_tree::ptree ptVector;
+			ptVector.add( "<xmlattr>.dx", v.dx );
+			ptVector.add( "<xmlattr>.dy", v.dy );
+			ptVector.add( "<xmlattr>.dz", v.dz );
+			opt.add_child( "Velocity", ptVector );
+			return opt;
+		}
+
+		inline boost::property_tree::ptree& operator << ( boost::property_tree::ptree& opt, const spat::Vector<AngularVelocity>& v ){
+			boost::property_tree::ptree ptVector;
+			ptVector.add( "<xmlattr>.dx", v.dx );
+			ptVector.add( "<xmlattr>.dy", v.dy );
+			ptVector.add( "<xmlattr>.dz", v.dz );
+			opt.add_child( "AngularVelocity", ptVector );
+			return opt;
+		}
 	
 	} // namespace ptreesupport
 } // namespace trax

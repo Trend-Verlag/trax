@@ -26,15 +26,68 @@
 namespace trax{
 namespace ptreesupport{
 
+static void WriteTrainContent( boost::property_tree::ptree& ptTrain, const Train& train )
+{
+	ptTrain.add( "<xmlattr>.orientation", ToString( train.GetOrientation() ) );
+	
+	for( int index = 0; index < train.GetNumberOfComponents(); ++index )
+	{
+		ptTrain << *train.GetComponent( index );
+	}
+}
+
+static void WriteRollingStockContent( boost::property_tree::ptree& ptRollingStock, const RollingStock& rollingStock )
+{
+	ptRollingStock.add( "<xmlattr>.orientation", ToString( rollingStock.GetOrientation() ) );
+
+	for( int index = 0; index < rollingStock.GetNumberOfTopmostParents(); ++index )
+	{
+		ptRollingStock << rollingStock.GetTopmostParent( index );
+	}
+}
+
+static void WriteBogieContent( boost::property_tree::ptree& ptBogie, const Bogie& bogie )
+{		
+	ptBogie.add( "<xmlattr>.couplingNorthActivated", bogie.IsActivated( EndType::north ) );
+	ptBogie.add( "<xmlattr>.couplingSouthActivated", bogie.IsActivated( EndType::south ) );
+	ptBogie.add( "<xmlattr>.target_velocity", bogie.TargetVelocity() );
+	ptBogie.add( "<xmlattr>.thrust", bogie.Thrust() );
+	ptBogie.add( "<xmlattr>.brake", bogie.Brake() );
+
+	spat::Frame<Length,One> BodyFrame;
+	bogie.GetGestalt().GetFrame( BodyFrame );
+	ptBogie << BodyFrame;
+	spat::Vector<Velocity> velocity;
+	bogie.GetGestalt().GetLinearVelocity( velocity );
+	ptBogie << velocity;
+	spat::Vector<AngularVelocity> angularVelocity;
+	bogie.GetGestalt().GetAngularVelocity( angularVelocity );
+	ptBogie << angularVelocity;
+
+	if( std::shared_ptr<Bogie> pBogieNorth = bogie.GetChild( EndType::north ).first; pBogieNorth )
+		ptBogie << *pBogieNorth;
+	if( std::shared_ptr<Bogie> pBogieSouth = bogie.GetChild( EndType::south ).first
+		; pBogieSouth && !pBogieSouth->GetParent( EndType::south ).first ) // children are written by there south parent if any.
+		ptBogie << *pBogieSouth;
+}
+
+static void WriteWheelFrameContent( boost::property_tree::ptree& ptWheelFrame, const WheelFrame& wheelFrame )
+{
+	WriteBogieContent( ptWheelFrame, wheelFrame );
+}
+
 boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const RailRunner& railRunner ){
+	boost::property_tree::ptree ptRailRunner;
+	ReferencesToAttributes( ptRailRunner, railRunner );
+
 	if( const Train* pTrain = dynamic_cast<const Train*>(&railRunner); pTrain )
-		pt << *pTrain;
+		WriteTrainContent( ptRailRunner, *pTrain );
 	else if( const RollingStock* pRollingStock = dynamic_cast<const RollingStock*>(&railRunner); pRollingStock )
-		pt << *pRollingStock;
+		WriteRollingStockContent( ptRailRunner, *pRollingStock );
 	else if( const WheelFrame* pWheelFrame = dynamic_cast<const WheelFrame*>(&railRunner); pWheelFrame )
-		pt << *pWheelFrame;
+		WriteWheelFrameContent( ptRailRunner, *pWheelFrame );
 	else if( const Bogie* pBogie = dynamic_cast<const Bogie*>(&railRunner); pBogie )
-		pt << *pBogie;
+		WriteBogieContent( ptRailRunner, *pBogie );
 	else{
 		std::ostringstream stream;
 		stream << "Unknown RailRunner type!" << std::endl;
@@ -42,69 +95,7 @@ boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const 
 		throw std::logic_error{ stream.str() };
 	}
 
-	return pt;
-}
-
-boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const Train& train ){
-	boost::property_tree::ptree ptTrain;
-	ReferencesToAttributes( ptTrain, train );
-
-	for( int index = 0; index < train.GetNumberOfComponents(); ++index )
-	{
-		ptTrain << *train.GetComponent( index );
-	}
-
-	move_child( pt, train.TypeName(), ptTrain );
-	return pt;
-}
-
-boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const RollingStock& rollingStock ){
-	boost::property_tree::ptree ptRollingStock;
-	ReferencesToAttributes( ptRollingStock, rollingStock );
-
-	for( int index = 0; index < rollingStock.GetNumberOfTopmostParents(); ++index )
-	{
-		ptRollingStock << rollingStock.GetTopmostParent( index );
-	}
-
-	move_child( pt, rollingStock.TypeName(), ptRollingStock );
-	return pt;
-}
-
-static void WriteBogieContent( boost::property_tree::ptree& ptBogie, const Bogie& bogie ){
-	spat::Frame<Length,One> frame;
-	bogie.GetGestalt().GetFrame( frame );
-	ptBogie << frame;
-
-	if( std::shared_ptr<Bogie> pBogieNorth = bogie.GetChild( EndType::north ).first; pBogieNorth )
-		ptBogie << *pBogieNorth;
-
-	if( std::shared_ptr<Bogie> pBogieSouth = bogie.GetChild( EndType::south ).first; pBogieSouth )
-		ptBogie << *pBogieSouth;
-}
-
-boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const Bogie& bogie ){
-	if( const WheelFrame* pWheelFrame = dynamic_cast<const WheelFrame*>(&bogie); pWheelFrame ){
-		pt << *pWheelFrame;
-	}
-	else{
-		boost::property_tree::ptree ptBogie;
-		ReferencesToAttributes( ptBogie, bogie );
-
-		WriteBogieContent( ptBogie, bogie );
-
-		move_child( pt, bogie.TypeName(), ptBogie );
-	}
-
-	return pt;
-}
-
-boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const WheelFrame& wheelFrame ){
-	boost::property_tree::ptree ptWheelFrame;
-
-	WriteBogieContent( ptWheelFrame, wheelFrame );
-
-	move_child( pt, wheelFrame.TypeName(), ptWheelFrame );
+	move_child( pt, railRunner.TypeName(), ptRailRunner );
 	return pt;
 }
 

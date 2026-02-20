@@ -1,14 +1,14 @@
-add_library(trax_core_collections STATIC
-    "./source/Collections_Imp.cpp"
-    "./source/ConnectorCollection_Imp.cpp"
-    "./source/IndicatorCollection_Imp.cpp"
-    "./source/PulseCounterCollection_Imp.cpp"
-    "./source/SignalCollection_Imp.cpp"
-    "./source/TimerCollection_Imp.cpp"
-    "./source/TrackCollectionContainer_Imp.cpp"
-    "./source/TrackCollection_Imp.cpp"
-    "./source/TrackSystemParser_Imp.cpp"
-    "./source/TrackSystem_Imp.cpp"
+add_library(trax_core_collections 
+    STATIC
+        "./source/Collections_Imp.cpp"
+        "./source/ConnectorCollection_Imp.cpp"
+        "./source/IndicatorCollection_Imp.cpp"
+        "./source/PulseCounterCollection_Imp.cpp"
+        "./source/SignalCollection_Imp.cpp"
+        "./source/TimerCollection_Imp.cpp"
+        "./source/TrackCollectionContainer_Imp.cpp"
+        "./source/TrackCollection_Imp.cpp"
+        "./source/TrackSystem_Imp.cpp"
 )
 
 set(PUBLIC_HEADERS
@@ -35,7 +35,6 @@ set(PRIVATE_HEADERS
     "./source/TimerCollection_Imp.h"
     "./source/TrackCollectionContainer_Imp.h"
     "./source/TrackCollection_Imp.h"
-    "./source/TrackSystemParser_Imp.h"
     "./source/TrackSystem_Imp.h"
 )
 

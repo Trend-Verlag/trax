@@ -22,11 +22,12 @@ namespace trax{
 	struct Module;
 	struct ModuleCollection;
 	struct TrackSystem;
+	struct Scene;
 
 	class AnlReader{
 	public:
-		dclspc AnlReader( const char* pLocale = nullptr );
-		dclspc AnlReader( SocketRegistry& socketRegistry, const char* pLocale = nullptr );
+		dclspc AnlReader( Scene& scene, const char* pLocale = nullptr );
+		dclspc AnlReader( Scene& scene, SocketRegistry& socketRegistry, const char* pLocale = nullptr );
 
 
 		std::unique_ptr<ModuleCollection> dclspc ReadModuleCollection( const std::filesystem::path& path ) const;
@@ -51,15 +52,16 @@ namespace trax{
 		/// \param atIdx The index of the track system to read.
 		/// \return A shared pointer to the track system.
 		//@{
-		std::shared_ptr<TrackSystem> dclspc ReadTrackSystem( const std::filesystem::path& fromPath, int atIdx = 1 ) const;
+		static std::shared_ptr<TrackSystem> dclspc ReadTrackSystem( const std::filesystem::path& fromPath, int atIdx = 1 );
 				
-		std::shared_ptr<TrackSystem> dclspc ReadTrackSystem( const unsigned char* bufferStart, const unsigned char* bufferEnd, int atIdx = 1 ) const;
+		static std::shared_ptr<TrackSystem> dclspc ReadTrackSystem( const unsigned char* bufferStart, const unsigned char* bufferEnd, int atIdx = 1 );
 		//@}
 	private:
 		std::unique_ptr<SocketRegistry> m_pSocketRegistry;
 		const char* m_pLocale = nullptr;
 	protected:
 		SocketRegistry& m_SocketRegistry;
+		Scene& m_Scene;
 	};
 
 } // namespace trax

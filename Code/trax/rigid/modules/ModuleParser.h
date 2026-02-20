@@ -1,10 +1,11 @@
 //	trax track library
-//	AD 2024 
+//	AD 2026 
 //
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
-//
+// 
+// 
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //
@@ -27,14 +28,42 @@
 #pragma once
 
 #include "trax/collections/TrackSystemParser.h"
-#include "trax/source/Parser_Imp.h"
-
+#include "trax/rigid/trains/collections/FleetParser.h"
 
 namespace trax{
-namespace ptreesupport{
 
-	bool ParseTrackSystem( const boost::property_tree::ptree& pt, TrackSystemParser& callback );
+	struct Module;
+	struct ModuleCollection;
+
+	struct ModuleParser : Parser{
+
+		virtual TrackSystemParser& GetTrackSystemParser() = 0;
+
+		virtual FleetParser& GetFleetParser() = 0;
+
+		virtual bool ModuleStart( IDType /*id*/ ) noexcept(false) { return true; }
 
 
-}	// namespace ptreesupport
-}	// namespace trax
+
+		virtual void ModuleEnd() noexcept( false ) {}
+
+
+	};
+
+
+	struct ModuleCollectionParser : Parser{
+
+		virtual ModuleParser& GetModuleParser() noexcept(false) = 0;
+
+		virtual bool ModuleCollectionStart() noexcept(false) { return true; }
+
+		virtual void ModuleCollectionEnd() noexcept(false) {}
+
+	};
+
+
+	bool dclspc ParseModule( const Module& module, ModuleParser& callback ) noexcept(false);
+
+	bool dclspc ParseModuleCollection( const ModuleCollection& moduleCollection, ModuleCollectionParser& callback ) noexcept(false);
+
+}

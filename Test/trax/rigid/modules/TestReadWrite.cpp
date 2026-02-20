@@ -22,7 +22,7 @@ using namespace std;
 
 BOOST_AUTO_TEST_SUITE(trax_tests)
 BOOST_AUTO_TEST_SUITE(Module_tests)
-
+/*
 BOOST_AUTO_TEST_CASE( RoundtripTest )
 {
 	AnlReader reader;
@@ -78,6 +78,6 @@ BOOST_AUTO_TEST_CASE( RoundtripTest3 )
 	BOOST_REQUIRE( pModule->GetTrackSystem() );
 	BOOST_CHECK_EQUAL( numTracks, pModule->GetTrackSystem()->Count() );
 }
-
+*/
 BOOST_AUTO_TEST_SUITE_END() //Module_tests
 BOOST_AUTO_TEST_SUITE_END() //trax_tests

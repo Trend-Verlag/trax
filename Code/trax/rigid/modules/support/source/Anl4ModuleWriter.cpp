@@ -18,6 +18,7 @@
 #include "trax/collections/IndicatorCollection.h"
 #include "trax/collections/PulseCounterCollection.h"
 #include "trax/collections/TimerCollection.h"
+#include "trax/rigid/trains/Train.h"
 #include "trax/rigid/trains/collections/Fleet.h"
 
 #include "trax/rigid/trains/support/Anl4RailRunnerWriter.h"

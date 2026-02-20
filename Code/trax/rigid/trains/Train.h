@@ -136,8 +136,9 @@ namespace trax{
 		/// properly first.
 		/// \param atEnd End of this Train to append to.
 		/// \param pComponent The TrainComponent to append. Does nothing if nullptr.
-		/// \param bCouple if true, the omponent gets coupled properly, if false the
-		/// coupling state remains unchanged.
+		/// \param bCouple if true, the component gets coupled properly (ignoring the
+		/// activated status of the couplings), if false the coupling state remains 
+		/// unchanged.
 		/// \param withEnd End of the TrainComponent to append.
 		/// \param orientation Orientation of the TrainComponent to append it in.
 		/// \throws std::invalid_argument if the TrainComponent is already part of 
@@ -220,9 +221,9 @@ namespace trax{
 		/// The coupling will try to maintain the actual distance of the two 
 		/// Train's ends.
 		/// The coupling attempt will fail if the two Trains are already coupled
-		/// (with different partners or the same parters at different ends) or 
-		/// if one of the couplings is deactivated. An coupling attempt will 
-		/// also fail, when two couplings wear different coupling type indices. 
+		/// (with different partners or the same parters at different ends). A 
+		/// coupling attempt will also fail, when two couplings wear different 
+		/// coupling type indices. 
 		/// \see Bogie::CouplingProps.
 		/// \param thisEnd End of this Train.
 		/// \param with Other Train.

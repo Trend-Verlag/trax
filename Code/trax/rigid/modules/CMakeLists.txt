@@ -10,6 +10,7 @@ set(PUBLIC_HEADERS
     "./CameraType.h"
     "./Module.h"
     "./ModuleCollection.h"
+    "./ModuleParser.h"
 )
 
 set(PRIVATE_HEADERS

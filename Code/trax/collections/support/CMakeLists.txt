@@ -6,6 +6,7 @@ add_library(trax_core_collections_support
         "./source/FixturesCollections.cpp"
         "./source/SupportXML_Collection.cpp"
         "./source/SupportXML_Twist.cpp"
+        "./source/TrackSystemParser_Imp.cpp"
         "./source/TrackSystemReader.cpp"
         "./source/curves/SupportXML_Arc.cpp"
         "./source/curves/SupportXML_ArcP.cpp"
@@ -23,6 +24,10 @@ add_library(trax_core_collections_support
         "./source/curves/SupportXML_Spline.cpp"
 )
 
+set(PRIVATE_HEADERS
+    "./source/TrackSystemParser_Imp.h"
+)
+
 set(PUBLIC_HEADERS
     "./Anl3TrackSystemReader.h"
     "./Anl4TrackSystemReader.h"
@@ -35,6 +40,8 @@ set(PUBLIC_HEADERS
 target_sources(trax_core_collections_support
     PUBLIC
         ${PUBLIC_HEADERS}
+    PRIVATE
+        ${PRIVATE_HEADERS}
 )
 
 # Create source groups (filters) for Visual Studio

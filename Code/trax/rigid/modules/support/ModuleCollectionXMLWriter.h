@@ -1,5 +1,5 @@
 //	trax track library
-//	AD 2024 
+//	AD 2026 
 //
 //  "the resolution of all the fruitless searches"
 //
@@ -27,20 +27,22 @@
 
 #pragma once
 
-#include "../RailRunnerParser.h"
+#include "trax/rigid/modules/ModuleParser.h"
 
-#include "trax/support/source/Parser_Imp.h"
+#include <filesystem>
 
-namespace trax{
-namespace ptreesupport{
+namespace trax
+{
+	bool dclspc XMLWriteModuleCollection( std::basic_ostream<char>& stream, ModuleCollectionParser& callback ) noexcept( false );
 
-	void ParseAxisArrangement( const boost::property_tree::ptree& root, RollingStockParser& callback );
-	
-	void ParseRollingStock( const boost::property_tree::ptree& root, RollingStockParser& callback );
+	bool dclspc XMLWriteModuleCollection( std::filesystem::path filePath, ModuleCollectionParser& callback ) noexcept( false );
 
-	void ParseTrain( const boost::property_tree::ptree& pt, TrainParser& callback );
-	
-	bool ParseFleet( const boost::property_tree::ptree& pt, FleetParser& callback );
 
-}	// namespace ptreesupport
-}	// namespace trax
+	class ModuleCollectionXMLWriter : public ModuleCollectionParser
+	{
+
+
+
+	};
+
+}

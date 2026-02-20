@@ -16,22 +16,12 @@
 
 namespace trax{
 	
-	struct Fleet;
-	struct Train;
-	struct TrainComponent;
 	struct RailRunner;
-	struct RollingStock;
-	struct Bogie;
-	struct WheelFrame;
 
 	namespace ptreesupport{
 		/// \name Property Tree Streaming Support for Trax Classes
 		///@{
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const RailRunner& railRunner );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Train& train );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const RollingStock& rollingStock );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Bogie& bogie );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const WheelFrame& wheelFrame );
 		///@}
 	} 
 }

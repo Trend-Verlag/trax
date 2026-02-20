@@ -29,25 +29,27 @@
 
 namespace trax{
 
-AnlReader::AnlReader( const char* pLocale )
+AnlReader::AnlReader( Scene& scene, const char* pLocale )
 	: m_pSocketRegistry	{ SocketRegistry::Make() }
 	, m_pLocale			{ pLocale }
 	, m_SocketRegistry	{ *m_pSocketRegistry }
+	, m_Scene			{ scene }
 {
 }
 
-AnlReader::AnlReader( SocketRegistry& socketRegistry, const char* pLocale )
+AnlReader::AnlReader( Scene& scene, SocketRegistry& socketRegistry, const char* pLocale )
 	: m_pLocale			{ pLocale }
 	, m_SocketRegistry	{ socketRegistry }
+	, m_Scene			{ scene }
 {
 }
 
-std::unique_ptr<ModuleCollection> ReadModuleCollection( const boost::property_tree::ptree& ptr )
+std::unique_ptr<ModuleCollection> ReadModuleCollection( Scene& scene, const boost::property_tree::ptree& ptr )
 {
 	for( const auto& pair : ptr )
 	{
 		if( pair.first == "traxML" ){
-			ptreesupport::Anl4ModuleReader reader;
+			ptreesupport::Anl4ModuleReader reader{ scene };
 			RegisterAllCurveReaders( reader );
 			RegisterAllTwistReaders( reader );
 			return reader.ReadModuleCollection( pair.second );
@@ -69,7 +71,7 @@ std::unique_ptr<ModuleCollection> AnlReader::ReadModuleCollection( const std::fi
 
 	read_xml( path.string(), ptr );
 
-	return trax::ReadModuleCollection( ptr );
+	return trax::ReadModuleCollection( m_Scene, ptr );
 }
 
 std::unique_ptr<ModuleCollection> AnlReader::ReadModuleCollection( const unsigned char* bufferStart, const unsigned char* bufferEnd ) const
@@ -81,15 +83,15 @@ std::unique_ptr<ModuleCollection> AnlReader::ReadModuleCollection( const unsigne
 
 	read_xml( stream, ptr );
 
-	return trax::ReadModuleCollection( ptr );
+	return trax::ReadModuleCollection( m_Scene, ptr );
 }
 
-std::unique_ptr<Module> ReadModule( const boost::property_tree::ptree& ptr, int atIdx ){
+std::unique_ptr<Module> ReadModule( Scene& scene, const boost::property_tree::ptree& ptr, int atIdx ){
 
 	for( const auto& pair : ptr )
 	{
 		if( pair.first == "traxML" ){
-			ptreesupport::Anl4ModuleReader reader;
+			ptreesupport::Anl4ModuleReader reader{ scene };
 			RegisterAllCurveReaders( reader );
 			RegisterAllTwistReaders( reader );
 			return reader.ReadModule( pair.second, atIdx );
@@ -111,7 +113,7 @@ std::unique_ptr<Module> AnlReader::ReadModule( const std::filesystem::path& path
 
 	read_xml( path.string(), ptr );
 
-	return trax::ReadModule( ptr, atIdx );
+	return trax::ReadModule( m_Scene, ptr, atIdx );
 }
 
 std::unique_ptr<Module> AnlReader::ReadModule( const unsigned char* bufferStart, const unsigned char* bufferEnd, int atIdx ) const
@@ -123,7 +125,7 @@ std::unique_ptr<Module> AnlReader::ReadModule( const unsigned char* bufferStart,
 
 	read_xml( stream, ptr );
 
-	return trax::ReadModule( ptr, atIdx );
+	return trax::ReadModule( m_Scene, ptr, atIdx );
 }
 
 static std::shared_ptr<TrackSystem> ReadTrackSystem( const boost::property_tree::ptree& ptr, int atIdx )
@@ -147,7 +149,7 @@ static std::shared_ptr<TrackSystem> ReadTrackSystem( const boost::property_tree:
 	return nullptr;
 }
 
-std::shared_ptr<TrackSystem> AnlReader::ReadTrackSystem( const std::filesystem::path& path, int atIdx ) const
+std::shared_ptr<TrackSystem> AnlReader::ReadTrackSystem( const std::filesystem::path& path, int atIdx )
 {	
 	boost::property_tree::ptree ptr;
 
@@ -156,7 +158,7 @@ std::shared_ptr<TrackSystem> AnlReader::ReadTrackSystem( const std::filesystem::
 	return trax::ReadTrackSystem( ptr, atIdx );
 }
 
-std::shared_ptr<TrackSystem> AnlReader::ReadTrackSystem( const unsigned char* bufferStart, const unsigned char* bufferEnd, int atIdx ) const
+std::shared_ptr<TrackSystem> AnlReader::ReadTrackSystem( const unsigned char* bufferStart, const unsigned char* bufferEnd, int atIdx )
 {
 	std::string string( (const char*)bufferStart, bufferEnd - bufferStart );
 	std::istringstream stream( string );

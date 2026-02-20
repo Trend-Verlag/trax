@@ -1,11 +1,10 @@
 //	trax track library
-//	AD 2024 
+//	AD 2026 
 //
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
-// 
-// 
+//
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //
@@ -27,20 +26,17 @@
 
 #pragma once
 
-#include "../RailRunnerParser.h"
-
-#include "trax/support/source/Parser_Imp.h"
+#include "trax/Parser.h"
+#include "trax/IDType.h"
 
 namespace trax{
-namespace ptreesupport{
 
-	void ParseAxisArrangement( const boost::property_tree::ptree& root, RollingStockParser& callback );
-	
-	void ParseRollingStock( const boost::property_tree::ptree& root, RollingStockParser& callback );
+	struct FleetParser : virtual Parser{
 
-	void ParseTrain( const boost::property_tree::ptree& pt, TrainParser& callback );
-	
-	bool ParseFleet( const boost::property_tree::ptree& pt, FleetParser& callback );
 
-}	// namespace ptreesupport
-}	// namespace trax
+		virtual bool FleetStart() noexcept(false) { return true; }
+
+		virtual void FleetEnd() noexcept( false ) {}
+	};
+
+}
