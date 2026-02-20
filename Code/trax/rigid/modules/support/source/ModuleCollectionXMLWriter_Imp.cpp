@@ -47,11 +47,13 @@ bool XMLWriteModuleCollection( const boost::property_tree::ptree& pt, ModuleColl
 
 
 	}
+
+	return false;
 }
 
 bool XMLWriteModuleCollection( const unsigned char* bufferStart, const unsigned char* bufferEnd, ModuleCollectionParser& callback ) noexcept(false)
 {
-	std::string string{ (const char*)bufferStart, bufferEnd - bufferStart };
+	std::string string{ (const char*)bufferStart, (const char*)(bufferEnd - bufferStart) };
 	std::istringstream stream{ string };
 
 	boost::property_tree::ptree ptr;
