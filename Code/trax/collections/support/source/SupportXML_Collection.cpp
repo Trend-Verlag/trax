@@ -43,6 +43,33 @@ using common::ptreesupport::operator<<;
 using spat::ptreesupport::operator<<;
 
 ///////////////////////////////////////
+void RegisterAllCurveReaders( PTreeReader& toReader )
+{
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::Line ), CreateLine );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::LineP ), CreateLineP );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::Arc ), CreateArc );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::ArcP ), CreateArcP );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::Helix ), CreateHelix );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::HelixP ), CreateHelixP );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::Cubic ), CreateCubic );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::Spline ), CreateSpline );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::Clothoid ), CreateClothoid );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::Rotator ), CreateRotator );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::RotatorChain ), CreateRotatorChain );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::PolygonalChain ), CreatePolygonalChain );
+    toReader.RegisterCurveReader( TypeToName( Curve::CurveType::SampledCurve ), CreateSampledCurve );
+	toReader.RegisterCurveReader( TypeToName( Curve::CurveType::EEPCurve ), CreateEEPCurve );
+}
+
+void RegisterAllTwistReaders( class PTreeReader& toReader )
+{
+    toReader.RegisterTwistReader( TypeToName( RoadwayTwist::TwistType::Constant ), CreateConstantTwist );
+    toReader.RegisterTwistReader( TypeToName( RoadwayTwist::TwistType::Linear ), CreateLinearTwist );
+    toReader.RegisterTwistReader( TypeToName( RoadwayTwist::TwistType::Piecewise ), CreatePiecewiseTwist );
+    toReader.RegisterTwistReader( TypeToName( RoadwayTwist::TwistType::PiecewiseLinear ), CreatePiecewiseLinearTwist );
+    toReader.RegisterTwistReader( TypeToName( RoadwayTwist::TwistType::PiecewiseCircular ), CreatePiecewiseCircularTwist );
+    toReader.RegisterTwistReader( TypeToName( RoadwayTwist::TwistType::Directional ), CreateDirectionalTwist );
+}
 ///////////////////////////////////////
 // std::map has no export interface, so have it static to the library
 // by using the pimpl idiom.
@@ -189,57 +216,6 @@ std::unique_ptr<RoadwayTwist> PTreeReader::CreateCombinedTwist( const boost::pro
 	}
 
 	return nullptr;
-}
-///////////////////////////////////////
-void Read( const boost::property_tree::ptree& pt, Cubic::Data& data ){
-	std::vector<spat::Vector<Length>> vectors;
-	vectors.reserve( 3 );
-
-	for( const auto& pair : pt )
-	{
-		if( pair.first == "Position" )
-			ReadPosition( pair.second, data.a );
-
-		else if( pair.first == "Vector" ){
-			vectors.push_back( {} );
-			ReadVector( pair.second, vectors.back() );
-		}
-	}
-
-	if( vectors.size() > 0 )
-		data.b = vectors.at(0);
-
-	if( vectors.size() > 1 )
-		data.c = vectors.at(1);
-
-	if( vectors.size() > 2 )
-		data.d = vectors.at(2);
-}
-
-void Read( const boost::property_tree::ptree& pt, CurveSample& sample ){
-	sample.s = pt.get( "<xmlattr>.s", sample.s );
-	sample.k = pt.get( "<xmlattr>.k", sample.k );
-	sample.t = pt.get( "<xmlattr>.t", sample.t );
-
-	for( const auto& pair : pt ){
-		if( pair.first == "Frame" )
-			ReadFrame( pair.second, sample.F );
-	}
-}
-
-void Read( const boost::property_tree::ptree& pt, EEPCurve::Data& data ){
-	data.gc_Kruemmung = pt.get( "<xmlattr>.Kruemmung", data.gc_Kruemmung );
-	data.gc_Windung = pt.get( "<xmlattr>.Torsion", data.gc_Windung );
-	data.gc_Verdrillung = pt.get( "<xmlattr>.Fuehrungsverdrehung", data.gc_Verdrillung );
-	data.gc_Laenge = pt.get( "<xmlattr>.Laenge", data.gc_Laenge );
-	data.gc_Kurve = pt.get( "<xmlattr>.Kurve", data.gc_Kurve );
-	data.m_FuehrungsVerdrehung = pt.get( "<xmlattr>.Anfangsfuehrungsverdrehung", data.m_FuehrungsVerdrehung );
-
-	for( const auto& pair : pt )
-	{
-		if( pair.first == "Frame" )
-			ReadFrame( pair.second, data.m_AnfangsBein );
-	}
 }
 ///////////////////////////////////////
 } // namespace ptreesupport

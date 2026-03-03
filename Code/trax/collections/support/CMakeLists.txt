@@ -5,23 +5,8 @@ add_library(trax_core_collections_support
         "./source/Anl4TrackSystemWriter.cpp"
         "./source/FixturesCollections.cpp"
         "./source/SupportXML_Collection.cpp"
-        "./source/SupportXML_Twist.cpp"
         "./source/TrackSystemParser_Imp.cpp"
         "./source/TrackSystemReader.cpp"
-        "./source/curves/SupportXML_Arc.cpp"
-        "./source/curves/SupportXML_ArcP.cpp"
-        "./source/curves/SupportXML_Clothoid.cpp"
-        "./source/curves/SupportXML_Cubic.cpp"
-        "./source/curves/SupportXML_Curve.cpp"
-        "./source/curves/SupportXML_EEPCurve.cpp"
-        "./source/curves/SupportXML_Helix.cpp"
-        "./source/curves/SupportXML_HelixP.cpp"
-        "./source/curves/SupportXML_Line.cpp"
-        "./source/curves/SupportXML_LineP.cpp"
-        "./source/curves/SupportXML_PolygonalChain.cpp"
-        "./source/curves/SupportXML_Rotator.cpp"
-        "./source/curves/SupportXML_SampledCurve.cpp"
-        "./source/curves/SupportXML_Spline.cpp"
 )
 
 set(PRIVATE_HEADERS
@@ -33,6 +18,7 @@ set(PUBLIC_HEADERS
     "./Anl4TrackSystemReader.h"
     "./Anl4TrackSystemWriter.h"
     "./CollectionSupportXML.h"
+    "./CollectionSupportWriteXML.h"
     "./FixturesCollections.h"
     "./TrackSystemReader.h"
 )

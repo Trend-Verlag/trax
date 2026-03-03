@@ -1,9 +1,9 @@
 //	trax track library
 //	AD 2024 
 //
-//  "the resolution of all the fruitless searches"
+//  "Rubin can take out a man with just one punch"
 //
-//								Peter Gabriel
+//								Bob Dylan, "Hurricane" (1975)
 // 
 // 
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH

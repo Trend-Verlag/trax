@@ -363,18 +363,18 @@ namespace spat{
 	///	\brief Determinant of the matrix.
 	///	\returns Returns the determinant of the matrix
 	template<typename Valtype, const unsigned short nColsAndRows > constexpr 
-	auto Determinant( const SquareMatrix<Valtype,nColsAndRows>& m ) -> decltype(pow<nColsAndRows>(Valtype{}));
+	auto Determinant( const SquareMatrix<Valtype,nColsAndRows>& m ) -> typename common::pow_result<nColsAndRows,Valtype>::type;
 
 
 	/// \name Adjungated
 	///	\brief Adjungate value for element
 	///@{
 	template<typename Valtype, const unsigned short nColsAndRows> constexpr 
-	auto Adjungated( const SquareMatrix<Valtype,nColsAndRows>& m, unsigned short c, unsigned short r ) -> decltype(pow<nColsAndRows-1>(Valtype{}));
+	auto Adjungated( const SquareMatrix<Valtype,nColsAndRows>& m, unsigned short c, unsigned short r ) -> typename common::pow_result<nColsAndRows-1,Valtype>::type;
 
 
 	template<typename Valtype> constexpr 
-	auto Adjungated( const SquareMatrix<Valtype,1>& m, unsigned short c, unsigned short r ) noexcept -> decltype(pow<0>(Valtype{}));
+	auto Adjungated( const SquareMatrix<Valtype,1>& m, unsigned short c, unsigned short r ) noexcept -> typename common::pow_result<0,Valtype>::type;
 	///@}
 
 
@@ -1201,8 +1201,8 @@ inline SquareMatrix<Valtype,nColsAndRows> Transposed( const SquareMatrix<Valtype
 }
 
 template<typename Valtype, const unsigned short nColsAndRows > constexpr
-auto Determinant( const SquareMatrix<Valtype,nColsAndRows>& m ) -> decltype(pow<nColsAndRows>(Valtype{})){
-	decltype(pow<nColsAndRows>(Valtype{})) D{0};
+auto Determinant( const SquareMatrix<Valtype,nColsAndRows>& m ) -> typename common::pow_result<nColsAndRows,Valtype>::type {
+	typename common::pow_result<nColsAndRows,Valtype>::type D{0};
 	for( unsigned short z = 0; z < nColsAndRows; ++z )
 		D += m( z, 0 ) * Adjungated( m, z, 0 );
 
@@ -1210,13 +1210,13 @@ auto Determinant( const SquareMatrix<Valtype,nColsAndRows>& m ) -> decltype(pow<
 }
 
 template<typename Valtype, const unsigned short nColsAndRows > constexpr
-auto Adjungated( const SquareMatrix<Valtype,nColsAndRows>& m, unsigned short c, unsigned short r ) -> decltype(pow<nColsAndRows-1>(Valtype{})){
+auto Adjungated( const SquareMatrix<Valtype,nColsAndRows>& m, unsigned short c, unsigned short r ) -> typename common::pow_result<nColsAndRows-1,Valtype>::type {
 	SquareMatrix<Valtype,nColsAndRows-1> sub{ m.SubMatrix( c, r ) };
 	return (((r + c) % 2) ? -1 : 1 ) * Determinant( sub );
 }
 
 template<typename Valtype > constexpr 
-auto Adjungated( const SquareMatrix<Valtype,1>&, unsigned short, unsigned short ) noexcept -> decltype(pow<0>(Valtype{})){
+auto Adjungated( const SquareMatrix<Valtype,1>&, unsigned short, unsigned short ) noexcept -> typename common::pow_result<0,Valtype>::type{
 	return 1;
 }
 

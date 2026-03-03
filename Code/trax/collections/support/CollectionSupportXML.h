@@ -55,35 +55,8 @@ namespace trax{
 
 	namespace ptreesupport{
 
-		/// \name Explicit XML Reading
-		///@{	
-		dclspc std::unique_ptr<Curve> CreateLine( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateLineP( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateArc( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateArcP( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateHelix( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateHelixP( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateCubic( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateSpline( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateClothoid( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateRotator( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateRotatorChain( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreatePolygonalChain( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateSampledCurve( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<Curve> CreateEEPCurve( const boost::property_tree::ptree& pt );
-
 		dclspc void RegisterAllCurveReaders( class PTreeReader& toReader );
-
-		dclspc std::unique_ptr<RoadwayTwist> CreateConstantTwist( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<RoadwayTwist> CreateLinearTwist( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<RoadwayTwist> CreatePiecewiseTwist( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<RoadwayTwist> CreatePiecewiseLinearTwist( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<RoadwayTwist> CreatePiecewiseCircularTwist( const boost::property_tree::ptree& pt );
-		dclspc std::unique_ptr<RoadwayTwist> CreateDirectionalTwist( const boost::property_tree::ptree& pt );
-
 		dclspc void RegisterAllTwistReaders( class PTreeReader& toReader );
-
-		///@}
 
 
 		/// \brief Base class for XML readers based on ptree.
@@ -125,9 +98,9 @@ namespace trax{
 
 			virtual std::shared_ptr<trax::TrackSystem> ReadTrackSystem( const boost::property_tree::ptree& pt ) const = 0;
 		protected:
-			std::unique_ptr<Curve> CreateCurve( const boost::property_tree::ptree& pt ) const;
+			std::unique_ptr<Curve> dclspc CreateCurve( const boost::property_tree::ptree& pt ) const;
 
-			std::unique_ptr<RoadwayTwist> CreateTwist( const boost::property_tree::ptree& pt ) const;
+			std::unique_ptr<RoadwayTwist> dclspc CreateTwist( const boost::property_tree::ptree& pt ) const;
 
 		private:
 			std::unique_ptr<SocketRegistry> m_pSocketRegistry;

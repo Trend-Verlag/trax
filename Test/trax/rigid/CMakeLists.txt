@@ -8,8 +8,9 @@ add_executable(trax_rigid_tests
 target_link_libraries(trax_rigid_tests 
     PRIVATE
         test_settings
-        trax_core_support
         trax_core_collections_support
+        trax_rigid_collections
+        trax_rigid_support
         trax_rigid_physx
 )
 

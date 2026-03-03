@@ -57,6 +57,64 @@ using namespace dim::ptreesupport;
 using namespace spat;
 using namespace spat::ptreesupport;
 
+const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree& pt, TrackSystem& trackSystem )
+{
+	AttributesToReferences( pt, trackSystem );
+
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "TrackCollection" )
+		{
+			if( std::unique_ptr<TrackCollection> pTrackCollection = TrackCollection::Make(); pTrackCollection )
+			{
+				pair.second >> *pTrackCollection;
+				if( auto pTrackCollectionContainer = trackSystem.GetCollectionContainer() )
+					pTrackCollectionContainer->Add( std::move( pTrackCollection ) );
+			}
+		}
+
+		else if( pair.first == "ConnectorCollection" )
+		{
+			if( std::unique_ptr<ConnectorCollection> pConnectorCollection = ConnectorCollection::Make(); pConnectorCollection )
+			{
+				pair.second >> *pConnectorCollection;
+				trackSystem.SetConnectorCollection( std::move( pConnectorCollection ) );
+			}
+		}
+	}
+
+	return pt;
+}
+
+const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree& pt, TrackCollection& trackCollection )
+{
+	AttributesToReferences( pt, trackCollection );
+
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "Frame" ){
+			spat::Frame<Length,One> frame;
+			ReadFrame( pair.second, frame );
+			trackCollection.SetFrame( frame );
+		}
+
+		else if( pair.first == "Track" )
+		{
+			if( std::shared_ptr<TrackBuilder> pTrack = MovableTrack::Make( TrackType( pair.second.get( "<xmlattr>.type", "standard" ) ) ); pTrack )
+			{
+				pair.second >> *pTrack;
+				trackCollection.Add( std::move( pTrack ) );
+			}
+		}
+	}
+
+	return pt;
+}
+
+const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree& pt, ConnectorCollection& connectorCollection )
+{
+	return pt;
+}
 
 Anl4TrackSystemReader::Anl4TrackSystemReader( const char* pLocale )
 	: PTreeReader{ pLocale }

@@ -14,6 +14,8 @@ add_executable(trax_core_tests
     "./support/TestSupportXML.cpp"
 )
 
+target_compile_definitions(trax_core_tests PUBLIC DIM_STATIC_LIBRARY)
+
 target_link_libraries(trax_core_tests 
     PRIVATE
         test_settings

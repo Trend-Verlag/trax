@@ -27,23 +27,24 @@
 
 #pragma once
 
+#include "trax/collections/Collection.h"
 #include "trax/support/TraxSupportXML.h"
 
 namespace trax{
-
-	struct Material;
-	struct TrackJointLimits;
-	struct TractionForceCharacteristic;
-	struct Wheelset;
-
 	namespace ptreesupport{
 
-		/// \name Explicit XML Reading
+		/// \name Property Tree Streaming Support for Trax Classes
 		///@{
-		dclspc void ReadMaterial( const boost::property_tree::ptree& pt, Material& material ) noexcept;
-		dclspc void ReadTrackJointLimits( const boost::property_tree::ptree& pt, TrackJointLimits& wfl ) noexcept;
-		dclspc void ReadWheelset( const boost::property_tree::ptree& pt, Wheelset& wheelset ) noexcept;
-		dclspc void ReadTractionForceCharacteristic( const boost::property_tree::ptree& pt, TractionForceCharacteristic& tractionForceCharacteristic ) noexcept;
-		///@}
+		template< class Collection_Type, class Value_Type >
+		inline boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const Collection<Collection_Type,Value_Type>& collection ){	
+			boost::property_tree::ptree ptCollection;
+
+			for( const auto& element : collection )
+				ptCollection << element;
+
+			move_child( pt, collection.TypeName(), ptCollection );
+			return pt;
+		} // do not move away from here, doesn't belong to CollectionSupportXML.h since it is writing code ...
+
 	} // namespace ptreesupport
 } // namespace trax

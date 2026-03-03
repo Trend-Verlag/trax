@@ -25,7 +25,7 @@ source_group("Interface" FILES ${PUBLIC_HEADERS})
 
 target_link_libraries(trax_modules_support
      PUBLIC
-        trax_core_support
+        trax_trains_collections_support
         trax_modules
 )
 

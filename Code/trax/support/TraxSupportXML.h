@@ -31,10 +31,12 @@
 #include "dim/support/DimSupportXML.h"
 #include "spat/support/SpatSupportXML.h"
 
+#include "trax/Curve.h"
 #include "trax/Track.h"
 
 namespace trax{
 
+	struct Section;
 	struct TrackLocation;
 	struct TrackLocationRef;
 	struct TrackRange;
@@ -43,13 +45,72 @@ namespace trax{
 
 		using spat::ptreesupport::operator<<;
 
+
+		/// \name Property Tree Streaming Support for Trax Classes
+		///@{
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Line& line );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, LineP& lineP );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Arc& arc );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, ArcP& arcP );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Helix& helix );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, HelixP& helixP );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Cubic& cubic );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Spline& spline );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Clothoid& clothoid );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Rotator& rotator );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, RotatorChain& rotatorChain );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, PolygonalChain& polygonalChain );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, SampledCurve& sampledCurve );
+
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, ConstantTwist& constantTwist );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, LinearTwist& linearTwist );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, PiecewiseTwist& piecewiseTwist );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, DirectionalTwist& directionalTwist );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, PiecewiseDirectionalTwist& piecewiseDirectionalTwist );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, CombinedTwist& combinedTwist );
+
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Section& section );
+
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, TrackBuilder& track );
+		///@}
+
+		/// \name Explicit XML Reading
+		///@{	
+
 		/// \name Explicit XML Reading
 		///@{
+		dclspc std::unique_ptr<Curve> CreateLine( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateLineP( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateArc( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateArcP( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateHelix( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateHelixP( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateCubic( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateSpline( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateClothoid( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateRotator( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateRotatorChain( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreatePolygonalChain( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateSampledCurve( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<Curve> CreateEEPCurve( const boost::property_tree::ptree& pt );
+
+		dclspc std::unique_ptr<RoadwayTwist> CreateTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreateConstantTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreateLinearTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreatePiecewiseTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreatePiecewiseLinearTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreatePiecewiseCircularTwist( const boost::property_tree::ptree& pt );
+		dclspc std::unique_ptr<RoadwayTwist> CreateDirectionalTwist( const boost::property_tree::ptree& pt );
 		dclspc void ReadConnection( const boost::property_tree::ptree& pt, Track::End& trackend );
 		dclspc void ReadTrackEnd( const boost::property_tree::ptree& pt, Track::End& trackend );
+
 		dclspc void ReadTrackLocation( const boost::property_tree::ptree& pt, TrackLocation& trackLocation ) noexcept;
 		dclspc void ReadTrackLocationRef( const boost::property_tree::ptree& pt, TrackLocationRef& trackLocationRef ) noexcept;
 		dclspc void ReadTrackRange( const boost::property_tree::ptree& pt, TrackRange& trackRange ) noexcept;
+
+		dclspc void Read( const boost::property_tree::ptree& pt, Cubic::Data& curve );
+		dclspc void Read( const boost::property_tree::ptree& pt, CurveSample& sample );
+		dclspc void Read( const boost::property_tree::ptree& pt, EEPCurve::Data& data );
 		///@}
 
 		template<class Interface>
@@ -95,7 +156,6 @@ namespace trax{
 
 		template<class T>
 		inline void ReferencesToAttributes( boost::property_tree::ptree& pt, const Identified<T>& refInterface ){
-			pt.add( "<xmlattr>.id", refInterface.ID() );
 			const std::vector<char const*>& names = refInterface.ReferenceNames();
 			for( char const* pName : names )
 			{
@@ -108,11 +168,11 @@ namespace trax{
 		inline void AttributesToReferences( const boost::property_tree::ptree& pt, Identified<T>& refInterface ){
 			const auto iter = pt.find( "<xmlattr>" );
 			if( iter != pt.not_found() )
-				for( const auto& attribute : iter->second )
+			{
+				for( const auto& attribute : iter->second ){
 					refInterface.Reference( attribute.first, attribute.second.data() );
-
-			auto id = pt.get_optional<IDType>("<xmlattr>.id");
-			if( id ) refInterface.ID(*id);
+				}
+			}
 		}
 
 		/// \brief Move the node as child to another tree.

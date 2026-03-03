@@ -34,7 +34,9 @@
 
 #include <filesystem>
 
-struct FixtureBase{
+struct dclspc FixtureBase{
+	FixtureBase();
+	~FixtureBase();
 
 	static std::filesystem::path FixturePath();
 

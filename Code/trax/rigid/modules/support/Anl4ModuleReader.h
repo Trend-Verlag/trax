@@ -16,6 +16,7 @@
 
 #include "spat/Frame.h"
 
+#include <filesystem>
 
 namespace trax{
 
@@ -29,7 +30,16 @@ namespace trax{
 	struct RollingStock;
 	struct Train;
 
+	std::unique_ptr<ModuleCollection> dclspc ReadModuleCollection( const std::filesystem::path& anl4FilePath, Scene& scene );
+
 	namespace ptreesupport{
+
+		/// \name Property Tree Streaming Support for Trax Classes
+		///@{
+		void dclspc Read( const boost::property_tree::ptree& pt, Scene& scene, ModuleCollection& moduleCollection );
+		void dclspc Read( const boost::property_tree::ptree& pt, Scene& scene, Module& module );
+		///@}
+
 
 		class Anl4ModuleReader : public Anl4TrackSystemReader
 		{

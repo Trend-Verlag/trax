@@ -24,18 +24,46 @@
 #include "trax/rigid/trains/support/Anl4RailRunnerWriter.h"
 #include "trax/collections/support/Anl4TrackSystemWriter.h"
 
-namespace trax{
-namespace ptreesupport{
+#include "trax/collections/support/CollectionSupportWriteXML.h"
 
-boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const ModuleCollection& moduleCollection ){
+#if defined(_MSC_VER)
+#	pragma warning(push)
+#	pragma warning(disable: 6313) //  Incorrect operator:  zero-valued flag cannot be tested with bitwise-and.  Use an equality test to check for zero-valued flags.
+#endif
+#include <boost/property_tree/ptree.hpp> // NOLINT 
+#include <boost/property_tree/xml_parser.hpp> // NOLINT 
+#if defined(_MSC_VER)
+#	pragma warning(pop)
+#endif
+
+namespace trax{
+
+void WriteModuleCollection( const ModuleCollection& moduleCollection, const std::filesystem::path& anl4FilePath )
+{
+	using namespace ptreesupport;
+
+	boost::property_tree::ptree ptOut;
 	boost::property_tree::ptree pttraxML;
 	pttraxML.add<std::string>( "<xmlattr>.xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance" );
 	pttraxML.add<std::string>( "<xmlattr>.xsi:noNamespaceSchemaLocation", "https://www.trendverlag.com/Schema/traxML.xsd" );
 
-	for( const auto& module : moduleCollection )
-		pttraxML << module;
+	pttraxML << moduleCollection;
 
-	move_child( pt, "traxML", pttraxML );
+	ptreesupport::move_child( ptOut, "traxML", pttraxML );
+
+	write_xml( anl4FilePath.string(), ptOut, std::locale(),
+				boost::property_tree::xml_parser::xml_writer_settings<std::string>( '\t', 1 ) );
+}
+
+namespace ptreesupport{
+
+boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const ModuleCollection& moduleCollection ){
+	boost::property_tree::ptree ptModuleCollection;
+
+	for( const auto& module : moduleCollection )
+		ptModuleCollection << module;
+
+	move_child( pt, moduleCollection.TypeName(), ptModuleCollection );
 	return pt;
 }
 
@@ -43,8 +71,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 {
 	boost::property_tree::ptree ptModule;
 	ReferencesToAttributes( ptModule, _module );
-	ptModule.add( "<xmlattr>.id", _module.ID() );
-	ptModule.add( "<xmlattr>.maxValidPlugID", _module.MaxValidPlugID() );
+	ptModule.put( "<xmlattr>.id", _module.ID() );
+	ptModule.put( "<xmlattr>.maxValidPlugID", _module.MaxValidPlugID() );
 
 	WriteLocalizedTag( ptModule, "DisplayName", _module );
 	WriteLocalizedTag( ptModule, "Description", _module );
@@ -53,7 +81,6 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	area.Move( spat::Origin3D<Length> - _module.GetFrame().P );
 
 	ptModule << area;
-
 	ptModule << _module.GetFrame();
 
 	if( const auto pTrackSystem = _module.GetTrackSystem(); pTrackSystem )
@@ -87,8 +114,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const CameraCollection& cameraCollection ){
 	boost::property_tree::ptree ptCameraCollection;
 
-	ptCameraCollection.add( "<xmlattr>.userCameraType", From( cameraCollection.UserCameraType() ) );
-	ptCameraCollection.add( "<xmlattr>.userStartCamera", cameraCollection.UserStartCameraID() );
+	ptCameraCollection.put( "<xmlattr>.userCameraType", From( cameraCollection.UserCameraType() ) );
+	ptCameraCollection.put( "<xmlattr>.userStartCamera", cameraCollection.UserStartCameraID() );
 
 	for( const auto& camera : cameraCollection )
 		ptCameraCollection << camera;
@@ -102,13 +129,13 @@ boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const 
 boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const Camera& camera ){
 	boost::property_tree::ptree ptCamera;
 	ReferencesToAttributes( ptCamera, camera );
-	ptCamera.add( "<xmlattr>.id", camera.ID() );
-	ptCamera.add( "<xmlattr>.type", From( camera.GetType() ) );
+	ptCamera.put( "<xmlattr>.id", camera.ID() );
+	ptCamera.put( "<xmlattr>.type", From( camera.GetType() ) );
 	ptCamera << camera.GetFrame();
 
 	//if( auto pBodyCam = dynamic_cast<const trax::BodyCam*>(&camera) )
 	//	if( auto pRailRunner = std::dynamic_pointer_cast<const RailRunner>(pBodyCam->GetBody()); pRailRunner )
-	//		ptCamera.add( "<xmlattr>.railRunnerName", pRailRunner->Reference( "name" ) );
+	//		ptCamera.put( "<xmlattr>.railRunnerName", pRailRunner->Reference( "name" ) );
 
 	move_child( pt, camera.TypeName(), ptCamera );
 	return pt;

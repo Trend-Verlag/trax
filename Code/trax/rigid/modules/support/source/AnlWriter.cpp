@@ -12,7 +12,9 @@
 
 #include "../AnlWriter.h"
 #include "../Anl4ModuleWriter.h"
-#include "trax/support/TraxSupportXML.h"
+
+#include "trax/rigid/modules/ModuleCollection.h"
+#include "trax/collections/support/CollectionSupportWriteXML.h"
 
 #if defined(_MSC_VER)
 #	pragma warning(push)
@@ -31,7 +33,14 @@ namespace trax{
 void Write( const ModuleCollection& moduleCollection, const std::filesystem::path& path )
 {
 	boost::property_tree::ptree ptOut;
-	ptOut << moduleCollection;
+	boost::property_tree::ptree pttraxML;
+	pttraxML.add<std::string>( "<xmlattr>.xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance" );
+	pttraxML.add<std::string>( "<xmlattr>.xsi:noNamespaceSchemaLocation", "https://www.trendverlag.com/Schema/traxML.xsd" );
+
+	pttraxML << moduleCollection;
+
+	ptreesupport::move_child( ptOut, "traxML", pttraxML );
+
 	write_xml( path.string(), ptOut, std::locale(),
 				boost::property_tree::xml_parser::xml_writer_settings<std::string>( '\t', 1 ) );
 }

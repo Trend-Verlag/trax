@@ -28,5 +28,6 @@ source_group("Private Headers" FILES ${PRIVATE_HEADERS})
 
 target_link_libraries(trax_trains_collections
     PUBLIC
+        trax_rigid_collections
         trax_trains
 )

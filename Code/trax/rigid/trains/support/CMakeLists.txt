@@ -16,6 +16,7 @@ set(PUBLIC_HEADERS
     "./RailRunnerParser.h"
     "./RollingStockCreator.h"
     "./RollingStockFileReader.h"
+    "./SupportXML.h"
     "./TrainCreator.h"
     "./TrainFileReader.h"
 )
@@ -37,6 +38,7 @@ source_group("Private Headers" FILES ${PRIVATE_HEADERS})
 
 target_link_libraries(trax_trains_support
     PUBLIC
+        trax_rigid_support
         trax_trains
 )
 

@@ -85,20 +85,5 @@ namespace trax{
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Timer& timer );
 		///@}
 
-
-		/// \name Property Tree Streaming Support for Trax Classes
-		///@{
-		template< class Collection_Type, class Value_Type >
-		boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const Collection<Collection_Type,Value_Type>& collection ){	
-			boost::property_tree::ptree ptCollection;
-
-			for( const auto& element : collection )
-				ptCollection << element;
-
-			move_child( pt, collection.TypeName(), ptCollection );
-			return pt;
-		} // do not move away from here, doesn't belong to CollectionSupportXML.h since it is writing code ...
-
-
 	} // namespace ptreesupport
 } // namespace trax

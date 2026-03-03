@@ -57,9 +57,37 @@ namespace common{
 		return val * val * val;
 	}
 
+
+	// Helper trait to compute the result type of T^Y
+	template<int Y, typename T, bool Positive = (Y > 0)>
+	struct pow_result;
+
+	template<typename T>
+	struct pow_result<0,T,false> {
+		using type = decltype(T{}/T{}); // dimensionless for Y=0
+	};
+
+	template<typename T>
+	struct pow_result<1,T,true> {
+		using type = T;
+	};
+
+	template<int Y, typename T>
+	struct pow_result<Y,T,true> {
+		using type = decltype(std::declval<T>() * std::declval<typename pow_result<Y-1,T>::type>());
+	};
+
+	// For negative exponents Y < 0: T^Y = 1 / T^(-Y)
+	template<int Y, typename T>
+	struct pow_result<Y, T, false> {
+		using type = decltype(std::declval<typename pow_result<0,T>::type>() / 
+							  std::declval<typename pow_result<-Y,T>::type>());
+	};
+
 	/// \brief power function with templated integer exponent.
-	template<int Y, typename T> inline constexpr T pow( T val ) noexcept{
-		return static_cast<T>(std::pow(val,Y)); //? why is this acting as constexpr???
+	template<int Y, typename T>
+	inline constexpr auto pow(T val) noexcept -> typename pow_result<Y,T>::type {
+		return static_cast<typename pow_result<Y, T>::type>(std::pow(val, Y));
 	}
 
 	///	\brief Tests equality in the sense |a-b| < epsilon.

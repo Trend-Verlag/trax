@@ -1,12 +1,12 @@
 //	trax track library
-//	AD 2014 
+//	AD 2026 
 //
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
 //
 // 
-// Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
+// Copyright (c) 2026 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //
 // Permission is hereby granted to any person obtaining a copy of this software 
@@ -27,23 +27,21 @@
 
 #pragma once
 
-#include "trax/support/TraxSupportXML.h"
+#include "common/support/CommonSupportXML.h"
+#include "trax/Configuration.h"
 
 namespace trax{
 
-	struct Material;
-	struct TrackJointLimits;
-	struct TractionForceCharacteristic;
-	struct Wheelset;
+	struct Fleet;
+	struct Scene;
 
 	namespace ptreesupport{
 
-		/// \name Explicit XML Reading
+		/// \name Property Tree Streaming Support for Trax Classes
 		///@{
-		dclspc void ReadMaterial( const boost::property_tree::ptree& pt, Material& material ) noexcept;
-		dclspc void ReadTrackJointLimits( const boost::property_tree::ptree& pt, TrackJointLimits& wfl ) noexcept;
-		dclspc void ReadWheelset( const boost::property_tree::ptree& pt, Wheelset& wheelset ) noexcept;
-		dclspc void ReadTractionForceCharacteristic( const boost::property_tree::ptree& pt, TractionForceCharacteristic& tractionForceCharacteristic ) noexcept;
+		void dclspc Read( const boost::property_tree::ptree& pt, Scene& scene, Fleet& fleet );
 		///@}
-	} // namespace ptreesupport
-} // namespace trax
+
+	}
+}
+

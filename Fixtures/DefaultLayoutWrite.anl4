@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="utf-8"?>
+<traxML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.trendverlag.com/Schema/traxML.xsd">
+	<ModuleCollection>
+		<Module id="1" maxValidPlugID="0">
+			<Area xnear="-1000m" xfar="1000m" ynear="-1000m" yfar="1000m" znear="-1000m" zfar="1000m"/>
+			<Frame>
+				<Position x="0m" y="0m" z="0m"/>
+				<Vector dx="1" dy="0" dz="0"/>
+				<Vector dx="0" dy="1" dz="0"/>
+				<Vector dx="0" dy="0" dz="1"/>
+			</Frame>
+			<TrackSystem activeTrack="11">
+				<TrackCollection id="1" id="1">
+					<Frame>
+						<Position x="0m" y="0m" z="0m"/>
+						<Vector dx="1" dy="0" dz="0"/>
+						<Vector dx="0" dy="1" dz="0"/>
+						<Vector dx="0" dy="0" dz="1"/>
+					</Frame>
+				</TrackCollection>
+				<TrackCollection id="2" id="2">
+					<Frame>
+						<Position x="0m" y="0m" z="0m"/>
+						<Vector dx="1" dy="0" dz="0"/>
+						<Vector dx="0" dy="1" dz="0"/>
+						<Vector dx="0" dy="0" dz="1"/>
+					</Frame>
+					<Track id="1" id="1" type="standard">
+						<Begin>
+							<OpenEnd/>
+						</Begin>
+						<End>
+							<OpenEnd/>
+						</End>
+						<Frame>
+							<Position x="-43.80m" y="-0.15m" z="0.30m"/>
+							<Vector dx="1" dy="0" dz="0"/>
+							<Vector dx="0" dy="1" dz="0"/>
+							<Vector dx="0" dy="0" dz="1"/>
+						</Frame>
+						<Interval near="0m" far="60m"/>
+						<Curve>
+							<BasicLine/>
+						</Curve>
+						<Twist>
+							<CombinedTwist>
+								<Twist>
+									<DirectionalTwist>
+										<Vector dx="0" dy="0" dz="1"/>
+									</DirectionalTwist>
+								</Twist>
+								<Twist>
+									<LinearTwist startangle="0" endangle="0"/>
+								</Twist>
+							</CombinedTwist>
+						</Twist>
+					</Track>
+					<Track id="2" id="2" type="standard">
+						<Begin>
+							<OpenEnd/>
+						</Begin>
+						<End>
+							<OpenEnd/>
+						</End>
+						<Frame>
+							<Position x="-129.75m" y="56.15m" z="1.75m"/>
+							<Vector dx="-0.9999217" dy="0.01251395" dz="-8.629046e-08"/>
+							<Vector dx="-0.01251395" dy="-0.9999217" dz="-9.000399e-08"/>
+							<Vector dx="-8.741002e-08" dy="-8.891711e-08" dz="1"/>
+						</Frame>
+						<Interval near="0m" far="89.61m"/>
+						<Curve>
+							<BasicHelix k="0.017698_1/m" t="-0.000285_1/m"/>
+						</Curve>
+						<Twist>
+							<CombinedTwist>
+								<Twist>
+									<DirectionalTwist>
+										<Vector dx="0" dy="0" dz="1"/>
+									</DirectionalTwist>
+								</Twist>
+								<Twist>
+									<LinearTwist startangle="0" endangle="0"/>
+								</Twist>
+							</CombinedTwist>
+						</Twist>
+					</Track>
+					<Track id="3" id="3" type="standard">
+						<Begin>
+							<OpenEnd/>
+						</Begin>
+						<End>
+							<OpenEnd/>
+						</End>
+						<Frame>
+							<Position x="-290.89m" y="61354.81m" z="0.31m"/>
+							<Vector dx="0.002628683" dy="-0.9999965" dz="-8.868703e-08"/>
+							<Vector dx="0.9999965" dy="0.002628683" dz="8.764345e-08"/>
+							<Vector dx="-8.741002e-08" dy="-8.891711e-08" dz="1"/>
+						</Frame>
+						<Interval near="0m" far="59.92m"/>
+						<Curve>
+							<BasicArc k="0.000016_1/m"/>
+						</Curve>
+						<Twist>
+							<CombinedTwist>
+								<Twist>
+									<DirectionalTwist>
+										<Vector dx="0" dy="0" dz="1"/>
+									</DirectionalTwist>
+								</Twist>
+								<Twist>
+									<LinearTwist startangle="0" endangle="0"/>
+								</Twist>
+							</CombinedTwist>
+						</Twist>
+					</Track>
+					<Track id="4" id="4" type="standard">
+						<Begin>
+							<OpenEnd/>
+						</Begin>
+						<End>
+							<OpenEnd/>
+						</End>
+						<Frame>
+							<Position x="16.20m" y="-61.75m" z="0.30m"/>
+							<Vector dx="4.440892e-16" dy="1" dz="8.742278e-08"/>
+							<Vector dx="1" dy="-4.440892e-16" dz="-1.224647e-16"/>
+							<Vector dx="-1.224647e-16" dy="8.742278e-08" dz="-1"/>
+						</Frame>
+						<Interval near="0m" far="96.43m"/>
+						<Curve>
+							<BasicHelix k="0.016228_1/m" t="-0.000295_1/m"/>
+						</Curve>
+						<Twist>
+							<CombinedTwist>
+								<Twist>
+									<DirectionalTwist>
+										<Vector dx="0" dy="0" dz="1"/>
+									</DirectionalTwist>
+								</Twist>
+								<Twist>
+									<LinearTwist startangle="0" endangle="0"/>
+								</Twist>
+							</CombinedTwist>
+						</Twist>
+					</Track>
+					<Track id="5" id="5" type="standard">
+						<Begin>
+							<OpenEnd/>
+						</Begin>
+						<End>
+							<OpenEnd/>
+						</End>
+						<Frame>
+							<Position x="16.20m" y="-61.75m" z="2.05m"/>
+							<Vector dx="0.9999838" dy="0.005697892" dz="4.981258e-10"/>
+							<Vector dx="0.005697892" dy="-0.9999838" dz="-8.742136e-08"/>
+							<Vector dx="2.775558e-16" dy="8.742278e-08" dz="-1"/>
+						</Frame>
+						<Interval near="0m" far="96.42m"/>
+						<Curve>
+							<BasicHelix k="0.016230_1/m" t="-0.000253_1/m"/>
+						</Curve>
+						<Twist>
+							<CombinedTwist>
+								<Twist>
+									<DirectionalTwist>
+										<Vector dx="0" dy="0" dz="1"/>
+									</DirectionalTwist>
+								</Twist>
+								<Twist>
+									<LinearTwist startangle="0" endangle="0"/>
+								</Twist>
+							</CombinedTwist>
+						</Twist>
+					</Track>
+					<Track id="6" id="6" type="standard">
+						<Begin>
+							<OpenEnd/>
+						</Begin>
+						<End>
+							<OpenEnd/>
+						</End>
+						<Frame>
+							<Position x="16.20m" y="-61.75m" z="3.55m"/>
+							<Vector dx="0.01139572" dy="-0.9999351" dz="-8.741712e-08"/>
+							<Vector dx="-0.9999351" dy="-0.01139572" dz="-9.962555e-10"/>
+							<Vector dx="9.992007e-15" dy="8.74228e-08" dz="-1"/>
+						</Frame>
+						<Interval near="0m" far="96.43m"/>
+						<Curve>
+							<BasicHelix k="0.016228_1/m" t="-0.000295_1/m"/>
+						</Curve>
+						<Twist>
+							<CombinedTwist>
+								<Twist>
+									<DirectionalTwist>
+										<Vector dx="0" dy="0" dz="1"/>
+									</DirectionalTwist>
+								</Twist>
+								<Twist>
+									<LinearTwist startangle="0" endangle="0"/>
+								</Twist>
+							</CombinedTwist>
+						</Twist>
+					</Track>
+					<Track id="7" id="7" type="standard">
+						<Begin>
+							<OpenEnd/>
+						</Begin>
+						<End>
+							<OpenEnd/>
+						</End>
+						<Frame>
+							<Position x="-43.80m" y="-0.15m" z="0.30m"/>
+							<Vector dx="-1" dy="1.224647e-16" dz="0"/>
+							<Vector dx="-1.224647e-16" dy="-1" dz="0"/>
+							<Vector dx="0" dy="0" dz="1"/>
+						</Frame>
+						<Interval near="0m" far="25.89m"/>
+						<Curve>
+							<BasicLine/>
+						</Curve>
+						<Twist>
+							<CombinedTwist>
+								<Twist>
+									<DirectionalTwist>
+										<Vector dx="0" dy="0" dz="1"/>
+									</DirectionalTwist>
+								</Twist>
+								<Twist>
+									<LinearTwist startangle="0" endangle="0"/>
+								</Twist>
+							</CombinedTwist>
+						</Twist>
+					</Track>
+					<Track id="8" id="8" type="standard">
+						<Begin>
+							<OpenEnd/>
+						</Begin>
+						<End>
+							<OpenEnd/>
+						</End>
+						<Frame>
+							<Position x="-45.39m" y="-62.80m" z="5.30m"/>
+							<Vector dx="-0.01709293" dy="0.9998539" dz="4.369994e-08"/>
+							<Vector dx="-0.9998539" dy="-0.01709293" dz="-4.445338e-08"/>
+							<Vector dx="-4.369992e-08" dy="-4.445339e-08" dz="1"/>
+						</Frame>
+						<Interval near="0m" far="60m"/>
+						<Curve>
+							<BasicLine/>
+						</Curve>
+						<Twist>
+							<CombinedTwist>
+								<Twist>
+									<DirectionalTwist>
+										<Vector dx="0" dy="0" dz="1"/>
+									</DirectionalTwist>
+								</Twist>
+								<Twist>
+									<LinearTwist startangle="0" endangle="0"/>
+								</Twist>
+							</CombinedTwist>
+						</Twist>
+					</Track>
+					<Track id="9" id="9" type="standard">
+						<Begin>
+							<OpenEnd/>
+						</Begin>
+						<End>
+							<OpenEnd/>
+						</End>
+						<Frame>
+							<Position x="-46.42m" y="-2.81m" z="5.30m"/>
+							<Vector dx="-0.01709293" dy="0.9998539" dz="4.369993e-08"/>
+							<Vector dx="-0.9998539" dy="-0.01709293" dz="-4.445338e-08"/>
+							<Vector dx="-4.369992e-08" dy="-4.445339e-08" dz="1"/>
+						</Frame>
+						<Interval near="0m" far="60m"/>
+						<Curve>
+							<BasicLine/>
+						</Curve>
+						<Twist>
+							<CombinedTwist>
+								<Twist>
+									<DirectionalTwist>
+										<Vector dx="0" dy="0" dz="1"/>
+									</DirectionalTwist>
+								</Twist>
+								<Twist>
+									<LinearTwist startangle="0" endangle="0"/>
+								</Twist>
+							</CombinedTwist>
+						</Twist>
+					</Track>
+					<Track id="10" id="10" type="standard">
+						<Begin>
+							<OpenEnd/>
+						</Begin>
+						<End>
+							<OpenEnd/>
+						</End>
+						<Frame>
+							<Position x="-116.84m" y="56m" z="5.30m"/>
+							<Vector dx="0.9998539" dy="0.01709293" dz="8.891709e-08"/>
+							<Vector dx="-0.01709293" dy="0.9998539" dz="8.741002e-08"/>
+							<Vector dx="-8.741001e-08" dy="-8.89171e-08" dz="1"/>
+						</Frame>
+						<Interval near="0m" far="108.01m"/>
+						<Curve>
+							<BasicHelix k="0.014403_1/m" t="-0.000233_1/m"/>
+						</Curve>
+						<Twist>
+							<CombinedTwist>
+								<Twist>
+									<DirectionalTwist>
+										<Vector dx="0" dy="0" dz="1"/>
+									</DirectionalTwist>
+								</Twist>
+								<Twist>
+									<LinearTwist startangle="0" endangle="0"/>
+								</Twist>
+							</CombinedTwist>
+						</Twist>
+					</Track>
+					<Track id="11" id="11" type="standard">
+						<Begin>
+							<OpenEnd/>
+						</Begin>
+						<End>
+							<OpenEnd/>
+						</End>
+						<Frame>
+							<Position x="-116.84m" y="56m" z="3.55m"/>
+							<Vector dx="-0.002289802" dy="0.9999974" dz="8.871671e-08"/>
+							<Vector dx="-0.9999974" dy="-0.002289802" dz="-8.761337e-08"/>
+							<Vector dx="-8.741e-08" dy="-8.891709e-08" dz="1"/>
+						</Frame>
+						<Interval near="0m" far="108.01m"/>
+						<Curve>
+							<BasicHelix k="0.014403_1/m" t="-0.000241_1/m"/>
+						</Curve>
+						<Twist>
+							<CombinedTwist>
+								<Twist>
+									<DirectionalTwist>
+										<Vector dx="0" dy="0" dz="1"/>
+									</DirectionalTwist>
+								</Twist>
+								<Twist>
+									<LinearTwist startangle="0" endangle="0"/>
+								</Twist>
+							</CombinedTwist>
+						</Twist>
+					</Track>
+				</TrackCollection>
+				<TrackCollection id="3" id="3">
+					<Frame>
+						<Position x="0m" y="0m" z="0m"/>
+						<Vector dx="1" dy="0" dz="0"/>
+						<Vector dx="0" dy="1" dz="0"/>
+						<Vector dx="0" dy="0" dz="1"/>
+					</Frame>
+				</TrackCollection>
+				<TrackCollection id="4" id="4">
+					<Frame>
+						<Position x="0m" y="0m" z="0m"/>
+						<Vector dx="1" dy="0" dz="0"/>
+						<Vector dx="0" dy="1" dz="0"/>
+						<Vector dx="0" dy="0" dz="1"/>
+					</Frame>
+				</TrackCollection>
+				<TrackCollection id="5" id="5">
+					<Frame>
+						<Position x="0m" y="0m" z="0m"/>
+						<Vector dx="1" dy="0" dz="0"/>
+						<Vector dx="0" dy="1" dz="0"/>
+						<Vector dx="0" dy="0" dz="1"/>
+					</Frame>
+				</TrackCollection>
+				<TrackCollection id="6" id="6">
+					<Frame>
+						<Position x="0m" y="0m" z="0m"/>
+						<Vector dx="1" dy="0" dz="0"/>
+						<Vector dx="0" dy="1" dz="0"/>
+						<Vector dx="0" dy="0" dz="1"/>
+					</Frame>
+				</TrackCollection>
+				<TrackCollection id="7" id="7">
+					<Frame>
+						<Position x="0m" y="0m" z="0m"/>
+						<Vector dx="1" dy="0" dz="0"/>
+						<Vector dx="0" dy="1" dz="0"/>
+						<Vector dx="0" dy="0" dz="1"/>
+					</Frame>
+				</TrackCollection>
+				<ConnectorCollection/>
+			</TrackSystem>
+			<Fleet>
+				<Train id="1" name="Train_1" type="Train" reference="/Script/railUnreal.Train" orientation="para" orientation="para">
+					<RollingStock id="0" name="BR_TRAXX147_Blueprint_C_1" type="BR_TRAXX147_Blueprint_C" reference="/Game/RollingStock/Locomotives/BR_Traxx147/BR_TRAXX147_Blueprint.BR_TRAXX147_Blueprint_C" orientation="anti" orientation="anti">
+						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="true" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="true" target_velocity="0km/h" thrust="0" brake="0">
+							<Frame>
+								<Position x="5.50m" y="-0.15m" z="0.33m"/>
+								<Vector dx="1" dy="7.734371e-11" dz="1.193328e-06"/>
+								<Vector dx="-7.735538e-11" dy="1" dz="9.781661e-09"/>
+								<Vector dx="-1.193328e-06" dy="-9.781661e-09" dz="1"/>
+							</Frame>
+							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+							<AngularVelocity dx="1.36845175e-08_1/s" dy="-1.14091392e-07_1/s" dz="2.05635828e-08_1/s"/>
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+								<Frame>
+									<Position x="0.20m" y="-0.15m" z="1.63m"/>
+									<Vector dx="1" dy="2.906767e-14" dz="1.369575e-06"/>
+									<Vector dx="-2.906767e-14" dy="1" dz="-2.547067e-16"/>
+									<Vector dx="-1.369575e-06" dy="2.546669e-16" dz="1"/>
+								</Frame>
+								<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+								<AngularVelocity dx="1.65536828e-13_1/s" dy="1.56642477e-06_1/s" dz="-3.31237757e-14_1/s"/>
+							</WheelFrame>
+						</Bogie>
+					</RollingStock>
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_1" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<Frame>
+								<Position x="-14.71m" y="-0.15m" z="0.45m"/>
+								<Vector dx="1" dy="5.157783e-12" dz="2.178444e-05"/>
+								<Vector dx="-5.160243e-12" dy="1" dz="1.129292e-10"/>
+								<Vector dx="-2.178444e-05" dy="-1.129293e-10" dz="1"/>
+							</Frame>
+							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+							<AngularVelocity dx="6.94340363e-10_1/s" dy="1.35043251e-06_1/s" dz="8.64153714e-12_1/s"/>
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+								<Frame>
+									<Position x="-6.71m" y="-0.15m" z="1.45m"/>
+									<Vector dx="1" dy="-1.429616e-15" dz="-2.936942e-08"/>
+									<Vector dx="1.429616e-15" dy="1" dz="-5.494069e-18"/>
+									<Vector dx="2.936942e-08" dy="5.494027e-18" dz="1"/>
+								</Frame>
+								<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+								<AngularVelocity dx="1.57493706e-16_1/s" dy="2.04205644e-05_1/s" dz="-9.94010755e-13_1/s"/>
+							</WheelFrame>
+						</Bogie>
+					</RollingStock>
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_2" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<Frame>
+								<Position x="-35.51m" y="-0.15m" z="0.45m"/>
+								<Vector dx="1" dy="-2.182149e-13" dz="2.178332e-05"/>
+								<Vector dx="2.15755e-13" dy="1" dz="1.129263e-10"/>
+								<Vector dx="-2.178332e-05" dy="-1.129263e-10" dz="1"/>
+							</Frame>
+							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+							<AngularVelocity dx="6.94155455e-10_1/s" dy="1.00908153e-06_1/s" dz="8.6454368e-12_1/s"/>
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+								<Frame>
+									<Position x="-27.51m" y="-0.15m" z="1.45m"/>
+									<Vector dx="1" dy="4.638858e-14" dz="9.529876e-07"/>
+									<Vector dx="-4.638858e-14" dy="1" dz="-4.940749e-18"/>
+									<Vector dx="-9.529876e-07" dy="4.896541e-18" dz="1"/>
+								</Frame>
+								<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+								<AngularVelocity dx="2.15658771e-16_1/s" dy="1.41621977e-05_1/s" dz="-6.89371086e-13_1/s"/>
+							</WheelFrame>
+						</Bogie>
+					</RollingStock>
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_4" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<Frame>
+								<Position x="-56.31m" y="-0.15m" z="0.45m"/>
+								<Vector dx="1" dy="-6.475346e-10" dz="2.178112e-05"/>
+								<Vector dx="6.476578e-10" dy="1" dz="-5.659835e-09"/>
+								<Vector dx="-2.178112e-05" dy="5.659849e-09" dz="1"/>
+							</Frame>
+							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+							<AngularVelocity dx="1.41540909e-07_1/s" dy="1.01250919e-06_1/s" dz="-3.82882703e-08_1/s"/>
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+								<Frame>
+									<Position x="-48.31m" y="-0.15m" z="1.45m"/>
+									<Vector dx="1" dy="4.620999e-14" dz="9.518359e-07"/>
+									<Vector dx="-4.620999e-14" dy="1" dz="-1.151398e-15"/>
+									<Vector dx="-9.518359e-07" dy="1.151353e-15" dz="1"/>
+								</Frame>
+								<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+								<AngularVelocity dx="-4.12038906e-14_1/s" dy="1.41607607e-05_1/s" dz="-6.8930289e-13_1/s"/>
+							</WheelFrame>
+						</Bogie>
+					</RollingStock>
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_6" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<Frame>
+								<Position x="-77.11m" y="-0.18m" z="0.45m"/>
+								<Vector dx="0.9999927" dy="0.003808576" dz="2.155164e-05"/>
+								<Vector dx="-0.003808576" dy="0.9999927" dz="1.978555e-08"/>
+								<Vector dx="-2.15514e-05" dy="-1.018664e-07" dz="1"/>
+							</Frame>
+							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+							<AngularVelocity dx="-8.78479369e-08_1/s" dy="4.04532443e-07_1/s" dz="-6.55967725e-08_1/s"/>
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+								<Frame>
+									<Position x="-69.11m" y="-0.15m" z="1.45m"/>
+									<Vector dx="1" dy="9.670778e-14" dz="1.989241e-06"/>
+									<Vector dx="-9.670776e-14" dy="1" dz="-9.482442e-15"/>
+									<Vector dx="-1.989241e-06" dy="9.482249e-15" dz="1"/>
+								</Frame>
+								<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+								<AngularVelocity dx="1.3918131e-13_1/s" dy="7.61908314e-06_1/s" dz="-3.70874338e-13_1/s"/>
+							</WheelFrame>
+						</Bogie>
+					</RollingStock>
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_8" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<Frame>
+								<Position x="-97.91m" y="-0.25m" z="0.45m"/>
+								<Vector dx="0.9999942" dy="0.003417956" dz="2.187206e-05"/>
+								<Vector dx="-0.003417956" dy="0.9999942" dz="2.84377e-10"/>
+								<Vector dx="-2.187193e-05" dy="-7.504211e-08" dz="1"/>
+							</Frame>
+							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+							<AngularVelocity dx="1.61750165e-07_1/s" dy="1.00829925e-06_1/s" dz="-6.88002686e-08_1/s"/>
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+								<Frame>
+									<Position x="-89.91m" y="-0.22m" z="1.45m"/>
+									<Vector dx="0.9999946" dy="0.003275753" dz="1.423073e-06"/>
+									<Vector dx="-0.003275753" dy="0.9999946" dz="-3.841372e-14"/>
+									<Vector dx="-1.423065e-06" dy="-4.661597e-09" dz="1"/>
+								</Frame>
+								<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+								<AngularVelocity dx="-1.23009698e-07_1/s" dy="3.75509444e-05_1/s" dz="1.48406154e-09_1/s"/>
+							</WheelFrame>
+						</Bogie>
+					</RollingStock>
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_10" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<Frame>
+								<Position x="-118.71m" y="-0.31m" z="0.45m"/>
+								<Vector dx="0.9999957" dy="0.002929677" dz="2.187866e-05"/>
+								<Vector dx="-0.002929677" dy="0.9999957" dz="-3.82466e-09"/>
+								<Vector dx="-2.187857e-05" dy="-6.027275e-08" dz="1"/>
+							</Frame>
+							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+							<AngularVelocity dx="-3.03623793e-09_1/s" dy="1.32813659e-06_1/s" dz="-8.7715037e-08_1/s"/>
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+								<Frame>
+									<Position x="-110.71m" y="-0.29m" z="1.45m"/>
+									<Vector dx="0.9999957" dy="0.002936698" dz="1.421441e-06"/>
+									<Vector dx="-0.002936698" dy="0.9999957" dz="-1.532108e-14"/>
+									<Vector dx="-1.421435e-06" dy="-4.174328e-09" dz="1"/>
+								</Frame>
+								<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
+								<AngularVelocity dx="-1.10248891e-07_1/s" dy="3.75414093e-05_1/s" dz="1.4836965e-09_1/s"/>
+							</WheelFrame>
+						</Bogie>
+					</RollingStock>
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_12" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<Frame>
+								<Position x="-138.98m" y="1m" z="0.61m"/>
+								<Vector dx="0.9861578" dy="-0.1650213" dz="-0.01614602"/>
+								<Vector dx="0.165042" dy="0.9862865" dz="-5.24685e-05"/>
+								<Vector dx="0.01593326" dy="-0.002613029" dz="0.9998696"/>
+							</Frame>
+							<Velocity dx="0.36km/h" dy="-0.06km/h" dz="0km/h"/>
+							<AngularVelocity dx="1.61073622e-05_1/s" dy="1.52708822e-06_1/s" dz="0.00177956652_1/s"/>
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+								<Frame>
+									<Position x="-131.08m" y="-0.32m" z="1.48m"/>
+									<Vector dx="0.9995891" dy="-0.02370598" dz="-0.01611335"/>
+									<Vector dx="0.02370906" dy="0.9997189" dz="-6.984919e-09"/>
+									<Vector dx="0.01610882" dy="-0.0003820253" dz="0.9998702"/>
+								</Frame>
+								<Velocity dx="0.36km/h" dy="0km/h" dz="0km/h"/>
+								<AngularVelocity dx="5.24315347e-08_1/s" dy="5.49058086e-07_1/s" dz="0.00178787438_1/s"/>
+							</WheelFrame>
+						</Bogie>
+					</RollingStock>
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_14" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="true" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="true" target_velocity="0km/h" thrust="0" brake="0">
+							<Frame>
+								<Position x="-158.19m" y="8m" z="0.94m"/>
+								<Vector dx="0.8608727" dy="-0.508564" dz="-0.01614607"/>
+								<Vector dx="0.5086296" dy="0.8609855" dz="-5.16763e-05"/>
+								<Vector dx="0.01392781" dy="-0.008167882" dz="0.9998696"/>
+							</Frame>
+							<Velocity dx="0.32km/h" dy="-0.19km/h" dz="0km/h"/>
+							<AngularVelocity dx="7.07485306e-05_1/s" dy="-3.9511986e-05_1/s" dz="0.0018734585_1/s"/>
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+								<Frame>
+									<Position x="-151.29m" y="3.93m" z="1.81m"/>
+									<Vector dx="0.9242166" dy="-0.3815286" dz="-0.01611339"/>
+									<Vector dx="0.3815781" dy="0.9243366" dz="-6.752089e-09"/>
+									<Vector dx="0.0148942" dy="-0.006148511" dz="0.9998702"/>
+								</Frame>
+								<Velocity dx="0.35km/h" dy="-0.14km/h" dz="0km/h"/>
+								<AngularVelocity dx="3.54347719e-07_1/s" dy="9.05928403e-07_1/s" dz="0.00187120889_1/s"/>
+							</WheelFrame>
+						</Bogie>
+					</RollingStock>
+				</Train>
+			</Fleet>
+		</Module>
+	</ModuleCollection>
+</traxML>

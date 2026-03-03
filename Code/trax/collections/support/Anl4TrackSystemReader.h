@@ -36,6 +36,14 @@ namespace trax{
 
 	namespace ptreesupport{
 
+		/// \name Property Tree Streaming Support for Trax Classes
+		///@{
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, TrackSystem& trackSystem );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, TrackCollection& trackCollection );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, ConnectorCollection& connectorCollection );
+		///@}
+
+
 		class Anl4TrackSystemReader : public PTreeReader
 		{
 		public:

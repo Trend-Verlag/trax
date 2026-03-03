@@ -81,7 +81,7 @@ namespace trax{
 		static const std::string					m_Empty;
 		std::string									m_Name;
 		IDType										m_ID;
-		static std::vector<char const *>			sm_ReferenceNames;
+		static std::vector<char const*>				sm_ReferenceNames;
 	};
 
 	template<class Base>

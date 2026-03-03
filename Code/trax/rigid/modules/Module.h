@@ -60,7 +60,12 @@ namespace trax{
 					virtual SocketRegistry
 	{
 		/// \brief Makes a standard Module object.
-		static dclspc std::unique_ptr<Module> Make( bool bCreateCollections = true ) noexcept;
+		/// 
+		/// \param bCreateCollections If true, the module will create and attach empty collections 
+		/// of all types to itself. If false, no collections will be created or attached.
+		///@{
+		static dclspc std::unique_ptr<Module> Make( bool bCreateCollections = false ) noexcept;
+		///@}
 
 
 		/// \returns the name for the object type that implements this interface. 

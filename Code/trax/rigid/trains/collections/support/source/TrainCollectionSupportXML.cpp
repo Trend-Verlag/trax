@@ -1,12 +1,12 @@
 //	trax track library
-//	AD 2014 
+//	AD 2026 
 //
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
 //
 // 
-// Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
+// Copyright (c) 2026 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //
 // Permission is hereby granted to any person obtaining a copy of this software 
@@ -25,25 +25,30 @@
 //
 // For further information, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
-
-#include "trax/support/TraxSupportXML.h"
+#include "../TrainCollectionSupportXML.h"
+#include "trax/rigid/trains/Train.h"
+#include "trax/rigid/trains/support/SupportXML.h"
+#include "trax/rigid/trains/collections/Fleet.h"
 
 namespace trax{
 
-	struct Material;
-	struct TrackJointLimits;
-	struct TractionForceCharacteristic;
-	struct Wheelset;
+namespace ptreesupport{
 
-	namespace ptreesupport{
+void Read( const boost::property_tree::ptree& pt, Scene& scene, Fleet& fleet )
+{
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "Train" )
+		{
+			if( std::shared_ptr<Train> pTrain = Train::Make(); pTrain )
+			{
+				Read( pair.second, scene, *pTrain );
+				fleet.Add( pTrain );
+			}
+		}
+	}
+}
 
-		/// \name Explicit XML Reading
-		///@{
-		dclspc void ReadMaterial( const boost::property_tree::ptree& pt, Material& material ) noexcept;
-		dclspc void ReadTrackJointLimits( const boost::property_tree::ptree& pt, TrackJointLimits& wfl ) noexcept;
-		dclspc void ReadWheelset( const boost::property_tree::ptree& pt, Wheelset& wheelset ) noexcept;
-		dclspc void ReadTractionForceCharacteristic( const boost::property_tree::ptree& pt, TractionForceCharacteristic& tractionForceCharacteristic ) noexcept;
-		///@}
-	} // namespace ptreesupport
-} // namespace trax
+}
+}
+

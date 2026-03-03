@@ -128,12 +128,16 @@ target_sources(trax_core
 source_group("Interface" FILES ${PUBLIC_HEADERS})
 source_group("Private Headers" FILES ${PRIVATE_HEADERS})
 
-target_compile_definitions(trax_core PUBLIC TRAX_STATIC_LIBRARY)
+target_compile_definitions(trax_core 
+    PUBLIC 
+        TRAX_STATIC_LIBRARY
+        DIM_STATIC_LIBRARY
+)
 
 target_link_libraries(trax_core
     PUBLIC
-        dim_support
-        spat_support
+        dim
+        spat
 )
 
 # ---------- Boost (header-only math/tools) ----------

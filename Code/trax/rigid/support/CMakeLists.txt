@@ -17,6 +17,7 @@ source_group("Interface" FILES ${PUBLIC_HEADERS})
 
 target_link_libraries(trax_rigid_support
      PUBLIC
+        trax_core_support
         trax_rigid
 )
 

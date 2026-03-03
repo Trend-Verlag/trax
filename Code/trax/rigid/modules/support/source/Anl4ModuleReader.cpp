@@ -11,6 +11,7 @@
 
 
 #include "trax/rigid/modules/support/Anl4ModuleReader.h"
+#include "trax/rigid/trains/collections/support/TrainCollectionSupportXML.h"
 #include "spat/support/SpatSupportXML.h"
 
 #include "trax/rigid/Gestalt.h"
@@ -28,13 +29,138 @@
 #include "trax/collections/TimerCollection.h"
 #include "trax/collections/TrackSystem.h"
 
+#if defined(_MSC_VER)
+#	pragma warning(push)
+#	pragma warning(disable: 6313) //  Incorrect operator:  zero-valued flag cannot be tested with bitwise-and.  Use an equality test to check for zero-valued flags.
+#endif
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#if defined(_MSC_VER)
+#	pragma warning(pop)
+#endif
+
 namespace trax{
+
+std::unique_ptr<ModuleCollection> ReadModuleCollection( const std::filesystem::path& anl4FilePath, Scene& scene )
+{
+	using namespace ptreesupport;
+
+	boost::property_tree::ptree ptr;
+
+	read_xml( anl4FilePath.string(), ptr );
+
+	if( auto iter = ptr.find( "traxML" ); iter != ptr.not_found() )
+	{
+		for( const auto& pair : iter->second )
+		{
+			if( pair.first == "ModuleCollection" )
+			{
+				if( std::unique_ptr<ModuleCollection> pModuleCollection = ModuleCollection::Make(); pModuleCollection )
+				{
+					Read( pair.second, scene, *pModuleCollection );
+					return pModuleCollection;
+				}
+			}
+
+			else if( pair.first == "Module" )
+			{
+				if( std::unique_ptr<ModuleCollection> pModuleCollection = ModuleCollection::Make(); pModuleCollection )
+				{
+					Read( iter->second, scene, *pModuleCollection );
+					return pModuleCollection;
+				}
+			}
+		}
+	}
+
+	return nullptr;
+}
+
 namespace ptreesupport{
 
 	using namespace dim::ptreesupport;
 	using namespace spat;
 	using namespace spat::ptreesupport;
 
+
+void Read( const boost::property_tree::ptree& pt, Scene& scene, ModuleCollection& moduleCollection )
+{
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "Module" )
+		{
+			if( std::shared_ptr<Module> pModule = trax::Module::Make(); pModule )
+			{
+				Read( pair.second, scene, *pModule );
+				if( pModule->IsValid() )
+					moduleCollection.Add( pModule );
+			}
+		}
+	}
+}
+
+void Read( const boost::property_tree::ptree& pt, Scene& scene, Module& module )
+{
+	AttributesToReferences( pt, module );
+
+	for( const auto& pair : pt )
+	{
+		//if( pair.first == "DisplayName" )
+		//	ReadLocalizedTag( pair.second, "DisplayName", module, GetLocale() );
+
+		//else if( pair.first == "Description" )
+		//	ReadLocalizedTag( pair.second, "Description", module, GetLocale() );
+
+		if( pair.first == "Area" ){
+			Box<Length> area;
+			ReadArea( pair.second, area );
+			module.SetVolume( area );
+		}
+
+		else if( pair.first == "Frame" ){
+			Frame<Length,One> frame;
+			ReadFrame( pair.second, frame );
+			module.SetFrame( frame );
+		}
+
+		else if( pair.first == "TrackSystem" )
+		{
+			if( std::shared_ptr<TrackSystem> pTrackSystem = TrackSystem::Make(); pTrackSystem )
+			{
+				pair.second >> *pTrackSystem;
+				module.Attach( pTrackSystem );
+			}
+		}
+
+		//else if( pair.first == "Batch" && pSimulator )
+		//	pModule->Attach( CreateBatch( pair.second, *pModule ) );
+
+		else if( pair.first == "Fleet" )
+		{
+			if( std::unique_ptr<Fleet> pFleet = Fleet::Make(); pFleet )
+			{
+				Read( pair.second, scene, *pFleet );
+				module.Attach( std::move( pFleet ) );
+			}
+		}
+
+		//else if( pair.first == "SignalCollection" && pModule->GetTrackSystem() /*&& pModule->GetFleet()*/ )
+		//	pModule->Attach( CreateSignalCollection( pair.second, *pModule->GetTrackSystem()/*, *pModule->GetFleet()*/ ) );
+
+		//else if( pair.first == "IndicatorCollection" && pModule->GetTrackSystem() && pModule->GetTrackSystem()->GetConnectorCollection() && pModule->GetSignalCollection() )
+		//	pModule->Attach( CreateIndicatorCollection(
+		//		pair.second, 
+		//		*pModule->GetTrackSystem()->GetConnectorCollection(),
+		//		*pModule->GetSignalCollection()
+		//		) );
+
+		//else if( pair.first == "PulseCounterCollection" )
+		//	pModule->Attach( CreatePulseCounterCollection( pair.second ) );
+
+		//else if( pair.first == "TimerCollection" )
+		//	pModule->Attach( CreateTimerCollection( pair.second ) );
+	}
+}
 
 Anl4ModuleReader::Anl4ModuleReader( 
 	Scene& scene,
@@ -55,15 +181,18 @@ Anl4ModuleReader::Anl4ModuleReader(
 
 std::unique_ptr<ModuleCollection> Anl4ModuleReader::ReadModuleCollection( const boost::property_tree::ptree& pt ) const
 {
-	if( std::unique_ptr<ModuleCollection> pModuleCollection = trax::ModuleCollection::Make(); pModuleCollection )
+	if( auto iter = pt.find( "ModuleCollection" ); iter != pt.not_found() )
 	{
-		for( const auto& pair : pt )
+		if( std::unique_ptr<ModuleCollection> pModuleCollection = trax::ModuleCollection::Make(); pModuleCollection )
 		{
-			if( pair.first == "Module" )
-				pModuleCollection->Add( ReadModule( pair.second ) );
-		}
+			for( const auto& pair : iter->second )
+			{
+				if( pair.first == "Module" )
+					pModuleCollection->Add( ReadModule( pair.second ) );
+			}
 
-		return pModuleCollection;
+			return pModuleCollection;
+		}
 	}
 
 	return nullptr;

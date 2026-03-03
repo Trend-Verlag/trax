@@ -148,7 +148,7 @@ namespace trax{
         static pxr::SdfPath Name( const TraxType& object, const char* pDefault )
 		{
 	        if( std::string Name = object.Reference( "Name" ); Name.empty() )
-		        return pxr::SdfPath{ pDefault + std::to_string( object.ID() ) };
+		        return pxr::SdfPath{ pDefault + to_string( object.ID() ) };
 	        else
 				return pxr::SdfPath{ pxr::SdfPath{ Name }.GetName() };
 		}

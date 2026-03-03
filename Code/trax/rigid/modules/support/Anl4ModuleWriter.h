@@ -14,6 +14,7 @@
 
 #include "trax/Configuration.h"
 #include <boost/property_tree/ptree.hpp>
+#include <filesystem>
 
 namespace trax{
 
@@ -21,6 +22,8 @@ namespace trax{
 	struct CameraCollection;
 	struct Module;
 	struct ModuleCollection;
+
+	void dclspc WriteModuleCollection( const ModuleCollection& moduleCollection, const std::filesystem::path& anl4FilePath );
 
 	namespace ptreesupport{
 		/// \name Property Tree Streaming Support for Trax Classes

@@ -12,15 +12,25 @@
 
 #pragma once
 
-#include "trax/Units.h"
-#include <boost/property_tree/ptree.hpp>
+#include "trax/rigid/support/RigidSupportXML.h"
 
 namespace trax{
 
+	struct Bogie;
+	struct RollingStock;
+	struct Scene;
+	struct Train;
+	struct WheelFrame;
 
-	/// \name Explicit XML Reading
-	///@{	
-	///@}
+	namespace ptreesupport{
 
+		/// \name Explicit XML Reading
+		///@{	
+		void dclspc Read( const boost::property_tree::ptree& pt, Scene& scene, Train& train );
+		void dclspc Read( const boost::property_tree::ptree& pt, Scene& scene, RollingStock& rollingStock );
+		void dclspc Read( const boost::property_tree::ptree& pt, Scene& scene, Bogie& bogie );
+		void dclspc Read( const boost::property_tree::ptree& pt, Scene& scene, WheelFrame& wheelFrame );
+		///@}
 
+	}
 }

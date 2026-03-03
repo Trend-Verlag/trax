@@ -31,12 +31,13 @@
 #include "trax/collections/TrackCollectionContainer.h"
 #include "trax/collections/ConnectorCollection.h"
 
-#include "trax/SectionTrack.h"
+#include "trax/Curve.h"
 #include "trax/Indicator.h"
 #include "trax/Jack.h"
 #include "trax/LogicElements.h"
 #include "trax/Plug.h"
 #include "trax/Section.h"
+#include "trax/SectionTrack.h"
 #include "trax/Sensor.h"
 #include "trax/Switch.h"
 #include "trax/Timer.h"
@@ -44,7 +45,7 @@
 #include "common/support/CommonSupportXML.h"
 #include "dim/support/DimSupportXML.h"
 #include "spat/support/SpatSupportXML.h"
-#include "trax/collections/support/CollectionSupportXML.h"
+#include "trax/collections/support/CollectionSupportWriteXML.h"
 
 
 namespace trax{
@@ -63,7 +64,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	boost::property_tree::ptree ptTrackSystem;
 
 	if( auto pTrack = tracksystem.GetActive() )
-		ptTrackSystem.add( "<xmlattr>.activeTrack", pTrack->ID() );
+		ptTrackSystem.put( "<xmlattr>.activeTrack", pTrack->ID() );
 	
 	if( std::shared_ptr<const TrackCollectionContainer> pContainer = tracksystem.GetCollectionContainer() )
 	{
@@ -80,8 +81,9 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackCollection& trackcollection ){
 	boost::property_tree::ptree ptTrackCollection;
-	ReferencesToAttributes( ptTrackCollection, trackcollection );
 
+	ptTrackCollection.put( "<xmlattr>.id", trackcollection.ID() );
+	ReferencesToAttributes( ptTrackCollection, trackcollection );
 	ptTrackCollection << trackcollection.GetFrame();
 
 	for( const TrackBuilder& track : trackcollection )
@@ -94,8 +96,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Track::End& end ){
 	boost::property_tree::ptree ptTrackEnd;
 
-	ptTrackEnd.add( "<xmlattr>.refid", end.id );
-	ptTrackEnd.add( "<xmlattr>.type", end.type == EndType::north ? "front" : "end" );
+	ptTrackEnd.put( "<xmlattr>.refid", end.id );
+	ptTrackEnd.put( "<xmlattr>.type", end.type == EndType::north ? "front" : "end" );
 
 	move_child( pt, "TrackEnd", ptTrackEnd );
 	return pt;
@@ -103,13 +105,15 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackBuilder& track ){
 	boost::property_tree::ptree ptTrack;
+
+	ptTrack.put( "<xmlattr>.id", track.ID() );
 	ReferencesToAttributes( ptTrack, track );
-	ptTrack.add( "<xmlattr>.type", track.Reference( "type" ).empty() ? ToString( track.GetTrackType() ) : track.Reference( "type" ) );
+	ptTrack.put( "<xmlattr>.type", track.Reference( "type" ).empty() ? ToString( track.GetTrackType() ) : track.Reference( "type" ) );
 
 	{
 		boost::property_tree::ptree ptBegin;
 		if( !track.Reference( "electrificationShiftBegin" ).empty() )
-			ptBegin.add( "<xmlattr>.electrificationShift", track.Reference( "electrificationShiftBegin" ) );
+			ptBegin.put( "<xmlattr>.electrificationShift", track.Reference( "electrificationShiftBegin" ) );
 
 		const Track::End frontend = track.TransitionEnd( EndType::north );
 		if( frontend.id ){
@@ -132,7 +136,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	{
 		boost::property_tree::ptree ptEnd;
 		if( !track.Reference( "electrificationShiftEnd" ).empty() )
-			ptEnd.add( "<xmlattr>.electrificationShift", track.Reference( "electrificationShiftEnd" ) );
+			ptEnd.put( "<xmlattr>.electrificationShift", track.Reference( "electrificationShiftEnd" ) );
 
 		const Track::End backend = track.TransitionEnd( EndType::south );
 		if( backend.id ){
@@ -183,8 +187,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackLocation& tlr ){
 	boost::property_tree::ptree ptTrackLocation;
 
-	ptTrackLocation.add( "<xmlattr>.parameter", tlr.parameter );
-	ptTrackLocation.add( "<xmlattr>.orientation", tlr.orientation == Orientation::Value::para ? "para" : "anti" );
+	ptTrackLocation.put( "<xmlattr>.parameter", tlr.parameter );
+	ptTrackLocation.put( "<xmlattr>.orientation", tlr.orientation == Orientation::Value::para ? "para" : "anti" );
 
 	move_child( pt, "TrackLocation", ptTrackLocation );
 	return pt;
@@ -193,9 +197,9 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackLocationRef& tlr ){
 	boost::property_tree::ptree ptTrackLocationRef;
 
-	ptTrackLocationRef.add( "<xmlattr>.refid", tlr.refid );
-	ptTrackLocationRef.add( "<xmlattr>.parameter", tlr.location.parameter );
-	ptTrackLocationRef.add( "<xmlattr>.orientation", tlr.location.orientation == Orientation::Value::para ? "para" : "anti" );
+	ptTrackLocationRef.put( "<xmlattr>.refid", tlr.refid );
+	ptTrackLocationRef.put( "<xmlattr>.parameter", tlr.location.parameter );
+	ptTrackLocationRef.put( "<xmlattr>.orientation", tlr.location.orientation == Orientation::Value::para ? "para" : "anti" );
 
 	move_child( pt, "TrackLocation", ptTrackLocationRef );
 	return pt;
@@ -204,9 +208,9 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackRange& tr ){
 	boost::property_tree::ptree ptTrackRange;
 
-	ptTrackRange.add( "<xmlattr>.refid", tr.refid );
-	ptTrackRange.add( "<xmlattr>.near", tr.range.Near() );
-	ptTrackRange.add( "<xmlattr>.far", tr.range.Far() );
+	ptTrackRange.put( "<xmlattr>.refid", tr.refid );
+	ptTrackRange.put( "<xmlattr>.near", tr.range.Near() );
+	ptTrackRange.put( "<xmlattr>.far", tr.range.Far() );
 
 	move_child( pt, "TrackRange", ptTrackRange );
 	return pt;
@@ -226,16 +230,16 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	ReferencesToAttributes( ptSensor, sensor );
 
 	//if( auto pVelocitySensor = dynamic_cast<const VelocitySensor*>(&sensor) ){
-	//	ptSensor.add( "<xmlattr>.minVelocity", pVelocitySensor->VelocityMin() );
-	//	ptSensor.add( "<xmlattr>.maxVelocity", pVelocitySensor->VelocityMax() );
-	//	ptSensor.add( "<xmlattr>.triggerInside", pVelocitySensor->TriggerInside() );
+	//	ptSensor.put( "<xmlattr>.minVelocity", pVelocitySensor->VelocityMin() );
+	//	ptSensor.put( "<xmlattr>.maxVelocity", pVelocitySensor->VelocityMax() );
+	//	ptSensor.put( "<xmlattr>.triggerInside", pVelocitySensor->TriggerInside() );
 	//}
 
 	//if( auto pWeighSensor = dynamic_cast<const WeighSensor*>(&sensor) ){
-	//	ptSensor.add( "<xmlattr>.minWeight", pWeighSensor->WeightMin() );
-	//	ptSensor.add( "<xmlattr>.maxWeight", pWeighSensor->WeightMax() );
-	//	ptSensor.add( "<xmlattr>.triggerInside", pWeighSensor->TriggerInside() );
-	//	ptSensor.add( "<xmlattr>.weighTrain", pWeighSensor->WeighTrain() );
+	//	ptSensor.put( "<xmlattr>.minWeight", pWeighSensor->WeightMin() );
+	//	ptSensor.put( "<xmlattr>.maxWeight", pWeighSensor->WeightMax() );
+	//	ptSensor.put( "<xmlattr>.triggerInside", pWeighSensor->TriggerInside() );
+	//	ptSensor.put( "<xmlattr>.weighTrain", pWeighSensor->WeighTrain() );
 	//}
 
 	//if( auto pSensorFilterJack = dynamic_cast<const SensorFilterJack*>(&sensor) ){
@@ -272,10 +276,10 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Section& section ){
 	boost::property_tree::ptree ptSection;
-	ptSection.add( "<xmlattr>.type", ToString( section.GetSectionType() ) );
+	ptSection.put( "<xmlattr>.type", ToString( section.GetSectionType() ) );
 
 	if( section.GetSectionType() == Section::SpecialSections::custom ){
-		ptSection.add( "<xmlattr>.count", section.CountPoints() );
+		ptSection.put( "<xmlattr>.count", section.CountPoints() );
 		for( int idx = 0; idx < section.CountPoints(); ++idx )
 			ptSection << section.Get( idx ).p;
 	}
@@ -298,20 +302,20 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	boost::property_tree::ptree ptConnector;
 	ReferencesToAttributes( ptConnector, connector );
 	if( !connector.Reference( "kollektorID" ).empty() )
-		ptConnector.add( "<xmlattr>.kollektorID", connector.Reference( "DKWType" ) );
+		ptConnector.put( "<xmlattr>.kollektorID", connector.Reference( "DKWType" ) );
 
 	if( auto pSwitch = dynamic_cast<const Switch*>(&connector) )
-		ptConnector.add( "<xmlattr>.status", ToString(pSwitch->Get()) );
+		ptConnector.put( "<xmlattr>.status", ToString(pSwitch->Get()) );
 	else if( auto pThreeWaySwitch = dynamic_cast<const ThreeWaySwitch*>(&connector) )
-		ptConnector.add( "<xmlattr>.status", ToString(pThreeWaySwitch->Get()) );
+		ptConnector.put( "<xmlattr>.status", ToString(pThreeWaySwitch->Get()) );
 	else if( auto pSingleSlipSwitch = dynamic_cast<const SingleSlipSwitch*>(&connector) ){
-		ptConnector.add( "<xmlattr>.status", ToString(pSingleSlipSwitch->Get()) );
+		ptConnector.put( "<xmlattr>.status", ToString(pSingleSlipSwitch->Get()) );
 		Frame<Length,One> center;
 		pSingleSlipSwitch->GetCenter( center );
 		ptConnector << center;
 	}
 	else if( auto pDoubleSlipSwitch = dynamic_cast<const DoubleSlipSwitch*>(&connector) ){
-		ptConnector.add( "<xmlattr>.status", ToString(pDoubleSlipSwitch->Get()) );
+		ptConnector.put( "<xmlattr>.status", ToString(pDoubleSlipSwitch->Get()) );
 		Frame<Length,One> center;
 		pDoubleSlipSwitch->GetCenter( center );
 		ptConnector << center;
@@ -328,11 +332,11 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 		auto trackEnd = connector.Slot( slot ); 
 		if( trackEnd.first ){
-			ptTrackEnd.add( "<xmlattr>.refid", trackEnd.first->ID() );
-			ptTrackEnd.add( "<xmlattr>.type", ToString(trackEnd.second) );
+			ptTrackEnd.put( "<xmlattr>.refid", trackEnd.first->ID() );
+			ptTrackEnd.put( "<xmlattr>.type", ToString(trackEnd.second) );
 		}
 		else{
-			ptTrackEnd.add( "<xmlattr>.refid", 0 );
+			ptTrackEnd.put( "<xmlattr>.refid", 0 );
 		}
 
 		ptConnector.add_child( "TrackEnd", ptTrackEnd );
@@ -367,10 +371,10 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const VelocityControl& signal ){
 	boost::property_tree::ptree ptSignal;
 	ReferencesToAttributes( ptSignal, signal );
-	ptSignal.add( "<xmlattr>.status", ToString( signal.Get() ) );
-	ptSignal.add( "<xmlattr>.stopDistance", signal.StopDistance() );
+	ptSignal.put( "<xmlattr>.status", ToString( signal.Get() ) );
+	ptSignal.put( "<xmlattr>.stopDistance", signal.StopDistance() );
 	if( !signal.Reference( "Key_Id" ).empty() )
-		ptSignal.add( "<xmlattr>.refid", signal.Reference( "Key_Id" ) );
+		ptSignal.put( "<xmlattr>.refid", signal.Reference( "Key_Id" ) );
 
 	try{ 
 		Location location{signal.GetLocation()};
@@ -395,10 +399,10 @@ boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const 
 		if( signal.IsValidState( status ) ){
 			boost::property_tree::ptree ptControlState;
 
-			ptControlState.add( "<xmlattr>.status", ToString( status ) );
-			ptControlState.add( "<xmlattr>.velocityMin", signal.VelocityMin( status ) );
-			ptControlState.add( "<xmlattr>.velocityMax", signal.VelocityMax( status ) );
-			ptControlState.add( "<xmlattr>.affectTravelVelocity", signal.AffectTravelVelocity( status ) );
+			ptControlState.put( "<xmlattr>.status", ToString( status ) );
+			ptControlState.put( "<xmlattr>.velocityMin", signal.VelocityMin( status ) );
+			ptControlState.put( "<xmlattr>.velocityMax", signal.VelocityMax( status ) );
+			ptControlState.put( "<xmlattr>.affectTravelVelocity", signal.AffectTravelVelocity( status ) );
 
 			ptSignal.add_child( "ControlState", ptControlState );
 		}
@@ -418,7 +422,7 @@ boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const 
 boost::property_tree::ptree & operator<<( boost::property_tree::ptree& pt, const JumpSite& signal ){
 	boost::property_tree::ptree ptSignal;
 	ReferencesToAttributes( ptSignal, signal );
-	ptSignal.add( "<xmlattr>.status", ToString( signal.Get() ) );
+	ptSignal.put( "<xmlattr>.status", ToString( signal.Get() ) );
 
 	TrackRange trackRange;
 	signal.GetTrackRange( trackRange );
@@ -429,7 +433,7 @@ boost::property_tree::ptree & operator<<( boost::property_tree::ptree& pt, const
 		ptTarget << signal.TargetLocation();
 	//else if( auto pDepot = signal.TargetDepot() ){
 	//	boost::property_tree::ptree ptDepot;
-	//	ptDepot.add( "<xmlattr>.depotID", pDepot->ID() );
+	//	ptDepot.put( "<xmlattr>.depotID", pDepot->ID() );
 	//	ptTarget.add_child( "Depot", ptDepot );
 	//}
 	ptSignal.add_child( "Target", ptTarget );
@@ -447,7 +451,7 @@ boost::property_tree::ptree & operator<<( boost::property_tree::ptree& pt, const
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Indicator& indicator ){
 	boost::property_tree::ptree ptIndicator;
 	ReferencesToAttributes( ptIndicator, indicator );
-	ptIndicator.add( "<xmlattr>.status", ToString( indicator.Get() ) );
+	ptIndicator.put( "<xmlattr>.status", ToString( indicator.Get() ) );
 	ptIndicator << indicator.GetFrame();
 
 	if( auto pPlugEnumerator = dynamic_cast<const PlugEnumerator*>(&indicator) )
@@ -457,14 +461,14 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 		ptIndicator << *pJackEnumerator;
 
 	if( auto pSignalAligned = dynamic_cast<const SignalAligned*>(&indicator) ){
-		ptIndicator.add( "<xmlattr>.refid", pSignalAligned->GetSignalRef() );
-		ptIndicator.add( "<xmlattr>.parameterOffset", pSignalAligned->ParameterOffset() );
-		ptIndicator.add( "<xmlattr>.bPreserveUpDirection", pSignalAligned->PreserveUpDirection() );
+		ptIndicator.put( "<xmlattr>.refid", pSignalAligned->GetSignalRef() );
+		ptIndicator.put( "<xmlattr>.parameterOffset", pSignalAligned->ParameterOffset() );
+		ptIndicator.put( "<xmlattr>.bPreserveUpDirection", pSignalAligned->PreserveUpDirection() );
 	}
 
 	if( auto pSwitchAligned = dynamic_cast<const SwitchAligned*>(&indicator) ){
-		ptIndicator.add( "<xmlattr>.refid", pSwitchAligned->GetSwitchRef() );
-		ptIndicator.add( "<xmlattr>.bPreserveUpDirection", pSwitchAligned->PreserveUpDirection() );
+		ptIndicator.put( "<xmlattr>.refid", pSwitchAligned->GetSwitchRef() );
+		ptIndicator.put( "<xmlattr>.bPreserveUpDirection", pSwitchAligned->PreserveUpDirection() );
 	}
 
 	move_child( pt, indicator.TypeName(), ptIndicator );
@@ -508,9 +512,9 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	boost::property_tree::ptree ptSample;
 	using namespace spat::ptreesupport;
 
-	ptSample.add( "<xmlattr>.s", sample.s );
-	ptSample.add( "<xmlattr>.k", sample.k );
-	ptSample.add( "<xmlattr>.t", sample.t );
+	ptSample.put( "<xmlattr>.s", sample.s );
+	ptSample.put( "<xmlattr>.k", sample.k );
+	ptSample.put( "<xmlattr>.t", sample.t );
 	ptSample << sample.F;
 
 	move_child( pt, "Sample", ptSample );
@@ -529,7 +533,7 @@ boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const 
 {
 	boost::property_tree::ptree ptCurve;
 
-	ptCurve.add( "<xmlattr>.k", curve.GetData().k );
+	ptCurve.put( "<xmlattr>.k", curve.GetData().k );
 
 	move_child( pt, curve.TypeName(), ptCurve );
 	return pt;
@@ -539,8 +543,8 @@ boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const 
 {
 	boost::property_tree::ptree ptCurve;
 
-	ptCurve.add( "<xmlattr>.k", curve.GetData().k );
-	ptCurve.add( "<xmlattr>.t", curve.GetData().t );
+	ptCurve.put( "<xmlattr>.k", curve.GetData().k );
+	ptCurve.put( "<xmlattr>.t", curve.GetData().t );
 
 	move_child( pt, curve.TypeName(), ptCurve );
 	return pt;
@@ -568,8 +572,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const HelixP& curve ){
 	boost::property_tree::ptree ptCurve;
 
-	ptCurve.add( "<xmlattr>.a", curve.GetData().a );
-	ptCurve.add( "<xmlattr>.b", curve.GetData().b );
+	ptCurve.put( "<xmlattr>.a", curve.GetData().a );
+	ptCurve.put( "<xmlattr>.b", curve.GetData().b );
 	ptCurve << curve.GetData().center;
 
 	move_child( pt, curve.TypeName(), ptCurve );
@@ -603,7 +607,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const Clothoid& curve ){
 	boost::property_tree::ptree ptCurve;
 
-	ptCurve.add( "<xmlattr>.a", curve.GetData().a );
+	ptCurve.put( "<xmlattr>.a", curve.GetData().a );
 
 	move_child( pt, curve.TypeName(), ptCurve );
 	return pt;
@@ -612,11 +616,11 @@ boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const 
 boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const Rotator& curve ){
 	boost::property_tree::ptree ptCurve;
 
-	ptCurve.add( "<xmlattr>.a", curve.GetData().a );
-	ptCurve.add( "<xmlattr>.b", curve.GetData().b );
+	ptCurve.put( "<xmlattr>.a", curve.GetData().a );
+	ptCurve.put( "<xmlattr>.b", curve.GetData().b );
 	if( curve.GetData().a0 != 0_rad || curve.GetData().b0 != 0_rad ){
-		ptCurve.add( "<xmlattr>.a0", curve.GetData().a0 );
-		ptCurve.add( "<xmlattr>.b0", curve.GetData().b0 );
+		ptCurve.put( "<xmlattr>.a0", curve.GetData().a0 );
+		ptCurve.put( "<xmlattr>.b0", curve.GetData().b0 );
 	}
 
 	move_child( pt, curve.TypeName(), ptCurve );
@@ -629,9 +633,9 @@ boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const 
 	for( const auto& tuple : curve.GetData() ){
 		boost::property_tree::ptree ptLink;
 
-		ptLink.add( "<xmlattr>.a", std::get<0>(tuple) );
-		ptLink.add( "<xmlattr>.b", std::get<1>(tuple) );
-		ptLink.add( "<xmlattr>.length", std::get<2>(tuple) );
+		ptLink.put( "<xmlattr>.a", std::get<0>(tuple) );
+		ptLink.put( "<xmlattr>.b", std::get<1>(tuple) );
+		ptLink.put( "<xmlattr>.length", std::get<2>(tuple) );
 
 		move_child( ptCurve, "Link", ptLink );
 	}
@@ -685,7 +689,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const ConstantTwist& twist ){
 	boost::property_tree::ptree ptTwist;
 
-	ptTwist.add( "<xmlattr>.angle", twist.TwistValue() );
+	ptTwist.put( "<xmlattr>.angle", twist.TwistValue() );
 
 	move_child( pt, twist.TypeName(), ptTwist );
 	return pt;
@@ -694,8 +698,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const LinearTwist& twist ){
 	boost::property_tree::ptree ptTwist;
 
-	ptTwist.add( "<xmlattr>.startangle", twist.From() );
-	ptTwist.add( "<xmlattr>.endangle", twist.To() );
+	ptTwist.put( "<xmlattr>.startangle", twist.From() );
+	ptTwist.put( "<xmlattr>.endangle", twist.To() );
 
 	move_child( pt, twist.TypeName(), ptTwist );
 	return pt;
@@ -707,8 +711,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	for( int idx = 0; idx < twist.CntTwistValues(); ++idx ){
 		boost::property_tree::ptree ptTwistAngle;
 
-		ptTwistAngle.add( "<xmlattr>.s", twist.Twist(idx).first );
-		ptTwistAngle.add( "<xmlattr>.value", twist.Twist(idx).second );
+		ptTwistAngle.put( "<xmlattr>.s", twist.Twist(idx).first );
+		ptTwistAngle.put( "<xmlattr>.value", twist.Twist(idx).second );
 
 		ptTwist.add_child( "TwistAngle", ptTwistAngle );
 	}
@@ -721,7 +725,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	boost::property_tree::ptree ptTwist;
 	
 	if( twist.IsFrozen() )
-		ptTwist.add( "<xmlattr>.bFrozen", true );
+		ptTwist.put( "<xmlattr>.bFrozen", true );
 
 	ptTwist << twist.Attractor();
 
@@ -749,7 +753,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	if( plug.Plugged() || plug.JackOnPulse().Plugged() ){
 		boost::property_tree::ptree ptPlug;
 		ReferencesToAttributes( ptPlug, plug );
-		ptPlug.add( "<xmlattr>.plugid", plug.ID() );
+		ptPlug.put( "<xmlattr>.plugid", plug.ID() );
 
 		if( plug.JackOnPulse().Plugged() )
 			ptPlug << plug.JackOnPulse();
@@ -774,7 +778,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 		if( const Plug* pPlug = GetFirstNonZeroIDPlugInChain( *jack.GetPlug() ) ){
 			boost::property_tree::ptree ptJack;
 			ReferencesToAttributes( ptJack, jack );
-			ptJack.add( "<xmlattr>.plugid", pPlug->ID() );
+			ptJack.put( "<xmlattr>.plugid", pPlug->ID() );
 
 			move_child( pt, "Jack", ptJack );
 		}
@@ -786,8 +790,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 boost::property_tree::ptree & operator<<( boost::property_tree::ptree& pt, const PulseCounter& pulseCounter ){
 	boost::property_tree::ptree ptPulseCounter;
 	ReferencesToAttributes( ptPulseCounter, pulseCounter );
-	ptPulseCounter.add( "<xmlattr>.threshold", pulseCounter.Threshold() );
-	ptPulseCounter.add( "<xmlattr>.counter", pulseCounter.Counter() );
+	ptPulseCounter.put( "<xmlattr>.threshold", pulseCounter.Threshold() );
+	ptPulseCounter.put( "<xmlattr>.counter", pulseCounter.Counter() );
 
 	if( auto pPlugEnumerator = dynamic_cast<const PlugEnumerator*>(&pulseCounter) )
 		ptPulseCounter << *pPlugEnumerator;
@@ -802,10 +806,10 @@ boost::property_tree::ptree & operator<<( boost::property_tree::ptree& pt, const
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Timer& timer ){
 	boost::property_tree::ptree ptTimer;
 	ReferencesToAttributes( ptTimer, timer );
-	ptTimer.add( "<xmlattr>.lapse", timer.Lapse() );
-	ptTimer.add( "<xmlattr>.periodic", timer.Periodic() );
-	ptTimer.add( "<xmlattr>.started", timer.IsStarted() );
-	ptTimer.add( "<xmlattr>.time", timer.GetTime() );
+	ptTimer.put( "<xmlattr>.lapse", timer.Lapse() );
+	ptTimer.put( "<xmlattr>.periodic", timer.Periodic() );
+	ptTimer.put( "<xmlattr>.started", timer.IsStarted() );
+	ptTimer.put( "<xmlattr>.time", timer.GetTime() );
 
 	if( auto pPlugEnumerator = dynamic_cast<const PlugEnumerator*>(&timer) )
 		ptTimer << *pPlugEnumerator;

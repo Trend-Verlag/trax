@@ -39,6 +39,16 @@
 using namespace dim::literals;
 
 ///////////////////////////////////////
+FixtureBase::FixtureBase()
+{
+	SetReportVerbosity( trax::Verbosity::verbose );
+}
+
+FixtureBase::~FixtureBase()
+{
+	SetReportVerbosity( trax::Verbosity::normal );
+}
+
 std::filesystem::path FixtureBase::FixturePath()
 {
 	//std::filesystem::path fixturePath = std::filesystem::current_path();
@@ -99,7 +109,7 @@ SwichFixture::SwichFixture()
 	//	1		2
 	// ----- ------
 	//		\3
-	//		 \
+	//		 \.
 	//
 	m_pTrack1 = trax::TrackBuilder::Make();
  	std::shared_ptr<trax::LineP> pLine = trax::LineP::Make();

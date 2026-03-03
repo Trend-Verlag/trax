@@ -31,6 +31,7 @@
 
 namespace trax{
 
+	struct Fleet;
 	struct SimulatorTrain;
 
 

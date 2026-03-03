@@ -75,7 +75,6 @@ bool Module_Imp::IsValid() const noexcept
 	if( !m_pTrackSystem )
 	{
 		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no TrackSystem attached." << std::endl;
-		return false;
 	} 
 	else if( !m_pTrackSystem->IsValid() )
 	{
@@ -86,7 +85,6 @@ bool Module_Imp::IsValid() const noexcept
 	if( !m_pFleet )
 	{
 		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no Fleet attached." << std::endl;
-		return false;
 	}
 	else if( !m_pFleet->IsValid() )
 	{
@@ -97,7 +95,6 @@ bool Module_Imp::IsValid() const noexcept
 	if( !m_pSignalCollection )
 	{
 		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no SignalCollection attached." << std::endl;
-		return false;
 	}
 	else if( !m_pSignalCollection->IsValid() ){
 		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has invalid SignalCollection attached." << std::endl;
@@ -107,7 +104,6 @@ bool Module_Imp::IsValid() const noexcept
 	if( !m_pIndicatorCollection )
 	{
 		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no IndicatorCollection attached." << std::endl;
-		return false;
 	}
 	else if( !m_pIndicatorCollection->IsValid() )
 	{
@@ -118,7 +114,6 @@ bool Module_Imp::IsValid() const noexcept
 	if( !m_pCargoCollection )
 	{
 		std::cout << Verbosity::detailed << "Module '" << Reference( "name" ) << " id:" << ID() << "' has no CargoCollection attached." << std::endl;
-		return false;
 	}
 	else if( !m_pCargoCollection->IsValid() )
 	{

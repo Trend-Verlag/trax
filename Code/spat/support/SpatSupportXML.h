@@ -49,37 +49,48 @@ namespace spat{
 	/// hidden by the namespace's own overloads.
 	namespace ptreesupport{
 
-		/// \name Property Tree Streaming Support for spat classes
+		/// \name Property Tree Write Streaming Support for spat classes
 		/// \brief The operators will write the objects with their XML names and syntax.
 		///@{
 		template<typename Valtype>
 		boost::property_tree::ptree&	operator << ( boost::property_tree::ptree& opt, const Position<Valtype>& p );
 		template<typename Valtype>
-		boost::property_tree::ptree&	operator >> ( boost::property_tree::ptree& ipt, Position<Valtype>& p );
-		template<typename Valtype>
 		boost::property_tree::ptree&	operator << ( boost::property_tree::ptree& opt, const Position2D<Valtype>& p );
 		template<typename Valtype>
-		boost::property_tree::ptree&	operator >> ( boost::property_tree::ptree& ipt, Position2D<Valtype>& p );
-		template<typename Valtype>
 		boost::property_tree::ptree&	operator << ( boost::property_tree::ptree& opt, const Vector<Valtype>& v );
-		template<typename Valtype>
-		boost::property_tree::ptree&	operator >> ( boost::property_tree::ptree& ipt, Vector<Valtype>& v );
 		template<typename Valtype,typename ValtypeT>
 		boost::property_tree::ptree&	operator << ( boost::property_tree::ptree& opt, const VectorBundle<Valtype,ValtypeT>& vb );
 		template<typename Valtype,typename ValtypeT>
-		boost::property_tree::ptree&	operator >> ( boost::property_tree::ptree& ipt, VectorBundle<Valtype,ValtypeT>& vb );
-		template<typename Valtype,typename ValtypeT>
 		boost::property_tree::ptree&	operator << ( boost::property_tree::ptree& opt, const VectorBundle2<Valtype,ValtypeT>& vb2 );
+		template<typename Valtype,typename ValtypeT>
+		boost::property_tree::ptree&	operator << ( boost::property_tree::ptree& opt, const Frame<Valtype,ValtypeT>& f );
+		template<typename Valtype>
+		boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Box<Valtype>& box );
+		template<typename Valtype>
+		boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Rect<Valtype>& rect );
+		///@}
+
+
+		/// \name Property Tree Read Streaming Support for spat classes
+		/// \brief The operators will read the objects with their XML names and syntax.
+		/// 
+		/// For reading multiple tags with the same name this streaming has to consume the tags, so 
+		/// the property tree will be changed by these operators. If you want to read without changing 
+		/// the property tree, use the Read...() functions instead.
+		/// \returns A reference to the next tag.
+		///@{
+		template<typename Valtype>
+		boost::property_tree::ptree&	operator >> ( boost::property_tree::ptree& ipt, Position<Valtype>& p );
+		template<typename Valtype>
+		boost::property_tree::ptree&	operator >> ( boost::property_tree::ptree& ipt, Position2D<Valtype>& p );
+		template<typename Valtype>
+		boost::property_tree::ptree&	operator >> ( boost::property_tree::ptree& ipt, Vector<Valtype>& v );
+		template<typename Valtype,typename ValtypeT>
+		boost::property_tree::ptree&	operator >> ( boost::property_tree::ptree& ipt, VectorBundle<Valtype,ValtypeT>& vb );
 		template<typename Valtype,typename ValtypeT>
 		boost::property_tree::ptree&	operator >> ( boost::property_tree::ptree& ipt, VectorBundle2<Valtype,ValtypeT>& vb2 );
 		template<typename Valtype,typename ValtypeT>
-		boost::property_tree::ptree&	operator << ( boost::property_tree::ptree& opt, const Frame<Valtype,ValtypeT>& f );
-		template<typename Valtype,typename ValtypeT>
 		boost::property_tree::ptree&	operator >> ( boost::property_tree::ptree& ipt, Frame<Valtype,ValtypeT>& f );
-		template<typename Valtype>
-		boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Box<Valtype>& section );
-		template<typename Valtype>
-		boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Rect<Valtype>& rect );
 		///@}
 
 
