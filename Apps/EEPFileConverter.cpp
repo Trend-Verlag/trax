@@ -82,7 +82,7 @@ Allowed options");
 		std::cout << trax::Verbosity::normal << "Input: " << vm["input"].as<std::filesystem::path>() << std::endl;
 		std::cout << trax::Verbosity::normal << "Output: " << vm["output"].as<std::filesystem::path>() << std::endl;
 
-		if( std::unique_ptr<trax::ModuleCollection> pModuleCollection = trax::AnlReader{}.ReadModuleCollection( vm["input"].as<std::filesystem::path>() ); 
+		if( std::unique_ptr<trax::ModuleCollection> pModuleCollection = trax::AnlReaderBase{}.ReadModuleCollection( vm["input"].as<std::filesystem::path>() ); 
 			pModuleCollection )
 		{
 			if( auto pModule = pModuleCollection->GetFirst() )

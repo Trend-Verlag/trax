@@ -28,9 +28,40 @@
 #endif
 
 namespace trax{
+///////////////////////////////////////
+AnlReaderBase::AnlReaderBase( const char* pLocale )
+{
+}
 
+AnlReaderBase::AnlReaderBase( SocketRegistry& socketRegistry, const char* pLocale )
+{
+}
+
+std::unique_ptr<ModuleCollection> AnlReaderBase::ReadModuleCollection( const std::filesystem::path& path ) const
+{
+	boost::property_tree::ptree ptr;
+
+	read_xml( path.string(), ptr );
+
+	for( const auto& pair : ptr )
+	{
+		if( pair.first == "traxML" ){
+			//TODO: scene free reading ...
+		}
+		else if( pair.first == "sutrackp" ){
+			ptreesupport::Anl3ModuleReader reader;
+			RegisterAllCurveReaders( reader );
+			RegisterAllTwistReaders( reader );
+			return reader.ReadModuleCollection( pair.second );
+		}
+	}
+
+	return nullptr;
+}
+///////////////////////////////////////
 AnlReader::AnlReader( Scene& scene, const char* pLocale )
-	: m_pSocketRegistry	{ SocketRegistry::Make() }
+	: AnlReaderBase		{ pLocale }
+	, m_pSocketRegistry	{ SocketRegistry::Make() }
 	, m_pLocale			{ pLocale }
 	, m_SocketRegistry	{ *m_pSocketRegistry }
 	, m_Scene			{ scene }
@@ -38,7 +69,8 @@ AnlReader::AnlReader( Scene& scene, const char* pLocale )
 }
 
 AnlReader::AnlReader( Scene& scene, SocketRegistry& socketRegistry, const char* pLocale )
-	: m_pLocale			{ pLocale }
+	: AnlReaderBase		{ socketRegistry, pLocale }
+	, m_pLocale			{ pLocale }
 	, m_SocketRegistry	{ socketRegistry }
 	, m_Scene			{ scene }
 {
@@ -169,5 +201,5 @@ std::shared_ptr<TrackSystem> AnlReader::ReadTrackSystem( const unsigned char* bu
 
 	return trax::ReadTrackSystem( ptr, atIdx );
 }
-
+///////////////////////////////////////
 } // namespace trax

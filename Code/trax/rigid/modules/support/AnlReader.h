@@ -24,13 +24,23 @@ namespace trax{
 	struct TrackSystem;
 	struct Scene;
 
-	class AnlReader{
+	class AnlReaderBase{
+	public:
+		dclspc AnlReaderBase( const char* pLocale = nullptr );
+		dclspc AnlReaderBase( SocketRegistry& socketRegistry, const char* pLocale = nullptr );
+
+		virtual std::unique_ptr<ModuleCollection> dclspc ReadModuleCollection( const std::filesystem::path& path ) const;
+
+	};
+
+
+	class AnlReader : AnlReaderBase{
 	public:
 		dclspc AnlReader( Scene& scene, const char* pLocale = nullptr );
 		dclspc AnlReader( Scene& scene, SocketRegistry& socketRegistry, const char* pLocale = nullptr );
 
 
-		std::unique_ptr<ModuleCollection> dclspc ReadModuleCollection( const std::filesystem::path& path ) const;
+		std::unique_ptr<ModuleCollection> dclspc ReadModuleCollection( const std::filesystem::path& path ) const override;
 				
 		std::unique_ptr<ModuleCollection> dclspc ReadModuleCollection( const unsigned char* bufferStart, const unsigned char* bufferEnd ) const;
 
