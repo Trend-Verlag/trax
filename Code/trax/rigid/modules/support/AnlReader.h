@@ -28,6 +28,7 @@ namespace trax{
 	public:
 		dclspc AnlReaderBase( const char* pLocale = nullptr );
 		dclspc AnlReaderBase( SocketRegistry& socketRegistry, const char* pLocale = nullptr );
+		virtual ~AnlReaderBase() = default;
 
 		virtual std::unique_ptr<ModuleCollection> dclspc ReadModuleCollection( const std::filesystem::path& path ) const;
 

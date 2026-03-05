@@ -47,7 +47,7 @@ static void WriteRollingStockContent( boost::property_tree::ptree& ptRollingStoc
 }
 
 static void WriteBogieContent( boost::property_tree::ptree& ptBogie, const Bogie& bogie )
-{		
+{
 	ptBogie.add( "<xmlattr>.couplingNorthActivated", bogie.IsActivated( EndType::north ) );
 	ptBogie.add( "<xmlattr>.couplingSouthActivated", bogie.IsActivated( EndType::south ) );
 	ptBogie.add( "<xmlattr>.target_velocity", bogie.TargetVelocity() );
