@@ -603,6 +603,26 @@ bool Bogie_Imp::IsActivated( EndType end ) const noexcept
 	return false;
 }
 
+int Bogie_Imp::GetCouplingTypeIndex( EndType end ) const noexcept
+{
+	switch( end )
+	{
+		case EndType::none:
+			break;
+		case EndType::north:
+			return m_CouplingNorth.CouplingTypeIdx;
+		case EndType::south:
+			return m_CouplingSouth.CouplingTypeIdx;
+		case EndType::any:
+			return GetCouplingTypeIndex( EndType::north );
+		case EndType::both:
+			if( GetCouplingTypeIndex( EndType::north ) == GetCouplingTypeIndex( EndType::south ) )
+				return GetCouplingTypeIndex( EndType::north );
+	}
+
+	return -1;
+}
+
 bool Bogie_Imp::Uncouple( EndType end, bool btriggerPulses ) noexcept
 {
 	switch( end )

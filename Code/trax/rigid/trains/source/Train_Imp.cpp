@@ -677,8 +677,7 @@ void Train_Imp::Take(
 	from_imp.m_Train.clear();
 }
 
-std::pair<std::shared_ptr<struct Train>,std::shared_ptr<struct Train>> 
-Train_Imp::SplitAfter( int at )
+std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> Train_Imp::SplitAfter( int at )
 {
 	std::size_t _at = static_cast<std::size_t>(at);
 	if( _at >= 0 && 
@@ -802,6 +801,47 @@ void Train_Imp::Reduce( bool bRecursive )
 	}
 }
 
+bool Train_Imp::Replace( int atIdx, TrainComponent& withComponent )
+{
+	if( atIdx < 0 || static_cast<std::size_t>(atIdx) >= m_Train.size() )
+		throw std::out_of_range( "Train_Imp::Replace: index out of range" );
+	if( !withComponent.IsValid() )
+		throw std::invalid_argument( "Train_Imp::Replace: component invalid" );
+	if( withComponent.GetTrain() )
+		throw std::invalid_argument( "Train_Imp::Replace: component already in train" );
+
+	std::shared_ptr<TrainComponent> pOldComponent = m_Train.at( static_cast<std::size_t>( atIdx ) );
+	const TrainComponent::Coupling newCouplingNorth{
+		pOldComponent->GetCoupledTrainComponent( pOldComponent->GetOrientation() ? EndType::north : EndType::south ),
+		std::make_pair( withComponent.ThisTrainComponent(), withComponent.GetOrientation() ? EndType::north : EndType::south )
+	};
+	if( !CanReCouple(newCouplingNorth) )
+	{
+		std::cout << Verbosity::detailed << "Train::Replace: cannot replace component because of north coupling." << std::endl;
+		return false;
+	}
+
+	const TrainComponent::Coupling newCouplingSouth{
+		pOldComponent->GetCoupledTrainComponent( pOldComponent->GetOrientation() ? EndType::south : EndType::north ),
+		std::make_pair( withComponent.ThisTrainComponent(), withComponent.GetOrientation() ? EndType::south : EndType::north )
+	};
+	if( !CanReCouple(newCouplingSouth) )
+	{
+		std::cout << Verbosity::detailed << "Train::Replace: cannot replace component because of south coupling." << std::endl;
+		return false;
+	}
+
+	m_Train.at( static_cast<std::size_t>( atIdx ) ) = withComponent.ThisTrainComponent();
+	
+	pOldComponent->SetTrain( nullptr );
+	withComponent.SetTrain( this );
+
+	ReCouple( newCouplingNorth );
+	ReCouple( newCouplingSouth );
+
+	return true;
+}
+
 void Train_Imp::Clear() noexcept
 {
 	Train_Base::Clear();
@@ -915,13 +955,11 @@ void Train_Imp::Recouple() noexcept
 	for( std::size_t index = 1; index < m_Train.size(); ++index )
 	{
 		TrainComponent::Coupling coupling{
-			m_Train[index-1],
-			m_Train[index-1]->GetOrientation() ? EndType::south : EndType::north,
-			m_Train[index],
-			m_Train[index]->GetOrientation() ? EndType::north : EndType::south
+			std::make_pair( m_Train[index-1], m_Train[index-1]->GetOrientation() ? EndType::south : EndType::north ),
+			std::make_pair( m_Train[index], m_Train[index]->GetOrientation() ? EndType::north : EndType::south )
 		};
 
-		coupling.pTrainComponentA->Uncouple( coupling.endA );
+		coupling.coupledA.first->Uncouple( coupling.coupledA.second );
 		trax::Couple( coupling );
 	}
 }

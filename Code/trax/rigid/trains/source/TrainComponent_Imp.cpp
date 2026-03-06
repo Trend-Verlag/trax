@@ -30,11 +30,97 @@
 
 namespace trax{
 
+bool CanCouple( const TrainComponent::Coupling& coupling ) noexcept
+{
+	if( coupling.coupledA.first && coupling.coupledB.first )
+	{
+		if( coupling.coupledA.first->IsCoupled( coupling.coupledA.second ) )
+		{
+			std::cout << Verbosity::detailed << "TrainComponent::CanCouple: cannot couple component A because the end is coupled." << std::endl;
+			return false;
+		}
+
+		if( !coupling.coupledA.first->IsActivated( coupling.coupledA.second ) )
+		{
+			std::cout << Verbosity::detailed << "TrainComponent::CanCouple: cannot couple component A because the end is not activated." << std::endl;
+			return false;
+		}
+
+		if( coupling.coupledB.first->IsCoupled( coupling.coupledB.second ) )
+		{
+			std::cout << Verbosity::detailed << "TrainComponent::CanCouple: cannot couple component B because the end is coupled." << std::endl;
+			return false;
+		}
+
+		if( !coupling.coupledB.first->IsActivated( coupling.coupledB.second ) )
+		{
+			std::cout << Verbosity::detailed << "TrainComponent::CanCouple: cannot couple component B because the end is not activated." << std::endl;
+			return false;
+		}
+
+		if( coupling.coupledA.first->GetCouplingTypeIndex( coupling.coupledA.second ) != coupling.coupledB.first->GetCouplingTypeIndex( coupling.coupledB.second ) )
+		{
+			std::cout << Verbosity::detailed << "TrainComponent::CanCouple: cannot couple component because the coupling types do not match." << std::endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
 bool Couple( const TrainComponent::Coupling& coupling ) noexcept
 {
-	if( coupling.pTrainComponentA && coupling.pTrainComponentB )
+	if( coupling.coupledA.first && coupling.coupledB.first )
 	{
-		return coupling.pTrainComponentA->Couple( coupling.endA, *coupling.pTrainComponentB, coupling.endB );
+		return coupling.coupledA.first->Couple( coupling.coupledA.second, *coupling.coupledB.first, coupling.coupledB.second );
+	}
+
+	return false;
+}
+
+bool CanReCouple( const TrainComponent::Coupling& coupling ) noexcept
+{
+	if( coupling.coupledA.first && coupling.coupledB.first )
+	{
+		if( !coupling.coupledA.first->IsCoupled( coupling.coupledA.second ) && !coupling.coupledA.first->IsActivated( coupling.coupledA.second ) )
+		{
+			std::cout << Verbosity::detailed << "TrainComponent::CanReCouple: cannot couple component A because the end is neither coupled nor active." << std::endl;
+			return false;
+		}
+
+		if( !coupling.coupledB.first->IsCoupled( coupling.coupledB.second ) && !coupling.coupledB.first->IsActivated( coupling.coupledB.second ) )
+		{
+			std::cout << Verbosity::detailed << "TrainComponent::CanReCouple: cannot couple component B because the end is neither coupled nor active." << std::endl;
+			return false;
+		}
+
+		if( coupling.coupledA.first->GetCouplingTypeIndex( coupling.coupledA.second ) != coupling.coupledB.first->GetCouplingTypeIndex( coupling.coupledB.second ) )
+		{
+			std::cout << Verbosity::detailed << "TrainComponent::CanReCouple: cannot couple component because the coupling types do not match." << std::endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool ReCouple( const TrainComponent::Coupling& coupling ) noexcept
+{
+	if( coupling.coupledA.first && coupling.coupledB.first )
+	{
+		if( coupling.coupledA.first->IsCoupled( coupling.coupledA.second ) )
+		{
+			coupling.coupledA.first->Uncouple( coupling.coupledA.second );
+			coupling.coupledA.first->ActivateCoupling( coupling.coupledA.second );
+		}
+
+		if( coupling.coupledB.first->IsCoupled( coupling.coupledB.second ) )
+		{
+			coupling.coupledB.first->Uncouple( coupling.coupledB.second );
+			coupling.coupledB.first->ActivateCoupling( coupling.coupledB.second );
+		}
+
+		return coupling.coupledA.first->Couple( coupling.coupledA.second, *coupling.coupledB.first, coupling.coupledB.second );
 	}
 
 	return false;

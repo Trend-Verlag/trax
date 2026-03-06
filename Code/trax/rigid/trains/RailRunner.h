@@ -595,8 +595,14 @@ namespace trax{
 		virtual bool IsActivated( EndType end = EndType::any ) const noexcept = 0;
 
 
+		/// \returns the type of the coupling at the respective and. Couplings with 
+		/// the same type index can couple to each other, if they are active.
+		virtual int GetCouplingTypeIndex( EndType end ) const noexcept = 0;
+
+
 		/// \brief Uncouples the RailRunner at the specified end.
 		///
+		/// If the coupling was actually uncoupled, it will be left in an deactivated state.
 		/// \param end End of this RailRunner.
 		/// \param btriggerPulses If true the respective JackOnUnCouple jacks are pulsing.
 		/// \returns True if actually some uncoupling happened.

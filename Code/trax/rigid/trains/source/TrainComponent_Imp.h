@@ -63,6 +63,8 @@ namespace trax{
 
 		bool IsActivated( EndType end ) const noexcept override;
 
+		int GetCouplingTypeIndex( EndType end ) const noexcept override;
+
 		bool Uncouple( EndType end, bool btriggerPulses = true ) noexcept override;
 
 		bool IsCoupled( EndType end = EndType::any ) const noexcept override;
@@ -274,6 +276,35 @@ bool TrainComponent_Imp<Base>::IsActivated( EndType end ) const noexcept
 		std::cerr << "TrainComponent_Imp::IsActivated: unknown exception." << std::endl;
 		return false;
 	}
+}
+
+template<class Base>
+int TrainComponent_Imp<Base>::GetCouplingTypeIndex( EndType end ) const noexcept
+{
+	switch( end )
+	{
+		case EndType::any:
+			return GetCouplingTypeIndex( EndType::north );
+		case EndType::both:
+			if( GetCouplingTypeIndex( EndType::north ) == GetCouplingTypeIndex( EndType::south ) )
+				return GetCouplingTypeIndex( EndType::north );
+		default:
+			return -1;
+	}	
+
+	try{
+		std::pair<const Bogie&, EndType> coupling = this->GetTipAt( end );
+		return coupling.first.GetCouplingTypeIndex( coupling.second );
+	}
+	catch( const std::exception& e ){
+		std::cerr << "TrainComponent_Imp::GetCouplingTypeIndex: " << e.what() << std::endl;
+		return false;
+	}
+	catch( ... ){
+		std::cerr << "TrainComponent_Imp::GetCouplingTypeIndex: unknown exception." << std::endl;
+		return false;
+	}
+	return 0;
 }
 
 template<class Base>

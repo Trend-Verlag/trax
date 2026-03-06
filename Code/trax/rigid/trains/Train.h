@@ -31,10 +31,6 @@
 
 namespace trax{
 
-	struct Fleet;
-	struct SimulatorTrain;
-
-
 	/// \brief A Train is a collection of TrainComponents that are coupled in a row.
 	///
 	/// A Train can be railed and moved on a track. It can be coupled with other
@@ -172,11 +168,11 @@ namespace trax{
 		/// Note that the TrainComponents idxAt and idxAt+1 do not get
 		/// uncoupled from each other; use Clear() to remove all components 
 		/// from this train and decouple them.
-		/// \param idxAt The zero based index to split at. 0 is the first 
+		/// \param atIdx The zero based index to split at. 0 is the first 
 		/// component.
 		/// \returns A pair of shared pointers to the two new trains. Will 
-		/// be nullptrs if idxAt is out of range.
-		virtual std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> SplitAfter( int idxAt ) = 0;
+		/// be nullptrs if atIdx is out of range.
+		virtual std::pair<std::shared_ptr<Train>,std::shared_ptr<Train>> SplitAfter( int atIdx ) = 0;
 
 
 		//Removing:
@@ -203,6 +199,22 @@ namespace trax{
 		/// sub-components, leaving the Train reduced to its RollingStock components 
 		/// only.
 		virtual void Reduce( bool bRecursive = true ) = 0;
+
+
+		/// \brief Replaces the TrainComponent at the given index with another one.
+		///
+		/// The new component will be coupled and become part of this Train, but it 
+		/// will not get moved or railed. Use Align() to position or rail it properly 
+		/// first. 
+		/// \param atIdx The zero based index of the component to replace.
+		/// \param pWithComponent The component to replace with. 
+		/// \returns true if the replacement was successful, false if either a coupling
+		/// of withComponent was inactive or a coupling type missmatch.
+		/// \throws std::invalid_argument if the TrainComponent not IsValid().
+		/// \throws std::invalid_argument if the TrainComponent to replace with is already
+		/// this or another train.
+		/// 
+		virtual bool Replace( int atIdx, TrainComponent& withComponent ) = 0;
 
 
 		/// \brief Removes all components from this train.

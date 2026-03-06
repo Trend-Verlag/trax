@@ -103,10 +103,8 @@ namespace trax{
 
 		/// \brief Structure describing a coupling between two TrainComponents.
 		struct Coupling{
-			std::shared_ptr<TrainComponent> pTrainComponentA;	///< The TrainComponent A.
-			EndType endA;										///< The end of A.
-			std::shared_ptr<TrainComponent> pTrainComponentB;	///< The TrainComponent B.
-			EndType endB;										///< The end of B.
+			std::pair<std::shared_ptr<TrainComponent>,EndType> coupledA;	///< The coupled TrainComponent and end of A.
+			std::pair<std::shared_ptr<TrainComponent>,EndType> coupledB;	///< The coupled TrainComponent and end of B.
 		};
 
 
@@ -250,9 +248,31 @@ namespace trax{
 	EndType South( const TrainComponent& trainComponent ) noexcept;
 
 
+	/// \returns true if the two TrainComponents can be Couple()'ed.
+	dclspc bool CanCouple( const TrainComponent::Coupling& coupling ) noexcept;
+
 
 	/// \brief Couples two TrainComponents.
+	///
+	/// \returns true if the coupling was successful or the two TrainComponent were 
+	/// already properly coupled. The coupling attempt will fail if the two TrainComponent 
+	/// are already coupled (with different partners or the same parters at different ends) 
+	/// or if one of the couplings is deactivated. An coupling attempt will also fail, when 
+	/// two couplings wear different coupling type indices.
 	dclspc bool Couple( const TrainComponent::Coupling& coupling ) noexcept;
+
+
+	/// \returns true if the two TrainComponents can be ReCouple()'ed.
+	dclspc bool CanReCouple( const TrainComponent::Coupling& coupling ) noexcept;
+
+
+	/// \brief Couples two TrainComponents, even if they are already coupled, but with different 
+	/// partners or the same parters at different ends.
+	/// 
+	/// \returns true if the coupling was successful or the two TrainComponent were already 
+	/// properly coupled. The coupling attempt will fail if one of the couplings is deactivated 
+	/// or when two couplings wear different coupling type indices.
+	dclspc bool ReCouple( const TrainComponent::Coupling& coupling ) noexcept;
 
 
 	/// \returns the first common Train parent if the two TrainComponents have one.
@@ -267,4 +287,5 @@ namespace trax{
 	inline EndType South( const TrainComponent& trainComponent ) noexcept{
 		return South( trainComponent.GetOrientation() );
 	}
-}
+
+	}

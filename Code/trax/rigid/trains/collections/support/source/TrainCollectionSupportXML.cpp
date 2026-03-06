@@ -34,6 +34,26 @@ namespace trax{
 
 namespace ptreesupport{
 
+static void EmplaceSubTrains( Train& train, Fleet& fromFleet )
+{
+	for( int index = 0; index < train.GetNumberOfComponents(); ++index )
+	{
+		if( std::shared_ptr<TrainComponent> pComponent = train.GetComponent( index ) )
+		{
+			if( std::shared_ptr<Train> pSubTrain = std::dynamic_pointer_cast<Train>( pComponent ) )
+			{
+				if( pSubTrain->GetNumberOfComponents() == 0 )
+				{
+					if( std::shared_ptr<Train> pFleetTrain = fromFleet.Get( pSubTrain->ID() ) )
+					{
+						train.Replace( index, *pFleetTrain );
+					}
+				}
+			}
+		}
+	}
+}
+
 void Read( const boost::property_tree::ptree& pt, Scene& scene, Fleet& fleet )
 {
 	for( const auto& pair : pt )
@@ -46,6 +66,13 @@ void Read( const boost::property_tree::ptree& pt, Scene& scene, Fleet& fleet )
 				fleet.Add( pTrain );
 			}
 		}
+	}
+
+	// Empty sub-trains with ids mean to be references to other trains 
+	// in the fleet, so we need to replace them with the actual trains.
+	for( Train& train : fleet )
+	{
+		EmplaceSubTrains( train, fleet );
 	}
 }
 

@@ -145,6 +145,8 @@ namespace trax{
 	
 		void Reduce( bool bRecursive = true ) override;
 
+		bool Replace( int atIdx, TrainComponent& withComponent ) override;
+
 		void Clear() noexcept override;
 
 		bool Couple( EndType end, Train& with, EndType withEnd ) override;

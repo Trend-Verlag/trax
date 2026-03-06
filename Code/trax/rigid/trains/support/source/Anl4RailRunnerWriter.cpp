@@ -28,7 +28,8 @@ namespace ptreesupport{
 
 static void WriteTrainContent( boost::property_tree::ptree& ptTrain, const Train& train )
 {
-	ptTrain.add( "<xmlattr>.orientation", ToString( train.GetOrientation() ) );
+	ptTrain.put( "<xmlattr>.id", train.ID() );
+	ptTrain.put( "<xmlattr>.orientation", ToString( train.GetOrientation() ) );
 	
 	for( int index = 0; index < train.GetNumberOfComponents(); ++index )
 	{
@@ -38,7 +39,7 @@ static void WriteTrainContent( boost::property_tree::ptree& ptTrain, const Train
 
 static void WriteRollingStockContent( boost::property_tree::ptree& ptRollingStock, const RollingStock& rollingStock )
 {
-	ptRollingStock.add( "<xmlattr>.orientation", ToString( rollingStock.GetOrientation() ) );
+	ptRollingStock.put( "<xmlattr>.orientation", ToString( rollingStock.GetOrientation() ) );
 
 	for( int index = 0; index < rollingStock.GetNumberOfTopmostParents(); ++index )
 	{

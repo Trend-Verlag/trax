@@ -139,6 +139,8 @@ namespace trax{
 
 		bool IsActivated( EndType end ) const noexcept override;
 
+		int GetCouplingTypeIndex( EndType end ) const noexcept override;
+
 		bool Uncouple( EndType end, bool btriggerPulses = true ) noexcept override;
 
 		bool IsCoupled( EndType end = EndType::any ) const noexcept override;
