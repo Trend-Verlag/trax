@@ -119,6 +119,7 @@ namespace trax{
 
 		spat::Frame<Length,One> UnflippedAnchor() const noexcept override;
 
+		using Bogie_Imp::Attach;
 
 		int Attach( const Wheelset& ws ) override;
 

@@ -112,9 +112,9 @@ namespace trax{
 
 		std::unique_ptr<Curve> Clone() const override;
 
-		bool Equals( const Curve& toCurve, Length epsilon_length = epsilon__length, Angle epsilon_angle = epsilon__angle ) const noexcept;
+		using Line_Base::Equals;
 
-	//	using Line_Base::Equals;
+		bool Equals( const Curve& toCurve, Length epsilon_length = epsilon__length, Angle epsilon_angle = epsilon__angle ) const noexcept;
 
 		AnglePerLength Curvature( Length ) const noexcept override{
 			return f.Curvature();

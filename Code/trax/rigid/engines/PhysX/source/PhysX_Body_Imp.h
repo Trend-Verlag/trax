@@ -32,7 +32,7 @@
 
 namespace trax
 {
-	class PhysX_Body_ImpBase : public Body_Imp{
+	class PhysX_Body_ImpBase : public virtual Body_Imp{
 	public:
 		PhysX_Body_ImpBase( physx::PxRigidDynamic& actor, Real engine_meters_per_unit, Real engine_kilograms_per_unit ) noexcept;
 		~PhysX_Body_ImpBase() noexcept;

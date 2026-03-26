@@ -10,8 +10,6 @@
 //
 //								Peter Gabriel
 
-#pragma once
-
 #include "trax/rigid/trains/support/Anl4RailRunnerWriter.h"
 
 #include "trax/rigid/Gestalt.h"

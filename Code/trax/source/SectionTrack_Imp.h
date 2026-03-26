@@ -41,6 +41,7 @@ namespace trax{
 
 		bool Diagnose( std::ostream& os ) const noexcept override;
 
+		using TrackBuilder::Attach;
 
 		// SectionTrack:
 		int Attach( std::shared_ptr<const Section> pSection ) override;

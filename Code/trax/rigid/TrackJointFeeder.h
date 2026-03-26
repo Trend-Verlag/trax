@@ -43,6 +43,7 @@ namespace trax{
 	class TrackJointFeeder{
 	public:
 		dclspc TrackJointFeeder( Real engine_meters_per_unit, Real engine_kilograms_per_unit ) noexcept;
+		virtual ~TrackJointFeeder() = default;
 
 		/// \brief Simulation update method, to be called,
 		/// after a simulation step is finished.

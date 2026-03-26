@@ -365,26 +365,68 @@ namespace common{
 	}
 
 	/// \brief convert multibyte character string (UTF-8) to ANSI string.
-	inline std::string utf8_to_string( const std::string& utf8str, const std::locale& loc = std::locale("") )
-	// @implementation: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0618r0.html
-	// it say's "this library component should be retired to Annex D, along side , until a suitable replacement is standardized"
-	// i.e. D.18.1. TODO: substitute implementation with the replacement when available. Until then, use deprecated feature.
-	{
-		// UTF-8 to wstring
-#if defined(_MSC_VER)
-#	pragma warning(push)
-#	pragma warning(disable: 4996) // deprecated stl feature
-#endif
-		std::wstring_convert<std::codecvt_utf8<wchar_t>> wconv;
-		std::wstring wstr = wconv.from_bytes(utf8str.c_str());
-#if defined(_MSC_VER)
-#	pragma warning(pop)
-#endif
-		// wstring to string
-		std::vector<char> buf(wstr.size());
-		std::use_facet<std::ctype<wchar_t>>(loc).narrow(wstr.data(), wstr.data() + wstr.size(), '?', buf.data());
-		return std::string(buf.data(), buf.size());
-	}
+//	inline std::string utf8_to_string( const std::string& utf8str, const std::locale& loc = std::locale("") )
+//	{
+//#if defined(_MSC_VER)
+//		// Windows: use Win32 API to avoid deprecated std::codecvt_utf8
+//		// Step 1: UTF-8 -> wide string
+//		if( utf8str.empty() )
+//			return std::string();
+//
+//		int wlen = ::MultiByteToWideChar( CP_UTF8, 0,
+//			utf8str.data(), narrow_cast<int>(utf8str.size()),
+//			nullptr, 0 );
+//		if( wlen <= 0 )
+//			return std::string();
+//
+//		std::wstring wstr( static_cast<std::size_t>(wlen), L'\0' );
+//		::MultiByteToWideChar( CP_UTF8, 0,
+//			utf8str.data(), narrow_cast<int>(utf8str.size()),
+//			wstr.data(), wlen );
+//
+//		// Step 2: wide string -> ANSI (system default code page)
+//		int alen = ::WideCharToMultiByte( CP_ACP, 0,
+//			wstr.data(), narrow_cast<int>(wstr.size()),
+//			nullptr, 0, nullptr, nullptr );
+//		if( alen <= 0 )
+//			return std::string();
+//
+//		std::string result( static_cast<std::size_t>(alen), '\0' );
+//		::WideCharToMultiByte( CP_ACP, 0,
+//			wstr.data(), narrow_cast<int>(wstr.size()),
+//			result.data(), alen, nullptr, nullptr );
+//
+//		return result;
+//#else
+//		// POSIX: use locale-aware C functions
+//		// Step 1: UTF-8 -> wide string using mbsrtowcs with a UTF-8 locale
+//		std::locale prevLoc = std::locale::global( std::locale("en_US.UTF-8") );
+//
+//		std::mbstate_t state{};
+//		const char* src = utf8str.c_str();
+//		std::size_t wlen = std::mbsrtowcs( nullptr, &src, 0, &state );
+//		if( wlen == static_cast<std::size_t>(-1) ){
+//			std::locale::global( prevLoc );
+//			return std::string();
+//		}
+//
+//		std::wstring wstr( wlen, L'\0' );
+//		src = utf8str.c_str();
+//		state = std::mbstate_t{};
+//		std::mbsrtowcs( wstr.data(), &src, wstr.size() + 1, &state );
+//
+//		// Restore original locale
+//		std::locale::global( prevLoc );
+//
+//		// Step 2: wide string -> narrow string using the provided locale
+//		std::vector<char> buf( wstr.size() );
+//		std::use_facet<std::ctype<wchar_t>>( loc ).narrow(
+//			wstr.data(), wstr.data() + wstr.size(), '?', buf.data() );
+//
+//		return std::string( buf.data(), buf.size() );
+//#endif
+//	}
+
 
 	/// \brief Flips a flag for the lifetime of the class object.
 	class FlagBlocker{

@@ -87,6 +87,8 @@ namespace trax{
 
 		void Rail( const Location& location, bool bMoveTo, TrainComponent::DistanceType distance, bool bFailOnReservationConflicts = false ) override;
 
+		using RailRunner_Imp<Base>::Couple;
+
 		bool Couple( EndType end, TrainComponent& with, EndType withEnd, bool btriggerPulses = true ) override;
 
 		std::pair<std::shared_ptr<TrainComponent>,EndType> GetCoupledTrainComponent( EndType end ) const override;

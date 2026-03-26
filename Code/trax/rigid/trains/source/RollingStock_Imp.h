@@ -79,7 +79,11 @@ namespace trax{
 
 		Velocity MaximumVelocity() const noexcept override;
 
+		using RollingStock_Base::Thrust;
+
 		void Thrust( One byfactor ) override;
+
+		using RollingStock_Base::ThrustAbsolute;
 
 		Force ThrustAbsolute() const noexcept override;
 
@@ -87,7 +91,11 @@ namespace trax{
 
 		Force MaxThrust( Velocity velocity ) const noexcept override;
 
+		using RollingStock_Base::Brake;
+
 		void Brake( One byfactor ) override;
+
+		using RollingStock_Base::BrakeAbsolute;
 
 		Force BrakeAbsolute() const noexcept override;
 

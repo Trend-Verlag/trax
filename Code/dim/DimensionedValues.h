@@ -748,403 +748,403 @@ namespace dim{
 		///@{
 
 		/// \brief Dimensionated Values literal operator.
-		constexpr Value<Dimension<-1,0,0>> operator"" _1Ikm( const unsigned long long int value ){
+		constexpr Value<Dimension<-1,0,0>> operator""_1Ikm( const unsigned long long int value ){
 			return Value<Dimension<-1,0,0>>{ static_cast<Real>(value) * meters_per_unit / 1000 };
 		}
 
-		constexpr Value<Dimension<-1,0,0>> operator"" _1Ikm( const long double value ){
+		constexpr Value<Dimension<-1,0,0>> operator""_1Ikm( const long double value ){
 			return Value<Dimension<-1,0,0>>{ static_cast<Real>(value) * meters_per_unit / 1000 };
 		}
 
-		constexpr Value<Dimension<-1,0,0>> operator"" _1Im( const unsigned long long int value ){
+		constexpr Value<Dimension<-1,0,0>> operator""_1Im( const unsigned long long int value ){
 			return Value<Dimension<-1,0,0>>{ static_cast<Real>(value) * meters_per_unit };
 		}
 
-		constexpr Value<Dimension<-1,0,0>> operator"" _1Im( const long double value ){
+		constexpr Value<Dimension<-1,0,0>> operator""_1Im( const long double value ){
 			return Value<Dimension<-1,0,0>>{ static_cast<Real>(value) * meters_per_unit };
 		}
 
-		constexpr Value<Dimension<-1,0,0>> operator"" _1Icm( const unsigned long long int value ){
+		constexpr Value<Dimension<-1,0,0>> operator""_1Icm( const unsigned long long int value ){
 			return Value<Dimension<-1,0,0>>{ static_cast<Real>(value) * meters_per_unit * 100 };
 		}
 
-		constexpr Value<Dimension<-1,0,0>> operator"" _1Icm( const long double value ){
+		constexpr Value<Dimension<-1,0,0>> operator""_1Icm( const long double value ){
 			return Value<Dimension<-1,0,0>>{ static_cast<Real>(value) * meters_per_unit * 100 };
 		}
 
-		constexpr Value<Dimension<-2,0,0>> operator"" _1Im2( const unsigned long long int value ){
+		constexpr Value<Dimension<-2,0,0>> operator""_1Im2( const unsigned long long int value ){
 			return Value<Dimension<-2,0,0>>{ static_cast<Real>(value) * meters_per_unit * meters_per_unit };
 		}
 
-		constexpr Value<Dimension<-2,0,0>> operator"" _1Im2( const long double value ){
+		constexpr Value<Dimension<-2,0,0>> operator""_1Im2( const long double value ){
 			return Value<Dimension<-2,0,0>>{ static_cast<Real>(value) * meters_per_unit * meters_per_unit };
 		}
 
-		constexpr Value<Dimension<0,0,-1>> operator"" _1Is( const unsigned long long int value ){
+		constexpr Value<Dimension<0,0,-1>> operator""_1Is( const unsigned long long int value ){
 			return Value<Dimension<0,0,-1>>{ static_cast<Real>(value) / units_per_second };
 		}
 
-		constexpr Value<Dimension<0,0,-1>> operator"" _1Is( const long double value ){
+		constexpr Value<Dimension<0,0,-1>> operator""_1Is( const long double value ){
 			return Value<Dimension<0,0,-1>>{ static_cast<Real>(value) / units_per_second };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _mm( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,0>> operator""_mm( const unsigned long long int value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter / 1000 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _mm( const long double value ){
+		constexpr Value<Dimension<1,0,0>> operator""_mm( const long double value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter / 1000 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _cm( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,0>> operator""_cm( const unsigned long long int value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter / 100 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _cm( const long double value ){
+		constexpr Value<Dimension<1,0,0>> operator""_cm( const long double value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter / 100 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _dm( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,0>> operator""_dm( const unsigned long long int value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter / 10 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _dm( const long double value ){
+		constexpr Value<Dimension<1,0,0>> operator""_dm( const long double value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter / 10 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _m( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,0>> operator""_m( const unsigned long long int value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _m( const long double value ){
+		constexpr Value<Dimension<1,0,0>> operator""_m( const long double value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _km( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,0>> operator""_km( const unsigned long long int value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * 1000 * units_per_meter };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _km( const long double value ){
+		constexpr Value<Dimension<1,0,0>> operator""_km( const long double value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * 1000 * units_per_meter };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _mi( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,0>> operator""_mi( const unsigned long long int value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * 1000 * units_per_meter * 25146/15625 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _mi( const long double value ){
+		constexpr Value<Dimension<1,0,0>> operator""_mi( const long double value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * 1000 * units_per_meter * 25146/15625 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _nmi( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,0>> operator""_nmi( const unsigned long long int value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter * 1852 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _nmi( const long double value ){
+		constexpr Value<Dimension<1,0,0>> operator""_nmi( const long double value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter * 1852 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _yd( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,0>> operator""_yd( const unsigned long long int value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter * 0.3048f * 3 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _yd( const long double value ){
+		constexpr Value<Dimension<1,0,0>> operator""_yd( const long double value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter * 0.3048f * 3 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _ft( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,0>> operator""_ft( const unsigned long long int value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter * 0.3048f };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _ft( const long double value ){
+		constexpr Value<Dimension<1,0,0>> operator""_ft( const long double value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter * 0.3048f  };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _in( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,0>> operator""_in( const unsigned long long int value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter * 0.3048f/12 };
 		}
 
-		constexpr Value<Dimension<1,0,0>> operator"" _in( const long double value ){
+		constexpr Value<Dimension<1,0,0>> operator""_in( const long double value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter * 0.3048f/12  };
 		}
 
-		constexpr Value<Dimension<2,0,0>> operator"" _cm2( const unsigned long long int value ){
+		constexpr Value<Dimension<2,0,0>> operator""_cm2( const unsigned long long int value ){
 			return Value<Dimension<2,0,0>>{ static_cast<Real>(value) * units_per_meter / 100 * units_per_meter / 100 };
 		}
 
-		constexpr Value<Dimension<2,0,0>> operator"" _cm2( const long double value ){
+		constexpr Value<Dimension<2,0,0>> operator""_cm2( const long double value ){
 			return Value<Dimension<2,0,0>>{ static_cast<Real>(value) * units_per_meter / 100 * units_per_meter / 100 };
 		}
 
-		constexpr Value<Dimension<2,0,0>> operator"" _m2( const unsigned long long int value ){
+		constexpr Value<Dimension<2,0,0>> operator""_m2( const unsigned long long int value ){
 			return Value<Dimension<2,0,0>>{ static_cast<Real>(value) * units_per_meter * units_per_meter };
 		}
 
-		constexpr Value<Dimension<2,0,0>> operator"" _m2( const long double value ){
+		constexpr Value<Dimension<2,0,0>> operator""_m2( const long double value ){
 			return Value<Dimension<2,0,0>>{ static_cast<Real>(value) * units_per_meter * units_per_meter };
 		}
 
-		constexpr Value<Dimension<3,0,0>> operator"" _m3( const unsigned long long int value ){
+		constexpr Value<Dimension<3,0,0>> operator""_m3( const unsigned long long int value ){
 			return Value<Dimension<3,0,0>>{ static_cast<Real>(value) * units_per_meter * units_per_meter * units_per_meter };
 		}
 
-		constexpr Value<Dimension<3,0,0>> operator"" _m3( const long double value ){
+		constexpr Value<Dimension<3,0,0>> operator""_m3( const long double value ){
 			return Value<Dimension<3,0,0>>{ static_cast<Real>(value) * units_per_meter * units_per_meter * units_per_meter };
 		}
 
-		constexpr Value<Dimension<0,1,0>> operator"" _g( const unsigned long long int value ){
+		constexpr Value<Dimension<0,1,0>> operator""_g( const unsigned long long int value ){
 			return Value<Dimension<0,1,0>>{ static_cast<Real>(value) * units_per_kilogram / 1000 };
 		}
 
-		constexpr Value<Dimension<0,1,0>> operator"" _g( const long double value ){
+		constexpr Value<Dimension<0,1,0>> operator""_g( const long double value ){
 			return Value<Dimension<0,1,0>>{ static_cast<Real>(value) * units_per_kilogram / 1000 };
 		}
 
-		constexpr Value<Dimension<0,1,0>> operator"" _kg( const unsigned long long int value ){
+		constexpr Value<Dimension<0,1,0>> operator""_kg( const unsigned long long int value ){
 			return Value<Dimension<0,1,0>>{ static_cast<Real>(value) * units_per_kilogram };
 		}
 
-		constexpr Value<Dimension<0,1,0>> operator"" _kg( const long double value ){
+		constexpr Value<Dimension<0,1,0>> operator""_kg( const long double value ){
 			return Value<Dimension<0,1,0>>{ static_cast<Real>(value) * units_per_kilogram };
 		}
 
-		constexpr Value<Dimension<0,1,0>> operator"" _t( const unsigned long long int value ){
+		constexpr Value<Dimension<0,1,0>> operator""_t( const unsigned long long int value ){
 			return Value<Dimension<0,1,0>>{ static_cast<Real>(value) * 1000 * units_per_kilogram };
 		}
 
-		constexpr Value<Dimension<0,1,0>> operator"" _t( const long double value ){
+		constexpr Value<Dimension<0,1,0>> operator""_t( const long double value ){
 			return Value<Dimension<0,1,0>>{ static_cast<Real>(value) * 1000 * units_per_kilogram };
 		}
 
-		constexpr Value<Dimension<-3,1,0>> operator"" _gIcm3( const unsigned long long int value ){
+		constexpr Value<Dimension<-3,1,0>> operator""_gIcm3( const unsigned long long int value ){
 			return Value<Dimension<-3,1,0>>{ static_cast<Real>(value) * 1000 * units_per_kilogram / units_per_meter / units_per_meter / units_per_meter };
 		}
 
-		constexpr Value<Dimension<-3,1,0>> operator"" _gIcm3( const long double value ){
+		constexpr Value<Dimension<-3,1,0>> operator""_gIcm3( const long double value ){
 			return Value<Dimension<-3,1,0>>{ static_cast<Real>(value) * 1000 * units_per_kilogram / units_per_meter / units_per_meter / units_per_meter };
 		}
 
-		constexpr Value<Dimension<-3,1,0>> operator"" _kgIm3( const unsigned long long int value ){
+		constexpr Value<Dimension<-3,1,0>> operator""_kgIm3( const unsigned long long int value ){
 			return Value<Dimension<-3,1,0>>{ static_cast<Real>(value) * units_per_kilogram / units_per_meter / units_per_meter / units_per_meter };
 		}
 
-		constexpr Value<Dimension<-3,1,0>> operator"" _kgIm3( const long double value ){
+		constexpr Value<Dimension<-3,1,0>> operator""_kgIm3( const long double value ){
 			return Value<Dimension<-3,1,0>>{ static_cast<Real>(value) * units_per_kilogram / units_per_meter / units_per_meter / units_per_meter };
 		}
 
-		constexpr Value<Dimension<-3,1,0>> operator"" _tIm3( const unsigned long long int value ){
+		constexpr Value<Dimension<-3,1,0>> operator""_tIm3( const unsigned long long int value ){
 			return Value<Dimension<-3,1,0>>{ static_cast<Real>(value) * 1000 * units_per_kilogram / units_per_meter / units_per_meter / units_per_meter };
 		}
 
-		constexpr Value<Dimension<-3,1,0>> operator"" _tIm3( const long double value ){
+		constexpr Value<Dimension<-3,1,0>> operator""_tIm3( const long double value ){
 			return Value<Dimension<-3,1,0>>{ static_cast<Real>(value) * 1000 * units_per_kilogram / units_per_meter / units_per_meter / units_per_meter };
 		}
 
-		constexpr Value<Dimension<0,0,1>> operator"" _h( const unsigned long long int value ){
+		constexpr Value<Dimension<0,0,1>> operator""_h( const unsigned long long int value ){
 			return Value<Dimension<0,0,1>>{ static_cast<Real>(value) * 60 * 60 / seconds_per_unit };
 		}
 
-		constexpr Value<Dimension<0,0,1>> operator"" _h( const long double value ){
+		constexpr Value<Dimension<0,0,1>> operator""_h( const long double value ){
 			return Value<Dimension<0,0,1>>{ static_cast<Real>(value) * 60 * 60 / seconds_per_unit };
 		}
 
-		constexpr Value<Dimension<0,0,1>> operator"" _s( const unsigned long long int value ){
+		constexpr Value<Dimension<0,0,1>> operator""_s( const unsigned long long int value ){
 			return Value<Dimension<0,0,1>>{ static_cast<Real>(value) / seconds_per_unit };
 		}
 
-		constexpr Value<Dimension<0,0,1>> operator"" _s( const long double value ){
+		constexpr Value<Dimension<0,0,1>> operator""_s( const long double value ){
 			return Value<Dimension<0,0,1>>{ static_cast<Real>(value) / seconds_per_unit };
 		}
 
-		constexpr Value<Dimension<0,0,1>> operator"" _ms( const unsigned long long int value ){
+		constexpr Value<Dimension<0,0,1>> operator""_ms( const unsigned long long int value ){
 			return Value<Dimension<0,0,1>>{ static_cast<Real>(value) / seconds_per_unit / 1000 };
 		}
 
-		constexpr Value<Dimension<0,0,1>> operator"" _ms( const long double value ){
+		constexpr Value<Dimension<0,0,1>> operator""_ms( const long double value ){
 			return Value<Dimension<0,0,1>>{ static_cast<Real>(value) / seconds_per_unit / 1000 };
 		}
 
-		constexpr Value<Dimension<1,0,-1>> operator"" _cmIs( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,-1>> operator""_cmIs( const unsigned long long int value ){
 			return Value<Dimension<1,0,-1>>{ static_cast<Real>(value) / 100 * units_per_meter / units_per_second };
 		}
 
-		constexpr Value<Dimension<1,0,-1>> operator"" _cmIs( const long double value ){
+		constexpr Value<Dimension<1,0,-1>> operator""_cmIs( const long double value ){
 			return Value<Dimension<1,0,-1>>{ static_cast<Real>(value) / 100 * units_per_meter / units_per_second };
 		}
 
-		constexpr Value<Dimension<1,0,-1>> operator"" _mIs( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,-1>> operator""_mIs( const unsigned long long int value ){
 			return Value<Dimension<1,0,-1>>{ static_cast<Real>(value) * units_per_meter / units_per_second };
 		}
 
-		constexpr Value<Dimension<1,0,-1>> operator"" _mIs( const long double value ){
+		constexpr Value<Dimension<1,0,-1>> operator""_mIs( const long double value ){
 			return Value<Dimension<1,0,-1>>{ static_cast<Real>(value) * units_per_meter / units_per_second };
 		}
 
-		constexpr Value<Dimension<1,0,-1>> operator"" _kmIh( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,-1>> operator""_kmIh( const unsigned long long int value ){
 			return Value<Dimension<1,0,-1>>{ static_cast<Real>(value) / 3.6f * units_per_meter };
 		}
 
-		constexpr Value<Dimension<1,0,-1>> operator"" _kmIh( const long double value ){
+		constexpr Value<Dimension<1,0,-1>> operator""_kmIh( const long double value ){
 			return Value<Dimension<1,0,-1>>{ static_cast<Real>(value) / 3.6f * units_per_meter };
 		}
 
-		constexpr Value<Dimension<1,0,-1>> operator"" _miIh( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,-1>> operator""_miIh( const unsigned long long int value ){
 			return Value<Dimension<1,0,-1>>{ static_cast<Real>(value) * 0.44704 * units_per_meter / units_per_second };
 		}
 
-		constexpr Value<Dimension<1,0,-1>> operator"" _miIh( const long double value ){
+		constexpr Value<Dimension<1,0,-1>> operator""_miIh( const long double value ){
 			return Value<Dimension<1,0,-1>>{ static_cast<Real>(value) * 0.44704 * units_per_meter / units_per_second };
 		}
 
-		constexpr Value<Dimension<1,0,-1>> operator"" _mph( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,-1>> operator""_mph( const unsigned long long int value ){
 			return Value<Dimension<1,0,-1>>{ static_cast<Real>(value) * 0.44704 * units_per_meter / units_per_second };
 		}
 
-		constexpr Value<Dimension<1,0,-1>> operator"" _mph( const long double value ){
+		constexpr Value<Dimension<1,0,-1>> operator""_mph( const long double value ){
 			return Value<Dimension<1,0,-1>>{ static_cast<Real>(value) * 0.44704 * units_per_meter / units_per_second };
 		}
 
-		constexpr Value<Dimension<1,0,-2>> operator"" _mIs2( const unsigned long long int value ){
+		constexpr Value<Dimension<1,0,-2>> operator""_mIs2( const unsigned long long int value ){
 			return Value<Dimension<1,0,-2>>{ static_cast<Real>(value) * units_per_meter / units_per_second / units_per_second};
 		}
 
-		constexpr Value<Dimension<1,0,-2>> operator"" _mIs2( const long double value ){
+		constexpr Value<Dimension<1,0,-2>> operator""_mIs2( const long double value ){
 			return Value<Dimension<1,0,-2>>{ static_cast<Real>(value) * units_per_meter / units_per_second / units_per_second };
 		}
 
-		constexpr Value<Dimension<1,1,-2>> operator"" _N( const unsigned long long int value ){
+		constexpr Value<Dimension<1,1,-2>> operator""_N( const unsigned long long int value ){
 			return Value<Dimension<1,1,-2>>{ static_cast<Real>(value) * units_per_newton };
 		}
 
-		constexpr Value<Dimension<1,1,-2>> operator"" _N( const long double value ){
+		constexpr Value<Dimension<1,1,-2>> operator""_N( const long double value ){
 			return Value<Dimension<1,1,-2>>{ static_cast<Real>(value) * units_per_newton };
 		}
 
-		constexpr Value<Dimension<1,1,-2>> operator"" _kN( const unsigned long long int value ){
+		constexpr Value<Dimension<1,1,-2>> operator""_kN( const unsigned long long int value ){
 			return Value<Dimension<1,1,-2>>{ static_cast<Real>(value) * 1000 * units_per_newton };
 		}
 
-		constexpr Value<Dimension<1,1,-2>> operator"" _kN( const long double value ){
+		constexpr Value<Dimension<1,1,-2>> operator""_kN( const long double value ){
 			return Value<Dimension<1,1,-2>>{ static_cast<Real>(value) * 1000 * units_per_newton };
 		}
 
-		constexpr Value<Dimension<-1,1,-2>> operator"" _Pa( const unsigned long long int value ){
+		constexpr Value<Dimension<-1,1,-2>> operator""_Pa( const unsigned long long int value ){
 			return Value<Dimension<-1,1,-2>>{ static_cast<Real>(value) * units_per_pascal };
 		}
 
-		constexpr Value<Dimension<-1,1,-2>> operator"" _Pa( const long double value ){
+		constexpr Value<Dimension<-1,1,-2>> operator""_Pa( const long double value ){
 			return Value<Dimension<-1,1,-2>>{ static_cast<Real>(value) * units_per_pascal };
 		}
 
-		constexpr Value<Dimension<-1, 1, -2>> operator"" _kPa( const unsigned long long int value ){
+		constexpr Value<Dimension<-1, 1, -2>> operator""_kPa( const unsigned long long int value ){
 			return Value<Dimension<-1, 1, -2>>{ static_cast<Real>(value) * 1000 * units_per_pascal };
 		}
 
-		constexpr Value<Dimension<-1, 1, -2>> operator"" _kPa( const long double value ){
+		constexpr Value<Dimension<-1, 1, -2>> operator""_kPa( const long double value ){
 			return Value<Dimension<-1, 1, -2>>{ static_cast<Real>(value) * 1000 * units_per_pascal };
 		}
 
-		constexpr Value<Dimension<-1, 1, -2>> operator"" _bar( const unsigned long long int value ){
+		constexpr Value<Dimension<-1, 1, -2>> operator""_bar( const unsigned long long int value ){
 			return Value<Dimension<-1, 1, -2>>{ static_cast<Real>(value) * 100 * 1000 * units_per_pascal };
 		}
 
-		constexpr Value<Dimension<-1, 1, -2>> operator"" _bar( const long double value ){
+		constexpr Value<Dimension<-1, 1, -2>> operator""_bar( const long double value ){
 			return Value<Dimension<-1, 1, -2>>{ static_cast<Real>(value) * 100 * 1000 * units_per_pascal };
 		}
 
-		constexpr Value<Dimension<2,1,0>> operator"" _kgm2( const unsigned long long int value ){
+		constexpr Value<Dimension<2,1,0>> operator""_kgm2( const unsigned long long int value ){
 			return Value<Dimension<2,1,0>>{ static_cast<Real>(value) * units_per_kilogram * units_per_meter * units_per_meter };
 		}
 
-		constexpr Value<Dimension<2,1,0>> operator"" _kgm2( const long double value ){
+		constexpr Value<Dimension<2,1,0>> operator""_kgm2( const long double value ){
 			return Value<Dimension<2,1,0>>{ static_cast<Real>(value) * units_per_kilogram * units_per_meter * units_per_meter };
 		}
 
-		constexpr Value<Dimension<2,1,-2>> operator"" _Nm( const unsigned long long int value ){
+		constexpr Value<Dimension<2,1,-2>> operator""_Nm( const unsigned long long int value ){
 			return Value<Dimension<2,1,-2>>{ static_cast<Real>(value) * units_per_newton * units_per_meter };
 		}
 
-		constexpr Value<Dimension<2,1,-2>> operator"" _Nm( const long double value ){
+		constexpr Value<Dimension<2,1,-2>> operator""_Nm( const long double value ){
 			return Value<Dimension<2,1,-2>>{ static_cast<Real>(value) * units_per_newton * units_per_meter };
 		}
 
-		constexpr Value<Dimension<2,1,-2>> operator"" _kNm( const unsigned long long int value ){
+		constexpr Value<Dimension<2,1,-2>> operator""_kNm( const unsigned long long int value ){
 			return Value<Dimension<2,1,-2>>{ static_cast<Real>(value) * 1000 * units_per_newton * units_per_meter };
 		}
 
-		constexpr Value<Dimension<2,1,-2>> operator"" _kNm( const long double value ){
+		constexpr Value<Dimension<2,1,-2>> operator""_kNm( const long double value ){
 			return Value<Dimension<2,1,-2>>{ static_cast<Real>(value) * 1000 * units_per_newton * units_per_meter };
 		}
 
-		constexpr Value<Dimension<1,1,-1>> operator"" _Ns( const unsigned long long int value ){
+		constexpr Value<Dimension<1,1,-1>> operator""_Ns( const unsigned long long int value ){
 			return Value<Dimension<1,1,-1>>{ static_cast<Real>(value) * units_per_newton * units_per_second };
 		}
 
-		constexpr Value<Dimension<1,1,-1>> operator"" _Ns( const long double value ){
+		constexpr Value<Dimension<1,1,-1>> operator""_Ns( const long double value ){
 			return Value<Dimension<1,1,-1>>{ static_cast<Real>(value) * units_per_newton * units_per_second };
 		}
 
-		constexpr Value<Dimension<2,1,-1>> operator"" _Nms( const unsigned long long int value ){
+		constexpr Value<Dimension<2,1,-1>> operator""_Nms( const unsigned long long int value ){
 			return Value<Dimension<2,1,-1>>{ static_cast<Real>(value) * units_per_newton * units_per_meter * units_per_second };
 		}
 
-		constexpr Value<Dimension<2,1,-1>> operator"" _Nms( const long double value ){
+		constexpr Value<Dimension<2,1,-1>> operator""_Nms( const long double value ){
 			return Value<Dimension<2,1,-1>>{ static_cast<Real>(value) * units_per_newton * units_per_meter * units_per_second };
 		}
 
-		constexpr Value<Dimension<2,1,-2>> operator"" _J( const unsigned long long int value ){
+		constexpr Value<Dimension<2,1,-2>> operator""_J( const unsigned long long int value ){
 			return Value<Dimension<2,1,-2>>{ static_cast<Real>(value) * units_per_kilogram * units_per_meter * units_per_meter / units_per_second / units_per_second };
 		}
 
-		constexpr Value<Dimension<2,1,-2>> operator"" _J( const long double value ){
+		constexpr Value<Dimension<2,1,-2>> operator""_J( const long double value ){
 			return Value<Dimension<2,1,-2>>{ static_cast<Real>(value) * units_per_kilogram * units_per_meter * units_per_meter / units_per_second / units_per_second };
 		}
 
-		constexpr Value<Dimension<2,1,-3>> operator"" _W( const unsigned long long int value ){
+		constexpr Value<Dimension<2,1,-3>> operator""_W( const unsigned long long int value ){
 			return Value<Dimension<2,1,-3>>{ static_cast<Real>(value) * units_per_kilogram * units_per_meter * units_per_meter };
 		}
 
-		constexpr Value<Dimension<2,1,-3>> operator"" _W( const long double value ){
+		constexpr Value<Dimension<2,1,-3>> operator""_W( const long double value ){
 			return Value<Dimension<2,1,-3>>{ static_cast<Real>(value) * units_per_kilogram * units_per_meter * units_per_meter };
 		}
 
-		constexpr Value<Dimension<2,1,-3>> operator"" _kW( const unsigned long long int value ){
+		constexpr Value<Dimension<2,1,-3>> operator""_kW( const unsigned long long int value ){
 			return Value<Dimension<2,1,-3>>{ static_cast<Real>(value) * 1000 * units_per_kilogram * units_per_meter * units_per_meter };
 		}
 
-		constexpr Value<Dimension<2,1,-3>> operator"" _kW( const long double value ){
+		constexpr Value<Dimension<2,1,-3>> operator""_kW( const long double value ){
 			return Value<Dimension<2,1,-3>>{ static_cast<Real>(value) * 1000 * units_per_kilogram * units_per_meter * units_per_meter };
 		}
 
-		constexpr Value<Dimension<0,0,0>> operator"" _1( const unsigned long long int value ){
+		constexpr Value<Dimension<0,0,0>> operator""_1( const unsigned long long int value ){
 			return Value<Dimension<0,0,0>>{ static_cast<Real>(value) };
 		}
 
-		constexpr Value<Dimension<0,0,0>> operator"" _1( const long double value ){
+		constexpr Value<Dimension<0,0,0>> operator""_1( const long double value ){
 			return Value<Dimension<0,0,0>>{ static_cast<Real>(value) };
 		}
 
-		constexpr Angle operator"" _rad( const unsigned long long int radiant ){
+		constexpr Angle operator""_rad( const unsigned long long int radiant ){
 			return Angle{ static_cast<Real>(radiant) };
 		}
 
-		constexpr Angle operator"" _rad( const long double radiant ){
+		constexpr Angle operator""_rad( const long double radiant ){
 			return Angle{ static_cast<Real>(radiant) };
 		}
 
-		constexpr AngularVelocity operator"" _radIs( const unsigned long long int value ){
+		constexpr AngularVelocity operator""_radIs( const unsigned long long int value ){
 			return AngularVelocity{ static_cast<Real>(value) * seconds_per_unit };
 		}
 
-		constexpr AngularVelocity operator"" _radIs( const long double value ){
+		constexpr AngularVelocity operator""_radIs( const long double value ){
 			return AngularVelocity{ static_cast<Real>(value) * seconds_per_unit };
 		}
 
-		constexpr AngularVelocity operator"" _radIm( const unsigned long long int value ){
+		constexpr AngularVelocity operator""_radIm( const unsigned long long int value ){
 			return AngularVelocity{ static_cast<Real>(value) * meters_per_unit };
 		}
 
-		constexpr AngularVelocity operator"" _radIm( const long double value ){
+		constexpr AngularVelocity operator""_radIm( const long double value ){
 			return AngularVelocity{ static_cast<Real>(value) * meters_per_unit };
 		}
 		///@}
@@ -1161,27 +1161,27 @@ namespace dim{
 		///@{
 		
 		/// \brief Dimensionated Values literal operator.
-		constexpr Angle operator"" _deg( const unsigned long long int degree ){
+		constexpr Angle operator""_deg( const unsigned long long int degree ){
 			return Angle{ static_cast<Real>(degree) * pi/180 };
 		}
 
-		constexpr Angle operator"" _deg( const long double degree ){
+		constexpr Angle operator""_deg( const long double degree ){
 			return Angle{ static_cast<Real>(degree) * pi/180 };
 		}
 
-		constexpr AngularVelocity operator"" _degIs( const unsigned long long int value ){
+		constexpr AngularVelocity operator""_degIs( const unsigned long long int value ){
 			return AngularVelocity{ static_cast<Real>(value) * pi/180  * seconds_per_unit };
 		}
 
-		constexpr AngularVelocity operator"" _degIs( const long double value ){
+		constexpr AngularVelocity operator""_degIs( const long double value ){
 			return AngularVelocity{ static_cast<Real>(value) * pi/180  * seconds_per_unit };
 		}
 
-		constexpr AnglePerLength operator"" _degIm( const unsigned long long int value ){
+		constexpr AnglePerLength operator""_degIm( const unsigned long long int value ){
 			return AnglePerLength{ static_cast<Real>(value) * pi/180  * meters_per_unit };
 		}
 
-		constexpr AnglePerLength operator"" _degIm( const long double value ){
+		constexpr AnglePerLength operator""_degIm( const long double value ){
 			return AnglePerLength{ static_cast<Real>(value) * pi/180  * meters_per_unit };
 		}
 		///@}

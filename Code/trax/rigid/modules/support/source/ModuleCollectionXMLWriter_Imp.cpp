@@ -42,11 +42,11 @@ namespace trax{
 
 bool XMLWriteModuleCollection( const boost::property_tree::ptree& pt, ModuleCollectionParser& callback ) noexcept(false)
 {
-	for( const auto& pair : pt )
-	{
+	//for( const auto& pair : pt )
+	//{
 
 
-	}
+	//}
 
 	return false;
 }

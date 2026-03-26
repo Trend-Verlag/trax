@@ -131,6 +131,10 @@ namespace trax{
 	inline Orientation& operator+=( Orientation& a, const Orientation& b ) noexcept;
 
 
+	template <class Valtype> inline
+	Valtype operator*( const Orientation& orient, Valtype value ) noexcept;
+
+
 	/// \brief Get the front end of an oriented element.
 	/// \param orientation The orientation of the element.
 	/// \returns The end type corresponding to the given orientation.
@@ -172,6 +176,11 @@ namespace trax{
 	Orientation& operator+=( Orientation& a, const Orientation& b ) noexcept{
 		a = a + b;
 		return a;
+	}
+
+	template <class Valtype> inline
+	Valtype operator*( const Orientation& orient, Valtype value ) noexcept{
+		return orient ? value : -value;
 	}
 
 	inline EndType North( Orientation orientation ) noexcept{

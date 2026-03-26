@@ -117,6 +117,8 @@ namespace trax{
 
 		void Thrust( One byfactor ) override;
 
+		using Bogie_Base::ThrustAbsolute;
+
 		Force ThrustAbsolute() const noexcept override;
 
 		Force MaxThrust() const noexcept override;
@@ -126,6 +128,8 @@ namespace trax{
 		using Bogie_Base::Brake;
 
 		void Brake( One byfactor ) override;
+
+		using Bogie_Base::BrakeAbsolute;
 
 		Force BrakeAbsolute() const noexcept override;
 
@@ -245,9 +249,9 @@ namespace trax{
 			BogieJoint(	std::unique_ptr<JointType> pJoint,
 						Bogie_Imp& bogieParent, 
 						Bogie_Imp& bogieChild ) noexcept
-				: m_pJoint( std::move( pJoint ) )
-				, m_BogieA( bogieParent )
-				, m_BogieB( bogieChild )
+				: m_BogieA{ bogieParent }
+				, m_BogieB{ bogieChild }
+				, m_pJoint{ std::move( pJoint ) }	
 			{
 			}
 

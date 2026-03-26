@@ -63,9 +63,13 @@ namespace trax
 
 		void AxisArrangementEnd( Orientation orientation ) noexcept(false) override;
 
+		using RollingStockCreator::RollingStockStart;
+
 		RollingStockParser* RollingStockStart( 
 			const std::string& name,
 			const std::string& reference ) noexcept(false) override;
+
+		using RollingStockCreator::RollingStockEnd;
 
 		void RollingStockEnd( Orientation orientation ) noexcept(false) override;
 
