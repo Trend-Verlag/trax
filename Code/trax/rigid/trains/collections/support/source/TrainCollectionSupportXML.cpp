@@ -27,12 +27,27 @@
 
 #include "../TrainCollectionSupportXML.h"
 #include "trax/rigid/trains/Train.h"
+#include "trax/rigid/trains/support/Anl4RailRunnerWriter.h"
 #include "trax/rigid/trains/support/SupportXML.h"
 #include "trax/rigid/trains/collections/Fleet.h"
 
 namespace trax{
 
 namespace ptreesupport{
+
+boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const Fleet& fleet )
+{
+	boost::property_tree::ptree ptFleet;
+
+	for( const auto& element : fleet )
+	{
+		if( element.GetTrain() == nullptr ) // trains get written by their parent.
+			ptFleet << element;
+	}
+
+	move_child( pt, fleet.TypeName(), ptFleet );
+	return pt;
+}
 
 static void EmplaceSubTrains( Train& train, Fleet& fromFleet )
 {

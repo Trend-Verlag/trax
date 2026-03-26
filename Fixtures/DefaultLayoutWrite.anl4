@@ -399,8 +399,8 @@
 				<ConnectorCollection/>
 			</TrackSystem>
 			<Fleet>
-				<Train id="1" name="Train_1" type="Train" reference="/Script/railUnreal.Train" orientation="para" orientation="para">
-					<RollingStock id="0" name="BR_TRAXX147_Blueprint_C_1" type="BR_TRAXX147_Blueprint_C" reference="/Game/RollingStock/Locomotives/BR_Traxx147/BR_TRAXX147_Blueprint.BR_TRAXX147_Blueprint_C" orientation="anti" orientation="anti">
+				<Train id="1" name="Train_1" type="Train" reference="/Script/railUnreal.Train" orientation="para">
+					<RollingStock id="0" name="BR_TRAXX147_Blueprint_C_1" type="BR_TRAXX147_Blueprint_C" reference="/Game/RollingStock/Locomotives/BR_Traxx147/BR_TRAXX147_Blueprint.BR_TRAXX147_Blueprint_C" orientation="anti">
 						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="true" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="true" target_velocity="0km/h" thrust="0" brake="0">
 							<Frame>
 								<Position x="5.50m" y="-0.15m" z="0.33m"/>
@@ -422,7 +422,7 @@
 							</WheelFrame>
 						</Bogie>
 					</RollingStock>
-					<RollingStock id="0" name="LogWaggon_Blueprint_C_1" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_1" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para">
 						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
 							<Frame>
 								<Position x="-14.71m" y="-0.15m" z="0.45m"/>
@@ -444,7 +444,7 @@
 							</WheelFrame>
 						</Bogie>
 					</RollingStock>
-					<RollingStock id="0" name="LogWaggon_Blueprint_C_2" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_2" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para">
 						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
 							<Frame>
 								<Position x="-35.51m" y="-0.15m" z="0.45m"/>
@@ -466,7 +466,7 @@
 							</WheelFrame>
 						</Bogie>
 					</RollingStock>
-					<RollingStock id="0" name="LogWaggon_Blueprint_C_4" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_4" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para">
 						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
 							<Frame>
 								<Position x="-56.31m" y="-0.15m" z="0.45m"/>
@@ -488,7 +488,7 @@
 							</WheelFrame>
 						</Bogie>
 					</RollingStock>
-					<RollingStock id="0" name="LogWaggon_Blueprint_C_6" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_6" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para">
 						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
 							<Frame>
 								<Position x="-77.11m" y="-0.18m" z="0.45m"/>
@@ -510,7 +510,7 @@
 							</WheelFrame>
 						</Bogie>
 					</RollingStock>
-					<RollingStock id="0" name="LogWaggon_Blueprint_C_8" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_8" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para">
 						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
 							<Frame>
 								<Position x="-97.91m" y="-0.25m" z="0.45m"/>
@@ -532,7 +532,7 @@
 							</WheelFrame>
 						</Bogie>
 					</RollingStock>
-					<RollingStock id="0" name="LogWaggon_Blueprint_C_10" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_10" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para">
 						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
 							<Frame>
 								<Position x="-118.71m" y="-0.31m" z="0.45m"/>
@@ -554,7 +554,7 @@
 							</WheelFrame>
 						</Bogie>
 					</RollingStock>
-					<RollingStock id="0" name="LogWaggon_Blueprint_C_12" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_12" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para">
 						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
 							<Frame>
 								<Position x="-138.98m" y="1m" z="0.61m"/>
@@ -576,7 +576,7 @@
 							</WheelFrame>
 						</Bogie>
 					</RollingStock>
-					<RollingStock id="0" name="LogWaggon_Blueprint_C_14" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para" orientation="para">
+					<RollingStock id="0" name="LogWaggon_Blueprint_C_14" type="LogWaggon_Blueprint_C" reference="/Game/RollingStock/Waggons/LogWaggon/LogWaggon_Blueprint.LogWaggon_Blueprint_C" orientation="para">
 						<Bogie brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="true" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="true" target_velocity="0km/h" thrust="0" brake="0">
 							<Frame>
 								<Position x="-158.19m" y="8m" z="0.94m"/>

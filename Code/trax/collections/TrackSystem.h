@@ -212,7 +212,7 @@ namespace trax{
 	/// tracks from different collections get coupled to both ends. If the track itself is part
 	/// of a collection, only tracks from that collection will be considered.
 	/// \param system The track system to search track ends in.
-	/// \param trackEnd The track end to couple.
+	/// \param trackEnd The track end to couple; use Track::EndType::both for both.
 	/// \param maxDistance A threshold for the distance to search track ends around the to be 
 	/// coupled end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
@@ -227,9 +227,9 @@ namespace trax{
 	/// \brief Searches open track ends inside an area around a given track end and couples 
 	/// and snaps to the closest.
 	/// 
-	/// The method will snap only once.
+	/// The method will snap only once (if coupling targets on both ends were found).
 	/// \param system The track system to search track ends in.
-	/// \param trackEnd The track end to couple.
+	/// \param trackEnd The track end to couple; use Track::EndType::both for both.
 	/// \param maxDistance A threshold for the distance to search track ends around the to be 
 	/// coupled end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.

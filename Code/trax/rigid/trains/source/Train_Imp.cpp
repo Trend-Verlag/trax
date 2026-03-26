@@ -620,7 +620,7 @@ void Train_Imp::Append(
 
 	if( bCouple && !m_Train.empty() )
 	{
-		if( !trax::Couple( GetTipAt( atEnd ), pComponent->GetTipAt( withEnd ) ) )
+		if( !trax::Couple( GetTipAt( atEnd ), pComponent->GetTipAt( withEnd ), false ) )
 			throw std::runtime_error( "Train_Imp::Append: could not couple" );
 	}
 

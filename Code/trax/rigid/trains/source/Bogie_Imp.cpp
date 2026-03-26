@@ -1580,8 +1580,8 @@ bool AreCoupled( const Bogie& a, const Bogie& b ) noexcept{
 			a.GetCoupledBogie( EndType::south ).first.get() == &b;
 }
 
-bool Couple( std::pair<Bogie&,EndType> a, std::pair<Bogie&,EndType> b ) noexcept{
-	return a.first.Couple( a.second, b.first, b.second );
+bool Couple( std::pair<Bogie&,EndType> a, std::pair<Bogie&,EndType> b, bool btriggerPulses ) noexcept{
+	return a.first.Couple( a.second, b.first, b.second, btriggerPulses );
 }
 
 Length GetCouplingDistance( 

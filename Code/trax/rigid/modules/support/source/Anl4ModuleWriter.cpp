@@ -21,6 +21,7 @@
 #include "trax/rigid/trains/Train.h"
 #include "trax/rigid/trains/collections/Fleet.h"
 
+#include "trax/rigid/trains/collections/support/TrainCollectionSupportXML.h"
 #include "trax/rigid/trains/support/Anl4RailRunnerWriter.h"
 #include "trax/collections/support/Anl4TrackSystemWriter.h"
 

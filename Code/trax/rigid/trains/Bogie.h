@@ -299,7 +299,7 @@ namespace trax{
 	/// The activity status of the two couplings are ignored, but the coupling 
 	/// indexes must match for success.
 	/// \returns true if the coupling could get established or already was.
-	dclspc bool Couple( std::pair<Bogie&,EndType> a, std::pair<Bogie&,EndType> b ) noexcept;
+	dclspc bool Couple( std::pair<Bogie&,EndType> a, std::pair<Bogie&,EndType> b, bool btriggerPulses ) noexcept;
 
 
 	/// \returns true if the two bogie ends are coupled.
