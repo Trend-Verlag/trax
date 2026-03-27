@@ -39,6 +39,10 @@ std::unique_ptr<Switch> Switch::Make() noexcept
 		return nullptr;
 	}
 }
+
+std::shared_ptr<Switch> Switch::Cast( std::shared_ptr<Connector> pConnector ) noexcept{
+	return std::dynamic_pointer_cast<Switch>( pConnector );
+}
 ///////////////////////////////////////
 std::unique_ptr<ThreeWaySwitch> ThreeWaySwitch::Make() noexcept
 {
@@ -48,6 +52,10 @@ std::unique_ptr<ThreeWaySwitch> ThreeWaySwitch::Make() noexcept
 	catch( const std::bad_alloc& ){
 		return nullptr;
 	}
+}
+
+std::shared_ptr<ThreeWaySwitch> ThreeWaySwitch::Cast( std::shared_ptr<Connector> pConnector ) noexcept{
+	return std::dynamic_pointer_cast<ThreeWaySwitch>( pConnector );
 }
 ///////////////////////////////////////
 std::unique_ptr<SingleSlipSwitch> SingleSlipSwitch::Make() noexcept
@@ -59,6 +67,10 @@ std::unique_ptr<SingleSlipSwitch> SingleSlipSwitch::Make() noexcept
 		return nullptr;
 	}
 }
+
+std::shared_ptr<SingleSlipSwitch> SingleSlipSwitch::Cast( std::shared_ptr<Connector> pConnector ) noexcept{
+	return std::dynamic_pointer_cast<SingleSlipSwitch>( pConnector );
+}
 ///////////////////////////////////////
 std::unique_ptr<DoubleSlipSwitch> DoubleSlipSwitch::Make() noexcept
 {
@@ -69,6 +81,10 @@ std::unique_ptr<DoubleSlipSwitch> DoubleSlipSwitch::Make() noexcept
 		return nullptr;
 	}
 }
+
+std::shared_ptr<DoubleSlipSwitch> DoubleSlipSwitch::Cast( std::shared_ptr<Connector> pConnector ) noexcept{
+	return std::dynamic_pointer_cast<DoubleSlipSwitch>( pConnector );
+}
 ///////////////////////////////////////
 std::unique_ptr<NarrowSwitch> NarrowSwitch::Make( unsigned char numBranches ) noexcept
 {
@@ -78,6 +94,10 @@ std::unique_ptr<NarrowSwitch> NarrowSwitch::Make( unsigned char numBranches ) no
 		return std::make_unique<ThreeWaySwitch_Imp>();
 
 	return std::make_unique<NarrowSwitch_Imp>( numBranches );
+}
+
+std::shared_ptr<NarrowSwitch> NarrowSwitch::Cast( std::shared_ptr<Connector> pConnector ) noexcept{
+	return std::dynamic_pointer_cast<NarrowSwitch>( pConnector );
 }
 
 NarrowSwitch_Imp::NarrowSwitch_Imp( unsigned char numBranches )

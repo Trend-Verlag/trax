@@ -270,6 +270,8 @@ namespace trax
 		/// \brief Makes a ConstantTwist object from another twist.
 		static dclspc std::unique_ptr<ConstantTwist> Make( const RoadwayTwist& fromTwist ) noexcept;
 
+		static dclspc const ConstantTwist& Cast( const RoadwayTwist& twist );
+
 
 		/// \brief Set twist value.
 		virtual void TwistValue( Angle twist ) noexcept = 0;
@@ -294,6 +296,8 @@ namespace trax
 		
 		/// \brief Makes a LinearTwist object from another twist.
 		static dclspc std::unique_ptr<LinearTwist> Make( const RoadwayTwist& fromTwist ) noexcept;
+
+		static dclspc const LinearTwist& Cast( const RoadwayTwist& twist );
 
 
 		/// \brief Data describing the twist.
@@ -337,6 +341,9 @@ namespace trax
 		/// \brief Makes a PiecewiseTwist object from another twist.
 		static dclspc std::unique_ptr<PiecewiseTwist> Make( TwistType type, const RoadwayTwist& fromTwist ) noexcept;
 
+		static dclspc const PiecewiseTwist& Cast( const RoadwayTwist& twist );
+
+
 		using SegmentValueType = std::pair<Length, Angle>;
 		using Data = std::vector<SegmentValueType>;
 
@@ -376,6 +383,9 @@ namespace trax
 		
 		/// \brief Makes a DirectionalTwist object from another twist.
 		static dclspc std::unique_ptr<DirectionalTwist> Make( const RoadwayTwist& fromTwist ) noexcept;
+
+		static dclspc const DirectionalTwist& Cast( const RoadwayTwist& twist );
+
 
 		using Data = spat::Vector<One>;
 
@@ -423,6 +433,8 @@ namespace trax
 		
 		/// \brief Makes a PiecewiseDirectionalTwist object from another twist.
 		static dclspc std::unique_ptr<PiecewiseDirectionalTwist> Make( const RoadwayTwist& fromTwist ) noexcept;
+
+		static dclspc const PiecewiseDirectionalTwist& Cast( const RoadwayTwist& twist );
 
 
 		using Data = std::vector<std::pair<Length,spat::Vector<One>>>;
@@ -472,6 +484,8 @@ namespace trax
 
 		/// \brief Makes a CombinedTwist object from another twist.
 		static dclspc std::unique_ptr<CombinedTwist> Make( const RoadwayTwist& fromTwist ) noexcept;
+
+		static dclspc const CombinedTwist& Cast( const RoadwayTwist& twist );
 
 
 		/// \brief Populates the first slot

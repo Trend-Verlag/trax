@@ -84,6 +84,10 @@ std::unique_ptr<Clothoid> Clothoid::Make() noexcept{
 		return nullptr;
 	}
 }
+
+std::shared_ptr<Clothoid> Clothoid::Cast( std::shared_ptr<Curve> pCurve ) noexcept{
+	return std::dynamic_pointer_cast<Clothoid>( pCurve );
+}
 ///////////////////////////////////////
 const char* Clothoid_Imp::TypeName() const noexcept{
 	return "Clothoid";

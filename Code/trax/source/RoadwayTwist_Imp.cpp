@@ -171,6 +171,12 @@ std::unique_ptr<ConstantTwist> ConstantTwist::Make( const RoadwayTwist& fromTwis
 	}
 }
 
+const ConstantTwist& ConstantTwist::Cast( const RoadwayTwist& twist ){
+	if( auto pTwist = dynamic_cast<const ConstantTwist*>(&twist) )
+		return *pTwist;
+	throw std::bad_cast();
+}
+
 ConstantTwist_Imp::ConstantTwist_Imp( Real twistvalue ) noexcept
 	:	m_Twist{ twistvalue }
 {}
@@ -256,6 +262,12 @@ std::unique_ptr<LinearTwist> LinearTwist::Make( const RoadwayTwist& fromTwist ) 
 	catch( const std::bad_alloc& ){
 		return nullptr;
 	}
+}
+
+const LinearTwist& LinearTwist::Cast( const RoadwayTwist& twist ){
+	if( auto pTwist = dynamic_cast<const LinearTwist*>(&twist) )
+		return *pTwist;
+	throw std::bad_cast();
 }
 
 LinearTwist_Imp::LinearTwist_Imp( Angle from, Angle to ) noexcept
@@ -398,6 +410,12 @@ std::unique_ptr<PiecewiseTwist> PiecewiseTwist::Make( TwistType type, const Road
 	catch( const std::bad_alloc& ){
 		return nullptr;
 	}
+}
+
+const PiecewiseTwist& PiecewiseTwist::Cast( const RoadwayTwist& twist ){
+	if( auto pTwist = dynamic_cast<const PiecewiseTwist*>(&twist) )
+		return *pTwist;
+	throw std::bad_cast();
 }
 
 PiecewiseTwist_Imp::PiecewiseTwist_Imp( const RoadwayTwist& fromTwist )
@@ -591,6 +609,12 @@ std::unique_ptr<DirectionalTwist> DirectionalTwist::Make( const RoadwayTwist& fr
 	}
 }
 
+const DirectionalTwist& DirectionalTwist::Cast( const RoadwayTwist& twist ){
+	if( auto pTwist = dynamic_cast<const DirectionalTwist*>(&twist) )
+		return *pTwist;
+	throw std::bad_cast();
+}
+
 DirectionalTwist_Imp::DirectionalTwist_Imp() noexcept
 	:	DirectionalTwist_ImpBase<DirectionalTwist>{},
 		GlobalA	{Up},
@@ -750,6 +774,12 @@ std::unique_ptr<PiecewiseDirectionalTwist> PiecewiseDirectionalTwist::Make( cons
 	}
 }
 
+const PiecewiseDirectionalTwist& PiecewiseDirectionalTwist::Cast( const RoadwayTwist& twist ){
+	if( auto pTwist = dynamic_cast<const PiecewiseDirectionalTwist*>(&twist) )
+		return *pTwist;
+	throw std::bad_cast();
+}
+
 PiecewiseDirectionalTwist_Imp::PiecewiseDirectionalTwist_Imp( const RoadwayTwist& /*fromTwist*/ )
 	: PiecewiseDirectionalTwist_Imp{}
 {
@@ -864,6 +894,12 @@ std::unique_ptr<CombinedTwist> CombinedTwist::Make( const RoadwayTwist& fromTwis
 	catch( const std::bad_alloc& ){
 		return nullptr;
 	}
+}
+
+const CombinedTwist& CombinedTwist::Cast( const RoadwayTwist& twist ){
+	if( auto pTwist = dynamic_cast<const CombinedTwist*>(&twist) )
+		return *pTwist;
+	throw std::bad_cast();
 }
 
 CombinedTwist_Imp::CombinedTwist_Imp()

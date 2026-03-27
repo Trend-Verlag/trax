@@ -83,6 +83,11 @@ namespace trax{
 
 		std::shared_ptr<ParallelizableTrack> GetParallelizableTrack() noexcept override;
 
+		std::shared_ptr<const SectionTrack> GetSectionTrack() const noexcept override;
+
+		std::shared_ptr<SectionTrack> GetSectionTrack() noexcept override;
+
+
 		const std::string& Reference( const std::string& name ) const override{
 			return TrackBase::Reference( name );
 		}

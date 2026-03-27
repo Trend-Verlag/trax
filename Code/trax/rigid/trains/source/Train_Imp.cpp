@@ -51,6 +51,10 @@ std::shared_ptr<Train> Train::Make() noexcept
 	}
 }
 
+std::shared_ptr<Train> Train::Cast( std::shared_ptr<RailRunner> pRailRunner ) noexcept{
+	return std::dynamic_pointer_cast<Train>( pRailRunner );
+}
+
 Train_Imp::Train_Imp()
 	: Train_Base{}
 {

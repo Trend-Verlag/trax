@@ -55,6 +55,7 @@ Track::TrackType MovableTrack_Imp::GetTrackType() const noexcept{
 }
 
 std::shared_ptr<const MovableTrack> MovableTrack_Imp::GetMovableTrack() const noexcept{
+
 	return std::dynamic_pointer_cast<const MovableTrack>(This());
 }
 

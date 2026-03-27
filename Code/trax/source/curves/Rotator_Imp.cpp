@@ -101,6 +101,10 @@ std::unique_ptr<Rotator> Rotator::Make( CurveType type ) noexcept{
 		return nullptr;
 	}
 }
+
+std::shared_ptr<Rotator> Rotator::Cast( std::shared_ptr<Curve> pCurve ) noexcept{
+	return std::dynamic_pointer_cast<Rotator>( pCurve );
+}
 ///////////////////////////////////////
 const char*	RotatorWithOffset_Imp::TypeName() const noexcept{
 	return "Rotator";
@@ -139,6 +143,10 @@ std::unique_ptr<RotatorChain> RotatorChain::Make() noexcept{
 	catch( const std::bad_alloc& ){
 		return nullptr;
 	}
+}
+
+std::shared_ptr<RotatorChain> RotatorChain::Cast( std::shared_ptr<Curve> pCurve ) noexcept{
+	return std::dynamic_pointer_cast<RotatorChain>( pCurve );
 }
 ///////////////////////////////////////
 const char*	RotatorChain_Imp::TypeName() const noexcept{

@@ -142,6 +142,14 @@ std::shared_ptr<ParallelizableTrack> Track_Imp::GetParallelizableTrack() noexcep
 	return nullptr;
 }
 
+std::shared_ptr<const SectionTrack> Track_Imp::GetSectionTrack() const noexcept{
+	return nullptr;
+}
+
+std::shared_ptr<SectionTrack> Track_Imp::GetSectionTrack() noexcept{
+	return nullptr;
+}
+
 
 //TODO check unhandled throw
 // it's very slowly. it's very slowly. it's very slowly. it's very slowly. it's very slowly. it's very slowly.  tralala BCA

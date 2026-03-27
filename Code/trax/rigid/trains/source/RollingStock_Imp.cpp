@@ -53,6 +53,10 @@ std::shared_ptr<RollingStock> RollingStock::Make() noexcept{
 	}
 }
 
+std::shared_ptr<RollingStock> RollingStock::Cast( std::shared_ptr<RailRunner> pRailRunner ) noexcept{
+	return std::dynamic_pointer_cast<RollingStock>( pRailRunner );
+}
+
 RollingStock_Imp::RollingStock_Imp() noexcept
 	: RollingStock_Base	{}
 	, m_pNorthTip		{ nullptr }

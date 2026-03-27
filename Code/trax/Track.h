@@ -256,6 +256,7 @@ namespace trax
 	struct MovableTrack;
 	struct ParallelizableTrack;
 	struct RoadwayTwist;
+	struct SectionTrack;
 	struct Sensor;
 	struct Signal;
 	struct SignalTarget;
@@ -370,6 +371,15 @@ namespace trax
 		virtual std::shared_ptr<const ParallelizableTrack> GetParallelizableTrack() const noexcept = 0;
 
 		virtual std::shared_ptr<ParallelizableTrack> GetParallelizableTrack() noexcept = 0;
+		///@}
+
+
+		/// \returns A shared pointer to the section track interface or nullptr, if none.
+		///@{
+		
+		virtual std::shared_ptr<const SectionTrack> GetSectionTrack() const noexcept = 0;
+
+		virtual std::shared_ptr<SectionTrack> GetSectionTrack() noexcept = 0;
 		///@}
 
 

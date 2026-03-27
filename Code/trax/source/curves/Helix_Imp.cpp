@@ -39,6 +39,10 @@ std::unique_ptr<Helix> Helix::Make() noexcept{
 		return nullptr;
 	}
 }
+
+std::shared_ptr<Helix> Helix::Cast( std::shared_ptr<Curve> pCurve ) noexcept{
+	return std::dynamic_pointer_cast<Helix>( pCurve );
+}
 ///////////////////////////////////////
 const char*	Helix_Imp::TypeName() const noexcept{
 	return "BasicHelix";

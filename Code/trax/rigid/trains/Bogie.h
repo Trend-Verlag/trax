@@ -71,6 +71,8 @@ namespace trax{
 		/// one is automatically created.
 		static dclspc std::shared_ptr<Bogie> Make( Scene& scene, std::shared_ptr<Gestalt> pGestalt = nullptr ) noexcept;
 
+		static dclspc std::shared_ptr<Bogie> Cast( std::shared_ptr<RailRunner> pRailRunner ) noexcept;
+
 
 		/// \brief Gets a shared pointer to this.
 		virtual std::shared_ptr<Bogie> ThisBogie() const noexcept = 0;

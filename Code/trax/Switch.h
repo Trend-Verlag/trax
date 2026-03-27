@@ -39,6 +39,9 @@ namespace trax{
 		/// \brief Makes a standard NarrowSwitch object.
 		static dclspc std::unique_ptr<NarrowSwitch> Make( unsigned char numBranches ) noexcept;
 
+		static dclspc std::shared_ptr<NarrowSwitch> Cast( std::shared_ptr<Connector> pConnector ) noexcept;
+
+
 		enum SlotNames : char{
 			slot_none = -1,
 			slot_0 = 0,		///< narrow track
@@ -187,6 +190,8 @@ namespace trax{
 		/// \brief Makes a standard Switch object.
 		static dclspc std::unique_ptr<Switch> Make() noexcept;
 
+		static dclspc std::shared_ptr<Switch> Cast( std::shared_ptr<Connector> pConnector ) noexcept;
+
 
 		static constexpr char slot_count = 3;
 		static constexpr char status_count = 2;
@@ -328,6 +333,8 @@ namespace trax{
 		/// \brief Makes a standard ThreeWaySwitch object.
 		static dclspc std::unique_ptr<ThreeWaySwitch> Make() noexcept;
 
+		static dclspc std::shared_ptr<ThreeWaySwitch> Cast( std::shared_ptr<Connector> pConnector ) noexcept;
+
 
 		static constexpr char slot_count = 4;
 		static constexpr char status_count = 3;
@@ -441,6 +448,9 @@ namespace trax{
 		/// \brief Makes a standard SingleSlipSwitch object.
 		static dclspc std::unique_ptr<SingleSlipSwitch> Make() noexcept;
 
+		static dclspc std::shared_ptr<SingleSlipSwitch> Cast( std::shared_ptr<Connector> pConnector ) noexcept;
+
+
 		enum SlotNames{
 			slot_none = -1,
 			slot_0 = 0,	///< first narrow track end
@@ -528,6 +538,8 @@ namespace trax{
 
 		/// \brief Makes a standard DoubleSlipSwitch object.
 		static dclspc std::unique_ptr<DoubleSlipSwitch> Make() noexcept;
+
+		static dclspc std::shared_ptr<DoubleSlipSwitch> Cast( std::shared_ptr<Connector> pConnector ) noexcept;
 
 
 		enum SlotNames{

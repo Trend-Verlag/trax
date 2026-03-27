@@ -47,6 +47,8 @@ namespace trax{
 		/// \brief Makes a RollingStock object.
 		static dclspc std::shared_ptr<RollingStock> Make() noexcept;
 
+		static dclspc std::shared_ptr<RollingStock> Cast( std::shared_ptr<RailRunner> pRailRunner ) noexcept;
+
 
 		/// \brief Gets a shared pointer to this.
 		virtual std::shared_ptr<RollingStock> ThisRollingStock() const noexcept = 0;

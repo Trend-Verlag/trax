@@ -308,6 +308,10 @@ std::unique_ptr<PolygonalChain> PolygonalChain::Make() noexcept{
 		return nullptr;
 	}
 }
+
+std::shared_ptr<PolygonalChain> PolygonalChain::Cast( std::shared_ptr<Curve> pCurve ) noexcept{
+	return std::dynamic_pointer_cast<PolygonalChain>( pCurve );
+}
 ///////////////////////////////////////
 Length PolygonalChain_Imp::GetParameter( int idx ) const
 {

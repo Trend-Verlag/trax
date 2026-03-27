@@ -39,6 +39,10 @@ std::unique_ptr<Arc> Arc::Make() noexcept{
 		return nullptr;
 	}
 }
+
+std::shared_ptr<Arc> Arc::Cast( std::shared_ptr<Curve> pCurve ) noexcept{
+	return std::dynamic_pointer_cast<Arc>( pCurve );
+}
 ///////////////////////////////////////
 const char*	Arc_Imp::TypeName() const noexcept{
 	return "BasicArc";

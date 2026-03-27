@@ -41,6 +41,10 @@ std::unique_ptr<Line> Line::Make() noexcept{
 		return nullptr;
 	}
 }
+
+std::shared_ptr<Line> Line::Cast( std::shared_ptr<Curve> pCurve ) noexcept{
+	return std::dynamic_pointer_cast<Line>( pCurve );
+}
 ///////////////////////////////////////
 const char*	Line_Imp::TypeName() const noexcept{
 	return "BasicLine";

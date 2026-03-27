@@ -53,6 +53,10 @@ std::shared_ptr<WheelFrame> WheelFrame::Make(
 	}
 }
 
+std::shared_ptr<WheelFrame> WheelFrame::Cast( std::shared_ptr<RailRunner> pRailRunner ) noexcept{
+	return std::dynamic_pointer_cast<WheelFrame>( pRailRunner );
+}
+
 WheelFrame_Imp::WheelFrame_Imp( 
 	Scene& scene, 
 	std::shared_ptr<Gestalt> pGestalt )

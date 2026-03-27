@@ -149,6 +149,10 @@ std::unique_ptr<Cubic> Cubic::Make() noexcept{
 		return nullptr;
 	}
 }
+
+std::shared_ptr<Cubic> Cubic::Cast( std::shared_ptr<Curve> pCurve ) noexcept{
+	return std::dynamic_pointer_cast<Cubic>( pCurve );
+}
 ///////////////////////////////////////
 const char* Cubic_Imp::TypeName() const noexcept{
 	return "Cubic";
@@ -678,6 +682,10 @@ std::unique_ptr<Spline> Spline::Make() noexcept{
 	catch( const std::bad_alloc& ){
 		return nullptr;
 	}
+}
+
+std::shared_ptr<Spline> Spline::Cast( std::shared_ptr<Curve> pCurve ) noexcept{
+	return std::dynamic_pointer_cast<Spline>( pCurve );
 }
 ///////////////////////////////////////
 const char* Spline_Imp::TypeName() const noexcept{

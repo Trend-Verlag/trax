@@ -50,6 +50,7 @@ namespace trax{
 		/// one is automatically created.
 		static dclspc std::shared_ptr<WheelFrame> Make( Scene& scene, std::shared_ptr<Gestalt> pGestalt = nullptr ) noexcept;
 
+		static dclspc std::shared_ptr<WheelFrame> Cast( std::shared_ptr<RailRunner> pRailRunner ) noexcept;
 
 
 		/// \brief Sets all the limits for this wheelframe.

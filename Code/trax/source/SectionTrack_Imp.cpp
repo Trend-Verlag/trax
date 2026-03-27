@@ -48,6 +48,16 @@ Track::TrackType SectionTrack_Imp::GetTrackType() const noexcept{
 	return TrackType::withGeoms;
 }
 
+std::shared_ptr<const SectionTrack> SectionTrack_Imp::GetSectionTrack() const noexcept
+{
+	return std::dynamic_pointer_cast<const SectionTrack>(This());
+}
+
+std::shared_ptr<SectionTrack> SectionTrack_Imp::GetSectionTrack() noexcept
+{
+	return std::dynamic_pointer_cast<SectionTrack>(This());
+}
+
 bool SectionTrack_Imp::IsValid() const noexcept
 {
 	if( !Track_Imp::IsValid() )

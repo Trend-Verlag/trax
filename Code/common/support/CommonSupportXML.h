@@ -30,7 +30,6 @@
 
 #include "common/Interval.h"
 
-
 namespace common{
 
 	/// \brief ptree operator support

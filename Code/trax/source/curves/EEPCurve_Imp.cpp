@@ -34,6 +34,10 @@ std::unique_ptr<EEPCurve> EEPCurve::Make( CurveType type ) noexcept
 		return nullptr;
 	}
 }
+
+std::shared_ptr<EEPCurve> EEPCurve::Cast( std::shared_ptr<Curve> pCurve ) noexcept{
+	return std::dynamic_pointer_cast<EEPCurve>( pCurve );
+}
 	/*
 ///////////////////////////////////////
 std::string EEPResidualCurve_Imp::TypeName() const{

@@ -99,6 +99,8 @@ namespace trax
 					 virtual Shape
 	{
 	public:
+		static dclspc std::shared_ptr<Gestalt> Cast( std::shared_ptr<Body> pBody ) noexcept;
+		static dclspc std::shared_ptr<Gestalt> Cast( std::shared_ptr<Shape> pShape ) noexcept;
 
 		// Gestalt's name:
 

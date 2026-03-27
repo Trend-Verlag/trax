@@ -33,6 +33,16 @@
 namespace trax
 {
 
+std::shared_ptr<Gestalt> Gestalt::Cast( std::shared_ptr<Body> pBody ) noexcept
+{
+	return std::dynamic_pointer_cast<Gestalt>( pBody );
+}
+
+std::shared_ptr<Gestalt> Gestalt::Cast( std::shared_ptr<Shape> pShape ) noexcept
+{
+	return std::dynamic_pointer_cast<Gestalt>( pShape );
+}
+
 void Gestalt_Imp::SetName( const char* name ) noexcept
 {
 	Shape_ImpBase::SetName( name );

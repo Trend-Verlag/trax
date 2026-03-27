@@ -499,6 +499,8 @@ namespace trax
 
 		/// \brief Makes a Line object.
 		static dclspc std::unique_ptr<Line> Make() noexcept;
+
+		static dclspc std::shared_ptr<Line> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
 	};
 
 
@@ -512,6 +514,8 @@ namespace trax
 
 		/// \brief Makes a LineP object.
 		static dclspc std::unique_ptr<LineP> Make() noexcept;
+
+		static dclspc std::shared_ptr<LineP> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
 
 
 		/// \brief Data definig the curve.
@@ -604,6 +608,8 @@ namespace trax
 		/// \brief Makes a Arc object.
 		static dclspc std::unique_ptr<Arc> Make() noexcept;
 
+		static dclspc std::shared_ptr<Arc> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
+
 		/// \brief Data definig the curve.
 		///
 		/// This is used for persistence. GetData() receives the data and
@@ -671,6 +677,7 @@ namespace trax
 		/// \brief Makes a ArcP object.
 		static dclspc std::unique_ptr<ArcP> Make() noexcept;
 
+		static dclspc std::shared_ptr<ArcP> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
 
 		/// \brief Data definig the curve.
 		///
@@ -814,6 +821,8 @@ namespace trax
 		/// \brief Makes a Helix object.
 		static dclspc std::unique_ptr<Helix> Make() noexcept;
 
+		static dclspc std::shared_ptr<Helix> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
+
 		/// \brief Data definig the curve.
 		///
 		/// This is used for persistence. GetData() receives the data and
@@ -905,6 +914,7 @@ namespace trax
 		/// \brief Makes a HelixP object.
 		static dclspc std::unique_ptr<HelixP> Make() noexcept;
 
+		static dclspc std::shared_ptr<HelixP> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
 
 		/// \brief Data definig the curve.
 		///
@@ -1069,6 +1079,7 @@ namespace trax
 		/// \brief Makes a Cubic object.
 		static dclspc std::unique_ptr<Cubic> Make() noexcept;
 
+		static dclspc std::shared_ptr<Cubic> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
 
 		using Data = CubicData; ///< Data definig the curve.
 
@@ -1163,6 +1174,8 @@ namespace trax
 
 		/// \brief Makes a Spline object.
 		static dclspc std::unique_ptr<Spline> Make() noexcept;
+
+		static dclspc std::shared_ptr<Spline> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
 
 
 		/// \brief Type of handling the ends:
@@ -1395,6 +1408,8 @@ namespace trax
 		/// \brief Makes a Clothoid object.
 		static dclspc std::unique_ptr<Clothoid> Make() noexcept;
 
+		static dclspc std::shared_ptr<Clothoid> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
+
 
 		/// \brief Data defining the curve.
 		///
@@ -1570,6 +1585,8 @@ namespace trax
 		/// \brief Makes a Rotator object.
 		static dclspc std::unique_ptr<Rotator> Make( CurveType type = CurveType::Rotator ) noexcept;
 
+		static dclspc std::shared_ptr<Rotator> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
+
 
 		/// \brief Data definig the curve.
 		///
@@ -1632,6 +1649,9 @@ namespace trax
 
 		/// \brief Makes a RotatorChain object.
 		static dclspc std::unique_ptr<RotatorChain> Make() noexcept;
+
+		static dclspc std::shared_ptr<RotatorChain> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
+
 
 		using SegmentValueType = std::tuple<Angle,Angle,Length>;
 		/// \brief Data defining the curve.
@@ -1746,6 +1766,8 @@ namespace trax
 		/// \brief Makes a PolygonalChain object.
 		static dclspc std::unique_ptr<PolygonalChain> Make() noexcept;
 
+		static dclspc std::shared_ptr<PolygonalChain> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
+
 
 		/// \brief Type of handling the ends:
 		enum class WrapTypes{
@@ -1858,6 +1880,8 @@ namespace trax
 		/// \brief Makes a SampledCurve object.
 		static dclspc std::unique_ptr<SampledCurve> Make() noexcept;
 
+		static dclspc std::shared_ptr<SampledCurve> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
+
 
 		using Data = std::vector<CurveSample>;
 
@@ -1933,6 +1957,8 @@ namespace trax
 
 		/// \brief Makes a EEPCurve object.
 		static dclspc std::unique_ptr<EEPCurve> Make(CurveType type = CurveType::EEPCurve) noexcept;
+
+		static dclspc std::shared_ptr<EEPCurve> Cast( std::shared_ptr<Curve> pCurve ) noexcept;
 
 
 		/// \brief Data definig the curve.

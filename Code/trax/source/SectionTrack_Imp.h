@@ -37,6 +37,10 @@ namespace trax{
 		// Track:
 		TrackType GetTrackType() const noexcept override;
 
+		std::shared_ptr<const SectionTrack> GetSectionTrack() const noexcept override;
+
+		std::shared_ptr<SectionTrack> GetSectionTrack() noexcept override;
+
 		bool IsValid() const noexcept override;
 
 		bool Diagnose( std::ostream& os ) const noexcept override;

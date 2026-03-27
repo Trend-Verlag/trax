@@ -42,6 +42,8 @@ namespace trax{
 		/// \brief Makes a Train object.
 		static dclspc std::shared_ptr<Train> Make() noexcept;
 
+		static dclspc std::shared_ptr<Train> Cast( std::shared_ptr<RailRunner> pRailRunner ) noexcept;
+
 
 		/// \brief Gets a shared pointer to this.
 		virtual std::shared_ptr<Train> ThisTrain() const noexcept = 0;
