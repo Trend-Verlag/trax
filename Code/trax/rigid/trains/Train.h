@@ -185,7 +185,8 @@ namespace trax{
 		/// 
 		/// No coupling or railing as well as no change of poses is done. 
 		/// The new train as well as this train might be left with a single 
-		/// component; use Reduce() or Clear() to remove redundant Trains.
+		/// component, even if it is a Train already; use Reduce() or Clear() 
+		/// to remove redundant Trains.
 		/// 
 		/// \returns a new Train with the components that were removed or 
 		/// nullptr if there was no broken coupling.

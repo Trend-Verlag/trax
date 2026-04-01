@@ -647,7 +647,7 @@ void Train_Imp::Append(
 {
 	Append( atEnd, 
 			pComponent, 
-			orientation ? EndType::north : EndType::south,
+			atEnd == EndType::north ? (orientation ? EndType::south : EndType::north) : (orientation ? EndType::north : EndType::south),
 			bCouple );
 }
 
