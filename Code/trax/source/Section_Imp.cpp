@@ -515,6 +515,18 @@ void Section_Imp::Create( SpecialSections specialSection )
 		Set( 6, { {1.800_m, -.900_m}	, {0,1}, 1.0f - 0.0f } );
 		CalculateNormals();
 		break;
+	case SpecialSections::embankment_closed:
+		SetCntPoints( 8 );
+		Set( 0, { {-1.800_m, -.900_m}	, {0,1}, 1.0f - 0.0f } );
+		Set( 1, { {-1.700_m, -.600_m}	, {0,1}, 1.0f - 0.01f } );
+		Set( 2, { {-1.240_m, -.200_m}	, {0,1}, 1.0f - 0.3f } );
+		Set( 3, { {0.0_m, -.170_m}		, {0,1}, 1.0f - 1.0f } );
+		Set( 4, { {1.240_m, -.200_m}	, {0,1}, 1.0f - 0.3f } );
+		Set( 5, { {1.700_m, -.600_m}	, {0,1}, 1.0f - 0.01f } );
+		Set( 6, { {1.800_m, -.900_m}	, {0,1}, 1.0f - 0.0f } );
+		Set( 7, { {-1.800_m, -.900_m}	, {0,1}, 0.0f } );
+		CalculateNormals();
+		break;
 	case SpecialSections::square:
 		CreatePipeline(*this, 4 );
 		break;
@@ -697,6 +709,8 @@ std::string ToString( Section::SpecialSections specialSection ){
 		return "eep_flatballast_rods";
 	case Section::SpecialSections::embankment:
 		return "embankment";
+	case Section::SpecialSections::embankment_closed:
+		return "embankment_closed";
 	case Section::SpecialSections::square:
 		return "square";
 	case Section::SpecialSections::hexagon:
@@ -748,6 +762,8 @@ Section::SpecialSections SpecialSection( const std::string& string ){
 		return Section::SpecialSections::eep_flatballast_rods;
 	else if( string == "embankment" )
 		return Section::SpecialSections::embankment;
+	else if( string == "embankment_closed" )
+		return Section::SpecialSections::embankment_closed;
 	else if( string == "square" )
 		return Section::SpecialSections::square;
 	else if( string == "hexagon" )

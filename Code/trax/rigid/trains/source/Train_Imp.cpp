@@ -421,8 +421,11 @@ Length Train_Imp::GetLength( DistanceType distance ) const noexcept{
 
 std::pair<Bogie&,EndType> Train_Imp::GetTipAt( EndType end )
 {
-	if( m_Train.empty() )
-		throw std::runtime_error( "Train_Imp::GetTipAt: empty train" );
+	if( m_Train.empty() ){
+		std::ostringstream oss;
+		oss << "Train_Imp::GetTipAt: empty train. ID(" << ID() << "), name(" << Reference( "name" ) << ")";
+		throw std::runtime_error( oss.str() );
+	}
 
 	switch( end ){
 		case EndType::north:
@@ -430,7 +433,7 @@ std::pair<Bogie&,EndType> Train_Imp::GetTipAt( EndType end )
 		case EndType::south:
 			return m_Train.back()->GetTipAt( m_Train.back()->GetOrientation() ? EndType::south : EndType::north );
 		case EndType::any:
-			return GetTipAt(EndType::north );
+			return GetTipAt( EndType::north );
 		default:
 			break;
 	}
@@ -440,8 +443,11 @@ std::pair<Bogie&,EndType> Train_Imp::GetTipAt( EndType end )
 
 std::pair<const Bogie&,EndType> Train_Imp::GetTipAt( EndType end ) const
 {
-	if( m_Train.empty() )
-		throw std::runtime_error( "Train_Imp::GetTipAt: empty train" );
+	if( m_Train.empty() ){
+		std::ostringstream oss;
+		oss << "Train_Imp::GetTipAt: empty train. ID(" << ID() << "), name(" << Reference( "name" ) << ")";
+		throw std::runtime_error( oss.str() );
+	}
 
 	switch( end ){
 		case EndType::north:
@@ -449,7 +455,7 @@ std::pair<const Bogie&,EndType> Train_Imp::GetTipAt( EndType end ) const
 		case EndType::south:
 			return m_Train.back()->GetTipAt( m_Train.back()->GetOrientation() ? EndType::south : EndType::north );
 		case EndType::any:
-			return GetTipAt(EndType::north );
+			return GetTipAt( EndType::north );
 		default:
 			break;
 	}

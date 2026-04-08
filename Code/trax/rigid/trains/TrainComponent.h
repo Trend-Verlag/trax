@@ -188,7 +188,7 @@ namespace trax{
 		/// of the RailRunner.
 		/// 
 		/// The tip of a RailRunner is at the outmost coupling position.
-		/// \returns southern overhang.
+		/// \returns northern or southern overhang.
 		virtual Length GetOverhang( EndType end, DistanceType distance = DistanceType::actual ) const noexcept = 0;
 
 
@@ -239,13 +239,13 @@ namespace trax{
 	/// \ingroup Group_RailRunnerEndHelpers
 	/// \param trainComponent The TrainComponent to get the end for according to its orientation in its Train.
 	/// \returns The end type corresponding to the given orientation.
-	EndType North( const TrainComponent& trainComponent ) noexcept;
+	inline EndType North( const TrainComponent& trainComponent ) noexcept;
 
 	/// \brief Get the back end of a TrainComponent according to its orientation in its Train.
 	/// \ingroup Group_RailRunnerEndHelpers
 	/// \param trainComponent The TrainComponent to get the end for according to its orientation in its Train.
 	/// \returns The end type corresponding to the given orientation.
-	EndType South( const TrainComponent& trainComponent ) noexcept;
+	inline EndType South( const TrainComponent& trainComponent ) noexcept;
 
 
 	/// \returns true if the two TrainComponents can be Couple()'ed.
@@ -277,6 +277,10 @@ namespace trax{
 
 	/// \returns the first common Train parent if the two TrainComponents have one.
 	dclspc Train* CommonParent( const TrainComponent& a, const TrainComponent& b ) noexcept;
+
+
+	/// \brief Gets the center frame of this TrainComponent.
+	dclspc spat::Frame<Length,One> GetCenter( const TrainComponent& ofTrainComponent, TrainComponent::DistanceType distance = TrainComponent::DistanceType::actual );
 
 
 // inlines:

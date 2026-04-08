@@ -69,6 +69,7 @@ namespace trax{
 			eep_simple3,				///< very simple epp track. high embankment.
 			eep_flatballast_rods,		///< flat ballast with rods
 			embankment,					///< simple embankment profile without rods
+			embankment_closed,			///< simple closed embankment profile without rods
 			square,						///< four points profile
 			hexagon,					///< six points profile
 			pipeline,					///< round profile.

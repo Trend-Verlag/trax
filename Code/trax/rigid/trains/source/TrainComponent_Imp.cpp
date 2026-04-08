@@ -146,4 +146,21 @@ Train* CommonParent( const TrainComponent& a, const TrainComponent& b ) noexcept
 	return nullptr;
 }
 
+spat::Frame<Length,One> GetCenter( const TrainComponent& ofTrainComponent, TrainComponent::DistanceType distance )
+{
+	if( !ofTrainComponent.IsValid() )
+		throw std::logic_error( "TrainComponent::GetCenter: cannot get center of an invalid component." );
+	if( !ofTrainComponent.IsRailed() )
+		throw std::logic_error( "TrainComponent::GetCenter: cannot get center of a derailed component." );
+	
+	const Length northOverhang = ofTrainComponent.GetOverhang( EndType::north, distance );
+	const Length southOverhang = ofTrainComponent.GetOverhang( EndType::south, distance );
+	Location location = ofTrainComponent.GetLocation();
+	location.Move( -(northOverhang + southOverhang) / 2 + northOverhang );
+
+	spat::Frame<Length,One> retval;
+	location.Transition( retval );
+	return retval;
+}
+
 }
