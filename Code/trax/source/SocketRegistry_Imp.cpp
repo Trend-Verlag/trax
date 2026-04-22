@@ -47,12 +47,18 @@ void SocketRegistry_Imp::RegisterPlug( Plug& plug ){
 		Connect(plug);
 	else{
 		m_Jacks.clear(); // no jacks can get connected if there are 
-						 // zero id plugs, wich have to be assigned an id first.
+						 // zero id plugs, which have to be assigned an id first.
 
-		//std::clog << "Plug with zero ID! No jacks can get connected if there are zero id plugs, which have to be assigned an id first. This will not be a problem on import." << std::endl;
+		std::clog << Verbosity::detailed << "Plug with zero ID! No jacks can get connected if there are zero id plugs, which have to be assigned an id first. This will not be a problem on import." << std::endl;
 	}
 
 	m_Plugs.insert( &plug );
+
+	//if( MultiPlug* pMultiPlug = dynamic_cast<MultiPlug*>(&plug); pMultiPlug )
+	//{
+	//	for( Plug& clone : *pMultiPlug )
+	//		RegisterPlug( clone );
+	//}
 }
 
 void SocketRegistry_Imp::UnRegisterPlug( const Plug& plug ){

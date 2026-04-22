@@ -1185,6 +1185,28 @@ std::string ToString( SingleSlipSwitch::Status status ){
 	}
 }
 
+std::string ToString( SingleSlipSwitch::SlotNames slotName ){
+	switch( slotName ){
+	case SingleSlipSwitch::SlotNames::slot_none:
+		return "slot_none";
+	case SingleSlipSwitch::SlotNames::slot_0:
+		return "slot_0";
+	case SingleSlipSwitch::SlotNames::slot_1:
+		return "slot_1";
+	case SingleSlipSwitch::SlotNames::slot_2:
+		return "slot_2";
+	case SingleSlipSwitch::SlotNames::slot_3:
+		return "slot_3";
+	case SingleSlipSwitch::SlotNames::slot_4:
+		return "slot_4";
+	case SingleSlipSwitch::SlotNames::slot_5:
+		return "slot_5";
+	default:
+		assert( !"Unknown Switch::SlotNames enumerator!" );
+		return "unknown";
+	}
+}
+
 SingleSlipSwitch::Status ToSingleSlipSwitchStatus( const std::string& status ){
 	if( status == "go" )
 		return SingleSlipSwitch::Status::go;
@@ -1534,6 +1556,42 @@ std::string ToString( DoubleSlipSwitch::Status status ){
 	default:
 		assert( !"Unknown Switch::Status enumerator!" );
 		return "unknown";
+	}
+}
+
+std::string ToString( DoubleSlipSwitch::SlotNames slotName )
+{
+	switch( slotName )
+	{
+		case DoubleSlipSwitch::SlotNames::slot_none:
+			return "slot_none";
+		case DoubleSlipSwitch::SlotNames::slot_0:
+			return "slot_0";
+		case DoubleSlipSwitch::SlotNames::slot_1:
+			return "slot_1";
+		case DoubleSlipSwitch::SlotNames::slot_2:
+			return "slot_2";
+		case DoubleSlipSwitch::SlotNames::slot_3:
+			return "slot_3";
+		case DoubleSlipSwitch::SlotNames::slot_4:
+			return "slot_4";
+		case DoubleSlipSwitch::SlotNames::slot_5:
+			return "slot_5";
+		case DoubleSlipSwitch::SlotNames::slot_6:
+			return "slot_6";
+		case DoubleSlipSwitch::SlotNames::slot_7:
+			return "slot_7";
+		case DoubleSlipSwitch::SlotNames::slot_8:
+			return "slot_8";
+		case DoubleSlipSwitch::SlotNames::slot_9:
+			return "slot_9";
+		case DoubleSlipSwitch::SlotNames::slot_10:
+			return "slot_10";
+		case DoubleSlipSwitch::SlotNames::slot_11:
+			return "slot_11";
+		default:
+			assert( !"Unknown DoubleSlipSwitch::SlotNames enumerator!" );
+			return "unknown";
 	}
 }
 

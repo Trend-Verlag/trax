@@ -34,10 +34,13 @@
 #include "trax/collections/TrackSystem.h"
 #include "trax/collections/TrackCollectionContainer.h"
 
-#include "trax/SectionTrack.h"
+#include "trax/support/TraxSupportStream.h"
+
+#include "trax/Indicator.h"
 #include "trax/Jack.h"
 #include "trax/Plug.h"
 #include "trax/Section.h"
+#include "trax/SectionTrack.h"
 #include "trax/SocketRegistry.h"
 #include "trax/Switch.h"
 
@@ -113,7 +116,435 @@ const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree
 
 const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree& pt, ConnectorCollection& connectorCollection )
 {
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "Switch" )
+		{
+			if( std::unique_ptr<Switch> pSwitch = Switch::Make(); pSwitch )
+			{
+				pair.second >> *pSwitch;
+				connectorCollection.Add( std::move( pSwitch ) );
+			}
+		}
+
+		else if( pair.first == "ThreeWaySwitch" )
+		{
+			if( std::unique_ptr<ThreeWaySwitch> pThreeWaySwitch = ThreeWaySwitch::Make(); pThreeWaySwitch )
+			{
+				pair.second >> *pThreeWaySwitch;
+				connectorCollection.Add( std::move( pThreeWaySwitch ) );
+			}
+		}
+
+		else if( pair.first == "SingleSlipSwitch" )
+		{
+			if( std::unique_ptr<SingleSlipSwitch> pSingleSlipSwitch = SingleSlipSwitch::Make(); pSingleSlipSwitch )
+			{
+				pair.second >> *pSingleSlipSwitch;
+				connectorCollection.Add( std::move( pSingleSlipSwitch ) );
+			}
+		}
+
+		else if( pair.first == "DoubleSlipSwitch" )
+		{
+			if( std::unique_ptr<DoubleSlipSwitch> pDoubleSlipSwitch = DoubleSlipSwitch::Make(); pDoubleSlipSwitch )
+			{
+				pair.second >> *pDoubleSlipSwitch;
+				connectorCollection.Add( std::move( pDoubleSlipSwitch ) );
+			}
+		}
+	}
+
 	return pt;
+}
+
+const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree& pt, Switch& switchObject )
+{
+	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
+	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
+	switchObject.Set( ToNarrowSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+
+	std::string refName = "NarrowTrack";
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "TrackEnd" ){
+			Track::End end;
+			ReadTrackEnd( pair.second, end );
+			std::ostringstream stream;
+			stream << end;
+						
+			switchObject.Reference( refName, stream.str() );
+
+			if( refName == "NarrowTrack" )
+				refName = "StraightTrack";
+			else if( refName == "StraightTrack" )
+				refName = "DivergedTrack";
+		}
+
+		else if( pair.first == "Plug" )
+			pair.second >> switchObject.PlugTo( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+
+		else if( pair.first == "Jack" )
+			pair.second >> switchObject.JackOn( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+	}
+
+	return pt;
+}
+
+const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree& pt, ThreeWaySwitch& threeWaySwitch )
+{
+	threeWaySwitch.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
+	threeWaySwitch.ID( pt.get( "<xmlattr>.id", 0 ) );
+	threeWaySwitch.Set( ToNarrowSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+
+	std::string refName = "NarrowTrack";
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "TrackEnd" ){
+			Track::End end;
+			ReadTrackEnd( pair.second, end );
+			std::ostringstream stream;
+			stream << end;
+						
+			threeWaySwitch.Reference( refName, stream.str() );
+
+			if( refName == "NarrowTrack" )
+				refName = "StraightTrack";
+			else if( refName == "StraightTrack" )
+				refName = "DivergedTrack1";
+			else if( refName == "DivergedTrack1" )
+				refName = "DivergedTrack2";
+		}
+
+		else if( pair.first == "Plug" )
+			pair.second >> threeWaySwitch.PlugTo( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+
+		else if( pair.first == "Jack" )
+			pair.second >> threeWaySwitch.JackOn( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+	}
+
+	return pt;
+}
+
+const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree& pt, SingleSlipSwitch& singleSlipSwitch )
+{
+	singleSlipSwitch.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
+	singleSlipSwitch.ID( pt.get( "<xmlattr>.id", 0 ) );
+	singleSlipSwitch.Set( ToSingleSlipSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+
+	SingleSlipSwitch::SlotNames slotName = SingleSlipSwitch::slot_0;
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "TrackEnd" ){
+			Track::End end;
+			ReadTrackEnd( pair.second, end );
+			std::ostringstream stream;
+			stream << end;
+						
+			singleSlipSwitch.Reference( ToString( slotName ), stream.str() );
+			slotName = static_cast<SingleSlipSwitch::SlotNames>(slotName + 1);
+		}
+
+		else if( pair.first == "Plug" )
+			pair.second >> singleSlipSwitch.PlugTo( SingleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+
+		else if( pair.first == "Jack" )
+			pair.second >> singleSlipSwitch.JackOn( SingleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+	}
+
+	return pt;
+}
+
+const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree& pt, DoubleSlipSwitch& doubleSlipSwitch )
+{
+	doubleSlipSwitch.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
+	doubleSlipSwitch.ID( pt.get( "<xmlattr>.id", 0 ) );
+	doubleSlipSwitch.Set( ToDoubleSlipSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+
+	DoubleSlipSwitch::SlotNames slotName = DoubleSlipSwitch::slot_0;
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "TrackEnd" ){
+			Track::End end;
+			ReadTrackEnd( pair.second, end );
+			std::ostringstream stream;
+			stream << end;
+						
+			doubleSlipSwitch.Reference( ToString( slotName ), stream.str() );
+			slotName = static_cast<DoubleSlipSwitch::SlotNames>(slotName + 1);
+		}
+
+		else if( pair.first == "Plug" )
+			pair.second >> doubleSlipSwitch.PlugTo( DoubleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+
+		else if( pair.first == "Jack" )
+			pair.second >> doubleSlipSwitch.JackOn( DoubleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+	}
+
+	return pt;
+}
+
+const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree& pt, IndicatorCollection& indicatorCollection )
+{
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "SwitchSemaphore" )
+		{
+			if( std::unique_ptr<BinaryIndicator> pBinaryIndicator = BinaryIndicator::Make( Indicator::Type::switch_semaphore ); pBinaryIndicator )
+			{
+				pair.second >> *pBinaryIndicator;
+				indicatorCollection.Add( std::move( pBinaryIndicator ) );
+			}
+		}
+	}
+
+	return pt;
+}
+
+void Read( 
+	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
+	ConnectorCollection& connectorCollection, 
+	const TrackSystem& trackSystem )
+{
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "Switch" )
+		{
+			if( std::unique_ptr<Switch> pSwitch = Switch::Make(); pSwitch )
+			{
+				Read( pair.second, socketRegistry, *pSwitch, trackSystem );
+				connectorCollection.Add( std::move( pSwitch ) );
+			}
+		}
+
+		else if( pair.first == "ThreeWaySwitch" )
+		{
+			if( std::unique_ptr<ThreeWaySwitch> pThreeWaySwitch = ThreeWaySwitch::Make(); pThreeWaySwitch )
+			{
+				Read( pair.second, socketRegistry, *pThreeWaySwitch, trackSystem );
+				connectorCollection.Add( std::move( pThreeWaySwitch ) );
+			}
+		}
+
+		else if( pair.first == "SingleSlipSwitch" )
+		{
+			if( std::unique_ptr<SingleSlipSwitch> pSingleSlipSwitch = SingleSlipSwitch::Make(); pSingleSlipSwitch )
+			{
+				Read( pair.second, socketRegistry, *pSingleSlipSwitch, trackSystem );
+				connectorCollection.Add( std::move( pSingleSlipSwitch ) );
+			}
+		}
+
+		else if( pair.first == "DoubleSlipSwitch" )
+		{
+			if( std::unique_ptr<DoubleSlipSwitch> pDoubleSlipSwitch = DoubleSlipSwitch::Make(); pDoubleSlipSwitch )
+			{
+				Read( pair.second, socketRegistry, *pDoubleSlipSwitch, trackSystem );
+				connectorCollection.Add( std::move( pDoubleSlipSwitch ) );
+			}
+		}
+	}
+}
+
+void Read( 
+	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
+	Switch& switchObject, 
+	const TrackSystem& trackSystem )
+{
+	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
+	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
+	switchObject.Set( ToNarrowSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+
+	int slot = 0;
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "TrackEnd" ){
+			Track::End end;
+			ReadTrackEnd( pair.second, end );
+			if( auto pTrack = trackSystem.Get( end.id ) )
+				switchObject.Slot( slot, pTrack, end.type );
+
+			++slot;
+		}
+
+		else if( pair.first == "Plug" )
+			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+
+		else if( pair.first == "Jack" )
+			ReadJack( pair.second, socketRegistry, switchObject.JackOn( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+	}
+
+    if( !switchObject.Check( std::cerr, 10_cm ) )
+        std::cerr << "trax: a switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
+}
+
+void Read( 
+	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry,
+	ThreeWaySwitch& switchObject,  
+	const TrackSystem& trackSystem )
+{
+	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
+	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
+	switchObject.Set( ToNarrowSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+
+	int slot = 0;
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "TrackEnd" ){
+			Track::End end;
+			ReadTrackEnd( pair.second, end );
+			if( auto pTrack = trackSystem.Get( end.id ) )
+				switchObject.Slot( slot, pTrack, end.type );
+
+			++slot;
+		}
+
+		else if( pair.first == "Plug" )
+			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+
+		else if( pair.first == "Jack" )
+			ReadJack( pair.second, socketRegistry, switchObject.JackOn( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+	}
+
+    if( !switchObject.Check(std::cerr,10_cm) )
+        std::cerr << "trax: a three way switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
+}
+
+void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, SingleSlipSwitch& switchObject, const TrackSystem& trackSystem )
+{
+	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
+	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
+	switchObject.Set( ToSingleSlipSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+
+	int slot = 0;
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "Frame" ){
+			Frame<Length,One> frame;
+			ReadFrame( pair.second, frame );
+			switchObject.SetCenter( frame );
+		}
+
+		else if( pair.first == "TrackEnd" ){
+			Track::End end;
+			ReadTrackEnd( pair.second, end );
+			if( auto pTrack = trackSystem.Get( end.id ) )
+				switchObject.Slot( slot, pTrack, end.type );
+
+			++slot;
+		}
+
+		else if( pair.first == "Plug" )
+			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( SingleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+
+		else if( pair.first == "Jack" )
+			ReadJack( pair.second, socketRegistry, switchObject.JackOn( SingleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+	}
+
+    if( !switchObject.Check(std::cerr,10_cm) )
+        std::cerr << "trax: a single slip switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
+}
+
+void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, DoubleSlipSwitch& switchObject, const TrackSystem& trackSystem )
+{
+	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
+	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
+	switchObject.Set( ToDoubleSlipSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+
+	int slot = 0;
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "Frame" ){
+			Frame<Length,One> frame;
+			ReadFrame( pair.second, frame );
+			switchObject.SetCenter( frame );
+		}
+
+		else if( pair.first == "TrackEnd" ){
+			Track::End end;
+			ReadTrackEnd( pair.second, end );
+			if( auto pTrack = trackSystem.Get( end.id ) )
+				switchObject.Slot( slot, pTrack, end.type );
+
+			++slot;
+		}
+
+		else if( pair.first == "Plug" )
+			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( DoubleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+
+		else if( pair.first == "Jack" )
+			ReadJack( pair.second, socketRegistry, switchObject.JackOn( DoubleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+	}
+
+    if( !switchObject.Check(std::cerr,10_cm) )
+        std::cerr << "trax: a double slip switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
+}
+
+void Read( 
+	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
+	BinaryIndicator& binaryIndicator )
+{
+	binaryIndicator.ID( pt.get( "<xmlattr>.id", IDType{0} ) );
+	binaryIndicator.RefTargetID( pt.get( "<xmlattr>.refid", IDType{0} ) );
+	binaryIndicator.Set( ToIndicatorStatus( pt.get( "<xmlattr>.status", ToString(Indicator::Status::unknown) )) );
+	AttributesToReferences( pt, binaryIndicator );
+	
+	Indicator::Status status = Indicator::Status::unknown;
+	for( const auto& pair : pt )
+	{
+		if( pair.first == "Frame" )
+		{
+			spat::Frame<Length,One> frame;
+			ReadFrame( pair.second, frame );
+
+			if( status == Indicator::Status::unknown )	
+				binaryIndicator.SetFrame( frame );
+			else
+				binaryIndicator.LocalFrameForStatus( status, frame );
+
+			status = static_cast<Indicator::Status>(static_cast<int>(status) + 1);
+		}
+
+		else if( pair.first == "Plug" )
+			ReadPlug( pair.second, socketRegistry, binaryIndicator.PlugTo( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+		
+		else if( pair.first == "Jack" )
+			ReadJack( pair.second, socketRegistry, binaryIndicator.JackOn( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+	}
+}
+
+void ReadJack( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Jack& jack )
+{
+	jack.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
+	jack.ID( pt.get( "<xmlattr>.id", IDType{0} ) );
+	jack.RefPlugID( pt.get( "<xmlattr>.plugid", IDType{0} ) );
+	socketRegistry.ConnectJack( jack );
+}
+
+void ReadPlug( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Plug& plug )
+{
+	plug.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
+
+	if( pt.get( "<xmlattr>.plugid", IDType{} ) == IDType{} )
+		std::cerr << "Reading 'Plug': attribute 'plugid' not present or zero. Plug:id=\"" 
+				  << pt.get<IDType>( "<xmlattr>.id", IDType{} ) << "\"" << std::endl;
+	plug.ID( pt.get( "<xmlattr>.plugid", pt.get( "<xmlattr>.id", IDType{} ) ) );
+
+	socketRegistry.RegisterPlug( plug );
+
+	for( const auto& pair : pt ){
+		if( pair.first == "Jack" )
+			ReadJack( pair.second, socketRegistry, plug.JackOnPulse() );
+	}
+}
+
+void ReadPlug( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, MultiPlug& plug )
+{
+	ReadPlug( pt, socketRegistry, plug.ID() ? plug.Make( nullptr ) : static_cast<Plug&>(plug) );
 }
 
 Anl4TrackSystemReader::Anl4TrackSystemReader( const char* pLocale )

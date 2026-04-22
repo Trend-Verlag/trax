@@ -37,6 +37,7 @@ namespace trax{
 	struct Plug;
 	struct Jack;
 	struct SocketRegistry;
+	struct Switch;
 
 	/// \brief Interface for objects that indicates system states somehow.
 	///
@@ -46,6 +47,7 @@ namespace trax{
 		enum class Type : char{
 			unknown = -1,
 			none  = 0,
+			switch_semaphore,
 			switch_mono,
 			switch_multi,
 			velocity_control,
@@ -128,11 +130,31 @@ namespace trax{
 		virtual bool IsValidState( Status status ) const = 0;
 
 
+		/// \brief Sets the local pose of the indicator for a status.
+		/// \param status The status to set the local frame for.
+		/// \param frame The local frame relative to GetFrame() to set 
+		/// for the status.
+		/// \throws std::invalid_argument if the status is not valid 
+		/// for this indicator or the frame is not orthonormal.
+		virtual void LocalFrameForStatus( Status status, const spat::Frame<Length,One>& frame ) = 0;
+
+
+		/// \returns the local pose of the indicator for a status.
+		/// \param status The status to get the local frame for.
+		/// \throws std::invalid_argument if the status is not valid 
+		/// for this indicator.
+		virtual const spat::Frame<Length,One>& LocalFrameForStatus( Status status ) const = 0;
+
+
 		/// \brief Set an angle to rotate the indicator by with its status.
+		/// \deprecated Use .
+		[[deprecated("Use some alternative instead.")]]
 		virtual void RotateWithStatus( Status status, Real angle ) = 0;
 
 
 		/// \returns the rotation angle for a status.
+		/// \deprecated Use some alternative instead.
+		[[deprecated( "Use some alternative instead." )]]
 		virtual Real RotateWithStatus( Status status ) const = 0;
 
 
@@ -159,6 +181,11 @@ namespace trax{
 
 		/// \brief Removes all references to Plugs and Jacks from the module.
 		virtual void UnregisterSockets( SocketRegistry& registry ) = 0;
+
+
+		virtual void RefTargetID( IDType id ) noexcept = 0;
+
+		virtual IDType RefTargetID() const noexcept = 0;
 	};
 
 
@@ -183,6 +210,15 @@ namespace trax{
 		/// \brief Makes a BinaryIndicator object.
 		static dclspc std::unique_ptr<BinaryIndicator> Make( Type type ) noexcept;
 		
+
+		/// \brief Aligns the indicator's frames to a certain switch.
+		/// \param switchObject The switch to align to.
+		/// \param localPosition The position of the indicator relative to the switch.
+		/// \param alignment The direction the indicator should use to point to the switches
+		/// outgoing tracks.
+		/// \throws std::logic_error if the switch is not valid.
+		virtual void AlignTo( Switch& switchObject, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> ) = 0;
+
 
 		/// \brief Gets a Jack that pulses its Plug if the BinaryIndicator is set to one. 
 		virtual Jack& JackOnOne() noexcept = 0;

@@ -251,6 +251,16 @@ bool Multicator::IsValidState( Status status ) const{
 	return m_IndicatorStates.find( status ) != m_IndicatorStates.end();
 }
 
+void Multicator::LocalFrameForStatus( Status status, const spat::Frame<Length, One>& frame )
+{
+	throw std::logic_error( "SwitchSemaphore::LocalFrameForStatus: Not yet implemented!" );
+}
+
+const spat::Frame<Length, One>& Multicator::LocalFrameForStatus( Status status ) const
+{
+	throw std::logic_error( "SwitchSemaphore::LocalFrameForStatus: Not yet implemented!" );
+}
+
 void Multicator::RotateWithStatus( Status status, Real angle ){
 	auto iter = m_IndicatorStates.find( status );
 	if( iter == m_IndicatorStates.end() )
@@ -349,6 +359,14 @@ void Multicator::UnregisterSockets( SocketRegistry& registry ){
 		registry.UnRegisterPlug( pair.second.m_PlugToStatus );
 		registry.RemoveJack( pair.second.m_JackOnStatus );
 	}
+}
+
+void Multicator::RefTargetID( IDType id ) noexcept{
+	m_RefTargetID = id;
+}
+
+IDType Multicator::RefTargetID() const noexcept{
+	return m_RefTargetID;
 }
 
 const char* Multicator::TypeName() const noexcept{
@@ -459,6 +477,8 @@ std::unique_ptr<Indicator> Indicator::Make( Type type ) noexcept{
 std::unique_ptr<BinaryIndicator> BinaryIndicator::Make( Type type ) noexcept{
 	try{
 		switch( type ){
+			case Type::switch_semaphore:
+				return std::make_unique<SwitchSemaphore_Imp>();
 			case Type::switch_mono:
 				return std::make_unique<SwitchSemaphore>();
 			case Type::switch_multi:

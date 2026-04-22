@@ -27,14 +27,300 @@
 #include "SwitchSemaphore_Imp.h"
 #include "trax/Location.h"
 
+#include <iostream>
+
 namespace trax{
 	using namespace spat;
+
+///////////////////////////////////////
+SwitchSemaphore_Imp::SwitchSemaphore_Imp()
+	:	m_Status				{Status::unknown},
+		m_PlugToGo				{*this,Status::one},
+		m_PlugToBranch			{*this,Status::two},
+		m_PlugToToggle			{*this}
+{
+	m_PoseOne.Init();
+	m_PoseTwo.Init();
+	m_PlugToGo.Reference( "name", "PlugToOne" );
+	m_PlugToBranch.Reference( "name", "PlugToTwo" );
+	m_PlugToToggle.Reference( "name", "PlugToToggle" );
+}
+
+const char* SwitchSemaphore_Imp::TypeName() const noexcept{
+	return "SwitchSemaphore";
+}
+
+void SwitchSemaphore_Imp::Get( Frame<Length,One>& frame ) const{
+	switch( m_Status ){
+	case Status::one:
+		frame = GetFrame() * m_PoseOne;
+		break;
+	case Status::two:
+		frame = GetFrame() * m_PoseTwo;
+		break;
+	default:
+		throw std::logic_error( "Invalid enumeration value!" );
+	}
+}
+
+BinaryIndicator::Status SwitchSemaphore_Imp::Set( Status status, bool pulse ){
+	const Status Retval = m_Status;
+
+	//if( m_Status != status ) //we need pulses to transire, so do the set in any case
+	{
+		m_Status = status;
+
+		if( pulse ){
+			JackOn( m_Status ).Pulse();
+			JackOnChange().Pulse();
+		}
+	}
+
+	return Retval;
+}
+
+void SwitchSemaphore_Imp::Toggle( bool pulse ){
+	Set( m_Status == Status::one ? Status::two : Status::one, pulse );
+}
+
+BinaryIndicator::Status SwitchSemaphore_Imp::Get() const noexcept{
+	return m_Status;
+}
+
+bool SwitchSemaphore_Imp::IsValidState( Status status ) const noexcept{
+	return status == Status::one || status == Status::two;
+}
+
+void SwitchSemaphore_Imp::LocalFrameForStatus( Status status, const spat::Frame<Length,One>& frame )
+{
+	if( !frame.IsOrthoNormal() )
+		throw std::invalid_argument( "Frame must be orthonormal!" );
+
+	switch( status ){
+	case Status::one:
+		m_PoseOne = frame;
+		break;
+	case Status::two:
+		m_PoseTwo = frame;
+		break;
+	default:
+		throw std::invalid_argument( "Invalid enumeration value!" );
+	}
+}
+
+const spat::Frame<Length,One>& SwitchSemaphore_Imp::LocalFrameForStatus( Status status ) const
+{
+	switch( status ){
+	case Status::one:
+		return m_PoseOne;
+	case Status::two:
+		return m_PoseTwo;
+	default:
+		throw std::invalid_argument( "Invalid enumeration value!" );
+	}
+}
+
+void SwitchSemaphore_Imp::RotateWithStatus( Status status, Real angle ) noexcept{
+	std::cerr << "SwitchSemaphore_Imp::RotateWithStatus: Deprecated!" << std::endl;
+}
+
+Real SwitchSemaphore_Imp::RotateWithStatus(Status status) const noexcept{
+	std::cerr << "SwitchSemaphore_Imp::RotateWithStatus: Deprecated!" << std::endl;
+	return 0.0;
+}
+
+void SwitchSemaphore_Imp::AlignTo( 
+	Switch& switchObject, 
+	const spat::Position<dim::Length>& localPosition, 
+	const spat::Vector<One>& alignment )
+{
+	spat::Frame<dim::Length,dim::One> frame;
+	switchObject.Bifurcation().Transition( frame );
+	SetFrame( frame );
+	frame.TransportTo( localPosition );
+
+	if( switchObject.IsHorizontal() )
+	{
+		if( switchObject.IsY() )
+		{
+			if( switchObject.BranchLeftOrRight() )
+			{
+				frame.LookAt( alignment, -frame.N );
+				m_PoseOne = frame;
+				switchObject.Bifurcation().Transition( frame );
+				frame.TransportTo( localPosition );
+				frame.LookAt( alignment, frame.N );
+				m_PoseTwo = frame;
+			}
+			else
+			{
+				frame.LookAt( alignment, frame.N );
+				m_PoseOne = frame;
+				switchObject.Bifurcation().Transition( frame );
+				frame.TransportTo( localPosition );
+				frame.LookAt( alignment, -frame.N );
+				m_PoseTwo = frame;
+			}
+		}
+		else if( switchObject.BranchLeftOrRight() )
+		{
+			frame.LookAt( alignment, frame.T );
+			m_PoseOne = frame;
+			switchObject.Bifurcation().Transition( frame );
+			frame.TransportTo( localPosition );
+			frame.LookAt( alignment, frame.N );
+			m_PoseTwo = frame;
+		}
+		else
+		{
+			frame.LookAt( alignment, frame.T );
+			m_PoseOne = frame;
+			switchObject.Bifurcation().Transition( frame );
+			frame.TransportTo( localPosition );
+			frame.LookAt( alignment, -frame.N );
+			m_PoseTwo = frame;
+		}
+	}
+	else
+	{
+		std::cerr << "SwitchSemaphore_Imp::AlignTo: switch orientation not yet supported!" << std::endl;
+	}
+
+	GetFrame().FromParent( m_PoseOne );
+	GetFrame().FromParent( m_PoseTwo );
+
+	JackOnOne().InsertAndAppend( &switchObject.PlugToGo().Make() );
+	JackOnTwo().InsertAndAppend( &switchObject.PlugToBranch().Make() );
+	switchObject.JackOnGo().InsertAndAppend( &PlugToOne() );
+	switchObject.JackOnBranch().InsertAndAppend( &PlugToTwo() );
+	
+	RefTargetID( switchObject.ID() );
+	Set( switchObject.Get() == Switch::Status::go ? Status::one : Status::two, false );
+}
+
+Plug& SwitchSemaphore_Imp::PlugToToggle() noexcept{
+	return m_PlugToToggle;
+}
+
+Jack& SwitchSemaphore_Imp::JackOnChange() noexcept{
+	return m_JackOnChange;
+}
+
+Jack& SwitchSemaphore_Imp::JackOn( Status status ){
+	switch( status ){
+	case Status::one:
+		return JackOnOne();
+	case Status::two:
+		return JackOnTwo();
+	case Status::change:
+		return JackOnChange();
+	default:
+		throw std::invalid_argument( "Unknown enumeration value!" );
+	}
+}
+
+Plug& SwitchSemaphore_Imp::PlugTo( Status status ){
+	switch( status ){
+	case Status::one:
+		return PlugToOne();
+	case Status::two:
+		return PlugToTwo();
+	case Status::toggle:
+		return PlugToToggle();
+	default:
+		throw std::invalid_argument( "Unknown enumeration value!" );
+	}
+}
+
+Jack& SwitchSemaphore_Imp::JackOnOne() noexcept{
+	return m_JackOnGo;
+}
+
+Plug& SwitchSemaphore_Imp::PlugToOne() noexcept{
+	return m_PlugToGo;
+}
+
+Jack& SwitchSemaphore_Imp::JackOnTwo() noexcept{
+	return m_JackOnBranch;
+}
+
+Plug& SwitchSemaphore_Imp::PlugToTwo() noexcept{
+	return m_PlugToBranch;
+}
+
+void SwitchSemaphore_Imp::RegisterSockets( SocketRegistry& module ){
+	module.RegisterPlug( m_PlugToGo );
+	module.RegisterPlug( m_PlugToBranch );
+	module.RegisterPlug( m_PlugToToggle );
+
+	module.ConnectJack( m_JackOnGo );
+	module.ConnectJack( m_JackOnBranch );
+	module.ConnectJack( m_JackOnChange );
+}
+
+void SwitchSemaphore_Imp::UnregisterSockets( SocketRegistry& module ){
+	module.UnRegisterPlug( m_PlugToGo );
+	module.UnRegisterPlug( m_PlugToBranch );
+	module.UnRegisterPlug( m_PlugToToggle );
+
+	module.RemoveJack( m_JackOnGo );
+	module.RemoveJack( m_JackOnBranch );
+	module.RemoveJack( m_JackOnChange );
+}
+
+void SwitchSemaphore_Imp::RefTargetID( IDType id ) noexcept{
+	m_RefTargetID = id;
+}
+
+IDType SwitchSemaphore_Imp::RefTargetID() const noexcept{
+	return m_RefTargetID;
+}
+
+const Plug& SwitchSemaphore_Imp::_GetPlug( int idx ) const{
+	switch( idx ){
+	case 0:
+		return m_PlugToGo;
+	case 1:
+		return m_PlugToBranch;
+	case 2:
+		return m_PlugToToggle;
+	default:
+		std::ostringstream stream;
+		stream << "Out of range!" << std::endl;
+		stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
+		throw std::range_error( stream.str() );
+	}
+}
+
+const Jack& SwitchSemaphore_Imp::_GetJack( int idx ) const{
+	switch( idx ){
+	case 0:
+		return m_JackOnGo;
+	case 1:
+		return m_JackOnBranch;
+	case 2:
+		return m_JackOnChange;
+	default:
+		std::ostringstream stream;
+		stream << "Out of range!" << std::endl;
+		stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
+		throw std::range_error( stream.str() );
+	}
+}
+
+int SwitchSemaphore_Imp::CountPlugs() const noexcept{
+	return 3;
+}
+
+int SwitchSemaphore_Imp::CountJacks() const noexcept{
+	return 3;
+}
 ///////////////////////////////////////
 SwitchSemaphore::SwitchSemaphore()
 	:	m_Status				{Status::unknown},
 		m_bPreserveUpDirection	{false},
 		m_RotAngleOne			{0},
-		m_RotAngleTwo			{0},
+		m_RotAngleTwo			{pi/2},
 		m_PlugToGo				{*this,Status::one},
 		m_PlugToBranch			{*this,Status::two},
 		m_PlugToToggle			{*this}
@@ -159,6 +445,16 @@ bool SwitchSemaphore::IsValidState( Status status ) const noexcept{
 	return status == Status::one || status == Status::two;
 }
 
+void SwitchSemaphore::LocalFrameForStatus( Status status, const spat::Frame<Length,One>& frame )
+{
+	throw std::logic_error( "SwitchSemaphore::LocalFrameForStatus: Not yet implemented!" );
+}
+
+const spat::Frame<Length, One>& SwitchSemaphore::LocalFrameForStatus( Status status ) const
+{
+	throw std::logic_error( "SwitchSemaphore::LocalFrameForStatus: Not yet implemented!" );
+}
+
 void SwitchSemaphore::RotateWithStatus( Status status, Real angle ) noexcept{
 	switch( status ){
 	case Status::one:
@@ -181,6 +477,11 @@ Real SwitchSemaphore::RotateWithStatus(Status status) const noexcept{
 	default:
 		return 0;
 	}
+}
+
+void SwitchSemaphore::AlignTo( Switch& switchObject, const spat::Position<dim::Length>& localPosition, const spat::Vector<One>& alignment )
+{
+	std::cerr << "SwitchSemaphore::AlignTo: Not yet implemented!" << std::endl;
 }
 
 Plug& SwitchSemaphore::PlugToToggle() noexcept{
@@ -251,6 +552,14 @@ void SwitchSemaphore::UnregisterSockets( SocketRegistry& module ){
 	module.RemoveJack( m_JackOnGo );
 	module.RemoveJack( m_JackOnBranch );
 	module.RemoveJack( m_JackOnChange );
+}
+
+void SwitchSemaphore::RefTargetID( IDType id ) noexcept{
+	m_RefTargetID = id;
+}
+
+IDType SwitchSemaphore::RefTargetID() const noexcept{
+	return m_RefTargetID;
 }
 
 const Plug& SwitchSemaphore::_GetPlug( int idx ) const{

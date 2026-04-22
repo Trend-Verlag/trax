@@ -27,13 +27,14 @@
 
 #pragma once
 
-#include "trax/Event.h"
-#include "trax/Track.h"
-#include "trax/TrackLocation.h"
-#include "trax/Location.h"
 #include "trax/Curve.h"
+#include "trax/Event.h"
+#include "trax/Indicator.h"
+#include "trax/Location.h"
 #include "trax/Plug.h"
 #include "trax/Switch.h"
+#include "trax/Track.h"
+#include "trax/TrackLocation.h"
 
 #include "common/support/CommonSupportStream.h"
 #include "dim/support/DimSupportStream.h"
@@ -50,41 +51,44 @@ namespace trax{
 	
 	/// \brief Streams trax objects.
 	/// \ingroup Group_StreamingFunctions
-	inline std::ostream& operator << ( std::ostream& os, const EndType& endType );
+	inline std::ostream& operator<<( std::ostream& os, const EndType& endType );
 
-	inline std::istream& operator >> ( std::istream& is, EndType& endType );
+	inline std::istream& operator>>( std::istream& is, EndType& endType );
 
-	inline std::ostream& operator << ( std::ostream& os, const Track::End& end );
+	inline std::ostream& operator<<( std::ostream& os, const Track::End& end );
 
-	inline std::istream& operator >> ( std::istream& is, Track::End& end );
+	inline std::istream& operator>>( std::istream& is, Track::End& end );
 
-	inline std::ostream& operator << ( std::ostream& ost, const Location& location );
+	inline std::ostream& operator<<( std::ostream& ost, const Location& location );
 
-	inline std::ostream& operator << ( std::ostream& ost, const TrackLocation& location );
+	inline std::ostream& operator<<( std::ostream& ost, const TrackLocation& location );
 
-	inline std::ostream& operator << ( std::ostream& ost, const TrackLocationRef& location );
+	inline std::ostream& operator<<( std::ostream& ost, const TrackLocationRef& location );
 
-	inline std::ostream& operator << ( std::ostream& ost, const TrackRange& range );
+	inline std::ostream& operator<<( std::ostream& ost, const TrackRange& range );
 
 	inline std::ostream& operator<<( std::ostream& ost, const Orientation& orient );
 
 	inline std::ostream& operator<<( std::ostream& ost, const Orientation::Value& orient );
 
 
-	inline std::ostream& operator << ( std::ostream& ost, NarrowSwitch::Status status );
+	inline std::ostream& operator<<( std::ostream& ost, const NarrowSwitch::Status status );
+
+	inline std::ostream& operator<<( std::ostream& ost, const Indicator::Status status );
+	inline std::istream& operator>>( std::istream& is, Indicator::Status& status );
 
 
-	inline std::ostream& operator << ( std::ostream& os, const LineP::Data& data );
-	inline std::ostream& operator << ( std::ostream& os, const Arc::Data& data );
-	inline std::ostream& operator << ( std::ostream& os, const ArcP::Data& data );
-	inline std::ostream& operator << ( std::ostream& os, const Helix::Data& data );
-	inline std::ostream& operator << ( std::ostream& os, const HelixP::Data& data );
-	inline std::ostream& operator << ( std::ostream& os, const Cubic::Data& data );
-	inline std::ostream& operator << ( std::ostream& os, const Spline::Data& data );
-	inline std::ostream& operator << ( std::ostream& os, const Clothoid::Data& data );
-	inline std::ostream& operator << ( std::ostream& os, const Rotator::Data& data );
-	inline std::ostream& operator << ( std::ostream& os, const RotatorChain::Data& data );
-	inline std::ostream& operator << ( std::ostream& os, const PolygonalChain::Data& data );
+	inline std::ostream& operator<<( std::ostream& os, const LineP::Data& data );
+	inline std::ostream& operator<<( std::ostream& os, const Arc::Data& data );
+	inline std::ostream& operator<<( std::ostream& os, const ArcP::Data& data );
+	inline std::ostream& operator<<( std::ostream& os, const Helix::Data& data );
+	inline std::ostream& operator<<( std::ostream& os, const HelixP::Data& data );
+	inline std::ostream& operator<<( std::ostream& os, const Cubic::Data& data );
+	inline std::ostream& operator<<( std::ostream& os, const Spline::Data& data );
+	inline std::ostream& operator<<( std::ostream& os, const Clothoid::Data& data );
+	inline std::ostream& operator<<( std::ostream& os, const Rotator::Data& data );
+	inline std::ostream& operator<<( std::ostream& os, const RotatorChain::Data& data );
+	inline std::ostream& operator<<( std::ostream& os, const PolygonalChain::Data& data );
 
 	inline std::istream& operator >> ( std::istream& is, LineP::Data& data );
 	inline std::istream& operator >> ( std::istream& is, Arc::Data& data );
@@ -192,6 +196,23 @@ namespace trax{
 	inline std::ostream& operator<<(std::ostream& ost, NarrowSwitch::Status status){
 		ost << "NarrowSwitch::Status(" << ToString(status) << " )";
 		return ost;
+	}
+
+	inline std::ostream& operator<<(std::ostream& ost, Indicator::Status status){
+		ost << "Indicator::Status( " << ToString(status) << " )";
+		return ost;
+	}
+
+	inline std::istream& operator>>( std::istream& is, Indicator::Status& status ){
+		std::string token;
+		is >> token;
+		if( token != "Indicator::Status(" )
+			throw std::runtime_error( "No Indicator::Status" );
+		char c;
+		is >> token;
+		is >> c;
+		status = ToIndicatorStatus( token );
+		return is;
 	}
 
 	inline std::ostream& operator << ( std::ostream& os, const LineP::Data& data ){

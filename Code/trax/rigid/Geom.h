@@ -126,28 +126,33 @@ namespace trax{
 		/// collision will be possible. 
 		enum Filters : unsigned int{
 			none			= 0,
-			fBogie			= 0x00000001,
-			fChildBogie		= 0x00000002,
-			fWheelset		= 0x00000004,
-			fCargo			= 0x00000008,
-			fTerrain		= 0x00000010,
-			fBogieSpace		= 0x00000020,
-			fCrane			= 0x00000040,
-			fConstruction	= 0x00000080,
+			fBogie			= (1 << 0),
+			fChildBogie		= (1 << 1),
+			fWheelset		= (1 << 2),
+			fCargo			= (1 << 3),
+			fTerrain		= (1 << 4),
+			fBogieSpace		= (1 << 5),
+			fCrane			= (1 << 6),
+			fConstruction	= (1 << 7),
 
-			fHook			= 0x00000100,
-			fHookFixed		= 0x00000200,
-			fCouplingNorth	= 0x00000400,
-			fCouplingSouth	= 0x00000800,
+			// Trigger filters:
+			fHook			= (1 << 8),
+			fHookFixed		= (1 << 9),
+			fCouplingNorth	= (1 << 10),
+			fCouplingSouth	= (1 << 11),
+			fTriggerShape	= (1 << 12),
 
-			fTriggerShape	= 0x00001000,
-			fCabin			= 0x00002000,
-			fBogieNoCabin	= 0x00004000,
-			fBuffer			= 0x00008000,
-			fTrack			= 0x00010000,
-			fMovableTrack	= 0x00020000,
+			fCabin			= (1 << 13),
+			fBogieNoCabin	= (1 << 14),
+			fBuffer			= (1 << 15),
 
-			fAll			= 0x2fffffff
+			// Track filters:
+			fTrack			= (1 << 16),
+			fMovableTrack	= (1 << 17),
+			fSwitchArm		= (1 << 18),
+
+			fAll			= 0x7fffffff,
+			fAllNoCoupling  = fAll ^ (fCouplingNorth | fCouplingSouth)
 		};
 
 
@@ -198,6 +203,10 @@ namespace trax{
 
 	constexpr bool IsTrigger( unsigned int filter ) noexcept{
 		return (filter & (Geom::fTriggerShape | Geom::fHook | Geom::fHookFixed | Geom::fCouplingNorth | Geom::fCouplingSouth)) ? true : false;
+	}
+
+	constexpr unsigned int TriggerFilters() noexcept{
+		return Geom::fTriggerShape | Geom::fHook | Geom::fHookFixed | Geom::fCouplingNorth | Geom::fCouplingSouth;
 	}
 
 

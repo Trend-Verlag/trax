@@ -31,22 +31,65 @@
 #include "dim/support/DimSupportXML.h"
 #include "spat/support/SpatSupportXML.h"
 
+#include "trax/Configuration.h"
+#include "trax/Interfaces.h"
 #include "trax/Curve.h"
 #include "trax/Track.h"
 
 namespace trax{
 
-	struct Section;
-	struct TrackLocation;
-	struct TrackLocationRef;
-	struct TrackRange;
-
 	namespace ptreesupport{
 
 		using spat::ptreesupport::operator<<;
 
+		/// \name Property tree streaming writing support for trax classes
+		///@{
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackBuilder& track );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Location& location );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackLocation& tlr );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackLocationRef& tlr );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackRange& tr );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Sensor& sensor );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Section& section );
 
-		/// \name Property Tree Streaming Support for Trax Classes
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Connector& connector );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const VelocityControl& signal );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const JumpSite& signal );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Indicator& indicator );
+
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Curve& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const CurveSample& sample );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Line& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Arc& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Helix& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const LineP& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const ArcP& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const HelixP& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Cubic& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Spline& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Clothoid& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Rotator& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const RotatorChain& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const PolygonalChain& curve );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const SampledCurve& curve );
+
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const RoadwayTwist& twist );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const ConstantTwist& twist );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const LinearTwist& twist );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const PiecewiseTwist& twist );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const DirectionalTwist& twist );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const CombinedTwist& twist );
+
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const PlugEnumerator& plugEnumerator );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Plug& plug );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const JackEnumerator& jackEnumerator );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Jack& jack );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const PulseCounter& pulseCounter );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Timer& timer );
+		///@}
+
+
+		/// \name Property tree streaming reading support for trax classes
 		///@{
 		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Line& line );
 		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, LineP& lineP );
@@ -72,10 +115,13 @@ namespace trax{
 		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Section& section );
 
 		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, TrackBuilder& track );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, BinaryIndicator& binaryIndicator );
+
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Plug& plug );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, MultiPlug& plug );
+		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Jack& jack );
 		///@}
 
-		/// \name Explicit XML Reading
-		///@{	
 
 		/// \name Explicit XML Reading
 		///@{

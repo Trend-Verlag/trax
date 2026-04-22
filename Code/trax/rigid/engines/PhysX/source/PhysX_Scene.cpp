@@ -526,17 +526,18 @@ physx::PxFilterFlags PhysX_Scene::PhysX_SceneFilterShader(
 		return physx::PxFilterFlag::eSUPPRESS;
 	}
 
-	// generate contacts for all that were not filtered above
-	pairFlags = physx::PxPairFlag::eCONTACT_DEFAULT;
-
 	// trigger the contact callback for pairs (A,B) where
 	// the filtermask of A contains the ID of B or vice versa.
-	if((filterData0.word0 & filterData1.word1) || (filterData1.word0 & filterData0.word1)){
-			pairFlags |= physx::PxPairFlag::eNOTIFY_TOUCH_FOUND;
-			pairFlags |= physx::PxPairFlag::eNOTIFY_CONTACT_POINTS;
+	if((filterData0.word0 & filterData1.word1) || (filterData1.word0 & filterData0.word1))
+	{
+		// generate contacts for all that were not filtered above
+		pairFlags  = physx::PxPairFlag::eCONTACT_DEFAULT;
+		pairFlags |= physx::PxPairFlag::eNOTIFY_TOUCH_FOUND;
+		pairFlags |= physx::PxPairFlag::eNOTIFY_CONTACT_POINTS;
+		return physx::PxFilterFlag::eDEFAULT;
 	}
 
-	return physx::PxFilterFlag::eDEFAULT;
+	return physx::PxFilterFlag::eSUPPRESS;
 }
 
 PhysX_Scene::Dispatcher::Dispatcher( unsigned int numThreads )

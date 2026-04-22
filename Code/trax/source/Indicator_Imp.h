@@ -50,6 +50,10 @@ namespace trax{
 
 		bool IsValidState( Status status ) const override;
 
+		void LocalFrameForStatus( Status status, const spat::Frame<Length,One>& frame ) override;
+
+		const spat::Frame<Length,One>& LocalFrameForStatus( Status status ) const override;
+
 		void RotateWithStatus( Status status, Real angle ) override;
 
 		Real RotateWithStatus( Status status ) const override;
@@ -65,6 +69,10 @@ namespace trax{
 		void RegisterSockets( SocketRegistry& registry ) override;
 
 		void UnregisterSockets( SocketRegistry& registry ) override;
+
+		void RefTargetID( IDType id ) noexcept override;
+
+		virtual IDType RefTargetID() const noexcept override;
 
 		// Inherited via PlugEnumerator
 		const char* TypeName() const noexcept override;
@@ -85,6 +93,7 @@ namespace trax{
 	private:
 		Indicator::Status m_Status;
 		bool m_StatusChangeBlocker;
+		IDType m_RefTargetID;
 
 		struct IndicatorState{
 			IndicatorState( Multicator& parent, Indicator::Status status );

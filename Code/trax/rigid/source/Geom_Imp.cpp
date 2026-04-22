@@ -206,6 +206,12 @@ Geom::Filters GeomFilter( const std::string& filter ){
 
 unsigned int CollisionFilterFor( Geom::Filters filter ) noexcept{
 	switch( filter ){
+	case Geom::fTrack:
+		return Geom::fAllNoCoupling ^ Geom::fTrack;
+	case Geom::fMovableTrack:
+		return Geom::fAllNoCoupling;
+	case Geom::fSwitchArm:
+		return Geom::fAllNoCoupling ^ Geom::fSwitchArm;
 	case Geom::fBogie:
 	case Geom::fCabin:
 	case Geom::fBogieNoCabin:
@@ -215,7 +221,7 @@ unsigned int CollisionFilterFor( Geom::Filters filter ) noexcept{
 	case Geom::fWheelset:
 	case Geom::fCargo:
 	case Geom::fBogieSpace:
-		return Geom::fAll ^ (Geom::fCouplingNorth | Geom::fCouplingSouth);
+		return Geom::fAllNoCoupling;
 	case Geom::fTerrain:
 		return Geom::fAll ^ (Geom::fCouplingNorth | Geom::fCouplingSouth | Geom::fTerrain);
 	case Geom::fCrane:

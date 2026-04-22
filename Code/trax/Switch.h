@@ -505,6 +505,8 @@ namespace trax{
 	/// \brief Makes a string from the status
 	dclspc std::string ToString( SingleSlipSwitch::Status status );
 
+	/// \brief Makes a string from the SlotName
+	dclspc std::string ToString( SingleSlipSwitch::SlotNames slotName );
 
 	/// \brief Makes a status value from a status string.
 	/// \throws std::invalid_argument if the string was not recognized.
@@ -605,6 +607,8 @@ namespace trax{
 	/// \brief Makes a string from the status
 	dclspc std::string ToString( DoubleSlipSwitch::Status status );
 
+	/// \brief Makes a string from the SlotName
+	dclspc std::string ToString( DoubleSlipSwitch::SlotNames slotName );
 
 	/// \brief Makes a status value from a status string.
 	/// \throws std::invalid_argument if the string was not recognized.

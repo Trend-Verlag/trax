@@ -32,6 +32,82 @@ namespace trax{
 
 	typedef Pose_Imp<ObjectID_Imp<BinaryIndicator>> SwitchSemaphore_Base;
 
+	class SwitchSemaphore_Imp : public SwitchSemaphore_Base,
+								public PlugEnumerator,
+								public JackEnumerator
+	{
+	public:
+		SwitchSemaphore_Imp();
+
+		const char* TypeName() const noexcept override;
+
+		void Get( spat::Frame<Length,One>& frame ) const override;
+
+		Status Set( Status status, bool pulse = true ) override;
+
+		void Toggle( bool pulse = true ) override;
+
+		Status Get() const noexcept override;
+
+		bool IsValidState( Status status ) const noexcept override;
+
+		void LocalFrameForStatus( Status status, const spat::Frame<Length,One>& frame ) override;
+
+		const spat::Frame<Length,One>& LocalFrameForStatus( Status status ) const override;
+
+		void RotateWithStatus( Status status, Real angle ) noexcept override;
+
+		Real RotateWithStatus( Status status ) const noexcept override;
+
+		void AlignTo( Switch& switchObject, const spat::Position<dim::Length>& localPosition, const spat::Vector<One>& alignment = spat::Ez<One> ) override;
+
+		Plug& PlugToToggle() noexcept override;
+
+		Jack& JackOnChange() noexcept override;
+
+		Jack& JackOn( Status status ) override;
+
+		Plug& PlugTo( Status status ) override;
+
+		Jack& JackOnOne() noexcept override;
+
+		Plug& PlugToOne() noexcept override;
+
+		Jack& JackOnTwo() noexcept override;
+
+		Plug& PlugToTwo() noexcept override;
+
+		void RegisterSockets( SocketRegistry& module ) override;
+
+		void UnregisterSockets( SocketRegistry& module ) override;
+
+		void RefTargetID( IDType id ) noexcept override;
+
+		virtual IDType RefTargetID() const noexcept override;
+
+
+		int CountPlugs() const noexcept override;
+
+		int CountJacks() const noexcept override;
+	protected:
+		const Plug& _GetPlug( int idx ) const override;
+		const Jack& _GetJack( int idx ) const override;
+	private:
+		Status					m_Status;
+		spat::Frame<Length,One>	m_PoseOne;
+		spat::Frame<Length,One>	m_PoseTwo;
+		IDType					m_RefTargetID;
+
+		Jack_Imp m_JackOnGo{ "JackOnOne" };
+		Jack_Imp m_JackOnBranch{ "JackOnTwo" };
+		Jack_Imp m_JackOnChange{ "JackOnChange" };
+
+		StatusHolder_Plug<SwitchSemaphore_Imp>	m_PlugToGo;
+		StatusHolder_Plug<SwitchSemaphore_Imp>	m_PlugToBranch;
+		Toggle_Pug<SwitchSemaphore_Imp>			m_PlugToToggle;
+	};
+
+
 	class SwitchSemaphore : public SwitchSemaphore_Base,
 							public SwitchAligned,
 							public PlugEnumerator,
@@ -62,9 +138,15 @@ namespace trax{
 
 		bool IsValidState( Status status ) const noexcept override;
 
+		void LocalFrameForStatus( Status status, const spat::Frame<Length,One>& frame ) override;
+
+		const spat::Frame<Length,One>& LocalFrameForStatus( Status status ) const override;
+
 		void RotateWithStatus( Status status, Real angle ) noexcept override;
 
 		Real RotateWithStatus( Status status ) const noexcept override;
+
+		void AlignTo( Switch& switchObject, const spat::Position<dim::Length>& localPosition, const spat::Vector<One>& alignment = spat::Ez<One> ) override;
 
 		Plug& PlugToToggle() noexcept override;
 
@@ -85,6 +167,10 @@ namespace trax{
 		void RegisterSockets( SocketRegistry& module ) override;
 
 		void UnregisterSockets( SocketRegistry& module ) override;
+
+		void RefTargetID( IDType id ) noexcept override;
+
+		virtual IDType RefTargetID() const noexcept override;
 
 
 		const std::string& Reference( const std::string& name ) const override{
@@ -115,6 +201,7 @@ namespace trax{
 		bool								m_bPreserveUpDirection;
 		Real								m_RotAngleOne;
 		Real								m_RotAngleTwo;
+		IDType								m_RefTargetID;
 
 		Jack_Imp m_JackOnGo{ "JackOnOne" };
 		Jack_Imp m_JackOnBranch{ "JackOnTwo" };

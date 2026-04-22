@@ -39,50 +39,8 @@ namespace trax{
 		///@{
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackSystem& trackSystem );
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackCollection& trackCollection );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackBuilder& track );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Location& location );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackLocation& tlr );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackLocationRef& tlr );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackRange& tr );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Sensor& sensor );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Section& section );
-
 	//	dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const ConnectorCollection& connectorCollection );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Connector& connector );
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const SignalCollection& signalCollection );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const VelocityControl& signal );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const JumpSite& signal );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Indicator& indicator );
-
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Curve& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const CurveSample& sample );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Line& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Arc& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Helix& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const LineP& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const ArcP& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const HelixP& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Cubic& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Spline& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Clothoid& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Rotator& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const RotatorChain& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const PolygonalChain& curve );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const SampledCurve& curve );
-
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const RoadwayTwist& twist );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const ConstantTwist& twist );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const LinearTwist& twist );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const PiecewiseTwist& twist );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const DirectionalTwist& twist );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const CombinedTwist& twist );
-
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const PlugEnumerator& plugEnumerator );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Plug& plug );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const JackEnumerator& jackEnumerator );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Jack& jack );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const PulseCounter& pulseCounter );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Timer& timer );
 		///@}
 
 	} // namespace ptreesupport

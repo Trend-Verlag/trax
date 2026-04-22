@@ -70,6 +70,7 @@ namespace trax{
 	struct ParallelTrack;
 	struct ParallelizableTrack;
 	class Parser;
+	struct PiecewiseDirectionalTwist;
 	struct PiecewiseTwist;
 	struct Plug;
 	struct PlugEnumerator;
