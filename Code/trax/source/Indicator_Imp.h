@@ -99,6 +99,7 @@ namespace trax{
 			IndicatorState( Multicator& parent, Indicator::Status status );
 
 			Real											m_RotAngle;
+			spat::Frame<Length, One>						m_LocalFrame;
 			Jack_Imp										m_JackOnStatus;
 			MultiPlug_Imp<StatusHolder_Plug<Multicator>>	m_PlugToStatus;
 		};

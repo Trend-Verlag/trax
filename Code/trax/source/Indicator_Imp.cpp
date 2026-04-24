@@ -253,12 +253,20 @@ bool Multicator::IsValidState( Status status ) const{
 
 void Multicator::LocalFrameForStatus( Status status, const spat::Frame<Length, One>& frame )
 {
-	throw std::logic_error( "SwitchSemaphore::LocalFrameForStatus: Not yet implemented!" );
+	auto iter = m_IndicatorStates.find( status );
+	if( iter == m_IndicatorStates.end() )
+		throw std::runtime_error( "Status not yet created for Multicator!" );
+
+	iter->second.m_LocalFrame = frame;
 }
 
 const spat::Frame<Length, One>& Multicator::LocalFrameForStatus( Status status ) const
 {
-	throw std::logic_error( "SwitchSemaphore::LocalFrameForStatus: Not yet implemented!" );
+	auto iter = m_IndicatorStates.find( status );
+	if( iter == m_IndicatorStates.end() )
+		throw std::runtime_error( "Status not yet created for Multicator!" );
+
+	return iter->second.m_LocalFrame;
 }
 
 void Multicator::RotateWithStatus( Status status, Real angle ){

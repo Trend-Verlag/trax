@@ -231,7 +231,6 @@ namespace trax{
 		/// \returns the name for the object type that implements this interface. 
 		virtual const char*	TypeName() const noexcept = 0;
 
-
 		/// \brief Checks whether the connector is valid 
 		/// \returns true if the connector is valid.
 		virtual bool IsValid() const noexcept = 0;
@@ -243,10 +242,39 @@ namespace trax{
 		virtual void Toggle( bool pulse = true ) = 0;
 
 
+		/// \brief Status 
+		///
+		/// If more branches are needed then 3, this can get extended.
+		enum class Status : char{
+			unknown = -2,			///< the connector is in an unknown state. This can be used to denote an error state.
+			none = -1,				
+			go,						///< go over straight track
+			branch  = 1,			///< go over first diverging track
+			branch1 = branch,		///< go over first diverging track
+			branch2 = 2,			///< go over second diverging track
+			branch3 = 3,			///< go over third diverging track
+			maxBranches = branch3,	///< the maximum number of branches a connector can possible have.
+			go1 = go,				///< the train runs over the straight tracks.
+			go2 = maxBranches + 1,	///< the train runs over the straight tracks. Second go status only differs in the jack that pulses.
+			toggle,					///< toggle the connector
+			change,					///< signal a status change (used with Jacks'n Plugs).
+			empty					///< set to first empty from go over branch1 to CntDivergedTracks()
+		};
+
+
+		/// \brief Turns the connector to the specified setting.
+		/// \returns The previous status of the switch.
+		virtual Status Set( Status to, bool pulse = true ) = 0;
+
+
 		/// \brief Sets the Connector to the setting that connects the two track ends.
 		/// \throws std::invalid_argument if one of the two track ends is not in a slot.
 		/// \throws std::logic_error, if the two ends can not get connected by the Connector.
 		virtual void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) = 0;
+
+
+		/// \brief Gets the setting of the switch.
+		virtual Status Get() const = 0;
 
 
 		/// \brief Disconnects all track ends from each other.
@@ -355,6 +383,14 @@ namespace trax{
 		/// \returns User provided data.
 		virtual ConnectorUserData* UserData() const noexcept = 0;
 	};
+
+	/// \brief Makes a string from the status
+	dclspc std::string ToString( Connector::Status status );
+
+
+	/// \brief Makes a status value from a status string.
+	/// \throws std::invalid_argument if the string was not recognized.
+	dclspc Connector::Status ToConnectorStatus( const std::string& status );
 
 
 	/// \brief Connect two track ends by inserting them into Connectors, if available.

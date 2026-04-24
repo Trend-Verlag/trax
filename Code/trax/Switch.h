@@ -55,35 +55,6 @@ namespace trax{
 		};
 
 
-		/// \brief Status 
-		enum class Status : char{
-			none = -1,
-			go,					///< go over straight track
-			branch  = 1,		///< go over first diverging track
-			branch1 = 1,		///< go over first diverging track
-			branch2 = 2,		///< go over second diverging track
-			branch3 = 3,
-			branch4 = 4,
-			bramch5 = 5,
-			branchN = 124,
-			maxBranches = 124,
-			toggle,				///< toggle the switch
-			change,		
-			empty				///< set to first empty from go over branch1 to CntDivergedTracks()
-		};
-
-
-		/// \brief Turns the switch to the specified setting.
-		/// \returns The previous status of the switch.
-		virtual Status Set( Status to, bool pulse = true ) = 0;
-
-		using Connector::Set;
-
-
-		/// \brief Gets the setting of the switch.
-		virtual Status Get() const = 0;
-
-
 		/// \brief Occupies the slot for the narrow track.
 		///
 		/// The narrow track is the incomming track of a switch.
@@ -166,15 +137,6 @@ namespace trax{
 		/// \brief Gets a Plug that sets the switch to the outgoing track.
 		virtual MultiPlug& PlugToDivergedTrack( int divTrackID ) = 0;
 	};
-
-
-	/// \brief Makes a string from the status
-	dclspc std::string ToString( NarrowSwitch::Status status );
-
-
-	/// \brief Makes a status value from a status string.
-	/// \throws std::invalid_argument if the string was not recognized.
-	dclspc NarrowSwitch::Status ToNarrowSwitchStatus( const std::string& status );
 
 
 	/// \returns The status a specific socket is related with.
@@ -462,32 +424,6 @@ namespace trax{
 			slot_count
 		};
 
-		/// \brief Status values of a switch.
-		///
-		/// Note that there are actually only two states for the
-		/// SingleSlipSwitch: go and branch. The others are redundant 
-		/// and play a role only in toggling and pulsing.
-		enum class Status{
-			none = -1,			///< status not specified.
-			go,					///< the train runs over the straight tracks.
-			go1 = go,			///< the train runs over the straight tracks.
-			go2,				///< the train runs over the straight tracks. Second go status only differs in in the jack that pulses.
-			branch,				///< the train runs over the diverging track.
-			count,				///< number of valid status values.
-			toggle,				///< toggle through the valid status (including go2).
-			change				///< signal a status change (used with Jacks'n Plugs).
-		};
-
-		/// \brief Turns the switch to the specified setting.
-		/// \returns The previous status of the switch.
-		virtual Status Set( Status to, bool pulse = true ) = 0;
-
-		using Connector::Set;
-
-
-		/// \brief Gets the setting of the switch.
-		virtual Status Get() const = 0;
-
 
 		/// \brief Sets the center of the switch.
 		virtual void SetCenter( const spat::Frame<Length,One>& center ) = 0;
@@ -502,15 +438,8 @@ namespace trax{
 	};
 
 
-	/// \brief Makes a string from the status
-	dclspc std::string ToString( SingleSlipSwitch::Status status );
-
 	/// \brief Makes a string from the SlotName
 	dclspc std::string ToString( SingleSlipSwitch::SlotNames slotName );
-
-	/// \brief Makes a status value from a status string.
-	/// \throws std::invalid_argument if the string was not recognized.
-	dclspc SingleSlipSwitch::Status ToSingleSlipSwitchStatus( const std::string& status );
 
 
 	/// \returns The status a specific socket is related with.
@@ -562,35 +491,6 @@ namespace trax{
 		};
 
 
-		/// \brief Status values of a switch.
-		///
-		/// Note that there are actually only two states for the
-		/// DoubleSlipSwitch: go and branch. The others are redundant 
-		/// and play a role only in toggling and pulsing.
-		enum class Status{
-			none = -1,			///< status not specified.
-			go,					///< the train runs over the crossing tracks.
-			go1 = go,			///< the train runs over the crossing tracks.
-			go2,				///< the train runs over the crossing tracks. Second go status only differs in the jack that pulses.
-			branch,				///< the train runs over the diverging tracks.
-			branch1 = branch,	///< the train runs over the diverging tracks.
-			branch2,			///< the train runs over the diverging tracks. Second branch status only differs in the jack that pulses.
-			count,				///< number of valid status values.
-			toggle,				///< toggle through the valid status (including go2 and branch2).
-			change				///< signal a status change (used with Jacks'n Plugs).
-		};
-
-		/// \brief Turns the switch to the specified setting.
-		/// \returns The previous status of the switch.
-		virtual Status Set( Status to, bool pulse = true ) = 0;
-
-		using Connector::Set;
-
-
-		/// \brief Gets the setting of the switch.
-		virtual Status Get() const = 0;
-
-
 		/// \brief Sets the center of the switch.
 		virtual void SetCenter( const spat::Frame<Length,One>& center ) = 0;
 
@@ -604,15 +504,8 @@ namespace trax{
 	};
 
 
-	/// \brief Makes a string from the status
-	dclspc std::string ToString( DoubleSlipSwitch::Status status );
-
 	/// \brief Makes a string from the SlotName
 	dclspc std::string ToString( DoubleSlipSwitch::SlotNames slotName );
-
-	/// \brief Makes a status value from a status string.
-	/// \throws std::invalid_argument if the string was not recognized.
-	dclspc DoubleSlipSwitch::Status ToDoubleSlipSwitchStatus( const std::string& status );
 
 
 	/// \returns The status a specific socket is related with.

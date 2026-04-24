@@ -303,6 +303,50 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 	return bOk;
 }
 ///////////////////////////////////////
+std::string ToString( Connector::Status status ){
+	if( status >= Connector::Status::branch1 && status <= Connector::Status::maxBranches )
+		return "branch" + std::to_string( static_cast<int>(status) );
+
+	switch( status ){
+	case Connector::Status::none:
+		return "none";
+	case Connector::Status::go:
+		return "go";
+	case Connector::Status::toggle:
+		return "toggle";
+	case Connector::Status::change:
+		return "change";
+	case Connector::Status::empty:
+		return "empty";
+	case Connector::Status::unknown:
+	default:
+		assert( !"Unknown Switch::Status enumerator!" );
+		return "unknown";
+	}
+}
+
+Connector::Status ToConnectorStatus( const std::string& status ){
+	if( status == "go" )
+		return Connector::Status::go;
+	else if( status == "branch" )
+		return Connector::Status::branch1;
+	else if( status.substr( 0, 6 ) == "branch" )
+		return static_cast<Connector::Status>(std::stoi( status.substr( 6 ) ));
+	else if( status == "toggle" )
+		return Connector::Status::toggle;
+	else if( status == "change" )
+		return Connector::Status::change;
+	else if( status == "none" )
+		return Connector::Status::none;
+	else if( status == "empty" )
+		return Connector::Status::empty;
+
+	std::ostringstream stream;
+	stream << "Invalid Switch::Status string!" << status << std::endl;
+	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
+	throw std::invalid_argument( stream.str() );
+}
+
 void Couple( 
 	std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEndA, 
 	std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEndB, 

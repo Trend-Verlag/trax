@@ -2056,7 +2056,7 @@ BOOST_FIXTURE_TEST_CASE( NarrowSwitchWithFourOutgoingTracksCreationtest, SwichFi
 	pSwitch->Set( NarrowSwitch::Status::empty );
 	BOOST_CHECK_EQUAL( pSwitch->Get(), NarrowSwitch::Status::branch1 );
 
-	BOOST_CHECK_EQUAL( ToNarrowSwitchStatus( "branch3" ), NarrowSwitch::Status::branch3 );
+	BOOST_CHECK_EQUAL( ToConnectorStatus( "branch3" ), NarrowSwitch::Status::branch3 );
 }
 
 BOOST_FIXTURE_TEST_CASE( NarrowSwitchAccesToNonExistingSlot, SwichFixture ){

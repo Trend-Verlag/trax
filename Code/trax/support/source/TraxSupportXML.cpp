@@ -404,8 +404,14 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	for( Indicator::Status status = Indicator::Status::one; status < Indicator::Status::count
 		 ; status = static_cast<Indicator::Status>(static_cast<int>(status) + 1))
 	{
-		if( indicator.IsValidState( status ) )			
-			ptIndicator << indicator.LocalFrameForStatus( status );
+		try{
+			if( indicator.IsValidState( status ) )			
+				ptIndicator << indicator.LocalFrameForStatus( status );
+		}
+		catch( const std::logic_error& e ){
+			std::cerr << "Indicator " << indicator.ID() << ": Local frame for status " << ToString( status ) << " is not valid. " 
+				<< "Error: " << e.what() << std::endl;
+		}
 	}
 
 	if( auto pPlugEnumerator = dynamic_cast<const PlugEnumerator*>(&indicator) )

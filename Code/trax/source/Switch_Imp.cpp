@@ -467,45 +467,6 @@ const Jack& NarrowSwitch_Imp::_GetJack( int idx ) const{
 	return Connector_Imp::_GetJack( idx );
 }
 ///////////////////////////////////////
-std::string ToString( NarrowSwitch::Status status ){
-	if( status >= NarrowSwitch::Status::branch1 && status <= NarrowSwitch::Status::branchN )
-		return "branch" + std::to_string( static_cast<int>(status) );
-
-	switch( status ){
-	case NarrowSwitch::Status::none:
-		return "none";
-	case NarrowSwitch::Status::go:
-		return "go";
-	case NarrowSwitch::Status::toggle:
-		return "toggle";
-	case NarrowSwitch::Status::change:
-		return "change";
-	default:
-		assert( !"Unknown Switch::Status enumerator!" );
-		return "unknown";
-	}
-}
-
-NarrowSwitch::Status ToNarrowSwitchStatus( const std::string& status ){
-	if( status == "go" )
-		return NarrowSwitch::Status::go;
-	else if( status == "branch" )
-		return NarrowSwitch::Status::branch1;
-	else if( status.substr( 0, 6 ) == "branch" )
-		return static_cast<NarrowSwitch::Status>(std::stoi( status.substr( 6 ) ));
-	else if( status == "toggle" )
-		return NarrowSwitch::Status::toggle;
-	else if( status == "change" )
-		return NarrowSwitch::Status::change;
-	else if( status == "none" )
-		return NarrowSwitch::Status::none;
-
-	std::ostringstream stream;
-	stream << "Invalid Switch::Status string!" << status << std::endl;
-	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::invalid_argument( stream.str() );
-}
-
 NarrowSwitch::Status NarrowSwitchStatusFrom( const std::string& socketName )
 {
 	if( socketName == "JackOnGo" ||
@@ -953,11 +914,17 @@ const char* SingleSlipSwitch_Imp::TypeName() const noexcept{
 }
 
 void SingleSlipSwitch_Imp::Toggle( bool pulse ){
-	int status = static_cast<int>(m_Status);
-	if( ++status >= static_cast<int>(Status::count) )
-		status = static_cast<int>(Status::go1);
-
-	Set( static_cast<Status>(status), pulse );
+	switch( m_Status ){
+		case Status::go1:
+			Set( Status::go2, pulse );
+			break;
+		case Status::go2:
+			Set( Status::branch, pulse );
+			break;
+		case Status::branch:
+			Set( Status::go1, pulse );
+			break;
+	}
 }
 
 void SingleSlipSwitch_Imp::Set( 
@@ -1165,26 +1132,6 @@ const Jack& SingleSlipSwitch_Imp::_GetJack(int idx) const{
 	}
 }
 
-std::string ToString( SingleSlipSwitch::Status status ){
-	switch( status ){
-	case SingleSlipSwitch::Status::none:
-		return "none";
-	case SingleSlipSwitch::Status::go1:
-		return "go1";
-	case SingleSlipSwitch::Status::go2:
-		return "go2";
-	case SingleSlipSwitch::Status::branch:
-		return "branch";
-	case SingleSlipSwitch::Status::toggle:
-		return "toggle";
-	case SingleSlipSwitch::Status::change:
-		return "change";
-	default:
-		assert( !"Unknown Switch::Status enumerator!" );
-		return "unknown";
-	}
-}
-
 std::string ToString( SingleSlipSwitch::SlotNames slotName ){
 	switch( slotName ){
 	case SingleSlipSwitch::SlotNames::slot_none:
@@ -1205,28 +1152,6 @@ std::string ToString( SingleSlipSwitch::SlotNames slotName ){
 		assert( !"Unknown Switch::SlotNames enumerator!" );
 		return "unknown";
 	}
-}
-
-SingleSlipSwitch::Status ToSingleSlipSwitchStatus( const std::string& status ){
-	if( status == "go" )
-		return SingleSlipSwitch::Status::go;
-	if( status == "go1" )
-		return SingleSlipSwitch::Status::go1;
-	if( status == "go2" )
-		return SingleSlipSwitch::Status::go2;
-	if( status == "branch" )
-		return SingleSlipSwitch::Status::branch;
-	if( status == "toggle" )
-		return SingleSlipSwitch::Status::toggle;
-	if( status == "change" )
-		return SingleSlipSwitch::Status::change;
-	if( status == "none" )
-		return SingleSlipSwitch::Status::none;
-
-	std::ostringstream stream;
-	stream << "Invalid SingleSlipSwitch::Status string!" << status << std::endl;
-	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::invalid_argument( stream.str() );
 }
 
 SingleSlipSwitch::Status SingleSlipSwitchStatusFrom( const std::string& socketName ){
@@ -1279,11 +1204,20 @@ const char* DoubleSlipSwitch_Imp::TypeName() const noexcept{
 }
 
 void DoubleSlipSwitch_Imp::Toggle( bool pulse ){
-	int status = static_cast<int>(m_Status);
-	if( ++status >= static_cast<int>(Status::count) )
-		status = static_cast<int>(Status::go1);
-
-	Set( static_cast<Status>(status), pulse );
+	switch( m_Status ){
+		case Status::go1:
+			Set( Status::go2, pulse );
+			break;
+		case Status::go2:
+			Set( Status::branch, pulse );
+			break;
+		case Status::branch1:
+			Set( Status::branch2, pulse );
+			break;
+		case Status::branch2:
+			Set( Status::go1, pulse );
+			break;
+	}
 }
 
 void DoubleSlipSwitch_Imp::Set(
@@ -1537,28 +1471,6 @@ const Jack& DoubleSlipSwitch_Imp::_GetJack(int idx) const{
 	}
 }
 
-std::string ToString( DoubleSlipSwitch::Status status ){
-	switch( status ){
-	case DoubleSlipSwitch::Status::none:
-		return "none";
-	case DoubleSlipSwitch::Status::go1:
-		return "go1";
-	case DoubleSlipSwitch::Status::go2:
-		return "go2";
-	case DoubleSlipSwitch::Status::branch1:
-		return "branch1";
-	case DoubleSlipSwitch::Status::branch2:
-		return "branch2";
-	case DoubleSlipSwitch::Status::toggle:
-		return "toggle";
-	case DoubleSlipSwitch::Status::change:
-		return "change";
-	default:
-		assert( !"Unknown Switch::Status enumerator!" );
-		return "unknown";
-	}
-}
-
 std::string ToString( DoubleSlipSwitch::SlotNames slotName )
 {
 	switch( slotName )
@@ -1593,32 +1505,6 @@ std::string ToString( DoubleSlipSwitch::SlotNames slotName )
 			assert( !"Unknown DoubleSlipSwitch::SlotNames enumerator!" );
 			return "unknown";
 	}
-}
-
-DoubleSlipSwitch::Status ToDoubleSlipSwitchStatus( const std::string& status ){
-	if( status == "go" )
-		return DoubleSlipSwitch::Status::go;
-	if( status == "go1" )
-		return DoubleSlipSwitch::Status::go1;
-	if( status == "go2" )
-		return DoubleSlipSwitch::Status::go2;
-	if( status == "branch" )
-		return DoubleSlipSwitch::Status::branch;
-	if( status == "branch1" )
-		return DoubleSlipSwitch::Status::branch1;
-	if( status == "branch2" )
-		return DoubleSlipSwitch::Status::branch2;
-	if( status == "toggle" )
-		return DoubleSlipSwitch::Status::toggle;
-	if( status == "change" )
-		return DoubleSlipSwitch::Status::change;
-	if( status == "none" )
-		return DoubleSlipSwitch::Status::none;
-
-	std::ostringstream stream;
-	stream << "Invalid DoubleSlipSwitch::Status string!" << status << std::endl;
-	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::invalid_argument( stream.str() );
 }
 
 DoubleSlipSwitch::Status DoubleSlipSwitchStatusFrom( const std::string& socketName ){

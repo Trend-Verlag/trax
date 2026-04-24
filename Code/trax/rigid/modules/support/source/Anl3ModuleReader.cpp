@@ -318,7 +318,7 @@ void Anl3ModuleReader::ReadGebaeudesammlung(
 							pAligned->Attach( pDoubleSlipSwitch );
 						}
 
-						for( int i = 1; i <= static_cast<int>(DoubleSlipSwitch::Status::count); ++i ){
+						for( int i = 1; i <= 4; ++i ){
 							pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pDoubleSlipSwitch->PlugTo( DoubleSlipSwitchStatusFromEEP( i ) ).Unplugged( &m_SocketRegistry ) );
 							pDoubleSlipSwitch->JackOn( DoubleSlipSwitchStatusFromEEP( i ) ).InsertAtTail( &pSwitchIndicator->PlugTo( static_cast<trax::Indicator::Status>(i) ) );
 						}
@@ -444,7 +444,7 @@ void Anl3ModuleReader::ConnectSockets( Module& modul ) const{
 						for( auto& connector : *pConnectorCollection ){
 							if( auto pSwitch = dynamic_cast<Switch*>(&connector) ){
 								if( jack.Reference( "KontaktZiel" ) == pSwitch->NarrowTrack().first->Reference( "KontaktZiel" ) ){
-									jack.InsertAtTail( &pSwitch->PlugTo( ToNarrowSwitchStatus( jack.Reference( "Switch::Status" ) ) ).Unplugged( &modul ) );
+									jack.InsertAtTail( &pSwitch->PlugTo( ToConnectorStatus( jack.Reference( "Switch::Status" ) ) ).Unplugged( &modul ) );
 									continue;
 								}
 							}

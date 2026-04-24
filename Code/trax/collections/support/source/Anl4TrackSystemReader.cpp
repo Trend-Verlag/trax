@@ -162,7 +162,7 @@ const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree
 {
 	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
-	switchObject.Set( ToNarrowSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+	switchObject.Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 	std::string refName = "NarrowTrack";
 	for( const auto& pair : pt )
@@ -195,7 +195,7 @@ const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree
 {
 	threeWaySwitch.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 	threeWaySwitch.ID( pt.get( "<xmlattr>.id", 0 ) );
-	threeWaySwitch.Set( ToNarrowSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+	threeWaySwitch.Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 	std::string refName = "NarrowTrack";
 	for( const auto& pair : pt )
@@ -230,7 +230,7 @@ const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree
 {
 	singleSlipSwitch.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 	singleSlipSwitch.ID( pt.get( "<xmlattr>.id", 0 ) );
-	singleSlipSwitch.Set( ToSingleSlipSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+	singleSlipSwitch.Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 	SingleSlipSwitch::SlotNames slotName = SingleSlipSwitch::slot_0;
 	for( const auto& pair : pt )
@@ -259,7 +259,7 @@ const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree
 {
 	doubleSlipSwitch.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 	doubleSlipSwitch.ID( pt.get( "<xmlattr>.id", 0 ) );
-	doubleSlipSwitch.Set( ToDoubleSlipSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+	doubleSlipSwitch.Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 	DoubleSlipSwitch::SlotNames slotName = DoubleSlipSwitch::slot_0;
 	for( const auto& pair : pt )
@@ -355,7 +355,7 @@ void Read(
 {
 	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
-	switchObject.Set( ToNarrowSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+	switchObject.Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 	int slot = 0;
 	for( const auto& pair : pt )
@@ -388,7 +388,7 @@ void Read(
 {
 	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
-	switchObject.Set( ToNarrowSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+	switchObject.Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 	int slot = 0;
 	for( const auto& pair : pt )
@@ -417,7 +417,7 @@ void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry
 {
 	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
-	switchObject.Set( ToSingleSlipSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+	switchObject.Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 	int slot = 0;
 	for( const auto& pair : pt )
@@ -452,7 +452,7 @@ void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry
 {
 	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
-	switchObject.Set( ToDoubleSlipSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+	switchObject.Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 	int slot = 0;
 	for( const auto& pair : pt )
@@ -745,7 +745,7 @@ std::unique_ptr<Switch> Anl4TrackSystemReader::CreateSwitch(
 	{
 		pSwitch->Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 		pSwitch->ID( pt.get( "<xmlattr>.id", 0 ) );
-		pSwitch->Set( ToNarrowSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+		pSwitch->Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 		int slot = 0;
 		for( const auto& pair : pt )
@@ -783,7 +783,7 @@ std::unique_ptr<ThreeWaySwitch> Anl4TrackSystemReader::CreateThreeWaySwitch(
 	{
 		pSwitch->Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 		pSwitch->ID( pt.get( "<xmlattr>.id", 0 ) );
-		pSwitch->Set( ToNarrowSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+		pSwitch->Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 		int slot = 0;
 		for( const auto& pair : pt )
@@ -821,7 +821,7 @@ std::unique_ptr<SingleSlipSwitch> Anl4TrackSystemReader::CreateSingleSlipSwitch(
 	{
 		pSwitch->Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 		pSwitch->ID( pt.get( "<xmlattr>.id", 0 ) );
-		pSwitch->Set( ToSingleSlipSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+		pSwitch->Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 		int slot = 0;
 		for( const auto& pair : pt )
@@ -865,7 +865,7 @@ std::unique_ptr<DoubleSlipSwitch> Anl4TrackSystemReader::CreateDoubleSlipSwitch(
 	{
 		pSwitch->Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 		pSwitch->ID( pt.get( "<xmlattr>.id", 0 ) );
-		pSwitch->Set( ToDoubleSlipSwitchStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
+		pSwitch->Set( ToConnectorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
 
 		int slot = 0;
 		for( const auto& pair : pt )
