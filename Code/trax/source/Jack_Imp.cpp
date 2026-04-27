@@ -105,8 +105,10 @@ void Jack_Imp::Insert( Plug* pPlug ) noexcept{
 	Clear();
 
 	m_pPlug = pPlug;
-	if( m_pPlug )
+	if( m_pPlug ){
+		RefPlugID( m_pPlug->ID() );
 		m_pPlug->ConnectTo( *this );
+	}
 }
 
 void Jack_Imp::InsertAtTail( Plug* pPlug ){

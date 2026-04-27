@@ -207,7 +207,7 @@ const Jack& Signal_Imp::_GetJack( int idx ) const{
 		std::ostringstream stream;
 		stream << "Out of range!" << std::endl;
 		stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-		throw std::range_error( stream.str() );
+		throw std::out_of_range( stream.str() );
 	}
 }
 
@@ -294,7 +294,7 @@ const Plug& SignalClear_Imp::_GetPlug( int idx ) const{
 		return m_PlugToClear.GetPlug( idx );
 	//idx -= m_PlugToClear.CountPlugs();
 
-	throw std::range_error( "Unknown index for plug" );
+	throw std::out_of_range( "Unknown index for plug" );
 }
 
 const Jack& SignalClear_Imp::_GetJack( int idx ) const{
@@ -310,7 +310,7 @@ const Jack& SignalClear_Imp::_GetJack( int idx ) const{
 	std::ostringstream stream;
 	stream << "Out of range!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 ///////////////////////////////////////
 std::unique_ptr<VelocityControl> VelocityControl::Make() noexcept{
@@ -541,7 +541,7 @@ const Plug& VelocityControl_Imp::_GetPlug( int idx ) const{
 	std::ostringstream stream;
 	stream << "Unknown index for plug!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 
 const Jack& VelocityControl_Imp::_GetJack( int idx ) const{
@@ -563,7 +563,7 @@ const Jack& VelocityControl_Imp::_GetJack( int idx ) const{
 	std::ostringstream stream;
 	stream << "Unknown index for jack!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 
 VelocityControl_Imp::ControlState::ControlState(
@@ -720,7 +720,7 @@ const Plug& JumpSite_Imp::_GetPlug( int idx ) const{
 	if( idx < m_PlugToJump.CountPlugs() )
 		return m_PlugToJump.GetPlug( idx );
 
-	throw std::range_error( "Unknown index for plug" );
+	throw std::out_of_range( "Unknown index for plug" );
 }
 
 const Jack& JumpSite_Imp::_GetJack( int idx ) const{
@@ -737,7 +737,7 @@ const Jack& JumpSite_Imp::_GetJack( int idx ) const{
 	std::ostringstream stream;
 	stream << "Out of range!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 
 int JumpSite_Imp::CountPlugs() const{

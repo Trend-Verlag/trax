@@ -34,10 +34,13 @@
 
 namespace trax{
 
-	struct Plug;
+	struct DoubleSlipSwitch;
 	struct Jack;
+	struct Plug;
+	struct SingleSlipSwitch;
 	struct SocketRegistry;
 	struct Switch;
+	struct ThreeWaySwitch;
 
 	/// \brief Interface for objects that indicates system states somehow.
 	///
@@ -211,15 +214,6 @@ namespace trax{
 		static dclspc std::unique_ptr<BinaryIndicator> Make( Type type ) noexcept;
 		
 
-		/// \brief Aligns the indicator's frames to a certain switch.
-		/// \param switchObject The switch to align to.
-		/// \param localPosition The position of the indicator relative to the switch.
-		/// \param alignment The direction the indicator should use to point to the switches
-		/// outgoing tracks.
-		/// \throws std::logic_error if the switch is not valid.
-		virtual void AlignTo( Switch& switchObject, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> ) = 0;
-
-
 		/// \brief Gets a Jack that pulses its Plug if the BinaryIndicator is set to one. 
 		virtual Jack& JackOnOne() noexcept = 0;
 
@@ -235,4 +229,21 @@ namespace trax{
 		/// \brief Gets a Plug that sets the BinaryIndicator to zero.
 		virtual Plug& PlugToTwo() noexcept = 0;
 	};
+
+
+	/// \brief Aligns the indicator's frames to a certain switch.
+	/// \param indicator
+	/// \param toSwitch The switch to align to.
+	/// \param localPosition The position of the indicator relative to the switch.
+	/// \param alignment The direction the indicator should use to point to the switches
+	/// outgoing tracks.
+	/// \throws std::logic_error if the switch is not valid.
+	void dclspc AlignTo( BinaryIndicator& indicator, Switch& toSwitch, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> );
+
+	void dclspc AlignTo( BinaryIndicator& indicator, SingleSlipSwitch& toSwitch, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> );
+
+	void dclspc AlignTo( BinaryIndicator& indicator, DoubleSlipSwitch& toSwitch, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> );
+
+	void dclspc AlignTo( Indicator& indicator, ThreeWaySwitch& toSwitch, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> );
+
 }

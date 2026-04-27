@@ -127,6 +127,8 @@ namespace trax
 
 		using Shape::Attach;
 		
+		/// \anchor geom_attachment
+		/// \name Attachment of Geoms
 		/// \brief Attach Geoms with dedicated mass properties to the Gestalt.
 		///
 		/// This will be used for collision testing. The Geom carries a
@@ -149,6 +151,8 @@ namespace trax
 		/// \throws std::runtime_error if pGeom could not be attached due to 
 		/// system issues including range errors.
 		///@{
+		
+		/// \brief Attach a single Geom with mass properties to the Gestalt.
 		virtual int Attach( std::unique_ptr<Geom> pGeom, Mass mass ) = 0;
 
 		virtual int Attach( std::unique_ptr<Geom> pGeom, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) = 0;

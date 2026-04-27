@@ -59,8 +59,6 @@ namespace trax{
 
 		Real RotateWithStatus( Status status ) const noexcept override;
 
-		void AlignTo( Switch& switchObject, const spat::Position<dim::Length>& localPosition, const spat::Vector<One>& alignment = spat::Ez<One> ) override;
-
 		Plug& PlugToToggle() noexcept override;
 
 		Jack& JackOnChange() noexcept override;
@@ -145,8 +143,6 @@ namespace trax{
 		void RotateWithStatus( Status status, Real angle ) noexcept override;
 
 		Real RotateWithStatus( Status status ) const noexcept override;
-
-		void AlignTo( Switch& switchObject, const spat::Position<dim::Length>& localPosition, const spat::Vector<One>& alignment = spat::Ez<One> ) override;
 
 		Plug& PlugToToggle() noexcept override;
 

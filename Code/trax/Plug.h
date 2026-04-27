@@ -142,7 +142,7 @@ namespace trax{
 		/// \name GetPlug
 		/// \brief Get one of the object's Plugs.
 		/// \param name idx The zero based index of the Plug.
-		/// \throws std::range_error if idx is not in [0,SizePlugs()(
+		/// \throws std::out_of_range if idx is not in [0,SizePlugs()(
 		///@{		
 		Plug& GetPlug( int idx ){
 			return const_cast<Plug&>(_GetPlug( idx ));

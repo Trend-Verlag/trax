@@ -54,7 +54,7 @@ namespace trax{
 
 		int Slot( int slot, std::shared_ptr<TrackBuilder> pTrack, EndType trackend, bool connectAnonymous = false ) override;
 
-		bool Check( std::ostream& os, Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
+		bool Check( Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
 
 		void GetCenter( Frame<Length,One>& center ) const override;
 
@@ -68,23 +68,35 @@ namespace trax{
 
 		Status Get() const noexcept override;
 
-		void NarrowTrack(std::shared_ptr<TrackBuilder> pNarrowTrack,EndType trackend) override;
+		void NarrowTrack( std::shared_ptr<TrackBuilder> pNarrowTrack, EndType trackend ) override;
+
+		void NarrowTrack( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackend ) override;
+
+		void NarrowTrack( Track::TrackEnd end ) override;
 
 		std::pair<std::shared_ptr<TrackBuilder>,EndType> NarrowTrack() const noexcept override;
 
-		void ClearNarrowTrack() override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearNarrowTrack() override;
 
-		void StraightTrack(std::shared_ptr<TrackBuilder> pStaightTrack,EndType trackend) override;
+		void StraightTrack( std::shared_ptr<TrackBuilder> pStaightTrack,EndType trackend ) override;
+
+		void StraightTrack( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackend  ) override;
+
+		void StraightTrack( Track::TrackEnd end ) override;
 
 		std::pair<std::shared_ptr<TrackBuilder>,EndType> StraightTrack() const noexcept override;
 
-		void ClearStraightTrack() override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearStraightTrack() override;
 
-		void DivergedTrack( int divTrackID, std::shared_ptr<TrackBuilder> pDivergedTrack,EndType trackend) override;
+		void DivergedTrack( int divTrackID, std::shared_ptr<TrackBuilder> pDivergedTrack,EndType trackend ) override;
+
+		void DivergedTrack( int divTrackID, std::pair<std::shared_ptr<TrackBuilder>,EndType> trackend ) override;
+
+		void DivergedTrack( int divTrackID, Track::TrackEnd end ) override;
 
 		std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack( int divTrackID ) const noexcept override;
 
-		void ClearDivergedTrack( int divTrackID ) override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearDivergedTrack( int divTrackID ) override;
 
 		int CntDivergedTracks() const noexcept override;
 
@@ -139,11 +151,15 @@ namespace trax{
 
 		void DivergedTrack( std::shared_ptr<TrackBuilder> pDivergedTrack, EndType trackend ) override;
 
+		void DivergedTrack( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd ) override;
+
+		void DivergedTrack( Track::TrackEnd end ) override;
+
 		std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack() const noexcept override;
 
 		using NarrowSwitch_Imp::ClearDivergedTrack;
 
-		void ClearDivergedTrack() override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearDivergedTrack() override;
 
 		void SwapTracks() override;
 
@@ -187,17 +203,25 @@ namespace trax{
 
 		// ThreeWaySwitch:
 
-		void DivergedTrack1(std::shared_ptr<TrackBuilder> pDivergedTrack,EndType trackend) override;
+		void DivergedTrack1( std::shared_ptr<TrackBuilder> pDivergedTrack,EndType trackend ) override;
+
+		void DivergedTrack1( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackend ) override;
+
+		void DivergedTrack1( Track::TrackEnd end ) override;
 
 		std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack1() const noexcept override;
 
-		void ClearDivergedTrack1() override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearDivergedTrack1() override;
 
 		void DivergedTrack2(std::shared_ptr<TrackBuilder> pDivergedTrack,EndType trackend) override;
 
+		void DivergedTrack2( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackend ) override;
+
+		void DivergedTrack2( Track::TrackEnd end ) override;
+
 		std::pair<std::shared_ptr<TrackBuilder>,EndType> DivergedTrack2() const noexcept override;
 
-		void ClearDivergedTrack2() override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearDivergedTrack2() override;
 
 		void SwapStraightWithDiverged() override;
 
@@ -245,7 +269,7 @@ namespace trax{
 
 		void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) override;
 
-		bool Check( std::ostream& os, Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
+		bool Check( Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
 
 		void GetCenter( Frame<Length,One>& center ) const noexcept override;
 
@@ -309,7 +333,7 @@ namespace trax{
 
 		void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) override;
 
-		bool Check( std::ostream& os, Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
+		bool Check( Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
 
 		void GetCenter( Frame<Length,One>& center ) const noexcept override;
 

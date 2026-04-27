@@ -322,8 +322,7 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 	const TrackCollection& collection, 
 	Track::TrackEnd trackEnd,
 	Length maxDistance, 
-	Angle maxKink,
-	bool bSilent )
+	Angle maxKink )
 {
 	if( !trackEnd.pTrack || maxDistance <= 0_m || maxKink <= 0_deg )
 		return {};
@@ -339,15 +338,15 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 		break;
 	case EndType::any:
 	{
-		TrackBuilder::TrackEnd retval = Couple( collection, {trackEnd.pTrack,EndType::north}, maxDistance, maxKink, bSilent ).first;
+		TrackBuilder::TrackEnd retval = Couple( collection, {trackEnd.pTrack,EndType::north}, maxDistance, maxKink ).first;
 		if( !retval.pTrack )
-			return Couple( collection, {trackEnd.pTrack,EndType::south}, maxDistance, maxKink, bSilent );
+			return Couple( collection, {trackEnd.pTrack,EndType::south}, maxDistance, maxKink );
 		else
 			return { retval, {} };
 	}
 	case EndType::both:
-		return { Couple( collection, {trackEnd.pTrack,EndType::north}, maxDistance, maxKink, bSilent ).first,
-				 Couple( collection, {trackEnd.pTrack,EndType::south}, maxDistance, maxKink, bSilent ).second };
+		return { Couple( collection, {trackEnd.pTrack,EndType::north}, maxDistance, maxKink ).first,
+				 Couple( collection, {trackEnd.pTrack,EndType::south}, maxDistance, maxKink ).second };
 	default:
 		return {};
 	};
@@ -370,7 +369,7 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 		std::remove_if( 
 			TrackEnds.begin(), 
 			TrackEnds.end(), 
-			[&trackEnd,maxKink,&trackEndFrame,bSilent]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept 
+			[&trackEnd,maxKink,&trackEndFrame]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept 
 			{ 
 				const Track& otherTrack = *std::get<0>( tuple );
 				spat::Frame<Length,One> otherFrame;
@@ -385,26 +384,26 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 				Angle angleT = atan2( (trackEndFrame.T % otherFrame.T).Length(), trackEndFrame.T * otherFrame.T );
 				Angle angleB = atan2( (trackEndFrame.B % otherFrame.B).Length(), trackEndFrame.B * otherFrame.B );
 
-				if( !bSilent ){
-					if( angleT > maxKink )
-					{
-						std::clog	<< "Couple rejected due to kink: " 
-									<< " angleT=" << angleT
-									<< " maxKink=" << maxKink 
-									<< " trackEnd=" << trackEnd
-									<< " otherEnd=" << Track::End{ otherTrack.ID(), std::get<EndType>( tuple ) }
-									<< std::endl;
-					}
+				if( angleT > maxKink )
+				{
+					std::clog	<< Verbosity::detailed 
+								<< "Couple rejected due to kink: " 
+								<< " angleT=" << angleT
+								<< " maxKink=" << maxKink 
+								<< " trackEnd=" << trackEnd
+								<< " otherEnd=" << Track::End{ otherTrack.ID(), std::get<EndType>( tuple ) }
+								<< std::endl;
+				}
 
-					if( angleB > maxKink )
-					{
-						std::clog	<< "Couple rejected due to kink: " 
-									<< " angleB=" << angleB
-									<< " maxKink=" << maxKink 
-									<< " trackEnd=" << trackEnd
-									<< " otherEnd=" << Track::End{ otherTrack.ID(), std::get<EndType>( tuple ) }
-									<< std::endl;
-					}
+				if( angleB > maxKink )
+				{
+					std::clog	<< Verbosity::detailed 
+								<< "Couple rejected due to kink: " 
+								<< " angleB=" << angleB
+								<< " maxKink=" << maxKink 
+								<< " trackEnd=" << trackEnd
+								<< " otherEnd=" << Track::End{ otherTrack.ID(), std::get<EndType>( tuple ) }
+								<< std::endl;
 				}
 
 				return angleT > maxKink || angleB > maxKink;
@@ -417,12 +416,13 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 		std::remove_if( 
 			TrackEnds.begin(), 
 			TrackEnds.end(), 
-			[trackEnd,bSilent]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept 
+			[trackEnd]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept 
 			{ 
 				bool bCoupled = std::get<0>(tuple)->IsCoupled( std::get<1>(tuple) );
 
-				if( bCoupled && !bSilent ){
-					std::clog	<< "Couple rejected due to existing coupling: "
+				if( bCoupled ){
+					std::clog	<< Verbosity::detailed 
+								<< "Couple rejected due to existing coupling: "
 								<< " trackEnd=" << trackEnd
 								<< " otherEnd=" << Track::End{ std::get<0>( tuple )->ID(), std::get<1>( tuple ) }
 								<< std::endl;
@@ -447,28 +447,27 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 			Couple( trackEnd, retval.second );
 		}
 
-		if( !bSilent ){
-			spat::Position<dim::Length> trackAt, trackOtherAt;
-			trackEnd.pTrack->Transition( s, trackAt );
-			Length s2;
-			if( retval.first.pTrack )
-			{
-				s2 = (retval.first.end == EndType::north) ? 0_m : retval.first.pTrack->GetLength();
-				retval.first.pTrack->Transition( s2, trackOtherAt );
-			}
-			else{
-				s2 = (retval.second.end == EndType::north ) ? 0_m : retval.second.pTrack->GetLength();
-				retval.second.pTrack->Transition( s2, trackOtherAt );
-			}
-
-			std::cout	<< "Coupled: "
-				<< " trackEnd=" << trackEnd 
-				<< " at " << trackAt
-				<< " otherEnd=" << (retval.first.pTrack ? retval.first.end : retval.second.end)
-				<< " at " << trackOtherAt
-				<< " distance=" << (trackAt - trackOtherAt).Length()
-				<< std::endl;
+		spat::Position<dim::Length> trackAt, trackOtherAt;
+		trackEnd.pTrack->Transition( s, trackAt );
+		Length s2;
+		if( retval.first.pTrack )
+		{
+			s2 = (retval.first.end == EndType::north) ? 0_m : retval.first.pTrack->GetLength();
+			retval.first.pTrack->Transition( s2, trackOtherAt );
 		}
+		else{
+			s2 = (retval.second.end == EndType::north ) ? 0_m : retval.second.pTrack->GetLength();
+			retval.second.pTrack->Transition( s2, trackOtherAt );
+		}
+
+		std::cout	<< Verbosity::detailed 
+					<< "Coupled: "
+					<< " trackEnd=" << trackEnd 
+					<< " at " << trackAt
+					<< " otherEnd=" << (retval.first.pTrack ? retval.first.end : retval.second.end)
+					<< " at " << trackOtherAt
+					<< " distance=" << (trackAt - trackOtherAt).Length()
+					<< std::endl;
 
 		return retval;
 	}

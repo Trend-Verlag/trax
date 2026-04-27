@@ -25,6 +25,7 @@
 // For further information, please contact: horstmann.marc@trendverlag.de
 
 #include "MovableTrack_Imp.h"
+#include "trax/Connector.h"
 #include "trax/rigid/Body.h"
 
 #include <iostream>
@@ -35,6 +36,10 @@ namespace trax{
 MovableTrack_Imp::MovableTrack_Imp() noexcept
 	: m_pBody								{ nullptr }
 	, m_bFramePropagationToBodyOnSetFrame	{ true }
+	, m_PlugToDeconnect						{ *this, &MovableTrack_Imp::OnTryDeconnect }
+	, m_LengthThreshold						{ 0_m }
+	, m_AngleThreshold						{ 0_deg }
+	, m_bAutoDeconnectRemoveFromConnector	{ false }
 {
 }
 
@@ -132,6 +137,47 @@ void MovableTrack_Imp::UpdateTrackPose() noexcept
 
 bool MovableTrack_Imp::IsMoving() const noexcept{
 	return m_pBody ? !m_pBody->IsSleeping() : false;
+}
+
+void MovableTrack_Imp::AutoDeconnect( Length atDistance, Angle atAngle, bool bRemoveFromConnector )
+{
+	if( !m_pBody )
+		throw std::logic_error{ "MovableTrack_Imp::AutoDeconnect: No body assigned to track." };
+
+	m_LengthThreshold = atDistance;
+	m_AngleThreshold = atAngle;
+	m_bAutoDeconnectRemoveFromConnector = bRemoveFromConnector;
+
+	if( m_LengthThreshold > 0_m || m_AngleThreshold > 0_deg )
+		m_pBody->JackOnSleep().InsertAtTail( &m_PlugToDeconnect );
+	else
+		m_PlugToDeconnect.Remove();
+}
+
+void MovableTrack_Imp::OnTryDeconnect() noexcept
+{
+	OnTryDeconnect( trax::EndType::north );
+	OnTryDeconnect( trax::EndType::south );
+}
+
+void MovableTrack_Imp::OnTryDeconnect( trax::EndType endType ) noexcept
+{
+	if( TrackEnd othersEnd = TransitionEnd( endType ); othersEnd.pTrack )
+	{
+		Frame<Length,One> thisFrame, otherFrame;
+		Transition( ParameterFrom( endType ), thisFrame );
+		othersEnd.pTrack->Transition( othersEnd.pTrack->ParameterFrom( othersEnd.end ), otherFrame );
+
+		if( (m_LengthThreshold > 0_m && (otherFrame.P - thisFrame.P).Length() > m_LengthThreshold) ||
+			(m_AngleThreshold > 0_rad && asin( (otherFrame.T % thisFrame.T).Length() ) > m_AngleThreshold) )
+		{
+			DeCouple( endType );
+
+			if( m_bAutoDeconnectRemoveFromConnector )
+				if( Connector* pConnector = GetConnector( endType ); pConnector )
+					pConnector->Clear( pConnector->Slot( *this, endType ) );
+		}
+	}
 }
 
 }

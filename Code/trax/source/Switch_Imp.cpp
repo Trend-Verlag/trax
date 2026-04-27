@@ -27,6 +27,8 @@
 #include "Switch_Imp.h"
 #include "trax/Location.h"
 
+#include <iostream>
+
 
 namespace trax{
 ///////////////////////////////////////
@@ -108,7 +110,7 @@ NarrowSwitch_Imp::NarrowSwitch_Imp( unsigned char numBranches )
 		m_PlugsToBranches	{ numBranches }
 {
 	if( static_cast<int>(numBranches) > static_cast<int>(Status::maxBranches) )
-		throw std::range_error( "NarrowSwitch can not have more than " + std::to_string(static_cast<int>(Status::maxBranches)) + " branches!" );
+		throw std::out_of_range( "NarrowSwitch can not have more than " + std::to_string(static_cast<int>(Status::maxBranches)) + " branches!" );
 
 	m_PlugToGo.SetStatus( Status::go );
 	m_PlugToGo.Reference( "name", "PlugToGo" );
@@ -177,16 +179,16 @@ int NarrowSwitch_Imp::Slot(
 	return retval;
 }
 
-bool NarrowSwitch_Imp::Check( std::ostream& os, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
+bool NarrowSwitch_Imp::Check( Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
 {
 	if( !IsComplete() ){
-		os << Verbosity::detailed << "Switch is incomplete! SwitchID: " << ID() << std::endl;
+		std::cerr << Verbosity::normal << "Switch is incomplete! SwitchID: " << ID() << std::endl;
 		return false;
 	}
 
 	bool bOk = true;
 	for( int i = slot_1; i < CntSlots(); ++i )
-		if( !CheckSlot( i, os, e_distance, e_kink, e_twist ) )
+		if( !CheckSlot( i, e_distance, e_kink, e_twist ) )
 			bOk = false;
 
 	return bOk;
@@ -324,12 +326,22 @@ void NarrowSwitch_Imp::NarrowTrack(
 	Slot( slot_0, pNarrowTrack, trackend );
 }
 
+void NarrowSwitch_Imp::NarrowTrack( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackend )
+{
+	Slot( slot_0, trackend.first, trackend.second );
+}
+
+void NarrowSwitch_Imp::NarrowTrack( Track::TrackEnd end )
+{
+	Slot( slot_0, std::dynamic_pointer_cast<TrackBuilder>(end.pTrack), end.end );
+}
+
 std::pair<std::shared_ptr<TrackBuilder>, EndType> NarrowSwitch_Imp::NarrowTrack() const noexcept{
 	return Slot(slot_0);
 }
 
-void NarrowSwitch_Imp::ClearNarrowTrack(){
-	Clear(slot_0);
+std::pair<std::shared_ptr<TrackBuilder>,EndType> NarrowSwitch_Imp::ClearNarrowTrack(){
+	return Clear(slot_0);
 }
 
 void NarrowSwitch_Imp::StraightTrack( 
@@ -339,12 +351,22 @@ void NarrowSwitch_Imp::StraightTrack(
 	Slot( slot_1, pStaightTrack, trackend );
 }
 
+void NarrowSwitch_Imp::StraightTrack( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackend )
+{
+	Slot( slot_1, trackend.first, trackend.second );
+}
+
+void NarrowSwitch_Imp::StraightTrack( Track::TrackEnd end )
+{
+	Slot( slot_1, std::dynamic_pointer_cast<TrackBuilder>(end.pTrack), end.end );
+}
+
 std::pair<std::shared_ptr<TrackBuilder>, EndType> NarrowSwitch_Imp::StraightTrack() const noexcept{
 	return Slot(slot_1);
 }
 
-void NarrowSwitch_Imp::ClearStraightTrack(){
-	Clear(slot_1);
+std::pair<std::shared_ptr<TrackBuilder>,EndType> NarrowSwitch_Imp::ClearStraightTrack(){
+	return Clear(slot_1);
 }
 
 void NarrowSwitch_Imp::DivergedTrack( 
@@ -354,12 +376,22 @@ void NarrowSwitch_Imp::DivergedTrack(
 	Slot( slot_2 + divTrackID, pDivergedTrack, trackend );
 }
 
+void NarrowSwitch_Imp::DivergedTrack( int divTrackID, std::pair<std::shared_ptr<TrackBuilder>,EndType> trackend )
+{
+	Slot( slot_2 + divTrackID, trackend.first, trackend.second );
+}
+
+void NarrowSwitch_Imp::DivergedTrack( int divTrackID, Track::TrackEnd end )
+{
+	Slot( slot_2 + divTrackID, std::dynamic_pointer_cast<TrackBuilder>(end.pTrack), end.end );
+}
+
 std::pair<std::shared_ptr<TrackBuilder>, EndType> NarrowSwitch_Imp::DivergedTrack( int divTrackID ) const noexcept{
 	return Slot(slot_2 + divTrackID);
 }
 
-void NarrowSwitch_Imp::ClearDivergedTrack( int divTrackID ){
-	Clear(slot_2 + divTrackID);
+std::pair<std::shared_ptr<TrackBuilder>,EndType> NarrowSwitch_Imp::ClearDivergedTrack( int divTrackID ){
+	return Clear( slot_2 + divTrackID );
 }
 
 int NarrowSwitch_Imp::CntDivergedTracks() const noexcept{
@@ -467,28 +499,6 @@ const Jack& NarrowSwitch_Imp::_GetJack( int idx ) const{
 	return Connector_Imp::_GetJack( idx );
 }
 ///////////////////////////////////////
-NarrowSwitch::Status NarrowSwitchStatusFrom( const std::string& socketName )
-{
-	if( socketName == "JackOnGo" ||
-		socketName == "PlugToGo" )
-		return Switch::Status::go;
-	else if( socketName == "JackOnBranch" ||
-			 socketName == "PlugToBranch" )
-		return NarrowSwitch::Status::branch1;
-	else if( socketName.substr( 0, 12 ) == "JackOnBranch" ||
-			 socketName.substr( 0, 12 ) == "PlugToBranch" )
-		return static_cast<NarrowSwitch::Status>(std::stoi( socketName.substr( 12 ) ));
-	else if( socketName == "JackOnChange" )
-		return NarrowSwitch::Status::change;
-	else if( socketName == "PlugToToggle" )
-		return NarrowSwitch::Status::toggle;
-
-	std::ostringstream stream;
-	stream << "Invalid Switch::Status socketName string!" << socketName << std::endl;
-	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::invalid_argument( stream.str() );
-}
-///////////////////////////////////////
 Switch_Imp::Switch_Imp()
 	:	NarrowSwitch_Imp{1}
 {
@@ -509,12 +519,22 @@ void Switch_Imp::DivergedTrack(
 	Slot( slot_2, pDivergedTrack, trackend );
 }
 
+void Switch_Imp::DivergedTrack( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd )
+{
+	Slot( slot_2, trackEnd.first, trackEnd.second );
+}
+
+void Switch_Imp::DivergedTrack( Track::TrackEnd end )
+{
+	Slot( slot_2, std::dynamic_pointer_cast<TrackBuilder>(end.pTrack), end.end );
+}
+
 std::pair<std::shared_ptr<TrackBuilder>,EndType> Switch_Imp::DivergedTrack() const noexcept{
 	return Slot(slot_2);
 }
 
-void Switch_Imp::ClearDivergedTrack(){
-	Clear(slot_2);
+std::pair<std::shared_ptr<TrackBuilder>,EndType> Switch_Imp::ClearDivergedTrack(){
+	return Clear(slot_2);
 }
 
 void Switch_Imp::SwapTracks(){
@@ -697,12 +717,22 @@ void ThreeWaySwitch_Imp::DivergedTrack1(
 	Slot( slot_2, pDivergedTrack1, trackend );
 }
 
+void ThreeWaySwitch_Imp::DivergedTrack1( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackend )
+{
+	Slot( slot_2, trackend.first, trackend.second );
+}
+
+void ThreeWaySwitch_Imp::DivergedTrack1( Track::TrackEnd end )
+{
+	Slot( slot_2, std::dynamic_pointer_cast<TrackBuilder>(end.pTrack), end.end );
+}
+
 std::pair<std::shared_ptr<TrackBuilder>,EndType> ThreeWaySwitch_Imp::DivergedTrack1() const noexcept{
 	return Slot(slot_2);
 }
 
-void ThreeWaySwitch_Imp::ClearDivergedTrack1(){
-	Clear(slot_2);
+std::pair<std::shared_ptr<TrackBuilder>,EndType> ThreeWaySwitch_Imp::ClearDivergedTrack1(){
+	return Clear(slot_2);
 }
 
 void ThreeWaySwitch_Imp::DivergedTrack2(
@@ -712,12 +742,22 @@ void ThreeWaySwitch_Imp::DivergedTrack2(
 	Slot( slot_3, pDivergedTrack, trackend );
 }
 
+void ThreeWaySwitch_Imp::DivergedTrack2( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackend )
+{
+	Slot( slot_3, trackend.first, trackend.second );
+}
+
+void ThreeWaySwitch_Imp::DivergedTrack2( Track::TrackEnd end )
+{
+	Slot( slot_3, std::dynamic_pointer_cast<TrackBuilder>(end.pTrack), end.end );
+}
+
 std::pair<std::shared_ptr<TrackBuilder>,EndType> ThreeWaySwitch_Imp::DivergedTrack2() const noexcept{
 	return Slot(slot_3);
 }
 
-void ThreeWaySwitch_Imp::ClearDivergedTrack2(){
-	Clear(slot_3);
+std::pair<std::shared_ptr<TrackBuilder>,EndType> ThreeWaySwitch_Imp::ClearDivergedTrack2(){
+	return Clear(slot_3);
 }
 
 void ThreeWaySwitch_Imp::SwapStraightWithDiverged(){
@@ -937,24 +977,24 @@ void SingleSlipSwitch_Imp::Set(
 	assert( !"Not implemented yet!" );
 }
 
-bool SingleSlipSwitch_Imp::Check( std::ostream& os, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
+bool SingleSlipSwitch_Imp::Check( Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
 {
 	if( !IsComplete() ){
-		os << Verbosity::detailed << "SingleSlipSwitch is incomplete! SwitchID: " << ID() << std::endl;
+		std::clog << Verbosity::detailed << "SingleSlipSwitch is incomplete! SwitchID: " << ID() << std::endl;
 		return false;
 	}
 
 	bool bOk = true;
-	if( !CheckSlot( slot_2, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_2, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
-	if( !CheckSlot( slot_3, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_3, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
-	if( !CheckSlot( slot_4, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_4, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
-	if( !CheckSlot( slot_5, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_5, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
 	return bOk;
@@ -1128,7 +1168,7 @@ const Jack& SingleSlipSwitch_Imp::_GetJack(int idx) const{
 		std::ostringstream stream;
 		stream << "Out of range!" << std::endl;
 		stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-		throw std::range_error( stream.str() );
+		throw std::out_of_range( stream.str() );
 	}
 }
 
@@ -1152,27 +1192,6 @@ std::string ToString( SingleSlipSwitch::SlotNames slotName ){
 		assert( !"Unknown Switch::SlotNames enumerator!" );
 		return "unknown";
 	}
-}
-
-SingleSlipSwitch::Status SingleSlipSwitchStatusFrom( const std::string& socketName ){
-	if( socketName == "JackOnGo1" ||
-		socketName == "PlugToGo1" )
-		return SingleSlipSwitch::Status::go1;
-	else if(	socketName == "JackOnGo2" ||
-				socketName == "PlugToGo2" )
-		return SingleSlipSwitch::Status::go2;
-	else if(	socketName == "JackOnBranch" ||
-				socketName == "PlugToBranch" )
-		return SingleSlipSwitch::Status::branch;
-	else if( socketName == "JackOnChange" )
-		return SingleSlipSwitch::Status::change;
-	else if( socketName == "PlugToToggle" )
-		return SingleSlipSwitch::Status::toggle;
-
-	std::ostringstream stream;
-	stream << "Invalid SingleSlipSwitch::Status socketName string!" << socketName << std::endl;
-	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::invalid_argument( stream.str() );
 }
 ///////////////////////////////////////
 DoubleSlipSwitch_Imp::DoubleSlipSwitch_Imp()
@@ -1230,36 +1249,36 @@ void DoubleSlipSwitch_Imp::Set(
 	assert( !"Not implemented yet!" );
 }
 
-bool DoubleSlipSwitch_Imp::Check( std::ostream& os, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
+bool DoubleSlipSwitch_Imp::Check( Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
 {
 	if( !IsComplete() ){
-		os << Verbosity::detailed << "DoubleSlipSwitch is incomplete! SwitchID: " << ID() << std::endl;
+		std::clog << Verbosity::detailed << "DoubleSlipSwitch is incomplete! SwitchID: " << ID() << std::endl;
 		return false;
 	}
 
 	bool bOk = true;
-	if( !CheckSlot( slot_4, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_4, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
-	if( !CheckSlot( slot_5, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_5, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
-	if( !CheckSlot( slot_6, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_6, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
-	if( !CheckSlot( slot_7, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_7, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
-	if( !CheckSlot( slot_8, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_8, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
-	if( !CheckSlot( slot_9, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_9, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
-	if( !CheckSlot( slot_10, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_10, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
-	if( !CheckSlot( slot_11, os, e_distance, e_kink, e_twist ) )
+	if( !CheckSlot( slot_11, e_distance, e_kink, e_twist ) )
 		bOk = false;
 
 	return bOk;
@@ -1467,7 +1486,7 @@ const Jack& DoubleSlipSwitch_Imp::_GetJack(int idx) const{
 		std::ostringstream stream;
 		stream << "Out of range!" << std::endl;
 		stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-		throw std::range_error( stream.str() );
+		throw std::out_of_range( stream.str() );
 	}
 }
 
@@ -1505,30 +1524,6 @@ std::string ToString( DoubleSlipSwitch::SlotNames slotName )
 			assert( !"Unknown DoubleSlipSwitch::SlotNames enumerator!" );
 			return "unknown";
 	}
-}
-
-DoubleSlipSwitch::Status DoubleSlipSwitchStatusFrom( const std::string& socketName ){
-	if( socketName == "JackOnGo1" ||
-		socketName == "PlugToGo1" )
-		return DoubleSlipSwitch::Status::go1;
-	else if(	socketName == "JackOnGo2" ||
-				socketName == "PlugToGo2" )
-		return DoubleSlipSwitch::Status::go2;
-	else if(	socketName == "JackOnBranch1" ||
-				socketName == "PlugToBranch1" )
-		return DoubleSlipSwitch::Status::branch1;
-	else if(	socketName == "JackOnBranch2" ||
-				socketName == "PlugToBranch2" )
-		return DoubleSlipSwitch::Status::branch2;
-	else if( socketName == "JackOnChange" )
-		return DoubleSlipSwitch::Status::change;
-	else if( socketName == "PlugToToggle" )
-		return DoubleSlipSwitch::Status::toggle;
-
-	std::ostringstream stream;
-	stream << "Invalid DoubleSlipSwitch::Status socketName string!" << socketName << std::endl;
-	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::invalid_argument( stream.str() );
 }
 ///////////////////////////////////////
 }

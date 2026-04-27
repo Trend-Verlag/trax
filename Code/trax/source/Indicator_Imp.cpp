@@ -253,6 +253,8 @@ bool Multicator::IsValidState( Status status ) const{
 
 void Multicator::LocalFrameForStatus( Status status, const spat::Frame<Length, One>& frame )
 {
+	Create( status );
+
 	auto iter = m_IndicatorStates.find( status );
 	if( iter == m_IndicatorStates.end() )
 		throw std::runtime_error( "Status not yet created for Multicator!" );
@@ -417,7 +419,7 @@ const Plug& Multicator::_GetPlug( int idx ) const{
 	std::ostringstream stream;
 	stream << "Unknown index for plug!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 
 const Jack& Multicator::_GetJack( int idx ) const{
@@ -434,7 +436,7 @@ const Jack& Multicator::_GetJack( int idx ) const{
 	std::ostringstream stream;
 	stream << "Unknown index for jack!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 
 void Multicator::Create( Status status ){

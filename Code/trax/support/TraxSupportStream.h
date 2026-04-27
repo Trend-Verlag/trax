@@ -72,7 +72,7 @@ namespace trax{
 	inline std::ostream& operator<<( std::ostream& ost, const Orientation::Value& orient );
 
 
-	inline std::ostream& operator<<( std::ostream& ost, const NarrowSwitch::Status status );
+	inline std::ostream& operator<<( std::ostream& ost, const Connector::Status status );
 
 	inline std::ostream& operator<<( std::ostream& ost, const Indicator::Status status );
 	inline std::istream& operator>>( std::istream& is, Indicator::Status& status );
@@ -193,8 +193,8 @@ namespace trax{
 		return ost;
 	}
 
-	inline std::ostream& operator<<(std::ostream& ost, NarrowSwitch::Status status){
-		ost << "NarrowSwitch::Status(" << ToString(status) << " )";
+	inline std::ostream& operator<<(std::ostream& ost, Connector::Status status){
+		ost << "Connector::Status(" << ToString(status) << " )";
 		return ost;
 	}
 

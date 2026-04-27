@@ -25,11 +25,12 @@
 // For further information, please contact: horstmann.marc@trendverlag.de
 
 #pragma once
+
 #include "trax/Indicator.h"
+#include "trax/Jack.h"
+#include "trax/ImplementationHelper.h"
 
 #include "Plug_Imp.h"
-#include "Jack_Imp.h"
-#include "trax/ImplementationHelper.h"
 
 namespace trax{
 

@@ -186,7 +186,7 @@ namespace trax{
 		/// \name GetJack
 		/// \brief Get one of the object's Jacks.
 		/// \param name idx The zero based index of the Jack.
-		/// \throws std::range_error if idx is not in [0,SizeJacks()(
+		/// \throws std::out_of_range if idx is not in [0,SizeJacks()(
 		///@{
 		/// Use only for iterating over the jacks.
 		Jack& GetJack( int idx )

@@ -182,10 +182,10 @@ const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree
 		}
 
 		else if( pair.first == "Plug" )
-			pair.second >> switchObject.PlugTo( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+			pair.second >> switchObject.PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
 
 		else if( pair.first == "Jack" )
-			pair.second >> switchObject.JackOn( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+			pair.second >> switchObject.JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
 	}
 
 	return pt;
@@ -217,10 +217,10 @@ const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree
 		}
 
 		else if( pair.first == "Plug" )
-			pair.second >> threeWaySwitch.PlugTo( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+			pair.second >> threeWaySwitch.PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
 
 		else if( pair.first == "Jack" )
-			pair.second >> threeWaySwitch.JackOn( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+			pair.second >> threeWaySwitch.JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
 	}
 
 	return pt;
@@ -246,10 +246,10 @@ const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree
 		}
 
 		else if( pair.first == "Plug" )
-			pair.second >> singleSlipSwitch.PlugTo( SingleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+			pair.second >> singleSlipSwitch.PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
 
 		else if( pair.first == "Jack" )
-			pair.second >> singleSlipSwitch.JackOn( SingleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+			pair.second >> singleSlipSwitch.JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
 	}
 
 	return pt;
@@ -275,10 +275,10 @@ const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree
 		}
 
 		else if( pair.first == "Plug" )
-			pair.second >> doubleSlipSwitch.PlugTo( DoubleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+			pair.second >> doubleSlipSwitch.PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
 
 		else if( pair.first == "Jack" )
-			pair.second >> doubleSlipSwitch.JackOn( DoubleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
+			pair.second >> doubleSlipSwitch.JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) );
 	}
 
 	return pt;
@@ -370,14 +370,14 @@ void Read(
 		}
 
 		else if( pair.first == "Plug" )
-			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 		else if( pair.first == "Jack" )
-			ReadJack( pair.second, socketRegistry, switchObject.JackOn( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadJack( pair.second, socketRegistry, switchObject.JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 	}
 
-    if( !switchObject.Check( std::cerr, 10_cm ) )
-        std::cerr << "trax: a switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
+    if( !switchObject.Check( 10_cm ) )
+        std::cerr << Verbosity::normal << "trax: a switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
 }
 
 void Read( 
@@ -403,14 +403,14 @@ void Read(
 		}
 
 		else if( pair.first == "Plug" )
-			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 		else if( pair.first == "Jack" )
-			ReadJack( pair.second, socketRegistry, switchObject.JackOn( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadJack( pair.second, socketRegistry, switchObject.JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 	}
 
-    if( !switchObject.Check(std::cerr,10_cm) )
-        std::cerr << "trax: a three way switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
+    if( !switchObject.Check(10_cm) )
+        std::cerr << Verbosity::normal << "trax: a three way switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
 }
 
 void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, SingleSlipSwitch& switchObject, const TrackSystem& trackSystem )
@@ -438,14 +438,14 @@ void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry
 		}
 
 		else if( pair.first == "Plug" )
-			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( SingleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 		else if( pair.first == "Jack" )
-			ReadJack( pair.second, socketRegistry, switchObject.JackOn( SingleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadJack( pair.second, socketRegistry, switchObject.JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 	}
 
-    if( !switchObject.Check(std::cerr,10_cm) )
-        std::cerr << "trax: a single slip switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
+    if( !switchObject.Check(10_cm) )
+        std::cerr << Verbosity::normal << "trax: a single slip switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
 }
 
 void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, DoubleSlipSwitch& switchObject, const TrackSystem& trackSystem )
@@ -473,14 +473,14 @@ void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry
 		}
 
 		else if( pair.first == "Plug" )
-			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( DoubleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadPlug( pair.second, socketRegistry, switchObject.PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 		else if( pair.first == "Jack" )
-			ReadJack( pair.second, socketRegistry, switchObject.JackOn( DoubleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadJack( pair.second, socketRegistry, switchObject.JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 	}
 
-    if( !switchObject.Check(std::cerr,10_cm) )
-        std::cerr << "trax: a double slip switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
+    if( !switchObject.Check(10_cm) )
+        std::cerr << Verbosity::normal << "trax: a double slip switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
 }
 
 void Read( 
@@ -760,14 +760,14 @@ std::unique_ptr<Switch> Anl4TrackSystemReader::CreateSwitch(
 			}
 
 			else if( pair.first == "Plug" )
-				ReadPlug( pair.second, pSwitch->PlugTo( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadPlug( pair.second, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 			else if( pair.first == "Jack" )
-				ReadJack( pair.second, pSwitch->JackOn( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadJack( pair.second, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 		}
 
-        if( !pSwitch->Check(std::cerr,10_cm) )
-            std::cerr << "trax: a switch's slots are not fully populated or show gaps or kinks or twists: " << pSwitch->ID() << std::endl;
+        if( !pSwitch->Check(10_cm) )
+            std::cerr << Verbosity::normal << "trax: a switch's slots are not fully populated or show gaps or kinks or twists: " << pSwitch->ID() << std::endl;
 
 		return pSwitch;
 	}
@@ -798,14 +798,14 @@ std::unique_ptr<ThreeWaySwitch> Anl4TrackSystemReader::CreateThreeWaySwitch(
 			}
 
 			else if( pair.first == "Plug" )
-				ReadPlug( pair.second, pSwitch->PlugTo( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadPlug( pair.second, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 			else if( pair.first == "Jack" )
-				ReadJack( pair.second, pSwitch->JackOn( NarrowSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadJack( pair.second, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 		}
 
-        if( !pSwitch->Check(std::cerr,10_cm) )
-            std::cerr << "trax: a three way switch's slots are not fully populated or show gaps or kinks or twists: " << pSwitch->ID() << std::endl;
+        if( !pSwitch->Check(10_cm) )
+            std::cerr << Verbosity::normal << "trax: a three way switch's slots are not fully populated or show gaps or kinks or twists: " << pSwitch->ID() << std::endl;
 
 		return pSwitch;
 	}
@@ -842,14 +842,14 @@ std::unique_ptr<SingleSlipSwitch> Anl4TrackSystemReader::CreateSingleSlipSwitch(
 			}
 
 			else if( pair.first == "Plug" )
-				ReadPlug( pair.second, pSwitch->PlugTo( SingleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadPlug( pair.second, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 			else if( pair.first == "Jack" )
-				ReadJack( pair.second, pSwitch->JackOn( SingleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadJack( pair.second, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 		}
 
-        if( !pSwitch->Check(std::cerr,10_cm) )
-            std::cerr << "trax: a single slip switch's slots are not fully populated or show gaps or kinks or twists: " << pSwitch->ID() << std::endl;
+        if( !pSwitch->Check(10_cm) )
+            std::cerr << Verbosity::normal << "trax: a single slip switch's slots are not fully populated or show gaps or kinks or twists: " << pSwitch->ID() << std::endl;
 
 		return pSwitch;
 	}
@@ -886,14 +886,14 @@ std::unique_ptr<DoubleSlipSwitch> Anl4TrackSystemReader::CreateDoubleSlipSwitch(
 			}
 
 			else if( pair.first == "Plug" )
-				ReadPlug( pair.second, pSwitch->PlugTo( DoubleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadPlug( pair.second, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 			else if( pair.first == "Jack" )
-				ReadJack( pair.second, pSwitch->JackOn( DoubleSlipSwitchStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadJack( pair.second, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 		}
 
-        if( !pSwitch->Check(std::cerr,10_cm) )
-            std::cerr << "trax: a double slip switch's slots are not fully populated or show gaps or kinks or twists: " << pSwitch->ID() << std::endl;
+        if( !pSwitch->Check(10_cm) )
+            std::cerr << Verbosity::normal << "trax: a double slip switch's slots are not fully populated or show gaps or kinks or twists: " << pSwitch->ID() << std::endl;
 
 		return pSwitch;
 	}

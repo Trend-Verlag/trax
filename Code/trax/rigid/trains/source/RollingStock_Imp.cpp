@@ -547,7 +547,7 @@ const Jack& trax::RollingStock_Imp::_GetJack( int idx ) const
 	std::ostringstream stream;
 	stream << "Out of range!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 
 void RollingStock_Imp::ConnectJacks()

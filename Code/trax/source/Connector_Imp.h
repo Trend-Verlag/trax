@@ -55,7 +55,7 @@ namespace trax{
 
 		bool IsComplete() const noexcept override;
 
-		void Clear( int slot ) override;
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> Clear( int slot ) noexcept override;
 
 		void Clear() override;
 
@@ -82,7 +82,7 @@ namespace trax{
 		const Plug & _GetPlug(int idx) const override;
 		const Jack & _GetJack(int idx) const override;
 
-		bool CheckSlot( int slot, std::ostream& os, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept;
+		bool CheckSlot( int slot, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept;
 	private:
 		std::vector<std::pair<std::shared_ptr<TrackBuilder>,EndType>> m_Slots;
 

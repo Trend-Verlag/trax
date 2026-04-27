@@ -210,13 +210,12 @@ namespace trax{
 		/// will not get moved or railed. Use Align() to position or rail it properly 
 		/// first. 
 		/// \param atIdx The zero based index of the component to replace.
-		/// \param pWithComponent The component to replace with. 
+		/// \param withComponent The component to replace with. 
 		/// \returns true if the replacement was successful, false if either a coupling
 		/// of withComponent was inactive or a coupling type missmatch.
 		/// \throws std::invalid_argument if the TrainComponent not IsValid().
 		/// \throws std::invalid_argument if the TrainComponent to replace with is already
 		/// this or another train.
-		/// 
 		virtual bool Replace( int atIdx, TrainComponent& withComponent ) = 0;
 
 

@@ -160,8 +160,7 @@ namespace trax{
 		/// than maxDistance.
 		/// \param maxDistance A threshold for the distance to search track ends around the to be coupled end.
 		/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
-		/// \param bSilent If true no log messages are emitted.
-		virtual void CoupleAll( Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true ) = 0;
+		virtual void CoupleAll( Length maxDistance = 1_m, Angle maxKink = pi ) = 0;
 
 
 		/// \brief Uncouples all the Tracks in the TrackSystem from each other.
@@ -216,12 +215,11 @@ namespace trax{
 	/// \param maxDistance A threshold for the distance to search track ends around the to be 
 	/// coupled end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
-	/// \param bSilent If true no log messages are emitted.
 	/// \return The other track ends, the track was coupled to, pair.first for front and 
 	/// pair.second for back end; or { nullptr, EndType::none } if no suitable track 
 	/// end was found.
 	/// \throws std::invalid_argument If the end type is not recocnised.
-	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc Couple( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true );
+	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc Couple( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
 
 
 	/// \brief Searches open track ends inside an area around a given track end and couples 
@@ -233,13 +231,14 @@ namespace trax{
 	/// \param maxDistance A threshold for the distance to search track ends around the to be 
 	/// coupled end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
-	/// \param bSilent If true no log messages are emitted.
 	/// \return The other track ends, the track was coupled to, pair.first for front and 
 	/// pair.second for back end; or { nullptr, EndType::none } if no suitable track 
 	/// end was found.
 	/// \throws std::invalid_argument If the end type is not recocnised.
 	/// \throws std::runtime_error If snapping failed (e.g. due to invalid track).
-	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc CoupleAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true );
+	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc CoupleAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
+
+	std::shared_ptr<Connector> dclspc CoupleAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Track::TrackEnd toTrackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
 
 
 	/// \brief A decorator for TrackSystems.

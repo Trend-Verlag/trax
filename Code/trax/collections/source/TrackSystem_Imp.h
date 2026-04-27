@@ -111,7 +111,7 @@ namespace trax{
 
 		void Connection( const Track::Coupling& couplings, Track::Coupling& active ) const override;
 
-		void CoupleAll( Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true ) override;
+		void CoupleAll( Length maxDistance = 1_m, Angle maxKink = pi ) override;
 
 		void DeCoupleAll() override;
 

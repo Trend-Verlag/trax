@@ -55,12 +55,22 @@ namespace trax{
 		};
 
 
+		/// \name NarrowTrack
 		/// \brief Occupies the slot for the narrow track.
 		///
 		/// The narrow track is the incomming track of a switch.
 		/// \param pNarrowTrack Shared pointer to track.
 		/// \param trackEnd End of track to connect.
+		/// \param narrowTrackAndEnd A pair of shared pointer to track 
+		/// and end type to connect.
+		/// \param narrowTrackEnd Track end to connect for narrow track.
+		///@{
 		virtual void NarrowTrack( std::shared_ptr<TrackBuilder> pNarrowTrack, EndType trackEnd ) = 0;
+
+		virtual void NarrowTrack( std::pair<std::shared_ptr<TrackBuilder>,EndType> narrowTrackAndEnd ) = 0;
+
+		virtual void NarrowTrack( Track::TrackEnd narrowTrackEnd ) = 0;
+		///@}
 
 
 		/// \returns the track and the end type in the narrow slot.
@@ -68,15 +78,25 @@ namespace trax{
 
 
 		/// \brief Clears the slot for the narrow track.
-		virtual void ClearNarrowTrack() = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearNarrowTrack() = 0;
 
 
+		/// \name StraightTrack
 		/// \brief Occupies the slot for the straight track.
 		///
 		/// The straight track is the go through track of a switch.
 		/// \param pStaightTrack Shared pointer to track.
 		/// \param trackEnd End of track to connect.
+		/// \param straightTrackAndEnd A pair of shared pointer to track 
+		/// and end type to connect.
+		/// \param straightTrackEnd Track end to connect for straight track.
+		///@{
 		virtual void StraightTrack( std::shared_ptr<TrackBuilder> pStaightTrack, EndType trackEnd ) = 0;
+
+		virtual void StraightTrack( std::pair<std::shared_ptr<TrackBuilder>,EndType> straightTrackAndEnd ) = 0;
+
+		virtual void StraightTrack( Track::TrackEnd straightTrackEnd ) = 0;
+		///@}
 
 
 		/// \returns the track and the end type in the straight slot.
@@ -84,16 +104,26 @@ namespace trax{
 
 
 		/// \brief Clears the slot for the straight track.
-		virtual void ClearStraightTrack() = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearStraightTrack() = 0;
 
 
+		/// \name DivergedTrack
 		/// \brief Occupies the slot for the diverging track.
 		///
 		/// The diverging track is the branching track of a switch.
 		/// \param divTrackID zero based id of the diverging track to set.
 		/// \param pDivergedTrack Shared pointer to track.
 		/// \param trackEnd End of track to connect.
+		/// \param divergedTrackAndEnd A pair of shared pointer to track
+		/// and end type to connect.
+		/// \param divergedTrackEnd Track end to connect for diverging track.
+		///@{
 		virtual void DivergedTrack( int divTrackID, std::shared_ptr<TrackBuilder> pDivergedTrack, EndType trackEnd ) = 0;
+
+		virtual void DivergedTrack( int divTrackID, std::pair<std::shared_ptr<TrackBuilder>,EndType> divergedTrackAndEnd ) = 0;
+
+		virtual void DivergedTrack( int divTrackID, Track::TrackEnd divergedTrackEnd ) = 0;
+		///@}
 
 
 		/// \returns the track and the end type in the straight slot.
@@ -101,7 +131,7 @@ namespace trax{
 
 
 		/// \brief Clears the slot for the straight track.
-		virtual void ClearDivergedTrack( int divTrackID ) = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearDivergedTrack( int divTrackID ) = 0;
 
 
 		/// \returns The number of diverging tracks. This does not include the outgoing straight track.
@@ -139,10 +169,6 @@ namespace trax{
 	};
 
 
-	/// \returns The status a specific socket is related with.
-	dclspc NarrowSwitch::Status NarrowSwitchStatusFrom( const std::string& socketName );
-
-
 	/// \brief A Switch rearranges the connections between three track ends.
 	///
 	/// Tracks only have one connection at each end. A switch will reconnect 
@@ -161,12 +187,22 @@ namespace trax{
 
 		using NarrowSwitch::DivergedTrack;
 
+		/// \name DivergedTrack
 		/// \brief Occupies the slot for the diverged track.
 		///
 		/// The diverged track is the branching track of a switch.
 		/// \param pDivergedTrack Shared pointer to track.
 		/// \param trackEnd End of track to connect.
+		/// \param divergedTrackAndEnd A pair of shared pointer to track
+		/// and end type to connect.
+		/// \param divergedTrackEnd Track end to connect for diverging track.
+		///@{
 		virtual void DivergedTrack( std::shared_ptr<TrackBuilder> pDivergedTrack, EndType trackEnd ) = 0;
+
+		virtual void DivergedTrack( std::pair<std::shared_ptr<TrackBuilder>,EndType> divergedTrackAndEnd ) = 0;
+
+		virtual void DivergedTrack( Track::TrackEnd divergedTrackEnd ) = 0;
+		///@}
 
 
 		/// \returns the track and the end type in the diverged slot.
@@ -176,7 +212,7 @@ namespace trax{
 		using NarrowSwitch::ClearDivergedTrack;
 
 		/// \brief Clears the slot for the diverged track.
-		virtual void ClearDivergedTrack() = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearDivergedTrack() = 0;
 
 
 		///\brief Swaps the straight and the diverged track.
@@ -303,12 +339,22 @@ namespace trax{
 		static constexpr char branch_count = 2;
 
 
+		/// \name DivergedTrack1
 		/// \brief Occupies the slot for the diverged track.
 		///
 		/// The diverged track is the branching track of a switch.
 		/// \param pDivergedTrack1 Shared pointer to track.
 		/// \param trackEnd End of track to connect.
+		/// \param divergedTrackAndEnd A pair of shared pointer to track 
+		/// and end type to connect.
+		/// \param divergedTrackEnd Track end to connect for diverging track.
+		///@{
 		virtual void DivergedTrack1( std::shared_ptr<TrackBuilder> pDivergedTrack1, EndType trackEnd ) = 0;
+
+		virtual void DivergedTrack1( std::pair<std::shared_ptr<TrackBuilder>,EndType> divergedTrackAndEnd ) = 0;
+
+		virtual void DivergedTrack1( Track::TrackEnd divergedTrackEnd ) = 0;
+		///@}
 
 
 		/// \returns the track and the end type in the diverged slot.
@@ -316,15 +362,25 @@ namespace trax{
 
 
 		/// \brief Clears the slot for the diverged1 track.
-		virtual void ClearDivergedTrack1() = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearDivergedTrack1() = 0;
 
 
+		/// \name DivergedTrack2
 		/// \brief Occupies the slot for the diverged track.
 		///
 		/// The diverged track is the branching track of a switch.
 		/// \param pDivergedTrack2 Shared pointer to track.
 		/// \param trackEnd End of track to connect.
+		/// \param divergedTrackAndEnd A pair of shared pointer to track 
+		/// and end type to connect.
+		/// \param divergedTrackEnd Track end to connect for diverging track.
+		///@{
 		virtual void DivergedTrack2( std::shared_ptr<TrackBuilder> pDivergedTrack2, EndType trackEnd ) = 0;
+
+		virtual void DivergedTrack2( std::pair<std::shared_ptr<TrackBuilder>,EndType> divergedTrackAndEnd ) = 0;
+
+		virtual void DivergedTrack2( Track::TrackEnd divergedTrackEnd ) = 0;
+		///@}
 
 
 		/// \returns the track and the end type in the diverged slot.
@@ -332,7 +388,7 @@ namespace trax{
 
 
 		/// \brief Clears the slot for the diverged2 track.
-		virtual void ClearDivergedTrack2() = 0;
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> ClearDivergedTrack2() = 0;
 
 
 		///\brief Swaps the straight and the diverged track.
@@ -442,10 +498,6 @@ namespace trax{
 	dclspc std::string ToString( SingleSlipSwitch::SlotNames slotName );
 
 
-	/// \returns The status a specific socket is related with.
-	dclspc SingleSlipSwitch::Status SingleSlipSwitchStatusFrom( const std::string& socketName );
-
-
 	/// \brief A double slip switch is made from eight tracks that form a crossing
 	/// with the possibility to divert the route to connect two of the narrowing (incoming)
 	/// tracks pairwise.
@@ -506,10 +558,6 @@ namespace trax{
 
 	/// \brief Makes a string from the SlotName
 	dclspc std::string ToString( DoubleSlipSwitch::SlotNames slotName );
-
-
-	/// \returns The status a specific socket is related with.
-	dclspc DoubleSlipSwitch::Status DoubleSlipSwitchStatusFrom( const std::string& socketName );
 
 
 	struct SwitchAligned{

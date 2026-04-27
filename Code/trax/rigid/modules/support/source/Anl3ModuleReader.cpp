@@ -303,8 +303,8 @@ void Anl3ModuleReader::ReadGebaeudesammlung(
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_9, trackSystem.Get( ends.second.id ), ends.second.type, true );
 						}
 
-						if( !pDoubleSlipSwitch->Check(std::cerr, 30_cm) )
-							std::cerr << "trax: a double slip switch's slots are not fully populated or show gaps or kinks or twists: " << pDoubleSlipSwitch->Reference( "ImmoIdx" ) 
+						if( !pDoubleSlipSwitch->Check( 30_cm) )
+							std::cerr << Verbosity::normal <<"trax: a double slip switch's slots are not fully populated or show gaps or kinks or twists: " << pDoubleSlipSwitch->Reference( "ImmoIdx" ) 
 								<< " " << pair.second.get( "<xmlattr>.gsbname", "" ) << ". DKWType: " << pair.second.get( "<xmlattr>.DKWType", 0 ) << std::endl;
 					}
 
@@ -364,8 +364,8 @@ void Anl3ModuleReader::ReadGebaeudesammlung(
 							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_5, trackSystem.Get( ends.second.id ), ends.second.type, true );
 						}
 
-						if( !pSingleSlipSwitch->Check(std::cerr, 30_cm) )
-							std::cerr << "trax: a single slip switch's slots are not fully populated or show gaps or kinks or twists: " << pSingleSlipSwitch->Reference( "ImmoIdx" ) 
+						if( !pSingleSlipSwitch->Check( 30_cm) )
+							std::cerr << Verbosity::normal <<"trax: a single slip switch's slots are not fully populated or show gaps or kinks or twists: " << pSingleSlipSwitch->Reference( "ImmoIdx" ) 
 								<< " " << pair.second.get( "<xmlattr>.gsbname", "" ) << ". DKWType: " << pair.second.get( "<xmlattr>.DKWType", 0 ) << std::endl;
 					}
 

@@ -156,10 +156,10 @@ const Plug& PulseCounter_Imp::_GetPlug( int idx ) const{
 	assert( 0 );
 	std::ostringstream stream;
 	stream << __FILE__ << '(' << __LINE__ << ')' << "Out of range!";
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 
-const Jack & PulseCounter_Imp::_GetJack( int idx ) const{
+const Jack& PulseCounter_Imp::_GetJack( int idx ) const{
 	switch( idx ){
 	case 0:
 		return m_JackOnReachThreshold;
@@ -173,7 +173,7 @@ const Jack & PulseCounter_Imp::_GetJack( int idx ) const{
 		assert( 0 );
 		std::ostringstream stream;
 		stream << __FILE__ << '(' << __LINE__ << ')' << "Out of range!";
-		throw std::range_error( stream.str() );
+		throw std::out_of_range( stream.str() );
 	}
 }
 ///////////////////////////////////////

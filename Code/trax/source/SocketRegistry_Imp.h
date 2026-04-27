@@ -41,7 +41,11 @@ namespace trax{
 
 		void RegisterPlug( Plug& plug ) override;
 
+		void RegisterPlug( MultiPlug& plug ) override;
+
 		void UnRegisterPlug( const Plug& plug ) override;
+
+		void UnRegisterPlug( const MultiPlug& plug ) override;
 
 		Plug* GetPlug( IDType id ) const override;
 

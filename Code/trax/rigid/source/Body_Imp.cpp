@@ -25,16 +25,61 @@
 // For further information, please contact: horstmann.marc@trendverlag.de
 
 #include "Body_Imp.h"
+#include <sstream>
 
 namespace trax
 {
 	using namespace spat;
 
 ///////////////////////////////////////
+Body_Imp::Body_Imp()
+{
+}
+
 void Body_Imp::SetMass( Mass mass ){
 	if( mass <= 0_kg )
 		throw std::invalid_argument( "Mass has to have positive value" );
 }
+
+void Body_Imp::OnSleep()
+{
+	m_JackOnSleep.Pulse();
+}
+
+void Body_Imp::OnWake(){
+	m_JackOnWake.Pulse();
+}
+
+const Jack& Body_Imp::_GetJack( int idx ) const
+{
+	switch( idx ){
+	case 0:
+		return m_JackOnSleep;
+	case 1:
+		return m_JackOnWake;
+	}
+
+	assert( 0 );
+	std::ostringstream stream;
+	stream << "Unknown index for jack!" << std::endl;
+	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
+	throw std::out_of_range( stream.str() );
+}
+
+Jack& Body_Imp::JackOnSleep() noexcept{
+	SetSendSleepNotifies();
+	return m_JackOnSleep;
+}
+
+Jack& Body_Imp::JackOnWake() noexcept{
+	SetSendSleepNotifies();
+	return m_JackOnWake;
+}
+
+int Body_Imp::CountJacks() const{
+	return 2;
+}
+
 //
 //Shape& Body_Imp::GetGeomList() noexcept{
 //	return *this;

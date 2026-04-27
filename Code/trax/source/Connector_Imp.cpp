@@ -80,7 +80,7 @@ Connector_Imp::Connector_Imp( int cntSlots )
 
 bool Connector_Imp::IsValid() const noexcept
 {
-	return Check( std::cout );
+	return Check();
 }
 
 void Connector_Imp::Disconnect(){
@@ -177,15 +177,19 @@ bool Connector_Imp::IsComplete() const noexcept{
 	return true;
 }
 
-void Connector_Imp::Clear( int slot ){
+std::pair<std::shared_ptr<TrackBuilder>,EndType> Connector_Imp::Clear( int slot ) noexcept{
 	if( 0 <= slot && slot < static_cast<int>(m_Slots.size()) ){
-		if( auto pTrackImp = dynamic_cast<Track_Imp*>(m_Slots.at(slot).first.get()) ){
-			if( pTrackImp->GetConnector( m_Slots[slot].second ) == this )
-				pTrackImp->AddConnector( nullptr, m_Slots[slot].second );
+		std::pair<std::shared_ptr<TrackBuilder>, EndType> retval = m_Slots[slot];
+		if( auto pTrackImp = dynamic_cast<Track_Imp*>(retval.first.get()) ){
+			if( pTrackImp->GetConnector( retval.second ) == this )
+				pTrackImp->AddConnector( nullptr, retval.second );
 		}
 
 		m_Slots[slot].first.reset();
+		return retval;
 	}
+
+	return {};
 }
 
 void Connector_Imp::Clear(){
@@ -246,18 +250,18 @@ const Jack& Connector_Imp::_GetJack( int idx ) const{
 	std::ostringstream stream;
 	stream << "Out of range!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 
-bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
+bool Connector_Imp::CheckSlot( int slot, Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
 {
 	if( slot < 0 || slot >= CntSlots() ){
-		os << Verbosity::error << "Slot ID is out of range!" << std::endl;
+		std::clog << Verbosity::error << "Slot ID is out of range!" << std::endl;
 		return false;
 	}
 
 	if( !m_Slots[slot].first ){
-		os << Verbosity::verbose << "Slot is empty!" << std::endl;
+		std::clog << Verbosity::verbose << "Slot is empty!" << std::endl;
 		return false;
 	}
 
@@ -266,7 +270,7 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 		try{
 			if( e_distance > 0_m ){
 				if( DistanceToCoupled( *pTrack, m_Slots[slot].second ) > e_distance ){
-					os << Verbosity::verbose << "Distance to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+					std::clog << Verbosity::verbose << "Distance to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
 						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
 						<< " Distance: " << DistanceToCoupled( *pTrack, m_Slots[slot].second ) << std::endl;
@@ -276,7 +280,7 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 
 			if( e_kink > 0_deg ){
 				if( KinkToCoupled( *pTrack, m_Slots[slot].second ) > e_kink ){
-					os << Verbosity::verbose << "Kink to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+					std::clog << Verbosity::verbose << "Kink to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
 						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
 						<< " Kink: " << _deg(KinkToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
@@ -286,7 +290,7 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 
 			if( e_twist > 0_deg ){
 				if( TwistToCoupled( *pTrack, m_Slots[slot].second ) > e_twist ){
-					os << Verbosity::verbose << "Twist to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+					std::clog << Verbosity::verbose << "Twist to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
 						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
 						<< " Twist: " << _deg(TwistToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
@@ -295,7 +299,7 @@ bool Connector_Imp::CheckSlot( int slot, std::ostream& os, Length e_distance, An
 			}
 		}
 		catch( const std::exception& e ){
-			os << Verbosity::error << "Connector_Imp::CheckSlot: Exception caught during check: " << e.what() << std::endl;
+			std::cerr << Verbosity::error << "Connector_Imp::CheckSlot: Exception caught during check: " << e.what() << std::endl;
 			return false;
 		}
 	}
@@ -343,6 +347,34 @@ Connector::Status ToConnectorStatus( const std::string& status ){
 
 	std::ostringstream stream;
 	stream << "Invalid Switch::Status string!" << status << std::endl;
+	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
+	throw std::invalid_argument( stream.str() );
+}
+
+Connector::Status ConnectorStatusFrom( const std::string& socketName )
+{
+	if( socketName == "JackOnGo" ||
+		socketName == "PlugToGo" )
+			return Connector::Status::go;
+	else if( socketName == "JackOnBranch" ||
+			 socketName == "PlugToBranch" )
+		return Connector::Status::branch1;
+	else if( socketName == "JackOnGo1" ||
+			 socketName == "PlugToGo1" )
+				return Connector::Status::go1;
+	else if( socketName == "JackOnGo2" ||
+			 socketName == "PlugToGo2" )
+		return Connector::Status::go2;
+	else if( socketName.substr( 0, 12 ) == "JackOnBranch" ||
+			 socketName.substr( 0, 12 ) == "PlugToBranch" )
+		return static_cast<Connector::Status>(std::stoi( socketName.substr( 12 ) ));
+	else if( socketName == "JackOnChange" )
+		return Connector::Status::change;
+	else if( socketName == "PlugToToggle" )
+		return Connector::Status::toggle;
+
+	std::ostringstream stream;
+	stream << "Invalid Connector::Status socketName string!" << socketName << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
 	throw std::invalid_argument( stream.str() );
 }

@@ -37,6 +37,9 @@
 
 namespace trax{
 
+
+	struct Jack;
+
 	/// \brief A dynamic object in physical space.
 	///
 	/// For a good introduction in dynamics of solid bodies see 
@@ -187,6 +190,13 @@ namespace trax{
 		/// \returns true if the simulation of this Body is enabled; false if disabled.
 		virtual bool IsSimulationEnabled() const noexcept = 0;
 
+
+		/// \brief Gets a Jack that pulses its Plug if the Body falls to sleep. 
+		virtual Jack& JackOnSleep() noexcept = 0;
+
+
+		/// \brief Gets a Jack that pulses its Plug if the Body wakes up. 
+		virtual Jack& JackOnWake() noexcept = 0;
 
 
 		virtual ~Body() = default;

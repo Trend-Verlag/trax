@@ -33,29 +33,56 @@
 namespace trax{
 
 	struct IDType;
+	struct MultiPlug;
 	struct Plug;
 	struct Jack;
 
-	/// \brief Interface for a registry that reconnects Plugs and Jacks according to their IDs.
+	/// \brief Interface for a registry that reconnects Plugs and Jacks 
+	/// according to their IDs.
+	///
+	/// A SocketRegistry can be used with Plugs and Jacks that carry unique 
+	/// IDs and ref-IDs respectively. E.g., after reading from a file. Also 
+	/// the registry mechanism can get used to assign unique IDs for plugs 
+	/// and set the ref-IDs of jacks to the connected plug's ID.
 	struct SocketRegistry{
 
 		/// \brief Makes a standard SocketRegistry object.
 		static dclspc std::unique_ptr<SocketRegistry> Make() noexcept;
 
 
-		/// \brief Registers a Plug with the module. 
+		/// \brief Registers a Plug by assigning a unique ID() to it 
+		/// and making it available for Jacks to connect with.
 		/// 
-		/// If the Plug carries no id it gets assigned some unique id. If it comes with an unique 
-		/// id, that one gets used. If a matching Jack is found, the Plug will get connected.
+		/// If the Plug carries no id it gets assigned some unique id 
+		/// All Jacks previously Connected() will get removed from the 
+		/// registry in that case, because their RefIDs can not be valid.
+		/// If the Plug comes with an unique id, that one gets used. If 
+		/// for an unconnected Plug a matching Jack is found, the Plug 
+		/// will get connected.
 		/// \param plug Reference to Plug to register.
-		/// \exception std::logic_error Thrown if it is tried to register a Plug with an id that 
-		/// is already occupied by another registered Plug.
+		/// \exception std::logic_error Thrown if it is tried to register 
+		/// a Plug with an id that is already occupied by another registered 
+		/// Plug.
+		///@{
+		
+		/// \brief Registers a single plug.
 		virtual void RegisterPlug( Plug& plug ) = 0;
+
+		/// \brief Registers all plugs of a multi-plug.
+		virtual void RegisterPlug( MultiPlug& plug ) = 0;
+		///@}
 
 
 		/// \brief Removes the supplied Plug from registration database.
 		/// \param plug Reference to Plug to unregister.
+		///@{
+
+		/// \brief Unregisters a single plug.
 		virtual void UnRegisterPlug( const Plug& plug ) = 0;
+
+		/// \brief Unregisters all plugs of a multi-plug.
+		virtual void UnRegisterPlug( const MultiPlug& plug ) = 0;
+		///@}
 
 
 		/// \returns A Plug previously registered with RegisterPlug() that carries the id or nullptr
@@ -69,9 +96,12 @@ namespace trax{
 
 		/// \brief Registers a Jack for connecting with a plug.
 		///
-		/// This will only reconnect a Jack wiches RefPlugID is set, otherwise will do nothing. A registerd
-		/// Jack will be kept until a Plug appears with RegisterPlug that carries the same id. If a Plug gets
-		/// registered with zero id all registered Jacks are removed.
+		/// This will only reconnect a Jack whose RefPlugID is set, 
+		/// otherwise will do nothing if unconnected, or set the RefID
+		/// if already connected to a Plug. A registerd Jack will be kept 
+		/// until a Plug appears with RegisterPlug that carries the 
+		/// referenced id. If a Plug gets registered with zero id, all 
+		/// registered Jacks are removed.
 		/// \param jack Reference to jack that needs reconnection.
 		virtual void ConnectJack( Jack& jack ) = 0;
 

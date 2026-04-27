@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "../MovableTrack.h"
+#include "trax/rigid/MovableTrack.h"
 #include "trax/source/Track_Imp.h"
 
 namespace trax{
@@ -62,10 +62,20 @@ namespace trax{
 		void UpdateTrackPose() noexcept override;
 
 		bool IsMoving() const noexcept override;
+
+		void AutoDeconnect( Length atDistance = 1_m, Angle atAngle = pi/4, bool bRemoveFromConnector = true ) override;
 	private:
 		spat::Frame<Length,One>	m_RelativePose;
 		std::shared_ptr<Body>	m_pBody;
 		bool 					m_bFramePropagationToBodyOnSetFrame;
+
+		// AutoDeconnect:
+		Plug_Imp_ParentPointer<MovableTrack_Imp> m_PlugToDeconnect;
+		void OnTryDeconnect() noexcept;
+		void OnTryDeconnect( trax::EndType endType ) noexcept;
+		Length m_LengthThreshold;
+		Angle m_AngleThreshold;
+		bool m_bAutoDeconnectRemoveFromConnector;
 	};
 
 }

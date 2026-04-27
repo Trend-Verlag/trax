@@ -201,7 +201,7 @@ const Jack& Timer_Imp::_GetJack( int idx ) const{
 	assert( 0 );
 	std::ostringstream stream;
 	stream << __FILE__ << '(' << __LINE__ << ')' << "Out of range!";
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 
 const Plug& Timer_Imp::_GetPlug( int idx ) const{
@@ -219,7 +219,7 @@ const Plug& Timer_Imp::_GetPlug( int idx ) const{
 	assert( 0 );
 	std::ostringstream stream;
 	stream << __FILE__ << '(' << __LINE__ << ')' << "Out of range!";
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 ///////////////////////////////////////
 //std::string TimerCollection_Imp::TypeName() const{

@@ -320,13 +320,22 @@ void PhysX_Scene::onConstraintBreak( physx::PxConstraintInfo* /*constraints*/, p
 {
 }
 
-void PhysX_Scene::onWake( physx::PxActor** /*actors*/, physx::PxU32 /*count*/ )
+void PhysX_Scene::onWake( physx::PxActor** actors, physx::PxU32 count )
 {
-	// TODO
+	while( --count )
+	{	
+        if( physx::PxRigidDynamic* dynamic = actors[count]->is<physx::PxRigidDynamic>(); dynamic )
+			static_cast<PhysX_Body_ImpBase*>(dynamic->userData)->OnWake();
+	}
 }
 
-void PhysX_Scene::onSleep( physx::PxActor** /*actors*/, physx::PxU32 /*count*/ )
+void PhysX_Scene::onSleep( physx::PxActor** actors, physx::PxU32 count )
 {
+	while( --count )
+	{	
+        if( physx::PxRigidDynamic* dynamic = actors[count]->is<physx::PxRigidDynamic>(); dynamic )
+			static_cast<PhysX_Body_ImpBase*>(dynamic->userData)->OnSleep();
+	}
 }
 
 void PhysX_Scene::onContact( const physx::PxContactPairHeader& /*pairHeader*/, const physx::PxContactPair* /*pairs*/, physx::PxU32 /*nbPairs*/ )

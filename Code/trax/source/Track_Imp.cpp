@@ -289,6 +289,20 @@ Track::TrackEnd Track_Imp::TransitionEnd( EndType thisEnd ) const noexcept{
 	return { nullptr, EndType::none };
 }
 
+Length Track_Imp::ParameterFrom( EndType thisEnd ) const noexcept{
+	switch( thisEnd )
+	{
+		case EndType::any:
+			return ParameterFrom( EndType::south );
+		case EndType::north:
+			return Range().Near();
+		case EndType::south:
+			return Range().Far();
+		default:
+			return 0_m;
+	}
+}
+
 bool Track_Imp::IsCoupled( EndType atend ) const noexcept{
 	if( atend == EndType::any )
 		return IsCoupled( EndType::north ) || IsCoupled( EndType::south );

@@ -27,20 +27,36 @@
 #pragma once
 
 #include "trax/rigid/Body.h"
+#include "trax/Jack.h"
 
 namespace trax
 {
-	class Body_Imp : public virtual Body
+	class Body_Imp : public virtual Body,
+					 public JackEnumerator
 	{
 	public:
+		Body_Imp();
 		
-
-
 		// Body:
 		void SetMass( Mass mass ) override;
 
+		Jack& JackOnSleep() noexcept override;
 
+		Jack& JackOnWake() noexcept override;
 
-	
+		// JackEnumerator:
+		int CountJacks() const override;
+
+		// Body_Imp:
+		void OnSleep();
+		void OnWake();
+	protected:
+		const Jack& _GetJack( int idx ) const override;
+
+		virtual void SetSendSleepNotifies( bool bNotify = true ) = 0;
+
+	private:
+		Jack_Imp m_JackOnSleep	{ "JackOnSleep" };
+		Jack_Imp m_JackOnWake	{ "JackOnWake" };
 	};
 }

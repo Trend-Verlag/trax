@@ -95,8 +95,7 @@ namespace trax{
 
 	/// \brief Moves a track so that one of it's ends aligns to another track end in a collection.
 	/// \param collection The track collection to search track ends in.
-	/// \param track The track to snap.
-	/// \param endType The track's end to snap.
+	/// \param trackEnd The track end to snap.
 	/// \param maxDistance A threshold for the distance to search track ends around the to be snapped end.
 	/// \param bUncoupled If true only uncoupled track ends are taken into consideration.
 	/// \return The other track end, the track was snapped to, or { nullptr, EndType::none } if no suitable track end was found.
@@ -109,11 +108,10 @@ namespace trax{
 	/// are supported.
 	/// \param maxDistance A threshold for the distance to search track ends around the to be coupled end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
-	/// \param bSilent If true no log messages are emitted.
 	/// \return The other track ends, the track was coupled to, or { nullptr, EndType::none } if no suitable 
 	/// track end was found. For a coupling with front the result is in pair.first, for a coupling with end in pair.second.
 	/// \throws std::invalid_argument If the end type is not recocnized.
-	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc Couple( const TrackCollection& collection, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi, bool bSilent = true );
+	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc Couple( const TrackCollection& collection, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
 
 
 	/// \brief A decorator for TrackCollection.

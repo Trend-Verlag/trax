@@ -461,7 +461,7 @@ const Jack& WheelFrame_Imp::_GetJack( int idx ) const{
 	std::ostringstream stream;
 	stream << "Out of range!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 //
 //const Plug& WheelFrame_Imp::_GetPlug( int idx ) const
@@ -472,7 +472,7 @@ const Jack& WheelFrame_Imp::_GetJack( int idx ) const{
 //	std::ostringstream stream;
 //	stream << "Out of range!" << std::endl;
 //	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-//	throw std::range_error( stream.str() );
+//	throw std::out_of_range( stream.str() );
 //}
 
 void WheelFrame_Imp::SetLimits( const TrackJointLimits& wfl )

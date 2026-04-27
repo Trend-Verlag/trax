@@ -129,75 +129,6 @@ Real SwitchSemaphore_Imp::RotateWithStatus(Status status) const noexcept{
 	return 0.0;
 }
 
-void SwitchSemaphore_Imp::AlignTo( 
-	Switch& switchObject, 
-	const spat::Position<dim::Length>& localPosition, 
-	const spat::Vector<One>& alignment )
-{
-	spat::Frame<dim::Length,dim::One> frame;
-	switchObject.Bifurcation().Transition( frame );
-	SetFrame( frame );
-	frame.TransportTo( localPosition );
-
-	if( switchObject.IsHorizontal() )
-	{
-		if( switchObject.IsY() )
-		{
-			if( switchObject.BranchLeftOrRight() )
-			{
-				frame.LookAt( alignment, -frame.N );
-				m_PoseOne = frame;
-				switchObject.Bifurcation().Transition( frame );
-				frame.TransportTo( localPosition );
-				frame.LookAt( alignment, frame.N );
-				m_PoseTwo = frame;
-			}
-			else
-			{
-				frame.LookAt( alignment, frame.N );
-				m_PoseOne = frame;
-				switchObject.Bifurcation().Transition( frame );
-				frame.TransportTo( localPosition );
-				frame.LookAt( alignment, -frame.N );
-				m_PoseTwo = frame;
-			}
-		}
-		else if( switchObject.BranchLeftOrRight() )
-		{
-			frame.LookAt( alignment, frame.T );
-			m_PoseOne = frame;
-			switchObject.Bifurcation().Transition( frame );
-			frame.TransportTo( localPosition );
-			frame.LookAt( alignment, frame.N );
-			m_PoseTwo = frame;
-		}
-		else
-		{
-			frame.LookAt( alignment, frame.T );
-			m_PoseOne = frame;
-			switchObject.Bifurcation().Transition( frame );
-			frame.TransportTo( localPosition );
-			frame.LookAt( alignment, -frame.N );
-			m_PoseTwo = frame;
-		}
-	}
-	else
-	{
-		std::cerr << "SwitchSemaphore_Imp::AlignTo: switch orientation not yet supported!" << std::endl;
-	}
-
-	GetFrame().FromParent( m_PoseOne );
-	GetFrame().FromParent( m_PoseTwo );
-
-	JackOnOne().InsertAndAppend( &switchObject.PlugToGo().Make() );
-	JackOnTwo().InsertAndAppend( &switchObject.PlugToBranch().Make() );
-	switchObject.JackOnGo().InsertAndAppend( &PlugToOne() );
-	switchObject.JackOnBranch().InsertAndAppend( &PlugToTwo() );
-	
-	RefTargetID( switchObject.ID() );
-	Set( switchObject.Get() == Switch::Status::go ? Status::one : Status::two, false );
-}
-
 Plug& SwitchSemaphore_Imp::PlugToToggle() noexcept{
 	return m_PlugToToggle;
 }
@@ -288,7 +219,7 @@ const Plug& SwitchSemaphore_Imp::_GetPlug( int idx ) const{
 		std::ostringstream stream;
 		stream << "Out of range!" << std::endl;
 		stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-		throw std::range_error( stream.str() );
+		throw std::out_of_range( stream.str() );
 	}
 }
 
@@ -304,7 +235,7 @@ const Jack& SwitchSemaphore_Imp::_GetJack( int idx ) const{
 		std::ostringstream stream;
 		stream << "Out of range!" << std::endl;
 		stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-		throw std::range_error( stream.str() );
+		throw std::out_of_range( stream.str() );
 	}
 }
 
@@ -314,6 +245,232 @@ int SwitchSemaphore_Imp::CountPlugs() const noexcept{
 
 int SwitchSemaphore_Imp::CountJacks() const noexcept{
 	return 3;
+}
+///////////////////////////////////////
+void AlignTo( 
+	BinaryIndicator& indicator, 
+	Switch& toSwitch,
+	const spat::Position<dim::Length>& localPosition, 
+	const spat::Vector<One>& alignment )
+{
+	spat::Frame<dim::Length,dim::One> frame, PoseOne, PoseTwo;
+	toSwitch.Bifurcation().Transition( frame );
+	indicator.SetFrame( frame );
+	frame.TransportTo( localPosition );
+
+	if( toSwitch.IsHorizontal() )
+	{
+		if( toSwitch.IsY() )
+		{
+			if( toSwitch.BranchLeftOrRight() )
+			{
+				frame.LookAt( alignment, -frame.N );
+				PoseOne = frame;
+				toSwitch.Bifurcation().Transition( frame );
+				frame.TransportTo( localPosition );
+				frame.LookAt( alignment, frame.N );
+				PoseTwo = frame;
+			}
+			else
+			{
+				frame.LookAt( alignment, frame.N );
+				PoseOne = frame;
+				toSwitch.Bifurcation().Transition( frame );
+				frame.TransportTo( localPosition );
+				frame.LookAt( alignment, -frame.N );
+				PoseTwo = frame;
+			}
+		}
+		else if( toSwitch.BranchLeftOrRight() )
+		{
+			frame.LookAt( alignment, frame.T );
+			PoseOne = frame;
+			toSwitch.Bifurcation().Transition( frame );
+			frame.TransportTo( localPosition );
+			frame.LookAt( alignment, frame.N );
+			PoseTwo = frame;
+		}
+		else
+		{
+			frame.LookAt( alignment, frame.T );
+			PoseOne = frame;
+			toSwitch.Bifurcation().Transition( frame );
+			frame.TransportTo( localPosition );
+			frame.LookAt( alignment, -frame.N );
+			PoseTwo = frame;
+		}
+	}
+	else
+	{
+		std::cerr << "SwitchSemaphore_Imp::AlignTo: switch orientation not yet supported!" << std::endl;
+	}
+
+	indicator.GetFrame().FromParent( PoseOne );
+	indicator.LocalFrameForStatus( BinaryIndicator::Status::one, PoseOne );
+	indicator.GetFrame().FromParent( PoseTwo );
+	indicator.LocalFrameForStatus( BinaryIndicator::Status::two, PoseTwo );
+
+	indicator.JackOnOne().InsertAndAppend( &toSwitch.PlugToGo().Make() );
+	indicator.JackOnTwo().InsertAndAppend( &toSwitch.PlugToBranch().Make() );
+	toSwitch.JackOnGo().InsertAndAppend( &indicator.PlugToOne() );
+	toSwitch.JackOnBranch().InsertAndAppend( &indicator.PlugToTwo() );
+	
+	indicator.RefTargetID( toSwitch.ID() );
+	indicator.Set( toSwitch.Get() == Switch::Status::go ? BinaryIndicator::Status::one : BinaryIndicator::Status::two, false );
+}
+
+void AlignTo( 
+	BinaryIndicator& indicator, 
+	SingleSlipSwitch& toSwitch, 
+	const spat::Position<Length>& localPosition, 
+	const spat::Vector<One>& alignment )
+{
+	spat::Frame<dim::Length,dim::One> frame, poseOne, poseTwo;
+	toSwitch.GetCenter( frame );
+	indicator.SetFrame( frame );
+
+	frame.TransportTo( localPosition );
+	frame.LookAt( alignment, frame.T );
+	poseOne = frame;
+
+	toSwitch.GetCenter( frame );
+	frame.TransportTo( localPosition );
+	frame.LookAt( alignment, frame.N );
+	poseTwo = frame;
+
+	indicator.GetFrame().FromParent( poseOne );
+	indicator.LocalFrameForStatus( BinaryIndicator::Status::one, poseOne );
+	indicator.GetFrame().FromParent( poseTwo );
+	indicator.LocalFrameForStatus( BinaryIndicator::Status::two, poseTwo );
+
+	indicator.JackOnOne().InsertAndAppend( &toSwitch.PlugTo( SingleSlipSwitch::Status::go ).Make() );
+	indicator.JackOnTwo().InsertAndAppend( &toSwitch.PlugTo( SingleSlipSwitch::Status::branch ).Make() );
+	toSwitch.JackOn( SingleSlipSwitch::Status::go ).InsertAndAppend( &indicator.PlugToOne() );
+	toSwitch.JackOn( SingleSlipSwitch::Status::branch ).InsertAndAppend( &indicator.PlugToTwo() );
+
+	indicator.RefTargetID( toSwitch.ID() );
+	indicator.Set( toSwitch.Get() == SingleSlipSwitch::Status::go ? BinaryIndicator::Status::one : BinaryIndicator::Status::two, false );
+}
+
+void AlignTo( 
+	BinaryIndicator& indicator, 
+	DoubleSlipSwitch& toSwitch, 
+	const spat::Position<Length>& localPosition, 
+	const spat::Vector<One>& alignment )
+{
+	spat::Frame<dim::Length,dim::One> frame, poseOne, poseTwo;
+	toSwitch.GetCenter( frame );
+	indicator.SetFrame( frame );
+
+	frame.TransportTo( localPosition );
+	frame.LookAt( alignment, frame.T );
+	poseOne = frame;
+
+	toSwitch.GetCenter( frame );
+	frame.TransportTo( localPosition );
+	frame.LookAt( alignment, frame.N );
+	poseTwo = frame;
+
+	indicator.GetFrame().FromParent( poseOne );
+	indicator.LocalFrameForStatus( BinaryIndicator::Status::one, poseOne );
+	indicator.GetFrame().FromParent( poseTwo );
+	indicator.LocalFrameForStatus( BinaryIndicator::Status::two, poseTwo );
+
+	indicator.JackOnOne().InsertAndAppend( &toSwitch.PlugTo( DoubleSlipSwitch::Status::go ).Make() );
+	indicator.JackOnTwo().InsertAndAppend( &toSwitch.PlugTo( DoubleSlipSwitch::Status::branch ).Make() );
+	toSwitch.JackOn( DoubleSlipSwitch::Status::go ).InsertAndAppend( &indicator.PlugToOne() );
+	toSwitch.JackOn( DoubleSlipSwitch::Status::branch ).InsertAndAppend( &indicator.PlugToTwo() );
+	
+	indicator.RefTargetID( toSwitch.ID() );
+	indicator.Set( toSwitch.Get() == DoubleSlipSwitch::Status::go ? BinaryIndicator::Status::one : BinaryIndicator::Status::two, false );
+}
+
+void AlignTo( 
+	Indicator& indicator, 
+	ThreeWaySwitch& toSwitch, 
+	const spat::Position<Length>& localPosition, 
+	const spat::Vector<One>& alignment )
+{
+	spat::Frame<dim::Length,dim::One> frame, poseOne, poseTwo, poseThree;
+	toSwitch.Bifurcation().Transition( frame );
+	indicator.SetFrame( frame );
+
+	frame.TransportTo( localPosition );
+	frame.LookAt( alignment, frame.N );
+	poseOne = frame;
+	indicator.GetFrame().FromParent( poseOne );
+
+	switch( toSwitch.StatusToLeft() )
+	{
+		case NarrowSwitch::Status::go:
+			indicator.LocalFrameForStatus( Indicator::Status::one, poseOne );
+			break;
+		case NarrowSwitch::Status::branch1:
+			indicator.LocalFrameForStatus( Indicator::Status::two, poseOne );
+			break;
+		case NarrowSwitch::Status::branch2:
+			indicator.LocalFrameForStatus( Indicator::Status::three, poseOne );
+			break;
+	}
+
+	frame = indicator.GetFrame();
+	frame.TransportTo( localPosition );
+	frame.LookAt( alignment, frame.T );
+
+	switch( toSwitch.StatusToMiddle() )
+	{
+		case NarrowSwitch::Status::go:
+			indicator.LocalFrameForStatus( Indicator::Status::one, poseTwo );
+			break;
+		case NarrowSwitch::Status::branch1:
+			indicator.LocalFrameForStatus( Indicator::Status::two, poseTwo );
+			break;
+		case NarrowSwitch::Status::branch2:
+			indicator.LocalFrameForStatus( Indicator::Status::three, poseTwo );
+			break;
+	}
+
+	frame = indicator.GetFrame();
+	frame.TransportTo( localPosition );
+	frame.LookAt( alignment, -frame.N );
+	switch( toSwitch.StatusToRight() )
+	{
+		case NarrowSwitch::Status::go:
+			indicator.LocalFrameForStatus( Indicator::Status::one, poseThree );
+			break;
+		case NarrowSwitch::Status::branch1:
+			indicator.LocalFrameForStatus( Indicator::Status::two, poseThree );
+			break;
+		case NarrowSwitch::Status::branch2:
+			indicator.LocalFrameForStatus( Indicator::Status::three, poseThree );
+			break;
+		default:
+			std::cerr << "UThreeWaySwitchComponent::ConnectIndicator: Unknown switch status." << std::endl;
+			return;
+	}
+
+	indicator.JackOn( Indicator::Status::one ).InsertAndAppend( &toSwitch.PlugToGo().Make() );
+	indicator.JackOn( Indicator::Status::two ).InsertAndAppend( &toSwitch.PlugToBranch1().Make() );
+	indicator.JackOn( Indicator::Status::three ).InsertAndAppend( &toSwitch.PlugToBranch2().Make() );
+	toSwitch.JackOnGo().InsertAndAppend( &indicator.PlugTo( Indicator::Status::one ) );
+	toSwitch.JackOnBranch1().InsertAndAppend( &indicator.PlugTo( Indicator::Status::two ) );
+	toSwitch.JackOnBranch2().InsertAndAppend( &indicator.PlugTo( Indicator::Status::three ) );
+	
+	indicator.RefTargetID( toSwitch.ID() );
+	indicator.Set( toSwitch.Get() == Switch::Status::go ? BinaryIndicator::Status::one : BinaryIndicator::Status::two, false );
+
+	switch( toSwitch.Get() )
+	{
+		case NarrowSwitch::Status::go:
+			indicator.Set( BinaryIndicator::Status::one, false );
+			break;
+		case NarrowSwitch::Status::branch1:
+			indicator.Set( BinaryIndicator::Status::two, false );
+			break;
+		case NarrowSwitch::Status::branch2:
+			indicator.Set( BinaryIndicator::Status::three, false );
+			break;
+	}
 }
 ///////////////////////////////////////
 SwitchSemaphore::SwitchSemaphore()
@@ -395,7 +552,7 @@ void SwitchSemaphore::Get( Frame<Length,One>& frame ) const{
 		//	//pLocation->Move( m_pSwitch->DivergedTrack()->Length() );
 		//	//m_pSwitch->Set( status, false );
 
-		//	//spat::Position<trax::Real> EndPosDiverged;
+		//	//spat::Position<Real> EndPosDiverged;
 		//	//pLocation->Get( EndPosDiverged );
 		//	//base.FromParent( EndPosDiverged );
 
@@ -477,11 +634,6 @@ Real SwitchSemaphore::RotateWithStatus(Status status) const noexcept{
 	default:
 		return 0;
 	}
-}
-
-void SwitchSemaphore::AlignTo( Switch& switchObject, const spat::Position<dim::Length>& localPosition, const spat::Vector<One>& alignment )
-{
-	std::cerr << "SwitchSemaphore::AlignTo: Not yet implemented!" << std::endl;
 }
 
 Plug& SwitchSemaphore::PlugToToggle() noexcept{
@@ -574,7 +726,7 @@ const Plug& SwitchSemaphore::_GetPlug( int idx ) const{
 		std::ostringstream stream;
 		stream << "Out of range!" << std::endl;
 		stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-		throw std::range_error( stream.str() );
+		throw std::out_of_range( stream.str() );
 	}
 }
 
@@ -590,7 +742,7 @@ const Jack& SwitchSemaphore::_GetJack( int idx ) const{
 		std::ostringstream stream;
 		stream << "Out of range!" << std::endl;
 		stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-		throw std::range_error( stream.str() );
+		throw std::out_of_range( stream.str() );
 	}
 }
 

@@ -54,6 +54,23 @@ namespace trax{
 
 		/// \returns true if the track is actually in motion.
 		virtual bool IsMoving() const noexcept = 0;
+
+
+		/// \brief Automatically deconnects track ends.
+		/// 
+		/// Automatically deconnects track ends if the connected track is
+		/// farther than atDistance or at an angle larger than atAngle. This will
+		/// only happen if the MovableTrack comes to rest (i.e., falls to sleep).
+		/// \param atDistance A threshold for the distance to the connected track 
+		/// end to stay connected. Values <= 0_m will switch off auto deconnect on 
+		/// distance.
+		/// \param atAngle A threshold for the angle between the track's tangent
+		/// directions (aka: a kink). Values <= 0_rad will switch off auto deconnect 
+		/// on angle.
+		/// \param bRemoveFromConnector If true, the track end will also get removed 
+		/// from a Connector, if any.
+		/// \throws std::logic_error if no Body is assigned to the track.
+		virtual void AutoDeconnect( Length atDistance = 1_m, Angle atAngle = pi/4, bool bRemoveFromConnector = true ) = 0;
 	};
 
 }

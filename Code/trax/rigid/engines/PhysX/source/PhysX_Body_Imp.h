@@ -106,12 +106,17 @@ namespace trax
 		inline Real EngineKilogramsPerUnit() const noexcept{
 			return m_EngineKilogramsPerUnit;
 		}
+
 	protected:
+
+		void SetSendSleepNotifies( bool bNotify = true ) override;
 
 	private:
 		physx::PxRigidDynamic& m_Actor;
 		const Real m_EngineMetersPerUnit;
 		const Real m_EngineKilogramsPerUnit;
+
+
 	};
 
 

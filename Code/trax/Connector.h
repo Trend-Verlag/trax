@@ -328,17 +328,17 @@ namespace trax{
 		/// Certain track ends in slots are supposed to align with each other.
 		/// The method checks the the degree of general smoothness of the track ends
 		/// that get connected by the connector.
-		/// \param os Stream to write the error messages to.
 		/// \param e_distance Allowed deviation for the distance between the tracks ends.
 		/// \param e_kink Allowed deviation for the kink angle between the tracks.
 		/// \param e_twist Allowed deviation for the twist angle between the tracks.
 		/// \returns True if the connector is consistent with respect to the given tolerances.
-		virtual bool Check( std::ostream& os, Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept = 0;
+		virtual bool Check( Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept = 0;
 
 
 		/// \brief clears the slot with index slot.
 		/// \param slot Zero based index of the slot to clear. The method does nothing, if the slot is not existing.
-		virtual void Clear( int slot ) = 0;
+		/// \returns The track end that got released from the slot.
+		virtual std::pair<std::shared_ptr<TrackBuilder>,EndType> Clear( int slot ) noexcept = 0;
 
 
 		/// \brief Releases all the tracks from the slots.
@@ -391,6 +391,10 @@ namespace trax{
 	/// \brief Makes a status value from a status string.
 	/// \throws std::invalid_argument if the string was not recognized.
 	dclspc Connector::Status ToConnectorStatus( const std::string& status );
+
+
+	/// \returns The status a specific socket is related with.
+	dclspc Connector::Status ConnectorStatusFrom( const std::string& socketName );
 
 
 	/// \brief Connect two track ends by inserting them into Connectors, if available.

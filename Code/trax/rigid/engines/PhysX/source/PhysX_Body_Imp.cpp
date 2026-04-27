@@ -42,7 +42,7 @@ PhysX_Body_ImpBase::PhysX_Body_ImpBase(
 #ifdef _DEBUG
 	Actor().setActorFlag( physx::PxActorFlag::eVISUALIZATION, true );
 #endif
-	Actor().userData = static_cast<Body*>(this);
+	Actor().userData = this;
 }
 
 PhysX_Body_ImpBase::~PhysX_Body_ImpBase() noexcept{
@@ -186,6 +186,10 @@ void PhysX_Body_ImpBase::EnableSimulation( bool enable ) noexcept{
 bool PhysX_Body_ImpBase::IsSimulationEnabled() const noexcept{
 	SceneLockRead lock{ Actor().getScene() };
 	return !Actor().getActorFlags().isSet( physx::PxActorFlag::eDISABLE_SIMULATION );
+}
+
+void PhysX_Body_ImpBase::SetSendSleepNotifies( bool bNotify ){
+	Actor().setActorFlag( physx::PxActorFlag::eSEND_SLEEP_NOTIFIES, bNotify );
 }
 ///////////////////////////////////////
 PhysX_Body_Imp::PhysX_Body_Imp( physx::PxPhysics& physics, Real engine_meters_per_unit, Real engine_kilograms_per_unit ) noexcept

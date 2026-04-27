@@ -1287,7 +1287,7 @@ const Jack& Bogie_Imp::_GetJack( int idx ) const
 	std::ostringstream stream;
 	stream << "Out of range!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
-	throw std::range_error( stream.str() );
+	throw std::out_of_range( stream.str() );
 }
 //
 //const Plug& Bogie_Imp::_GetPlug( int idx ) const
@@ -1299,7 +1299,7 @@ const Jack& Bogie_Imp::_GetJack( int idx ) const
 //	assert( 0 );
 //	std::ostringstream stream;
 //	stream << __FILE__ << '(' << __LINE__ << ')' << "Out of range!";
-//	throw std::range_error( stream.str() );
+//	throw std::out_of_range( stream.str() );
 //}
 
 void Bogie_Imp::RailChildBogies( const trax::Location& location, bool bMoveTo )

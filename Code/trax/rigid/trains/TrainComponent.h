@@ -79,9 +79,14 @@ namespace trax{
 		/// The method gives a strong guarantee: if it fails, the RailRunner will 
 		/// be in the same railing state as before the call. If it succeeds, the 
 		/// RailRunner will be railed at the given location.
+		/// \param location The location to rail at. The location has to be on a track, 
+		/// otherwise an exception is thrown.
 		/// \param bMoveTo If bMoveTo is true, the TrainComponent will be moved to the location.
 		/// \param distance The internal distances of coupled components are resolved by 'distance'
 		/// if this happens to be a Train.
+		/// \param bFailOnReservationConflicts If true, the method will fail if a reservation 
+		/// conflict with an already existing reservation occurs. If false, the method will 
+		/// ignore reservation.
 		/// \throws std::invalid_argument If location is not on a track.
 		/// \throws std::logic_error If the present configuration does not allow 
 		/// railing, e.g. because there are no suitable WheelFrame children in

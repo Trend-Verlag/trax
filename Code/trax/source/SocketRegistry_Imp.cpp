@@ -47,22 +47,31 @@ void SocketRegistry_Imp::RegisterPlug( Plug& plug ){
 		Connect(plug);
 	else{
 		m_Jacks.clear(); // no jacks can get connected if there are 
-						 // zero id plugs, which have to be assigned an id first.
+						 // zero id plugs, which have to be assigned 
+						 // an id first. This can not be known by Jacks.
 
-		std::clog << Verbosity::detailed << "Plug with zero ID! No jacks can get connected if there are zero id plugs, which have to be assigned an id first. This will not be a problem on import." << std::endl;
+		std::clog << Verbosity::verbose << "SocketRegistry_Imp::RegisterPlug: Plug with zero ID! The Plug gets assigned a unique id." << std::endl;
 	}
 
 	m_Plugs.insert( &plug );
+	if( plug.Plugged() )
+		plug.Plugged()->RefPlugID( plug.ID() );
+}
 
-	//if( MultiPlug* pMultiPlug = dynamic_cast<MultiPlug*>(&plug); pMultiPlug )
-	//{
-	//	for( Plug& clone : *pMultiPlug )
-	//		RegisterPlug( clone );
-	//}
+void SocketRegistry_Imp::RegisterPlug( MultiPlug& plug )
+{
+	for( Plug& clone : plug )
+		RegisterPlug( clone );
 }
 
 void SocketRegistry_Imp::UnRegisterPlug( const Plug& plug ){
 	m_Plugs.erase( plug.ID() );
+}
+
+void SocketRegistry_Imp::UnRegisterPlug( const MultiPlug& plug )
+{
+	for( const Plug& clone : plug )
+		UnRegisterPlug( clone );
 }
 
 Plug* SocketRegistry_Imp::GetPlug( IDType id ) const{
@@ -77,17 +86,29 @@ IDType SocketRegistry_Imp::MaxValidPlugID() const noexcept{
 	return m_Plugs.GetMaxValid();
 }
 
-void SocketRegistry_Imp::ConnectJack( Jack& jack ){
-	if( !jack.RefPlugID() || jack.GetPlug() )
-		return; // can not connect 
+void SocketRegistry_Imp::ConnectJack( Jack& jack )
+{
+	if( jack.RefPlugID() )
+	{
+		if( jack.GetPlug() == nullptr )
+		{
+			assert( std::find( m_Jacks.begin(), m_Jacks.end(), &jack ) == m_Jacks.end() );
 
-	assert( std::find( m_Jacks.begin(), m_Jacks.end(), &jack ) == m_Jacks.end() );
-
-	const auto iter = m_Plugs.find( jack.RefPlugID() );
-	if( iter != m_Plugs.end() )
-		jack.InsertAtTail( iter->second );
-	else
-		m_Jacks.push_back( &jack );
+			const auto iter = m_Plugs.find( jack.RefPlugID() );
+			if( iter != m_Plugs.end() )
+				jack.InsertAtTail( iter->second );
+			else
+				m_Jacks.push_back( &jack );
+		}
+	}
+	else 
+	{
+		if( jack.GetPlug() )
+		// already connected.
+		{
+			jack.RefPlugID( jack.GetPlug()->ID() );
+		}
+	}
 }
 
 void SocketRegistry_Imp::RemoveJack( Jack& jack ) noexcept{

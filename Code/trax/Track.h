@@ -33,13 +33,13 @@
 /// \section track_intro Introduction
 /// 
 /// A \link trax::Track Track \endlink is something with two ends - the \link 
-/// trax::Track::front front end \endlink the \link trax::Track::end end end 
+/// trax::EndType::north front end \endlink the \link trax::EndType::south end end 
 /// \endlink - which can get connected with the ends of other tracks; it can 
 /// provide geometry, by taking a Curve as a path in 3D space and a \link 
 /// trax::RoadwayTwist RoadwayTwist \endlink for determining the up direction
 /// of the path; there is a \link trax::Location Location \endlink that can 
 /// travel the tracks, including transitioning between tracks if they are 
-/// coupled and deliver 3D poses by its \ref location_getters getter methods -
+/// connected and deliver 3D poses by its \ref location_getters getter methods -
 /// \link trax::Connector Connectors \endlink are taking track ends and help 
 /// to dynamically reconnect them according to their special patterns.
 ///
@@ -497,6 +497,10 @@ namespace trax
 		/// no track is connected. If not nullptr, othersend will receive 
 		/// the type of end of the other track the coupling is existing for.
 		virtual TrackEnd TransitionEnd( EndType thisEnd ) const noexcept = 0;
+
+
+		/// \brief Gives the parameter value at the specified end of the track.
+		virtual Length ParameterFrom( EndType thisEnd ) const noexcept = 0;
 
 
 		/// Triggers all sensors in the range in the order of their positioning along the track
