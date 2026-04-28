@@ -63,10 +63,10 @@
 /// pArc4->Create( { Origin3D<Length>, { 0, -1, 0 }, { 10, 0, 0 } } );
 /// pTrack4->Attach( std::move(pArc4), {0_m, 10_m*pi/2} );
 /// 
-/// pTrack1->Couple( std::make_pair(pTrack1, Track::EndType::end), std::make_pair(pTrack2, Track::EndType::front) );
-/// pTrack2->Couple( std::make_pair(pTrack2, Track::EndType::end), std::make_pair(pTrack3, Track::EndType::front) );
-/// pTrack3->Couple( std::make_pair(pTrack3, Track::EndType::end), std::make_pair(pTrack4, Track::EndType::front) );
-/// pTrack4->Couple( std::make_pair(pTrack4, Track::EndType::end), std::make_pair(pTrack1, Track::EndType::front) );
+/// pTrack1->Connect( std::make_pair(pTrack1, Track::EndType::end), std::make_pair(pTrack2, Track::EndType::front) );
+/// pTrack2->Connect( std::make_pair(pTrack2, Track::EndType::end), std::make_pair(pTrack3, Track::EndType::front) );
+/// pTrack3->Connect( std::make_pair(pTrack3, Track::EndType::end), std::make_pair(pTrack4, Track::EndType::front) );
+/// pTrack4->Connect( std::make_pair(pTrack4, Track::EndType::end), std::make_pair(pTrack1, Track::EndType::front) );
 /// 
 /// Location loc{ pTrack1, { 0_m, Orientation::Value::para } };
 /// 
@@ -80,8 +80,8 @@
 /// auto pTrack = loc.GetTrack();
 /// BOOST_CHECK( pTrack == pTrack3 );
 /// 
-/// pTrack1->DeCouple(); // Coupled tracks will prevent each others destruction \see TrackSystem
-/// pTrack3->DeCouple();
+/// pTrack1->Disconnect(); // Connected tracks will prevent each others destruction \see TrackSystem
+/// pTrack3->Disconnect();
 /// \endcode
 ///
 /// Do also look at the tests in the test suit for further examples.
@@ -135,7 +135,7 @@ namespace trax
 		///
 		///	The track location gets resolved; this means that if the parameter value is 
 		/// out of Track::Range() for this track, the method tries to find the track for 
-		/// the position on coupled tracks.
+		/// the position on connected tracks.
 		/// If a dead end is encountered in this process a std::out_of_range exception gets
 		/// thrown.
 		/// \param pTrack The track relativ to wich tl is formulated.
@@ -228,7 +228,7 @@ namespace trax
 		/// actual switch settings.
 		///
 		/// Optionally the function receives signals and triggers sensors. If a dead
-		/// end of a track (uncoupled track end) is reached that end's position will be the 
+		/// end of a track (unconnected track end) is reached that end's position will be the 
 		/// resulting location. All sensors in the valid range get triggered for the given
 		/// Event and all signals be dispatched to the SignalTarget.
 		///
@@ -277,7 +277,7 @@ namespace trax
 
 
 		/// \brief Moves the location to the track's end and transitions it
-		/// to the coupled track's end if any.
+		/// to the connected track's end if any.
 		///
 		/// \param direction para moves to the tracks end in Track's direction, anti against it.
 		///	\param pEvent Trigger sensors and dispatch Event.
@@ -294,7 +294,7 @@ namespace trax
 
 		/// \brief Compares two Locations.
 		///
-		/// The comparison will work with Locations on coupled tracks.
+		/// The comparison will work with Locations on connected tracks.
 		/// \returns true if the two Locations stand for the same locations
 		/// along the track system with a difference smaller than epsilon in
 		/// parameter difference; false otherwise.
@@ -344,9 +344,9 @@ namespace trax
 		std::shared_ptr<const Track>	m_pTrack;
 		TrackLocation					m_TLocation;
 
-		// Calculates this track location relative to the coupled track at front or end.
+		// Calculates this track location relative to the connected track at front or end.
 		// This might lead to a parameter out of track ranges.
-		// Returns false if the track is uncoupled at the specified end.
+		// Returns false if the track is unconnected at the specified end.
 		bool TrackTransition( EndType frontend, const Event* pEvent ) noexcept;
 
 		// Transition tracks until parameter is on track.

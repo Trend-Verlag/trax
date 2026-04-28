@@ -32,7 +32,7 @@ TrackSystemFixture::TrackSystemFixture()
 TrackSystemFixture::~TrackSystemFixture()
 {
 	if( m_pTrackSystem )
-		m_pTrackSystem->DeCoupleAll();
+		m_pTrackSystem->DisconnectAll();
 }
 ///////////////////////////////////////
 TrackSystemCircleFixture::TrackSystemCircleFixture()

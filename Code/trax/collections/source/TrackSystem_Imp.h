@@ -95,25 +95,24 @@ namespace trax{
 
 		ConnectorCollection* GetConnectorCollection	() const noexcept override;
 
-		void Couple( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd2 ) const override;
+		void Connect( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd2 ) const override;
 
-		void Couple( const Track::Coupling& coupling, bool bUncoupledOnly = false ) const override;
+		void Connect( const Track::Connection& connection, bool bUnconnectedOnly = false ) const override;
 
 		std::shared_ptr<Sensor> GetSensor( IDType id, TrackLocation* pTrackLocation ) const override;
 
 		Length CalculateGapSize( const Track::End& theOne, const Track::End& theOther ) const override;
 
-		std::vector<Track::End> GetUncoupledIn( const Sphere<Length>& area ) const override;
+		std::vector<Track::End> GetUnconnectedIn( const Sphere<Length>& area ) const override;
 
-		void Connection( Track::Coupling& coupling ) const override;
+		void Connection( Track::Connection& connection ) const override;
 
-		void Connection( const Track::End& end, Track::End& coupled ) const override;
+		void Connection( const Track::End& end, Track::End& connected ) const override;
+		void Connection( const Track::Connection& connections, Track::Connection& active ) const override;
 
-		void Connection( const Track::Coupling& couplings, Track::Coupling& active ) const override;
+		void ConnectAll( Length maxDistance = 1_m, Angle maxKink = pi ) override;
 
-		void CoupleAll( Length maxDistance = 1_m, Angle maxKink = pi ) override;
-
-		void DeCoupleAll() override;
+		void DisconnectAll() override;
 
 
 		// Simulated:
@@ -162,7 +161,7 @@ namespace trax{
 
 		std::shared_ptr<ConnectorCollection>						m_pConnectorCollection;
 
-		void DoDeCoupleAll();
+		void DoDisconnectAll();
 		void DoClear();
 	};
 

@@ -168,11 +168,11 @@ int NarrowSwitch_Imp::Slot(
 	case 0:
 		for( int i = 1; i < CntSlots(); ++i )
 			if( Slot(i).first )
-				Slot(i).first->Couple( Slot(i), Slot(slot_0) );
+				Slot(i).first->Connect( Slot(i), Slot(slot_0) );
 		break;
 	default:
 		if( Slot(slot_0).first )
-			Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot) );
+			Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot) );
 	}
 
 	Set( m_Status, false );
@@ -262,10 +262,10 @@ NarrowSwitch::Status NarrowSwitch_Imp::Set( Status to, bool pulse ){
 	if( Slot(slot_0).first ){
 		switch( m_Status ){
 		case Status::none:
-			Slot(slot_0).first->DeCouple( Slot(slot_0).second, true );
+			Slot(slot_0).first->Disconnect( Slot(slot_0).second, true );
 			break;
 		case Status::go:
-			Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_1) );
+			Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_1) );
 
 			if( pulse )
 				m_JackOnGo.Pulse();
@@ -277,7 +277,7 @@ NarrowSwitch::Status NarrowSwitch_Imp::Set( Status to, bool pulse ){
 			break;
 		case Status::empty:
 			if( !Slot(slot_1).first ){
-				Slot(slot_0).first->DeCouple( Slot(slot_0).second, true );
+				Slot(slot_0).first->Disconnect( Slot(slot_0).second, true );
 				m_Status = Status::go;
 
 				if( pulse )
@@ -289,7 +289,7 @@ NarrowSwitch::Status NarrowSwitch_Imp::Set( Status to, bool pulse ){
 			m_Status = retval;
 			for( int i = 0; i < CntDivergedTracks(); ++i )
 				if( !Slot(slot_2+i).first ){
-					Slot(slot_0).first->DeCouple( Slot(slot_0).second, true );
+					Slot(slot_0).first->Disconnect( Slot(slot_0).second, true );
 					m_Status = static_cast<Status>(static_cast<int>(Status::branch1) + i);
 
 					if( pulse )
@@ -300,7 +300,7 @@ NarrowSwitch::Status NarrowSwitch_Imp::Set( Status to, bool pulse ){
 
 			break;
 		default:
-			Slot(slot_0).first->Couple( Slot(slot_0), Slot(static_cast<int>(m_Status)+1) );
+			Slot(slot_0).first->Connect( Slot(slot_0), Slot(static_cast<int>(m_Status)+1) );
 
 			if( pulse )
 				m_JacksOnBranches[static_cast<std::size_t>(m_Status)-1]->Pulse();
@@ -1013,24 +1013,24 @@ SingleSlipSwitch::Status SingleSlipSwitch_Imp::Set( Status to, bool pulse )
 	if( IsComplete() ){
 		switch( m_Status ){
 		case Status::go1:
-			Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_2) );
-			Slot(slot_1).first->Couple( Slot(slot_1), Slot(slot_3) );
+			Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_2) );
+			Slot(slot_1).first->Connect( Slot(slot_1), Slot(slot_3) );
 
 			if( pulse )
 				m_JackOnGo1.Pulse();
 
 			break;
 		case Status::go2:
-			Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_2) );
-			Slot(slot_1).first->Couple( Slot(slot_1), Slot(slot_3) );
+			Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_2) );
+			Slot(slot_1).first->Connect( Slot(slot_1), Slot(slot_3) );
 
 			if( pulse )
 				m_JackOnGo2.Pulse();
 
 			break;
 		case Status::branch:
-			Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_4) );
-			Slot(slot_1).first->Couple( Slot(slot_1), Slot(slot_5) );
+			Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_4) );
+			Slot(slot_1).first->Connect( Slot(slot_1), Slot(slot_5) );
 
 			if( pulse )
 				m_JackOnBranch.Pulse();
@@ -1094,10 +1094,10 @@ int SingleSlipSwitch_Imp::Slot(
 	const int retval = Connector_Imp::Slot( slot, pTrack, trackend, connectAnonymous );
 
 	if( IsComplete() ){
-		Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_2) );
-		Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_4) );
-		Slot(slot_1).first->Couple( Slot(slot_1), Slot(slot_3) );
-		Slot(slot_1).first->Couple( Slot(slot_1), Slot(5) );
+		Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_2) );
+		Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_4) );
+		Slot(slot_1).first->Connect( Slot(slot_1), Slot(slot_3) );
+		Slot(slot_1).first->Connect( Slot(slot_1), Slot(5) );
 
 		Set( m_Status, false );
 	}
@@ -1296,40 +1296,40 @@ DoubleSlipSwitch::Status DoubleSlipSwitch_Imp::Set( Status to, bool pulse ){
 	if( IsComplete() ){
 		switch( m_Status ){
 		case Status::go1:
-			Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_4) );
-			Slot(slot_1).first->Couple( Slot(slot_1), Slot(slot_5) );
-			Slot(slot_2).first->Couple( Slot(slot_2), Slot(slot_6) );
-			Slot(slot_3).first->Couple( Slot(slot_3), Slot(slot_7) );
+			Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_4) );
+			Slot(slot_1).first->Connect( Slot(slot_1), Slot(slot_5) );
+			Slot(slot_2).first->Connect( Slot(slot_2), Slot(slot_6) );
+			Slot(slot_3).first->Connect( Slot(slot_3), Slot(slot_7) );
 
 			if( pulse )
 				m_JackOnGo1.Pulse();
 
 			break;
 		case Status::go2:
-			Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_4) );
-			Slot(slot_1).first->Couple( Slot(slot_1), Slot(slot_5) );
-			Slot(slot_2).first->Couple( Slot(slot_2), Slot(slot_6) );
-			Slot(slot_3).first->Couple( Slot(slot_3), Slot(slot_7) );
+			Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_4) );
+			Slot(slot_1).first->Connect( Slot(slot_1), Slot(slot_5) );
+			Slot(slot_2).first->Connect( Slot(slot_2), Slot(slot_6) );
+			Slot(slot_3).first->Connect( Slot(slot_3), Slot(slot_7) );
 
 			if( pulse )
 				m_JackOnGo2.Pulse();
 
 			break;
 		case Status::branch1:
-			Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_8) );
-			Slot(slot_1).first->Couple( Slot(slot_1), Slot(slot_11) );
-			Slot(slot_2).first->Couple( Slot(slot_2), Slot(slot_10) );
-			Slot(slot_3).first->Couple( Slot(slot_3), Slot(slot_9) );
+			Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_8) );
+			Slot(slot_1).first->Connect( Slot(slot_1), Slot(slot_11) );
+			Slot(slot_2).first->Connect( Slot(slot_2), Slot(slot_10) );
+			Slot(slot_3).first->Connect( Slot(slot_3), Slot(slot_9) );
 
 			if( pulse )
 				m_JackOnBranch1.Pulse();
 
 			break;
 		case Status::branch2:
-			Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_8) );
-			Slot(slot_1).first->Couple( Slot(slot_1), Slot(slot_11) );
-			Slot(slot_2).first->Couple( Slot(slot_2), Slot(slot_10) );
-			Slot(slot_3).first->Couple( Slot(slot_3), Slot(slot_9) );
+			Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_8) );
+			Slot(slot_1).first->Connect( Slot(slot_1), Slot(slot_11) );
+			Slot(slot_2).first->Connect( Slot(slot_2), Slot(slot_10) );
+			Slot(slot_3).first->Connect( Slot(slot_3), Slot(slot_9) );
 
 			if( pulse )
 				m_JackOnBranch2.Pulse();
@@ -1397,14 +1397,14 @@ int DoubleSlipSwitch_Imp::Slot(
 	const int retval = Connector_Imp::Slot( slot, pTrack, trackend, connectAnonymous );
 
 	if( IsComplete() ){
-		Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_4) );
-		Slot(slot_0).first->Couple( Slot(slot_0), Slot(slot_8) );
-		Slot(slot_1).first->Couple( Slot(slot_1), Slot(slot_5) );
-		Slot(slot_1).first->Couple( Slot(slot_1), Slot(slot_11) );
-		Slot(slot_2).first->Couple( Slot(slot_2), Slot(slot_6) );
-		Slot(slot_2).first->Couple( Slot(slot_2), Slot(slot_10) );
-		Slot(slot_3).first->Couple( Slot(slot_3), Slot(slot_7) );
-		Slot(slot_3).first->Couple( Slot(slot_3), Slot(slot_9) );
+		Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_4) );
+		Slot(slot_0).first->Connect( Slot(slot_0), Slot(slot_8) );
+		Slot(slot_1).first->Connect( Slot(slot_1), Slot(slot_5) );
+		Slot(slot_1).first->Connect( Slot(slot_1), Slot(slot_11) );
+		Slot(slot_2).first->Connect( Slot(slot_2), Slot(slot_6) );
+		Slot(slot_2).first->Connect( Slot(slot_2), Slot(slot_10) );
+		Slot(slot_3).first->Connect( Slot(slot_3), Slot(slot_7) );
+		Slot(slot_3).first->Connect( Slot(slot_3), Slot(slot_9) );
 
 		Set( m_Status, false );
 	}

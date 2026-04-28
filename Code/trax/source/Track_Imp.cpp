@@ -303,9 +303,9 @@ Length Track_Imp::ParameterFrom( EndType thisEnd ) const noexcept{
 	}
 }
 
-bool Track_Imp::IsCoupled( EndType atend ) const noexcept{
+bool Track_Imp::IsConnected( EndType atend ) const noexcept{
 	if( atend == EndType::any )
-		return IsCoupled( EndType::north ) || IsCoupled( EndType::south );
+		return IsConnected( EndType::north ) || IsConnected( EndType::south );
 
 	return (atend == EndType::north && m_TrackFront.first) || (atend == EndType::south && m_TrackEnd.first);
 }
@@ -737,7 +737,7 @@ std::vector<Track::Overlap> Track_Imp::Overlaps( IDType withID ) const
 	return overlaps;
 }
 
-void Track_Imp::Couple( 
+void Track_Imp::Connect( 
 	std::pair<std::shared_ptr<TrackBuilder>,EndType> thisEnd, 
 	std::pair<std::shared_ptr<TrackBuilder>,EndType> othersEnd  )
 {
@@ -745,10 +745,10 @@ void Track_Imp::Couple(
 		throw std::logic_error( "pThisTrack has to point to this." );
 
 	if( thisEnd == othersEnd )
-		throw std::logic_error( "Can not couple track coupling to itself!" );
+		throw std::logic_error( "Can not connect track to itself!" );
 
 	if( thisEnd.second == EndType::any || othersEnd.second == EndType::any )
-		throw std::invalid_argument( "Unspecific end type to couple; use EndType::north or EndType::south." );
+		throw std::invalid_argument( "Unspecific end type to connect; use EndType::north or EndType::south." );
 
 	if( thisEnd.second == EndType::north ){
 		if( (m_TrackFront.first = std::dynamic_pointer_cast<Track_Imp>(othersEnd.first)) != nullptr ){
@@ -798,10 +798,10 @@ void Track_Imp::Couple(
 	}
 }
 
-void Track_Imp::DeCouple( EndType thisend, bool oneSided ){
+void Track_Imp::Disconnect( EndType thisend, bool oneSided ){
 	if( thisend == EndType::any ){
-		DeCouple( EndType::north, oneSided );
-		DeCouple( EndType::south, oneSided );
+		Disconnect( EndType::north, oneSided );
+		Disconnect( EndType::south, oneSided );
 		return;
 	}
 

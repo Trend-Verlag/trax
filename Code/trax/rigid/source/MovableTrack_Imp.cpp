@@ -171,7 +171,7 @@ void MovableTrack_Imp::OnTryDeconnect( trax::EndType endType ) noexcept
 		if( (m_LengthThreshold > 0_m && (otherFrame.P - thisFrame.P).Length() > m_LengthThreshold) ||
 			(m_AngleThreshold > 0_rad && asin( (otherFrame.T % thisFrame.T).Length() ) > m_AngleThreshold) )
 		{
-			DeCouple( endType );
+			Disconnect( endType );
 
 			if( m_bAutoDeconnectRemoveFromConnector )
 				if( Connector* pConnector = GetConnector( endType ); pConnector )

@@ -70,7 +70,7 @@ TrackFixture::TrackFixture()
 }
 
 TrackFixture::~TrackFixture(){
-	m_pTrack->DeCouple();
+	m_pTrack->Disconnect();
 }
 ///////////////////////////////////////
 ThreeTracksInALineFixture::ThreeTracksInALineFixture()
@@ -95,13 +95,13 @@ ThreeTracksInALineFixture::ThreeTracksInALineFixture()
 	frame.TransportTan( 10_m );
 	m_pTrack3->SetFrame( frame );
 
-	m_pTrack1->Couple( std::make_pair( m_pTrack1,trax::EndType::south ), std::make_pair( m_pTrack2, trax::EndType::north ) );
-	m_pTrack2->Couple( std::make_pair( m_pTrack2, trax::EndType::south ), std::make_pair( m_pTrack3, trax::EndType::north ) );
+	m_pTrack1->Connect( std::make_pair( m_pTrack1,trax::EndType::south ), std::make_pair( m_pTrack2, trax::EndType::north ) );
+	m_pTrack2->Connect( std::make_pair( m_pTrack2, trax::EndType::south ), std::make_pair( m_pTrack3, trax::EndType::north ) );
 }
 
 ThreeTracksInALineFixture::~ThreeTracksInALineFixture()
 {
-	m_pTrack2->DeCouple();
+	m_pTrack2->Disconnect();
 }
 ///////////////////////////////////////
 SwichFixture::SwichFixture()
@@ -129,9 +129,9 @@ SwichFixture::SwichFixture()
 
 SwichFixture::~SwichFixture()
 {
-	m_pTrack1->DeCouple();
-	m_pTrack2->DeCouple();
-	m_pTrack3->DeCouple();
+	m_pTrack1->Disconnect();
+	m_pTrack2->Disconnect();
+	m_pTrack3->Disconnect();
 }
 
 TrackAndLocation::TrackAndLocation()
@@ -172,17 +172,17 @@ TrackCircle::TrackCircle()
 	m_pTrack4->Attach( m_pArc4,{0_m, R*dim::pi/2} );
 	m_pTrack4->Attach( trax::LinearTwist::Make() );
 
-	m_pTrack1->Couple( std::make_pair(m_pTrack1, trax::EndType::south), std::make_pair(m_pTrack2, trax::EndType::north) );
-	m_pTrack2->Couple( std::make_pair(m_pTrack2, trax::EndType::south), std::make_pair(m_pTrack3, trax::EndType::north) );
-	m_pTrack3->Couple( std::make_pair(m_pTrack3, trax::EndType::south), std::make_pair(m_pTrack4, trax::EndType::north) );
-	m_pTrack4->Couple( std::make_pair(m_pTrack4, trax::EndType::south), std::make_pair(m_pTrack1, trax::EndType::north) );
+	m_pTrack1->Connect( std::make_pair(m_pTrack1, trax::EndType::south), std::make_pair(m_pTrack2, trax::EndType::north) );
+	m_pTrack2->Connect( std::make_pair(m_pTrack2, trax::EndType::south), std::make_pair(m_pTrack3, trax::EndType::north) );
+	m_pTrack3->Connect( std::make_pair(m_pTrack3, trax::EndType::south), std::make_pair(m_pTrack4, trax::EndType::north) );
+	m_pTrack4->Connect( std::make_pair(m_pTrack4, trax::EndType::south), std::make_pair(m_pTrack1, trax::EndType::north) );
 
 	m_Location.PutOn( m_pTrack1, trax::TrackLocation( 0_m, true ) );
 }
 
 TrackCircle::~TrackCircle(){
-	m_pTrack1->DeCouple();
-	m_pTrack3->DeCouple();
+	m_pTrack1->Disconnect();
+	m_pTrack3->Disconnect();
 }
 /////////////////////////////////////
 SensorFixture::SensorFixture()

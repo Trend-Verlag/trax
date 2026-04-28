@@ -323,7 +323,7 @@ bool Location::Equals( const Location& loc, Length _epsilon ) const noexcept{
 		return m_TLocation.Equals( loc.m_TLocation, _epsilon );
 
 	if( IsOnTrack() )
-	// there are situations at the end of coupled tracks that have to get handled seperately...
+	// there are situations at the end of connected tracks that have to get handled seperately...
 	{
 		if( m_TLocation.parameter <= _epsilon ){
 			Location thisLoc( *this );
@@ -411,13 +411,13 @@ bool Location::TrackTransition( EndType frontend, const Event* pEvent ) noexcept
 	if( frontend == EndType::north )
 	{
 		if( nextTrackEnd.end == EndType::north )
-			// front coupled with front: change orientation
+			// front connected with front: change orientation
 		{
 			m_TLocation.orientation.Flip();
 			m_TLocation.parameter = -m_TLocation.parameter;
 		}
 		else
-			// front coupled with end
+			// front connected with end
 		{
 			m_TLocation.parameter += nextTrackEnd.pTrack->GetLength();
 		}
@@ -425,13 +425,13 @@ bool Location::TrackTransition( EndType frontend, const Event* pEvent ) noexcept
 	else
 	{
 		if( nextTrackEnd.end == EndType::south )
-			// end coupled with end: change orientation
+			// end connected with end: change orientation
 		{
 			m_TLocation.orientation.Flip();
 			m_TLocation.parameter = nextTrackEnd.pTrack->GetLength() + m_pTrack->GetLength() - m_TLocation.parameter;
 		}
 		else
-			// end coupled with front
+			// end connected with front
 		{
 			m_TLocation.parameter -= m_pTrack->GetLength();
 		}

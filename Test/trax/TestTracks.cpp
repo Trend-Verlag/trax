@@ -1841,10 +1841,10 @@ BOOST_AUTO_TEST_CASE( connect_tests )
 		pTrack4->Attach( pArc4, {0_m,10_m*pi/2} );
 		BOOST_CHECK_SMALL( pTrack4->GetLength() - 10_m*pi/2, 1_mm );
 
-		pTrack1->Couple( std::make_pair(pTrack1, EndType::south), std::make_pair(pTrack2, EndType::north) );
-		pTrack2->Couple( std::make_pair(pTrack2, EndType::south), std::make_pair(pTrack3, EndType::north) );
-		pTrack3->Couple( std::make_pair(pTrack3, EndType::south), std::make_pair(pTrack4, EndType::north) );
-		pTrack4->Couple( std::make_pair(pTrack4, EndType::south), std::make_pair(pTrack1, EndType::north) );
+		pTrack1->Connect( std::make_pair(pTrack1, EndType::south), std::make_pair(pTrack2, EndType::north) );
+		pTrack2->Connect( std::make_pair(pTrack2, EndType::south), std::make_pair(pTrack3, EndType::north) );
+		pTrack3->Connect( std::make_pair(pTrack3, EndType::south), std::make_pair(pTrack4, EndType::north) );
+		pTrack4->Connect( std::make_pair(pTrack4, EndType::south), std::make_pair(pTrack1, EndType::north) );
 
 		BOOST_CHECK( pTrack1->TransitionEnd( EndType::north ).pTrack == pTrack4 );
 		BOOST_CHECK( pTrack1->TransitionEnd( EndType::north ).end == EndType::south );
@@ -1871,8 +1871,8 @@ BOOST_AUTO_TEST_CASE( connect_tests )
 		Loc.Transition( frame2 );
 		BOOST_CHECK( frame1.Equals( frame2, epsilon__length, 0.001f ) );
 
-		pTrack1->DeCouple();
-		pTrack3->DeCouple();
+		pTrack1->Disconnect();
+		pTrack3->Disconnect();
 	}
 }
 
@@ -1901,7 +1901,7 @@ BOOST_AUTO_TEST_CASE( move_over_paraconnection_tests )
 		pTrack1->Attach( pCurve1, {0_m,200_m} );
 		pTrack2->Attach( pCurve2, {0_m,200_m} );
 
-		pTrack1->Couple( std::make_pair(pTrack1, EndType::north), std::make_pair(pTrack2, EndType::north) );
+		pTrack1->Connect( std::make_pair(pTrack1, EndType::north), std::make_pair(pTrack2, EndType::north) );
 
 		trax::Location Loc{ pTrack1, trax::TrackLocation( 1_m, true ) };
 
@@ -1916,7 +1916,7 @@ BOOST_AUTO_TEST_CASE( move_over_paraconnection_tests )
 		// after transition both vectors should point roughly in the same direction...
 		BOOST_CHECK_GT( frame1.T * frame2.T, 0 );
 
-		pTrack1->DeCouple();
+		pTrack1->Disconnect();
 	}
 }
 
@@ -1928,8 +1928,8 @@ BOOST_AUTO_TEST_CASE( ConnectTwoTracksOnBothEnds )
 		std::shared_ptr<trax::TrackBuilder> pTrack2 = TrackBuilder::Make();
 		BOOST_CHECK( pTrack2 != nullptr );
 
-		pTrack1->Couple( std::make_pair(pTrack1, EndType::north), std::make_pair(pTrack2, EndType::south) );
-		pTrack1->Couple( std::make_pair(pTrack1, EndType::south), std::make_pair(pTrack2, EndType::north) );
+		pTrack1->Connect( std::make_pair(pTrack1, EndType::north), std::make_pair(pTrack2, EndType::south) );
+		pTrack1->Connect( std::make_pair(pTrack1, EndType::south), std::make_pair(pTrack2, EndType::north) );
 
 		BOOST_CHECK_EQUAL( pTrack1->TransitionEnd( EndType::north ).pTrack, pTrack2 );
 		BOOST_CHECK_EQUAL( pTrack1->TransitionEnd( EndType::north ).end, EndType::south );
@@ -1940,7 +1940,7 @@ BOOST_AUTO_TEST_CASE( ConnectTwoTracksOnBothEnds )
 		BOOST_CHECK_EQUAL( pTrack2->TransitionEnd( EndType::north ).pTrack, pTrack1 );
 		BOOST_CHECK_EQUAL( pTrack2->TransitionEnd( EndType::north ).end, EndType::south );
 
-		pTrack1->DeCouple();
+		pTrack1->Disconnect();
 	}
 }
 
@@ -1950,14 +1950,14 @@ BOOST_AUTO_TEST_CASE( ConnectSelf )
 		std::shared_ptr<trax::TrackBuilder> pTrack = TrackBuilder::Make();
 		BOOST_CHECK( pTrack != nullptr );
 
-		pTrack->Couple( std::make_pair(pTrack, EndType::north), std::make_pair(pTrack, EndType::south) );
+		pTrack->Connect( std::make_pair(pTrack, EndType::north), std::make_pair(pTrack, EndType::south) );
 
 		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( EndType::north ).pTrack, pTrack );
 		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( EndType::north ).end, EndType::south );
 		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( EndType::south ).pTrack, pTrack );
 		BOOST_CHECK_EQUAL( pTrack->TransitionEnd( EndType::south ).end, EndType::north );
 
-		pTrack->DeCouple();
+		pTrack->Disconnect();
 	}
 }
 
@@ -2004,9 +2004,9 @@ BOOST_AUTO_TEST_CASE( normalization_tests )
 	pSwitch->SwapTracks();
 	BOOST_CHECK( pSwitch->IsNormal() );
 
-	pTrack1->DeCouple();
-	pTrack2->DeCouple();
-	pTrack3->DeCouple();
+	pTrack1->Disconnect();
+	pTrack2->Disconnect();
+	pTrack3->Disconnect();
 }
 
 BOOST_FIXTURE_TEST_CASE( sloReassignmentPropperFreeExisting, SwichFixture )

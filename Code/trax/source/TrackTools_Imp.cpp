@@ -274,21 +274,21 @@ EndType ClosestEnd( const spat::Position<Length>& toPoint, const Track& onTrack 
 	return dN <= dS ? EndType::north : EndType::south;
 }
 
-void Couple( 
+void Connect(  
 	Track::TrackEnd trackEndA, 
 	Track::TrackEnd trackEndB )
 {
 	if( !IsValid(trackEndA) )
-		throw std::invalid_argument( "Couple: trackA is not valid!" );
+		throw std::invalid_argument( "Connect: trackA is not valid!" );
 	if( !IsValid(trackEndB) )
-		throw std::invalid_argument( "Couple: trackB is not valid!" );
+		throw std::invalid_argument( "Connect: trackB is not valid!" );
 
 	if( std::shared_ptr<TrackBuilder> pTrackBuilder = trackEndA.pTrack->This() )
-		pTrackBuilder->Couple(	std::make_pair(trackEndA.pTrack->This(), trackEndA.end), 
+		pTrackBuilder->Connect(	std::make_pair(trackEndA.pTrack->This(), trackEndA.end), 
 								std::make_pair(trackEndB.pTrack->This(), trackEndB.end) );
 }
 
-bool Coupled( 
+bool Connected( 
 	const Track::cTrackEnd& trackEndA, 
 	const Track::cTrackEnd& trackEndB ) noexcept
 {
@@ -319,28 +319,28 @@ Length DistanceOf(
 	return (posTheOther - posTheOne).Length();
 }
 
-Length DistanceToCoupled( const Track& track, EndType atEnd )
+Length DistanceToConnected( const Track& track, EndType atEnd )
 {
-	if( !track.IsCoupled( atEnd ) )
-		throw std::logic_error( "DistanceToCoupled: track end is not coupled!" );
+	if( !track.IsConnected( atEnd ) )
+		throw std::logic_error( "DistanceToConnected: track end is not connected!" );
 
 	return DistanceOf( { track.This(), atEnd }, track.TransitionEnd( atEnd ) );
 }
 
-Length DistanceToCoupled( const Track::cTrackEnd& trackEnd )
+Length DistanceToConnected( const Track::cTrackEnd& trackEnd )
 {
 	if( !IsValid( trackEnd ) )
-		throw std::invalid_argument( "DistanceToCoupled: track end has no valid track!" );
-	if( !trackEnd.pTrack->IsCoupled( trackEnd.end ) )
-		throw std::logic_error( "DistanceToCoupled: track end is not coupled!" );
+		throw std::invalid_argument( "DistanceToConnected: track end has no valid track!" );
+	if( !trackEnd.pTrack->IsConnected( trackEnd.end ) )
+		throw std::logic_error( "DistanceToConnected: track end is not connected!" );
 
 	return DistanceOf( trackEnd, trackEnd.pTrack->TransitionEnd( trackEnd.end ) );	
 }
 
-Angle KinkToCoupled( const Track& track, EndType atEnd )
+Angle KinkToConnected( const Track& track, EndType atEnd )
 {
-	if( !track.IsCoupled( atEnd ) )
-		throw std::logic_error( "KinkToCoupled: track end is not coupled!" );
+	if( !track.IsConnected( atEnd ) )
+		throw std::logic_error( "KinkToConnected: track end is not connected!" );
 
 	Vector<One> t1, t2;
 	Track::TrackEnd otherEnd = track.TransitionEnd( atEnd );
@@ -377,19 +377,19 @@ Angle KinkToCoupled( const Track& track, EndType atEnd )
 	return atan2( (t1 % t2).Length(), t1 * t2 );
 }
 
-Angle KinkToCoupled( const Track::cTrackEnd& trackEnd )
+Angle KinkToConnected( const Track::cTrackEnd& trackEnd )
 {
 	if( !IsValid( trackEnd ) )
-		throw std::invalid_argument( "KinkToCoupled: track end has no valid track!" );
-	if( !trackEnd.pTrack->IsCoupled( trackEnd.end ) )
-		throw std::logic_error( "KinkToCoupled: track end is not coupled!" );
-	return KinkToCoupled( *trackEnd.pTrack, trackEnd.end );
+		throw std::invalid_argument( "KinkToConnected: track end has no valid track!" );
+	if( !trackEnd.pTrack->IsConnected( trackEnd.end ) )
+		throw std::logic_error( "KinkToConnected: track end is not connected!" );
+	return KinkToConnected( *trackEnd.pTrack, trackEnd.end );
 }
 
-Angle TwistToCoupled( const Track& track, EndType atEnd )
+Angle TwistToConnected( const Track& track, EndType atEnd )
 {
-	if( !track.IsCoupled( atEnd ) )
-		throw std::logic_error( "TwistToCoupled: track end is not coupled!" );
+	if( !track.IsConnected( atEnd ) )
+		throw std::logic_error( "TwistToConnected: track end is not connected!" );
 
 	Frame<Length,One> b1, b2;
 	Track::TrackEnd otherEnd = track.TransitionEnd( atEnd );
@@ -423,13 +423,13 @@ Angle TwistToCoupled( const Track& track, EndType atEnd )
 	return atan2( (b1.B % b2.B).Length(), b1.B * b2.B );
 }
 
-Angle TwistToCoupled( const Track::cTrackEnd& trackEnd )
+Angle TwistToConnected( const Track::cTrackEnd& trackEnd )
 {
 	if( !IsValid( trackEnd ) )
-		throw std::invalid_argument( "TwistToCoupled: track end has no valid track!" );
-	if( !trackEnd.pTrack->IsCoupled( trackEnd.end ) )
-		throw std::logic_error( "TwistToCoupled: track end is not coupled!" );
-	return TwistToCoupled( *trackEnd.pTrack, trackEnd.end );
+		throw std::invalid_argument( "TwistToConnected: track end has no valid track!" );
+	if( !trackEnd.pTrack->IsConnected( trackEnd.end ) )
+		throw std::logic_error( "TwistToConnected: track end is not connected!" );
+	return TwistToConnected( *trackEnd.pTrack, trackEnd.end );
 }
 
 }

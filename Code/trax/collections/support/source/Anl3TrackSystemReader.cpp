@@ -55,7 +55,7 @@ Anl3TrackSystemReader::Anl3TrackSystemReader(
 
 std::shared_ptr<TrackSystem> Anl3TrackSystemReader::ReadTrackSystem( const boost::property_tree::ptree& pt ) const
 {
-	std::vector<std::pair<Track::Coupling, std::string>> couplings;
+	std::vector<std::pair<Track::Connection, std::string>> connections;
 	std::unique_ptr<SignalCollection> pSignalCollection= SignalCollection::Make();
 	std::unique_ptr<IndicatorCollection> pIndicatorCollection= IndicatorCollection::Make();
 	std::unique_ptr<TimerCollection> pTimerCollection= TimerCollection::Make();
@@ -64,7 +64,7 @@ std::shared_ptr<TrackSystem> Anl3TrackSystemReader::ReadTrackSystem( const boost
 	IDType maxSensorID = 0;
 
 	return CreateTrackSystem( pt, 
-		couplings, 
+		connections, 
 		*pSignalCollection, 
 		*pIndicatorCollection, 
 		*pTimerCollection, 
@@ -75,7 +75,7 @@ std::shared_ptr<TrackSystem> Anl3TrackSystemReader::ReadTrackSystem( const boost
 
 std::shared_ptr<TrackSystem> Anl3TrackSystemReader::CreateTrackSystem( 
 	const boost::property_tree::ptree& pt, 
-	std::vector<std::pair<Track::Coupling,std::string>>& couplings,
+	std::vector<std::pair<Track::Connection,std::string>>& connections,
 	SignalCollection& signalCollection,
 	IndicatorCollection& indicatorCollection, 
 	TimerCollection& timerCollection, 
@@ -89,7 +89,7 @@ std::shared_ptr<TrackSystem> Anl3TrackSystemReader::CreateTrackSystem(
 			if( pairTrackSystem.first == "Gleissystem" )
 			{
 				CreateTrackCollection( pairTrackSystem.second, *pTrackSystem,
-					couplings, 
+					connections, 
 					signalCollection, 
 					indicatorCollection, 
 					timerCollection, 
@@ -107,7 +107,7 @@ std::shared_ptr<TrackSystem> Anl3TrackSystemReader::CreateTrackSystem(
 
 void Anl3TrackSystemReader::CreateTrackCollection( const boost::property_tree::ptree& pt, 
 	TrackSystem& trackSystem, 
-	std::vector<std::pair<Track::Coupling, std::string>>& couplings, 
+	std::vector<std::pair<Track::Connection, std::string>>& connections, 
 	SignalCollection& signalCollection, 
 	IndicatorCollection& indicatorCollection, 
 	TimerCollection& timerCollection, 
@@ -137,19 +137,19 @@ void Anl3TrackSystemReader::CreateTrackCollection( const boost::property_tree::p
 
 			if( pair.first == "Gleisverbindung" ){
 				try{
-					const std::pair<Track::Coupling,std::string> coupling{ CreateTrackCoupling( pair.second, trackSystem ) };
+					const std::pair<Track::Connection,std::string> coupling{ CreateTrackConnection( pair.second, trackSystem ) };
 					const Length gap = trackSystem.CalculateGapSize( coupling.first.theOne, coupling.first.theOther );
 					if( gap > 30_cm ){
 						std::clog << Verbosity::detailed << "Warning: ";
 						std::clog << Verbosity::detailed << "There is a gap between two tracks in EEP. GleissystemID (" << pt.get( "<xmlattr>.GleissystemID", 0 );								
 						std::clog << Verbosity::detailed << ") : (" << coupling.first.theOne.id << ',';
 						std::clog << Verbosity::detailed << ToString( coupling.first.theOne.type ) << ") and (" << coupling.first.theOther.id << ',' << ToString( coupling.first.theOther.type );
-						std::clog << Verbosity::detailed << ") that are supposed to be coupled. Gap size: ";
+						std::clog << Verbosity::detailed << ") that are supposed to be connected. Gap size: ";
 						std::clog << Verbosity::detailed << gap << ". This might lead to rolling stocks derailing." << std::endl;
 					}
 
-					trackSystem.Couple( coupling.first );
-					couplings.push_back( coupling );
+					trackSystem.Connect( coupling.first );
+					connections.push_back( coupling );
 				}
 				catch( const std::runtime_error& e ){
 					std::clog << Verbosity::error << "Warning: ";
@@ -564,50 +564,49 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 	return nullptr;
 }
 
-std::pair<Track::Coupling,std::string> Anl3TrackSystemReader::CreateTrackCoupling( 
+std::pair<Track::Connection,std::string> Anl3TrackSystemReader::CreateTrackConnection( 
 	const boost::property_tree::ptree& pt, 
 	const TrackSystem& trackSystem ) const
 {
-	std::pair<Track::Coupling,std::string> coupling;
-	coupling.first.theOne.id					= pt.get( "<xmlattr>.GleisID1", 0 );
-	coupling.first.theOne.type					= From( pt.get( "<xmlattr>.Anschluss1", "" ) );
-	coupling.second								= pt.get( "<xmlattr>.Anschluss1", "" );	
-	coupling.first.theOther.id					= pt.get( "<xmlattr>.GleisID2", 0 );
-	coupling.first.theOther.type				= From( pt.get( "<xmlattr>.Anschluss2", "" ) );
-
-	if( coupling.first.theOne.type == EndType::south )
+	std::pair<Track::Connection,std::string> connection;
+	connection.first.theOne.id					= pt.get( "<xmlattr>.GleisID1", 0 );
+	connection.first.theOne.type				= From( pt.get( "<xmlattr>.Anschluss1", "" ) );
+	connection.second							= pt.get( "<xmlattr>.Anschluss1", "" );	
+	connection.first.theOther.id				= pt.get( "<xmlattr>.GleisID2", 0 );
+	connection.first.theOther.type				= From( pt.get( "<xmlattr>.Anschluss2", "" ) );
+	if( connection.first.theOne.type == EndType::south )
 		// A might be switch
 	{
 		for( auto iter = trackSystem.GetConnectorCollection()->begin(); iter != trackSystem.GetConnectorCollection()->end(); ++iter ){
 			assert( iter->Slot(0).first );
-			if( coupling.first.theOne.id == iter->Slot(0).first->ID() ){
+			if( connection.first.theOne.id == iter->Slot(0).first->ID() ){
 				if( pt.get( "<xmlattr>.Anschluss1", "" ) == "Ende" )
-					iter->Slot( 1, trackSystem.Get( coupling.first.theOther.id ), coupling.first.theOther.type, true );
+					iter->Slot( 1, trackSystem.Get( connection.first.theOther.id ), connection.first.theOther.type, true );
 				else if( pt.get( "<xmlattr>.Anschluss1", "" ) == "EndeAbzweig" )
-					iter->Slot( 2, trackSystem.Get( coupling.first.theOther.id ), coupling.first.theOther.type, true );
+					iter->Slot( 2, trackSystem.Get( connection.first.theOther.id ), connection.first.theOther.type, true );
 				else if( pt.get( "<xmlattr>.Anschluss1", "" ) == "EndeKoAbzweig" )
-					iter->Slot( 3, trackSystem.Get( coupling.first.theOther.id ), coupling.first.theOther.type, true );
+					iter->Slot( 3, trackSystem.Get( connection.first.theOther.id ), connection.first.theOther.type, true );
 			}
 		}
 	}
 
-	if( coupling.first.theOther.type == EndType::south )
+	if( connection.first.theOther.type == EndType::south )
 		// B might be switch
 	{
 		for( auto iter = trackSystem.GetConnectorCollection()->begin(); iter != trackSystem.GetConnectorCollection()->end(); ++iter ){
 			assert( iter->Slot(0).first );
-			if( coupling.first.theOther.id == iter->Slot(0).first->ID() ){
+			if( connection.first.theOther.id == iter->Slot(0).first->ID() ){
 				if( pt.get( "<xmlattr>.Anschluss2", "" ) == "Ende" )
-					iter->Slot( 1, trackSystem.Get( coupling.first.theOne.id ), coupling.first.theOne.type, true );
+					iter->Slot( 1, trackSystem.Get( connection.first.theOne.id ), connection.first.theOne.type, true );
 				else if( pt.get( "<xmlattr>.Anschluss2", "" ) == "EndeAbzweig" )
-					iter->Slot( 2, trackSystem.Get( coupling.first.theOne.id ), coupling.first.theOne.type, true );
+					iter->Slot( 2, trackSystem.Get( connection.first.theOne.id ), connection.first.theOne.type, true );
 				else if( pt.get( "<xmlattr>.Anschluss2", "" ) == "EndeKoAbzweig" )
-					iter->Slot( 3, trackSystem.Get( coupling.first.theOne.id ), coupling.first.theOne.type, true );
+					iter->Slot( 3, trackSystem.Get( connection.first.theOne.id ), connection.first.theOne.type, true );
 			}
 		}
 	}
 
-	return coupling;
+	return connection;
 }
 
 std::shared_ptr<Signal> Anl3TrackSystemReader::CreateSignal(

@@ -137,7 +137,7 @@ BOOST_FIXTURE_TEST_CASE( measureDistanceOverOpenTrackEnds, TrackAndLocation )
 	BOOST_CHECK_EQUAL( m_LocationOnTrack.Distance( otherLocation, -m_pTrack->GetLength()/2 ), -m_pTrack->GetLength()/2 );
 	BOOST_CHECK_EQUAL( m_LocationOnTrack.Distance( otherLocation, m_pTrack->GetLength()/2 ), m_pTrack->GetLength()/2 );
 
-	m_pTrack->Couple( std::make_pair(m_pTrack,EndType::north), std::make_pair(pOther, EndType::south) );
+	m_pTrack->Connect( std::make_pair(m_pTrack,EndType::north), std::make_pair(pOther, EndType::south) );
 	BOOST_CHECK_EQUAL( m_LocationOnTrack.Distance( otherLocation, -m_pTrack->GetLength()/2 - pOther->GetLength()), -m_pTrack->GetLength()/2 - pOther->GetLength()/2 );
 }
 
@@ -337,11 +337,11 @@ BOOST_FIXTURE_TEST_CASE( movetransit, ThreeTracksInALineFixture )
 	BOOST_CHECK_EQUAL( delta.first, -0_m );
 	BOOST_CHECK( delta.second );
 
-	m_pTrack1->DeCouple();
+	m_pTrack1->Disconnect();
 }
 
 BOOST_FIXTURE_TEST_CASE( distanceoverseveraltracks, ThreeTracksInALineFixture )
-//Distance over coupled track ends.
+//Distance over connected track ends.
 {
 	Location Loc1{ m_pTrack3, trax::TrackLocation{ 5_m, true } };
 	Length dist = Loc1.Distance( Location( m_pTrack1, trax::TrackLocation{ m_pTrack1->Range().Center(), true } ), -1_km );

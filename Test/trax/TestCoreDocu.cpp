@@ -181,10 +181,10 @@ BOOST_AUTO_TEST_CASE( test_docu_location )
 	pArc4->Create( { Origin3D<Length>, { 0, -1, 0 }, { 10, 0, 0 } } );
 	pTrack4->Attach( std::move(pArc4), {0_m, 10_m*pi/2} );
  
-	pTrack1->Couple( std::make_pair(pTrack1, EndType::south), std::make_pair(pTrack2, EndType::north) );
-	pTrack2->Couple( std::make_pair(pTrack2, EndType::south), std::make_pair(pTrack3, EndType::north) );
-	pTrack3->Couple( std::make_pair(pTrack3, EndType::south), std::make_pair(pTrack4, EndType::north) );
-	pTrack4->Couple( std::make_pair(pTrack4, EndType::south), std::make_pair(pTrack1, EndType::north) );
+	pTrack1->Connect( std::make_pair(pTrack1, EndType::south), std::make_pair(pTrack2, EndType::north) );
+	pTrack2->Connect( std::make_pair(pTrack2, EndType::south), std::make_pair(pTrack3, EndType::north) );
+	pTrack3->Connect( std::make_pair(pTrack3, EndType::south), std::make_pair(pTrack4, EndType::north) );
+	pTrack4->Connect( std::make_pair(pTrack4, EndType::south), std::make_pair(pTrack1, EndType::north) );
  
 	Location loc{ pTrack1, { 0_m, Orientation::Value::para } };
  
@@ -198,8 +198,8 @@ BOOST_AUTO_TEST_CASE( test_docu_location )
 	auto pTrack = loc.GetTrack();
 	BOOST_CHECK( pTrack == pTrack3 );
  
-	pTrack1->DeCouple(); // Coupled tracks will prevent each others destruction \see TrackSystem
-	pTrack3->DeCouple();
+	pTrack1->Disconnect(); // Connected tracks will prevent each others destruction \see TrackSystem
+	pTrack3->Disconnect();
 }
 
 BOOST_AUTO_TEST_SUITE_END() //CoreDocu

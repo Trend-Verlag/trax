@@ -82,21 +82,21 @@ std::unique_ptr<Module> Anl3ModuleReader::ReadModule(
 				std::vector<int> trackIDOffsets;
 				IDType maxSensorID{ 0 };
 				std::vector<Kollektor> kollektors;
-				std::vector<std::pair<Track::Coupling,std::string>> couplings;
+				std::vector<std::pair<Track::Connection,std::string>> connections;
 				for( const auto& pair : pt ){
 					if( pair.first == "Gleissystem" ){
-						std::vector<std::pair<Track::Coupling,std::string>> local_couplings;
+						std::vector<std::pair<Track::Connection,std::string>> local_connections;
 						if( std::shared_ptr<TrackSystem> pTempTrackSystem = TrackSystem::Make(); pTempTrackSystem ){
-							CreateTrackCollection( pair.second, *pTempTrackSystem, local_couplings, *pModule->GetSignalCollection(), *pModule->GetIndicatorCollection(), *pModule->GetTimerCollection(), *pModule->GetPulseCounterCollection(), travelVelocities, maxSensorID );
+							CreateTrackCollection( pair.second, *pTempTrackSystem, local_connections, *pModule->GetSignalCollection(), *pModule->GetIndicatorCollection(), *pModule->GetTimerCollection(), *pModule->GetPulseCounterCollection(), travelVelocities, maxSensorID );
 							if( std::shared_ptr<TrackCollection> pTrackCollection = TrackCollection::Make(); pTrackCollection ){
 								pModule->GetTrackSystem()->GetCollectionContainer()->Add( pTrackCollection );
 
 								trackIDOffsets.push_back( pModule->GetTrackSystem()->Take( *pTempTrackSystem ) );
-								for( auto& coupling : local_couplings ){
-									coupling.first.theOne.id = coupling.first.theOne.id + trackIDOffsets.back();
-									coupling.first.theOther.id = coupling.first.theOther.id + trackIDOffsets.back();
+								for( auto& connection : local_connections ){
+									connection.first.theOne.id = connection.first.theOne.id + trackIDOffsets.back();
+									connection.first.theOther.id = connection.first.theOther.id + trackIDOffsets.back();
 								}
-								couplings.insert( couplings.end(), local_couplings.begin(), local_couplings.end() );
+								connections.insert( connections.end(), local_connections.begin(), local_connections.end() );
 							}
 						}
 					}
@@ -122,7 +122,7 @@ std::unique_ptr<Module> Anl3ModuleReader::ReadModule(
 					//	pModule->Attach( EEPCreateBatch( pair.second, *pSimulator ) );
 
 					else if( pair.first == "Gebaeudesammlung" )
-						ReadGebaeudesammlung( pair.second, couplings, kollektors, *pModule->GetTrackSystem(), *pModule->GetIndicatorCollection() );
+						ReadGebaeudesammlung( pair.second, connections, kollektors, *pModule->GetTrackSystem(), *pModule->GetIndicatorCollection() );
 
 					else if( pair.first == "Kammerasammlung" )
 						pModule->Attach( ReadCameraCollection( pair.second ) );
@@ -253,7 +253,7 @@ void Anl3ModuleReader::ReadUserCamera(
 
 void Anl3ModuleReader::ReadGebaeudesammlung(
 	const boost::property_tree::ptree& pt,
-	const std::vector<std::pair<Track::Coupling,std::string>>& couplings,
+	const std::vector<std::pair<Track::Connection,std::string>>& connections,
 	const std::vector<Kollektor>& kollektors,
 	const TrackSystem& trackSystem,
 	IndicatorCollection& indicatorCollection) const
@@ -286,19 +286,19 @@ void Anl3ModuleReader::ReadGebaeudesammlung(
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_2, trackSystem.Get( iter->m_Tracks[3] ), EndType::south, true );
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_3, trackSystem.Get( iter->m_Tracks[1] ), EndType::south, true );
 
-							std::pair<Track::End,Track::End> ends = GetEnds( *pDoubleSlipSwitch, DoubleSlipSwitch::SlotNames::slot_0, couplings );
+							std::pair<Track::End,Track::End> ends = GetEnds( *pDoubleSlipSwitch, DoubleSlipSwitch::SlotNames::slot_0, connections );
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_4, trackSystem.Get( ends.first.id ), ends.first.type, true );
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_8, trackSystem.Get( ends.second.id ), ends.second.type, true );
 
-							ends = GetEnds( *pDoubleSlipSwitch, DoubleSlipSwitch::SlotNames::slot_1, couplings );
+							ends = GetEnds( *pDoubleSlipSwitch, DoubleSlipSwitch::SlotNames::slot_1, connections );
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_5, trackSystem.Get( ends.first.id ), ends.first.type, true );
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_11, trackSystem.Get( ends.second.id ), ends.second.type, true );
 				
-							ends = GetEnds( *pDoubleSlipSwitch, DoubleSlipSwitch::SlotNames::slot_2, couplings );
+							ends = GetEnds( *pDoubleSlipSwitch, DoubleSlipSwitch::SlotNames::slot_2, connections );
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_6, trackSystem.Get( ends.first.id ), ends.first.type, true );
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_10, trackSystem.Get( ends.second.id ), ends.second.type, true );
 
-							ends = GetEnds( *pDoubleSlipSwitch, DoubleSlipSwitch::SlotNames::slot_3, couplings );
+							ends = GetEnds( *pDoubleSlipSwitch, DoubleSlipSwitch::SlotNames::slot_3, connections );
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_7, trackSystem.Get( ends.first.id ), ends.first.type, true );
 							pDoubleSlipSwitch->Slot( DoubleSlipSwitch::SlotNames::slot_9, trackSystem.Get( ends.second.id ), ends.second.type, true );
 						}
@@ -355,11 +355,11 @@ void Anl3ModuleReader::ReadGebaeudesammlung(
 							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_0, trackSystem.Get( iter->m_Tracks[1] ), EndType::south, true );
 							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_1, trackSystem.Get( iter->m_Tracks[0] ), EndType::south, true );
 		
-							std::pair<Track::End,Track::End> ends = GetEnds( *pSingleSlipSwitch, SingleSlipSwitch::SlotNames::slot_0, couplings );
+							std::pair<Track::End,Track::End> ends = GetEnds( *pSingleSlipSwitch, SingleSlipSwitch::SlotNames::slot_0, connections );
 							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_2, trackSystem.Get( ends.first.id ), ends.first.type, true );
 							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_4, trackSystem.Get( ends.second.id ), ends.second.type, true );
 
-							ends = GetEnds( *pSingleSlipSwitch, SingleSlipSwitch::SlotNames::slot_1, couplings );
+							ends = GetEnds( *pSingleSlipSwitch, SingleSlipSwitch::SlotNames::slot_1, connections );
 							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_3, trackSystem.Get( ends.first.id ), ends.first.type, true );
 							pSingleSlipSwitch->Slot( SingleSlipSwitch::SlotNames::slot_5, trackSystem.Get( ends.second.id ), ends.second.type, true );
 						}
@@ -401,21 +401,21 @@ void Anl3ModuleReader::ReadGebaeudesammlung(
 std::pair<Track::End,Track::End> Anl3ModuleReader::GetEnds( 
 	const Connector& connector, 
 	int slot,
-	const std::vector<std::pair<Track::Coupling,std::string>>& couplings ) const
+	const std::vector<std::pair<Track::Connection,std::string>>& connections ) const
 {
 	std::pair<Track::End,Track::End> ends;
-	for( const auto& coupling : couplings )
+	for( const auto& connection : connections )
 	{
-		if( coupling.first.theOne.id == connector.Slot( slot ).first->ID() )
+		if( connection.first.theOne.id == connector.Slot( slot ).first->ID() )
 		{
-			if( coupling.first.theOne.type == EndType::south )
+			if( connection.first.theOne.type == EndType::south )
 			{
-				if( coupling.second == "Ende" )
-					ends.first = coupling.first.theOther;
-				else if( coupling.second == "EndeAbzweig" )
-					ends.second = coupling.first.theOther;
+				if( connection.second == "Ende" )
+					ends.first = connection.first.theOther;
+				else if( connection.second == "EndeAbzweig" )
+					ends.second = connection.first.theOther;
 				else
-					std::cerr << "Invalid EEP track end type for double or single slip switch: " << coupling.second << std::endl;
+					std::cerr << "Invalid EEP track end type for double or single slip switch: " << connection.second << std::endl;
 			}
 		}
 	}

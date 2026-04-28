@@ -413,7 +413,11 @@ void Read(
         std::cerr << Verbosity::normal << "trax: a three way switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
 }
 
-void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, SingleSlipSwitch& switchObject, const TrackSystem& trackSystem )
+void Read( 
+	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
+	SingleSlipSwitch& switchObject, 
+	const TrackSystem& trackSystem )
 {
 	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
@@ -448,7 +452,11 @@ void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry
         std::cerr << Verbosity::normal << "trax: a single slip switch's slots are not fully populated or show gaps or kinks or twists: " << switchObject.ID() << std::endl;
 }
 
-void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, DoubleSlipSwitch& switchObject, const TrackSystem& trackSystem )
+void Read( 
+	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
+	DoubleSlipSwitch& switchObject, 
+	const TrackSystem& trackSystem )
 {
 	switchObject.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 	switchObject.ID( pt.get( "<xmlattr>.id", 0 ) );
@@ -486,12 +494,12 @@ void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry
 void Read( 
 	const boost::property_tree::ptree& pt, 
 	SocketRegistry& socketRegistry, 
-	BinaryIndicator& binaryIndicator )
+	Indicator& indicator )
 {
-	binaryIndicator.ID( pt.get( "<xmlattr>.id", IDType{0} ) );
-	binaryIndicator.RefTargetID( pt.get( "<xmlattr>.refid", IDType{0} ) );
-	binaryIndicator.Set( ToIndicatorStatus( pt.get( "<xmlattr>.status", ToString(Indicator::Status::unknown) )) );
-	AttributesToReferences( pt, binaryIndicator );
+	indicator.ID( pt.get( "<xmlattr>.id", IDType{0} ) );
+	indicator.RefTargetID( pt.get( "<xmlattr>.refid", IDType{0} ) );
+	indicator.Set( ToIndicatorStatus( pt.get( "<xmlattr>.status", ToString(Indicator::Status::unknown) )) );
+	AttributesToReferences( pt, indicator );
 	
 	Indicator::Status status = Indicator::Status::unknown;
 	for( const auto& pair : pt )
@@ -502,20 +510,54 @@ void Read(
 			ReadFrame( pair.second, frame );
 
 			if( status == Indicator::Status::unknown )	
-				binaryIndicator.SetFrame( frame );
+				indicator.SetFrame( frame );
 			else
-				binaryIndicator.LocalFrameForStatus( status, frame );
+				indicator.LocalFrameForStatus( status, frame );
 
 			status = static_cast<Indicator::Status>(static_cast<int>(status) + 1);
 		}
 
 		else if( pair.first == "Plug" )
-			ReadPlug( pair.second, socketRegistry, binaryIndicator.PlugTo( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadPlug( pair.second, socketRegistry, indicator.PlugTo( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 		
 		else if( pair.first == "Jack" )
-			ReadJack( pair.second, socketRegistry, binaryIndicator.JackOn( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadJack( pair.second, socketRegistry, indicator.JackOn( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 	}
 }
+//
+//void Read(
+//	const boost::property_tree::ptree& pt, 
+//	SocketRegistry& socketRegistry, 
+//	BinaryIndicator& binaryIndicator )
+//{
+//	binaryIndicator.ID( pt.get( "<xmlattr>.id", IDType{0} ) );
+//	binaryIndicator.RefTargetID( pt.get( "<xmlattr>.refid", IDType{0} ) );
+//	binaryIndicator.Set( ToIndicatorStatus( pt.get( "<xmlattr>.status", ToString(Indicator::Status::unknown) )) );
+//	AttributesToReferences( pt, binaryIndicator );
+//	
+//	Indicator::Status status = Indicator::Status::unknown;
+//	for( const auto& pair : pt )
+//	{
+//		if( pair.first == "Frame" )
+//		{
+//			spat::Frame<Length,One> frame;
+//			ReadFrame( pair.second, frame );
+//
+//			if( status == Indicator::Status::unknown )	
+//				binaryIndicator.SetFrame( frame );
+//			else
+//				binaryIndicator.LocalFrameForStatus( status, frame );
+//
+//			status = static_cast<Indicator::Status>(static_cast<int>(status) + 1);
+//		}
+//
+//		else if( pair.first == "Plug" )
+//			ReadPlug( pair.second, socketRegistry, binaryIndicator.PlugTo( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+//		
+//		else if( pair.first == "Jack" )
+//			ReadJack( pair.second, socketRegistry, binaryIndicator.JackOn( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+//	}
+//}
 
 void ReadJack( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Jack& jack )
 {
@@ -573,7 +615,7 @@ std::shared_ptr<TrackSystem> Anl4TrackSystemReader::CreateTrackSystem(
 		pTrackSystem->ID( pt.get( "<xmlattr>.id", 0 ) );
 		pTrackSystem->Reference( "Name", pt.get( "<xmlattr>.name", "TrackSystem" + to_string(pTrackSystem->ID()) ) );
 
-		std::vector<Track::Coupling> couplings;
+		std::vector<Track::Connection> couplings;
 		for( const auto& pair : pt )
 		{
 			if( pair.first == "TrackCollection" ){
@@ -598,8 +640,8 @@ std::shared_ptr<TrackSystem> Anl4TrackSystemReader::CreateTrackSystem(
 			}
 		}
 
-		for( const Track::Coupling& coupling : couplings )
-			pTrackSystem->Couple( coupling, true );
+		for( const Track::Connection& coupling : couplings )
+			pTrackSystem->Connect( coupling, true );
 
 		if( const IDType activeTrackID = pt.get( "<xmlattr>.activeTrack", 0 ) )
 			pTrackSystem->PushActive( activeTrackID );
@@ -612,7 +654,7 @@ std::shared_ptr<TrackSystem> Anl4TrackSystemReader::CreateTrackSystem(
 
 std::shared_ptr<TrackCollection> Anl4TrackSystemReader::CreateTrackCollection( 
 	const boost::property_tree::ptree& pt, 
-	std::vector<Track::Coupling>& couplings ) const
+	std::vector<Track::Connection>& couplings ) const
 {
 	if( std::unique_ptr<TrackCollection> pTrackCollection = TrackCollection::Make(); pTrackCollection )
 	{
@@ -639,7 +681,7 @@ std::shared_ptr<TrackCollection> Anl4TrackSystemReader::CreateTrackCollection(
 
 std::shared_ptr<TrackBuilder> Anl4TrackSystemReader::CreateTrack(
 	const boost::property_tree::ptree& pt, 
-	std::vector<Track::Coupling>& couplings ) const
+	std::vector<Track::Connection>& couplings ) const
 {
 	if( auto pTrack = MovableTrack::Make( TrackType( pt.get( "<xmlattr>.type", "standard" ) ) ); pTrack )
 	{
@@ -1436,7 +1478,7 @@ void Anl4TrackSystemReader::ReadSection( const boost::property_tree::ptree& pt, 
 void ReadEnd( const boost::property_tree::ptree& pt,
 	TrackBuilder& track,
 	EndType endtype,
-	std::vector<Track::Coupling>& couplings )
+	std::vector<Track::Connection>& couplings )
 {
 	if( !pt.get( "<xmlattr>.electrificationShift", "" ).empty() ){
 		if( endtype == EndType::north )
@@ -1459,7 +1501,7 @@ void ReadEnd( const boost::property_tree::ptree& pt,
 		}
 
 		else if( pair.first == "Connection" ){
-			Track::Coupling coupling;
+			Track::Connection coupling;
 			coupling.theOne.id	= track.ID();
 			coupling.theOne.type= endtype;
 

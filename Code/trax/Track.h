@@ -100,8 +100,8 @@
 ///   +Attach(RoadwayTwist*)
 ///   +Attach(Sensor*, TrackLocation&)
 ///   +Attach(Signal*, Interval)
-///   +Couple(TrackEnd, TrackEnd)
-///   +DeCouple(EndType)
+///   +Connect(TrackEnd, TrackEnd)
+///   +Disconnect(EndType)
 /// }
 /// 
 /// class Line
@@ -337,12 +337,12 @@ namespace trax
 		};
 
 
-		/// \brief Designates two track ends. Typically used for coupling relations.
+		/// \brief Designates two track ends. Typically used for connection relations.
 		///
-		/// An End with zero id will mean an uncoupled end of the other track.
-		struct Coupling{
-			End theOne;		///< First end to be coupled.
-			End theOther;	///< Second end to be coupled.
+		/// An End with zero id will mean an unconnected end of the other track.
+		struct Connection{
+			End theOne;		///< First end to be connected.
+			End theOther;	///< Second end to be connected.
 		};
 
 
@@ -407,8 +407,8 @@ namespace trax
 		virtual common::Interval<Length> Range() const noexcept = 0;
 
 
-		/// \returns true if the respective end is coupled to another track end.
-		virtual bool IsCoupled( EndType atend = EndType::any ) const noexcept = 0;
+		/// \returns true if the respective end is connected to another track end.
+		virtual bool IsConnected( EndType atend = EndType::any ) const noexcept = 0;
 
 
 		/// \param s Parameter value 0 <= s <= Length()
@@ -491,11 +491,9 @@ namespace trax
 		///@}
 
 
-		/// \brief Gives the Track coupled to this at the specified end.
-		/// \param thisEnd End of this track to get the coupled track for.
-		/// \returns A shared pointer to the coupled track or a nullptr if
-		/// no track is connected. If not nullptr, othersend will receive 
-		/// the type of end of the other track the coupling is existing for.
+		/// \brief Gives the Track connected to this at the specified end.
+		/// \param thisEnd End of this track to get the connected track for.
+		/// \returns The connected track end.
 		virtual TrackEnd TransitionEnd( EndType thisEnd ) const noexcept = 0;
 
 
@@ -637,11 +635,11 @@ namespace trax
 
 
 	/// \brief Tests for equality.
-	inline bool operator==( const Track::Coupling& theone, const Track::Coupling& theother ) noexcept;
+	inline bool operator==( const Track::Connection& theone, const Track::Connection& theother ) noexcept;
 
 
 	/// \brief Tests for inequality.
-	inline bool operator!=( const Track::Coupling& theone, const Track::Coupling& theother ) noexcept;
+	inline bool operator!=( const Track::Connection& theone, const Track::Connection& theother ) noexcept;
 
 
 	inline bool operator==( const Track::Overlap& a, const Track::Overlap& b ) noexcept;
@@ -812,25 +810,25 @@ namespace trax
 	///@}
 
 
-	/// \brief Couple this trackA at endA with trackB at endB.
+	/// \brief Connect this trackA at endA with trackB at endB.
 	///
-	/// Couples two tracks at the specified ends together so that a Location transitions
-	/// between them respectively. There is exactly one coupling per end; use Points to
+	/// Connects two tracks at the specified ends together so that a Location transitions
+	/// between them respectively. There is exactly one connection per end; use Points to
 	/// reconnect tracks and by that build switches. 
 	/// There is no need for the specified track ends to be adjacent in a spatial sense, but
 	/// with physics engines in general trains will derail if the gap becomes too large.
-	/// Be aware that tracks coupled to each other will hold cyclic strong references, so 
-	/// they will produce a memory leak if not uncoupled. For this reason make tracks members
+	/// Be aware that tracks connected to each other will hold cyclic strong references, so 
+	/// they will produce a memory leak if not unconnected. For this reason make tracks members
 	/// of a TrackSystem.
 	/// \param trackEndA shared pointer and track end.
-	/// \param trackEndB track and end trackEndA is to be coupled with.
+	/// \param trackEndB track and end trackEndA is to be connected with.
 	/// \throws std::invalid_argument If the end type is not recocnised.
-	/// \throws std::logic_error If the track end could not coupled, e.g. because of self coupling.
-	dclspc void Couple( Track::TrackEnd trackEndA, Track::TrackEnd trackEndB );
+	/// \throws std::logic_error If the track end could not connect, e.g. because of self connection.
+	dclspc void Connect( Track::TrackEnd trackEndA, Track::TrackEnd trackEndB );
 
 
-	/// \returns true if the two track ends are coupled to each other.
-	dclspc bool Coupled( const Track::cTrackEnd& trackEndA, const Track::cTrackEnd& trackEndB ) noexcept;
+	/// \returns true if the two track ends are connected to each other.
+	dclspc bool Connected( const Track::cTrackEnd& trackEndA, const Track::cTrackEnd& trackEndB ) noexcept;
 
 
 	/// \returns the 3D distance between two track ends. If 
@@ -839,33 +837,33 @@ namespace trax
 	dclspc Length DistanceOf( const Track::cTrackEnd& trackEndA, const Track::cTrackEnd& trackEndB );
 
 
-	/// \returns The 3D distance of the coupled track, if any. 
+	/// \returns The 3D distance of the connected track, if any. 
 	/// \throws std::invalid_argument if any of the track ends is invalid.
-	/// \throws std::logic_error if the track end is not coupled.
+	/// \throws std::logic_error if the track end is not connected.
 	///@{
-	dclspc Length DistanceToCoupled( const Track& track, EndType atEnd );
+	dclspc Length DistanceToConnected( const Track& track, EndType atEnd );
 
-	dclspc Length DistanceToCoupled( const Track::cTrackEnd& trackEnd );
+	dclspc Length DistanceToConnected( const Track::cTrackEnd& trackEnd );
 	///@}
 
 
-	/// \returns The angle of the tangent of the coupled track, if any. 
+	/// \returns The angle of the tangent of the connected track, if any. 
 	/// \throws std::invalid_argument if any of the track ends is invalid.
-	/// \throws std::logic_error if the track end is not coupled.
+	/// \throws std::logic_error if the track end is not connected.
 	///@{
-	dclspc Angle KinkToCoupled( const Track& track, EndType atEnd );
+	dclspc Angle KinkToConnected( const Track& track, EndType atEnd );
 
-	dclspc Angle KinkToCoupled( const Track::cTrackEnd& trackEnd );
+	dclspc Angle KinkToConnected( const Track::cTrackEnd& trackEnd );
 	///@}
 
 
-	/// \returns The angle of the binormal of the coupled track, if any. 
+	/// \returns The angle of the binormal of the connected track, if any. 
 	/// \throws std::invalid_argument if any of the track ends is invalid.
-	/// \throws std::logic_error if the track end is not coupled.
+	/// \throws std::logic_error if the track end is not connected.
 	///@{
-	dclspc Angle TwistToCoupled( const Track& track, EndType atEnd );
+	dclspc Angle TwistToConnected( const Track& track, EndType atEnd );
 
-	dclspc Angle TwistToCoupled( const Track::cTrackEnd& trackEnd );
+	dclspc Angle TwistToConnected( const Track::cTrackEnd& trackEnd );
 	///@}
 
 
@@ -925,27 +923,27 @@ namespace trax
 		virtual const spat::Frame<Length,One>& GetAbsoluteFrame() const noexcept = 0;
 
 
-		/// \brief Couple this track at thisend with pOtherTrack at othersend.
+		/// \brief Connect this track at thisend with pOtherTrack at othersend.
 		///
-		/// Couples two tracks at the specified ends together so that a Location transitions
-		/// between them respectively. There is exactly one coupling per end; use Points to
+		/// Connects two tracks at the specified ends together so that a Location transitions
+		/// between them respectively. There is exactly one connection per end; use Points to
 		/// reconnect tracks and by that build switches. Existing connections are overriden.
 		/// There is no need for the specified track ends to be adjacent in a spatial sense, but
 		/// with physics engines in general trains will derail if the gap becomes too large.
-		/// Be aware that tracks coupled to each other will hold cyclic strong references, so 
-		/// they will produce a memory leak if not uncoupled. For this reason make tracks members
+		/// Be aware that tracks connected to each other will hold cyclic strong references, so 
+		/// they will produce a memory leak if not unconnected. For this reason make tracks members
 		/// of a TrackSystem.
-		/// \param thisEnd Shared pointer to this track and end of this track to be coupled. This is not derivable from this, 
+		/// \param thisEnd Shared pointer to this track and end of this track to be connected. This is not derivable from this, 
 		/// so it has to be supplied with the function call...
-		/// \param othersEnd track and end this one is to be coupled with.
-		virtual void Couple( std::pair<std::shared_ptr<TrackBuilder>,EndType> thisEnd, std::pair<std::shared_ptr<TrackBuilder>,EndType> othersEnd ) = 0;
+		/// \param othersEnd track and end this one is to be connected with.
+		virtual void Connect( std::pair<std::shared_ptr<TrackBuilder>,EndType> thisEnd, std::pair<std::shared_ptr<TrackBuilder>,EndType> othersEnd ) = 0;
 
 
-		/// \brief Remove coupling from this end.
-		/// \param thisEnd What track end to decouple.
-		/// \param oneSided If true only the coupling of this track to another will be removed,
+		/// \brief Remove connection from this end.
+		/// \param thisEnd What track end to disconnect.
+		/// \param oneSided If true only the connection of this track to another will be removed,
 		/// the other track stays connected to this.
-		virtual void DeCouple( EndType thisEnd = EndType::any, bool oneSided = false ) = 0;
+		virtual void Disconnect( EndType thisEnd = EndType::any, bool oneSided = false ) = 0;
 
 
 		/// \name Attach a Curve
@@ -1067,7 +1065,7 @@ namespace trax
 		/// \brief Exchanges start and end of the track, but keeps geometry. 
 		///
 		/// The track will run along the same path, but start and end will
-		/// be swapped after this operation. The couplings get updated accordingly.
+		/// be swapped after this operation. The connections get updated accordingly.
 		/// The binormal direction of the track is kept if a capable twist is 
 		/// present; the normal direction then will flip.
 		/// 
@@ -1097,9 +1095,9 @@ namespace trax
 	template<class TrackEndType> inline
 	bool IsValid( TrackEndType end ) noexcept;
 
-	/// \returns true if the track end is coupled to another track.
+	/// \returns true if the track end is connected to another track.
 	template<class TrackEndType> inline
-	bool IsCoupled( TrackEndType end ) noexcept;
+	bool IsConnected( TrackEndType end ) noexcept;
 
 
 	/// \brief Same as track.SetFrame( start, s ), but does not throw.
@@ -1439,12 +1437,12 @@ inline bool operator!=( const Track::End& theone, const Track::End& theother ) n
 	return !operator==( theone, theother );
 }
 
-inline bool operator==( const Track::Coupling& a, const Track::Coupling& b ) noexcept{
+inline bool operator==( const Track::Connection& a, const Track::Connection& b ) noexcept{
 	return	a.theOne == b.theOne &&
 			a.theOther == b.theOther;
 }
 
-inline bool operator!=( const Track::Coupling& a, const Track::Coupling& b ) noexcept{
+inline bool operator!=( const Track::Connection& a, const Track::Connection& b ) noexcept{
 	return !operator==( a, b );
 }
 
@@ -1513,9 +1511,9 @@ bool IsValid( TrackEndType end ) noexcept{
 }
 
 template<class TrackEndType> inline
-bool IsCoupled( TrackEndType end ) noexcept{
+bool IsConnected( TrackEndType end ) noexcept{
 	if( IsValid(end) ) 
-		return end.pTrack->IsCoupled( end.end );
+		return end.pTrack->IsConnected( end.end );
 	return false;
 }
 

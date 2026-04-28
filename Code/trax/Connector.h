@@ -130,7 +130,7 @@
 /// }
 /// 
 /// interface TrackBuilder {
-///   + Couple(thisEnd: pair<shared_ptr<TrackBuilder>,EndType>, othersEnd: pair<shared_ptr<TrackBuilder>,EndType>): void
+///   + Connect(thisEnd: pair<shared_ptr<TrackBuilder>,EndType>, othersEnd: pair<shared_ptr<TrackBuilder>,EndType>): void
 /// }
 /// 
 /// ' Layout directives to position Track/TrackBuilder at bottom
@@ -399,7 +399,7 @@ namespace trax{
 
 	/// \brief Connect two track ends by inserting them into Connectors, if available.
 	///
-	///	The two given track ends will get coupled by the function. If one end
+	///	The two given track ends will get connected by the function. If one end
 	/// is populating a Connector's slot, the other is inserted to a slot of that
 	/// Connector first. The slot would be the one designated by slotA for a switch found
 	/// with trackEndA or slotB for a switch found with trackEndB, or the next
@@ -410,8 +410,8 @@ namespace trax{
 	/// Connector is not able to do this. This behaviour can be overriden by setting the connectAnyway
 	/// flag; the two switches then would be allowed to deal with the track end concurrently.
 	/// 
-	/// \param trackEndA denotes a track's end to get coupled and inserted into a Connector's slot.
-	/// \param trackEndB denotes another track's end to get coupled and inserted into a Connector's slot.
+	/// \param trackEndA denotes a track's end to get connected and inserted into a Connector's slot.
+	/// \param trackEndB denotes another track's end to get connected and inserted into a Connector's slot.
 	/// \param slotA Determines the slot index of a Connector found with trackEndA, trackEndB is 
 	/// inserted to, if only one track end is member of a Connector or connectAnyway is set. 
 	/// If -1, the next empty slot with the lowest index number would be choosen.
@@ -427,7 +427,7 @@ namespace trax{
 	/// \throws std::logic_error, if the two ends can not get connected by the Connector.
 	/// \throws std::inalid_argument If one of the tracks is not valid or both are the same, or 
 	/// slot is not existing.
-	dclspc void Couple( 
+	dclspc void Connect( 
 		std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEndA, 
 		std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEndB, 
 		int slotA = -1,
@@ -435,14 +435,14 @@ namespace trax{
 		bool connectAnyway = false );
 
 
-	/// \brief Uncouples a track end by clearing any Connectors.
+	/// \brief Disconnects a track end by clearing any Connectors.
 	///
-	/// The track end gets decoupled and is removed from any Connector.
-	/// \param track The track to decouple an end of.
-	/// \param trackEnd The track end to decouple.
+	/// The track end gets disconnected and is removed from any Connector.
+	/// \param track The track to disconnect an end of.
+	/// \param trackEnd The track end to disconnect.
 	/// \param ownerSlot A slot type that is seen as the owner of the
 	/// connector, so the track end will not get removed from it.
-	dclspc void DeCouple( TrackBuilder& track, EndType trackEnd, int ownerSlot = -1 );
+	dclspc void Disconnect( TrackBuilder& track, EndType trackEnd, int ownerSlot = -1 );
 
 	
 	/// A location on a connected track. The Location will be oriented away from the 

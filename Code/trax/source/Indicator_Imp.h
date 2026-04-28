@@ -49,6 +49,8 @@ namespace trax{
 
 		Status Get() const override;
 
+		void Get( spat::Frame<Length,One>& frame ) const override;
+
 		bool IsValidState( Status status ) const override;
 
 		void LocalFrameForStatus( Status status, const spat::Frame<Length,One>& frame ) override;

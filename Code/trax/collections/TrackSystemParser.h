@@ -50,7 +50,7 @@ namespace trax{
 			const std::string& /*reference*/ ) noexcept(false) { return true; }
 
 		virtual bool TrackConnection(
-			const Track::Coupling& /*coupling*/ ) noexcept(false) { return true; }
+			const Track::Connection& /*connection*/ ) noexcept(false) { return true; }
 
 		virtual bool BufferStop(
 			Track::End /*theOne*/ ) noexcept(false) { return true; }

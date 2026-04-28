@@ -39,7 +39,7 @@ namespace trax{
 			
 		protected:
 			virtual std::shared_ptr<TrackSystem> CreateTrackSystem( const boost::property_tree::ptree& pt, 
-				std::vector<std::pair<Track::Coupling,std::string>>& couplings, 
+				std::vector<std::pair<Track::Connection,std::string>>& couplings, 
 				SignalCollection& signalCollection, 
 				IndicatorCollection& indicatorCollection, 
 				TimerCollection& timerCollection, 
@@ -49,7 +49,7 @@ namespace trax{
 
 			virtual void CreateTrackCollection( const boost::property_tree::ptree& pt, 
 				TrackSystem& trackSystem,
-				std::vector<std::pair<Track::Coupling,std::string>>& couplings, 
+				std::vector<std::pair<Track::Connection,std::string>>& couplings, 
 				SignalCollection& signalCollection, 
 				IndicatorCollection& indicatorCollection, 
 				TimerCollection& timerCollection, 
@@ -69,7 +69,7 @@ namespace trax{
 			std::shared_ptr<TrackBuilder> CreateTrack( const boost::property_tree::ptree& pt,
 				ConnectorCollection& connectors, std::vector<std::tuple<std::shared_ptr<Signal>,TrackBuilder*,common::Interval<Length>>>& signals, IndicatorCollection& indicatorCollection, TimerCollection& timerCollection, PulseCounterCollection& pulseCounterCollection, std::map<IDType,Velocity>& travelVelocities, IDType& maxSensorID ) const;
 
-			std::pair<Track::Coupling,std::string> CreateTrackCoupling( const boost::property_tree::ptree& pt, 
+			std::pair<Track::Connection,std::string> CreateTrackConnection( const boost::property_tree::ptree& pt, 
 				const TrackSystem& trackSystem ) const;
 
 			std::shared_ptr<Signal> CreateSignal( const boost::property_tree::ptree& pt, 

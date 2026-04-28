@@ -247,6 +247,15 @@ Indicator::Status Multicator::Get() const{
 	return m_Status;
 }
 
+void Multicator::Get( spat::Frame<Length, One>& frame ) const
+{
+	auto iter = m_IndicatorStates.find( m_Status );
+	if( iter == m_IndicatorStates.end() )
+		throw std::runtime_error( "Status not yet created for Multicator!" );
+
+	frame = GetFrame() * iter->second.m_LocalFrame;
+}
+
 bool Multicator::IsValidState( Status status ) const{
 	return m_IndicatorStates.find( status ) != m_IndicatorStates.end();
 }
@@ -473,6 +482,8 @@ std::unique_ptr<Indicator> Indicator::Make( Type type ) noexcept{
 				return std::make_unique<SwitchMultiSemaphore>();
 			case Type::velocity_control:
 				return std::make_unique<VelocityControlSemaphore>();
+			case Type::multicator:
+				return std::make_unique<Multicator>();
 			case Type::unknown:
 			case Type::none:
 			default:

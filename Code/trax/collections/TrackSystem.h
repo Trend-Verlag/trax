@@ -117,15 +117,15 @@ namespace trax{
 		virtual ConnectorCollection* GetConnectorCollection() const = 0;
 
 
-		/// \name Couple
-		/// \brief Couples two tracks that are members of this TrackSystem.
+		/// \name Connect
+		/// \brief Connects two tracks that are members of this TrackSystem.
 		/// \param trackEnd1 Shared pointer to and end of track A.
 		/// \param trackEnd2 Shared pointer to and end of track B.
-		/// \param bUncoupledOnly true if only loose ends should get connected, but existing connections stay untouched.
+		/// \param bUnconnectedOnly true if only loose ends should get connected, but existing connections stay untouched.
 		///@{
-		virtual void Couple( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd2 ) const = 0;
+		virtual void Connect( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd2 ) const = 0;
 
-		virtual void Couple( const Track::Coupling& coupling, bool bUncoupledOnly = false ) const = 0;
+		virtual void Connect( const Track::Connection& connection, bool bUnconnectedOnly = false ) const = 0;
 		///@}
 
 
@@ -137,37 +137,37 @@ namespace trax{
 		virtual Length CalculateGapSize( const Track::End& theOne, const Track::End& theOther ) const = 0;
 
 
-		/// \brief Searches for a free, uncoupled track end in the area.
-		virtual std::vector<Track::End> GetUncoupledIn( const spat::Sphere<Length>& area ) const = 0;
+		/// \brief Searches for a free, unconnected track end in the area.
+		virtual std::vector<Track::End> GetUnconnectedIn( const spat::Sphere<Length>& area ) const = 0;
 
 
 		/// \brief Completes the coupling.
 		///
 		/// \param coupling A track coupling with one of its track ids set to 0. This will be completed
 		/// by the correct connection.
-		virtual void Connection( Track::Coupling& coupling ) const = 0;
+		virtual void Connection( Track::Connection& coupling ) const = 0;
 
-		virtual void Connection( const Track::End& end, Track::End& coupled ) const = 0;
+		virtual void Connection( const Track::End& end, Track::End& connected ) const = 0;
 
-		/// \brief Writes the coupled tracks data of the trackends in couplings to active.
+		/// \brief Writes the connected tracks data of the trackends in couplings to active.
 		///
 		/// \param couplings Two track ends.
-		/// \param active Coupled track end data for the track ends in couplings.
-		virtual void Connection( const Track::Coupling& couplings, Track::Coupling& active ) const = 0;
+		/// \param active Connectd track end data for the track ends in couplings.
+		virtual void Connection( const Track::Connection& couplings, Track::Connection& active ) const = 0;
 		
 
-		///\brief Couples all open ends in the track system, if they are closer
+		///\brief Connects all open ends in the track system, if they are closer
 		/// than maxDistance.
-		/// \param maxDistance A threshold for the distance to search track ends around the to be coupled end.
+		/// \param maxDistance A threshold for the distance to search track ends around the to be connected end.
 		/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
-		virtual void CoupleAll( Length maxDistance = 1_m, Angle maxKink = pi ) = 0;
+		virtual void ConnectAll( Length maxDistance = 1_m, Angle maxKink = pi ) = 0;
 
 
-		/// \brief Uncouples all the Tracks in the TrackSystem from each other.
+		/// \brief Unconnects all the Tracks in the TrackSystem from each other.
 		///
-		/// This is needed since the coupled tracks hold shared pointer 
+		/// This is needed since the connected tracks hold shared pointer 
 		/// to each other.
-		virtual void DeCoupleAll() = 0;
+		virtual void DisconnectAll() = 0;
 	};
 	
 
@@ -204,41 +204,41 @@ namespace trax{
 	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackSystem& system, const spat::VectorBundle<Length,One>& ray, Length gauge = 0_m, bool sort = false );
 	
 
-	/// \brief Searches open track ends inside an area around a given track end and couples to 
+	/// \brief Searches open track ends inside an area around a given track end and connects to 
 	/// the closest.
 	/// 
-	/// The function will couple tracks from one collection only, so it will not happen that
-	/// tracks from different collections get coupled to both ends. If the track itself is part
+	/// The function will connect tracks from one collection only, so it will not happen that
+	/// tracks from different collections get connected to both ends. If the track itself is part
 	/// of a collection, only tracks from that collection will be considered.
 	/// \param system The track system to search track ends in.
-	/// \param trackEnd The track end to couple; use Track::EndType::both for both.
+	/// \param trackEnd The track end to connect; use Track::EndType::both for both.
 	/// \param maxDistance A threshold for the distance to search track ends around the to be 
-	/// coupled end.
+	/// connected end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
-	/// \return The other track ends, the track was coupled to, pair.first for front and 
+	/// \return The other track ends, the track was connected to, pair.first for front and 
 	/// pair.second for back end; or { nullptr, EndType::none } if no suitable track 
 	/// end was found.
 	/// \throws std::invalid_argument If the end type is not recocnised.
-	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc Couple( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
+	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc Connect( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
 
 
-	/// \brief Searches open track ends inside an area around a given track end and couples 
+	/// \brief Searches open track ends inside an area around a given track end and connects 
 	/// and snaps to the closest.
 	/// 
 	/// The method will snap only once (if coupling targets on both ends were found).
 	/// \param system The track system to search track ends in.
-	/// \param trackEnd The track end to couple; use Track::EndType::both for both.
+	/// \param trackEnd The track end to connect; use Track::EndType::both for both.
 	/// \param maxDistance A threshold for the distance to search track ends around the to be 
-	/// coupled end.
+	/// connected end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
-	/// \return The other track ends, the track was coupled to, pair.first for front and 
+	/// \return The other track ends, the track was connected to, pair.first for front and 
 	/// pair.second for back end; or { nullptr, EndType::none } if no suitable track 
 	/// end was found.
 	/// \throws std::invalid_argument If the end type is not recocnised.
 	/// \throws std::runtime_error If snapping failed (e.g. due to invalid track).
-	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc CoupleAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
+	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc ConnectAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
 
-	std::shared_ptr<Connector> dclspc CoupleAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Track::TrackEnd toTrackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
+	std::shared_ptr<Connector> dclspc ConnectAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Track::TrackEnd toTrackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
 
 
 	/// \brief A decorator for TrackSystems.
@@ -312,12 +312,12 @@ namespace trax{
 			return m_pComponent->GetConnectorCollection();
 		}
 
-		void Couple( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd2 ) const override{
-			return m_pComponent->Couple( trackEnd1, trackEnd2 );
+		void Connect( std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd1, std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd2 ) const override{
+			return m_pComponent->Connect( trackEnd1, trackEnd2 );
 		}
 
-		void Couple( const Track::Coupling& coupling, bool bUncoupledOnly = false ) const override{
-			return m_pComponent->Couple( coupling, bUncoupledOnly );
+		void Connect( const Track::Connection& coupling, bool bUnconnectedOnly = false ) const override{
+			return m_pComponent->Connect( coupling, bUnconnectedOnly );
 		}
 
 		std::shared_ptr<Sensor> GetSensor( IDType id, TrackLocation* pTrackLocation ) const override{
@@ -328,24 +328,24 @@ namespace trax{
 			return m_pComponent->CalculateGapSize( theOne, theOther );
 		}
 
-		std::vector<Track::End> GetUncoupledIn( const spat::Sphere<Length>& area ) const override{
-			return m_pComponent->GetUncoupledIn( area );
+		std::vector<Track::End> GetUnconnectedIn( const spat::Sphere<Length>& area ) const override{
+			return m_pComponent->GetUnconnectedIn( area );
 		}
 
-		void Connection( Track::Coupling& coupling ) const override{
-			return m_pComponent->Connection(coupling);
+		void Connection( Track::Connection& connection ) const override{
+			return m_pComponent->Connection(connection);
 		}
 
-		void Connection( const Track::End& end, Track::End& coupled ) const override{
-			return m_pComponent->Connection(end,coupled);
+		void Connection( const Track::End& end, Track::End& connected ) const override{
+			return m_pComponent->Connection(end,connected);
 		}
 
-		void Connection( const Track::Coupling& couplings, Track::Coupling& active ) const override{
-			return m_pComponent->Connection(couplings,active);
+		void Connection( const Track::Connection& connections, Track::Connection& active ) const override{
+			return m_pComponent->Connection(connections,active);
 		}
 
-		void DeCoupleAll() override{
-			return m_pComponent->DeCoupleAll();
+		void DisconnectAll() override{
+			return m_pComponent->DisconnectAll();
 		}
 		///@}
 	};

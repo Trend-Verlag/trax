@@ -400,6 +400,18 @@ void AlignTo(
 	poseOne = frame;
 	indicator.GetFrame().FromParent( poseOne );
 
+	frame = indicator.GetFrame();
+	frame.TransportTo( localPosition );
+	frame.LookAt( alignment, frame.T );
+	poseTwo = frame;
+	indicator.GetFrame().FromParent( poseTwo );
+
+	frame = indicator.GetFrame();
+	frame.TransportTo( localPosition );
+	frame.LookAt( alignment, -frame.N );
+	poseThree = frame;
+	indicator.GetFrame().FromParent( poseThree );
+
 	switch( toSwitch.StatusToLeft() )
 	{
 		case NarrowSwitch::Status::go:
@@ -412,10 +424,6 @@ void AlignTo(
 			indicator.LocalFrameForStatus( Indicator::Status::three, poseOne );
 			break;
 	}
-
-	frame = indicator.GetFrame();
-	frame.TransportTo( localPosition );
-	frame.LookAt( alignment, frame.T );
 
 	switch( toSwitch.StatusToMiddle() )
 	{
@@ -430,9 +438,6 @@ void AlignTo(
 			break;
 	}
 
-	frame = indicator.GetFrame();
-	frame.TransportTo( localPosition );
-	frame.LookAt( alignment, -frame.N );
 	switch( toSwitch.StatusToRight() )
 	{
 		case NarrowSwitch::Status::go:

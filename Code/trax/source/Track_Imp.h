@@ -120,7 +120,7 @@ namespace trax{
 		
 		Length ParameterFrom( EndType thisEnd ) const noexcept override;
 
-		bool IsCoupled( EndType atend = EndType::any ) const noexcept override;
+		bool IsConnected( EndType atend = EndType::any ) const noexcept override;
 
 		void TNBFrame( Length s, spat::Frame<Length,One>& frame ) const override;
 
@@ -175,9 +175,9 @@ namespace trax{
 		}
 
 		// TrackBuilder:
-		void Couple( std::pair<std::shared_ptr<TrackBuilder>,EndType> thisEnd, std::pair<std::shared_ptr<TrackBuilder>,EndType> othersEnd ) override;
+		void Connect( std::pair<std::shared_ptr<TrackBuilder>,EndType> thisEnd, std::pair<std::shared_ptr<TrackBuilder>,EndType> othersEnd ) override;
 
-		void DeCouple( EndType thisendbool = EndType::any, bool oneSided = false ) override;
+		void Disconnect( EndType thisendbool = EndType::any, bool oneSided = false ) override;
 
 
 		void Attach( std::shared_ptr<const Curve> pCurve, common::Interval<Length> curveSegment = {0_m,+infinite__length} ) override;

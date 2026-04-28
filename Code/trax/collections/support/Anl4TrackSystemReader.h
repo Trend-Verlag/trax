@@ -55,7 +55,8 @@ namespace trax{
 		dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, SingleSlipSwitch& switchObject, const TrackSystem& trackSystem );
 		dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, DoubleSlipSwitch& switchObject, const TrackSystem& trackSystem );
 
-		dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, BinaryIndicator& binaryIndicator );
+		dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Indicator& indicator );
+	//	dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, BinaryIndicator& binaryIndicator );
 
 		dclspc void ReadJack( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Jack& jack );
 		dclspc void ReadPlug( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Plug& plug );
@@ -74,10 +75,10 @@ namespace trax{
 			std::shared_ptr<TrackSystem> CreateTrackSystem( const boost::property_tree::ptree& pt ) const;
 			
 			std::shared_ptr<TrackCollection> CreateTrackCollection( const boost::property_tree::ptree& pts, 
-				std::vector<Track::Coupling>& couplings ) const;
+				std::vector<Track::Connection>& connections ) const;
 
 			std::shared_ptr<TrackBuilder> CreateTrack( const boost::property_tree::ptree& pt, 
-				std::vector<Track::Coupling>& couplings ) const;
+				std::vector<Track::Connection>& connections ) const;
 			
 			std::unique_ptr<ConnectorCollection> CreateConnectorCollection( const boost::property_tree::ptree& pt, 
 				const TrackSystem& trackSystem ) const;
@@ -157,7 +158,7 @@ namespace trax{
 
 		/// \name Explicit XML Reading
 		///@{
-		dclspc void ReadEnd( const boost::property_tree::ptree& pt, TrackBuilder& track, EndType endtype, std::vector<trax::Track::Coupling>& couplings );
+		dclspc void ReadEnd( const boost::property_tree::ptree& pt, TrackBuilder& track, EndType endtype, std::vector<trax::Track::Connection>& couplings );
 		///@}
 
 		/// \brief Reads a track system from a property tree.

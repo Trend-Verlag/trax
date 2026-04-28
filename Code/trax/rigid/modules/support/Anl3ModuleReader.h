@@ -45,9 +45,9 @@ namespace trax{
 				CameraCollection& cameraCollection ) const;
 
 			void ReadGebaeudesammlung( const boost::property_tree::ptree& pt, 
-				const std::vector<std::pair<Track::Coupling,std::string>>& couplings, const std::vector<Kollektor>& kollektor, const TrackSystem& trackSystem, IndicatorCollection& indicatorCollection ) const;
+				const std::vector<std::pair<Track::Connection,std::string>>& connections, const std::vector<Kollektor>& kollektor, const TrackSystem& trackSystem, IndicatorCollection& indicatorCollection ) const;
 
-			std::pair<Track::End,Track::End> GetEnds( const Connector& connector, int slot, const std::vector<std::pair<Track::Coupling,std::string>>& couplings ) const;	
+			std::pair<Track::End,Track::End> GetEnds( const Connector& connector, int slot, const std::vector<std::pair<Track::Connection,std::string>>& connection ) const;	
 
 			void ConnectSockets( Module& _module ) const;
 		};

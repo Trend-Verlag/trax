@@ -289,12 +289,12 @@ ConnectorCollection* TrackSystem_Imp::GetConnectorCollection() const noexcept{
 	return m_pConnectorCollection.get();
 }
 
-void TrackSystem_Imp::Couple(	
+void TrackSystem_Imp::Connect(	
 	std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd1, 
 	std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEnd2 ) const
 {
 	if( trackEnd1.first && trackEnd2.first ){
-		trackEnd1.first->Couple( trackEnd1, trackEnd2 );
+		trackEnd1.first->Connect( trackEnd1, trackEnd2 );
 		return;
 	}
 
@@ -304,13 +304,13 @@ void TrackSystem_Imp::Couple(
 	throw std::invalid_argument( stream.str() );
 }
 
-void TrackSystem_Imp::Couple( const Track::Coupling& coupling, bool bUncoupledOnly ) const{
+void TrackSystem_Imp::Connect( const Track::Connection& coupling, bool bUnconnectedOnly ) const{
 	if( auto pTrackA = Get( coupling.theOne.id ) ){
 		if( auto pTrackB = Get( coupling.theOther.id ) ){
-			if( bUncoupledOnly && (pTrackA->IsCoupled( coupling.theOne.type ) || pTrackB->IsCoupled( coupling.theOther.type )) )
+			if( bUnconnectedOnly && (pTrackA->IsConnected( coupling.theOne.type ) || pTrackB->IsConnected( coupling.theOther.type )) )
 				return;
 
-			pTrackA->Couple( std::make_pair(pTrackA, coupling.theOne.type), std::make_pair(pTrackB, coupling.theOther.type) );
+			pTrackA->Connect( std::make_pair(pTrackA, coupling.theOne.type), std::make_pair(pTrackB, coupling.theOther.type) );
 			return;
 		}
 	}
@@ -346,17 +346,17 @@ Length TrackSystem_Imp::CalculateGapSize( const Track::End& theOne, const Track:
 		Track::cTrackEnd{ Get( theOther.id ), theOther.type } );
 }
 
-std::vector<Track::End> TrackSystem_Imp::GetUncoupledIn( const Sphere<Length>& area ) const{
+std::vector<Track::End> TrackSystem_Imp::GetUnconnectedIn( const Sphere<Length>& area ) const{
 	std::vector<Track::End> ends;
 	Position<Length> trackEndPos;
 	for( const auto& track : *this ){
-		if( !track.IsCoupled( EndType::north ) ){
+		if( !track.IsConnected( EndType::north ) ){
 			track.Transition( 0_m, trackEndPos );
 			if( area.Includes(trackEndPos) )
 				ends.push_back( {track.ID(),EndType::north} );
 		}
 
-		if( !track.IsCoupled( EndType::south ) ){
+		if( !track.IsConnected( EndType::south ) ){
 			track.Transition( track.GetLength(), trackEndPos );
 			if( area.Includes(trackEndPos) )
 				ends.push_back( {track.ID(),EndType::south} );
@@ -366,7 +366,7 @@ std::vector<Track::End> TrackSystem_Imp::GetUncoupledIn( const Sphere<Length>& a
 	return ends;
 }
 
-void TrackSystem_Imp::Connection( Track::Coupling& coupling ) const{
+void TrackSystem_Imp::Connection( Track::Connection& coupling ) const{
 	if( !coupling.theOther.id ){
 		if( auto pTrackA = Get( coupling.theOne.id ) )
 			if( Track::TrackEnd trackEndB = pTrackA->TransitionEnd( coupling.theOne.type ); trackEndB.pTrack ){
@@ -391,7 +391,7 @@ void TrackSystem_Imp::Connection( const Track::End& end, Track::End& coupled ) c
 		}
 }
 
-void TrackSystem_Imp::Connection( const Track::Coupling& couplings, Track::Coupling& active ) const{
+void TrackSystem_Imp::Connection( const Track::Connection& couplings, Track::Connection& active ) const{
 	if( auto pTrack = Get( couplings.theOne.id ) )
 		if( Track::TrackEnd otherTrackEnd = pTrack->TransitionEnd( couplings.theOne.type ); otherTrackEnd.pTrack ){
 			active.theOne.id = otherTrackEnd.pTrack->ID();
@@ -404,7 +404,7 @@ void TrackSystem_Imp::Connection( const Track::Coupling& couplings, Track::Coupl
 		}
 }
 
-void TrackSystem_Imp::CoupleAll( Length maxDistance, Angle maxKink )
+void TrackSystem_Imp::ConnectAll( Length maxDistance, Angle maxKink )
 {
 	if( m_pTrackCollectionContainer )
 	{
@@ -412,19 +412,19 @@ void TrackSystem_Imp::CoupleAll( Length maxDistance, Angle maxKink )
 		{
 			for( TrackBuilder& track : trackCollection )
 			{
-				if( !track.IsCoupled( EndType::north ) )
-					trax::Couple( trackCollection, {track.This(), EndType::north}, maxDistance, maxKink );
+				if( !track.IsConnected( EndType::north ) )
+					trax::Connect( trackCollection, {track.This(), EndType::north}, maxDistance, maxKink );
 
-				if( !track.IsCoupled( EndType::south ) )
-					trax::Couple( trackCollection, {track.This(), EndType::south}, maxDistance, maxKink );
+				if( !track.IsConnected( EndType::south ) )
+					trax::Connect( trackCollection, {track.This(), EndType::south}, maxDistance, maxKink );
 			}
 		}
 	}
 }
 
-void TrackSystem_Imp::DeCoupleAll()
+void TrackSystem_Imp::DisconnectAll()
 {
-	DoDeCoupleAll();
+	DoDisconnectAll();
 }
 
 bool TrackSystem_Imp::Start( Scene& /*scene*/ ) noexcept
@@ -497,16 +497,16 @@ const Jack& TrackSystem_Imp::_GetJack( int idx ) const{
 	throw std::out_of_range( stream.str() );
 }
 
-void TrackSystem_Imp::DoDeCoupleAll(){
+void TrackSystem_Imp::DoDisconnectAll(){
 	std::for_each( m_Container.begin(), m_Container.end(),
 		[]( const std::pair<IDType,std::shared_ptr<TrackBuilder>>& pair  )
 	{ 
-		pair.second->DeCouple();
+		pair.second->Disconnect();
 	});
 }
 
 void TrackSystem_Imp::DoClear(){
-	DoDeCoupleAll();
+	DoDisconnectAll();
 
 	if( m_pTrackCollectionContainer )
 		m_pTrackCollectionContainer->Clear();
@@ -592,7 +592,7 @@ std::vector<std::pair<Location,Length>>dclspc FindTrackLocations(
 	return locations;
 }
 
-std::pair<Track::TrackEnd,Track::TrackEnd> Couple( 
+std::pair<Track::TrackEnd,Track::TrackEnd> Connect( 
 	const TrackSystem& system, 
 	Track::TrackEnd trackEnd, 
 	Length maxDistance, 
@@ -604,7 +604,7 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 		{
 			if( collection.IsMember( *trackEnd.pTrack->This() ) )
 			{
-				return Couple( 
+				return Connect( 
 					collection, 
 					trackEnd,
 					maxDistance,
@@ -615,7 +615,7 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 
 	for( const TrackCollection& collection : *system.GetCollectionContainer() )
 	{
-		std::pair<Track::TrackEnd,Track::TrackEnd> coupledTo = Couple( 
+		std::pair<Track::TrackEnd,Track::TrackEnd> coupledTo = Connect( 
 			collection, 
 			trackEnd,
 			maxDistance,
@@ -628,13 +628,13 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 	return {};
 }
 
-std::pair<Track::TrackEnd,Track::TrackEnd> CoupleAndSnap( 
+std::pair<Track::TrackEnd,Track::TrackEnd> ConnectAndSnap( 
 	const TrackSystem& system, 
 	Track::TrackEnd trackEnd, 
 	Length maxDistance, 
 	Angle maxKink )
 {
-	std::pair<Track::TrackEnd,Track::TrackEnd> CoupledTo = Couple( 
+	std::pair<Track::TrackEnd,Track::TrackEnd> CoupledTo = Connect( 
 		system, 
 		trackEnd,
 		maxDistance,
@@ -656,7 +656,7 @@ std::pair<Track::TrackEnd,Track::TrackEnd> CoupleAndSnap(
 	return CoupledTo;
 }
 
-std::shared_ptr<Connector> CoupleAndSnap( 
+std::shared_ptr<Connector> ConnectAndSnap( 
 	const TrackSystem& system, 
 	const Track::TrackEnd trackEnd, 
 	const Track::TrackEnd toTrackEnd, 
@@ -666,24 +666,24 @@ std::shared_ptr<Connector> CoupleAndSnap(
 	if( trackEnd.pTrack != toTrackEnd.pTrack && 
 		!trackEnd.pTrack->GetConnector( trackEnd.end ) )	
 	{
-		Track::TrackEnd wasCoupled = toTrackEnd.pTrack->TransitionEnd( toTrackEnd.end );
+		Track::TrackEnd wasConnected = toTrackEnd.pTrack->TransitionEnd( toTrackEnd.end );
 
-		Couple( trackEnd, toTrackEnd );
+		Connect( trackEnd, toTrackEnd );
 
-		if( Coupled( trackEnd, toTrackEnd ) &&
+		if( Connected( trackEnd, toTrackEnd ) &&
 			Snap( trackEnd, toTrackEnd ) )
 		{
-			// Track needs to get coupled on opposite end if applicable:
+			// Track needs to get connected on opposite end if applicable:
 			{
 				const Track::TrackEnd otherTrackEnd = !trackEnd;
 
-				if( IsCoupled( otherTrackEnd ) &&
-					DistanceToCoupled( otherTrackEnd ) > maxDistance )
+				if( IsConnected( otherTrackEnd ) &&
+					DistanceToConnected( otherTrackEnd ) > maxDistance )
 				{
-					trackEnd.pTrack->This()->DeCouple( otherTrackEnd.end );
+					trackEnd.pTrack->This()->Disconnect( otherTrackEnd.end );
 				}
 
-				Couple( system, otherTrackEnd, maxDistance, maxKink );
+				Connect( system, otherTrackEnd, maxDistance, maxKink );
 			}
 
 			if( Connector* pConnector = toTrackEnd.pTrack->GetConnector( toTrackEnd.end ); pConnector )
@@ -706,18 +706,18 @@ std::shared_ptr<Connector> CoupleAndSnap(
 						}
 						else
 						{
-							std::cerr << trax::Verbosity::error << "CoupleAndSnap: Created three way switch is not valid!" << std::endl;
+							std::cerr << trax::Verbosity::error << "ConnectAndSnap: Created three way switch is not valid!" << std::endl;
 						}
 					}
 				}
 			}
-			else if( wasCoupled.pTrack )
+			else if( wasConnected.pTrack )
 			// Creating a switch if applicable:
 			{
 				if( std::shared_ptr<Switch> pSwitch = Switch::Make(); pSwitch )
 				{
 					pSwitch->NarrowTrack( toTrackEnd );
-					pSwitch->StraightTrack( wasCoupled );
+					pSwitch->StraightTrack( wasConnected );
 					pSwitch->DivergedTrack( trackEnd );
 
 					if( pSwitch->Check( maxDistance, maxKink ) )
@@ -728,7 +728,7 @@ std::shared_ptr<Connector> CoupleAndSnap(
 					}
 					else
 					{
-						std::cerr << trax::Verbosity::error << "CoupleAndSnap: Created switch is not valid!" << std::endl;
+						std::cerr << trax::Verbosity::error << "ConnectAndSnap: Created switch is not valid!" << std::endl;
 					}
 				}
 			}

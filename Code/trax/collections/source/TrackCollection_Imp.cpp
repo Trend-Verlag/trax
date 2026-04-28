@@ -247,7 +247,7 @@ std::pair<std::shared_ptr<TrackBuilder>,EndType> Snap(
 	const TrackCollection& collection,
 	Track::TrackEnd trackEnd,
 	Length maxDistance,
-	bool bUncoupled )
+	bool bUnconnected )
 {
 	if( !trackEnd.pTrack || maxDistance <= 0_m )
 		return { nullptr, EndType::none };
@@ -263,9 +263,9 @@ std::pair<std::shared_ptr<TrackBuilder>,EndType> Snap(
 		break;
 	case EndType::any:
 	{
-		auto retval = Snap( collection, {trackEnd.pTrack,EndType::north}, maxDistance, bUncoupled );
+		auto retval = Snap( collection, {trackEnd.pTrack,EndType::north}, maxDistance, bUnconnected );
 		if( !retval.first )
-			return Snap( collection, {trackEnd.pTrack,EndType::south}, maxDistance, bUncoupled );
+			return Snap( collection, {trackEnd.pTrack,EndType::south}, maxDistance, bUnconnected );
 		else
 			return retval;
 	}
@@ -288,12 +288,12 @@ std::pair<std::shared_ptr<TrackBuilder>,EndType> Snap(
 		TrackEnds.end() 
 	);
 
-	if( bUncoupled )
+	if( bUnconnected )
 		TrackEnds.erase( 
 			std::remove_if( 
 				TrackEnds.begin(), 
 				TrackEnds.end(), 
-				[]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept { return std::get<0>(tuple)->IsCoupled( std::get<1>(tuple) ); }
+				[]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept { return std::get<0>(tuple)->IsConnected( std::get<1>(tuple) ); }
 			), 
 			TrackEnds.end() 
 		);
@@ -318,7 +318,7 @@ std::pair<std::shared_ptr<TrackBuilder>,EndType> Snap(
 	return { nullptr, EndType::none };
 }
 
-std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
+std::pair<Track::TrackEnd,Track::TrackEnd> Connect(
 	const TrackCollection& collection, 
 	Track::TrackEnd trackEnd,
 	Length maxDistance, 
@@ -338,15 +338,15 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 		break;
 	case EndType::any:
 	{
-		TrackBuilder::TrackEnd retval = Couple( collection, {trackEnd.pTrack,EndType::north}, maxDistance, maxKink ).first;
+		TrackBuilder::TrackEnd retval = Connect( collection, {trackEnd.pTrack,EndType::north}, maxDistance, maxKink ).first;
 		if( !retval.pTrack )
-			return Couple( collection, {trackEnd.pTrack,EndType::south}, maxDistance, maxKink );
+			return Connect( collection, {trackEnd.pTrack,EndType::south}, maxDistance, maxKink );
 		else
 			return { retval, {} };
 	}
 	case EndType::both:
-		return { Couple( collection, {trackEnd.pTrack,EndType::north}, maxDistance, maxKink ).first,
-				 Couple( collection, {trackEnd.pTrack,EndType::south}, maxDistance, maxKink ).second };
+		return { Connect( collection, {trackEnd.pTrack,EndType::north}, maxDistance, maxKink ).first,
+				 Connect( collection, {trackEnd.pTrack,EndType::south}, maxDistance, maxKink ).second };
 	default:
 		return {};
 	};
@@ -387,7 +387,7 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 				if( angleT > maxKink )
 				{
 					std::clog	<< Verbosity::detailed 
-								<< "Couple rejected due to kink: " 
+								<< "Connecting rejected due to kink: " 
 								<< " angleT=" << angleT
 								<< " maxKink=" << maxKink 
 								<< " trackEnd=" << trackEnd
@@ -398,7 +398,7 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 				if( angleB > maxKink )
 				{
 					std::clog	<< Verbosity::detailed 
-								<< "Couple rejected due to kink: " 
+								<< "Connecting rejected due to kink: " 
 								<< " angleB=" << angleB
 								<< " maxKink=" << maxKink 
 								<< " trackEnd=" << trackEnd
@@ -418,11 +418,11 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 			TrackEnds.end(), 
 			[trackEnd]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept 
 			{ 
-				bool bCoupled = std::get<0>(tuple)->IsCoupled( std::get<1>(tuple) );
+				bool bCoupled = std::get<0>(tuple)->IsConnected( std::get<1>(tuple) );
 
 				if( bCoupled ){
 					std::clog	<< Verbosity::detailed 
-								<< "Couple rejected due to existing coupling: "
+								<< "Connecting rejected due to existing connection: "
 								<< " trackEnd=" << trackEnd
 								<< " otherEnd=" << Track::End{ std::get<0>( tuple )->ID(), std::get<1>( tuple ) }
 								<< std::endl;
@@ -439,12 +439,12 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Couple(
 		std::pair<TrackBuilder::TrackEnd,TrackBuilder::TrackEnd> retval;
 		if( trackEnd.end == EndType::north ){
 			retval.first = { std::get<0>(TrackEnds.front()), std::get<1>(TrackEnds.front()) };
-			Couple( trackEnd, retval.first );
+			Connect( trackEnd, retval.first );
 		}
 		else
 		{
 			retval.second = {std::get<0>(TrackEnds.front()), std::get<1>(TrackEnds.front()) };
-			Couple( trackEnd, retval.second );
+			Connect( trackEnd, retval.second );
 		}
 
 		spat::Position<dim::Length> trackAt, trackOtherAt;

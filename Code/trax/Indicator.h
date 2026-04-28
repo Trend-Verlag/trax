@@ -54,6 +54,7 @@ namespace trax{
 			switch_mono,
 			switch_multi,
 			velocity_control,
+			multicator
 		};
 
 		/// \brief Makes a Indicator object.

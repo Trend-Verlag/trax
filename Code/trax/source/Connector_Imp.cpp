@@ -86,7 +86,7 @@ bool Connector_Imp::IsValid() const noexcept
 void Connector_Imp::Disconnect(){
 	for( const auto& pair : m_Slots )
 		if( pair.first )
-			pair.first->DeCouple( pair.second, false );
+			pair.first->Disconnect( pair.second, false );
 }
 
 int Connector_Imp::Slot( 
@@ -269,31 +269,31 @@ bool Connector_Imp::CheckSlot( int slot, Length e_distance, Angle e_kink, Angle 
 	if( auto pTrack = m_Slots[slot].first; pTrack ){
 		try{
 			if( e_distance > 0_m ){
-				if( DistanceToCoupled( *pTrack, m_Slots[slot].second ) > e_distance ){
+				if( DistanceToConnected( *pTrack, m_Slots[slot].second ) > e_distance ){
 					std::clog << Verbosity::verbose << "Distance to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
-						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
+						<< ", connected with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
-						<< " Distance: " << DistanceToCoupled( *pTrack, m_Slots[slot].second ) << std::endl;
+						<< " Distance: " << DistanceToConnected( *pTrack, m_Slots[slot].second ) << std::endl;
 					bOk = false;
 				}
 			}
 
 			if( e_kink > 0_deg ){
-				if( KinkToCoupled( *pTrack, m_Slots[slot].second ) > e_kink ){
+				if( KinkToConnected( *pTrack, m_Slots[slot].second ) > e_kink ){
 					std::clog << Verbosity::verbose << "Kink to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
-						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
+						<< ", connected with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
-						<< " Kink: " << _deg(KinkToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
+						<< " Kink: " << _deg(KinkToConnected( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
 					bOk = false;
 				}
 			}
 
 			if( e_twist > 0_deg ){
-				if( TwistToCoupled( *pTrack, m_Slots[slot].second ) > e_twist ){
+				if( TwistToConnected( *pTrack, m_Slots[slot].second ) > e_twist ){
 					std::clog << Verbosity::verbose << "Twist to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
-						<< ", coupled with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
+						<< ", connected with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
-						<< " Twist: " << _deg(TwistToCoupled( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
+						<< " Twist: " << _deg(TwistToConnected( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
 					bOk = false;
 				}
 			}
@@ -379,7 +379,7 @@ Connector::Status ConnectorStatusFrom( const std::string& socketName )
 	throw std::invalid_argument( stream.str() );
 }
 
-void Couple( 
+void Connect( 
 	std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEndA, 
 	std::pair<std::shared_ptr<TrackBuilder>,EndType> trackEndB, 
 	int slotA,
@@ -389,12 +389,11 @@ void Couple(
 	if( !trackEndA.first || !trackEndA.first->IsValid() || !trackEndB.first || !trackEndB.first->IsValid() )
 		throw std::invalid_argument( "Both tracks have to be valid." );
 	if( trackEndA == trackEndB )
-		throw std::invalid_argument( "Cannot couple to self." );
+		throw std::invalid_argument( "Cannot connect to self." );
 
 	if( auto pConnector = trackEndA.first->GetConnector(trackEndA.second) ){
 		if( slotA >= pConnector->CntSlots() )
-			throw std::out_of_range{ "Can not do coupling, since slot does not exist!" };
-
+			throw std::out_of_range{ "Can not do connection, since slot does not exist!" };
 		if( auto pConnectorOther = trackEndB.first->GetConnector(trackEndB.second) ){
 			if( slotB >= pConnectorOther->CntSlots() )
 				throw std::out_of_range{ "Can not do coupling, since slot does not exist!" };
@@ -421,12 +420,12 @@ void Couple(
 		}
 	}
 	else if( trackEndB.first->GetConnector(trackEndB.second) )
-		Couple( trackEndB, trackEndA, slotB, slotA, connectAnyway );
+		Connect( trackEndB, trackEndA, slotB, slotA, connectAnyway );
 	else 
-		trackEndA.first->Couple( trackEndA, trackEndB );
+		trackEndA.first->Connect( trackEndA, trackEndB );
 }
 
-void DeCouple( TrackBuilder& track, EndType trackend, int ownerSlot )
+void Disconnect( TrackBuilder& track, EndType trackend, int ownerSlot )
 {
 	if( auto pConnector = track.GetConnector(trackend) ){
 		int slot = pConnector->Slot(track,trackend);
@@ -441,7 +440,7 @@ void DeCouple( TrackBuilder& track, EndType trackend, int ownerSlot )
 		}
 	}
 
-	track.DeCouple( trackend );
+	track.Disconnect( trackend );
 }
 
 Location GetFarEndLocation( const Connector& connector, int slotID )
