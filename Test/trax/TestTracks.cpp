@@ -2023,6 +2023,73 @@ BOOST_FIXTURE_TEST_CASE( sloReassignmentPropperFreeExisting, SwichFixture )
 	BOOST_CHECK( m_pTrack2->GetConnector(EndType::north) == nullptr );
 }
 
+BOOST_FIXTURE_TEST_CASE( ConnectorFoundForTracksCorrectAfterDisconnectAndClear, SwichFixture )
+{
+	unique_ptr<Switch> pSwitch = Switch::Make();
+	pSwitch->NarrowTrack( m_pTrack1, EndType::south );
+	pSwitch->StraightTrack( m_pTrack2, EndType::north );
+	pSwitch->DivergedTrack( m_pTrack3, EndType::north );
+	pSwitch->Set( Switch::Status::go );
+
+	BOOST_CHECK_EQUAL( m_pTrack1->GetConnector( EndType::south ), pSwitch.get() );
+	BOOST_CHECK_EQUAL( m_pTrack2->GetConnector( EndType::north ), pSwitch.get() );
+	BOOST_CHECK_EQUAL( m_pTrack3->GetConnector( EndType::north ), pSwitch.get() );
+
+	pSwitch->Disconnect();
+	BOOST_CHECK_EQUAL( m_pTrack1->GetConnector( EndType::south ), pSwitch.get() );
+	BOOST_CHECK_EQUAL( m_pTrack2->GetConnector( EndType::north ), pSwitch.get() );
+	BOOST_CHECK_EQUAL( m_pTrack3->GetConnector( EndType::north ), pSwitch.get() );
+
+	pSwitch->Clear();
+	BOOST_CHECK( m_pTrack1->GetConnector( EndType::south ) == nullptr );
+	BOOST_CHECK( m_pTrack2->GetConnector( EndType::north ) == nullptr );
+	BOOST_CHECK( m_pTrack3->GetConnector( EndType::north ) == nullptr );
+}
+
+BOOST_FIXTURE_TEST_CASE( ConnectorFoundForTracksAfterPropperSlotCleaning, SwichFixture )
+{
+	unique_ptr<Switch> pSwitch = Switch::Make();
+	pSwitch->NarrowTrack( m_pTrack1, EndType::south );
+	pSwitch->StraightTrack( m_pTrack2, EndType::north );
+	pSwitch->DivergedTrack( m_pTrack3, EndType::north );
+	pSwitch->Set( Switch::Status::go );
+
+	BOOST_CHECK_EQUAL( m_pTrack1->GetConnector( EndType::south ), pSwitch.get() );
+	BOOST_CHECK_EQUAL( m_pTrack2->GetConnector( EndType::north ), pSwitch.get() );
+	BOOST_CHECK_EQUAL( m_pTrack3->GetConnector( EndType::north ), pSwitch.get() );
+
+	pSwitch->ClearNarrowTrack();
+	BOOST_CHECK( m_pTrack1->GetConnector( EndType::south ) == nullptr );
+	BOOST_CHECK_EQUAL( m_pTrack2->GetConnector( EndType::north ), pSwitch.get() );
+	BOOST_CHECK_EQUAL( m_pTrack3->GetConnector( EndType::north ), pSwitch.get() );
+
+	pSwitch->ClearStraightTrack();
+	BOOST_CHECK( m_pTrack1->GetConnector( EndType::south ) == nullptr );
+	BOOST_CHECK( m_pTrack2->GetConnector( EndType::north ) == nullptr );
+	BOOST_CHECK_EQUAL( m_pTrack3->GetConnector( EndType::north ), pSwitch.get() );
+
+	pSwitch->ClearDivergedTrack();
+	BOOST_CHECK( m_pTrack1->GetConnector( EndType::south ) == nullptr );
+	BOOST_CHECK( m_pTrack2->GetConnector( EndType::north ) == nullptr );
+	BOOST_CHECK( m_pTrack3->GetConnector( EndType::north ) == nullptr );
+}
+
+BOOST_FIXTURE_TEST_CASE( ConnectorFoundForTracksCorrectAfterSwitchDeletion, SwichFixture )
+// Connector found for tracks correct after switch deletion.
+{
+	{
+		unique_ptr<Switch> pSwitch = Switch::Make();
+		pSwitch->NarrowTrack( m_pTrack1, EndType::south );
+		pSwitch->StraightTrack( m_pTrack2, EndType::north );
+		pSwitch->DivergedTrack( m_pTrack3, EndType::north );
+		pSwitch->Set( Switch::Status::go );
+	}
+
+	BOOST_CHECK( m_pTrack1->GetConnector( EndType::south ) == nullptr );
+	BOOST_CHECK( m_pTrack2->GetConnector( EndType::north ) == nullptr );
+	BOOST_CHECK( m_pTrack3->GetConnector( EndType::north ) == nullptr );
+}
+
 BOOST_FIXTURE_TEST_CASE( flippingTracksConnectedBySwitch, SwichFixture ){
 	unique_ptr<Switch> pSwitch = Switch::Make();
 	pSwitch->NarrowTrack( m_pTrack1, EndType::south );

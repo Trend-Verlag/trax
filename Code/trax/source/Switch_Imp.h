@@ -252,6 +252,69 @@ namespace trax{
 	};
 
 
+	typedef ObjectID_Imp<NoSlipSwitch> NoSlipSwitch_Base;
+
+	class NoSlipSwitch_Imp :	public NoSlipSwitch_Base,
+								public Connector_Imp
+	{
+	public:
+		NoSlipSwitch_Imp();
+
+
+		// Connector:
+		ConnectorType GetConnectorType() const noexcept override;
+
+		const char* TypeName() const noexcept override;
+
+		void Toggle( bool pulse = true ) override;
+
+		void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) override;
+
+		bool Check( Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
+
+		void GetCenter( Frame<Length,One>& center ) const noexcept override;
+
+
+		// NoSlipSwitch
+		Status Set( Status to, bool pulse = true ) override;
+
+		Status Get() const noexcept override;
+
+		void SetCenter( const Frame<Length,One>& center ) noexcept override;
+
+		Jack& JackOn( Status status ) override;
+
+		MultiPlug& PlugTo( Status status ) override;
+
+
+		// Connector
+		using Connector_Imp::Slot;
+
+		int Slot( int slot,std::shared_ptr<TrackBuilder> pTrack, EndType trackend, bool connectAnonymous = false ) override;
+
+		void RegisterSockets( SocketRegistry& module ) override;
+
+		void UnregisterSockets( SocketRegistry& module ) override;
+
+		int CountPlugs() const override;
+
+		int CountJacks() const noexcept override;
+	protected:
+		const Plug & _GetPlug(int idx) const override;
+		const Jack & _GetJack(int idx) const override;
+
+	private:
+		Status m_Status;
+		Frame<Length,One> m_Center;
+
+		Jack_Imp m_JackOnGo1{ "JackOnGo1" };
+		Jack_Imp m_JackOnGo2{ "JackOnGo2" };
+
+		MultiPlug_Imp<StatusHolder_Plug<NoSlipSwitch_Imp>>	m_PlugToGo1;
+		MultiPlug_Imp<StatusHolder_Plug<NoSlipSwitch_Imp>>	m_PlugToGo2;
+	};
+
+
 	typedef ObjectID_Imp<SingleSlipSwitch> SingleSlipSwitch_Base;
 
 	class SingleSlipSwitch_Imp :	public SingleSlipSwitch_Base,

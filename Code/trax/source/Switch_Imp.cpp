@@ -60,6 +60,20 @@ std::shared_ptr<ThreeWaySwitch> ThreeWaySwitch::Cast( std::shared_ptr<Connector>
 	return std::dynamic_pointer_cast<ThreeWaySwitch>( pConnector );
 }
 ///////////////////////////////////////
+std::unique_ptr<NoSlipSwitch> NoSlipSwitch::Make() noexcept
+{
+	try{
+		return std::make_unique<NoSlipSwitch_Imp>();
+	}
+	catch( const std::bad_alloc& ){
+		return nullptr;
+	}
+}
+
+std::shared_ptr<NoSlipSwitch> NoSlipSwitch::Cast(std::shared_ptr<Connector> pConnector) noexcept{
+	return std::dynamic_pointer_cast<NoSlipSwitch>( pConnector );
+}
+///////////////////////////////////////
 std::unique_ptr<SingleSlipSwitch> SingleSlipSwitch::Make() noexcept
 {
 	try{
@@ -926,6 +940,218 @@ bool ThreeWaySwitch_Imp::MinimumOutgoingTrackEndpoints(
 	frame.FromParent( posDiverged1 );
 	frame.FromParent( posDiverged2 );
 	return true;
+}
+///////////////////////////////////////
+NoSlipSwitch_Imp::NoSlipSwitch_Imp()
+	:	Connector_Imp	{slot_count},
+		m_Status		{Status::go1},
+		m_PlugToGo1		{*this},
+		m_PlugToGo2		{*this}
+{
+	m_PlugToGo1.SetStatus( Status::go1 );
+	m_PlugToGo1.Reference( "name", "PlugToGo1" );
+	m_PlugToGo2.SetStatus( Status::go2 );
+	m_PlugToGo2.Reference( "name", "PlugToGo2" );
+
+	m_Center.Init();
+}
+
+ConnectorType NoSlipSwitch_Imp::GetConnectorType() const noexcept
+{
+	return ConnectorType::NoSlipSwitch;
+}
+
+const char * NoSlipSwitch_Imp::TypeName() const noexcept
+{
+	return "NoSlipSwitch";
+}
+
+void NoSlipSwitch_Imp::Toggle( bool pulse ){
+	switch( m_Status ){
+		case Status::go1:
+			Set( Status::go2, pulse );
+			break;
+		case Status::go2:
+			Set( Status::go1, pulse );
+			break;
+	}
+}
+
+void NoSlipSwitch_Imp::Set( 
+	const Track& trackA, 
+	EndType trackendA, 
+	const Track& trackB, 
+	EndType trackendB, 
+	bool pulse )
+{
+	assert( !"Not implemented yet!" );
+}
+
+bool NoSlipSwitch_Imp::Check( Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
+{
+	if( !IsComplete() ){
+		std::clog << Verbosity::detailed << "SingleSlipSwitch is incomplete! SwitchID: " << ID() << std::endl;
+		return false;
+	}
+
+	bool bOk = true;
+	if( !CheckSlot( slot_0, e_distance, e_kink, e_twist ) )
+		bOk = false;
+
+	if( !CheckSlot( slot_1, e_distance, e_kink, e_twist ) )
+		bOk = false;
+
+	return bOk;
+}
+
+void NoSlipSwitch_Imp::GetCenter( Frame<Length, One>& center ) const noexcept{
+	center = m_Center;
+}
+
+Connector::Status NoSlipSwitch_Imp::Set( Status to, bool pulse )
+{
+	const Status retval = m_Status;
+
+	m_Status = to;
+
+	if( IsComplete() ){
+		switch( m_Status ){
+		case Status::go1:
+
+			if( pulse )
+				m_JackOnGo1.Pulse();
+
+			break;
+		case Status::go2:
+
+			if( pulse )
+				m_JackOnGo2.Pulse();
+
+			break;
+		default:
+			assert( !"Unknown switch status value" );
+		}
+
+		if( pulse )
+			JackOnChange().Pulse();
+	}
+
+	return retval;
+}
+
+Connector::Status NoSlipSwitch_Imp::Get() const noexcept{
+	return m_Status;
+}
+
+void NoSlipSwitch_Imp::SetCenter( const Frame<Length, One>& center ) noexcept{
+	m_Center = center;
+}
+
+Jack& NoSlipSwitch_Imp::JackOn( Status status ){
+	switch( status ){
+	case Status::go1:
+		return m_JackOnGo1;
+	case Status::go2:
+		return m_JackOnGo2;
+	case Status::change:
+		return JackOnChange();
+	default:
+		throw std::invalid_argument( "Unknown ThreeWaySwitch::Status enumeration value!" );
+	}
+}
+
+MultiPlug& NoSlipSwitch_Imp::PlugTo( Status status ){
+	switch( status ){
+	case Status::go1:
+		return m_PlugToGo1;
+	case Status::go2:
+		return m_PlugToGo2;
+	case Status::toggle:
+		return PlugToToggle();
+	default:
+		throw std::invalid_argument( "Unknown Switch::Status enumeration value!" );
+	}
+}
+
+int NoSlipSwitch_Imp::Slot( int slot, std::shared_ptr<TrackBuilder> pTrack, EndType trackend, bool connectAnonymous )
+{
+	const int retval = Connector_Imp::Slot( slot, pTrack, trackend, connectAnonymous );
+
+	if( IsComplete() ){
+		Set( m_Status, false );
+	}
+
+	return retval;
+}
+
+void NoSlipSwitch_Imp::RegisterSockets( SocketRegistry& modul ){
+	Connector_Imp::RegisterSockets( modul );
+
+	modul.RegisterPlug( m_PlugToGo1 );
+	modul.RegisterPlug( m_PlugToGo2 );
+	modul.ConnectJack( m_JackOnGo1 );
+	modul.ConnectJack( m_JackOnGo2 );
+}
+
+void NoSlipSwitch_Imp::UnregisterSockets( SocketRegistry& modul ){
+	modul.RemoveJack( m_JackOnGo2 );
+	modul.RemoveJack( m_JackOnGo1 );
+	modul.UnRegisterPlug( m_PlugToGo2 );
+	modul.UnRegisterPlug( m_PlugToGo1 );
+
+	Connector_Imp::UnregisterSockets( modul );
+}
+
+int NoSlipSwitch_Imp::CountPlugs() const{
+	return	m_PlugToGo1.CountPlugs() + 
+			m_PlugToGo2.CountPlugs() + 
+			Connector_Imp::CountPlugs();
+}
+
+int NoSlipSwitch_Imp::CountJacks() const noexcept{
+	return Connector_Imp::CountJacks() + 3;
+}
+
+const Plug & NoSlipSwitch_Imp::_GetPlug( int idx ) const{
+	if( idx < m_PlugToGo1.CountPlugs() )
+		return m_PlugToGo1.GetPlug( idx );
+
+	idx -= m_PlugToGo1.CountPlugs();
+	if( idx < m_PlugToGo2.CountPlugs() )
+		return m_PlugToGo2.GetPlug( idx );
+
+	idx -= m_PlugToGo2.CountPlugs();
+	return Connector_Imp::_GetPlug( idx );
+}
+
+const Jack & NoSlipSwitch_Imp::_GetJack( int idx ) const{
+	switch( idx ){
+	case 0:
+		return m_JackOnGo1;
+	case 1:
+		return m_JackOnGo2;
+	case 3:
+		return JackOnChange();
+	default:
+		std::ostringstream stream;
+		stream << "Out of range!" << std::endl;
+		stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
+		throw std::out_of_range( stream.str() );
+	}
+}
+
+std::string ToString( NoSlipSwitch::SlotNames slotName ){
+	switch( slotName ){
+	case NoSlipSwitch::SlotNames::slot_none:
+		return "slot_none";
+	case NoSlipSwitch::SlotNames::slot_0:
+		return "slot_0";
+	case NoSlipSwitch::SlotNames::slot_1:
+		return "slot_1";
+	default:
+		assert( !"Unknown Switch::SlotNames enumerator!" );
+		return "unknown";
+	}
 }
 ///////////////////////////////////////
 SingleSlipSwitch_Imp::SingleSlipSwitch_Imp()

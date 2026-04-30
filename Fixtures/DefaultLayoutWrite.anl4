@@ -410,7 +410,7 @@
 							</Frame>
 							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
 							<AngularVelocity dx="1.36845175e-08_1/s" dy="-1.14091392e-07_1/s" dz="2.05635828e-08_1/s"/>
-							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0" bRailed="false">
 								<Frame>
 									<Position x="0.20m" y="-0.15m" z="1.63m"/>
 									<Vector dx="1" dy="2.906767e-14" dz="1.369575e-06"/>
@@ -432,7 +432,7 @@
 							</Frame>
 							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
 							<AngularVelocity dx="6.94340363e-10_1/s" dy="1.35043251e-06_1/s" dz="8.64153714e-12_1/s"/>
-							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0" bRailed="false">
 								<Frame>
 									<Position x="-6.71m" y="-0.15m" z="1.45m"/>
 									<Vector dx="1" dy="-1.429616e-15" dz="-2.936942e-08"/>
@@ -454,7 +454,7 @@
 							</Frame>
 							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
 							<AngularVelocity dx="6.94155455e-10_1/s" dy="1.00908153e-06_1/s" dz="8.6454368e-12_1/s"/>
-							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0" bRailed="false">
 								<Frame>
 									<Position x="-27.51m" y="-0.15m" z="1.45m"/>
 									<Vector dx="1" dy="4.638858e-14" dz="9.529876e-07"/>
@@ -476,7 +476,7 @@
 							</Frame>
 							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
 							<AngularVelocity dx="1.41540909e-07_1/s" dy="1.01250919e-06_1/s" dz="-3.82882703e-08_1/s"/>
-							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0" bRailed="false">
 								<Frame>
 									<Position x="-48.31m" y="-0.15m" z="1.45m"/>
 									<Vector dx="1" dy="4.620999e-14" dz="9.518359e-07"/>
@@ -498,7 +498,7 @@
 							</Frame>
 							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
 							<AngularVelocity dx="-8.78479369e-08_1/s" dy="4.04532443e-07_1/s" dz="-6.55967725e-08_1/s"/>
-							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0" bRailed="false">
 								<Frame>
 									<Position x="-69.11m" y="-0.15m" z="1.45m"/>
 									<Vector dx="1" dy="9.670778e-14" dz="1.989241e-06"/>
@@ -520,7 +520,7 @@
 							</Frame>
 							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
 							<AngularVelocity dx="1.61750165e-07_1/s" dy="1.00829925e-06_1/s" dz="-6.88002686e-08_1/s"/>
-							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0" bRailed="false">
 								<Frame>
 									<Position x="-89.91m" y="-0.22m" z="1.45m"/>
 									<Vector dx="0.9999946" dy="0.003275753" dz="1.423073e-06"/>
@@ -542,7 +542,7 @@
 							</Frame>
 							<Velocity dx="0km/h" dy="0km/h" dz="0km/h"/>
 							<AngularVelocity dx="-3.03623793e-09_1/s" dy="1.32813659e-06_1/s" dz="-8.7715037e-08_1/s"/>
-							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0" bRailed="false">
 								<Frame>
 									<Position x="-110.71m" y="-0.29m" z="1.45m"/>
 									<Vector dx="0.9999957" dy="0.002936698" dz="1.421441e-06"/>
@@ -564,7 +564,7 @@
 							</Frame>
 							<Velocity dx="0.36km/h" dy="-0.06km/h" dz="0km/h"/>
 							<AngularVelocity dx="1.61073622e-05_1/s" dy="1.52708822e-06_1/s" dz="0.00177956652_1/s"/>
-							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0" bRailed="false">
 								<Frame>
 									<Position x="-131.08m" y="-0.32m" z="1.48m"/>
 									<Vector dx="0.9995891" dy="-0.02370598" dz="-0.01611335"/>
@@ -586,7 +586,7 @@
 							</Frame>
 							<Velocity dx="0.32km/h" dy="-0.19km/h" dz="0km/h"/>
 							<AngularVelocity dx="7.07485306e-05_1/s" dy="-3.9511986e-05_1/s" dz="0.0018734585_1/s"/>
-							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0">
+							<WheelFrame brake="0" couplingNorthActivated="false" id="0" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" couplingNorthActivated="false" couplingSouthActivated="false" target_velocity="0km/h" thrust="0" brake="0" bRailed="false">
 								<Frame>
 									<Position x="-151.29m" y="3.93m" z="1.81m"/>
 									<Vector dx="0.9242166" dy="-0.3815286" dz="-0.01611339"/>

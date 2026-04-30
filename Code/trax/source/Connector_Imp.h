@@ -36,6 +36,7 @@ namespace trax{
 							public JackEnumerator{
 	public:
 		Connector_Imp( int cntSlots );
+		~Connector_Imp();
 
 		bool IsValid() const noexcept override;
 

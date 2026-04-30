@@ -443,6 +443,52 @@ namespace trax{
 	};
 
 
+	/// \brief A no slip switch is made from two tracks that form a crossing with no
+	/// possibility to divert the route. The two tracks are expected to cross each other.
+	/// There are only two crossing tracks:
+    /// \verbatim
+	/// 
+	/// in
+	/// 
+    /// X
+	/// 
+	/// out
+	/// 
+    ///\endverbatim
+	/// The NoSlipSwitch is a special case of a switch that has no diverging track. It 
+	/// can be used for crossing tracks, since it has two status, go1 and go2, which don't
+	/// mean any reconnection, but technically allow for the one or the other track
+	/// to be used by a rolling stock.
+	struct NoSlipSwitch : virtual Connector{
+
+		/// \brief Makes a standard NoSlipSwitch object.
+		static dclspc std::unique_ptr<NoSlipSwitch> Make() noexcept;
+		static dclspc std::shared_ptr<NoSlipSwitch> Cast( std::shared_ptr<Connector> pConnector ) noexcept;
+		enum SlotNames{
+			slot_none = -1,
+			slot_0,		///< first straight track end
+			slot_1,		///< second straight track end
+			slot_count
+		};
+
+
+		/// \brief Sets the center of the switch.
+		virtual void SetCenter( const spat::Frame<Length,One>& center ) = 0;
+
+
+		/// \brief Gets a Jack that pulses its Plug if the specified Status is set. 
+		virtual Jack& JackOn( Status status ) = 0;
+
+
+		/// \brief Gets a Plug that switches to the specified Status. 
+		virtual MultiPlug& PlugTo( Status status ) = 0;
+	};
+
+
+	/// \brief Makes a string from the SlotName
+	dclspc std::string ToString( NoSlipSwitch::SlotNames slotName );
+
+
 	/// \brief A single slip switch is made from five tracks that form a crossing
 	/// with the possibility to divert the route to connect the two narrow (incoming)
 	/// tracks.

@@ -180,28 +180,32 @@ namespace trax{
 	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> dclspc FindTrackEnds( const TrackSystem& system, const spat::Sphere<Length>& area, bool sort = false );
 
 
-	/// \brief Finds all tracks that run trough an area.
-	/// 
+	/// @name FindTrackLoc Find Track Locations
+	/// \brief Finds all tracks that run trough an area or got hit by a ray.
+	/// @{
+
 	/// \param system Track system with tracks to evaluate.
 	/// \param area Spherical area to detect tracks in.
 	/// \param sort If true the list gets sorted by distance to the center of the area (closest first). 
-	/// \return A list with track Locations as well as their distance from the area center.
+	/// \return A list with track Locations as well as their distance from the area center.	
 	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackSystem& system, const spat::Sphere<Length>& area, bool sort = false );
+	
 
+	/// \param system Track system with tracks to evaluate.
+	/// \param area Spherical area to detect tracks in.
 	Location dclspc FindTrackLocation( const TrackSystem& system, const spat::Sphere<Length>& area );
 	
 
-	/// \brief Finds all tracks that got hit by a ray.
-	/// 
 	/// \param system Track system with tracks to evaluate.
 	/// \param ray A line starting at ray.P and running in the ray.T direction ad infinitum.
 	/// \param gauge If this is > 0_m it is used as the width of a ribbon to hit, also defined 
-	/// by the track's up direction. 
-	/// If <= 0_m the track's Section gauge is evaluated for a width of the track.
+	/// by the track's up direction. If <= 0_m the track's Section gauge is evaluated for a 
+	/// width of the track.
 	/// \param sort If true the list gets sorted by distance to ray.P (closest first). 
 	/// \return A list with track Locations as well as their distance from the ray's starting 
 	/// point.
 	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackSystem& system, const spat::VectorBundle<Length,One>& ray, Length gauge = 0_m, bool sort = false );
+	/// @}
 	
 
 	/// \brief Searches open track ends inside an area around a given track end and connects to 

@@ -74,8 +74,10 @@ namespace trax{
 	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> dclspc FindTrackEnds( const TrackCollection& collection, const spat::Sphere<Length>& area, bool sort = false );
 
 
-	/// \brief Finds all tracks that run trough an area.
-	/// 
+	/// @name FindTrackLoc Find Track Locations
+	/// \brief Finds all tracks that run trough an area or got hit by a ray.
+	/// @{
+	
 	/// \param collection Track collection with tracks to evaluate.
 	/// \param area Spherical area to detect tracks in.
 	/// \param sort If true the list gets sorted by distance to the center of the area (closest first). 
@@ -83,14 +85,13 @@ namespace trax{
 	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackCollection& collection, const spat::Sphere<Length>& area, bool sort = false );
 	
 
-	/// \brief Finds all tracks that got hit by a ray.
-	/// 
 	/// \param collection Track collection with tracks to evaluate.
 	/// \param ray A line starting at ray.P and running in the ray.T direction ad infinitum.
 	/// \param gauge If this is > 0_m it is used as the width of a ribbon to hit, also defined by the track's up direction. 
 	/// \param sort If true the list gets sorted by distance to ray.P (closest first). 
 	/// \return A list with track Locations as well as their distance from the ray's starting point.
 	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackCollection& collection, const spat::VectorBundle<Length,One>& ray, Length gauge, bool sort = false );
+	/// @}
 
 
 	/// \brief Moves a track so that one of it's ends aligns to another track end in a collection.

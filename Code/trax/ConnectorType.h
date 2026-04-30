@@ -39,6 +39,7 @@ namespace trax{
 		NarrowSwitch,
 		TwoWaySwitch,		///<
 		ThreeWaySwitch,
+		NoSlipSwitch,
 		SingleSlipSwitch,
 		DoubleSlipSwitch,
 

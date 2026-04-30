@@ -78,6 +78,11 @@ Connector_Imp::Connector_Imp( int cntSlots )
 	m_PlugToToggle.Reference( "name", "PlugToToggle" );
 }
 
+Connector_Imp::~Connector_Imp()
+{
+	Clear();
+}
+
 bool Connector_Imp::IsValid() const noexcept
 {
 	return Check();

@@ -73,6 +73,8 @@ static void WriteBogieContent( boost::property_tree::ptree& ptBogie, const Bogie
 static void WriteWheelFrameContent( boost::property_tree::ptree& ptWheelFrame, const WheelFrame& wheelFrame )
 {
 	WriteBogieContent( ptWheelFrame, wheelFrame );
+
+	ptWheelFrame.add( "<xmlattr>.bRailed", wheelFrame.IsRailed() );
 }
 
 boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const RailRunner& railRunner ){
