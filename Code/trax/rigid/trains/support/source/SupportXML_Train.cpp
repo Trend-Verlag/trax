@@ -105,9 +105,6 @@ void Read( const boost::property_tree::ptree& pt, Scene& scene, Bogie& bogie )
 {
 	AttributesToReferences( pt, bogie );
 
-	bogie.TargetVelocity( pt.get( "<xmlattr>.target_velocity", 0_kmIh ) );
-	bogie.Thrust( pt.get( "<xmlattr>.thrust", 0_1 ) );
-	bogie.Brake( pt.get( "<xmlattr>.brake", 0_1 ) );
 	if( pt.get( "<xmlattr>.couplingNorthActivated", false ) )
 		bogie.ActivateCoupling( EndType::north );
 	if( pt.get( "<xmlattr>.couplingSouthActivated", false ) )
@@ -163,7 +160,9 @@ void Read( const boost::property_tree::ptree& pt, Scene& scene, WheelFrame& whee
 {
 	Read( pt, scene, static_cast<Bogie&>(wheelFrame) );
 
-	// ...
+	wheelFrame.TargetVelocity( pt.get( "<xmlattr>.target_velocity", 0_kmIh ) );
+	wheelFrame.Thrust( pt.get( "<xmlattr>.thrust", 0_1 ) );
+	wheelFrame.Brake( pt.get( "<xmlattr>.brake", 0_1 ) );
 }
 
 }

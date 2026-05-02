@@ -206,7 +206,7 @@ namespace trax{
 			for( char const* pName : names )
 			{
 				std::string name{ pName };
-				pt.add( "<xmlattr>." + name, refInterface.Reference( name ) );
+				pt.put( "<xmlattr>." + name, refInterface.Reference( name ) );
 			}
 		}
 

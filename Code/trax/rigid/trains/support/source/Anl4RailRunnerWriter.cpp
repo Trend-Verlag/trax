@@ -49,9 +49,6 @@ static void WriteBogieContent( boost::property_tree::ptree& ptBogie, const Bogie
 {
 	ptBogie.add( "<xmlattr>.couplingNorthActivated", bogie.IsActivated( EndType::north ) );
 	ptBogie.add( "<xmlattr>.couplingSouthActivated", bogie.IsActivated( EndType::south ) );
-	ptBogie.add( "<xmlattr>.target_velocity", bogie.TargetVelocity() );
-	ptBogie.add( "<xmlattr>.thrust", bogie.Thrust() );
-	ptBogie.add( "<xmlattr>.brake", bogie.Brake() );
 
 	spat::Frame<Length,One> BodyFrame;
 	bogie.GetGestalt().GetFrame( BodyFrame );
@@ -74,6 +71,9 @@ static void WriteWheelFrameContent( boost::property_tree::ptree& ptWheelFrame, c
 {
 	WriteBogieContent( ptWheelFrame, wheelFrame );
 
+	ptWheelFrame.add( "<xmlattr>.target_velocity", wheelFrame.TargetVelocity() );
+	ptWheelFrame.add( "<xmlattr>.thrust", wheelFrame.Thrust() );
+	ptWheelFrame.add( "<xmlattr>.brake", wheelFrame.Brake() );
 	ptWheelFrame.add( "<xmlattr>.bRailed", wheelFrame.IsRailed() );
 }
 

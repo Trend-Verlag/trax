@@ -410,7 +410,7 @@ void PhysX_Scene::StartStep( Time dt ) noexcept
 	Scene().simulate(static_cast<physx::PxReal>(_s(dt)));
 }
 
-void PhysX_Scene::Update( Time dt ) noexcept
+void PhysX_Scene::Update( Time dt )
 {
 	for( const auto& jnf : m_TrackJoints )
 		jnf->Update( dt );

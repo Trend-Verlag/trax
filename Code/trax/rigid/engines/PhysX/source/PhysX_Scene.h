@@ -164,7 +164,7 @@ namespace trax
 	
 	protected:
 		void StartStep( Time dt = fixed_timestep ) noexcept override;
-		void Update( Time dt = fixed_timestep ) noexcept override;
+		void Update( Time dt = fixed_timestep ) override;
 		bool EndStep() noexcept override;
 
 	private:
