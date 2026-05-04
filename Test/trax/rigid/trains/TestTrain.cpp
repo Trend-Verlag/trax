@@ -284,8 +284,11 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation6, TrainFixture )//VisualDebugger
 	BOOST_CHECK_EQUAL( pTrain->GetNumberOfComponents(), 4 );
 	// (79_m + (2*79_m + 2*0.5_m) + (11.6_m + 9 * 13.2_m + 9 * 2 * 0.4_m) + (2*11.6_m + 9 * 13.2_m + 10 * 2 * 0.4_m) +3*(0.5_m + 0.4_m))
 	Length theoreticalLength = 79_m + 159_m + 150_m + 137.6_m + 2.7_m;
+	Length cumulatedDistances = 2 * 0.5_m + 9 * 2 * 0.4_m + 10 * 2 * 0.4_m + 3 * ( 0.5_m + 0.4_m );
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::max ), theoreticalLength, 0.1 );
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::actual ), theoreticalLength, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::half ), theoreticalLength - cumulatedDistances/2, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::min ), theoreticalLength - cumulatedDistances, 0.1 );
 
 	//m_Location.PutOn( m_pTrack5, TrackLocation{ m_pTrack5->GetLength() - 10_m, true } );
 	pTrain->Rail( m_Location );
@@ -295,6 +298,7 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation6, TrainFixture )//VisualDebugger
 
 	BOOST_REQUIRE( pTrain->IsValid() );
 	BOOST_REQUIRE( pTrain->IsRailed() );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::actual ), theoreticalLength, 0.1 );
 	BOOST_CHECK_EQUAL( pTrain->TargetVelocity(), 10_mIs );
 	BOOST_CHECK_EQUAL( pTrain->Thrust(), 0.75 );
 	BOOST_CHECK_EQUAL( pTrain->Brake(), 0.5 );
@@ -360,6 +364,52 @@ BOOST_FIXTURE_TEST_CASE( testTrainCreation7, TrainFixtureVisualDebugger )
 
 	BOOST_CHECK( pTrain->IsRailed() );
 	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetVelocity(), 5_mIs, 1 );
+}
+
+//BOOST_FIXTURE_TEST_CASE( testTrainInTrain, TrainFixture ) //VisualDebugger
+BOOST_FIXTURE_TEST_CASE( testTrainInTrain, TrainFixtureVisualDebugger )
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "CompoundTrain2.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+	BOOST_CHECK( pTrain->IsValid() );
+
+	Length cumulatedDistances = 3 * 2 * 0.4_m;
+	Length theoreticalLength = 4*13.2_m + cumulatedDistances;
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::max ), theoreticalLength, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::actual ), theoreticalLength, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::half ), theoreticalLength - cumulatedDistances/2, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::min ), theoreticalLength - cumulatedDistances, 0.1 );
+
+	pTrain->Rail( m_Location );
+
+	BOOST_REQUIRE( pTrain->IsValid() );
+	BOOST_REQUIRE( pTrain->IsRailed() );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::actual ), theoreticalLength, 0.1 );
+}
+
+//BOOST_FIXTURE_TEST_CASE( testTrainInTrain2, TrainFixture ) //VisualDebugger
+BOOST_FIXTURE_TEST_CASE( testTrainInTrain2, TrainFixtureVisualDebugger )
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "CompoundTrain3.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+	BOOST_CHECK( pTrain->IsValid() );
+
+	Length cumulatedDistances = 3 * 2 * 0.4_m;
+	Length theoreticalLength = 4*13.2_m + cumulatedDistances;
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::max ), theoreticalLength, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::actual ), theoreticalLength, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::half ), theoreticalLength - cumulatedDistances/2, 0.1 );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::min ), theoreticalLength - cumulatedDistances, 0.1 );
+
+	pTrain->Rail( m_Location );
+
+	BOOST_REQUIRE( pTrain->IsValid() );
+	BOOST_REQUIRE( pTrain->IsRailed() );
+	BOOST_CHECK_CLOSE_DIMENSION( pTrain->GetLength( TrainComponent::DistanceType::actual ), theoreticalLength, 0.1 );
 }
 
 BOOST_AUTO_TEST_SUITE_END() // TrainCreationTests

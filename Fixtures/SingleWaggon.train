@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<Train name="Single Waggon" id="1">
+  <RollingStock name="Waggon1" reference="DR_Eas5951-EpIV_SK2-v8.rollingstock" orientation="para"/>
+</Train>
