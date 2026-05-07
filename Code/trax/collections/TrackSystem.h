@@ -235,14 +235,18 @@ namespace trax{
 	/// \param maxDistance A threshold for the distance to search track ends around the to be 
 	/// connected end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
+	/// \throws std::invalid_argument If the end type is not recocnised.
+	/// \throws std::runtime_error If snapping failed (e.g. due to invalid track).
+	/// @{
+	/// 
 	/// \return The other track ends, the track was connected to, pair.first for front and 
 	/// pair.second for back end; or { nullptr, EndType::none } if no suitable track 
 	/// end was found.
-	/// \throws std::invalid_argument If the end type is not recocnised.
-	/// \throws std::runtime_error If snapping failed (e.g. due to invalid track).
 	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc ConnectAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
 
+	/// \return A Connector if needed since a track end already was connected.
 	std::shared_ptr<Connector> dclspc ConnectAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Track::TrackEnd toTrackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
+	/// @}
 
 
 	/// \brief A decorator for TrackSystems.

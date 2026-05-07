@@ -772,7 +772,7 @@ inline bool TrackJoint<Valtype>::SetMovingBody( const spat::Frame<Valtype>& body
 		thresholdTViolated = true;
 		m_Dims = 0;
 		m_LimDims = 0;
-		std::clog << Verbosity::detailed << "Trackjoint: thresholdTViolated violated!" << std::endl;
+		std::clog << Verbosity::detailed << "Trackjoint: thresholdTViolated violated! (" << eN.Length() << "," << eB.Length() << ")  > " << thresholdT << std::endl;
 		return false;
 	}
 	else
@@ -783,7 +783,7 @@ inline bool TrackJoint<Valtype>::SetMovingBody( const spat::Frame<Valtype>& body
 		thresholdNViolated = true;
 		m_Dims = 0;
 		m_LimDims = 0;
-		std::clog << Verbosity::detailed << "Trackjoint: thresholdNViolated violated!" << std::endl;
+		std::clog << Verbosity::detailed << "Trackjoint: thresholdNViolated violated! (" << eT.Length() << "," << eB.Length() << ")  > " << thresholdN << std::endl;
 		return false;
 	}
 	else
@@ -795,7 +795,7 @@ inline bool TrackJoint<Valtype>::SetMovingBody( const spat::Frame<Valtype>& body
 		thresholdBViolated = true;
 		m_Dims = 0;
 		m_LimDims = 0;
-		std::clog << Verbosity::detailed << "Trackjoint: thresholdBViolated violated!" << std::endl;
+		std::clog << Verbosity::detailed << "Trackjoint: thresholdBViolated violated! (" << eT.Length() << "," << eN.Length() << ") > " << thresholdB << std::endl;
 		return false;
 	}
 	else

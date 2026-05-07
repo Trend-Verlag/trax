@@ -27,12 +27,11 @@
 
 #include "Bogie_Imp.h"
 
-#include "trax/rigid/Scene.h"
-#include "../WheelFrame.h"
 #include "trax/rigid/Gestalt.h"
 #include "trax/rigid/Joint.h"
-
-#include "dim/support/DimSupportStream.h"
+#include "trax/rigid/Scene.h"
+#include "trax/rigid/trains/WheelFrame.h"
+#include "trax/support/TraxSupportStream.h"
 
 #include <iostream>
 
@@ -971,8 +970,11 @@ bool Bogie_Imp::Couple( EndType end, Bogie& with, EndType withEnd, bool btrigger
 	thisCoupling.pCoupling->SetName( "Coupling" );
 	thisCoupling.pCoupling->SetLength( GetCouplingDistance( {*this,end}, {with,withEnd} ) );
 	Length couplinglength = thisCoupling.pCoupling->GetLength();
-	if( couplinglength > 5_m )
+	if( couplinglength > 5_m ){
 		std::clog << Verbosity::normal << "Very long coupling length: " << couplinglength << " is this intended?" << std::endl;
+		std::clog << Verbosity::detailed << "Trying to couple Bogie: " << Reference( "name" ) << " ID(" << ID() << ") " << end 
+			<< " with Bogie: " <<  Reference( "name" ) << " ID(" << ID() << ") " << withEnd << std::endl;
+	}
 
 	thisCoupling.bActivated = false;
 	thatCoupling.bActivated = false;
