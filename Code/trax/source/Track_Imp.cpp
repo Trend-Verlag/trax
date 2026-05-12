@@ -799,15 +799,20 @@ void Track_Imp::Connect(
 }
 
 void Track_Imp::Disconnect( EndType thisend, bool oneSided ){
-	if( thisend == EndType::any ){
+	if( thisend == EndType::both ){
 		Disconnect( EndType::north, oneSided );
+		Disconnect( EndType::south, oneSided );
+		return;
+	}
+
+	if( thisend == EndType::any ){
 		Disconnect( EndType::south, oneSided );
 		return;
 	}
 
 	if( thisend == EndType::north ){
 		if( m_TrackFront.first ){
-			if( !oneSided ){
+			if( !oneSided && m_TrackFront.first.get() == this ){
 				if( m_TrackFront.second == EndType::north ){
 					m_TrackFront.first->m_TrackFront.first.reset();
 
@@ -830,7 +835,7 @@ void Track_Imp::Disconnect( EndType thisend, bool oneSided ){
 	}
 	else if( thisend == EndType::south ){
 		if( m_TrackEnd.first ){
-			if( !oneSided ){
+			if( !oneSided && m_TrackEnd.first.get() == this ){
 				if( m_TrackEnd.second == EndType::north ){
 					m_TrackEnd.first->m_TrackFront.first.reset();
 

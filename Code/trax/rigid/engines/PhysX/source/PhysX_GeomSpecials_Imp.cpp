@@ -527,6 +527,7 @@ PhysX_ConvexMesh::PhysX_ConvexMesh( const PhysX_Scene& scene )
 	: PhysX_GeomBase_Imp	{ scene.EngineMetersPerUnit() }
 	, m_Scene				{ scene }
 	, m_ConvexMesGeometry	{}
+	, m_Volume				{ -1_m3 }
 {
 }
 
@@ -562,9 +563,10 @@ spat::Box<Length> PhysX_ConvexMesh::GetExtent() const noexcept{
 
 Volume PhysX_ConvexMesh::GetVolume() const noexcept
 {
-	assert( !"PhysX_ConvexMesh::GetVolume(): Not implemented yet!" );
-	std::cout << Verbosity::verbose << "PhysX_ConvexMesh::GetVolume(): Not implemented yet!" << std::endl;
-	return 0_m3;
+	if( m_Volume < 0_m3 && m_ConvexMesGeometry.convexMesh )
+		m_Volume = _m3( m_EngineMetersPerUnit * m_EngineMetersPerUnit * m_EngineMetersPerUnit * CalculateVolume( *m_ConvexMesGeometry.convexMesh ) );
+
+	return m_Volume;
 }
 
 bool PhysX_ConvexMesh::Create( const std::vector<Position<Length>>& points ){
@@ -665,6 +667,38 @@ bool PhysX_ConvexMesh::CookConvexMesh(
 	physx::PxDefaultMemoryInputData input(buf.getData(), buf.getSize());
 	m_ConvexMesGeometry.convexMesh = m_Scene.Simulator().Physics().createConvexMesh(input);
 	return true;
+}
+
+float PhysX_ConvexMesh::CalculateVolume( physx::PxConvexMesh& convexMesh ) noexcept
+{
+    const physx::PxU32 numPolygons = convexMesh.getNbPolygons();
+    const physx::PxVec3* vertices  = convexMesh.getVertices();
+
+    float volume = 0.0f;
+
+    for (physx::PxU32 i = 0; i < numPolygons; i++)
+    {
+        physx::PxHullPolygon polygon;
+        convexMesh.getPolygonData(i, polygon);
+
+        const physx::PxU8* indexBuffer = convexMesh.getIndexBuffer();
+
+        // Fan-triangulate the polygon and accumulate signed tet volumes
+        physx::PxU32 i0 = indexBuffer[polygon.mIndexBase];
+        for( physx::PxU16 j = 1; j < polygon.mNbVerts - 1; j++ )
+        {
+            physx::PxU16 i1 = indexBuffer[polygon.mIndexBase + j];
+            physx::PxU16 i2 = indexBuffer[polygon.mIndexBase + j + 1];
+
+            const physx::PxVec3& a = vertices[i0];
+            const physx::PxVec3& b = vertices[i1];
+            const physx::PxVec3& c = vertices[i2];
+
+            volume += a.dot(b.cross(c)) / 6.0f;
+        }
+    }
+
+    return std::abs( volume );
 }
 ///////////////////////////////////////
 PhysX_TriangleMesh::PhysX_TriangleMesh( const PhysX_Scene& scene )

@@ -217,9 +217,11 @@ namespace trax{
 	private:
 		const PhysX_Scene&			m_Scene;
 		physx::PxConvexMeshGeometry m_ConvexMesGeometry;
+		mutable Volume				m_Volume;
 
 		bool CookConvexMesh( const std::vector<Position<Length>>& points );
 		bool CookConvexMesh( const std::vector<Position<Length>>& points, const std::vector<int>& indices );
+		static float CalculateVolume( physx::PxConvexMesh& fromConvexMesh ) noexcept;
 	};
 
 

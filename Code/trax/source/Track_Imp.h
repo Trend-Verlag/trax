@@ -177,7 +177,7 @@ namespace trax{
 		// TrackBuilder:
 		void Connect( std::pair<std::shared_ptr<TrackBuilder>,EndType> thisEnd, std::pair<std::shared_ptr<TrackBuilder>,EndType> othersEnd ) override;
 
-		void Disconnect( EndType thisendbool = EndType::any, bool oneSided = false ) override;
+		void Disconnect( EndType thisendbool = EndType::both, bool oneSided = false ) override;
 
 
 		void Attach( std::shared_ptr<const Curve> pCurve, common::Interval<Length> curveSegment = {0_m,+infinite__length} ) override;

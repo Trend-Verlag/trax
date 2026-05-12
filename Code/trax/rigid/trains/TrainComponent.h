@@ -285,6 +285,9 @@ namespace trax{
 
 
 	/// \brief Gets the center frame of this TrainComponent.
+	/// \returns the center frame of this TrainComponent.
+	/// \throws std::logic_error if the TrainComponent is not railed.
+	/// \throws std::invalid_argument if the TrainComponent is not valid.
 	dclspc spat::Frame<Length,One> GetCenter( const TrainComponent& ofTrainComponent, TrainComponent::DistanceType distance = TrainComponent::DistanceType::actual );
 
 

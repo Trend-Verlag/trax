@@ -149,7 +149,7 @@ Train* CommonParent( const TrainComponent& a, const TrainComponent& b ) noexcept
 spat::Frame<Length,One> GetCenter( const TrainComponent& ofTrainComponent, TrainComponent::DistanceType distance )
 {
 	if( !ofTrainComponent.IsValid() )
-		throw std::logic_error( "TrainComponent::GetCenter: cannot get center of an invalid component." );
+		throw std::invalid_argument( "TrainComponent::GetCenter: cannot get center of an invalid component." );
 	if( !ofTrainComponent.IsRailed() )
 		throw std::logic_error( "TrainComponent::GetCenter: cannot get center of a derailed component." );
 	

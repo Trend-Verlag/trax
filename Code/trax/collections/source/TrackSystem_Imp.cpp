@@ -667,6 +667,12 @@ std::shared_ptr<Connector> ConnectAndSnap(
 		!trackEnd.pTrack->GetConnector( trackEnd.end ) )	
 	{
 		Track::TrackEnd wasConnected = toTrackEnd.pTrack->TransitionEnd( toTrackEnd.end );
+		Connector* pConnector = toTrackEnd.pTrack->GetConnector( toTrackEnd.end );
+		Switch* pSwitch = dynamic_cast<Switch*>(pConnector);
+
+		if( pConnector && (!pSwitch || pSwitch->NarrowTrack().first != toTrackEnd.pTrack ) )
+			// We have no option for these for now.
+			return nullptr; 
 
 		Connect( trackEnd, toTrackEnd );
 
@@ -686,9 +692,9 @@ std::shared_ptr<Connector> ConnectAndSnap(
 				Connect( system, otherTrackEnd, maxDistance, maxKink );
 			}
 
-			if( Connector* pConnector = toTrackEnd.pTrack->GetConnector( toTrackEnd.end ); pConnector )
+			if( pConnector )
 			{
-				if( Switch* pSwitch = dynamic_cast<Switch*>(pConnector); pSwitch )
+				if( pSwitch )
 				{
 					if( std::shared_ptr<ThreeWaySwitch> pThreeWaySwitch = ThreeWaySwitch::Make(); pThreeWaySwitch )
 					{
@@ -714,17 +720,16 @@ std::shared_ptr<Connector> ConnectAndSnap(
 			else if( wasConnected.pTrack )
 			// Creating a switch if applicable:
 			{
-				if( std::shared_ptr<Switch> pSwitch = Switch::Make(); pSwitch )
+				if( std::shared_ptr<Switch> pNewSwitch = Switch::Make(); pNewSwitch )
 				{
-					pSwitch->NarrowTrack( toTrackEnd );
-					pSwitch->StraightTrack( wasConnected );
-					pSwitch->DivergedTrack( trackEnd );
-
-					if( pSwitch->Check( maxDistance, maxKink ) )
+					pNewSwitch->NarrowTrack( toTrackEnd );
+					pNewSwitch->StraightTrack( wasConnected );
+					pNewSwitch->DivergedTrack( trackEnd );
+					if( pNewSwitch->Check( maxDistance, maxKink ) )
 					{
-						pSwitch->Normalize();
-						system.GetConnectorCollection()->Add( pSwitch );
-						return pSwitch;
+						pNewSwitch->Normalize();
+						system.GetConnectorCollection()->Add( pNewSwitch );
+						return pNewSwitch;
 					}
 					else
 					{

@@ -38,6 +38,8 @@ namespace trax{
 		const char* TypeName() const noexcept override;
 
 		bool IsValid() const noexcept override;
+
+		bool RemoveIncompleteConnectors() noexcept override;
 	};
 
 }

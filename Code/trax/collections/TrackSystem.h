@@ -244,7 +244,7 @@ namespace trax{
 	/// end was found.
 	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc ConnectAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
 
-	/// \return A Connector if needed since a track end already was connected.
+	/// \return A Connector if needed since a track end already was connected (first). 
 	std::shared_ptr<Connector> dclspc ConnectAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Track::TrackEnd toTrackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
 	/// @}
 

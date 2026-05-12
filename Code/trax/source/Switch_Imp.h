@@ -50,6 +50,8 @@ namespace trax{
 
 		void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) override;
 
+		bool DivertFrom( const Track& track, EndType trackend = EndType::both ) override;
+
 		using Connector_Imp::Slot;
 
 		int Slot( int slot, std::shared_ptr<TrackBuilder> pTrack, EndType trackend, bool connectAnonymous = false ) override;
@@ -167,6 +169,8 @@ namespace trax{
 
 		bool Normalize() override;
 
+		bool IsColocated( bool bStopAtFirstTrack = true, Length maxDistance = infinite__length, Length threshold = epsilon__length ) const override;
+
 		bool IsY( bool bStopAtFirstTrack = true, Length maxDistance = infinite__length, AnglePerLength margin = epsilon__angle / 80_m ) const override;
 
 		bool IsHorizontal( bool bStopAtFirstTrack = true, Length maxDistance = infinite__length ) const override;
@@ -233,6 +237,8 @@ namespace trax{
 
 		bool Normalize() override;
 
+		bool IsColocated( bool bStopAtFirstTrack = true, Length maxDistance = infinite__length, Length threshold = epsilon__length ) const override;
+
 		Status StatusToLeft() const override;
 
 		Status StatusToMiddle() const override;
@@ -269,6 +275,8 @@ namespace trax{
 		void Toggle( bool pulse = true ) override;
 
 		void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) override;
+
+		bool DivertFrom( const Track& track, EndType trackend = EndType::both ) override;
 
 		bool Check( Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
 
@@ -331,6 +339,8 @@ namespace trax{
 		void Toggle( bool pulse = true ) override;
 
 		void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) override;
+
+		bool DivertFrom( const Track& track, EndType trackend = EndType::both ) override;
 
 		bool Check( Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
 
@@ -396,10 +406,11 @@ namespace trax{
 
 		void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) override;
 
+		bool DivertFrom( const Track& track, EndType trackend = EndType::both ) override;
+
 		bool Check( Length e_distance = epsilon__length, Angle e_kink = epsilon__angle, Angle e_twist = epsilon__angle ) const noexcept override;
 
 		void GetCenter( Frame<Length,One>& center ) const noexcept override;
-
 
 
 		// DoubleSlipSwitch

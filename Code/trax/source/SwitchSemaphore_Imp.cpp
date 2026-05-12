@@ -306,8 +306,10 @@ void AlignTo(
 	}
 
 	indicator.GetFrame().FromParent( PoseOne );
+	PoseOne.OrthoNormalize();
 	indicator.LocalFrameForStatus( BinaryIndicator::Status::one, PoseOne );
 	indicator.GetFrame().FromParent( PoseTwo );
+	PoseTwo.OrthoNormalize();
 	indicator.LocalFrameForStatus( BinaryIndicator::Status::two, PoseTwo );
 
 	indicator.JackOnOne().InsertAndAppend( &toSwitch.PlugToGo().Make() );

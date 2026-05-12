@@ -943,7 +943,7 @@ namespace trax
 		/// \param thisEnd What track end to disconnect.
 		/// \param oneSided If true only the connection of this track to another will be removed,
 		/// the other track stays connected to this.
-		virtual void Disconnect( EndType thisEnd = EndType::any, bool oneSided = false ) = 0;
+		virtual void Disconnect( EndType thisEnd = EndType::both, bool oneSided = false ) = 0;
 
 
 		/// \name Attach a Curve

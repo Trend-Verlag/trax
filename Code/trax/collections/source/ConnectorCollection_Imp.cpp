@@ -47,5 +47,23 @@ bool ConnectorCollection_Imp::IsValid() const noexcept
 	return IsValid_Imp( m_Container );
 }
 
+bool ConnectorCollection_Imp::RemoveIncompleteConnectors() noexcept
+{
+	bool bRemoved = false;
+	for( auto iter = m_Container.begin(); iter != m_Container.end(); )
+	{
+		auto& connector = *(iter->second);
+		if( !connector.IsComplete() ){
+			iter = m_Container.erase( iter );
+			bRemoved = true;
+		}
+		else{
+			++iter;
+		}
+	}
+
+	return bRemoved;
+}
+
 }
 

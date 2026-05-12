@@ -241,6 +241,21 @@ namespace trax{
 		virtual bool Normalize() = 0;
 
 
+
+		/// \brief Are the outgoing track make any difference, or are 
+		/// they on top of each other?
+		///
+		/// Especially when working with fixed track samples, the 
+		/// endpoint might colocate on top of each other.
+		/// \param bStopAtFirstTrack If true the test will be done on the shorter length of the
+		/// two outgoing tracks, if maxDistance doesn't provide a narrower limit. Limit the maxDistance
+		/// carefully if you set bStopAtFirstTrack to false.
+		/// \param maxDistance Maximum distance along the outgoing tracks to look for comparison points.
+		/// If there is an open end that would define the maximum distance.
+		/// \threshold distances smaller then threshold are considered colocated.
+		virtual bool IsColocated( bool bStopAtFirstTrack = true, Length maxDistance = infinite__length, Length threshold = epsilon__length ) const = 0;
+
+
 		/// \brief Is this an Y - switch?
 		///
 		/// An Y - switch is a switch with its straight and diverged tracks going in
@@ -412,6 +427,20 @@ namespace trax{
 		/// \brief Rearranges the outgoing tracks if this switch is not normal.
 		/// \return True if the track was normal at in the first palce.
 		virtual bool Normalize() = 0;
+
+
+		/// \brief Are the outgoing tracks make any difference, or are 
+		/// they on top of each other?
+		///
+		/// Especially when working with fixed track samples, the 
+		/// endpoint might colocate on top of each other.
+		/// \param bStopAtFirstTrack If true the test will be done on the shorter length of the
+		/// two outgoing tracks, if maxDistance doesn't provide a narrower limit. Limit the maxDistance
+		/// carefully if you set bStopAtFirstTrack to false.
+		/// \param maxDistance Maximum distance along the outgoing tracks to look for comparison points.
+		/// If there is an open end that would define the maximum distance.
+		/// \threshold distances smaller then threshold are considered colocated.
+		virtual bool IsColocated( bool bStopAtFirstTrack = true, Length maxDistance = infinite__length, Length threshold = epsilon__length ) const = 0;
 
 
 		/// \returns the status that would lead over the left outgoing track.

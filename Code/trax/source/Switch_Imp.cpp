@@ -170,6 +170,43 @@ void NarrowSwitch_Imp::Set( const Track& trackA, EndType trackendA, const Track&
 	Set( static_cast<Status>(slotA != 0 ? slotA-1 : slotB-1), pulse );
 }
 
+bool NarrowSwitch_Imp::DivertFrom( const Track& track, EndType trackend ){
+	switch( trackend )
+	{
+		case EndType::both:
+		{
+			bool diverted = false;
+			if( DivertFrom( track, EndType::north ) )
+				diverted = true;
+			if( DivertFrom( track, EndType::south ) )
+				diverted = true;
+			return diverted;
+		}
+		case EndType::any:
+			return DivertFrom( track, EndType::south );
+		case EndType::north:
+		case EndType::south:
+		{
+			const int slotToDivert = Slot( track, trackend );
+
+			if( slotToDivert < 0 )
+				return false;
+
+			if( slotToDivert == 0 )
+				throw std::logic_error( "Cannot divert from a narrow track end!" );
+
+			if( slotToDivert == static_cast<int>(Get()) + 1 ){
+				Toggle();
+				return true;
+			}
+			
+			return false;
+		}
+		default:
+			throw std::invalid_argument( "Invalid track end type!" );
+	}
+}
+
 int NarrowSwitch_Imp::Slot( 
 	int slot, 
 	std::shared_ptr<TrackBuilder> pTrack, 
@@ -577,6 +614,17 @@ bool Switch_Imp::Normalize(){
 	return false;
 }
 
+bool Switch_Imp::IsColocated( bool bStopAtFirstTrack, Length maxDistance, Length threshold ) const{
+	Position<Length> EndPosStraight;
+	Position<Length> EndPosDiverged;
+	if( MinimumOutgoingTrackEndpoints( EndPosStraight, EndPosDiverged, bStopAtFirstTrack, maxDistance ) )
+	{
+		return (EndPosDiverged - EndPosStraight).Length() < threshold;
+	}
+
+	throw std::runtime_error( "Switch_Imp::IsColocated call invalid" );
+}
+
 bool Switch_Imp::IsY( bool bStopAtFirstTrack, Length maxDistance, AnglePerLength margin ) const{
 	Position<Length> EndPosStraight;
 	Position<Length> EndPosDiverged;
@@ -839,6 +887,20 @@ bool ThreeWaySwitch_Imp::Normalize(){
 	return false;
 }
 
+bool ThreeWaySwitch_Imp::IsColocated( bool bStopAtFirstTrack, Length maxDistance, Length threshold ) const{
+	Position<Length> EndPosStraight;		
+	Position<Length> EndPosDiverged1;		
+	Position<Length> EndPosDiverged2;		
+	if( MinimumOutgoingTrackEndpoints( EndPosStraight, EndPosDiverged1, EndPosDiverged2 ) )
+	{
+		return	(EndPosDiverged1 - EndPosStraight).Length() < threshold ||
+				(EndPosDiverged2 - EndPosStraight).Length() < threshold ||
+				(EndPosDiverged2 - EndPosDiverged1).Length() < threshold;
+	}
+
+	throw std::runtime_error( "ThreeWaySwitch_Imp::IsColocated call invalid" );
+}
+
 ThreeWaySwitch::Status ThreeWaySwitch_Imp::StatusToLeft() const{
 	Position<Length> EndPosStraight;		
 	Position<Length> EndPosDiverged1;		
@@ -985,6 +1047,12 @@ void NoSlipSwitch_Imp::Set(
 	bool pulse )
 {
 	assert( !"Not implemented yet!" );
+}
+
+bool NoSlipSwitch_Imp::DivertFrom( const Track& track, EndType trackend )
+{
+	assert( !"Not implemented yet!" );
+	return false;
 }
 
 bool NoSlipSwitch_Imp::Check( Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
@@ -1201,6 +1269,12 @@ void SingleSlipSwitch_Imp::Set(
 	bool /*pulse*/ )
 {
 	assert( !"Not implemented yet!" );
+}
+
+bool SingleSlipSwitch_Imp::DivertFrom( const Track& track, EndType trackend )
+{
+	assert( !"Not implemented yet!" );
+	return false;
 }
 
 bool SingleSlipSwitch_Imp::Check( Length e_distance, Angle e_kink, Angle e_twist ) const noexcept
@@ -1473,6 +1547,12 @@ void DoubleSlipSwitch_Imp::Set(
 	bool /*pulse*/)
 {
 	assert( !"Not implemented yet!" );
+}
+
+bool DoubleSlipSwitch_Imp::DivertFrom( const Track& track, EndType trackend )
+{
+	assert( !"Not implemented yet!" );
+	return false;
 }
 
 bool DoubleSlipSwitch_Imp::Check( Length e_distance, Angle e_kink, Angle e_twist ) const noexcept

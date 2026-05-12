@@ -116,7 +116,7 @@ bool Fleet_Imp::Remove( Train* pTrain, bool zeroIDs ){
 			break;
 		}
 	}
-
+	
 	UnregisterBogies( *pTrain );
 
 	return Fleet_Base::Remove( pTrain, zeroIDs );
@@ -241,6 +241,7 @@ void Fleet_Imp::RegisterBogies( const Train& train ) noexcept
 					Bogie* pBogie = &pRollingStock->GetBogie( bindex );
 					if( std::find( m_Bogies.begin(), m_Bogies.end(), pBogie ) == m_Bogies.end() )
 					{
+						std::clog << Verbosity::verbose << "Registering bogie with ID " << pBogie->ID() << " to fleet." << std::endl;
 						m_Bogies.push_back( pBogie );
 					}
 				}
@@ -264,6 +265,7 @@ void Fleet_Imp::UnregisterBogies( const Train& train ) noexcept
 					Bogie* pBogie = &pRollingStock->GetBogie( bindex );
 					if( auto iter = std::find( m_Bogies.begin(), m_Bogies.end(), pBogie ); iter != m_Bogies.end() )
 					{
+						std::clog << Verbosity::verbose << "Unregistering bogie with ID " << pBogie->ID() << " from fleet." << std::endl;
 						m_Bogies.erase( iter );
 					}
 				}

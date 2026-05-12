@@ -273,6 +273,18 @@ namespace trax{
 		virtual void Set( const Track& trackA, EndType trackendA, const Track& trackB, EndType trackendB, bool pulse = true ) = 0;
 
 
+		/// \brief Puts the switch to a state with the track end not targeted for connection.
+		/// 
+		/// If the track end is not connected to the switch, the method does nothing 
+		/// and returns false.
+		/// \param track The track to divert from.
+		/// \param trackend The track end to divert from.
+		/// \returns true if the switch got reset, false if no change was made.
+		/// \throws std::logic_error, if the track end can not get diverted, eg. because
+		/// it is a narrow track.
+		virtual bool DivertFrom( const Track& track, EndType trackend = EndType::both ) = 0;
+
+
 		/// \brief Gets the setting of the switch.
 		virtual Status Get() const = 0;
 
@@ -342,6 +354,8 @@ namespace trax{
 
 
 		/// \brief Releases all the tracks from the slots.
+		///
+		/// Existing connections between tracks will not get changed.
 		virtual void Clear() = 0;
 
 

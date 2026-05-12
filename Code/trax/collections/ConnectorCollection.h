@@ -37,6 +37,9 @@ namespace trax{
 
 		/// \brief Makes a standard ConnectorCollection object.
 		static std::unique_ptr<ConnectorCollection> Make() noexcept;
+
+
+		virtual bool RemoveIncompleteConnectors() noexcept = 0;
 	};
 
 
