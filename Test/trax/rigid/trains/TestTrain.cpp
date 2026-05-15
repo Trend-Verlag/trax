@@ -35,8 +35,9 @@
 #include "trax/rigid/StaticTrack.h"
 #include "trax/collections/TrackSystem.h"
 #include "trax/rigid/trains/support/RollingStockCreator.h"
-#include "trax/rigid/trains/Train.h"
 #include "trax/rigid/trains/support/TrainFileReader.h"
+#include "trax/rigid/trains/RollingStock.h"
+#include "trax/rigid/trains/Train.h"
 #include "trax/rigid/trains/collections/Fleet.h"
 
 #include "dim/DimLimits.h"
@@ -48,6 +49,7 @@ using namespace spat;
 using namespace trax;
 
 BOOST_AUTO_TEST_SUITE(trax_tests)
+
 BOOST_AUTO_TEST_SUITE(TrainCreationTests)
 
 BOOST_FIXTURE_TEST_CASE( testTrainCreation, TrainFixture )
@@ -475,7 +477,6 @@ BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture )
 }
 
 BOOST_AUTO_TEST_SUITE_END() // TrainRunningTests
-
 BOOST_AUTO_TEST_SUITE(TrainCouplingTests)
 
 BOOST_FIXTURE_TEST_CASE( testTrainDecouple, TrainFixture )
@@ -861,6 +862,68 @@ BOOST_FIXTURE_TEST_CASE( testTrainUncoupleCouple2, TrainFixture )
 	BOOST_CHECK( Split.first->GetTrain() || Split.second->GetTrain() );
 }
 
+BOOST_FIXTURE_TEST_CASE( testTrainCoupleWitSingleRollingStock, TrainFixture )
+//BOOST_FIXTURE_TEST_CASE( testTrainCoupleWitSingleRollingStock, TrainFixtureVisualDebugger )
+// Register train with Fleet, auto-couple with rolling stock on track:
+{
+	TrainFileReferenceReader reader{ *m_pScene, FixturePath() };
+	BOOST_REQUIRE( reader( "Cargo.train" ) );
+	std::shared_ptr<Train> pTrain = reader.GetTrain();
+	BOOST_REQUIRE( pTrain );
+
+	std::unique_ptr<Fleet> pFleet = Fleet::Make();
+	m_pScene->Register( *pFleet );
+	pFleet->Add( pTrain );
+
+	pTrain->Rail( m_Location );
+	BOOST_CHECK( !pTrain->IsActivated( EndType::north ) );
+	BOOST_CHECK( !pTrain->IsActivated( EndType::south ) );
+	pTrain->ActivateCoupling( EndType::north );
+	pTrain->ActivateCoupling( EndType::south );
+
+	RollingStockCreator creator{ *m_pScene };
+	RollingStockFileReader rs_reader{ creator, FixturePath() };
+	BOOST_REQUIRE( rs_reader( "BR212_267-9_2cb_SM2.rollingstock" ) );
+	std::shared_ptr<RollingStock> pRollingStock = creator.GetRollingStock();
+	BOOST_REQUIRE( pRollingStock );
+	std::shared_ptr<Train> pTrainSingle = Train::Make();
+	pTrainSingle->Create( *pRollingStock );
+	pFleet->Add( pTrainSingle );
+	pTrainSingle->ActivateCoupling( EndType::north );
+	pTrainSingle->ActivateCoupling( EndType::south );
+	m_Location.Move( pTrain->GetLength() );
+	pRollingStock->Rail( m_Location );
+
+	BOOST_CHECK( pRollingStock->GetTrain() );
+	BOOST_CHECK( pRollingStock->GetTrain() == pTrainSingle.get() );
+
+	Velocity v = 25_kmIh;
+	pTrain->TargetVelocity( v );
+	pTrain->Thrust( 0.75 );
+	pTrain->Brake( 0.75 );
+
+	Length l = pTrain->GetLength();
+	Acceleration a = pTrain->ThrustAbsolute()/2 / pTrain->TotalMass(); // actual thrust gets reduced by velocity and friction ...
+	Time simulationTime = sqrt( 2 * l / a );
+
+	const auto start = std::chrono::steady_clock::now();
+	m_pScene->Loop( simulationTime );
+	const auto end = std::chrono::steady_clock::now();
+
+	const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
+	std::cout << "Duration of simulation: " << duration << "ms; simulates ";
+	std::cout << simulationTime / _ms(duration);
+	std::cout << " times faster than real world time." << std::endl;
+
+	BOOST_CHECK( pTrainSingle->GetTrain() == nullptr );
+	BOOST_CHECK( pTrainSingle->GetNumberOfComponents() == 0 );
+	BOOST_CHECK( pTrain->GetIndexOf( *pTrainSingle ) < 0 );
+
+	BOOST_CHECK( pRollingStock->GetTrain() );
+	BOOST_CHECK( pRollingStock->GetTrain() == pTrain.get() );
+	BOOST_CHECK( pTrain->GetIndexOf( *pRollingStock ) >= 0 );
+}
+
 BOOST_AUTO_TEST_SUITE_END() // TrainCouplingTests
 
 BOOST_AUTO_TEST_SUITE(TrainRailingTests)
@@ -949,5 +1012,6 @@ BOOST_FIXTURE_TEST_CASE( testTrainReRailingOnTooShortATrack2, TrainFixture )
 }
 
 BOOST_AUTO_TEST_SUITE_END() // TrainRailingTests
+
 BOOST_AUTO_TEST_SUITE_END() // trax_tests
 #endif

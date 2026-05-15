@@ -717,7 +717,7 @@ std::shared_ptr<Connector> ConnectAndSnap(
 					}
 				}
 			}
-			else if( wasConnected.pTrack )
+			else if( wasConnected.pTrack && wasConnected.pTrack != trackEnd.pTrack )
 			// Creating a switch if applicable:
 			{
 				if( std::shared_ptr<Switch> pNewSwitch = Switch::Make(); pNewSwitch )

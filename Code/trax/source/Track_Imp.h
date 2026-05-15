@@ -120,7 +120,7 @@ namespace trax{
 		
 		Length ParameterFrom( EndType thisEnd ) const noexcept override;
 
-		bool IsConnected( EndType atend = EndType::any ) const noexcept override;
+		bool IsConnected( EndType atend = EndType::any, bool bDoubleSided = false ) const noexcept override;
 
 		void TNBFrame( Length s, spat::Frame<Length,One>& frame ) const override;
 

@@ -407,8 +407,13 @@ namespace trax
 		virtual common::Interval<Length> Range() const noexcept = 0;
 
 
+		/// \brief Tests for connection status.
+		/// 
+		/// \param atend what track end to examine.
+		/// \param bDoubleSided Only return true if the connection is mutual, i.e.
+		/// if the connected track end is itself connected to this track.
 		/// \returns true if the respective end is connected to another track end.
-		virtual bool IsConnected( EndType atend = EndType::any ) const noexcept = 0;
+		virtual bool IsConnected( EndType atend = EndType::any, bool bDoubleSided = false ) const noexcept = 0;
 
 
 		/// \param s Parameter value 0 <= s <= Length()
@@ -941,9 +946,9 @@ namespace trax
 
 		/// \brief Remove connection from this end.
 		/// \param thisEnd What track end to disconnect.
-		/// \param oneSided If true only the connection of this track to another will be removed,
+		/// \param bOneSided If true only the connection of this track to another will be removed,
 		/// the other track stays connected to this.
-		virtual void Disconnect( EndType thisEnd = EndType::both, bool oneSided = false ) = 0;
+		virtual void Disconnect( EndType thisEnd = EndType::both, bool bOneSided = false ) = 0;
 
 
 		/// \name Attach a Curve

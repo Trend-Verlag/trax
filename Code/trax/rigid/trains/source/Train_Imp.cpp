@@ -627,6 +627,8 @@ void Train_Imp::Append(
 		throw std::invalid_argument( "Train_Imp: component invalid" );
 	if( pComponent->GetTrain() )
 		throw std::invalid_argument( "Train_Imp::Append: component already in train" );
+	if( !IsConcreteEnd( atEnd ) || !IsConcreteEnd( withEnd ) )
+		throw std::invalid_argument( "Train_Imp::Append: invalid end type" );
 
 	if( bCouple && !m_Train.empty() )
 	{
@@ -635,12 +637,14 @@ void Train_Imp::Append(
 	}
 
 	pComponent->SetTrain( this );
-	pComponent->SetOrientation( withEnd == EndType::north ? Orientation::Value::para : Orientation::Value::anti );
-
-	if( atEnd == EndType::north )
+	if( atEnd == EndType::north ){
+		pComponent->SetOrientation( withEnd == EndType::north ? Orientation::Value::anti : Orientation::Value::para );
 		m_Train.push_front( pComponent );
-	else
+	}
+	else{
+		pComponent->SetOrientation( withEnd == EndType::north ? Orientation::Value::para : Orientation::Value::anti );
 		m_Train.push_back( pComponent );
+	}
 
 	ReconnectJacks();
 }
@@ -664,21 +668,47 @@ void Train_Imp::Take(
 {
 	Train_Imp& from_imp = dynamic_cast<Train_Imp&>(from);
 
-	if( withEnd == EndType::north )
+	if( atEnd == EndType::north )
 	{
-		for( auto iter = from_imp.m_Train.begin(); iter != from_imp.m_Train.end(); ++iter )
+		if( withEnd == EndType::north )
 		{
-			(*iter)->SetTrain( nullptr );
-			Append( atEnd, *iter, (*iter)->GetOrientation() );
+			for( auto iter = from_imp.m_Train.begin(); iter != from_imp.m_Train.end(); ++iter )
+			{
+				(*iter)->SetTrain( nullptr );
+				Append( atEnd, *iter, !(*iter)->GetOrientation() );
+			}
 		}
+		else if( withEnd == EndType::south )
+		{
+			for( auto iter = from_imp.m_Train.rbegin(); iter != from_imp.m_Train.rend(); ++iter )
+			{
+				(*iter)->SetTrain( nullptr );
+				Append( atEnd, *iter, (*iter)->GetOrientation() );
+			}
+		}
+		else
+			throw std::invalid_argument( "Train_Imp::Take: invalid end type" );
 	}
-	else if( withEnd == EndType::south )
+	else if( atEnd == EndType::south )
 	{
-		for( auto iter = from_imp.m_Train.rbegin(); iter != from_imp.m_Train.rend(); ++iter )
+		if( withEnd == EndType::north )
 		{
-			(*iter)->SetTrain( nullptr );
-			Append( atEnd, *iter, !(*iter)->GetOrientation() );
+			for( auto iter = from_imp.m_Train.begin(); iter != from_imp.m_Train.end(); ++iter )
+			{
+				(*iter)->SetTrain( nullptr );
+				Append( atEnd, *iter, (*iter)->GetOrientation() );
+			}
 		}
+		else if( withEnd == EndType::south )
+		{
+			for( auto iter = from_imp.m_Train.rbegin(); iter != from_imp.m_Train.rend(); ++iter )
+			{
+				(*iter)->SetTrain( nullptr );
+				Append( atEnd, *iter, !(*iter)->GetOrientation() );
+			}
+		}
+		else
+			throw std::invalid_argument( "Train_Imp::Take: invalid end type" );
 	}
 	else
 		throw std::invalid_argument( "Train_Imp::Take: invalid end type" );

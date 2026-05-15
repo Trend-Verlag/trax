@@ -303,11 +303,18 @@ Length Track_Imp::ParameterFrom( EndType thisEnd ) const noexcept{
 	}
 }
 
-bool Track_Imp::IsConnected( EndType atend ) const noexcept{
+bool Track_Imp::IsConnected( EndType atend, bool bDoubleSided ) const noexcept{
 	if( atend == EndType::any )
-		return IsConnected( EndType::north ) || IsConnected( EndType::south );
+		return IsConnected( EndType::north, bDoubleSided ) || IsConnected( EndType::south, bDoubleSided );
+	if( atend == EndType::both )
+		return IsConnected( EndType::north, bDoubleSided ) && IsConnected( EndType::south, bDoubleSided );
 
-	return (atend == EndType::north && m_TrackFront.first) || (atend == EndType::south && m_TrackEnd.first);
+	if( Track::TrackEnd otherEnd = TransitionEnd( atend ); otherEnd.pTrack == nullptr )
+		return false;
+	else if( bDoubleSided )
+		return otherEnd.pTrack->TransitionEnd( otherEnd.end ).pTrack.get() == this;
+
+	return true;
 }
 
 void Track_Imp::TNBFrame( Length s, Frame<Length,One>& frame ) const{
@@ -812,20 +819,20 @@ void Track_Imp::Disconnect( EndType thisend, bool oneSided ){
 
 	if( thisend == EndType::north ){
 		if( m_TrackFront.first ){
-			if( !oneSided && m_TrackFront.first.get() == this ){
-				if( m_TrackFront.second == EndType::north ){
+			if( !oneSided ){
+				if( m_TrackFront.second == EndType::north && m_TrackFront.first->m_TrackFront.first.get() == this ){
 					m_TrackFront.first->m_TrackFront.first.reset();
 
 					if( m_TrackFront.first->m_pTETFront )
 						m_TrackFront.first->CreateEndTransitionSignal( EndType::north );
 				}
-				else if( m_TrackFront.second == EndType::south ){
+				else if( m_TrackFront.second == EndType::south && m_TrackFront.first->m_TrackEnd.first.get() == this ){
 					m_TrackFront.first->m_TrackEnd.first.reset();
 
 					if( m_TrackFront.first->m_pTETEnd )
 						m_TrackFront.first->CreateEndTransitionSignal( EndType::south );
 				}
-			}
+			} 
 
 			m_TrackFront.first.reset();
 
@@ -835,14 +842,14 @@ void Track_Imp::Disconnect( EndType thisend, bool oneSided ){
 	}
 	else if( thisend == EndType::south ){
 		if( m_TrackEnd.first ){
-			if( !oneSided && m_TrackEnd.first.get() == this ){
-				if( m_TrackEnd.second == EndType::north ){
+			if( !oneSided ){
+				if( m_TrackEnd.second == EndType::north && m_TrackEnd.first->m_TrackFront.first.get() == this ){
 					m_TrackEnd.first->m_TrackFront.first.reset();
 
 					if( m_TrackEnd.first->m_pTETFront )
 						m_TrackEnd.first->CreateEndTransitionSignal( EndType::north );
 				}
-				else if( m_TrackEnd.second == EndType::south ){
+				else if( m_TrackEnd.second == EndType::south && m_TrackEnd.first->m_TrackEnd.first.get() == this ){
 					m_TrackEnd.first->m_TrackEnd.first.reset();
 
 					if( m_TrackEnd.first->m_pTETEnd )
