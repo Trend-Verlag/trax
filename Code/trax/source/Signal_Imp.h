@@ -81,11 +81,11 @@ namespace trax{
 
 		void UnregisterSockets( SocketRegistry& module ) override;
 
-		const std::string& Reference( const std::string& name ) const override{
+		const char* Reference( const char* name ) const override{
 			return Signal_Base::Reference( name );
 		}
 
-		void Reference( const std::string& name, const std::string& reference ) override{
+		void Reference( const char* name, const char* reference ) override{
 			return Signal_Base::Reference( name, reference );
 		}
 

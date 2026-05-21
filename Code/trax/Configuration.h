@@ -77,4 +77,13 @@ namespace trax{
 		}
 	};
 
+
+	dclspc void* dll_alloc( std::size_t n );
+	dclspc void dll_free( void* p ) noexcept;
+
+	struct DllHeap {
+		void* operator new  (std::size_t n)     { return dll_alloc(n); }
+		void  operator delete(void* p) noexcept { dll_free(p); }
+	};
+
 } // namespace trax

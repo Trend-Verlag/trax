@@ -136,9 +136,11 @@ namespace trax{
 
 		std::shared_ptr<TraxType>					GetPrevious	( const std::shared_ptr<TraxType>& pTraxType ) const override;
 
+		using Base::Get;
+
 		std::shared_ptr<TraxType>					Get			( IDType id ) const override;
 
-		std::shared_ptr<TraxType>					Get			( const std::string& name ) const override;
+		std::shared_ptr<TraxType>					Get			( const char* name ) const override;
 
 		void										PushActive	( IDType id ) override;
 
@@ -389,9 +391,9 @@ std::shared_ptr<TraxType> Container_Imp<TraxType,Base>::Get( IDType id ) const{
 }
 
 template<class TraxType, class Base>
-std::shared_ptr<TraxType> Container_Imp<TraxType,Base>::Get( const std::string& name ) const{
+std::shared_ptr<TraxType> Container_Imp<TraxType,Base>::Get( const char* name ) const{
 	for( auto iter = m_Container.begin(); iter != m_Container.end(); ++iter )
-		if( (*iter).second->Reference( "name" ).compare( name ) == 0 )
+		if( std::string{(*iter).second->Reference( "name" )}.compare( name ) == 0 )
 			return (*iter).second;
 
 	return nullptr;

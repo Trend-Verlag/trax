@@ -48,6 +48,9 @@ namespace trax{
 		Event( Event&& ) = delete;
 		Event& operator=( const Event& ) = delete;
 		Event& operator=( Event&& ) = delete;
+
+		void* operator new  (std::size_t n)     { return dll_alloc(n); }
+		void  operator delete(void* p) noexcept { dll_free(p); }
 	protected:
 		Event() = default;
 		Event( const Event& ) = default;

@@ -945,7 +945,7 @@ Signal::Status Anl3TrackSystemReader::SignalStatusFromEEP( int stellung, const S
 	// list here.
 	std::vector<int> functionMap;
 	for( int i = 0; ; ++i ){
-		std::string stellungstr( signal.Reference( std::to_string( i ) ) );
+		std::string stellungstr{ signal.Reference( std::to_string( i ) ) };
 		if( !stellungstr.empty() )
 			functionMap.push_back( std::stoi( stellungstr ) );
 		else break;

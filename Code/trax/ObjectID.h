@@ -27,9 +27,11 @@
 #pragma once
 
 #include "IDType.h"
+#include "common/Helpers.h"
 
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace trax{
 
@@ -39,34 +41,41 @@ namespace trax{
 	public:
 		using Base::operator=;
 
-		const std::string& Reference( const std::string& name ) const override{
+		using Base::Reference;
+
+		const char* Reference( const char* name ) const override{
 			auto iter = m_References.find( name );
 			if( iter == m_References.end() )
-				return m_Empty;
+				return sm_Empty.c_str();
 
-			return iter->second;
+			return iter->second->c_str();
 		}
 
-		void Reference( const std::string& name, const std::string& reference ) override{
-			if( reference.empty() )
+		void Reference( const char* name, const char* reference ) override{
+			if( reference == nullptr || *reference == '\0' )
 				m_References.erase( name );
-			else
-				m_References[name] = reference;
+			else{
+				m_References[name] = &*sm_InternPool.emplace( reference ).first;
+			}
 		}
 
-		const std::vector<char const *>& ReferenceNames( const std::string& namePart ) const override{
+		common::Span<const char*> ReferenceNames( const char* namePart ) const override{
 			sm_ReferenceNames.clear();
 			for( const auto& pair : m_References )
-				if( pair.first.find( namePart ) != std::string::npos )
+				if( std::strstr(pair.first.c_str(), namePart) != nullptr )
 					sm_ReferenceNames.push_back( pair.first.c_str() );
-			return sm_ReferenceNames;
+			return { sm_ReferenceNames.data(), sm_ReferenceNames.size() };
 		}
 
-		const std::vector<char const*>& ReferenceNames() const override{
+		common::Span<const char*> ReferenceNames() const override{
 			sm_ReferenceNames.clear();
 			for( const auto& pair : m_References )
 				sm_ReferenceNames.push_back( pair.first.c_str() );
-			return sm_ReferenceNames;
+			return { sm_ReferenceNames.data(), sm_ReferenceNames.size() };
+		}
+
+		const char* EmptyReference() const noexcept override{
+			return sm_Empty.c_str();
 		}
 
 		IDType ID() const noexcept override{
@@ -77,16 +86,22 @@ namespace trax{
 			m_ID = id;
 		}
 	private:
-		std::unordered_map<std::string,std::string> m_References;
-		static const std::string					m_Empty;
-		std::string									m_Name;
-		IDType										m_ID;
-		static std::vector<char const*>				sm_ReferenceNames;
+		std::unordered_map<std::string,const std::string*>	m_References;
+		static std::unordered_set<std::string>				sm_InternPool; // global unique values for string comparison by pointers.
+		static const std::string							sm_Empty;
+
+		std::string											m_Name;
+		IDType												m_ID;
+		static std::vector<char const*>						sm_ReferenceNames;
 	};
+
+
+	template<class Base>
+	std::unordered_set<std::string> ObjectID_Imp<Base>::sm_InternPool;
+
+	template<class Base>
+	const std::string ObjectID_Imp<Base>::sm_Empty;
 
 	template<class Base>
 	std::vector<char const *> ObjectID_Imp<Base>::sm_ReferenceNames;
-
-	template<class Base>
-	const std::string ObjectID_Imp<Base>::m_Empty;
 }

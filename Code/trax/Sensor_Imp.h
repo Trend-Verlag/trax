@@ -53,11 +53,11 @@ namespace trax{
 
 		const char*	TypeName() const noexcept override;
 
-		const std::string& Reference( const std::string& name ) const override{
+		const char* Reference( const char* name ) const override{
 			return ObjectID_Imp<Sensor>::Reference( name );
 		}
 
-		void Reference( const std::string& name, const std::string& reference ) override{
+		void Reference( const char* name, const char* reference ) override{
 			return ObjectID_Imp<Sensor>::Reference( name, reference );
 		}
 

@@ -104,6 +104,10 @@ namespace trax{
 		/// \brief Get all the speedsteps.
 		virtual void GetSpeedSteps( std::vector<std::pair<Velocity,One>>& speedsteps ) const = 0;
 
+
+		void* operator new  (std::size_t n)     { return dll_alloc(n); }
+		void  operator delete(void* p) noexcept { dll_free(p); }
+
 		virtual ~TractionForceCharacteristic() = default;
 		TractionForceCharacteristic( const TractionForceCharacteristic& ) = delete;
 		TractionForceCharacteristic( TractionForceCharacteristic&& ) = delete;

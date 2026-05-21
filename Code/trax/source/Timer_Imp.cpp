@@ -154,7 +154,7 @@ void Timer_Imp::UnregisterSockets( SocketRegistry& registry ){
 	registry.UnRegisterPlug( m_PlugToStart );
 }
 
-const std::string& Timer_Imp::Reference( const std::string & name ) const{
+const char* Timer_Imp::Reference( const char* name ) const{
 	return TimerBase::Reference( name );
 }
 

@@ -133,7 +133,7 @@ namespace trax{
 			return m_pComponent->Get(id);
 		}
 
-		std::shared_ptr<value_type> Get( const std::string& name ) const override{
+		std::shared_ptr<value_type> Get( const char* name ) const override{
 			return m_pComponent->Get(name);
 		}
 

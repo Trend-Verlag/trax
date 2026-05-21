@@ -230,13 +230,13 @@ void Bogie_Imp::Resume() noexcept{
 void Bogie_Imp::Stop() noexcept{
 }
 
-void Bogie_Imp::Reference( const std::string& name, const std::string& reference ){
+void Bogie_Imp::Reference( const char* name, const char* reference ){
 	Bogie_Base::Reference( name, reference );
-	if( name == "name" ){
-		if( reference.empty() )
+	if( std::strcmp( name, "name" ) == 0 ){
+		if( reference == nullptr )
 			m_pGestalt->SetName( nullptr );
 		else
-			m_pGestalt->SetName( Reference( "name" ).c_str() );
+			m_pGestalt->SetName( Reference( "name" ) );
 	}
 }
 

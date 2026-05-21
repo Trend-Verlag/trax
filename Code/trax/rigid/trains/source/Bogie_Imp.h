@@ -77,7 +77,7 @@ namespace trax{
 		// Identified<RailRunner>:
 		using Bogie_Base::Reference;
 
-		void Reference( const std::string& name, const std::string& reference ) override;
+		void Reference( const char* name, const char* reference ) override;
 
 
 		// RailRunner:

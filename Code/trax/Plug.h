@@ -363,7 +363,7 @@ namespace trax{
 
 		using ObjectID_Imp<Plug>::Reference;
 
-		const std::string& Reference(const std::string& name) const override {
+		const char* Reference(const char* name) const override {
 			return ObjectID_Imp<Plug>::Reference(name);
 		}
 

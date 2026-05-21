@@ -56,7 +56,7 @@
 namespace trax{
 
 	/// \brief Interface for the physics simulator.
-	struct Simulator{
+	struct Simulator : virtual DllHeap{
 
 		enum class Type{
 			none = 0,

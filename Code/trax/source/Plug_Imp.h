@@ -56,11 +56,13 @@ namespace trax{
 			return "MultiPlug";
 		}
 
-		const std::string& Reference( const std::string& name ) const override{
+		using ParentPlugType::Reference;
+
+		const char* Reference( const char* name ) const override{
 			return ParentPlugType::Reference( name );
 		}
 
-		void Reference( const std::string& name, const std::string& reference ) override{
+		void Reference( const char* name, const char* reference ) override{
 			return ParentPlugType::Reference( name, reference );
 		}
 

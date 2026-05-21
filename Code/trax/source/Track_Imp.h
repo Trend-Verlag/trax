@@ -88,11 +88,11 @@ namespace trax{
 		std::shared_ptr<SectionTrack> GetSectionTrack() noexcept override;
 
 
-		const std::string& Reference( const std::string& name ) const override{
+		const char* Reference( const char* name ) const override{
 			return TrackBase::Reference( name );
 		}
 
-		void Reference( const std::string& name, const std::string& reference ) override{
+		void Reference( const char* name, const char* reference ) override{
 			return TrackBase::Reference( name, reference );
 		}
 

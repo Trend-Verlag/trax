@@ -392,7 +392,7 @@ const char* Multicator::TypeName() const noexcept{
 	return "Multicator";
 }
 
-const std::string& Multicator::Reference( const std::string & name ) const{
+const char* Multicator::Reference( const char* name ) const{
 	return Multicator_Base::Reference( name );
 }
 

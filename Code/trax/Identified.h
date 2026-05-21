@@ -26,6 +26,9 @@
 
 #pragma once
 
+#include "common/Helpers.h"
+#include "trax/Configuration.h"
+
 #include <string>
 #include <vector>
 
@@ -37,26 +40,91 @@ namespace trax{
 	/// reference values.
 	///
 	/// The template argument prevents that this becomes a common base.
+	/// The returned pointers to value strings are guaranteed to be 
+	/// globally unique for equal strings. This allows string comparisons 
+	/// to be done by pointer comparison.
 	template<class I>
-	struct Identified{
+	struct Identified : virtual DllHeap{
 
 		/// \brief Gets a reference that was set for this object by name.
+		/// 
 		/// \param name Name of the reference.
 		/// \returns a reference string for additional data to the object.
-		virtual const std::string& Reference( const std::string& name ) const = 0;
+		/// Empty string is returned if no reference was set for the name.
+		/// This will never return nullptr.
+		virtual const char* Reference( const char* name ) const = 0;
+
+		const char* Reference( const std::string& name ) const
+		{
+			return Reference( name.c_str() );
+		}
 
 
 		/// \brief Sets the reference for the object.
 		/// \param name Name of the reference.
 		/// \param reference Reference string to be set.
-		virtual void Reference( const std::string& name, const std::string& reference ) = 0;
+		virtual void Reference( const char* name, const char* reference ) = 0;
+
+		void Reference( const char* name, const std::string& reference )
+		{
+			return Reference( name, reference.c_str() );
+		}
+
+		void Reference( const std::string& name, const std::string& reference )
+		{
+			return Reference( name.c_str(), reference.c_str() );
+		}
 
 
-		/// \brief Searches for all reference names that countain namePart as substring in the name.
-		virtual const std::vector<char const*>& ReferenceNames( const std::string& namePart ) const = 0;
+		/// \brief Returns a pointer to the empty string that is used to return empty references. 
+		/// 
+		/// This allows to compare empty references by pointer comparison.
+		/// You can also simply use *Reference( [key] ) for an IsEmpty test.
+		virtual const char* EmptyReference() const noexcept = 0;
+
+
+		bool IsEmptyReference( const char* name ) const
+		{
+			return Reference( name ) == EmptyReference();
+		}
+
+		bool IsEmptyReference( const std::string& name ) const
+		{
+			return Reference( name ) == EmptyReference();
+		}
+
+		bool IsReference( const char* name, const char* reference ) const
+		{
+			if( name == nullptr || *name == '\0' )
+				return false;
+			if( reference == nullptr || *reference == '\0' )
+				return false;
+
+			return strcmp( Reference( name ), reference ) == 0;
+		}
+
+		bool IsReference( const char* name, const std::string& reference ) const
+		{
+			return IsReference( name, reference.c_str() );
+		}
+
+		bool IsReference( const std::string& name, const std::string& reference ) const
+		{
+			return IsReference( name.c_str(), reference.c_str() );
+		}
+
+
+		/// \brief Searches for all reference names that contain namePart as substring in the name.
+		virtual common::Span<const char*> ReferenceNames( const char* namePart ) const = 0;
+
+		common::Span<const char*> ReferenceNames( const std::string& namePart ) const
+		{
+			return ReferenceNames( namePart.c_str() );
+		}
+
 
 		/// \brief Searches for all reference names.
-		virtual const std::vector<char const*>& ReferenceNames() const = 0;
+		virtual common::Span<const char*> ReferenceNames() const = 0;
 
 
 		/// \returns the object's id.

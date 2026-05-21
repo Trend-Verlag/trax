@@ -1,5 +1,6 @@
 add_executable(ALL_TESTS
 	"./Test.cpp"
+    "./appframe/TestCommands.cpp"
 	"./common/TestHelpers.cpp"
 	"./common/TestInterval.cpp"
 	"./common/TestNarrowCast.cpp"
@@ -33,6 +34,7 @@ add_executable(ALL_TESTS
 target_link_libraries(ALL_TESTS
 	PRIVATE
 		test_settings
+        appframe
         trax_core_support
         trax_core_collections_support
         trax_rigid_support

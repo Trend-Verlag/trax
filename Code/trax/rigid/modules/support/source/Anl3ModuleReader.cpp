@@ -427,7 +427,7 @@ void Anl3ModuleReader::ConnectSockets( Module& modul ) const{
 //	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(&modul) ){
 	if( auto pJackEnumerator = dynamic_cast<JackEnumerator*>(&modul) ){
 		for( auto& jack : *pJackEnumerator ){
-			if( !jack.Reference( "KontaktZiel" ).empty() ){
+			if( !jack.IsEmptyReference( "KontaktZiel" ) ){
 				if( auto pSignalCollection = modul.GetSignalCollection() ){
 					for( auto& signal : *pSignalCollection ){
 						if( jack.Reference( "KontaktZiel" ) == signal.Reference( "KontaktZiel" ) ){
@@ -461,11 +461,11 @@ void Anl3ModuleReader::ConnectSockets( Module& modul ) const{
 			if( auto pConnectorCollection = pTrackSystem->GetConnectorCollection() )
 			{
 				for( auto& firstSignal : *pSignalCollection ){
-					if( !firstSignal.Reference( "SignalData" ).empty() ){
+					if( !firstSignal.IsEmptyReference( "SignalData" ) ){
 						for( auto& secondSignal : *pSignalCollection ){
 							if( firstSignal.Reference( "SignalData" ) == secondSignal.Reference( "Key_Id" ) )
 							{
-								if( !firstSignal.Reference( "Count" ).empty() ){
+								if( !firstSignal.IsEmptyReference( "Count" ) ){
 									const int count = std::stoi( firstSignal.Reference( "Count" ) ); 
 									for( int fromFunction = 1; fromFunction <= count; ++fromFunction ){
 										std::ostringstream stream;
@@ -489,7 +489,7 @@ void Anl3ModuleReader::ConnectSockets( Module& modul ) const{
 							if( Switch* pSwitch = dynamic_cast<Switch*>(&secondConnector) ){
 								if( firstSignal.Reference( "SignalData" ) == pSwitch->Reference( "Key_Id" ) )
 								{
-									if( !firstSignal.Reference( "Count" ).empty() ){
+									if( !firstSignal.IsEmptyReference( "Count" ) ){
 										const int count = std::stoi( firstSignal.Reference( "Count" ) );
 										for( int fromFunction = 1; fromFunction <= count; ++fromFunction ){
 											std::ostringstream stream;
@@ -513,7 +513,7 @@ void Anl3ModuleReader::ConnectSockets( Module& modul ) const{
 
 				for( auto& firstConnector : *pConnectorCollection ){
 					if( Switch* pFirstSwitch = dynamic_cast<Switch*>(&firstConnector) ){
-						if( !pFirstSwitch->Reference( "SignalData" ).empty() ){
+						if( !pFirstSwitch->IsEmptyReference( "SignalData" ) ){
 							for( auto& secondSwitch : *pConnectorCollection ){
 								if( Switch* pSecondSwitch = dynamic_cast<Switch*>(&secondSwitch) ){
 									if( pFirstSwitch->Reference( "SignalData" ) == pSecondSwitch->Reference( "Key_Id" ) )

@@ -132,11 +132,11 @@ namespace trax{
 
 
 		// Identified:
-		const std::string& Reference( const std::string& name ) const override{
+		const char* Reference( const char* name ) const override{
 			return TrackSystem_Base::Reference( name );
 		}
 
-		void Reference( const std::string& name, const std::string& reference ) override{
+		void Reference( const char* name, const char* reference ) override{
 			return TrackSystem_Base::Reference( name, reference );
 		}
 

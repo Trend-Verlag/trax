@@ -189,20 +189,20 @@ namespace trax{
 			if( optional ){
 				refInterface.Reference( std::string{ tagName } + "_" + *optional, pt.data() );
 
-				if( refInterface.Reference( tagName ).empty() || localeString == *optional )
+				if( refInterface.IsEmptyReference( tagName ) || localeString == *optional )
 					refInterface.Reference( tagName, pt.data() );
 			}
 			else{
 				refInterface.Reference( std::string{ tagName } + "_unknown", pt.data() );
 
-				if( refInterface.Reference( tagName ).empty() )
+				if( refInterface.IsEmptyReference( tagName ) )
 					refInterface.Reference( tagName, pt.data() );
 			}
 		}
 
 		template<class T>
 		inline void ReferencesToAttributes( boost::property_tree::ptree& pt, const Identified<T>& refInterface ){
-			const std::vector<char const*>& names = refInterface.ReferenceNames();
+			const common::Span<const char*> names = refInterface.ReferenceNames();
 			for( char const* pName : names )
 			{
 				std::string name{ pName };

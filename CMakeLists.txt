@@ -183,6 +183,7 @@ endif()
 # -------- End Doxygen config --------
 
 
+add_subdirectory(Code/appframe)
 add_subdirectory(Code/common)
 add_subdirectory(Code/common/support)
 add_subdirectory(Code/dim)
@@ -205,6 +206,7 @@ add_subdirectory(Code/trax/rigid/modules/support)
 add_subdirectory(Code/trax/support)
 
 add_subdirectory(Test)
+add_subdirectory(Test/appframe)
 add_subdirectory(Test/common)
 add_subdirectory(Test/dim)
 add_subdirectory(Test/spat)

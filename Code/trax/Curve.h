@@ -349,6 +349,9 @@ namespace trax
 			Angle epsilon_angle = epsilon__angle ) const = 0;
 
 
+		void* operator new  (std::size_t n)     { return dll_alloc(n); }
+		void  operator delete(void* p) noexcept { dll_free(p); }
+
 		virtual ~Curve() = default;
 		Curve( Curve&& ) = delete;
 		Curve& operator=( const Curve& ) = delete;

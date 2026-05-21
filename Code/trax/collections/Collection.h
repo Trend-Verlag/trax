@@ -17,7 +17,7 @@
 namespace trax{
 
 	template<class Collection_Type,class Value_Type>
-	struct Collection{
+	struct Collection : virtual DllHeap{
 
 		/// \name Type information for decorator implementation
 		///@{
@@ -198,7 +198,11 @@ namespace trax{
 		///@{
 		virtual std::shared_ptr<Value_Type> Get( IDType id ) const = 0;
 
-		virtual std::shared_ptr<Value_Type> Get( const std::string& name ) const = 0;
+		virtual std::shared_ptr<Value_Type> Get( const char* name ) const = 0;
+
+		std::shared_ptr<Value_Type> Get( const std::string& name ) const{
+			return Get( name.c_str() );
+		}
 		///@}
 
 
@@ -256,6 +260,9 @@ namespace trax{
 		Collection( Collection&& ) = delete;
 		Collection& operator=( const Collection& ) = delete;
 		Collection& operator=( Collection&& ) = delete;
+
+		void* operator new  (std::size_t n)     { return dll_alloc(n); }
+		void  operator delete(void* p) noexcept { dll_free(p); }
 	protected:
 		Collection() = default;
 

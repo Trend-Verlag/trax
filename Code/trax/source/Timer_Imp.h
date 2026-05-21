@@ -90,7 +90,7 @@ namespace trax{
 
 		// Inherited via PlugEnumerator
 
-		const std::string& Reference( const std::string& name ) const override;
+		const char* Reference( const char* name ) const override;
 
 		IDType ID() const noexcept override;
 

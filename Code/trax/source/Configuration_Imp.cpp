@@ -74,12 +74,21 @@ Verbosity ToVerbosity( const std::string& type ) noexcept
 void SetReportVerbosity( Verbosity verbosity ) noexcept {
     g_ReportVerbosity = verbosity;
 }
+
 Verbosity GetReportVerbosity() noexcept {
     return g_ReportVerbosity;
 }
 
 std::ostream& operator<<( std::ostream& stream, Verbosity verbosity ){
     return (verbosity <= g_ReportVerbosity) ? stream : cnull;
+}
+
+void* dll_alloc( std::size_t n ){
+	return std::malloc(n);
+}
+
+void dll_free( void* p ) noexcept{
+	std::free( p );
 }
 
 }

@@ -100,15 +100,15 @@ namespace trax{
 			: BaseDecorator{ pComponent }
 		{}
 
-		const std::string& Reference( const std::string& name ) const override{
+		const char* Reference( const char* name ) const override{
 			return m_pComponent->Reference( name );
 		}
 
-		void Reference( const std::string& name, const std::string& reference ) override{
+		void Reference( const char* name, const char* reference ) override{
 			return m_pComponent->Reference( name, reference );
 		}
 
-		const std::vector<char const *>& ReferenceNames( const std::string& namePart ) const override{
+		common::Span<const char*> ReferenceNames( const char* namePart ) const override{
 			return m_pComponent->ReferenceNames( namePart );
 		}
 

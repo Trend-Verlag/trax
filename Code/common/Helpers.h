@@ -494,4 +494,16 @@ namespace common{
 
 		const container_type& get_container() const noexcept { return this->c; }
 	};
+
+
+	template<typename T>
+	struct Span {
+		T const* data;
+		std::size_t size;
+
+		// Make it range-for compatible:
+		T const* begin() const noexcept { return data; }
+		T const* end()   const noexcept { return data + size; }
+	};
+
 }

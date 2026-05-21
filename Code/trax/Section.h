@@ -197,6 +197,9 @@ namespace trax{
 		virtual void CalculateTextureCoordinates() = 0;
 
 
+		void* operator new  (std::size_t n)     { return dll_alloc(n); }
+		void  operator delete(void* p) noexcept { dll_free(p); }
+
 		virtual ~Section() = default;
 		Section( const Section& ) = delete;
 		Section( Section&& ) = delete;

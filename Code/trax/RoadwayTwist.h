@@ -230,6 +230,9 @@ namespace trax
 		virtual AnglePerLength DoD1( Length ) const = 0;
 
 
+		void* operator new  (std::size_t n)     { return dll_alloc(n); }
+		void  operator delete(void* p) noexcept { dll_free(p); }
+
 		virtual ~RoadwayTwist() = default;
 		RoadwayTwist( RoadwayTwist&& ) = delete;
 		RoadwayTwist& operator=( const RoadwayTwist& ) = delete;

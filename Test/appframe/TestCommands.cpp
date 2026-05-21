@@ -1,11 +1,11 @@
 //	trax track library
-//	AD 2014 
+//	AD 2013 
 //
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
 //
-// Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
+// Copyright (c) 2026 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //
 // Permission is hereby granted to any person obtaining a copy of this software 
@@ -24,29 +24,26 @@
 //
 // For further information, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
+#if defined( WITH_BOOST_TESTS )
+#include <boost/test/unit_test.hpp>
 
-#include "trax/ImplementationHelper.h"
-#include "trax/collections/PulseCounterCollection.h"
-#include "trax/source/Jack_Imp.h"
+#include "appframe/Command.h"
 
-namespace trax{
+class TestCommand : public cmnd::Command{
+public:
+	void Execute() override {}
+	std::unique_ptr<cmnd::Command> Clone() const override {
+		return std::make_unique<TestCommand>(*this);
+	}
+};
 
-	using PulseCounterCollection_Base = JackEnumerator_Imp<ObjectID_Imp<Container_Imp<PulseCounter,PulseCounterCollection>>>;
+BOOST_AUTO_TEST_SUITE(appframe_tests)
 
-	class PulseCounterCollection_Imp : public PulseCounterCollection_Base{
-	public:
-		const char* TypeName() const noexcept override;
-
-		// Inherited via JackEnumerator
-		const char* Reference( const char* /*name*/ ) const override{
-			static const char* empty = "";
-			return empty;
-		}
-
-		IDType ID() const noexcept override{
-			return IDType();
-		}
-	};
-
+BOOST_AUTO_TEST_CASE( CommandCreation )
+{
+	std::unique_ptr<cmnd::Command> pCommand = std::make_unique<TestCommand>();
+	BOOST_CHECK( pCommand );
 }
+
+BOOST_AUTO_TEST_SUITE_END() //appframe_tests
+#endif //WITH_BOOST_TESTS

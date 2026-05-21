@@ -66,11 +66,11 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 	ptTrack.put( "<xmlattr>.id", track.ID() );
 	ReferencesToAttributes( ptTrack, track );
-	ptTrack.put( "<xmlattr>.type", track.Reference( "type" ).empty() ? ToString( track.GetTrackType() ) : track.Reference( "type" ) );
+	ptTrack.put( "<xmlattr>.type", track.IsEmptyReference( "type" ) ? ToString( track.GetTrackType() ) : track.Reference( "type" ) );
 
 	{
 		boost::property_tree::ptree ptBegin;
-		if( !track.Reference( "electrificationShiftBegin" ).empty() )
+		if( !track.IsEmptyReference( "electrificationShiftBegin" ) )
 			ptBegin.put( "<xmlattr>.electrificationShift", track.Reference( "electrificationShiftBegin" ) );
 
 		const Track::End frontend = track.TransitionEnd( EndType::north );
@@ -80,7 +80,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 			ptBegin.add_child( "Connection", ptConnection );
 		}
-		else if( track.Reference( "bufferStopBegin" ) == "true" ){
+		else if( track.IsReference( "bufferStopBegin", "true" ) ){
 			boost::property_tree::ptree ptBufferStop;
 			ptBegin.add_child( "BufferStop", ptBufferStop );
 		}
@@ -93,7 +93,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 	{
 		boost::property_tree::ptree ptEnd;
-		if( !track.Reference( "electrificationShiftEnd" ).empty() )
+		if( !track.IsEmptyReference( "electrificationShiftEnd" ) )
 			ptEnd.put( "<xmlattr>.electrificationShift", track.Reference( "electrificationShiftEnd" ) );
 
 		const Track::End backend = track.TransitionEnd( EndType::south );
@@ -103,7 +103,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 			ptEnd.add_child( "Connection", ptConnection );
 		}
-		else if( track.Reference( "bufferStopEnd" ) == "true" ){
+		else if( track.IsReference( "bufferStopEnd", "true" ) ){
 			boost::property_tree::ptree ptBufferStop;
 			ptEnd.add_child( "BufferStop", ptBufferStop );
 		}
@@ -261,7 +261,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 
 	ptConnector.put( "<xmlattr>.id", connector.ID() );
 	ReferencesToAttributes( ptConnector, connector );
-	if( !connector.Reference( "kollektorID" ).empty() )
+	if( !connector.IsEmptyReference( "kollektorID" ) )
 		ptConnector.put( "<xmlattr>.kollektorID", connector.Reference( "DKWType" ) );
 
 	if( auto pSwitch = dynamic_cast<const Switch*>(&connector) )
@@ -317,7 +317,7 @@ boost::property_tree::ptree& operator<<( boost::property_tree::ptree& pt, const 
 	ReferencesToAttributes( ptSignal, signal );
 	ptSignal.put( "<xmlattr>.status", ToString( signal.Get() ) );
 	ptSignal.put( "<xmlattr>.stopDistance", signal.StopDistance() );
-	if( !signal.Reference( "Key_Id" ).empty() )
+	if( !signal.IsEmptyReference( "Key_Id" ) )
 		ptSignal.put( "<xmlattr>.refid", signal.Reference( "Key_Id" ) );
 
 	try{ 
