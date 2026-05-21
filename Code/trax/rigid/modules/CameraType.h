@@ -25,8 +25,15 @@ namespace trax {
 		cam_cabin
 	};
 
-	const char* From( CameraType type ) noexcept;
+	dclspc const char* From( CameraType type ) noexcept;
+
+	dclspc CameraType CameraTypeFrom( const char* name );
 
 	CameraType CameraTypeFrom( const std::string& name );
+	
+///////////////////////////////////////	
+inline CameraType CameraTypeFrom( const std::string& name ){
+	return CameraTypeFrom( name.c_str() );
+}
 
 }

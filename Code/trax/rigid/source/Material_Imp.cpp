@@ -34,7 +34,7 @@ Material::Type operator++( Material::Type& material ) noexcept{
 	return material;
 }
 
-std::string ToString( Material::Type type ){
+const char* ToString( Material::Type type ){
 	switch( type ){
 	case Material::Type::none:
 		return "none";
@@ -83,46 +83,46 @@ std::string ToString( Material::Type type ){
 	}
 }
 
-Material::Type MaterialType( const std::string& string ){
-	if( string == "steel" )
+Material::Type MaterialType( const char* string ){
+	if( strcmp(string, "steel") == 0 )
 		return Material::Type::steel;
-	else if( string == "tin" )
+	else if( strcmp(string, "tin") == 0 )
 		return Material::Type::tin;
-	else if( string == "aluminium" )
+	else if( strcmp(string, "aluminium") == 0 )
 		return Material::Type::aluminium;
-	else if( string == "copper" )
+	else if( strcmp(string, "copper") == 0 )
 		return Material::Type::copper;
-	else if( string == "stone" )
+	else if( strcmp(string, "stone") == 0 )
 		return Material::Type::stone;
-	else if( string == "coal" )
+	else if( strcmp(string, "coal") == 0 )
 		return Material::Type::coal;
-	else if( string == "soil" )
+	else if( strcmp(string, "soil") == 0 )
 		return Material::Type::soil;
-	else if( string == "wood" )
+	else if( strcmp(string, "wood") == 0 )
 		return Material::Type::wood;
-	else if( string == "asphalt" )
+	else if( strcmp(string, "asphalt") == 0 )
 		return Material::Type::asphalt;
-	else if( string == "rubber" )
+	else if( strcmp(string, "rubber") == 0 )
 		return Material::Type::rubber;
-	else if( string == "filt" )
+	else if( strcmp(string, "filt") == 0 )
 		return Material::Type::filt;
-	else if( string == "glass" )
+	else if( strcmp(string, "glass") == 0 )
 		return Material::Type::glass;
-	else if( string == "paper" )
+	else if( strcmp(string, "paper") == 0 )
 		return Material::Type::paper;
-	else if( string == "concrete" )
+	else if( strcmp(string, "concrete") == 0 )
 		return Material::Type::concrete;
-	else if( string == "water" )
+	else if( strcmp(string, "water") == 0 )
 		return Material::Type::water;
-	else if( string == "plastic" )
+	else if( strcmp(string, "plastic") == 0 )
 		return Material::Type::plastic;
-	else if( string == "cloth" )
+	else if( strcmp(string, "cloth") == 0 )
 		return Material::Type::cloth;
-	else if( string == "chalk" )
+	else if( strcmp(string, "chalk") == 0 )
 		return Material::Type::chalk;
-	else if( string == "diamond" )
+	else if( strcmp(string, "diamond") == 0 )
 		return Material::Type::diamond;
-	else if( string == "plasma" )
+	else if( strcmp(string, "plasma") == 0 )
 		return Material::Type::plasma;
 	else
 		return Material::Type::none;

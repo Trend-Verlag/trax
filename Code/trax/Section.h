@@ -45,7 +45,7 @@ namespace trax{
 	struct Section{
 
 		/// \brief Name for the object type that implements this interface. 
-		virtual std::string	TypeName() const noexcept = 0;
+		virtual const char*	TypeName() const noexcept = 0;
 
 
 		/// \brief Predefined cross sections.
@@ -209,7 +209,16 @@ namespace trax{
 		Section() = default;
 	};
 
-	dclspc std::string ToString( Section::SpecialSections specialSection );
+	dclspc const char* ToString( Section::SpecialSections specialSection );
 
-	dclspc Section::SpecialSections SpecialSection( const std::string& string );
+	dclspc Section::SpecialSections SpecialSection( const char* string );
+	
+	Section::SpecialSections SpecialSection( const std::string& string );
+
+
+///////////////////////////////////////
+inline Section::SpecialSections SpecialSection( const std::string& string ){
+	return SpecialSection( string.c_str() );
+}
+
 }

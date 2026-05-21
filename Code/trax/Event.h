@@ -73,14 +73,14 @@ namespace trax{
 		static dclspc std::unique_ptr<EventFilter> Make( EventFilter::Type type = EventFilter::Type::any ) noexcept;
 
 
-		static std::string From( Type type );
+	/*	static std::string From( Type type );
 
 		static Type From( const std::string& type );
 
 
 		virtual std::string Name() const = 0;
 
-		virtual void Name( const std::string& name ) = 0;
+		virtual void Name( const std::string& name ) = 0;*/
 
 		virtual Type GetType() const noexcept = 0;
 

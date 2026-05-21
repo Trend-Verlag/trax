@@ -46,7 +46,7 @@ Jack_Imp::Jack_Imp( Jack_Imp&& jack ) noexcept
 	jack.m_pPlug = nullptr;
 }
 
-Jack_Imp::Jack_Imp( const std::string& name )
+Jack_Imp::Jack_Imp( const char* name )
 	:	m_pPlug		{ nullptr },
 		m_bPulsing	{ false }
 {

@@ -134,7 +134,7 @@ namespace trax{
 		Jack_Imp() = delete;
 		Jack_Imp(const Jack_Imp& jack) = delete;
 		dclspc Jack_Imp(Jack_Imp&& jack) noexcept;
-		explicit dclspc Jack_Imp(const std::string& name);
+		explicit dclspc Jack_Imp( const char* name );
 
 		Jack_Imp& operator=(const Jack_Imp&) = delete;
 		Jack_Imp& operator=(Jack_Imp&& jack) = delete;

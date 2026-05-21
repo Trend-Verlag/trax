@@ -39,7 +39,7 @@
 namespace trax{
 	using namespace common;
 ///////////////////////////////////////
-std::string ToString( Indicator::Type type ){
+const char* ToString( Indicator::Type type ){
 	switch( type ){
 	case Indicator::Type::unknown:
 		return "unknown";
@@ -57,7 +57,7 @@ std::string ToString( Indicator::Type type ){
 	}
 }
 
-std::string ToString( Indicator::Status status ){
+const char* ToString( Indicator::Status status ){
 	switch( status ){
 	case Indicator::Status::none:
 		return "none";
@@ -99,88 +99,88 @@ std::string ToString( Indicator::Status status ){
 	}
 }
 
-Indicator::Status ToIndicatorStatus( const std::string& status ){
-	if( status == "none" )
+Indicator::Status ToIndicatorStatus( const char* status ){
+	if( strcmp( status, "none" ) == 0 )
 		return Indicator::Status::none;
-	else if( status == "unknown" )
+	else if( strcmp( status, "unknown" ) == 0 )
 		return Indicator::Status::unknown;
-	else if( status == "one" )
+	else if( strcmp( status, "one" ) == 0 )
 		return Indicator::Status::one;
-	else if( status == "two" )
+	else if( strcmp( status, "two" ) == 0 )
 		return Indicator::Status::two;
-	else if( status == "three" )
+	else if( strcmp( status, "three" ) == 0 )
 		return Indicator::Status::three;
-	else if( status == "four" )
+	else if( strcmp( status, "four" ) == 0 )
 		return Indicator::Status::four;
-	else if( status == "five" )
+	else if( strcmp( status, "five" ) == 0 )
 		return Indicator::Status::five;
-	else if( status == "six" )
+	else if( strcmp( status, "six" ) == 0 )
 		return Indicator::Status::six;
-	else if( status == "seven" )
+	else if( strcmp( status, "seven" ) == 0 )
 		return Indicator::Status::seven;
-	else if( status == "eight" )
+	else if( strcmp( status, "eight" ) == 0 )
 		return Indicator::Status::eight;
-	else if( status == "nine" )
+	else if( strcmp( status, "nine" ) == 0 )
 		return Indicator::Status::nine;
-	else if( status == "ten" )
+	else if( strcmp( status, "ten" ) == 0 )
 		return Indicator::Status::ten;
-	else if( status == "eleven" )
+	else if( strcmp( status, "eleven" ) == 0 )
 		return Indicator::Status::eleven;
-	else if( status == "twelve" )
+	else if( strcmp( status, "twelve" ) == 0 )
 		return Indicator::Status::twelve;
-	else if( status == "thirteen" )
+	else if( strcmp( status, "thirteen" ) == 0 )
 		return Indicator::Status::thirteen;
-	else if( status == "toggle" )
+	else if( strcmp( status, "toggle" ) == 0 )
 		return Indicator::Status::toggle;
-	else if( status == "change" )
+	else if( strcmp( status, "change" ) == 0 )
 		return Indicator::Status::change;
 
 	return Indicator::Status::unknown;
 }
 
-Indicator::Status IndicatorStatusFrom( const std::string& socketName ){
-	if( socketName == "JackOnOne" ||
-		socketName == "PlugToOne" )
+Indicator::Status IndicatorStatusFrom( const char* socketName ){
+	if( strcmp( socketName, "JackOnOne" ) == 0 ||
+		strcmp( socketName, "PlugToOne" ) == 0 )
 		return Indicator::Status::one;
-	else if(	socketName == "JackOnTwo" ||
-				socketName == "PlugToTwo" )
+	else if( strcmp( socketName, "JackOnTwo" ) == 0 ||
+				strcmp( socketName, "PlugToTwo" ) == 0 )
 		return Indicator::Status::two;
-	else if( socketName == "JackOnThree" ||
-		socketName == "PlugToThree" )
+	else if( strcmp( socketName, "JackOnThree" ) == 0 ||
+		strcmp( socketName, "PlugToThree" ) == 0 )
 		return Indicator::Status::three;
-	else if( socketName == "JackOnFour" ||
-		socketName == "PlugToFour" )
+	else if( strcmp( socketName, "JackOnFour" ) == 0 ||
+		strcmp( socketName, "PlugToFour" ) == 0 )
 		return Indicator::Status::four;
-	else if( socketName == "JackOnFive" ||
-		socketName == "PlugToFive" )
+	else if( strcmp( socketName, "JackOnFive" ) == 0 ||
+		strcmp( socketName, "PlugToFive" ) == 0 )
 		return Indicator::Status::five;
-	else if( socketName == "JackOnSix" ||
-		socketName == "PlugToSix" )
+	else if( strcmp( socketName, "JackOnSix" ) == 0 ||
+		strcmp( socketName, "PlugToSix" ) == 0 )
 		return Indicator::Status::six;
-	else if( socketName == "JackOnSeven" ||
-		socketName == "PlugToSeven" )
+	else if( strcmp( socketName, "JackOnSeven" ) == 0 ||
+		strcmp( socketName, "PlugToSeven" ) == 0 )
 		return Indicator::Status::seven;
-	else if( socketName == "JackOnEight" ||
-		socketName == "PlugToEight" )
+	else if( strcmp( socketName, "JackOnEight" ) == 0 ||
+		strcmp( socketName, "PlugToEight" ) == 0 )
 		return Indicator::Status::eight;
-	else if( socketName == "JackOnNine" ||
-		socketName == "PlugToNine" )
+	else if( strcmp( socketName, "JackOnNine" ) == 0 ||
+		strcmp( socketName, "PlugToNine" ) == 0 )
 		return Indicator::Status::nine;
-	else if( socketName == "JackOnTen" ||
-		socketName == "PlugToTen" )
+	else if( strcmp( socketName, "JackOnTen" ) == 0 ||
+		strcmp( socketName, "PlugToTen" ) == 0 )
 		return Indicator::Status::ten;
-	else if( socketName == "JackOnEleven" ||
-		socketName == "PlugToEleven" )
+	else if( strcmp( socketName, "JackOnEleven" ) == 0 ||
+		strcmp( socketName, "PlugToEleven" ) == 0 )
 		return Indicator::Status::eleven;
-	else if( socketName == "JackOnTwelve" ||
-		socketName == "PlugToTwelve" )
+	else if( strcmp( socketName, "JackOnTwelve" ) == 0 ||
+		strcmp( socketName, "PlugToTwelve" ) == 0 )
 		return Indicator::Status::twelve;
-	else if( socketName == "JackOnThirteen" ||
-		socketName == "PlugToThirteen" )
+	else if( strcmp( socketName, "JackOnThirteen" ) == 0 ||
+		strcmp( socketName, "PlugToThirteen" ) == 0 )
 		return Indicator::Status::thirteen;
-	else if( socketName == "JackOnChange" )
+	else if( strcmp( socketName, "JackOnChange" ) == 0 )
 		return Indicator::Status::change;
-	else if( socketName == "PlugToToggle" )
+	else if( strcmp( socketName, "PlugToToggle" ) == 0 )
 		return Indicator::Status::toggle;
 
 	return Indicator::Status::unknown;

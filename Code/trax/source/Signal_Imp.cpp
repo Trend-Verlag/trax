@@ -574,11 +574,11 @@ VelocityControl_Imp::ControlState::ControlState(
 	:	m_MinVelocity			{minVelocity},
 		m_MaxVelocity			{maxVelocity},
 		m_bAffectTravelVelocity	{false},
-		m_JackOnVelocity		{"JackOnVelocity" + std::to_string( static_cast<int>(status) - static_cast<int>(Status::velocity0) ) },
-		m_JackOnChangeToVelocity{"JackOnChangeToVelocity" + std::to_string( static_cast<int>(status) - static_cast<int>(Status::velocity0) ) },
+		m_JackOnVelocity		{("JackOnVelocity" + std::to_string( static_cast<int>(status) - static_cast<int>(Status::velocity0) ) ).c_str()},
+		m_JackOnChangeToVelocity{("JackOnChangeToVelocity" + std::to_string( static_cast<int>(status) - static_cast<int>(Status::velocity0) ) ).c_str()},
 		m_PlugToVelocity		{parent}
 {
-	m_PlugToVelocity.Reference( "name", "PlugToVelocity" + std::to_string( static_cast<int>(status) - static_cast<int>(Status::velocity0) ) );
+	m_PlugToVelocity.Reference( "name", ("PlugToVelocity" + std::to_string( static_cast<int>(status) - static_cast<int>(Status::velocity0) ) ).c_str() );
 	m_PlugToVelocity.SetStatus( status );
 }
 ///////////////////////////////////////
@@ -803,7 +803,7 @@ Track* TrackEndTransition_Imp::To() const noexcept{
 	return m_pToTrack;
 }
 ///////////////////////////////////////
-std::string ToString( Signal::Status status ){
+const char* ToString( Signal::Status status ){
 	switch( status ){
 	case Signal::Status::none:
 		return "none";
@@ -859,56 +859,56 @@ constexpr bool IsVelocityStatus( Signal::Status status ){
 	return Signal::Status::velocity0 <= status && status <= Signal::Status::velocityMax;
 }
 
-Signal::Status ToSignalStatus( const std::string& status ){
-	if( status == "none" )
+Signal::Status ToSignalStatus( const char* status ){
+	if( strcmp( status, "none" ) == 0 )
 		return Signal::Status::none;
-	else if( status == "stop" )
+	else if( strcmp( status, "stop" ) == 0 )
 		return Signal::Status::stop;
-	else if( status == "clear" )
+	else if( strcmp( status, "clear" ) == 0 )
 		return Signal::Status::clear;
-	else if( status == "slow" )
+	else if( strcmp( status, "slow" ) == 0 )
 		return Signal::Status::slow;
-	else if( status == "velocity0" )
+	else if( strcmp( status, "velocity0" ) == 0 )
 		return Signal::Status::velocity0;
-	else if( status == "velocity1" )
+	else if( strcmp( status, "velocity1" ) == 0 )
 		return Signal::Status::velocity1;
-	else if( status == "velocity2" )
+	else if( strcmp( status, "velocity2" ) == 0 )
 		return Signal::Status::velocity2;
-	else if( status == "velocity3" )
+	else if( strcmp( status, "velocity3" ) == 0 )
 		return Signal::Status::velocity3;
-	else if( status == "velocity4" )
+	else if( strcmp( status, "velocity4" ) == 0 )
 		return Signal::Status::velocity4;
-	else if( status == "velocity5" )
+	else if( strcmp( status, "velocity5" ) == 0 )
 		return Signal::Status::velocity5;
-	else if( status == "velocity6" )
+	else if( strcmp( status, "velocity6" ) == 0 )
 		return Signal::Status::velocity6;
-	else if( status == "velocity7" )
+	else if( strcmp( status, "velocity7" ) == 0 )
 		return Signal::Status::velocity7;
-	else if( status == "velocity8" )
+	else if( strcmp( status, "velocity8" ) == 0 )
 		return Signal::Status::velocity8;
-	else if( status == "velocity9" )
+	else if( strcmp( status, "velocity9" ) == 0 )
 		return Signal::Status::velocity9;
-	else if( status == "velocity10" )
+	else if( strcmp( status, "velocity10" ) == 0 )
 		return Signal::Status::velocity10;
-	else if( status == "velocity11" )
+	else if( strcmp( status, "velocity11" ) == 0 )
 		return Signal::Status::velocity11;
-	else if( status == "velocity12" )
+	else if( strcmp( status, "velocity12" ) == 0 )
 		return Signal::Status::velocity12;
-	else if( status == "caution" )
+	else if( strcmp( status, "caution" ) == 0 )
 		return Signal::Status::caution;
-	else if( status == "doors_open" )
+	else if( strcmp( status, "doors_open" ) == 0 )
 		return Signal::Status::doors_open;
-	else if( status == "doors_close" )
+	else if( strcmp( status, "doors_close" ) == 0 )
 		return Signal::Status::doors_close;
-	else if( status == "uncouple" )
+	else if( strcmp( status, "uncouple" ) == 0 )
 		return Signal::Status::uncouple;
-	else if( status == "lights_on" )
+	else if( strcmp( status, "lights_on" ) == 0 )
 		return Signal::Status::lights_on;
-	else if( status == "jump" )
+	else if( strcmp( status, "jump" ) == 0 )
 		return Signal::Status::jump;
-	else if( status == "toggle" )
+	else if( strcmp( status, "toggle" ) == 0 )
 		return Signal::Status::toggle;
-	else if( status == "change" )
+	else if( strcmp( status, "change" ) == 0 )
 		return Signal::Status::change;
 
 	std::ostringstream stream;
@@ -917,98 +917,98 @@ Signal::Status ToSignalStatus( const std::string& status ){
 	throw std::invalid_argument( stream.str() );
 }
 
-Signal::Status SignalStatusFrom( const std::string& socketName ){
-	if( socketName == "JackOnStop" ||
-		socketName == "JackOnChangeToStop" ||
-		socketName == "PlugToStop" )
+Signal::Status SignalStatusFrom( const char* socketName ){
+	if( strcmp( socketName, "JackOnStop" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToStop" ) == 0 ||
+		strcmp( socketName, "PlugToStop" ) == 0 )
 		return Signal::Status::stop;
-	else if( socketName == "JackOnClear" ||
-		socketName == "JackOnChangeToClear" ||
-		socketName == "PlugToClear" )
+	else if( strcmp( socketName, "JackOnClear" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToClear" ) == 0 ||
+		strcmp( socketName, "PlugToClear" ) == 0 )
 		return Signal::Status::clear;
-	else if( socketName == "JackOnSlow" ||
-		socketName == "JackOnChangeToSlow" ||
-		socketName == "PlugToSlow" )
+	else if( strcmp( socketName, "JackOnSlow" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToSlow" ) == 0 ||
+		strcmp( socketName, "PlugToSlow" ) == 0 )
 		return Signal::Status::slow;
-	else if( socketName == "JackOnVelocity0" ||
-		socketName == "JackOnChangeToVelocity0" ||
-		socketName == "PlugToVelocity0" )
+	else if( strcmp( socketName, "JackOnVelocity0" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity0" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity0" ) == 0 )
 		return Signal::Status::velocity0;
-	else if( socketName == "JackOnVelocity1" ||
-		socketName == "JackOnChangeToVelocity1" ||
-		socketName == "PlugToVelocity1" )
+	else if( strcmp( socketName, "JackOnVelocity1" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity1" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity1" ) == 0 )
 		return Signal::Status::velocity1;
-	else if( socketName == "JackOnVelocity2" ||
-		socketName == "JackOnChangeToVelocity2" ||
-		socketName == "PlugToVelocity2" )
+	else if( strcmp( socketName, "JackOnVelocity2" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity2" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity2" ) == 0 )
 		return Signal::Status::velocity2;
-	else if( socketName == "JackOnVelocity3" ||
-		socketName == "JackOnChangeToVelocity3" ||
-		socketName == "PlugToVelocity3" )
+	else if( strcmp( socketName, "JackOnVelocity3" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity3" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity3" ) == 0 )
 		return Signal::Status::velocity3;
-	else if( socketName == "JackOnVelocity4" ||
-		socketName == "JackOnChangeToVelocity4" ||
-		socketName == "PlugToVelocity4" )
+	else if( strcmp( socketName, "JackOnVelocity4" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity4" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity4" ) == 0 )
 		return Signal::Status::velocity4;
-	else if( socketName == "JackOnVelocity5" ||
-		socketName == "JackOnChangeToVelocity5" ||
-		socketName == "PlugToVelocity5" )
+	else if( strcmp( socketName, "JackOnVelocity5" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity5" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity5" ) == 0 )
 		return Signal::Status::velocity5;
-	else if( socketName == "JackOnVelocity6" ||
-		socketName == "JackOnChangeToVelocity6" ||
-		socketName == "PlugToVelocity6" )
+	else if( strcmp( socketName, "JackOnVelocity6" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity6" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity6" ) == 0 )
 		return Signal::Status::velocity6;
-	else if( socketName == "JackOnVelocity7" ||
-		socketName == "JackOnChangeToVelocity7" ||
-		socketName == "PlugToVelocity7" )
+	else if( strcmp( socketName, "JackOnVelocity7" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity7" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity7" ) == 0 )
 		return Signal::Status::velocity7;
-	else if( socketName == "JackOnVelocity8" ||
-		socketName == "JackOnChangeToVelocity8" ||
-		socketName == "PlugToVelocity8" )
+	else if( strcmp( socketName, "JackOnVelocity8" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity8" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity8" ) == 0 )
 		return Signal::Status::velocity8;
-	else if( socketName == "JackOnVelocity9" ||
-		socketName == "JackOnChangeToVelocity9" ||
-		socketName == "PlugToVelocity9" )
+	else if( strcmp( socketName, "JackOnVelocity9" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity9" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity9" ) == 0 )
 		return Signal::Status::velocity9;
-	else if( socketName == "JackOnVelocity10" ||
-		socketName == "JackOnChangeToVelocity10" ||
-		socketName == "PlugToVelocity10" )
+	else if( strcmp( socketName, "JackOnVelocity10" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity10" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity10" ) == 0 )
 		return Signal::Status::velocity10;
-	else if( socketName == "JackOnVelocity11" ||
-		socketName == "JackOnChangeToVelocity11" ||
-		socketName == "PlugToVelocity11" )
+	else if( strcmp( socketName, "JackOnVelocity11" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity11" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity11" ) == 0 )
 		return Signal::Status::velocity11;
-	else if( socketName == "JackOnVelocity12" ||
-		socketName == "JackOnChangeToVelocity12" ||
-		socketName == "PlugToVelocity12" )
+	else if( strcmp( socketName, "JackOnVelocity12" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToVelocity12" ) == 0 ||
+		strcmp( socketName, "PlugToVelocity12" ) == 0 )
 		return Signal::Status::velocity12;
-	else if( socketName == "JackOnCaution" ||
-		socketName == "JackOnChangeToCaution" ||
-		socketName == "PlugToCaution" )
+	else if( strcmp( socketName, "JackOnCaution" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToCaution" ) == 0 ||
+		strcmp( socketName, "PlugToCaution" ) == 0 )
 		return Signal::Status::caution;
-	else if( socketName == "JackOnDoorsOpen" ||
-		socketName == "JackOnChangeToDoorsOpen" ||
-		socketName == "PlugToDoorsOpen" )
+	else if( strcmp( socketName, "JackOnDoorsOpen" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToDoorsOpen" ) == 0 ||
+		strcmp( socketName, "PlugToDoorsOpen" ) == 0 )
 		return Signal::Status::doors_open;
-	else if( socketName == "JackOnDoorsClose" ||
-		socketName == "JackOnChangeToDoorsClose" ||
-		socketName == "PlugToDoorsClose" )
+	else if( strcmp( socketName, "JackOnDoorsClose" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToDoorsClose" ) == 0 ||
+		strcmp( socketName, "PlugToDoorsClose" ) == 0 )
 		return Signal::Status::doors_close;
-	else if( socketName == "JackOnUncouple" ||
-		socketName == "JackOnChangeToUncouple" ||
-		socketName == "PlugToUncouple" )
+	else if( strcmp( socketName, "JackOnUncouple" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToUncouple" ) == 0 ||
+		strcmp( socketName, "PlugToUncouple" ) == 0 )
 		return Signal::Status::uncouple;
-	else if( socketName == "JackOnLightsOn" ||
-		socketName == "JackOnChangeToLightsOn" ||
-		socketName == "PlugToLightsOn" )
+	else if( strcmp( socketName, "JackOnLightsOn" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToLightsOn" ) == 0 ||
+		strcmp( socketName, "PlugToLightsOn" ) == 0 )
 		return Signal::Status::lights_on;
-	else if( socketName == "JackOnJump" ||
-		socketName == "JackOnChangeToJump" ||
-		socketName == "PlugToJump" )
+	else if( strcmp( socketName, "JackOnJump" ) == 0 ||
+		strcmp( socketName, "JackOnChangeToJump" ) == 0 ||
+		strcmp( socketName, "PlugToJump" ) == 0 )
 		return Signal::Status::jump;
-	else if( socketName == "JackOnChange" )
+	else if( strcmp( socketName, "JackOnChange" ) == 0 )
 		return Signal::Status::change;
-	else if( socketName == "PlugToToggle" )
+	else if( strcmp( socketName, "PlugToToggle" ) == 0 )
 		return Signal::Status::toggle;
 
 	std::ostringstream stream;

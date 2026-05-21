@@ -194,18 +194,23 @@ namespace trax{
 
 
 	/// \brief Converts a TrackType to readable string.
-	dclspc std::string ToString( Indicator::Type type );
+	dclspc const char* ToString( Indicator::Type type );
 
 	/// \brief Makes a string from the status
-	dclspc std::string ToString( Indicator::Status status );
+	dclspc const char* ToString( Indicator::Status status );
 
 
 	/// \brief Makes a status value from a status string.
 	/// \throws std::invalid_argument if the string was not recognized.
-	dclspc Indicator::Status ToIndicatorStatus( const std::string& status );
+	dclspc Indicator::Status ToIndicatorStatus( const char* status );
+
+	Indicator::Status ToIndicatorStatus( const std::string& status );
 
 
-	dclspc Indicator::Status IndicatorStatusFrom( const std::string& socketName );
+	dclspc Indicator::Status IndicatorStatusFrom( const char* socketName );
+
+	Indicator::Status IndicatorStatusFrom( const std::string& socketName );
+
 
 
 	/// \brief An Indicator with two states.
@@ -246,5 +251,15 @@ namespace trax{
 	void dclspc AlignTo( BinaryIndicator& indicator, DoubleSlipSwitch& toSwitch, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> );
 
 	void dclspc AlignTo( Indicator& indicator, ThreeWaySwitch& toSwitch, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> );
+
+
+///////////////////////////////////////
+inline Indicator::Status ToIndicatorStatus( const std::string& status ){
+	return ToIndicatorStatus( status.c_str() );
+}
+
+inline Indicator::Status IndicatorStatusFrom( const std::string& socketName ){
+	return IndicatorStatusFrom( socketName.c_str() );
+}
 
 }

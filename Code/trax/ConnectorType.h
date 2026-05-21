@@ -47,10 +47,18 @@ namespace trax{
 	};
 
 	/// \brief Gets the type name of a curve from its type enumerator.
-	dclspc std::string ToString( ConnectorType ct );
+	dclspc const char* ToString( ConnectorType ct );
 
 
 	/// \brief Gets the type enumerator of a curve from its type name.
-	dclspc ConnectorType ToConnectorType( const std::string& name ) noexcept;
+	dclspc ConnectorType ToConnectorType( const char* name ) noexcept;
+
+	ConnectorType ToConnectorType( const std::string& name ) noexcept;
+
+
+/////////////////////////////////////////////////
+inline ConnectorType ToConnectorType( const std::string& name ) noexcept{
+	return ToConnectorType( name.c_str() );
+}
 
 } // namespace trax

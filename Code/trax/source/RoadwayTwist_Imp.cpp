@@ -126,26 +126,26 @@ const char* TypeToName( RoadwayTwist::TwistType type ){
 	}
 }
 
-RoadwayTwist::TwistType TwistNameToType( const std::string& name ) noexcept{
-	if( name.compare( "ZeroTwist" ) == 0 )
+RoadwayTwist::TwistType TwistNameToType( const char* name ) noexcept{
+	if( strcmp( name, "ZeroTwist" ) == 0 )
 		return RoadwayTwist::TwistType::Zero;
-	if( name.compare( "ConstantTwist" ) == 0 )
+	if( strcmp( name, "ConstantTwist" ) == 0 )
 		return RoadwayTwist::TwistType::Constant;
-	if( name.compare( "LinearTwist" ) == 0 )
+	if( strcmp( name, "LinearTwist" ) == 0 )
 		return RoadwayTwist::TwistType::Linear;
-	if( name.compare( "PiecewiseTwist" ) == 0 )
+	if( strcmp( name, "PiecewiseTwist" ) == 0 )
 		return RoadwayTwist::TwistType::Piecewise;
-	if( name.compare( "PiecewiseLinearTwist" ) == 0 )
+	if( strcmp( name, "PiecewiseLinearTwist" ) == 0 )
 		return RoadwayTwist::TwistType::PiecewiseLinear;
-	if( name.compare( "PiecewiseCircularTwist" ) == 0 )
+	if( strcmp( name, "PiecewiseCircularTwist" ) == 0 )
 		return RoadwayTwist::TwistType::PiecewiseCircular;
-	if( name.compare( "PositionalTwist" ) == 0 )
+	if( strcmp( name, "PositionalTwist" ) == 0 )
 		return RoadwayTwist::TwistType::Positional;
-	if( name.compare( "DirectionalTwist" ) == 0 )
+	if( strcmp( name, "DirectionalTwist" ) == 0 )
 		return RoadwayTwist::TwistType::Directional;
-	if( name.compare( "CombinedTwist" ) == 0 )
+	if( strcmp( name, "CombinedTwist" ) == 0 )
 		return RoadwayTwist::TwistType::Combined;
-	if( name.compare( "ParallelTwist" ) == 0 )
+	if( strcmp( name, "ParallelTwist" ) == 0 )
 		return RoadwayTwist::TwistType::Parallel;
 
 	return RoadwayTwist::TwistType::None;

@@ -273,7 +273,7 @@ namespace trax{
 	class MultiPlugJack_Imp :	public Jack_Imp,
 								public PlugEnumerator{
 	public:
-		MultiPlugJack_Imp( const std::string& name )
+		MultiPlugJack_Imp( const char* name )
 		: Jack_Imp		{ name }
 		, m_PlugToPulse	{ *this, &MultiPlugJack_Imp::Pulse }
 		{

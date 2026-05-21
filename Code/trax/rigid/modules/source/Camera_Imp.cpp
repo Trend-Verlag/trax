@@ -64,18 +64,18 @@ const char* From( CameraType type ) noexcept{
 	};
 }
 
-CameraType CameraTypeFrom( const std::string& name ){
-	if( name == "basic" )
+CameraType CameraTypeFrom( const char* name ){
+	if( strcmp(name, "basic") == 0 )
 		return CameraType::cam_basic;
-	else if( name == "firstperson" )
+	else if( strcmp(name, "firstperson") == 0 )
 		return CameraType::cam_firstperson;
-	else if( name == "orbiter" )
+	else if( strcmp(name, "orbiter") == 0 )
 		return CameraType::cam_orbiter;
-	else if( name == "terrainconfined" )
+	else if( strcmp(name, "terrainconfined") == 0 )
 		return CameraType::cam_terrainconfined;
-	else if( name == "dolly" )
+	else if( strcmp(name, "dolly") == 0 )
 		return CameraType::cam_dolly;
-	else if( name == "cabin" )
+	else if( strcmp(name, "cabin") == 0 )
 		return CameraType::cam_cabin;
 
 	std::ostringstream stream;

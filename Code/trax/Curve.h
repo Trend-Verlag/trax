@@ -406,7 +406,9 @@ namespace trax
 
 
 	/// \brief Gets the type enumerator of a curve from its type name.
-	dclspc Curve::CurveType CurveNameToType( const std::string& name ) noexcept;
+	dclspc Curve::CurveType CurveNameToType( const char* name ) noexcept;
+
+	inline Curve::CurveType CurveNameToType( const std::string& name ) noexcept;
 
 
 	/// \brief The dynamic data of a curve at one point.
@@ -2213,4 +2215,10 @@ namespace trax
 		CurvatureStrecher() = default;
 		CurvatureStrecher( const CurvatureStrecher& ) = default;
 	};
+
+///////////////////////////////////////
+inline Curve::CurveType CurveNameToType( const std::string& name ) noexcept{
+	return CurveNameToType( name.c_str() );
+}
+
 }

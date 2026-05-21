@@ -131,7 +131,7 @@ NarrowSwitch_Imp::NarrowSwitch_Imp( unsigned char numBranches )
 
 	for( unsigned char i = 0; i < numBranches; ++i ){	
 		std::string ordinal = numBranches == 1 ? "" : std::to_string(i+1); //no ordinal for simple switch, due to compatibility reasons ...
-		m_JacksOnBranches[i] = std::make_unique<Jack_Imp>( "JackOnBranch" + ordinal );
+		m_JacksOnBranches[i] = std::make_unique<Jack_Imp>( ("JackOnBranch" + ordinal).c_str() );
 		m_PlugsToBranches[i] = std::make_unique<MultiPlug_Imp<StatusHolder_Plug<NarrowSwitch_Imp>>>(*this);
 		m_PlugsToBranches[i]->SetStatus( static_cast<Status>(i+1) );
 		m_PlugsToBranches[i]->Reference( "name", "PlugToBranch" + ordinal );
@@ -1208,7 +1208,7 @@ const Jack & NoSlipSwitch_Imp::_GetJack( int idx ) const{
 	}
 }
 
-std::string ToString( NoSlipSwitch::SlotNames slotName ){
+const char* ToString( NoSlipSwitch::SlotNames slotName ){
 	switch( slotName ){
 	case NoSlipSwitch::SlotNames::slot_none:
 		return "slot_none";
@@ -1472,7 +1472,7 @@ const Jack& SingleSlipSwitch_Imp::_GetJack(int idx) const{
 	}
 }
 
-std::string ToString( SingleSlipSwitch::SlotNames slotName ){
+const char* ToString( SingleSlipSwitch::SlotNames slotName ){
 	switch( slotName ){
 	case SingleSlipSwitch::SlotNames::slot_none:
 		return "slot_none";
@@ -1796,7 +1796,7 @@ const Jack& DoubleSlipSwitch_Imp::_GetJack(int idx) const{
 	}
 }
 
-std::string ToString( DoubleSlipSwitch::SlotNames slotName )
+const char* ToString( DoubleSlipSwitch::SlotNames slotName )
 {
 	switch( slotName )
 	{

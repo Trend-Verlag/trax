@@ -515,7 +515,7 @@ namespace trax{
 
 
 	/// \brief Makes a string from the SlotName
-	dclspc std::string ToString( NoSlipSwitch::SlotNames slotName );
+	dclspc const char* ToString( NoSlipSwitch::SlotNames slotName );
 
 
 	/// \brief A single slip switch is made from five tracks that form a crossing
@@ -570,7 +570,7 @@ namespace trax{
 
 
 	/// \brief Makes a string from the SlotName
-	dclspc std::string ToString( SingleSlipSwitch::SlotNames slotName );
+	dclspc const char* ToString( SingleSlipSwitch::SlotNames slotName );
 
 
 	/// \brief A double slip switch is made from eight tracks that form a crossing
@@ -632,7 +632,7 @@ namespace trax{
 
 
 	/// \brief Makes a string from the SlotName
-	dclspc std::string ToString( DoubleSlipSwitch::SlotNames slotName );
+	dclspc const char* ToString( DoubleSlipSwitch::SlotNames slotName );
 
 
 	struct SwitchAligned{

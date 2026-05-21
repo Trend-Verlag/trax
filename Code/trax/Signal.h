@@ -391,15 +391,19 @@ namespace trax{
 
 
 	/// \brief Makes a string from the status
-	dclspc std::string ToString( Signal::Status status );
+	dclspc const char* ToString( Signal::Status status );
 
 
 	/// \brief Makes a status value from a status string.
 	/// \throws std::invalid_argument if the string was not recognized.
-	dclspc Signal::Status ToSignalStatus( const std::string& status );
+	dclspc Signal::Status ToSignalStatus( const char* status );
+	
+	Signal::Status ToSignalStatus( const std::string& status );
 
 
-	dclspc Signal::Status SignalStatusFrom( const std::string& socketName );
+	dclspc Signal::Status SignalStatusFrom( const char* socketName );
+	
+	Signal::Status SignalStatusFrom( const std::string& socketName );
 
 
 
@@ -459,5 +463,15 @@ namespace trax{
 	protected:
 		SignalAligned() = default;
 	};
+
+
+///////////////////////////////////////
+inline Signal::Status ToSignalStatus( const std::string& status ){
+	return ToSignalStatus( status.c_str() );
+}
+
+inline Signal::Status SignalStatusFrom( const std::string& socketName ){
+	return SignalStatusFrom( socketName.c_str() );
+}
 
 }

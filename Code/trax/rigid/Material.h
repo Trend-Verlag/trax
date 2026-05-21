@@ -97,7 +97,12 @@ namespace trax{
 		Material::Type matB;
 	};
 
-	dclspc std::string ToString( Material::Type type );
+	dclspc const char* ToString( Material::Type type );
 
-	dclspc Material::Type MaterialType( const std::string& string );
+	dclspc Material::Type MaterialType( const char* string );
+
+	inline Material::Type MaterialType( const std::string& string ){
+		return MaterialType( string.c_str() );
+	}
+
 }

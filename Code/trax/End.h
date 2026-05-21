@@ -49,38 +49,44 @@ namespace trax{
 	bool IsConcreteEnd( EndType end ) noexcept;
 
 	/// \brief Makes a string from the end.
-	dclspc std::string ToString( EndType end );
+	dclspc const char* ToString( EndType end );
 
 
 	/// \brief Makes an end value from a string.
 	/// \throws std::invalid_argument if the string was not recognized.
-	dclspc EndType ToEndType( const std::string& endtype );
+	dclspc EndType ToEndType( const char* endtype );
+	
+	EndType ToEndType( const std::string& endtype );
 
 
-// inlines:
-	inline EndType operator!( EndType end ) noexcept{
-		switch( end ){
-			case EndType::north: return EndType::south;
-			case EndType::south: return EndType::north;
-			default:							
-				return EndType::none;
-		}
+///////////////////////////////////////
+inline EndType ToEndType( const std::string& endtype ){
+	return ToEndType( endtype.c_str() );
+}
+
+inline EndType operator!( EndType end ) noexcept{
+	switch( end ){
+		case EndType::north: return EndType::south;
+		case EndType::south: return EndType::north;
+		default:							
+			return EndType::none;
 	}
+}
 
-	inline bool IsConcreteEnd( EndType end ) noexcept
-	{
-		return end == EndType::north || end == EndType::south;
-	}
+inline bool IsConcreteEnd( EndType end ) noexcept
+{
+	return end == EndType::north || end == EndType::south;
+}
 
-	/// \defgroup Group_RailRunnerEndHelpers RailRunner's End Helpers
-	/// \brief Helper functions to get the front and back ends of an oriented element.
+/// \defgroup Group_RailRunnerEndHelpers RailRunner's End Helpers
+/// \brief Helper functions to get the front and back ends of an oriented element.
 
-	/// \name End Helpers
-	/// @{
+/// \name End Helpers
+/// @{
 	
 
 
-	///@}
+///@}
 
 
 

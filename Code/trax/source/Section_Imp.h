@@ -39,7 +39,7 @@ namespace trax{
 		Section_Imp() noexcept;
 
 		// Section:
-		std::string	TypeName() const noexcept override;
+		const char*	TypeName() const noexcept override;
 
 		SpecialSections	GetSectionType() const noexcept override;
 

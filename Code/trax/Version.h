@@ -54,7 +54,7 @@ namespace trax{
 		dclspc static bool IsAtLeast( int major, int minor, int patch ) noexcept;
 
 		/// \returns true if a named feature is available with the library.
-		dclspc static bool HasFeature( const std::string& name ) noexcept;
+		dclspc static bool HasFeature( const char* name ) noexcept;
 
 		/// \returns the bytesize of the internally used floating point type.
 		dclspc static int SizeOfReal() noexcept;

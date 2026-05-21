@@ -57,7 +57,7 @@ Section_Imp::Section_Imp() noexcept
 	, m_GaugeRight	{0}
 {}
 
-std::string	Section_Imp::TypeName() const noexcept{
+const char* Section_Imp::TypeName() const noexcept{
 	return "Section";
 }
 
@@ -669,7 +669,7 @@ void Section_Imp::CalculateTextureCoordinates(){
 	}
 }
 ///////////////////////////////////////
-std::string ToString( Section::SpecialSections specialSection ){
+const char* ToString( Section::SpecialSections specialSection ){
 	switch( specialSection ){
 	case Section::SpecialSections::unknown:
 		return "unknown";
@@ -723,52 +723,52 @@ std::string ToString( Section::SpecialSections specialSection ){
 	}
 }
 
-Section::SpecialSections SpecialSection( const std::string& string ){
-	if( string == "standard" )
+Section::SpecialSections SpecialSection( const char* string ){
+	if( strcmp( string, "standard" ) == 0 )
 		return Section::SpecialSections::standard;
-	else if( string == "eepv7_grooved_convextread" )
+	else if( strcmp( string, "eepv7_grooved_convextread" ) == 0 )
 		return Section::SpecialSections::eepv7_grooved_convextread;
-	else if( string == "eep_embankment_simple" )
+	else if( strcmp( string, "eep_embankment_simple" ) == 0 )
 		return Section::SpecialSections::eep_embankment_simple;
-	else if( string == "vignol_UIC60" )
+	else if( strcmp( string, "vignol_UIC60" ) == 0 )
 		return Section::SpecialSections::vignol_UIC60;
-	else if( string == "vignol_EB63T_rod" )
+	else if( strcmp( string, "vignol_EB63T_rod" ) == 0 )
 		return Section::SpecialSections::vignol_EB63T_rod;
-	else if( string == "custom" )
+	else if( strcmp( string, "custom" ) == 0 )
 		return Section::SpecialSections::custom;
-	else if( string == "empty" )
+	else if( strcmp( string, "empty" ) == 0 )
 		return Section::SpecialSections::empty;
-	else if( string == "unknown" )
+	else if( strcmp( string, "unknown" ) == 0 )
 		return Section::SpecialSections::unknown;
-	else if( string == "eep_concrete_roadway" )
+	else if( strcmp( string, "eep_concrete_roadway" ) == 0 )
 		return Section::SpecialSections::eep_concrete_roadway;
-	else if( string == "eep_rack_railway" )
+	else if( strcmp( string, "eep_rack_railway" ) == 0 )
 		return Section::SpecialSections::eep_rack_railway;
-	else if( string == "eep7_track1435" )
+	else if( strcmp( string, "eep7_track1435" ) == 0 )
 		return Section::SpecialSections::eep7_track1435;
-	else if( string == "eep_simple" )
+	else if( strcmp( string, "eep_simple" ) == 0 )
 		return Section::SpecialSections::eep_simple;
-	else if( string == "eep_grooved_convextread" )
+	else if( strcmp( string, "eep_grooved_convextread" ) == 0 )
 		return Section::SpecialSections::eep_grooved_convextread;
-	else if( string == "eep_flatballast" )
+	else if( strcmp( string, "eep_flatballast" ) == 0 )
 		return Section::SpecialSections::eep_flatballast;
-	else if( string == "eepv7_track1000" )
+	else if( strcmp( string, "eepv7_track1000" ) == 0 )
 		return Section::SpecialSections::eepv7_track1000;
-	else if( string == "eep_simple2" )
+	else if( strcmp( string, "eep_simple2" ) == 0 )
 		return Section::SpecialSections::eep_simple2;
-	else if( string == "eep_simple3" )
+	else if( strcmp( string, "eep_simple3" ) == 0 )
 		return Section::SpecialSections::eep_simple3;
-	else if( string == "eep_flatballast_rods" )
+	else if( strcmp( string, "eep_flatballast_rods" ) == 0 )
 		return Section::SpecialSections::eep_flatballast_rods;
-	else if( string == "embankment" )
+	else if( strcmp( string, "embankment" ) == 0 )
 		return Section::SpecialSections::embankment;
-	else if( string == "embankment_closed" )
+	else if( strcmp( string, "embankment_closed" ) == 0 )
 		return Section::SpecialSections::embankment_closed;
-	else if( string == "square" )
+	else if( strcmp( string, "square" ) == 0 )
 		return Section::SpecialSections::square;
-	else if( string == "hexagon" )
+	else if( strcmp( string, "hexagon" ) == 0 )
 		return Section::SpecialSections::hexagon;
-	else if( string == "pipeline" )
+	else if( strcmp( string, "pipeline" ) == 0 )
 		return Section::SpecialSections::pipeline;
 
 	std::ostringstream stream;

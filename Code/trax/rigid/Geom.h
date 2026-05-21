@@ -195,9 +195,12 @@ namespace trax{
 	};
 
 
-	dclspc std::string ToString( Geom::Filters filter );
+	dclspc const char* ToString( Geom::Filters filter );
 
-	dclspc Geom::Filters GeomFilter( const std::string& filter );
+	dclspc Geom::Filters GeomFilter( const char* filterName );
+
+	inline Geom::Filters GeomFilter( const std::string& filter );
+
 
 	dclspc unsigned int CollisionFilterFor( Geom::Filters filter ) noexcept;
 
@@ -318,4 +321,10 @@ namespace trax{
 
 
 	};
+
+
+inline Geom::Filters GeomFilter( const std::string& filter ){
+	return GeomFilter( filter.c_str() );
+}
+
 }

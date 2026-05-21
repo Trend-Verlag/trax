@@ -261,7 +261,9 @@ namespace trax
 
 
 	/// \brief Gets the type enumerator of a twist from its type name.
-	dclspc RoadwayTwist::TwistType TwistNameToType( const std::string& name ) noexcept;
+	dclspc RoadwayTwist::TwistType TwistNameToType( const char* name ) noexcept;
+	
+	inline RoadwayTwist::TwistType TwistNameToType( const std::string& name ) noexcept;
 
 
 	/// \brief A twist that stays constant over the whole track range.
@@ -574,4 +576,10 @@ namespace trax
 	//std::unique_ptr<PiecewiseTwist> dclspc CreatePiecewiseCircularFrom( const RoadwayTwist& twist );
 	//std::unique_ptr<PiecewiseDirectionalTwist> dclspc CreatePiecewiseDirectionalFrom( const RoadwayTwist& twist );
 	//std::unique_ptr<DirectionalTwist> dclspc CreateDirectionalFrom( const RoadwayTwist& twist );
+
+///////////////////////////////////////
+RoadwayTwist::TwistType TwistNameToType( const std::string& name ) noexcept{
+	return TwistNameToType( name.c_str() );
+}
+
 }

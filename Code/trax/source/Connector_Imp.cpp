@@ -34,7 +34,7 @@
 
 namespace trax{
 
-std::string ToString( ConnectorType ct )
+const char* ToString( ConnectorType ct )
 {
 	switch( ct ){
 	case ConnectorType::unknown:
@@ -55,17 +55,17 @@ std::string ToString( ConnectorType ct )
 	};
 }
 
-ConnectorType ToConnectorType( const std::string& name ) noexcept
+ConnectorType ToConnectorType( const char* name ) noexcept
 {
-	if( name == "Switch" )
+	if( std::strcmp(name, "Switch") == 0 )
 		return ConnectorType::TwoWaySwitch;
-	else if( name == "ThreeWaySwitch" )
+	else if( std::strcmp(name, "ThreeWaySwitch") == 0 )
 		return ConnectorType::ThreeWaySwitch;
-	else if( name == "SingleSlipSwitch" )
+	else if( std::strcmp(name, "SingleSlipSwitch") == 0 )
 		return ConnectorType::SingleSlipSwitch;
-	else if( name == "DoubleSlipSwitch" )
+	else if( std::strcmp(name, "DoubleSlipSwitch") == 0 )
 		return ConnectorType::DoubleSlipSwitch;
-	else if( name == "none" )
+	else if( std::strcmp(name, "none") == 0 )
 		return ConnectorType::none;
 	else
 		return ConnectorType::unknown;
@@ -312,9 +312,11 @@ bool Connector_Imp::CheckSlot( int slot, Length e_distance, Angle e_kink, Angle 
 	return bOk;
 }
 ///////////////////////////////////////
-std::string ToString( Connector::Status status ){
-	if( status >= Connector::Status::branch1 && status <= Connector::Status::maxBranches )
-		return "branch" + std::to_string( static_cast<int>(status) );
+const char* ToString( Connector::Status status ){
+	if( status >= Connector::Status::branch1 && status <= Connector::Status::maxBranches ){
+		thread_local std::string branchStatus{ "branch" + std::to_string( static_cast<int>( status ) ) };
+		return branchStatus.c_str();
+	}
 
 	switch( status ){
 	case Connector::Status::none:
@@ -334,20 +336,20 @@ std::string ToString( Connector::Status status ){
 	}
 }
 
-Connector::Status ToConnectorStatus( const std::string& status ){
-	if( status == "go" )
+Connector::Status ToConnectorStatus( const char* status ){
+	if( strcmp(status, "go") == 0 )
 		return Connector::Status::go;
-	else if( status == "branch" )
+	else if( strcmp(status, "branch") == 0 )
 		return Connector::Status::branch1;
-	else if( status.substr( 0, 6 ) == "branch" )
-		return static_cast<Connector::Status>(std::stoi( status.substr( 6 ) ));
-	else if( status == "toggle" )
+	else if( strncmp(status, "branch", 6) == 0 )
+		return static_cast<Connector::Status>(std::stoi( status + 6 ));
+	else if( strcmp(status, "toggle") == 0 )
 		return Connector::Status::toggle;
-	else if( status == "change" )
+	else if( strcmp(status, "change") == 0 )
 		return Connector::Status::change;
-	else if( status == "none" )
+	else if( strcmp(status, "none") == 0 )
 		return Connector::Status::none;
-	else if( status == "empty" )
+	else if( strcmp(status, "empty") == 0 )
 		return Connector::Status::empty;
 
 	std::ostringstream stream;
@@ -356,26 +358,26 @@ Connector::Status ToConnectorStatus( const std::string& status ){
 	throw std::invalid_argument( stream.str() );
 }
 
-Connector::Status ConnectorStatusFrom( const std::string& socketName )
+Connector::Status ConnectorStatusFrom( const char* socketName )
 {
-	if( socketName == "JackOnGo" ||
-		socketName == "PlugToGo" )
+	if( strcmp(socketName, "JackOnGo") == 0 ||
+		strcmp(socketName, "PlugToGo") == 0 )
 			return Connector::Status::go;
-	else if( socketName == "JackOnBranch" ||
-			 socketName == "PlugToBranch" )
+	else if( strcmp(socketName, "JackOnBranch") == 0 ||
+			 strcmp(socketName, "PlugToBranch") == 0 )
 		return Connector::Status::branch1;
-	else if( socketName == "JackOnGo1" ||
-			 socketName == "PlugToGo1" )
+	else if( strcmp(socketName, "JackOnGo1") == 0 ||
+			 strcmp(socketName, "PlugToGo1") == 0 )
 				return Connector::Status::go1;
-	else if( socketName == "JackOnGo2" ||
-			 socketName == "PlugToGo2" )
+	else if( strcmp(socketName, "JackOnGo2") == 0 ||
+			 strcmp(socketName, "PlugToGo2") == 0 )
 		return Connector::Status::go2;
-	else if( socketName.substr( 0, 12 ) == "JackOnBranch" ||
-			 socketName.substr( 0, 12 ) == "PlugToBranch" )
-		return static_cast<Connector::Status>(std::stoi( socketName.substr( 12 ) ));
-	else if( socketName == "JackOnChange" )
+	else if( strncmp(socketName, "JackOnBranch", 12) == 0 ||
+			 strncmp(socketName, "PlugToBranch", 12) == 0 )
+		return static_cast<Connector::Status>(std::stoi( socketName + 12 ));
+	else if( strcmp(socketName, "JackOnChange") == 0 )
 		return Connector::Status::change;
-	else if( socketName == "PlugToToggle" )
+	else if( strcmp(socketName, "PlugToToggle") == 0	 )
 		return Connector::Status::toggle;
 
 	std::ostringstream stream;

@@ -28,7 +28,7 @@
 
 namespace trax{
 
-std::string ToString( Orientation orient )
+const char* ToString( Orientation orient )
 {
 	if( orient == Orientation::Value::anti )
 		return "anti";
@@ -40,13 +40,13 @@ std::string ToString( Orientation orient )
 	throw std::invalid_argument( "ToString: invalid Orientation value!" );
 }
 
-Orientation ToOrientation( const std::string& orient )
+Orientation ToOrientation( const char* orient )
 {
-	if( orient == "anti" )
+	if( strcmp( orient, "anti" ) == 0 )
 		return Orientation::Value::anti;
-	if( orient == "para" )
+	if( strcmp( orient, "para" ) == 0 )
 		return Orientation::Value::para;
-	if( orient == "none" )
+	if( strcmp( orient, "none" ) == 0 )
 		return Orientation::Value::none;
 
 	throw std::invalid_argument( "ToOrientation: invalid string!" );

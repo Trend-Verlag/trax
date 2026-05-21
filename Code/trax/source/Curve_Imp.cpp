@@ -129,46 +129,46 @@ const char* TypeToName( Curve::CurveType ct ){
 	}
 }
 
-Curve::CurveType CurveNameToType( const std::string& name ) noexcept{
-	if( name.compare( "BasicLine" ) == 0 )
+Curve::CurveType CurveNameToType( const char* name ) noexcept{
+	if( std::strcmp(name, "BasicLine") == 0 )
 		return Curve::CurveType::Line;
-	if( name.compare( "BasicArc" ) == 0 )
+	if( std::strcmp(name, "BasicArc") == 0 )
 		return Curve::CurveType::Arc;
-	if( name.compare( "BasicHelix" ) == 0 )
+	if( std::strcmp(name, "BasicHelix") == 0 )
 		return Curve::CurveType::Helix;
-	if( name.compare( "Line" ) == 0 )
+	if( std::strcmp(name, "Line") == 0 )
 		return Curve::CurveType::LineP;
-	if( name.compare( "Arc" ) == 0 )
+	if( std::strcmp(name, "Arc") == 0 )
 		return Curve::CurveType::ArcP;
-	if( name.compare( "Helix" ) == 0 )
+	if( std::strcmp(name, "Helix") == 0 )
 		return Curve::CurveType::HelixP;
-	if( name.compare( "Clothoid" ) == 0 )
+	if( std::strcmp(name, "Clothoid") == 0 )
 		return Curve::CurveType::Clothoid;
-	if( name.compare( "Cubic" ) == 0 )
+	if( std::strcmp(name, "Cubic") == 0 )
 		return Curve::CurveType::Cubic;
-	if( name.compare( "Spline" ) == 0 )
+	if( std::strcmp(name, "Spline") == 0 )
 		return Curve::CurveType::Spline;
-	if( name.compare( "Rotator" ) == 0 )
+	if( std::strcmp(name, "Rotator") == 0 )
 		return Curve::CurveType::Rotator;
-	if( name.compare( "RotatorWithOffset" ) == 0 )
+	if( std::strcmp(name, "RotatorWithOffset") == 0 )
 		return Curve::CurveType::RotatorWithOffset;
-	if( name.compare( "RotatorChain" ) == 0 )
+	if( std::strcmp(name, "RotatorChain") == 0 )
 		return Curve::CurveType::RotatorChain;
-	if( name.compare( "PolygonalChain" ) == 0 )
+	if( std::strcmp(name, "PolygonalChain") == 0 )
 		return Curve::CurveType::PolygonalChain;
-	if( name.compare( "SampledCurve" ) == 0 )
+	if( std::strcmp(name, "SampledCurve") == 0 )
 		return Curve::CurveType::SampledCurve;
-	if( name.compare( "Parallel" ) == 0 )
+	if( std::strcmp(name, "Parallel") == 0 )
 		return Curve::CurveType::Parallel;
-	if( name.compare( "EEPCurve" ) == 0 )
+	if( std::strcmp(name, "EEPCurve") == 0 )
 		return Curve::CurveType::EEPCurve;
-	if( name.compare( "EEPResidual" ) == 0 )
+	if( std::strcmp(name, "EEPResidual") == 0 )
 		return Curve::CurveType::EEPResidual;
-	if( name.compare( "EEPAlternative" ) == 0 )
+	if( std::strcmp(name, "EEPAlternative") == 0 )
 		return Curve::CurveType::EEPAlternative;
-	if( name.compare( "Unknown" ) == 0 )
+	if( std::strcmp(name, "Unknown") == 0 )
 		return Curve::CurveType::Unknown;
-	if( name.compare( "UserDefined" ) == 0 )
+	if( std::strcmp(name, "UserDefined") == 0 )
 		return Curve::CurveType::UserDefined;
 
 	return Curve::CurveType::none;

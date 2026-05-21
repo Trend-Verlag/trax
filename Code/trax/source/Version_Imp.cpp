@@ -76,7 +76,7 @@ bool Version::IsAtLeast( int major, int minor, int patch ) noexcept{
 	return true;
 }
 
-bool Version::HasFeature( const std::string& /*name*/ ) noexcept{
+bool Version::HasFeature( const char* /*name*/ ) noexcept{
 	return false;
 }
 

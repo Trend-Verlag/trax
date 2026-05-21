@@ -1362,20 +1362,20 @@ const char* ToString( Track::TrackType type ){
 	}
 }
 
-Track::TrackType TrackType( const std::string& type ) noexcept{
-	if( type == "standard" )
+Track::TrackType TrackType( const char* type ) noexcept{
+	if( std::strcmp( type, "standard" ) == 0 )
 		return Track::TrackType::standard;
-	else if( type == "withGeoms" )
+	else if( std::strcmp( type, "withGeoms" ) == 0 )
 		return Track::TrackType::withGeoms;
-	else if( type == "movable" )
+	else if( std::strcmp( type, "movable" ) == 0 )
 		return Track::TrackType::movable;
-	else if( type == "movable_withGeoms" )
+	else if( std::strcmp( type, "movable_withGeoms" ) == 0 )
 		return Track::TrackType::movable_withGeoms;
-	else if( type == "movable_autoconnecting" )
+	else if( std::strcmp( type, "movable_autoconnecting" ) == 0 )
 		return Track::TrackType::movable_autoconnecting;
-	else if( type == "parallel" )
+	else if( std::strcmp( type, "parallel" ) == 0 )
 		return Track::TrackType::parallel;
-	else if( type == "none" )
+	else if( std::strcmp( type, "none" ) == 0 )
 		return Track::TrackType::none;
 	else
 		return Track::TrackType::unknown;

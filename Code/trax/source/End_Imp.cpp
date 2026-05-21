@@ -31,7 +31,7 @@
 
 namespace trax{
 
-std::string ToString( EndType end ){
+const char* ToString( EndType end ){
 	switch( end ){
 	case EndType::none:
 		return "none";
@@ -48,20 +48,20 @@ std::string ToString( EndType end ){
 	}
 }
 
-EndType ToEndType( const std::string& endtype ){
-	if( endtype == "none" )
+EndType ToEndType( const char* endtype ){
+	if( std::strcmp(endtype, "none") == 0 )
 		return EndType::none;
-	else if( endtype == "north" )
+	else if( std::strcmp(endtype, "north") == 0 )
 		return EndType::north;
-	else if( endtype == "south" )
+	else if( std::strcmp(endtype, "south") == 0 )
 		return EndType::south;
-	else if( endtype == "any" )
+	else if( std::strcmp(endtype, "any") == 0 )
 		return EndType::any;
-	else if( endtype == "both" )
+	else if( std::strcmp(endtype, "both") == 0 )
 		return EndType::both;
-	else if( endtype == "front" )
+	else if( std::strcmp(endtype, "front") == 0 )
 		return EndType::north;
-	else if( endtype == "end" )
+	else if( std::strcmp(endtype, "end") == 0 )
 		return EndType::south;
 	else
 		throw std::invalid_argument( "Unknown EndType!" );

@@ -42,7 +42,15 @@ namespace trax
 		triangleMesh,
 	};
 
-	dclspc std::string ToString( GeomType type );
+	dclspc const char* ToString( GeomType type );
 
-	dclspc GeomType ToGeomType( const std::string& type );
+	dclspc GeomType ToGeomType( const char* type );
+	
+	inline GeomType ToGeomType( const std::string& type );
+
+///////////////////////////////////////
+inline GeomType ToGeomType( const std::string& type ){
+	return ToGeomType( type.c_str() );
+}
+
 }

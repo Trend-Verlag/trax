@@ -71,7 +71,7 @@ unsigned int Geom_Imp::CollisionFilter() const noexcept{
 	return m_CollisionFilter;
 }
 ///////////////////////////////////////
-std::string ToString( GeomType type ){
+const char* ToString( GeomType type ){
 	switch( type ){
 	case GeomType::unknown:
 		return "unknown";
@@ -97,28 +97,28 @@ std::string ToString( GeomType type ){
 	};
 }
 
-GeomType ToGeomType( const std::string& name ){
-	if( name == "box" )
+GeomType ToGeomType( const char* name ){
+	if( strcmp(name, "box") == 0 )
 		return GeomType::box;
-	else if( name == "capsule" )
+	else if( strcmp(name, "capsule") == 0 )
 		return GeomType::capsule;
-	else if( name == "convexMesh" )
+	else if( strcmp(name, "convexMesh") == 0 )
 		return GeomType::convexMesh;
-	else if( name == "triangleMesh" )
+	else if( strcmp(name, "triangleMesh") == 0 )
 		return GeomType::triangleMesh;
-	else if( name == "cylinder" )
+	else if( strcmp(name, "cylinder") == 0 )
 		return GeomType::cylinder;
-	else if( name == "sphere" )
+	else if( strcmp(name, "sphere") == 0 )
 		return GeomType::sphere;
-	else if( name == "heightField" )
+	else if( strcmp(name, "heightField") == 0 )
 		return GeomType::heightField;
-	else if( name == "none" )
+	else if( strcmp(name, "none") == 0 )
 		return GeomType::none;
 	else
 		return GeomType::unknown;
 }
 
-std::string ToString( Geom::Filters filter ){
+const char* ToString( Geom::Filters filter ){
 	switch( filter ){
 	case Geom::none:
 		return "none";
@@ -163,42 +163,42 @@ std::string ToString( Geom::Filters filter ){
 	}
 }
 
-Geom::Filters GeomFilter( const std::string& filter ){
-	if( filter == "bogie" )
+Geom::Filters GeomFilter( const char* filter ){
+	if( strcmp(filter, "bogie") == 0 )
 		return Geom::fBogie;
-	else if( filter == "childBogie" )
+	else if( strcmp(filter, "childBogie") == 0 )
 		return Geom::fChildBogie;
-	else if( filter == "wheelset" )
+	else if( strcmp(filter, "wheelset") == 0 )
 		return Geom::fWheelset;
-	else if( filter == "cargo" )
+	else if( strcmp(filter, "cargo") == 0 )
 		return Geom::fCargo;
-	else if( filter == "terrain" )
+	else if( strcmp(filter, "terrain") == 0 )
 		return Geom::fTerrain;
-	else if( filter == "bogieSpace" )
+	else if( strcmp(filter, "bogieSpace") == 0 )
 		return Geom::fBogieSpace;
-	else if( filter == "crane" )
+	else if( strcmp(filter, "crane") == 0 )
 		return Geom::fCrane;
-	else if( filter == "construction" )
+	else if( strcmp(filter, "construction") == 0 )
 		return Geom::fConstruction;
-	else if( filter == "hook" )
+	else if( strcmp(filter, "hook") == 0 )
 		return Geom::fHook;
-	else if( filter == "hookFixed" )
+	else if( strcmp(filter, "hookFixed") == 0 )
 		return Geom::fHookFixed;
-	else if( filter == "couplingNorth" )
+	else if( strcmp(filter, "couplingNorth") == 0 )
 		return Geom::fCouplingNorth;
-	else if( filter == "couplingSouth" )
+	else if( strcmp(filter, "couplingSouth") == 0 )
 		return Geom::fCouplingSouth;
-	else if( filter == "triggerShape" )
+	else if( strcmp(filter, "triggerShape") == 0 )
 		return Geom::fTriggerShape;
-	else if( filter == "cabin" )
+	else if( strcmp(filter, "cabin") == 0 )
 		return Geom::fCabin;
-	else if( filter == "bogieNoCabin" )
+	else if( strcmp(filter, "bogieNoCabin") == 0 )
 		return Geom::fBogieNoCabin;
-	else if( filter == "buffer" )
+	else if( strcmp(filter, "buffer") == 0 )
 		return Geom::fBuffer;
-	else if( filter == "track" )
+	else if( strcmp(filter, "track") == 0 )
 		return Geom::fTrack;
-	else if( filter == "movableTrack" )
+	else if( strcmp(filter, "movableTrack") == 0 )
 		return Geom::fMovableTrack;
 	else 
 		return Geom::none;

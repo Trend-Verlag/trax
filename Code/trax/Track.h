@@ -629,7 +629,10 @@ namespace trax
 	dclspc const char* ToString( Track::TrackType type );
 
 	/// \brief Finds TrackType for string.
-	dclspc Track::TrackType TrackType( const std::string& type ) noexcept;
+	dclspc Track::TrackType TrackType( const char* type ) noexcept;
+
+	inline Track::TrackType TrackType( const std::string& type ) noexcept;
+
 
 	/// \brief Tests for equality.
 	inline bool operator==( const Track::End& theone, const Track::End& theother ) noexcept;
@@ -653,7 +656,7 @@ namespace trax
 
 
 	/// \brief Makes a string from the status
-	dclspc std::string ToString( EndType end );
+	dclspc const char* ToString( EndType end );
 
 
 	/// \defgroup Group_Segments Track's Segments
@@ -1433,6 +1436,10 @@ inline Track::End::End( const std::pair<std::shared_ptr<TrackBuilder>,EndType>& 
 	: id	{ trackEnd.first ? trackEnd.first->ID() : IDType{0u} }
 	, type	{ trackEnd.second }
 {}
+
+inline Track::TrackType TrackType( const std::string& type ) noexcept{
+	return TrackType( type.c_str() );
+}
 
 inline bool operator==( const Track::End& theone, const Track::End& theother ) noexcept{
 	return theone.id == theother.id && theone.type == theother.type;

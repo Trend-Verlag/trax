@@ -147,9 +147,11 @@ namespace trax{
 	inline EndType South( Orientation orientation ) noexcept;
 
 
-	dclspc std::string ToString( Orientation orient );
+	dclspc const char* ToString( Orientation orient );
 
-	dclspc Orientation ToOrientation( const std::string& orient );
+	dclspc Orientation ToOrientation( const char* orient );
+
+	Orientation ToOrientation( const std::string& orient );
 
 
 //inlines:
@@ -189,5 +191,9 @@ namespace trax{
 
 	inline EndType South( Orientation orientation ) noexcept{
 		return orientation ? EndType::south : EndType::north;
+	}
+
+	inline Orientation ToOrientation( const std::string& orient ){
+		return ToOrientation( orient.c_str() );
 	}
 }

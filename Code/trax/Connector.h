@@ -398,17 +398,21 @@ namespace trax{
 		virtual ConnectorUserData* UserData() const noexcept = 0;
 	};
 
-	/// \brief Makes a string from the status
-	dclspc std::string ToString( Connector::Status status );
+	/// \brief Gets a string from the status
+	dclspc const char* ToString( Connector::Status status );
 
 
-	/// \brief Makes a status value from a status string.
+	/// \brief Gets a status value from a status string.
 	/// \throws std::invalid_argument if the string was not recognized.
-	dclspc Connector::Status ToConnectorStatus( const std::string& status );
+	dclspc Connector::Status ToConnectorStatus( const char* status );
+
+	Connector::Status ToConnectorStatus( const std::string& status );
 
 
 	/// \returns The status a specific socket is related with.
-	dclspc Connector::Status ConnectorStatusFrom( const std::string& socketName );
+	dclspc Connector::Status ConnectorStatusFrom( const char* socketName );
+
+	Connector::Status ConnectorStatusFrom( const std::string& socketName );
 
 
 	/// \brief Connect two track ends by inserting them into Connectors, if available.
@@ -480,4 +484,15 @@ namespace trax{
 	/// slot.
 	/// \throws std::runtime_error, if the slot is empty.
 	dclspc spat::Vector<Length> DistanceToOtherEnd( const Connector& connector, int fromSlot );
+
+
+///////////////////////////////////////
+inline Connector::Status ToConnectorStatus( const std::string& status ){ 
+	return ToConnectorStatus( status.c_str() ); 
+}
+
+inline Connector::Status ConnectorStatusFrom( const std::string& socketName ) { 
+	return ConnectorStatusFrom( socketName.c_str() ); 
+}
+///////////////////////////////////////
 }
