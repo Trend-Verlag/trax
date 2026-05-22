@@ -31,6 +31,7 @@
 #include "trax/rigid/trains/Bogie.h"
 #include "trax/rigid/trains/RollingStock.h"
 #include "trax/rigid/trains/Train.h"
+#include "trax/rigid/trains/collections/Consist.h"
 
 
 #include <iostream>
@@ -48,8 +49,12 @@ std::unique_ptr<Fleet> Fleet::Make() noexcept
 }
 
 Fleet_Imp::Fleet_Imp() noexcept
-	:  m_bTrainGenerationEnabled{ true }
-{}
+	: Fleet_Base				{}
+	, m_pConsist				{ Consist::Make() }
+	, m_bTrainGenerationEnabled	{ true }
+{
+	
+}
 
 const char*	Fleet_Imp::TypeName() const noexcept{
 	return "Fleet";
@@ -124,6 +129,7 @@ bool Fleet_Imp::Remove( Train* pTrain, bool zeroIDs ){
 
 void Fleet_Imp::Clear() noexcept
 {
+	m_pConsist->Clear();
 	m_Bogies.clear();
 	m_PlugEnumerators.clear();
 	m_TrainsSeparated.clear();
@@ -236,6 +242,8 @@ void Fleet_Imp::RegisterBogies( const Train& train ) noexcept
 		{
 			if( auto pRollingStock = std::dynamic_pointer_cast<RollingStock>(pTrainComponent) )
 			{
+				m_pConsist->Add( pRollingStock );
+
 				for( int bindex = 0; bindex < pRollingStock->GetNumberOfBogies(); ++bindex )
 				{
 					Bogie* pBogie = &pRollingStock->GetBogie( bindex );
@@ -269,6 +277,8 @@ void Fleet_Imp::UnregisterBogies( const Train& train ) noexcept
 						m_Bogies.erase( iter );
 					}
 				}
+
+				m_pConsist->Remove( pRollingStock.get(), true );
 			}
 			else if( auto pTrain = std::dynamic_pointer_cast<Train>(pTrainComponent) )
 				UnregisterBogies( *pTrain );

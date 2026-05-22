@@ -1,17 +1,20 @@
 add_library(trax_trains_collections
     STATIC
         "./source/CargoCollection_Imp.cpp"
+        "./source/Consist_Imp.cpp"
         "./source/Fleet_Imp.cpp"
 )
 
 set(PUBLIC_HEADERS
     "./CargoCollection.h"
+    "./Consist.h"
     "./Fleet.h"
     "./FleetParser.h"
 )
 
 set(PRIVATE_HEADERS
     "./source/CargoCollection_Imp.h"
+    "./source/Consist_Imp.h"
     "./source/Fleet_Imp.h"
 )
 

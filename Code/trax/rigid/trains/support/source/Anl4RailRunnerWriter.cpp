@@ -37,6 +37,7 @@ static void WriteTrainContent( boost::property_tree::ptree& ptTrain, const Train
 
 static void WriteRollingStockContent( boost::property_tree::ptree& ptRollingStock, const RollingStock& rollingStock )
 {
+	ptRollingStock.put( "<xmlattr>.id", rollingStock.ID() );
 	ptRollingStock.put( "<xmlattr>.orientation", ToString( rollingStock.GetOrientation() ) );
 
 	for( int index = 0; index < rollingStock.GetNumberOfTopmostParents(); ++index )

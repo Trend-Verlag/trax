@@ -1,5 +1,5 @@
 //	trax track library
-//	AD 2014 
+//	AD 2026 
 //
 //  "the resolution of all the fruitless searches"
 //
@@ -29,11 +29,13 @@
 
 #include "../Fleet.h"
 
-#include "trax/rigid/trains/RailRunner.h"
+#include "trax/End.h"
 #include "trax/ImplementationHelper.h"
 #include "trax/Plug.h"
 
 namespace trax{
+
+	struct Consist;
 
 	
 	typedef Container_Imp<Train,Fleet> Fleet_Base;
@@ -91,6 +93,7 @@ namespace trax{
 		void Stop() noexcept override;
 
 	private:
+		std::unique_ptr<Consist> m_pConsist; // TODO: maybe collection of consists needed ...
 		std::vector<struct Bogie*> m_Bogies;
 		bool m_bTrainGenerationEnabled;
 
