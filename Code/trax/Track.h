@@ -934,8 +934,9 @@ namespace trax
 		/// \brief Connect this track at thisend with pOtherTrack at othersend.
 		///
 		/// Connects two tracks at the specified ends together so that a Location transitions
-		/// between them respectively. There is exactly one connection per end; use Points to
-		/// reconnect tracks and by that build switches. Existing connections are overriden.
+		/// between them respectively. There is exactly one connection per end; use Connectors to
+		/// reconnect tracks and by that build switches. Existing connections are overriden,
+		/// but their counterparts will keep the connection (one sided connection).
 		/// There is no need for the specified track ends to be adjacent in a spatial sense, but
 		/// with physics engines in general trains will derail if the gap becomes too large.
 		/// Be aware that tracks connected to each other will hold cyclic strong references, so 
@@ -948,6 +949,10 @@ namespace trax
 
 
 		/// \brief Remove connection from this end.
+		/// 
+		/// Disconnects the track at the specified end. It also will remove the track end 
+		/// from switches, if bOneSided is false. If bOneSided is true, the end is kept in 
+		/// the switches and the originally connected track remains connected.
 		/// \param thisEnd What track end to disconnect.
 		/// \param bOneSided If true only the connection of this track to another will be removed,
 		/// the other track stays connected to this.

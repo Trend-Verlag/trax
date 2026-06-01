@@ -91,7 +91,7 @@ bool Connector_Imp::IsValid() const noexcept
 void Connector_Imp::Disconnect(){
 	for( const auto& pair : m_Slots )
 		if( pair.first )
-			pair.first->Disconnect( pair.second, false );
+			pair.first->Disconnect( pair.second, true );
 }
 
 int Connector_Imp::Slot( 

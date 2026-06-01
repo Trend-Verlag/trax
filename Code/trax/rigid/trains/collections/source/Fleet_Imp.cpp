@@ -154,6 +154,10 @@ bool Fleet_Imp::IsTrainGenerationEnabled() const noexcept{
 	return m_bTrainGenerationEnabled;
 }
 
+std::shared_ptr<RollingStock> Fleet_Imp::GetRollingStock( IDType rollingStockID ) const noexcept
+{
+	return m_pConsist->Get( rollingStockID );
+}
 
 bool Fleet_Imp::Start( Scene& /*scene*/ )
 {

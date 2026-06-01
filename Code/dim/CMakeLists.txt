@@ -1,5 +1,6 @@
 add_library(dim 
 	INTERFACE
+		Configuration.h
 		DimensionedValues.h
 		DimLimits.h
 )

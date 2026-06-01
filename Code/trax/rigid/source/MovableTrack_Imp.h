@@ -37,6 +37,7 @@ namespace trax{
 	{
 	public:
 		MovableTrack_Imp() noexcept;
+		~MovableTrack_Imp() noexcept;
 
 		// Pose_Imp:
 		void PropagateAbsoluteFrameToClients() noexcept override;

@@ -71,6 +71,9 @@ namespace trax{
 		virtual std::shared_ptr<TrackSystem> This() const noexcept = 0;
 
 
+		virtual const char*	TypeName() const noexcept = 0;
+
+
 		// TrackCollections:
 
 		/// \brief Creates a TrackCollection with the supplied id.

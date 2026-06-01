@@ -30,12 +30,17 @@
 #include "trax/Configuration.h"
 #include "trax/Identified.h"
 #include "trax/Units.h"
+#include "trax/Simulated.h"
 #include "trax/SocketRegistry.h"
 #include "trax/collections/ObjectIDDecorator.h"
 
 #include "spat/Box.h"
 #include "spat/Frame.h"
 
+namespace cmnd{
+	class Command;
+	class Logbook;
+}
 
 namespace trax{
 
@@ -57,6 +62,7 @@ namespace trax{
 	/// a frame of reference which is used to determine the general situation of the module. 
 	/// A track will give module local coordinates.
 	struct Module : Identified<Module>,
+					Simulated,
 					virtual SocketRegistry
 	{
 		/// \brief Makes a standard Module object.
@@ -77,10 +83,18 @@ namespace trax{
 		virtual bool IsValid() const noexcept = 0;
 
 
-		virtual void RegisterCollections( Scene& withScene ) const noexcept = 0;
+		/// \brief Registers this module with a scene for simulation.
+		/// 
+		/// After registering the methods from the Simulated interface will get 
+		/// called by the engine. This will also register the collections of the 
+		/// module with the scene.
+		virtual void Register( Scene& withScene ) noexcept = 0;
 
 
-		virtual void UnregisterCollections( Scene& withScene ) const noexcept = 0;
+		/// \brief Unregisters this module from a scene.
+		/// 
+		/// It will also unregister all the collections.
+		virtual void Unregister( Scene& withScene ) noexcept = 0;
 
 
 		/// \brief Set frame of reference.
@@ -193,6 +207,15 @@ namespace trax{
 
 		/// \brief Clears all the attached collections.
 		virtual void ClearCollections() = 0;
+
+
+		// Command processing:
+		virtual void SetLogbook( cmnd::Logbook* pLogbook ) = 0;
+		virtual bool Process( std::unique_ptr<cmnd::Command> Command ) = 0;
+		virtual bool Execute( std::unique_ptr<cmnd::Command> Command ) = 0;
+		virtual bool Undo() = 0;
+		virtual bool Redo() = 0;
+		virtual void StartReplay() = 0;
 	};
 
 }

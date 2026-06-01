@@ -39,6 +39,7 @@ namespace trax{
 	class Geom_Imp : public virtual Geom{
 	public:
 		Geom_Imp() noexcept;
+		~Geom_Imp() noexcept;
 
 		// Geom:
 		
@@ -67,5 +68,9 @@ namespace trax{
 		Material		m_Material;
 		Filters			m_TypeFilter;
 		unsigned int	m_CollisionFilter;
+
+		friend long trax::Geom::CountInstances() noexcept;
+		friend void trax::Geom::DumpInstances( Verbosity verbosity ) noexcept;
+		static std::vector<Geom*> sm_Instances;
 	};
 }

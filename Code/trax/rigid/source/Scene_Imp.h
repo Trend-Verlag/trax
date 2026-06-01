@@ -38,6 +38,7 @@ namespace trax{
 						public JackEnumerator{
 	public:
 		Scene_Imp();
+		~Scene_Imp();
 
 		const char*	TypeName() const noexcept override{
 			return "Scene";
@@ -48,6 +49,8 @@ namespace trax{
 		void Unregister( const Simulated& simulated ) noexcept override;
 
 		void UnregisterAllSimulated() noexcept override;
+
+		common::Span<Simulated*> RegisteredSimulated() const noexcept override;
 
 		void Simulate() override;
 

@@ -21,6 +21,7 @@ namespace trax{
 	class PhysX_Shape_ImpBase : public virtual Shape_ImpBase{
 	public:
 		PhysX_Shape_ImpBase( physx::PxRigidActor& actor, Real engine_meters_per_unit ) noexcept;
+		~PhysX_Shape_ImpBase();
 
 		//const char*	TypeName() const noexcept override;
 

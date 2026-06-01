@@ -44,6 +44,8 @@ namespace trax{
 	/// IDs and ref-IDs respectively. E.g., after reading from a file. Also 
 	/// the registry mechanism can get used to assign unique IDs for plugs 
 	/// and set the ref-IDs of jacks to the connected plug's ID.
+	/// You can use RegisterSockets/UnregisterSockets from specific objects
+	/// to register/unregister all its sockets at once.
 	struct SocketRegistry{
 
 		/// \brief Makes a standard SocketRegistry object.
@@ -59,6 +61,7 @@ namespace trax{
 		/// If the Plug comes with an unique id, that one gets used. If 
 		/// for an unconnected Plug a matching Jack is found, the Plug 
 		/// will get connected.
+		/// Registering an already registered plug will have no effect.
 		/// \param plug Reference to Plug to register.
 		/// \exception std::logic_error Thrown if it is tried to register 
 		/// a Plug with an id that is already occupied by another registered 

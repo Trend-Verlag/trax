@@ -24,6 +24,11 @@ PhysX_Gestalt_ImpBase::PhysX_Gestalt_ImpBase( physx::PxRigidDynamic& actor, Real
 {
 }
 
+PhysX_Gestalt_ImpBase::~PhysX_Gestalt_ImpBase()
+{
+	Clear();
+}
+
 void PhysX_Gestalt_ImpBase::SetName( const char* name ) noexcept{
 	PhysX_Shape_ImpBase::SetName( name );
 }
@@ -122,6 +127,7 @@ PhysX_Gestalt_Imp::PhysX_Gestalt_Imp( physx::PxScene& scene, Real engine_meters_
 
 PhysX_Gestalt_Imp::~PhysX_Gestalt_Imp() noexcept
 {
+	Clear();
 	SceneLockWrite lock{ Actor().getScene() };
 	Actor().release();
 }

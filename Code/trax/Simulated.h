@@ -5,7 +5,7 @@
 //
 //								Peter Gabriel
 //
-// Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
+// Copyright (c) 2026 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //
 // Permission is hereby granted to any person obtaining a copy of this software 
@@ -37,6 +37,10 @@ namespace trax{
 	/// to get called back for Update, Pause, Resume and Stop.
 	struct Simulated
 	{
+		/// \returns the name for the object type that implements this interface. 
+		virtual const char*	TypeName() const noexcept = 0;
+
+
 		/// \brief Called if the simulation is started.
 		/// \param scene The scene the simulation is started in.
 		/// \returns true if the simulated object wants to get

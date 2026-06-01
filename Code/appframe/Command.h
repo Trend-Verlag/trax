@@ -139,7 +139,7 @@ namespace cmnd{
 
 		/// \brief is the command reversible.
 		/// \returns true if the command can get unexecuted after execution.
-		virtual bool Revesible() const noexcept { return true; }
+		virtual bool Reversible() const noexcept { return true; }
 
 
 		/// \returns true if the command is targeting the simulation 
@@ -316,7 +316,7 @@ namespace cmnd{
 
 		bool Valid		() const noexcept override;
 		bool Profound	() const noexcept override;
-		bool Revesible	() const noexcept override;
+		bool Reversible	() const noexcept override;
 
 		std::unique_ptr<Command> Clone() const override;
 
@@ -616,12 +616,12 @@ inline bool Macro::Profound() const noexcept{
 		if( !pCommand->Profound() )
 			return false;
 
-	return false;
+	return true;
 }
 
-inline bool Macro::Revesible() const noexcept{
+inline bool Macro::Reversible() const noexcept{
 	for( auto pCommand : m_Commands )
-		if( !pCommand->Revesible() )
+		if( !pCommand->Reversible() )
 			return false;
 
 	return true;

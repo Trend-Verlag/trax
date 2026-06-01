@@ -26,6 +26,7 @@
 
 #pragma once
 #include "common/NarrowCast.h"
+#include "trax/Configuration.h"
 
 #include <istream>
 #include <ostream>
@@ -40,7 +41,7 @@ namespace trax{
 	/// 2. The real type of the number can be changed in one place only (change the type of Type)
 	/// In general we need ids for one reason only: we can not allocate objects at an address we want to. So if we
 	/// want to restore any program state - e.g. from file - we have to have platform independend references...
-	struct IDType{
+	struct dclspc IDType{
 
 		/// \brief Type to store index.
 		typedef unsigned int Type;
@@ -56,11 +57,14 @@ namespace trax{
 			: m_id{0}
 		{}
 
+		constexpr IDType( const IDType& ) noexcept = default;
+		constexpr IDType( IDType&& ) noexcept = default;
+
 		constexpr IDType( unsigned int uiidval ) noexcept
 			: m_id{uiidval}
 		{}
 
-		IDType( int iidval )
+		IDType( int iidval ) noexcept
 			: m_id{common::narrow_cast<Type>(iidval)}
 		{}
 
@@ -68,79 +72,84 @@ namespace trax{
 			: m_id{common::narrow_cast<Type>(uliidval)}
 		{}
 
-		IDType( long int liidval )
+		inline IDType( long int liidval )
 			: m_id{common::narrow_cast<Type>(liidval)}
 		{}
 		///@}
 
+		~IDType() noexcept = default;
+
+		constexpr IDType& operator=( const IDType& ) noexcept = default;
+		constexpr IDType& operator=( IDType&& ) noexcept = default;
+
 		/// \brief converts to true if the IDType is a valid id.
-		operator bool() const noexcept{
+		constexpr operator bool() const noexcept{
 			return m_id > 0;
 		}
 
 		/// \brief converts to int.
-		operator int() const{
+		operator int() const noexcept{
 			return common::narrow_cast<int>(m_id);
 		}
 
-		Type GetID() const noexcept{ return m_id; }
+		constexpr Type GetID() const noexcept{ return m_id; }
 
 
 		/// \name Mathematical Operators for IDType
 		///@{
-		friend bool operator==( const IDType& idA, const IDType& idB ) noexcept{
+		friend constexpr bool operator==( const IDType& idA, const IDType& idB ) noexcept{
 			return idA.m_id == idB.m_id;
 		}
 
 		template<typename ComType>
-		friend bool operator==( const IDType& idA, const ComType& idB ) noexcept{
+		friend constexpr bool operator==( const IDType& idA, const ComType& idB ) noexcept{
 			return idA.m_id == static_cast<Type>(idB);
 		}
 
 		template<typename ComType>
-		friend bool operator==( const ComType& idA, const IDType& idB ) noexcept{
+		friend constexpr bool operator==( const ComType& idA, const IDType& idB ) noexcept{
 			return static_cast<Type>(idA) == idB.m_id;
 		}
 
-		friend bool operator!=( const IDType& idA, const IDType& idB ) noexcept{
+		friend constexpr bool operator!=( const IDType& idA, const IDType& idB ) noexcept{
 			return idA.m_id != idB.m_id;
 		}
 
 		template<typename ComType>
-		friend bool operator!=( const IDType& idA, const ComType& idB ) noexcept{
+		friend constexpr bool operator!=( const IDType& idA, const ComType& idB ) noexcept{
 			return idA.m_id != static_cast<Type>(idB);
 		}
 
 		template<typename ComType>
-		friend bool operator!=( const ComType& idA, const IDType& idB ) noexcept{
+		friend constexpr bool operator!=( const ComType& idA, const IDType& idB ) noexcept{
 			return static_cast<Type>(idA) != idB.m_id;
 		}
 
-		friend bool operator<( const IDType& idA, const IDType& idB ) noexcept{
+		friend constexpr bool operator<( const IDType& idA, const IDType& idB ) noexcept{
 			return idA.m_id < idB.m_id;
 		}
 
-		friend bool operator<=( const IDType& idA, const IDType& idB ) noexcept{
+		friend constexpr bool operator<=( const IDType& idA, const IDType& idB ) noexcept{
 			return idA.m_id <= idB.m_id;
 		}
 
-		friend bool operator>( const IDType& idA, const IDType& idB ) noexcept{
+		friend constexpr bool operator>( const IDType& idA, const IDType& idB ) noexcept{
 			return idA.m_id > idB.m_id;
 		}
 
-		friend bool operator>=( const IDType& idA, const IDType& idB ) noexcept{
+		friend constexpr bool operator>=( const IDType& idA, const IDType& idB ) noexcept{
 			return idA.m_id >= idB.m_id;
 		}
 
-		friend IDType operator+( const IDType& idA, const IDType& idB ) noexcept{
+		friend constexpr IDType operator+( const IDType& idA, const IDType& idB ) noexcept{
 			return idA.m_id + idB.m_id;
 		}
 
-		friend IDType operator+( const IDType& idA, const int& idB ) noexcept{
+		friend constexpr IDType operator+( const IDType& idA, const int& idB ) noexcept{
 			return idA.m_id + idB;
 		}
 
-		friend IDType operator+( const int& idA, const IDType& idB ) noexcept{
+		friend constexpr IDType operator+( const int& idA, const IDType& idB ) noexcept{
 			return idA + idB.m_id;
 		}
 

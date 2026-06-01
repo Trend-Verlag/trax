@@ -72,9 +72,12 @@ namespace trax{
 			void insert( const mapped_type& pelement ){
 				if( pelement->ID() ){
 					if( !IsFree( pelement->ID() ) ){
+						if( const_iterator citer = find( pelement->ID() ); citer != end() && citer->second == pelement )
+							return; // already in container, do nothing
+						
 						std::ostringstream stream;
 						stream << "An objects ID is not unique: " << pelement->ID() << " value type: " << typeid( mapped_type ).name();
-						throw std::logic_error( stream.str() );
+						throw std::logic_error( stream.str() );		
 					}
 				}
 				else
@@ -117,12 +120,12 @@ namespace trax{
 				return m_Container.end();
 			}
 
-			bool IsFree( IDType id ) const{
+			bool IsFree( key_type id ) const{
 				return m_Container.find( id ) == m_Container.end();
 			}
 
-			IDType GetFree() const{
-				IDType x = 1u;
+			key_type GetFree() const{
+				key_type x = 1u;
 				for( auto citer = m_Container.begin();
 					citer != m_Container.end(); ++x, ++citer )
 				{
@@ -135,7 +138,7 @@ namespace trax{
 				return x;
 			}
 
-			IDType GetMaxValid() const noexcept{
+			key_type GetMaxValid() const noexcept{
 				if( m_Container.empty() )
 					return 0u;
 

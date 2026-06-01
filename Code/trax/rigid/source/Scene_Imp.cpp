@@ -31,6 +31,8 @@
 #include "../GeomType.h"
 #include "trax/Simulated.h"
 
+#include <iostream>
+
 namespace trax
 {
 	using namespace spat;
@@ -41,10 +43,24 @@ Scene_Imp::Scene_Imp()
 	m_PlugToStop.Reference( "name", "PlugToStop" );
 }
 
+Scene_Imp::~Scene_Imp()
+{
+	for( auto& pSimulated : m_Simulated )
+	{
+		std::cerr << Verbosity::error << "There is a Simulator interface still registered: " << pSimulated->TypeName() << "." << std::endl;
+	}
+
+	if( !m_Simulated.empty() )
+		std::cerr << Verbosity::detailed << "Not having Simulator interfaces already unregistered when destroying Scene_Imp is almost certainly a bug." << std::endl;
+}
+
 void Scene_Imp::Register( Simulated& simulated ) noexcept
 {
 	if( std::find( m_Simulated.begin(), m_Simulated.end(), &simulated ) == m_Simulated.end() )
+	{
 		m_Simulated.push_back( &simulated );
+		std::cout << Verbosity::detailed << "Registered a " << simulated.TypeName() << " for simulation." << std::endl;
+	}
 }
 
 void Scene_Imp::Unregister( const Simulated& simulated ) noexcept
@@ -57,6 +73,8 @@ void Scene_Imp::Unregister( const Simulated& simulated ) noexcept
 			(*it)->Stop();
 
 		m_Simulated.erase( it );
+
+		std::cout << Verbosity::detailed << "Unregistered a " << simulated.TypeName() << " from simulation." << std::endl;
 	}
 }
 
@@ -67,10 +85,16 @@ void Scene_Imp::UnregisterAllSimulated() noexcept
 		for( auto& pSimulated : m_Simulated )
 		{
 			pSimulated->Stop();
+			std::cout << Verbosity::detailed << "Unregistered a " << pSimulated->TypeName() << " from simulation." << std::endl;
 		}
 	}
 
 	m_Simulated.clear();
+}
+
+common::Span<Simulated*> Scene_Imp::RegisteredSimulated() const noexcept
+{
+	return { m_Simulated.data(), m_Simulated.size() };
 }
 
 void Scene_Imp::Simulate()

@@ -39,7 +39,7 @@ namespace trax{
 	class Shape_ImpBase : public virtual Shape{
 	public:
 		Shape_ImpBase() noexcept;
-
+		~Shape_ImpBase();
 
 		//Shape:
 		void SetName( const char* name ) noexcept override;
@@ -64,5 +64,9 @@ namespace trax{
 	private:
 		std::vector<std::unique_ptr<Geom>> m_Geoms;
 		std::string m_Name;
+
+		friend long trax::Shape::CountInstances() noexcept;
+		friend void trax::Shape::DumpInstances( Verbosity verbosity ) noexcept;
+		static std::vector<Shape*> sm_Instances;
 	};
 }

@@ -106,9 +106,11 @@ namespace trax{
 
 		/// \brief Registers a Simulated object for simulation.
 		///
-		/// Objects that are created with a scene reference register automatically,
-		/// others will need manual registration.
-		/// 
+		/// Objects that are created with a scene reference may 
+		/// register automatically, when needed, others will need manual 
+		/// registration. Don't forget to unregister the Simulated objects 
+		/// before they are destroyed.
+		///
 		/// The methods of the Simulated object will be called in order
 		/// of registration. Register container objects before their contents.
 		/// \param simulated The Simulated object to register.
@@ -121,6 +123,10 @@ namespace trax{
 
 		/// \brief Unregisters all Simulated objects from simulation.
 		virtual void UnregisterAllSimulated() noexcept = 0;
+
+
+		/// \returns a span of all Simulated objects currently registered for simulation.
+		virtual common::Span<Simulated*> RegisteredSimulated() const noexcept = 0;
 
 
 		/// \name Simulate

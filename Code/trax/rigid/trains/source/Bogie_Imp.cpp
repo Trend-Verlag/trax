@@ -52,6 +52,10 @@ std::shared_ptr<Bogie> Bogie::Make( Scene& scene, std::shared_ptr<Gestalt> pGest
 		return nullptr;
 	}
 }
+
+std::shared_ptr<Bogie> Bogie::Cast( std::shared_ptr<RailRunner> pRailRunner ) noexcept{
+	return std::dynamic_pointer_cast<Bogie>( pRailRunner );
+}
 ///////////////////////////////////////
 const Angle Bogie_Imp::scm_BendingAngle = pi/64;
 

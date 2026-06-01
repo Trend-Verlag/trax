@@ -38,6 +38,7 @@ namespace trax{
 
 //	struct DepotCollection;
 //	struct Materials;
+	struct RollingStock;
 	struct Train;
 
 
@@ -49,6 +50,8 @@ namespace trax{
 		/// \brief Makes a standard TrackCollection object.
 		static dclspc std::unique_ptr<Fleet> Make() noexcept;
 
+
+		virtual const char*	TypeName() const noexcept = 0;
 
 		///// \brief Couple two Bogie's ends, contained in this Fleet.
 		/////
@@ -83,6 +86,7 @@ namespace trax{
 		virtual bool IsTrainGenerationEnabled() const noexcept = 0;
 
 
+		virtual std::shared_ptr<RollingStock> GetRollingStock( IDType rollingStockID ) const noexcept = 0;
 
 
 

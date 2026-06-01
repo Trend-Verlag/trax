@@ -29,12 +29,42 @@
 #include "Shape_Imp.h"
 
 #include "common/NarrowCast.h"
+#include "dim/support/DimSupportStream.h"
+#include "spat/support/SpatSupportStream.h"
+
 #include <iostream>
 
 namespace trax{
 ///////////////////////////////////////
+long trax::Shape::CountInstances() noexcept
+{
+	return static_cast<long>(Shape_ImpBase::sm_Instances.size());
+}
+
+void Shape::DumpInstances( Verbosity verbosity ) noexcept
+{
+	for( auto* pShape : Shape_ImpBase::sm_Instances )
+	{
+		spat::Frame<Length,One> frame;
+		pShape->GetFrame( frame );
+		std::cout << verbosity << "Shape instance: " << pShape->GetName() << ", at position: " << frame.P << std::endl;
+	}
+}
+///////////////////////////////////////
+std::vector<Shape*> Shape_ImpBase::sm_Instances;
+
 Shape_ImpBase::Shape_ImpBase() noexcept
 {
+	sm_Instances.push_back(this);
+}
+
+Shape_ImpBase::~Shape_ImpBase()
+{
+	Clear();
+	auto it = std::find(sm_Instances.begin(), sm_Instances.end(), this);
+	if (it != sm_Instances.end()) {
+		sm_Instances.erase(it);
+	}
 }
 
 void Shape_ImpBase::SetName( const char* name ) noexcept

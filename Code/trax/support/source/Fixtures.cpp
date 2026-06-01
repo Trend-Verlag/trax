@@ -41,7 +41,7 @@ using namespace dim::literals;
 ///////////////////////////////////////
 FixtureBase::FixtureBase()
 {
-	SetReportVerbosity( trax::Verbosity::verbose );
+	SetReportVerbosity( trax::Verbosity::normal );
 }
 
 FixtureBase::~FixtureBase()

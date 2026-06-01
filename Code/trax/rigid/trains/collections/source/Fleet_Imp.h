@@ -68,6 +68,7 @@ namespace trax{
 
 		bool IsTrainGenerationEnabled() const noexcept override;
 
+		std::shared_ptr<RollingStock> GetRollingStock( IDType rollingStockID ) const noexcept override;
 
 
 		//std::shared_ptr<DepotCollection> Attach( std::shared_ptr<DepotCollection> pDepotCollection ) noexcept override;

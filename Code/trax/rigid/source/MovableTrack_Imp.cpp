@@ -43,6 +43,10 @@ MovableTrack_Imp::MovableTrack_Imp() noexcept
 {
 }
 
+MovableTrack_Imp::~MovableTrack_Imp() noexcept
+{
+}
+
 void MovableTrack_Imp::PropagateAbsoluteFrameToClients() noexcept
 {
 	Track_Imp::PropagateAbsoluteFrameToClients();

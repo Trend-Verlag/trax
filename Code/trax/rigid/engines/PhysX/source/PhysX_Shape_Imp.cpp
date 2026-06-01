@@ -22,6 +22,11 @@ PhysX_Shape_ImpBase::PhysX_Shape_ImpBase( physx::PxRigidActor& actor, Real engin
 {
 }
 
+PhysX_Shape_ImpBase::~PhysX_Shape_ImpBase()
+{
+	Clear();
+}
+
 void PhysX_Shape_ImpBase::SetName( const char* name ) noexcept{
 	Shape_ImpBase::SetName( name );
 	SceneLockWrite lock{ Actor().getScene() };
@@ -60,6 +65,7 @@ PhysX_Shape_Imp::PhysX_Shape_Imp(physx::PxScene& scene, Real engine_meters_per_u
 
 PhysX_Shape_Imp::~PhysX_Shape_Imp() noexcept
 {
+	Clear();
 	SceneLockWrite lock{ Actor().getScene() };
 	Actor().release();
 }

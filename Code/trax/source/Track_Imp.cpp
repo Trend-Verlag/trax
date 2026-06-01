@@ -839,6 +839,9 @@ void Track_Imp::Disconnect( EndType thisend, bool oneSided ){
 			if( m_pTETFront )
 				CreateEndTransitionSignal( EndType::north );
 		}
+
+		if( !oneSided && m_pConnectorFront )
+			m_pConnectorFront->Clear( m_pConnectorFront->Slot( *this, EndType::north ) );
 	}
 	else if( thisend == EndType::south ){
 		if( m_TrackEnd.first ){
@@ -862,6 +865,9 @@ void Track_Imp::Disconnect( EndType thisend, bool oneSided ){
 			if( m_pTETEnd )
 				CreateEndTransitionSignal( EndType::south );
 		}
+
+		if( !oneSided && m_pConnectorEnd )
+			m_pConnectorEnd->Clear( m_pConnectorEnd->Slot( *this, EndType::south ) );
 	}
 }
 

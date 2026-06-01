@@ -141,6 +141,9 @@ void PhysX_GeomBase_Imp::OnAttach( physx::PxRigidActor& actor )
 {
 	SceneLockWrite lock{ actor.getScene() };
 
+	assert( m_pMaterial == nullptr );
+	assert( m_pShape == nullptr );
+
 	m_pMaterial = actor.getScene()->getPhysics().createMaterial(	
 		static_cast<physx::PxReal>(GetMaterial().staticFriction),
 		static_cast<physx::PxReal>(GetMaterial().dynamicFriction),
@@ -153,7 +156,8 @@ void PhysX_GeomBase_Imp::OnAttach( physx::PxRigidActor& actor )
 	if( !m_pShape )
 		throw std::runtime_error("trax::PhysX_GeomBase_Imp: physx::PxRigidActorExt::createExclusiveShape failed!");
 
-	m_pShape->setName( GetName() ? nullptr : GetName() );
+	std::cout << Verbosity::verbose << "physx::PxShape created for Geom: " << (GetName() ? GetName() : "unknown") << std::endl;
+	m_pShape->setName( GetName() ? GetName() : nullptr );
 	m_pShape->setLocalPose( PoseFrom( Normalize(m_Frame).second ) );
 
 #ifdef _DEBUG
@@ -177,6 +181,7 @@ void PhysX_GeomBase_Imp::OnDetach() noexcept{
 		assert( m_pShape->getActor() );
 		m_pShape->getActor()->detachShape( *m_pShape );
 		m_pShape = nullptr;
+		std::cout << Verbosity::verbose << "physx::PxShape deleted for Geom: " << (GetName() ? GetName() : "unknown") << std::endl;
 	}
 }
 

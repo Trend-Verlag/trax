@@ -26,6 +26,7 @@ namespace trax
 	{
 	public:
 		PhysX_Gestalt_ImpBase( physx::PxRigidDynamic& actor, Real engine_meters_per_unit, Real engine_kilograms_per_unit ) noexcept;
+		~PhysX_Gestalt_ImpBase();
 
 		//Body/Shape:
 		void SetName( const char* name ) noexcept override;

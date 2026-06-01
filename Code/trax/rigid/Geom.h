@@ -191,6 +191,13 @@ namespace trax{
 		virtual bool IsOverlapping( const Geom& other ) const noexcept = 0;
 
 
+		/// \brief Counts the number of Geom instances alive.
+		static dclspc long CountInstances() noexcept;
+
+		/// \brief Dumps the Geoms alive to the console.
+		static dclspc void DumpInstances( Verbosity verbosity = Verbosity::normal ) noexcept;
+
+
 		virtual ~Geom() = default;
 	};
 

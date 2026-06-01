@@ -169,6 +169,8 @@
 /// \endcode
 /// 
 
+#include "dim/Configuration.h"
+
 #include <cmath>
 #include <limits>
 #include <utility>
@@ -176,21 +178,6 @@
 /// \brief The namespace provides classes and methods for the dim library
 namespace dim
 {
-	constexpr int DIM_VERSION_MAJOR = 3;
-	constexpr int DIM_VERSION_MINOR = 0;
-	constexpr int DIM_VERSION_PATCH = 0;
-
-#if defined( DIM_SINGLE )
-	typedef float Real; ///< Underlying floating point type to be used with the dim library.
-#elif defined( DIM_DOUBLE )
-	typedef double Real; ///< Underlying floating point type to be used with the dim library.
-#elif defined( DIM_LONG_DOUBLE )
-	typedef long double Real; ///< Underlying floating point type to be used with the dim library.
-#else
-	typedef float Real; ///< Underlying floating point type to be used with the dim library.
-#endif
-
-
 	/// \name Length and Mass and Time Units.
 	///@{
 	constexpr Real kilograms_per_unit	= 1; ///< How many kilograms will make up one unit.

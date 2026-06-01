@@ -44,7 +44,9 @@ std::unique_ptr<Module> Module::Make( bool bCreateCollections ) noexcept
 }
 
 Module_Imp::Module_Imp( bool bCreateCollections ) noexcept
-	: m_Frame{ Identity<Length,One> }
+	: m_Frame			{ Identity<Length,One> }
+	, m_pLogbook		{ nullptr }
+	, m_SimulationSteps	{ 0 }
 {
 	if( bCreateCollections )
 	{
@@ -124,20 +126,24 @@ bool Module_Imp::IsValid() const noexcept
 	return true;
 }
 
-void Module_Imp::RegisterCollections( Scene& withScene ) const noexcept
+void Module_Imp::Register( Scene& withScene ) noexcept
 {
+	withScene.Register( *this );
+
 	if( m_pTrackSystem )
 		withScene.Register( *m_pTrackSystem );
 	if( m_pFleet )
 		withScene.Register( *m_pFleet );
 }
 
-void Module_Imp::UnregisterCollections( Scene& withScene ) const noexcept
+void Module_Imp::Unregister( Scene& withScene ) noexcept
 {
 	if( m_pFleet )
 		withScene.Unregister( *m_pFleet );
 	if( m_pTrackSystem )
 		withScene.Unregister( *m_pTrackSystem );
+
+	withScene.Unregister( *this );
 }
 
 void Module_Imp::SetFrame( const spat::Frame<Length,One>& frame ) noexcept{
@@ -273,6 +279,98 @@ void Module_Imp::ClearCollections()
 	if( m_pCameraCollection )
 		m_pCameraCollection->Clear();
 }
+
+void Module_Imp::SetLogbook( cmnd::Logbook* pLogbook )
+{
+	m_pLogbook = pLogbook;
+}
+
+bool Module_Imp::Process( std::unique_ptr<cmnd::Command> Command )
+{
+	if( Command  )
+	{
+		m_Play.Push( std::move( Command ) );
+		return true;
+	}
+
+	return false;
+}
+
+bool Module_Imp::Execute( std::unique_ptr<cmnd::Command> Command )
+{
+	if( Command  )
+	{
+		Command->TimeStamp( m_SimulationSteps );
+		if( m_pLogbook )
+			m_pLogbook->Log( *Command );
+		m_History.Push( Command->Clone() );
+		Command->Execute();
+		return true;
+	}
+
+	return false;
+}
+
+bool Module_Imp::Undo()
+{
+	return false;
+}
+
+bool Module_Imp::Redo()
+{
+	return false;
+}
+
+void Module_Imp::StartReplay()
+{
+	m_Replay.Swap( m_History );
+	m_SimulationSteps = 0;
+}
+
+bool Module_Imp::Start( Scene& Scene )
+{
+	m_SimulationSteps = 0;
+	return true;
+}
+
+void Module_Imp::Idle()
+{}
+
+void Module_Imp::PreUpdate()
+{}
+
+void Module_Imp::Update( Time dt )
+{
+	++m_SimulationSteps;
+
+	if( !m_Replay.Empty() )
+	{
+		while( auto pCommand = m_Replay.PopFront( m_SimulationSteps ) ){
+			assert( m_SimulationSteps == pCommand->TimeStamp() );
+			Execute( std::move( pCommand ) );
+		}
+	}
+
+	while( auto pCommand = m_Play.PopFront() ){
+		if( pCommand->InfluencesSimulationResult() )
+			m_Replay.Clear();	// if some command is to be executed, end replay since typically 
+								// comands will not work on different targets etc...
+
+		pCommand->SetAllTimeStamps( m_SimulationSteps );
+		pCommand->Freeze();
+
+		Execute( std::move( pCommand ) );
+	}
+}
+
+void Module_Imp::Pause() noexcept
+{}
+
+void Module_Imp::Resume() noexcept
+{}
+
+void Module_Imp::Stop() noexcept
+{}
 
 int Module_Imp::CountJacks() const
 {

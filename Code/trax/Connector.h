@@ -290,6 +290,8 @@ namespace trax{
 
 
 		/// \brief Disconnects all track ends from each other.
+		///
+		/// Keeps the track ends in the slots, but disconnects them from each other. 
 		virtual void Disconnect() = 0;
 
 

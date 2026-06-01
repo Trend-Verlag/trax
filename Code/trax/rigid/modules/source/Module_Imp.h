@@ -28,6 +28,7 @@
 #pragma once
 
 #include "../Module.h"
+#include "appframe/Command.h"
 #include "trax/ImplementationHelper.h"
 #include "trax/source/SocketRegistry_Imp.h"
 
@@ -50,9 +51,9 @@ namespace trax{
 
 		bool IsValid() const noexcept override;
 
-		void RegisterCollections( Scene& withScene ) const noexcept override;
+		void Register( Scene& withScene ) noexcept override;
 
-		void UnregisterCollections( Scene& withScene ) const noexcept override;
+		void Unregister( Scene& withScene ) noexcept override;
 
 		void SetFrame( const spat::Frame<Length,One>& frame ) noexcept override;
 
@@ -102,13 +103,48 @@ namespace trax{
 		void ClearCollections() override;
 
 
+		// Command processing:
+		void SetLogbook( cmnd::Logbook* pLogbook ) override;
+
+		bool Process( std::unique_ptr<cmnd::Command> Command ) override;
+
+		bool Execute( std::unique_ptr<cmnd::Command> Command ) override;
+
+		bool Undo() override;
+
+		bool Redo() override;
+
+		void StartReplay() override;
+
+
+		// Simulated:
+		bool Start( Scene& Scene ) override;
+
+		void Idle() override;
+
+		void PreUpdate() override;
+
+		void Update( Time dt ) override;
+
+		void Pause() noexcept override;
+
+		void Resume() noexcept override;
+
+		void Stop() noexcept override;
+
+
 		int CountJacks() const override;
 	protected:
 		const Jack& _GetJack( int idx ) const override;
 
 	private:
-		spat::Frame<Length, One>	m_Frame;
-		spat::Box<Length>			m_Volume;
+		spat::Frame<Length, One> m_Frame;
+		spat::Box<Length> m_Volume;
+		cmnd::Logbook* m_pLogbook;
+		cmnd::Macro m_Play;
+		cmnd::Macro m_History;
+		cmnd::Macro m_Replay;
+		long m_SimulationSteps;	// Number of simulation steps since last Start() or StartReplay() call.
 
 		std::shared_ptr<TrackSystem>			m_pTrackSystem;
 		std::shared_ptr<Fleet>					m_pFleet;

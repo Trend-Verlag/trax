@@ -148,6 +148,13 @@ namespace trax{
 		//virtual std::shared_ptr<Axis> GetAxis( int idx = 0 ) const = 0;
 
 
+		/// \brief Counts the number of Shape instances alive.
+		static dclspc long CountInstances() noexcept;
+
+		/// \brief Dumps the Geoms alive to the console.
+		static dclspc void DumpInstances( Verbosity verbosity = Verbosity::normal ) noexcept;
+
+
 		virtual ~Shape() = default;
 	};
 

@@ -47,21 +47,6 @@
 
 namespace dim
 {
-
-#if defined( _WIN32 )
-#	if defined( DIM_STATIC_LIBRARY )
-#		define dclspc_dim
-#	else
-#		if defined( DIM_DLL_LIBRARY )
-#			define dclspc_dim __declspec( dllexport )
-#		else
-#			define dclspc_dim __declspec( dllimport )
-#		endif
-#	endif
-#else
-#	define dclspc_dim
-#endif
-
 	dclspc_dim Real KilogramsPerUnit() noexcept;
 	dclspc_dim Real MetersPerUnit() noexcept;
 	dclspc_dim Real SecondsPerUnit() noexcept;

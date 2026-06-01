@@ -271,11 +271,11 @@ bool TrainComponent_Imp<Base>::IsActivated( EndType end ) const noexcept
 		return coupling.first.IsActivated( coupling.second );
 	}
 	catch( const std::exception& e ){
-		std::cerr << "TrainComponent_Imp::IsActivated: " << e.what() << std::endl;
+		std::cerr << trax::Verbosity::normal << "TrainComponent_Imp::IsActivated: " << e.what() << std::endl;
 		return false;
 	}
 	catch( ... ){
-		std::cerr << "TrainComponent_Imp::IsActivated: unknown exception." << std::endl;
+		std::cerr << trax::Verbosity::normal << "TrainComponent_Imp::IsActivated: unknown exception." << std::endl;
 		return false;
 	}
 }
@@ -299,11 +299,11 @@ int TrainComponent_Imp<Base>::GetCouplingTypeIndex( EndType end ) const noexcept
 		return coupling.first.GetCouplingTypeIndex( coupling.second );
 	}
 	catch( const std::exception& e ){
-		std::cerr << "TrainComponent_Imp::GetCouplingTypeIndex: " << e.what() << std::endl;
+		std::cerr << trax::Verbosity::normal << "TrainComponent_Imp::GetCouplingTypeIndex: " << e.what() << std::endl;
 		return false;
 	}
 	catch( ... ){
-		std::cerr << "TrainComponent_Imp::GetCouplingTypeIndex: unknown exception." << std::endl;
+		std::cerr << trax::Verbosity::normal << "TrainComponent_Imp::GetCouplingTypeIndex: unknown exception." << std::endl;
 		return false;
 	}
 	return 0;
@@ -337,11 +337,11 @@ bool TrainComponent_Imp<Base>::Uncouple( EndType end, bool btriggerPulses ) noex
 		return coupling.first.Uncouple( coupling.second, btriggerPulses );
 	}
 	catch( const std::exception& e ){
-		std::cerr << "TrainComponent_Imp::Uncouple: " << e.what() << std::endl;
+		std::cerr << trax::Verbosity::normal << "TrainComponent_Imp::Uncouple: " << e.what() << std::endl;
 		return false;
 	}
 	catch( ... ){
-		std::cerr << "TrainComponent_Imp::Uncouple: unknown exception." << std::endl;
+		std::cerr << trax::Verbosity::normal << "TrainComponent_Imp::Uncouple: unknown exception." << std::endl;
 		return false;
 	}
 }
@@ -366,11 +366,11 @@ bool TrainComponent_Imp<Base>::IsCoupled( EndType end ) const noexcept
 		return coupling.first.IsCoupled( coupling.second );
 	}
 	catch( const std::exception& e ){
-		std::cerr << "TrainComponent_Imp::IsCoupled: " << e.what() << std::endl;
+		std::cerr << trax::Verbosity::normal << "TrainComponent_Imp::IsCoupled: " << e.what() << std::endl;
 		return false;
 	}
 	catch( ... ){
-		std::cerr << "TrainComponent_Imp::IsCoupled: unknown exception." << std::endl;
+		std::cerr << trax::Verbosity::normal << "TrainComponent_Imp::IsCoupled: unknown exception." << std::endl;
 		return false;
 	}
 }
@@ -395,11 +395,11 @@ Length TrainComponent_Imp<Base>::GetCouplingHeight( EndType end ) const noexcept
 		return coupling.first.GetCouplingHeight( coupling.second );
 	}
 	catch( const std::exception& e ){
-		std::cerr << "TrainComponent_Imp::GetCouplingHeight: " << e.what() << std::endl;
+		std::cerr << trax::Verbosity::normal << "TrainComponent_Imp::GetCouplingHeight: " << e.what() << std::endl;
 		return 0_m;
 	}
 	catch( ... ){
-		std::cerr << "TrainComponent_Imp::GetCouplingHeight: unknown exception." << std::endl;
+		std::cerr << trax::Verbosity::normal << "TrainComponent_Imp::GetCouplingHeight: unknown exception." << std::endl;
 		return 0_m;
 	}
 }
@@ -511,7 +511,7 @@ bool TrainComponent_Imp<Base>::Couple(
 	if( couplingA.first.IsCoupled( couplingA.second ) ||
 		couplingB.first.IsCoupled( couplingB.second ) )
 	{
-		std::cerr << "TrainComponent_Imp::Couple: coupling already established." << std::endl;
+		std::cerr << trax::Verbosity::detailed << "TrainComponent_Imp::Couple: coupling already established." << std::endl;
 		return false;
 	}
 

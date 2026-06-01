@@ -30,14 +30,41 @@
 
 #include "common/NarrowCast.h"
 
+#include <iostream>
+
 namespace trax{
 	using namespace common;
+
 ///////////////////////////////////////
+long trax::Geom::CountInstances() noexcept
+{
+	return static_cast<long>(Geom_Imp::sm_Instances.size());
+}
+
+void trax::Geom::DumpInstances( Verbosity verbosity ) noexcept
+{
+	for( auto* pGeom : Geom_Imp::sm_Instances )
+	{
+		std::cout << verbosity << "Geom instance: " << pGeom->GetName() << ", type: " << ToString( pGeom->GetGeomType() ) << std::endl;
+	}
+}
+///////////////////////////////////////
+std::vector<Geom*> Geom_Imp::sm_Instances;
+
 Geom_Imp::Geom_Imp() noexcept
 	:	m_Material			{ Material::Type::wood },
 		m_TypeFilter		{ none },
 		m_CollisionFilter	{ CollisionFilterFor(none) }
-{}
+{
+	sm_Instances.push_back(this);
+}
+
+Geom_Imp::~Geom_Imp() noexcept
+{
+	auto it = std::find( sm_Instances.begin(), sm_Instances.end(), this );
+	if( it != sm_Instances.end() )
+		sm_Instances.erase( it );
+}
 
 void Geom_Imp::SetName( const char* name ) noexcept{
 	m_Name = name;
