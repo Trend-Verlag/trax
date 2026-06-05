@@ -118,7 +118,7 @@ namespace trax{
 
 
 		/// \brief Unregisters a Simulated object from simulation.
-		virtual void Unregister( const Simulated& simulated ) noexcept = 0;
+		virtual void Unregister( Simulated& simulated ) noexcept = 0;
 
 
 		/// \brief Unregisters all Simulated objects from simulation.

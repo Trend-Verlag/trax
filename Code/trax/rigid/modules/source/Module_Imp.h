@@ -51,10 +51,6 @@ namespace trax{
 
 		bool IsValid() const noexcept override;
 
-		void Register( Scene& withScene ) noexcept override;
-
-		void Unregister( Scene& withScene ) noexcept override;
-
 		void SetFrame( const spat::Frame<Length,One>& frame ) noexcept override;
 
 		const spat::Frame<Length,One>& GetFrame() const noexcept override;
@@ -110,15 +106,26 @@ namespace trax{
 
 		bool Execute( std::unique_ptr<cmnd::Command> Command ) override;
 
+		bool Replay( std::unique_ptr<cmnd::Macro> pMacro ) override;
+
+		bool Replay() override;
+
+		bool IsReplaying() const noexcept override;
+
+		void StopReplay() noexcept override;
+
 		bool Undo() override;
 
 		bool Redo() override;
 
-		void StartReplay() override;
 
 
 		// Simulated:
-		bool Start( Scene& Scene ) override;
+		void Registered( Scene& scene ) noexcept override;
+
+		void Unregistered( Scene& scene ) noexcept override;
+
+		bool Start() override;
 
 		void Idle() override;
 
@@ -131,6 +138,11 @@ namespace trax{
 		void Resume() noexcept override;
 
 		void Stop() noexcept override;
+
+
+		Jack& JackOnReplayStart() noexcept override;
+
+		Jack& JackOnReplayStop() noexcept override;
 
 
 		int CountJacks() const override;
@@ -154,5 +166,12 @@ namespace trax{
 		std::shared_ptr<TimerCollection>		m_pTimerCollection;
 		std::shared_ptr<PulseCounterCollection> m_pPulseCounterCollection;
 		std::shared_ptr<CameraCollection>		m_pCameraCollection;
+
+		void DoReplay();
+
+		//void Register( Scene& withScene ) noexcept;
+		//void Unregister( Scene& withScene ) noexcept;
+		Jack_Imp m_JackOnReplayStart{ "JackOnReplayStart" };
+		Jack_Imp m_JackOnReplayStop { "JackOnReplayStop" };
 	};
 }

@@ -40,6 +40,7 @@
 namespace cmnd{
 	class Command;
 	class Logbook;
+	class Macro;
 }
 
 namespace trax{
@@ -61,6 +62,9 @@ namespace trax{
 	/// Fleet and Batch collections can be assigned to it (one of each only). A module maintains
 	/// a frame of reference which is used to determine the general situation of the module. 
 	/// A track will give module local coordinates.
+	/// If registered with a simulator, the module's command processing can get used. All collections 
+	/// owned by the module will get registered with the scene on simulation startup and deregistered at
+	/// simulation stop. This will make available autocoupling and break limits for couplings.
 	struct Module : Identified<Module>,
 					Simulated,
 					virtual SocketRegistry
@@ -70,7 +74,7 @@ namespace trax{
 		/// \param bCreateCollections If true, the module will create and attach empty collections 
 		/// of all types to itself. If false, no collections will be created or attached.
 		///@{
-		static dclspc std::unique_ptr<Module> Make( bool bCreateCollections = false ) noexcept;
+		static dclspc std::unique_ptr<Module> Make( bool bCreateCollections = true ) noexcept;
 		///@}
 
 
@@ -81,20 +85,6 @@ namespace trax{
 		/// \brief Checks whether the elements in this module are valid 
 		/// \returns true if all the elements are valid build.
 		virtual bool IsValid() const noexcept = 0;
-
-
-		/// \brief Registers this module with a scene for simulation.
-		/// 
-		/// After registering the methods from the Simulated interface will get 
-		/// called by the engine. This will also register the collections of the 
-		/// module with the scene.
-		virtual void Register( Scene& withScene ) noexcept = 0;
-
-
-		/// \brief Unregisters this module from a scene.
-		/// 
-		/// It will also unregister all the collections.
-		virtual void Unregister( Scene& withScene ) noexcept = 0;
 
 
 		/// \brief Set frame of reference.
@@ -213,9 +203,22 @@ namespace trax{
 		virtual void SetLogbook( cmnd::Logbook* pLogbook ) = 0;
 		virtual bool Process( std::unique_ptr<cmnd::Command> Command ) = 0;
 		virtual bool Execute( std::unique_ptr<cmnd::Command> Command ) = 0;
+		virtual bool Replay( std::unique_ptr<cmnd::Macro> pMacro ) = 0;
+		virtual bool Replay() = 0;
+		virtual bool IsReplaying() const noexcept = 0;
+		virtual void StopReplay() noexcept = 0;
 		virtual bool Undo() = 0;
 		virtual bool Redo() = 0;
-		virtual void StartReplay() = 0;
+
+
+		/// \brief A Jack that triggers a pulse when the command system 
+		/// starts to replay.
+		virtual struct Jack& JackOnReplayStart() noexcept = 0;
+
+
+		/// \brief A Jack that triggers a pulse when the command system
+		/// stops replay.
+		virtual struct Jack& JackOnReplayStop() noexcept = 0;
 	};
 
 }

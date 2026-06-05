@@ -109,6 +109,8 @@ namespace trax{
 		/// If the element carries an id, it is used as long as it is unique. If the id is 0 
 		/// the object is assigned one valid id. If it is not zero but already occupied,
 		/// an exception is thrown.
+		/// Adding an element to the container automatically pushes it on top of the activity 
+		/// stack.
 		/// \param pValue_Type Object to get added to the fleet.
 		/// \throws std::invalid_argument if the object is invalid or the objects id is 
 		/// already occupied.

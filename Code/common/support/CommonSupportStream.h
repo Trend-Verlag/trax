@@ -51,6 +51,8 @@ namespace common{
 	///@}
 
 
+	inline std::string ReadPureAlphaToken( std::istream& is );
+
 
 template<typename Valtype> inline
 std::ostream& operator << ( std::ostream& os, const common::Interval<Valtype>& i ){
@@ -79,6 +81,31 @@ std::istream& operator >> ( std::istream& is, common::Interval<Valtype>& i )
 	is >> i.m_Far;
 	is >> c; assert( c == ')' );
 	return is;
+}
+
+inline std::string ReadPureAlphaToken( std::istream& istr )
+{
+	std::string Token;
+	char Ch;
+
+	// Eat all preceding whitespaces
+	while( istr.peek() != EOF && std::isspace( static_cast<unsigned char>( istr.peek() ) ) )
+	{
+		istr.ignore();
+	}
+
+	while ( istr.peek() != EOF )
+	{
+		Ch = static_cast<char>( istr.peek() );
+		if ( !std::isalpha( static_cast<unsigned char>( Ch ) ) )
+		{
+			break;
+		}
+		istr.get( Ch );
+		Token += Ch;
+	}
+
+	return Token;
 }
 
 }

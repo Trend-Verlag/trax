@@ -189,7 +189,13 @@ void Bogie_Imp::SetWeakPointerToSelf( std::weak_ptr<RailRunner_Imp> pThis ) noex
 		m_pSwivelParentSouth->BogieA()->m_pBogieChildSouth = std::dynamic_pointer_cast<Bogie_Imp>(This());
 }
 
-bool Bogie_Imp::Start( Scene& ) noexcept{
+void Bogie_Imp::Registered( Scene & scene ) noexcept
+{}
+
+void Bogie_Imp::Unregistered( Scene & scene ) noexcept
+{}
+
+bool Bogie_Imp::Start() noexcept{
 	return true;
 }
 
@@ -718,6 +724,10 @@ RollingStock* Bogie_Imp::GetRollingStock() const noexcept{
 
 Gestalt& Bogie_Imp::GetGestalt() const noexcept{
 	return *m_pGestalt;
+}
+
+Scene& Bogie_Imp::GetScene() const noexcept{
+	return m_Scene;
 }
 
 void Bogie_Imp::Attach( std::shared_ptr<Bogie> pChildBogie, EndType atEnd, const Frame<Length,One>& swivelPose )

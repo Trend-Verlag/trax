@@ -41,11 +41,25 @@ namespace trax{
 		virtual const char*	TypeName() const noexcept = 0;
 
 
+		/// \brief Called before the object is registered with a scene.
+		///
+		/// This method can get overriden to perform additional registrations,
+		/// \param scene The scene the object is registered with.
+		virtual void Registered( Scene& scene ) noexcept = 0;
+
+
+		/// \brief Called before the object is unregistered with a scene.
+		///
+		/// This method can get overriden to perform additional unregistrations,
+		/// \param scene The scene the object is unregistered from.
+		virtual void Unregistered( Scene& scene ) noexcept = 0;
+
+
 		/// \brief Called if the simulation is started.
 		/// \param scene The scene the simulation is started in.
 		/// \returns true if the simulated object wants to get
 		/// called back for Update, Pause, Resume and Stop.
-		virtual bool Start( Scene& scene ) = 0;
+		virtual bool Start() = 0;
 
 
 		/// \brief Called during the simulation calculations,
@@ -105,8 +119,17 @@ namespace trax{
 			: BaseDecorator{ pComponent }
 		{}
 
-		bool Start( Scene& scene ) override{
-			return m_pComponent->Start( scene );
+
+		void Registered( Scene& scene ) noexcept{
+			m_pComponent->Registered( scene );
+		}
+
+		void Unregistered( Scene& scene ) noexcept{
+			m_pComponent->Unregistered( scene );
+		}
+
+		bool Start() override{
+			return m_pComponent->Start();
 		}
 
 		void Idle() override{

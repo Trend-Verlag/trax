@@ -172,7 +172,7 @@ namespace cmnd{
 			stream >> c;
 			if( c != ',' ){
 				stream.putback( c );
-				throw std::runtime_error{ "Separator ',' not found! Maybe separator was read with string by not using >> Separator{string}?" };
+				throw std::runtime_error{ "Separator ',' not found! Maybe separator was read with string by not using >> readstring{string}?" };
 			}
 
 			return stream;
@@ -257,6 +257,10 @@ namespace cmnd{
 
 		/// \returns true if there are no command in this Macro.
 		bool Empty() const noexcept;
+
+
+		/// \returns the number of commands in this Macro.
+		int Size() const noexcept;
 
 
 		/// \name Removing of commands from stack
@@ -522,6 +526,10 @@ inline void Macro::Swap( Macro& macro ) noexcept{
 
 inline bool Macro::Empty() const noexcept{
 	return m_Commands.empty();
+}
+
+inline int Macro::Size() const noexcept{
+	return static_cast<int>(m_Commands.size());
 }
 
 inline std::unique_ptr<Command> Macro::PopFront(){

@@ -427,7 +427,13 @@ void TrackSystem_Imp::DisconnectAll()
 	DoDisconnectAll();
 }
 
-bool TrackSystem_Imp::Start( Scene& /*scene*/ ) noexcept
+void TrackSystem_Imp::Registered( Scene & scene ) noexcept
+{}
+
+void TrackSystem_Imp::Unregistered( Scene & scene ) noexcept
+{}
+
+bool TrackSystem_Imp::Start() noexcept
 {
 	return true;
 }

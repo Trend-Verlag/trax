@@ -600,6 +600,8 @@
 					</RollingStock>
 				</Train>
 			</Fleet>
+			<SignalCollection/>
+			<IndicatorCollection/>
 		</Module>
 	</ModuleCollection>
 </traxML>

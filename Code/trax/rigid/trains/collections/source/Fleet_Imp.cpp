@@ -159,7 +159,13 @@ std::shared_ptr<RollingStock> Fleet_Imp::GetRollingStock( IDType rollingStockID 
 	return m_pConsist->Get( rollingStockID );
 }
 
-bool Fleet_Imp::Start( Scene& /*scene*/ )
+void Fleet_Imp::Registered( Scene & scene ) noexcept
+{}
+
+void Fleet_Imp::Unregistered( Scene & scene ) noexcept
+{}
+
+bool Fleet_Imp::Start()
 {
 	return true;
 }

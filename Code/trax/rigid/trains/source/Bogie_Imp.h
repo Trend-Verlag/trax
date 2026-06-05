@@ -59,7 +59,11 @@ namespace trax{
 
 
 		// Simulated:
-		bool Start( Scene& scene ) noexcept override;
+		void Registered( Scene& scene ) noexcept override;
+
+		void Unregistered( Scene& scene ) noexcept override;
+
+		bool Start() noexcept override;
 
 		void Idle() noexcept override;
 
@@ -162,6 +166,8 @@ namespace trax{
 		RollingStock* GetRollingStock() const noexcept override;
 
 		Gestalt& GetGestalt() const noexcept final; //final: GetGestalt() used in Joint::SetBogie via Bogie_Imp move constructor.
+
+		Scene& GetScene() const noexcept override;
 
 		void Attach( std::shared_ptr<Bogie> pChildBogie, EndType atEnd, const spat::Frame<Length,One>& swivelPose ) override;
 

@@ -64,7 +64,7 @@ EndType ToEndType( const char* endtype ){
 	else if( std::strcmp(endtype, "end") == 0 )
 		return EndType::south;
 	else
-		throw std::invalid_argument( "Unknown EndType!" );
+		throw std::invalid_argument( std::string{"Unknown EndType: "} + endtype );
 }
 
 }

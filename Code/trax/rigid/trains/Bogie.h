@@ -80,6 +80,8 @@ namespace trax{
 
 		virtual Gestalt& GetGestalt() const noexcept = 0;
 
+		virtual Scene& GetScene() const noexcept = 0;
+
 
 		/// \returns The RollingStock this Bogie is member of or nullptr if none.
 		virtual RollingStock* GetRollingStock() const noexcept = 0;

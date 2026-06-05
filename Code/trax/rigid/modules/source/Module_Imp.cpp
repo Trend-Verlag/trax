@@ -126,26 +126,6 @@ bool Module_Imp::IsValid() const noexcept
 	return true;
 }
 
-void Module_Imp::Register( Scene& withScene ) noexcept
-{
-	withScene.Register( *this );
-
-	if( m_pTrackSystem )
-		withScene.Register( *m_pTrackSystem );
-	if( m_pFleet )
-		withScene.Register( *m_pFleet );
-}
-
-void Module_Imp::Unregister( Scene& withScene ) noexcept
-{
-	if( m_pFleet )
-		withScene.Unregister( *m_pFleet );
-	if( m_pTrackSystem )
-		withScene.Unregister( *m_pTrackSystem );
-
-	withScene.Unregister( *this );
-}
-
 void Module_Imp::SetFrame( const spat::Frame<Length,One>& frame ) noexcept{
 	assert( m_Frame.IsOrthoNormal() );
 	m_Frame = frame;
@@ -311,6 +291,45 @@ bool Module_Imp::Execute( std::unique_ptr<cmnd::Command> Command )
 	return false;
 }
 
+bool Module_Imp::Replay( std::unique_ptr<cmnd::Macro> pMacro )
+{
+	if( pMacro && !pMacro->Empty() && !IsReplaying() )
+	{
+		m_Replay.Swap( *pMacro );
+		DoReplay();
+		return true;
+	}
+
+	return false;
+}
+
+bool Module_Imp::Replay()
+{
+	if( !IsReplaying() && !m_History.Empty() )
+	{
+		m_Replay.Swap( m_History );
+		DoReplay();
+		return true;
+	}
+
+	return false;
+}
+
+bool Module_Imp::IsReplaying() const noexcept
+{
+	return !m_Replay.Empty();
+}
+
+void Module_Imp::StopReplay() noexcept
+{
+	if( IsReplaying() )
+	{
+		std::clog << Verbosity::detailed << "Replay stopped with " << m_Replay.Size() << " commands left." << std::endl;
+		m_Replay.Clear();
+		m_JackOnReplayStop.Pulse();
+	}
+}
+
 bool Module_Imp::Undo()
 {
 	return false;
@@ -321,13 +340,23 @@ bool Module_Imp::Redo()
 	return false;
 }
 
-void Module_Imp::StartReplay()
+void Module_Imp::Registered( Scene& scene ) noexcept
 {
-	m_Replay.Swap( m_History );
-	m_SimulationSteps = 0;
+	if( m_pTrackSystem )
+		scene.Register( *m_pTrackSystem );
+	if( m_pFleet )
+		scene.Register( *m_pFleet );
 }
 
-bool Module_Imp::Start( Scene& Scene )
+void Module_Imp::Unregistered( Scene& scene ) noexcept
+{
+	if( m_pFleet )
+		scene.Unregister( *m_pFleet );
+	if( m_pTrackSystem )
+		scene.Unregister( *m_pTrackSystem );
+}
+
+bool Module_Imp::Start()
 {
 	m_SimulationSteps = 0;
 	return true;
@@ -343,18 +372,23 @@ void Module_Imp::Update( Time dt )
 {
 	++m_SimulationSteps;
 
-	if( !m_Replay.Empty() )
+	if( IsReplaying() )
 	{
 		while( auto pCommand = m_Replay.PopFront( m_SimulationSteps ) ){
 			assert( m_SimulationSteps == pCommand->TimeStamp() );
 			Execute( std::move( pCommand ) );
+
+			if( m_Replay.Empty() ){
+				std::clog << Verbosity::detailed << "Replay finished." << std::endl;
+				m_JackOnReplayStop.Pulse();
+			}
 		}
 	}
 
 	while( auto pCommand = m_Play.PopFront() ){
 		if( pCommand->InfluencesSimulationResult() )
-			m_Replay.Clear();	// if some command is to be executed, end replay since typically 
-								// comands will not work on different targets etc...
+			StopReplay();	// if some command is to be executed, end replay since typically 
+							// comands will not work on different targets etc...
 
 		pCommand->SetAllTimeStamps( m_SimulationSteps );
 		pCommand->Freeze();
@@ -372,10 +406,34 @@ void Module_Imp::Resume() noexcept
 void Module_Imp::Stop() noexcept
 {}
 
+Jack& Module_Imp::JackOnReplayStart() noexcept{
+	return m_JackOnReplayStart;
+}
+
+Jack& Module_Imp::JackOnReplayStop() noexcept{
+	return m_JackOnReplayStop;
+}
+
 int Module_Imp::CountJacks() const
 {
-	int count = 0;
+	int count = 2;
+
 	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(m_pTrackSystem.get()) )
+		count += pJackEnumerator->CountJacks();
+
+	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(m_pFleet.get()) )
+		count += pJackEnumerator->CountJacks();
+
+	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(m_pSignalCollection.get()) )
+		count += pJackEnumerator->CountJacks();
+
+	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(m_pIndicatorCollection.get()) )
+		count += pJackEnumerator->CountJacks();
+
+	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(m_pCargoCollection.get()) )
+		count += pJackEnumerator->CountJacks();
+
+	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(m_pTimerCollection.get()) )
 		count += pJackEnumerator->CountJacks();
 
 	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(m_pPulseCounterCollection.get()) )
@@ -384,13 +442,20 @@ int Module_Imp::CountJacks() const
 	if( auto pJackEnumerator = decorator_cast<JackEnumerator*>(m_pTimerCollection.get()) )
 		count += pJackEnumerator->CountJacks();
 
-	// todo: count further jacks here ...
-
 	return count;
 }
 
 const Jack& Module_Imp::_GetJack( int idx ) const
 {
+	switch( idx ){
+	case 0:
+		return m_JackOnReplayStart;
+	case 1:
+		return m_JackOnReplayStop;
+	}
+
+	idx -= 2;
+
 	if( auto pJackEnumerator = decorator_cast<const JackEnumerator*>(m_pTrackSystem.get()); pJackEnumerator ){
 		const int countJacks = pJackEnumerator->CountJacks();
 		if( idx < countJacks )
@@ -450,6 +515,14 @@ const Jack& Module_Imp::_GetJack( int idx ) const
 	stream << "Out of range!" << std::endl;
 	stream << __FILE__ << '(' << __LINE__ << ')' << std::endl;
 	throw std::range_error( stream.str() );
+}
+
+void Module_Imp::DoReplay()
+{
+	m_Play.Clear();
+	m_SimulationSteps = 0;
+	std::clog << Verbosity::detailed << "Replay started with " << m_Replay.Size() << " commands." << std::endl;
+	m_JackOnReplayStart.Pulse();
 }
 
 }

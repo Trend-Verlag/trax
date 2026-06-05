@@ -42,6 +42,7 @@
 
 # In-repository build
 /_Build/
+/Fixtures/DefaultLayoutWrite.anl4
 /Fixtures/Demo.anl4
 /Fixtures/NewCurves.anl4
 

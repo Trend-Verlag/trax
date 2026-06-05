@@ -56,25 +56,21 @@ Scene_Imp::~Scene_Imp()
 
 void Scene_Imp::Register( Simulated& simulated ) noexcept
 {
-	if( std::find( m_Simulated.begin(), m_Simulated.end(), &simulated ) == m_Simulated.end() )
+	if( std::find( m_Simulated.begin(), m_Simulated.end(), &simulated ) == m_Simulated.end() &&
+		std::find( m_ToBeRegistered.begin(), m_ToBeRegistered.end(), &simulated ) == m_ToBeRegistered.end() )
 	{
-		m_Simulated.push_back( &simulated );
-		std::cout << Verbosity::detailed << "Registered a " << simulated.TypeName() << " for simulation." << std::endl;
+		m_ToBeRegistered.push_back( &simulated );
+		simulated.Registered( *this );
 	}
 }
 
-void Scene_Imp::Unregister( const Simulated& simulated ) noexcept
+void Scene_Imp::Unregister( Simulated& simulated ) noexcept
 {
-	auto it = std::find( m_Simulated.begin(), m_Simulated.end(), &simulated );
-
-	if( it != m_Simulated.end() )
+	if( std::find( m_Simulated.begin(), m_Simulated.end(), &simulated ) != m_Simulated.end() &&
+		std::find( m_ToBeUnregistered.begin(), m_ToBeUnregistered.end(), &simulated ) != m_ToBeUnregistered.end() )
 	{
-		if( m_bSimulationRunning )
-			(*it)->Stop();
-
-		m_Simulated.erase( it );
-
-		std::cout << Verbosity::detailed << "Unregistered a " << simulated.TypeName() << " from simulation." << std::endl;
+		m_ToBeUnregistered.push_back( &simulated );
+		simulated.Unregistered( *this );
 	}
 }
 
@@ -134,7 +130,7 @@ void Scene_Imp::BeginSimulation() noexcept
 
 	for( auto& pSimulated : m_Simulated )
 	{
-		pSimulated->Start( *this );
+		pSimulated->Start();
 	}
 }
 
@@ -157,6 +153,8 @@ void Scene_Imp::Loop( Time forTimePeriod )
 
 void Scene_Imp::Step( Time dt )
 {
+	DoRegistrations();
+
 	StartStep( dt );
 
 	Idle();
@@ -283,7 +281,32 @@ const Plug& Scene_Imp::_GetPlug( int idx ) const{
 	throw std::range_error( stream.str() );
 }
 
-void Scene_Imp::Idle() const
+void Scene_Imp::DoRegistrations() noexcept
+{
+	while( !m_ToBeRegistered.empty() )
+	{
+		auto& pSimulated = m_ToBeRegistered.back();
+
+		m_Simulated.push_back( pSimulated );
+		std::cout << Verbosity::detailed << "Registered a " << pSimulated->TypeName() << " for simulation." << std::endl;
+		m_ToBeRegistered.pop_back();
+	}
+
+	while( !m_ToBeUnregistered.empty() )
+	{
+		auto& pSimulated = m_ToBeUnregistered.back();
+
+		if( m_bSimulationRunning )
+			pSimulated->Stop();
+
+		m_Simulated.erase( std::remove( m_Simulated.begin(), m_Simulated.end(), pSimulated ), m_Simulated.end() );
+
+		std::cout << Verbosity::detailed << "Unregistered a " << pSimulated->TypeName() << " from simulation." << std::endl;
+		m_ToBeUnregistered.pop_back();
+	}
+}
+
+void Scene_Imp::Idle()
 {
 	for( auto& pSimulated : m_Simulated )
 	{

@@ -46,7 +46,7 @@ namespace trax{
 
 		void Register( Simulated& simulated ) noexcept override;
 
-		void Unregister( const Simulated& simulated ) noexcept override;
+		void Unregister( Simulated& simulated ) noexcept override;
 
 		void UnregisterAllSimulated() noexcept override;
 
@@ -95,8 +95,9 @@ namespace trax{
 		const Jack& _GetJack( int idx ) const override;
 		const Plug& _GetPlug( int idx ) const override;
 
+				void DoRegistrations() noexcept;
 		virtual void StartStep( Time dt = fixed_timestep ) noexcept = 0;
-				void Idle() const;
+				void Idle();
 				void PreUpdate();
 		virtual void Update( Time dt = fixed_timestep );
 		virtual bool EndStep() noexcept = 0;	
@@ -108,6 +109,8 @@ namespace trax{
 		bool m_bPaused = false;
 
 		std::vector<Simulated*> m_Simulated;
+		std::vector<Simulated*> m_ToBeRegistered;
+		std::vector<Simulated*> m_ToBeUnregistered;
 	
 		Jack_Imp m_JackOnSimulationStep{ "JackOnSimulationStep" };
 		MultiPlug_Imp<Plug_Imp_ParentPointer<Scene_Imp>> m_PlugToStop;
