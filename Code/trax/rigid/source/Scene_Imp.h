@@ -50,8 +50,6 @@ namespace trax{
 
 		void UnregisterAllSimulated() noexcept override;
 
-		common::Span<Simulated*> RegisteredSimulated() const noexcept override;
-
 		void Simulate() override;
 
 		void Simulate( Time forTimePeriod ) override;
@@ -108,7 +106,7 @@ namespace trax{
 		Time m_LoopTime = 0.0_s;
 		bool m_bPaused = false;
 
-		std::vector<Simulated*> m_Simulated;
+		std::vector<std::pair<Simulated*,bool>> m_Simulated;
 		std::vector<Simulated*> m_ToBeRegistered;
 		std::vector<Simulated*> m_ToBeUnregistered;
 	

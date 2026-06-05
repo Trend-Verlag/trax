@@ -45,7 +45,7 @@ Scene_Imp::Scene_Imp()
 
 Scene_Imp::~Scene_Imp()
 {
-	for( auto& pSimulated : m_Simulated )
+	for( auto& [pSimulated,bRegistered] : m_Simulated )
 	{
 		std::cerr << Verbosity::error << "There is a Simulator interface still registered: " << pSimulated->TypeName() << "." << std::endl;
 	}
@@ -56,7 +56,8 @@ Scene_Imp::~Scene_Imp()
 
 void Scene_Imp::Register( Simulated& simulated ) noexcept
 {
-	if( std::find( m_Simulated.begin(), m_Simulated.end(), &simulated ) == m_Simulated.end() &&
+	if( std::find_if( m_Simulated.begin(), m_Simulated.end(),
+		[&simulated](const std::pair<Simulated*, bool>& pair){ return pair.first == &simulated; } ) == m_Simulated.end() &&
 		std::find( m_ToBeRegistered.begin(), m_ToBeRegistered.end(), &simulated ) == m_ToBeRegistered.end() )
 	{
 		m_ToBeRegistered.push_back( &simulated );
@@ -66,10 +67,12 @@ void Scene_Imp::Register( Simulated& simulated ) noexcept
 
 void Scene_Imp::Unregister( Simulated& simulated ) noexcept
 {
-	if( std::find( m_Simulated.begin(), m_Simulated.end(), &simulated ) != m_Simulated.end() &&
-		std::find( m_ToBeUnregistered.begin(), m_ToBeUnregistered.end(), &simulated ) != m_ToBeUnregistered.end() )
+	if( auto iter = std::find_if( m_Simulated.begin(), m_Simulated.end(),
+		[&simulated](const std::pair<Simulated*, bool>& pair){ return pair.first == &simulated; } ); iter != m_Simulated.end() &&
+		std::find( m_ToBeUnregistered.begin(), m_ToBeUnregistered.end(), &simulated ) == m_ToBeUnregistered.end() )
 	{
 		m_ToBeUnregistered.push_back( &simulated );
+		iter->second = false;
 		simulated.Unregistered( *this );
 	}
 }
@@ -78,19 +81,15 @@ void Scene_Imp::UnregisterAllSimulated() noexcept
 {
 	if( m_bSimulationRunning )
 	{
-		for( auto& pSimulated : m_Simulated )
+		for( auto& [pSimulated,bRegistered] : m_Simulated )
 		{
-			pSimulated->Stop();
+			if( bRegistered )
+				pSimulated->Stop();
 			std::cout << Verbosity::detailed << "Unregistered a " << pSimulated->TypeName() << " from simulation." << std::endl;
 		}
 	}
 
 	m_Simulated.clear();
-}
-
-common::Span<Simulated*> Scene_Imp::RegisteredSimulated() const noexcept
-{
-	return { m_Simulated.data(), m_Simulated.size() };
 }
 
 void Scene_Imp::Simulate()
@@ -128,9 +127,10 @@ void Scene_Imp::BeginSimulation() noexcept
 	m_SimulationTime = 0_s;
 	m_LoopTime = 0_s;
 
-	for( auto& pSimulated : m_Simulated )
+	for( auto& [pSimulated,bRegistered] : m_Simulated )
 	{
-		pSimulated->Start();
+		if( bRegistered )
+			pSimulated->Start();
 	}
 }
 
@@ -173,9 +173,10 @@ void Scene_Imp::Step( Time dt )
 
 void Scene_Imp::EndSimulation() noexcept
 {
-	for( auto& pSimulated : m_Simulated )
+	for( auto& [pSimulated,bRegistered] : m_Simulated )
 	{
-		pSimulated->Stop();
+		if( bRegistered )
+			pSimulated->Stop();
 	}
 
 	m_bSimulationRunning = false;
@@ -287,7 +288,7 @@ void Scene_Imp::DoRegistrations() noexcept
 	{
 		auto& pSimulated = m_ToBeRegistered.back();
 
-		m_Simulated.push_back( pSimulated );
+		m_Simulated.push_back( std::make_pair(pSimulated,true) );
 		std::cout << Verbosity::detailed << "Registered a " << pSimulated->TypeName() << " for simulation." << std::endl;
 		m_ToBeRegistered.pop_back();
 	}
@@ -299,7 +300,9 @@ void Scene_Imp::DoRegistrations() noexcept
 		if( m_bSimulationRunning )
 			pSimulated->Stop();
 
-		m_Simulated.erase( std::remove( m_Simulated.begin(), m_Simulated.end(), pSimulated ), m_Simulated.end() );
+		m_Simulated.erase( std::remove_if( m_Simulated.begin(), m_Simulated.end(),
+			[pSimulated](const std::pair<Simulated*, bool>& pair){ return pair.first == pSimulated; } ),
+			m_Simulated.end() );
 
 		std::cout << Verbosity::detailed << "Unregistered a " << pSimulated->TypeName() << " from simulation." << std::endl;
 		m_ToBeUnregistered.pop_back();
@@ -308,25 +311,28 @@ void Scene_Imp::DoRegistrations() noexcept
 
 void Scene_Imp::Idle()
 {
-	for( auto& pSimulated : m_Simulated )
+	for( auto& [pSimulated,bRegistered] : m_Simulated )
 	{
-		pSimulated->Idle();
+		if( bRegistered )
+			pSimulated->Idle();
 	}
 }
 
 void Scene_Imp::PreUpdate()
 {
-	for( auto& pSimulated : m_Simulated )
+	for( auto& [pSimulated,bRegistered] : m_Simulated )
 	{
-		pSimulated->PreUpdate();
+		if( bRegistered )
+			pSimulated->PreUpdate();
 	}
 }
 
 void Scene_Imp::Update( Time dt )
 {
-	for( auto& pSimulated : m_Simulated )
+	for( auto& [pSimulated,bRegistered] : m_Simulated )
 	{
-		pSimulated->Update( dt );
+		if( bRegistered )
+			pSimulated->Update( dt );
 	}
 }
 }

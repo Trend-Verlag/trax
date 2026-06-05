@@ -125,10 +125,6 @@ namespace trax{
 		virtual void UnregisterAllSimulated() noexcept = 0;
 
 
-		/// \returns a span of all Simulated objects currently registered for simulation.
-		virtual common::Span<Simulated*> RegisteredSimulated() const noexcept = 0;
-
-
 		/// \name Simulate
 		/// \brief Enters a main simulation loop and simulates the
 		/// scene.
