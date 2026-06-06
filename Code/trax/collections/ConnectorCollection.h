@@ -32,6 +32,8 @@
 
 namespace trax{
 
+	struct SocketRegistry;
+
 	/// \brief Collection to hold a set of Connector objects.
 	struct ConnectorCollection : Collection<ConnectorCollection,Connector>{
 
@@ -39,7 +41,7 @@ namespace trax{
 		static std::unique_ptr<ConnectorCollection> Make() noexcept;
 
 
-		virtual bool RemoveIncompleteConnectors() noexcept = 0;
+		virtual bool RemoveIncompleteConnectors( SocketRegistry* pRegistry = nullptr ) noexcept = 0;
 	};
 
 

@@ -39,7 +39,7 @@ namespace trax{
 
 		bool IsValid() const noexcept override;
 
-		bool RemoveIncompleteConnectors() noexcept override;
+		bool RemoveIncompleteConnectors( SocketRegistry* pRegistry = nullptr ) noexcept override;
 	};
 
 }
