@@ -267,7 +267,8 @@ namespace trax{
 
 		/// \brief A Jack that triggers a pulse once a simulation step.
 		///
-		/// Use this to create a timer.
+		/// Use this to create a timer. The pulse will get triggered after 
+		/// the simulation step finishes and all updates are made. 
 		virtual struct Jack& JackOnSimulationStep() noexcept = 0;
 
 

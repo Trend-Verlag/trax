@@ -370,7 +370,7 @@ void Module_Imp::PreUpdate()
 
 void Module_Imp::Update( Time dt )
 {
-	++m_SimulationSteps;
+	++m_SimulationSteps; // number of the latest finished simulation step, so the first step is 1, not 0.
 
 	if( IsReplaying() )
 	{

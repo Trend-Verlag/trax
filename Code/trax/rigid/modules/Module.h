@@ -200,12 +200,41 @@ namespace trax{
 
 
 		// Command processing:
+
+		/// \brief Sets the logbook for this module. The logbook will get 
+		/// used to log all commands processed by this module.
 		virtual void SetLogbook( cmnd::Logbook* pLogbook ) = 0;
+
+
+		/// \brief Supply a command for processing at the end of the next
+		/// simulation step.
+		/// 
+		/// These commands get queued so a command gets executed after all 
+		/// the commands that were supplied before it. A time stamp on the
+		/// command will get ignored.
 		virtual bool Process( std::unique_ptr<cmnd::Command> Command ) = 0;
+
+
+		/// \brief Supply a command for immediate execution.
 		virtual bool Execute( std::unique_ptr<cmnd::Command> Command ) = 0;
+
+
+		/// \brief Start replay mode and replay the commands from the given macro. 
+		/// according to their time stamps. 
 		virtual bool Replay( std::unique_ptr<cmnd::Macro> pMacro ) = 0;
+
+
+		/// \brief Start replay mode and replay the commands from the history.
 		virtual bool Replay() = 0;
+
+
+		/// \returns true if the command system is currently in replay mode.
 		virtual bool IsReplaying() const noexcept = 0;
+
+
+		/// <summary>
+		/// \brief Stop replay mode and discard any commands that are still 
+		/// in the replay queue.
 		virtual void StopReplay() noexcept = 0;
 		virtual bool Undo() = 0;
 		virtual bool Redo() = 0;
