@@ -34,10 +34,11 @@ namespace trax{
 
 ///////////////////////////////////////
 SwitchSemaphore_Imp::SwitchSemaphore_Imp()
-	:	m_Status				{Status::unknown},
-		m_PlugToGo				{*this,Status::one},
-		m_PlugToBranch			{*this,Status::two},
-		m_PlugToToggle			{*this}
+	: m_Status		{Status::unknown}
+	, m_pUserData	{nullptr}
+	, m_PlugToGo	{*this,Status::one}
+	, m_PlugToBranch{*this,Status::two}
+	, m_PlugToToggle{*this}
 {
 	m_PoseOne.Init();
 	m_PoseTwo.Init();
@@ -205,6 +206,14 @@ void SwitchSemaphore_Imp::RefTargetID( IDType id ) noexcept{
 
 IDType SwitchSemaphore_Imp::RefTargetID() const noexcept{
 	return m_RefTargetID;
+}
+
+void SwitchSemaphore_Imp::UserData( IndicatorUserData* pData ) noexcept{
+	m_pUserData = pData;
+}
+
+IndicatorUserData * SwitchSemaphore_Imp::UserData() const noexcept{
+	return m_pUserData;
 }
 
 const Plug& SwitchSemaphore_Imp::_GetPlug( int idx ) const{
@@ -719,6 +728,14 @@ void SwitchSemaphore::RefTargetID( IDType id ) noexcept{
 
 IDType SwitchSemaphore::RefTargetID() const noexcept{
 	return m_RefTargetID;
+}
+
+void SwitchSemaphore::UserData( IndicatorUserData* pData ) noexcept{
+	m_pUserData = pData;
+}
+
+IndicatorUserData* SwitchSemaphore::UserData() const noexcept{
+	return m_pUserData;
 }
 
 const Plug& SwitchSemaphore::_GetPlug( int idx ) const{

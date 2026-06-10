@@ -1,11 +1,13 @@
 add_library(appframe 
     STATIC
+        "./source/AppFrameCommands.cpp"
         "./source/Command_Imp.cpp"
 )
 
 target_sources(appframe
     PUBLIC
         "AppFrame.h"
+        "AppFrameCommands.h"
         "Command.h"
 )
 

@@ -77,6 +77,11 @@ namespace trax{
 
 		virtual IDType RefTargetID() const noexcept override;
 
+		virtual void UserData( IndicatorUserData* pData ) noexcept override;
+
+		virtual IndicatorUserData* UserData() const noexcept override;
+
+
 		// Inherited via PlugEnumerator
 		const char* TypeName() const noexcept override;
 		
@@ -97,6 +102,7 @@ namespace trax{
 		Indicator::Status m_Status;
 		bool m_StatusChangeBlocker;
 		IDType m_RefTargetID;
+		IndicatorUserData* m_pUserData;
 
 		struct IndicatorState{
 			IndicatorState( Multicator& parent, Indicator::Status status );

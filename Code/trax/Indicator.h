@@ -42,6 +42,11 @@ namespace trax{
 	struct Switch;
 	struct ThreeWaySwitch;
 
+
+	/// \brief Data to be defined by the user.
+	struct IndicatorUserData;
+
+
 	/// \brief Interface for objects that indicates system states somehow.
 	///
 	/// Typically an Indicator would be represented by a semaphore in 3D space.
@@ -190,6 +195,16 @@ namespace trax{
 		virtual void RefTargetID( IDType id ) noexcept = 0;
 
 		virtual IDType RefTargetID() const noexcept = 0;
+
+
+		/// \brief Sets a pointer to user provided data.
+		///
+		/// Define IndicatorUserData to specify your data types.
+		virtual void UserData( IndicatorUserData* pData ) noexcept = 0;
+
+
+		/// \returns User provided data.
+		virtual IndicatorUserData* UserData() const noexcept = 0;
 	};
 
 

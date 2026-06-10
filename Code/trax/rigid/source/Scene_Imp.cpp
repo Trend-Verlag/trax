@@ -73,6 +73,7 @@ void Scene_Imp::Unregister( Simulated& simulated ) noexcept
 	{
 		m_ToBeUnregistered.push_back( &simulated );
 		iter->second = false;
+		simulated.Stop();
 		simulated.Unregistered( *this );
 	}
 }
@@ -136,8 +137,14 @@ void Scene_Imp::BeginSimulation() noexcept
 
 void Scene_Imp::Loop( Time forTimePeriod )
 {
+	if( m_bLoopRunning )
+	{
+		std::cerr << Verbosity::error << "Scene_Imp::Loop: Loop is already running!" << std::endl;
+		return;
+	}
+
+	common::FlagBlocker flagBlocker( m_bLoopRunning );
 	m_LoopTime += forTimePeriod;
-	m_bLoopRunning = true;
 
 	while( m_bLoopRunning )
 	{
@@ -147,7 +154,7 @@ void Scene_Imp::Loop( Time forTimePeriod )
 		Step();
 
 		if( m_LoopTime -= fixed_timestep; m_LoopTime <= 0_s )
-			m_bLoopRunning = false;
+			break;
 	}
 }
 
@@ -297,14 +304,11 @@ void Scene_Imp::DoRegistrations() noexcept
 	{
 		auto& pSimulated = m_ToBeUnregistered.back();
 
-		if( m_bSimulationRunning )
-			pSimulated->Stop();
-
 		m_Simulated.erase( std::remove_if( m_Simulated.begin(), m_Simulated.end(),
 			[pSimulated](const std::pair<Simulated*, bool>& pair){ return pair.first == pSimulated; } ),
 			m_Simulated.end() );
 
-		std::cout << Verbosity::detailed << "Unregistered a " << pSimulated->TypeName() << " from simulation." << std::endl;
+		std::cout << Verbosity::detailed << "Unregistering a 'Simulated' interface from simulation." << std::endl;
 		m_ToBeUnregistered.pop_back();
 	}
 }

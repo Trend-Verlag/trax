@@ -388,6 +388,14 @@ IDType Multicator::RefTargetID() const noexcept{
 	return m_RefTargetID;
 }
 
+void Multicator::UserData( IndicatorUserData* pData ) noexcept{
+	m_pUserData = pData;
+}
+
+IndicatorUserData * Multicator::UserData() const noexcept{
+	return m_pUserData;
+}
+
 const char* Multicator::TypeName() const noexcept{
 	return "Multicator";
 }

@@ -81,7 +81,11 @@ namespace trax{
 
 		void RefTargetID( IDType id ) noexcept override;
 
-		virtual IDType RefTargetID() const noexcept override;
+		IDType RefTargetID() const noexcept override;
+
+		void UserData( IndicatorUserData* pData ) noexcept override;
+
+		IndicatorUserData* UserData() const noexcept override;
 
 
 		int CountPlugs() const noexcept override;
@@ -95,6 +99,7 @@ namespace trax{
 		spat::Frame<Length,One>	m_PoseOne;
 		spat::Frame<Length,One>	m_PoseTwo;
 		IDType					m_RefTargetID;
+		IndicatorUserData*      m_pUserData;
 
 		Jack_Imp m_JackOnGo{ "JackOnOne" };
 		Jack_Imp m_JackOnBranch{ "JackOnTwo" };
@@ -168,6 +173,10 @@ namespace trax{
 
 		virtual IDType RefTargetID() const noexcept override;
 
+		void UserData( IndicatorUserData* pData ) noexcept override;
+
+		IndicatorUserData* UserData() const noexcept override;
+
 
 		const char* Reference( const char* name ) const override{
 			return SwitchSemaphore_Base::Reference( name );
@@ -198,6 +207,7 @@ namespace trax{
 		Real								m_RotAngleOne;
 		Real								m_RotAngleTwo;
 		IDType								m_RefTargetID;
+		IndicatorUserData*					m_pUserData;
 
 		Jack_Imp m_JackOnGo{ "JackOnOne" };
 		Jack_Imp m_JackOnBranch{ "JackOnTwo" };
