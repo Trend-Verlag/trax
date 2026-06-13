@@ -52,7 +52,7 @@ namespace trax{
 
 		IDType Add( std::shared_ptr<Train> pTrain ) override;
 		
-		IDType AddRelaxed( std::shared_ptr<Train> pTrain ) override;
+		IDType AddRelaxed( std::shared_ptr<Train> pTrain ) noexcept override;
 
 		bool Remove( Train* pTrain, bool zeroIDs = false ) override;
 

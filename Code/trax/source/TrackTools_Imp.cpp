@@ -279,9 +279,9 @@ void Connect(
 	Track::TrackEnd trackEndB )
 {
 	if( !IsValid(trackEndA) )
-		throw std::invalid_argument( "Connect: trackA is not valid!" );
+		throw std::invalid_argument( "trax::Connect: trackA is not valid!" );
 	if( !IsValid(trackEndB) )
-		throw std::invalid_argument( "Connect: trackB is not valid!" );
+		throw std::invalid_argument( "trax::Connect: trackB is not valid!" );
 
 	if( std::shared_ptr<TrackBuilder> pTrackBuilder = trackEndA.pTrack->This() )
 		pTrackBuilder->Connect(	std::make_pair(trackEndA.pTrack->This(), trackEndA.end), 

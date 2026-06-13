@@ -123,7 +123,7 @@ namespace trax{
 		/// carries an id wich is already occupied, this method will supply the 
 		/// element with a free one. This might lead to other ids becoming occupied without
 		/// explicitely requested.
-		virtual IDType AddRelaxed( std::shared_ptr<Value_Type> pTraxType ) = 0;
+		virtual IDType AddRelaxed( std::shared_ptr<Value_Type> pTraxType ) noexcept = 0;
 
 
 		/// \brief Removes an element from this container.
@@ -214,7 +214,7 @@ namespace trax{
 		/// If an element is added to the container, it automatically is pushed
 		/// on the activity stack.
 		/// \param id for the element to push.
-		virtual	void PushActive( IDType id ) = 0;
+		virtual	void PushActive( IDType id ) noexcept = 0;
 
 
 		/// \brief Pops an element from the activity stack.
@@ -232,9 +232,9 @@ namespace trax{
 		/// \param item reference to element to test for membership.
 		/// \param id Unique id to test wether it is already in use.
 		///@{
-		virtual bool IsMember( const value_type& item ) const = 0;
+		virtual bool IsMember( const value_type& item ) const noexcept = 0;
 
-		virtual bool IsMember( IDType id ) const = 0;
+		virtual bool IsMember( IDType id ) const noexcept = 0;
 		///@}
 
 
@@ -249,12 +249,12 @@ namespace trax{
 
 		/// \returns The maximum valid id for an element of the collection. If no 
 		/// element is in the collection, the result will be zero.
-		virtual IDType MaxID() const = 0;
+		virtual IDType MaxID() const noexcept = 0;
 
 
 		/// \returns The minimum valid id for an element of the collection. If no 
 		/// element is in the collection, the result will be zero.
-		virtual IDType MinID() const = 0;
+		virtual IDType MinID() const noexcept = 0;
 
 
 		virtual ~Collection() = default;

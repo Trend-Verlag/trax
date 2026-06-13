@@ -74,10 +74,6 @@ void TrackCollection_Imp::SetParent( TrackSystem* pParent ){
 	m_pParent = pParent;
 }
 
-//TrackSystem* TrackCollection_Imp::GetParent() const noexcept{
-//	return m_pParent;
-//}
-
 const char* TrackCollection_Imp::TypeName() const noexcept{
 	return "TrackCollection";
 }

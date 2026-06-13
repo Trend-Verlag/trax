@@ -69,7 +69,7 @@ namespace trax{
 			return m_pComponent->Add(pItem);
 		}
 
-		IDType AddRelaxed( std::shared_ptr<value_type> pItem ) override{
+		IDType AddRelaxed( std::shared_ptr<value_type> pItem ) noexcept override{
 			return m_pComponent->AddRelaxed(pItem);
 		}
 
@@ -137,11 +137,11 @@ namespace trax{
 			return m_pComponent->Get(name);
 		}
 
-		void PushActive( IDType id ) override{
+		void PushActive( IDType id ) noexcept override{
 			return m_pComponent->PushActive(id);
 		}
 		
-		void PopActive() override{
+		void PopActive() noexcept override{
 			return m_pComponent->PopActive();
 		}
 
@@ -149,11 +149,11 @@ namespace trax{
 			return m_pComponent->GetActive();
 		}
 
-		bool IsMember( const value_type& item ) const override{
+		bool IsMember( const value_type& item ) const noexcept override{
 			return m_pComponent->IsMember(item);
 		}
 
-		bool IsMember( IDType id ) const override{
+		bool IsMember( IDType id ) const noexcept override{
 			return m_pComponent->IsMember(id);
 		}
 
@@ -161,11 +161,11 @@ namespace trax{
 			return m_pComponent->ShiftIDs( offset );
 		}
 
-		IDType MaxID() const override{
+		IDType MaxID() const noexcept override{
 			return m_pComponent->MaxID();
 		}
 
-		IDType MinID() const override{
+		IDType MinID() const noexcept override{
 			return m_pComponent->MinID();
 		}
 		///@}

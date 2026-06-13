@@ -106,7 +106,7 @@ namespace trax{
 
 		IDType										Add			( std::shared_ptr<TraxType> pTraxType ) override;
 
-		IDType										AddRelaxed	( std::shared_ptr<TraxType> pTraxType ) override;
+		IDType										AddRelaxed	( std::shared_ptr<TraxType> pTraxType ) noexcept override;
 
 		bool										Remove		( TraxType* pTraxType, bool zeroIDs = false ) override;
 
@@ -142,21 +142,21 @@ namespace trax{
 
 		std::shared_ptr<TraxType>					Get			( const char* name ) const override;
 
-		void										PushActive	( IDType id ) override;
+		void										PushActive	( IDType id ) noexcept override;
 
 		void										PopActive	() override;
 
 		std::shared_ptr<TraxType>					GetActive	() const override;
 
-		bool										IsMember	( const TraxType& item ) const override;
+		bool										IsMember	( const TraxType& item ) const noexcept override;
 
-		bool										IsMember	( IDType id  ) const override;
+		bool										IsMember	( IDType id  ) const noexcept override;
 
 		void										ShiftIDs	( int offset ) override;
 
-		IDType										MaxID		() const override;
+		IDType										MaxID		() const noexcept override;
 
-		IDType										MinID		() const override;
+		IDType										MinID		() const noexcept override;
 
 
 	protected:
@@ -168,13 +168,13 @@ namespace trax{
 	private:
 		Base* m_pDecorator;
 
-		bool IsFree( IDType id ) const{
+		bool IsFree( IDType id ) const noexcept{
 			return m_Container.find( id ) == m_Container.end();
 		}
 
 		std::stack<IDType> m_ActiveStack;
 
-		IDType GetFree() const{
+		IDType GetFree() const noexcept{
 			IDType x = 1;
 			for( auto citer = m_Container.begin();
 				citer != m_Container.end(); ++x, ++citer )
@@ -229,7 +229,7 @@ IDType Container_Imp<TraxType,Base>::Add( std::shared_ptr<TraxType> pTraxType ){
 }
 
 template<class TraxType, class Base>
-IDType Container_Imp<TraxType,Base>::AddRelaxed( std::shared_ptr<TraxType> pTraxType ){
+IDType Container_Imp<TraxType,Base>::AddRelaxed( std::shared_ptr<TraxType> pTraxType ) noexcept{
 	if( !pTraxType )
 		return 0;
 
@@ -245,10 +245,7 @@ IDType Container_Imp<TraxType,Base>::AddRelaxed( std::shared_ptr<TraxType> pTrax
 	else
 		pTraxType->ID( GetFree() );
 
-	m_Container.insert( std::make_pair( pTraxType->ID(), pTraxType ) );
-	Decorator()->PushActive(pTraxType->ID());
-
-	return pTraxType->ID();
+	return Add( pTraxType );
 }
 
 template<class TraxType, class Base>
@@ -310,7 +307,7 @@ std::shared_ptr<TraxType> Container_Imp<TraxType,Base>::GetPrevious( const std::
 }
 
 template<class TraxType, class Base>
-bool Container_Imp<TraxType,Base>::IsMember( const TraxType& item ) const{
+bool Container_Imp<TraxType,Base>::IsMember( const TraxType& item ) const noexcept{
 	if( !item.ID() )
 		return false;
 
@@ -400,7 +397,7 @@ std::shared_ptr<TraxType> Container_Imp<TraxType,Base>::Get( const char* name ) 
 }
 
 template<class TraxType, class Base>
-void Container_Imp<TraxType,Base>::PushActive( IDType id ){
+void Container_Imp<TraxType,Base>::PushActive( IDType id ) noexcept{
 	m_ActiveStack.push(id);
 }
 
@@ -421,7 +418,7 @@ std::shared_ptr<TraxType> Container_Imp<TraxType,Base>::GetActive() const{
 }
 
 template<class TraxType, class Base>
-bool Container_Imp<TraxType,Base>::IsMember( IDType id ) const{
+bool Container_Imp<TraxType,Base>::IsMember( IDType id ) const noexcept{
 	return !IsFree( id );
 }
 
@@ -452,7 +449,7 @@ inline void Container_Imp<TraxType, Base>::ShiftIDs( int offset ){
 }
 
 template<class TraxType, class Base>
-inline IDType Container_Imp<TraxType, Base>::MaxID() const{
+inline IDType Container_Imp<TraxType, Base>::MaxID() const noexcept{
 	if( m_Container.empty() )
 		return 0;
 
@@ -460,7 +457,7 @@ inline IDType Container_Imp<TraxType, Base>::MaxID() const{
 }
 
 template<class TraxType, class Base>
-inline IDType Container_Imp<TraxType, Base>::MinID() const{
+inline IDType Container_Imp<TraxType, Base>::MinID() const noexcept{
 	if( m_Container.empty() )
 		return 0;
 

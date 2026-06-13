@@ -91,7 +91,7 @@ IDType Fleet_Imp::Add( std::shared_ptr<Train> pTrain ){
 	return 0;
 }
 
-IDType Fleet_Imp::AddRelaxed( std::shared_ptr<Train> pTrain ){
+IDType Fleet_Imp::AddRelaxed( std::shared_ptr<Train> pTrain ) noexcept{
 	if( pTrain ){
 		if( IsMember( *pTrain ) )
 			return Fleet_Base::AddRelaxed( pTrain );
@@ -252,7 +252,7 @@ void Fleet_Imp::RegisterBogies( const Train& train ) noexcept
 		{
 			if( auto pRollingStock = std::dynamic_pointer_cast<RollingStock>(pTrainComponent) )
 			{
-				m_pConsist->Add( pRollingStock );
+				m_pConsist->AddRelaxed( pRollingStock );
 
 				for( int bindex = 0; bindex < pRollingStock->GetNumberOfBogies(); ++bindex )
 				{
