@@ -28,12 +28,48 @@
 #pragma once
 
 #include "../Cargo.h"
+#include "trax/ImplementationHelper.h"
 
 namespace trax{
 
-	class Cargo_Imp : public Cargo
-	{
+	typedef ObjectID_Imp<Cargo> CargoBase;
 
+	class Cargo_Imp : public CargoBase
+	{
+	public:
+		Cargo_Imp( CargoType type ) noexcept;
+
+		const char*	TypeName() const noexcept override;
+
+		CargoType GetType() const override;
+
+		void SetShape( std::shared_ptr<Shape> pShape ) noexcept override;
+
+		std::shared_ptr<Shape> GetShape() const noexcept override;
+
+		void UserData( CargoUserData* pData ) noexcept override;
+
+		CargoUserData* UserData() const noexcept override;
+	private:
+		CargoType m_Type;
+		std::shared_ptr<Shape> m_Shape;
+		CargoUserData* m_UserData;
+	};
+
+
+	class MoveableCargo_Imp : public MoveableCargo,
+							 public Cargo_Imp{
+	public:
+		MoveableCargo_Imp( CargoType type ) noexcept;
+
+		const char*	TypeName() const noexcept override;
+
+		void SetGestalt( std::shared_ptr<Gestalt> pGestalt ) noexcept override;
+
+		std::shared_ptr<Gestalt> GetGestalt() const noexcept override;
+
+	private:
+		std::shared_ptr<Gestalt> m_Gestalt;
 
 	};
 

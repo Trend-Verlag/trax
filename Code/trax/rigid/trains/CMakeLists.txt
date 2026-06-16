@@ -12,6 +12,7 @@ add_library(trax_trains
 set(PUBLIC_HEADERS
     "./Bogie.h"
     "./Cargo.h"
+    "./CargoType.h"
     "./RailRunner.h"
     "./RollingStock.h"
     "./Train.h"
