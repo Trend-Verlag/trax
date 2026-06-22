@@ -41,6 +41,13 @@ namespace trax{
 
 
 		/// \brief Sets a body the track is attached to (if any).
+		///
+		/// From the attachment of a body on, setting the frame for a track will
+		/// automatically adjust the body's frame to keep the relative pose.
+		/// To update the track's position from the moving body, call UpdateTrackPose(), 
+		/// after the body has moved. This will be done by TrackSystemMovable
+		/// if this track is added to it.
+		/// \param pBody A shared pointer to the body the track should be attached to.
 		virtual void SetBody( std::shared_ptr<Body> pBody ) noexcept = 0;
 
 
@@ -49,7 +56,7 @@ namespace trax{
 
 
 		/// \brief Updates the track's position from the moving body.
-		virtual void UpdateTrackPose() = 0;
+		virtual void UpdateTrackPose() noexcept = 0;
 
 
 		/// \returns true if the track is actually in motion.

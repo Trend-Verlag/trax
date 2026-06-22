@@ -1,5 +1,5 @@
 //	trax track library
-//	AD 2024 
+//	AD 2026 
 //
 //  "the resolution of all the fruitless searches"
 //
@@ -24,40 +24,20 @@
 //
 // For further information, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
-
-#include "trax/SectionTrack.h"
-#include "Track_Imp.h"
+#include "CollidableTrack_Imp.h"
 
 namespace trax{
 
-	class SectionTrack_Imp : public virtual SectionTrack,
-							 public virtual Track_Imp
-	{
-	public:
-		// Track:
-		TrackType GetTrackType() const noexcept override;
+void CollidableTrack_Imp::SetShape( std::shared_ptr<Shape> pShape ) noexcept
+{
+	m_pSyncee = pShape;
 
-		std::shared_ptr<const SectionTrack> GetSectionTrack() const noexcept override;
-
-		std::shared_ptr<SectionTrack> GetSectionTrack() noexcept override;
-
-		bool IsValid() const noexcept override;
-
-		bool Diagnose( std::ostream& os ) const noexcept override;
-
-		using TrackBuilder::Attach;
-
-		// SectionTrack:
-		int Attach( std::shared_ptr<const Section> pSection ) override;
-
-		std::shared_ptr<const Section> DetachSection( int index = 0 ) noexcept override;
-
-		std::shared_ptr<const Section> GetSection( int index = 0 ) const noexcept override;
-
-		int CntSections() const noexcept override;
-	private:
-		std::vector<std::shared_ptr<const Section>> m_Sections;
-	};
-
+	ReadRelativePose();
 }
+
+std::shared_ptr<Shape> CollidableTrack_Imp::GetShape() const noexcept
+{
+	return m_pSyncee;
+}
+
+};

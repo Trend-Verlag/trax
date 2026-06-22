@@ -1,5 +1,5 @@
 //	trax track library
-//	AD 2024 
+//	AD 2026 
 //
 //  "the resolution of all the fruitless searches"
 //
@@ -26,38 +26,32 @@
 
 #pragma once
 
-#include "trax/SectionTrack.h"
-#include "Track_Imp.h"
+#include "trax/rigid/CollidableTrack.h"
+#include "trax/rigid/Shape.h"
+#include "FrameSync_Impl.h"
+#include "trax/source/SectionTrack_Imp.h"
+
 
 namespace trax{
 
-	class SectionTrack_Imp : public virtual SectionTrack,
-							 public virtual Track_Imp
+	class CollidableTrack_ImpBase : public CollidableTrack, 
+									public SectionTrack_Imp
 	{
 	public:
-		// Track:
-		TrackType GetTrackType() const noexcept override;
 
-		std::shared_ptr<const SectionTrack> GetSectionTrack() const noexcept override;
-
-		std::shared_ptr<SectionTrack> GetSectionTrack() noexcept override;
-
-		bool IsValid() const noexcept override;
-
-		bool Diagnose( std::ostream& os ) const noexcept override;
-
-		using TrackBuilder::Attach;
-
-		// SectionTrack:
-		int Attach( std::shared_ptr<const Section> pSection ) override;
-
-		std::shared_ptr<const Section> DetachSection( int index = 0 ) noexcept override;
-
-		std::shared_ptr<const Section> GetSection( int index = 0 ) const noexcept override;
-
-		int CntSections() const noexcept override;
-	private:
-		std::vector<std::shared_ptr<const Section>> m_Sections;
 	};
 
-}
+
+	class CollidableTrack_Imp : public FrameSync_Imp<CollidableTrack_ImpBase,Shape>
+	{
+	public:
+
+		// Inherited via CollidableTrack:
+		void SetShape( std::shared_ptr<Shape> pShape ) noexcept override;
+
+		virtual std::shared_ptr<Shape> GetShape() const noexcept override;
+
+	};
+
+
+};

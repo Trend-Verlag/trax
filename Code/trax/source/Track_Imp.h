@@ -231,7 +231,7 @@ namespace trax{
 		//PlugEnumerator
 		int CountPlugs() const override;
 
-		std::shared_ptr<Body> GetBody() const noexcept override{ return nullptr; }
+	//	std::shared_ptr<Body> GetBody() const noexcept override{ return nullptr; }
 	protected:
 		const Plug& _GetPlug( int idx ) const override;
 		const Jack& _GetJack( int idx ) const override;

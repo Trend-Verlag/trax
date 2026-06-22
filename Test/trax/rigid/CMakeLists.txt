@@ -1,6 +1,7 @@
 add_executable(trax_rigid_tests
     "./Test.cpp"
     "./TestBody.cpp"
+    "./TestDynamicTrack.cpp"
     "./TestStaticTrack.cpp"
     "./TestTractionForceCharacteristic.cpp"
 )

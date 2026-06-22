@@ -22,6 +22,7 @@ add_executable(ALL_TESTS
     "./trax/support/TestSupportXML.cpp"
     "./trax/rigid/modules/TestReadWrite.cpp"
     "./trax/rigid/TestBody.cpp"
+    "./trax/rigid/TestDynamicTrack.cpp"
     "./trax/rigid/TestStaticTrack.cpp"
     "./trax/rigid/TestTractionForceCharacteristic.cpp"
     "./trax/rigid/trains/TestFleet.cpp"

@@ -281,6 +281,7 @@ namespace trax
 			unknown = -1,
 			none  = 0,
 			standard,
+			section,
 			withGeoms,
 			movable,
 			movable_withGeoms,
@@ -384,7 +385,7 @@ namespace trax
 
 
 		/// \returns Returns the body a track is assigned to or nullptr.
-		virtual std::shared_ptr<Body> GetBody() const noexcept = 0;
+	//	virtual std::shared_ptr<Body> GetBody() const noexcept = 0;
 
 
 		/// Tests wether a valid curve and twist are attached.

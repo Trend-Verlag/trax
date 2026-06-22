@@ -25,7 +25,7 @@
 // For further information, please contact: horstmann.marc@trendverlag.de
 
 
-#include "MovableSectionTrack_Imp.h"
+#include "RigidDynamicTrack_Imp.h"
 //#include "trax/source/ParallelTrack_Imp.h"
 
 #include <iostream>
@@ -41,14 +41,16 @@ std::shared_ptr<TrackBuilder> MovableTrack::Make( TrackType type ) noexcept
 			return nullptr;
 		case TrackType::standard:
 			return std::make_shared<Track_Imp>();
-		case TrackType::withGeoms:
+		case TrackType::section:
 			return std::make_shared<SectionTrack_Imp>();
+		case TrackType::withGeoms:
+			return std::make_shared<CollidableTrack_Imp>();
 		//case TrackType::parallel:
 		//	return std::make_shared<ParallelizableTrack_Imp>();
 		case TrackType::movable:
 			return std::make_shared<MovableTrack_Imp>();
 		case TrackType::movable_withGeoms:
-			return std::make_shared<MovableSectionTrack_Imp>();
+			return std::make_shared<DynamicTrack_Imp>();
 		default:
 			std::cerr << "MovableTrack::Make(): Unsupported track type requested: " << ToString(type) << ". Try more specific Make() method." << std::endl;
 			return nullptr;
@@ -59,30 +61,32 @@ std::shared_ptr<TrackBuilder> MovableTrack::Make( TrackType type ) noexcept
 	}
 }
 ///////////////////////////////////////
-Track::TrackType MovableSectionTrack_Imp::GetTrackType() const noexcept{
+void DynamicTrack_Imp::PropagateAbsoluteFrameToClients() noexcept{
+	MovableTrack_Imp::PropagateAbsoluteFrameToClients();
+}
+
+Track::TrackType DynamicTrack_Imp::GetTrackType() const noexcept{
 	return Track::TrackType::movable_withGeoms;
 }
 
-bool MovableSectionTrack_Imp::IsValid() const noexcept
-{
-	if( !MovableTrack_Imp::IsValid() )
-		return false;
-
-	if( !SectionTrack_Imp::IsValid() )
-		return false;
-
-	return true;
+bool DynamicTrack_Imp::IsValid() const noexcept{
+	return MovableTrack_Imp::IsValid();
 }
 
-bool MovableSectionTrack_Imp::Diagnose( std::ostream& os ) const noexcept
+bool DynamicTrack_Imp::Diagnose( std::ostream& os ) const noexcept{
+	return MovableTrack_Imp::Diagnose( os );
+}
+
+void DynamicTrack_Imp::SetBody( std::shared_ptr<Body> pBody ) noexcept
 {
-	if( !MovableTrack_Imp::Diagnose( os ) )
-		return false;
+	MovableTrack_Imp::SetBody( pBody );
+	CollidableTrack_Imp::SetShape( std::dynamic_pointer_cast<Shape>(pBody) );
+}
 
-	if( !SectionTrack_Imp::Diagnose( os ) )
-		return false;
-
-	return true;
+void DynamicTrack_Imp::SetShape( std::shared_ptr<Shape> pShape ) noexcept
+{
+	CollidableTrack_Imp::SetShape( pShape );
+	MovableTrack_Imp::SetBody( std::dynamic_pointer_cast<Body>( pShape ) );
 }
 ///////////////////////////////////////
 } // namespace trax

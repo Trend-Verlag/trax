@@ -1,9 +1,10 @@
 //	trax track library
-//	AD 2026 
+//	AD 2023 
 //
 //  "the resolution of all the fruitless searches"
 //
 //								Peter Gabriel
+//
 //
 // Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
@@ -24,25 +25,22 @@
 //
 // For further information, please contact: horstmann.marc@trendverlag.de
 
-#pragma once
+#include <boost/test/unit_test.hpp>
+#include "trax/rigid/MovableTrack.h"
 
-#include "MovableTrack_Imp.h"
-#include "trax/source/SectionTrack_Imp.h"
 
-namespace trax{
+using namespace trax;
 
-	class MovableSectionTrack_Imp :	public MovableTrack_Imp,
-									public SectionTrack_Imp
-							 
-	{
-	public:
 
-		// Track:
-		TrackType GetTrackType() const noexcept override;
+BOOST_AUTO_TEST_SUITE(TestDynamicTrack)
 
-		bool IsValid() const noexcept override;
+BOOST_AUTO_TEST_CASE( testCreation )
+{
+	std::shared_ptr<TrackBuilder> pTrack = MovableTrack::Make( Track::TrackType::movable_withGeoms );
+	BOOST_REQUIRE( pTrack );
 
-		bool Diagnose( std::ostream& os ) const noexcept override;
-	};
+	BOOST_CHECK( pTrack->GetMovableTrack() );
+	BOOST_CHECK( pTrack->GetSectionTrack() );
+}
 
-} 
+BOOST_AUTO_TEST_SUITE_END() //TestDynamicTrack

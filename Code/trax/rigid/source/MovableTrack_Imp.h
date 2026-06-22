@@ -26,23 +26,37 @@
 
 #pragma once
 
+#include "trax/rigid/Body.h"
 #include "trax/rigid/MovableTrack.h"
 #include "trax/source/Track_Imp.h"
+#include "FrameSync_Impl.h"
 
 namespace trax{
 
-	class MovableTrack_Imp :	public virtual MovableTrack,
-								public virtual Track_Imp
+	class MovableTrack_ImpBase : public virtual MovableTrack,
+								 public virtual Track_Imp
+	{		
+	public:
+		MovableTrack_ImpBase() noexcept;
+		~MovableTrack_ImpBase() noexcept;
+		
+		
+		void AutoDeconnect( Length atDistance = 1_m, Angle atAngle = pi/4, bool bRemoveFromConnector = true ) override;		
+	private:
+		// AutoDeconnect:
+		Plug_Imp_ParentPointer<MovableTrack_ImpBase> m_PlugToDeconnect;
+		void OnTryDeconnect() noexcept;
+		void OnTryDeconnect( trax::EndType endType ) noexcept;
+		Length m_LengthThreshold;
+		Angle m_AngleThreshold;
+		bool m_bAutoDeconnectRemoveFromConnector;
+	};
+
+
+	class MovableTrack_Imp : public FrameSync_Imp<MovableTrack_ImpBase,Body>
 							 
 	{
 	public:
-		MovableTrack_Imp() noexcept;
-		~MovableTrack_Imp() noexcept;
-
-		// Pose_Imp:
-		void PropagateAbsoluteFrameToClients() noexcept override;
-
-
 		// Track:
 		TrackType GetTrackType() const noexcept override;
 
@@ -50,33 +64,13 @@ namespace trax{
 
 		std::shared_ptr<MovableTrack> GetMovableTrack() noexcept override;
 
-		bool IsValid() const noexcept override;
-
-		bool Diagnose( std::ostream& os ) const noexcept override;
-
 
 		// Inherited via MovableTrack:
 		void SetBody( std::shared_ptr<Body> pBody ) noexcept override;
 
-		std::shared_ptr<Body> GetBody() const noexcept override;
-
-		void UpdateTrackPose() noexcept override;
+		virtual std::shared_ptr<Body> GetBody() const noexcept override;
 
 		bool IsMoving() const noexcept override;
-
-		void AutoDeconnect( Length atDistance = 1_m, Angle atAngle = pi/4, bool bRemoveFromConnector = true ) override;
-	private:
-		spat::Frame<Length,One>	m_RelativePose;
-		std::shared_ptr<Body>	m_pBody;
-		bool 					m_bFramePropagationToBodyOnSetFrame;
-
-		// AutoDeconnect:
-		Plug_Imp_ParentPointer<MovableTrack_Imp> m_PlugToDeconnect;
-		void OnTryDeconnect() noexcept;
-		void OnTryDeconnect( trax::EndType endType ) noexcept;
-		Length m_LengthThreshold;
-		Angle m_AngleThreshold;
-		bool m_bAutoDeconnectRemoveFromConnector;
 	};
 
 }

@@ -213,10 +213,13 @@ std::pair<Length,bool> TrackJointFeeder::MoveBy( Length ds )
 	{
 		const Orientation oldOrientation = m_Location.Orient();
 		auto retval = m_Location.Move( ds, oldOrientation, m_pEvent.get(), m_pSignalTarget.get() );
-		if( retval.second ){
+		if( retval.second )
+		{
 			if( m_Location.Orient() != oldOrientation )
 				TurnAnchor();
-			TrackBodyChange( (retval.first == 0_m && m_Location.GetTrack()) ? m_Location.GetTrack()->GetBody() : nullptr );
+
+			TrackBodyChange( (retval.first == 0_m && m_Location.GetTrack() && m_Location.GetTrack()->GetMovableTrack()) ? 
+				m_Location.GetTrack()->GetMovableTrack()->GetBody() : nullptr );
 			m_JackOnTrackTransition.Pulse();
 		}
 

@@ -33,119 +33,22 @@
 namespace trax{
 	using namespace spat;
 
-MovableTrack_Imp::MovableTrack_Imp() noexcept
-	: m_pBody								{ nullptr }
-	, m_bFramePropagationToBodyOnSetFrame	{ true }
-	, m_PlugToDeconnect						{ *this, &MovableTrack_Imp::OnTryDeconnect }
+///////////////////////////////////////
+MovableTrack_ImpBase::MovableTrack_ImpBase() noexcept
+	: m_PlugToDeconnect						{ *this, &MovableTrack_ImpBase::OnTryDeconnect }
 	, m_LengthThreshold						{ 0_m }
 	, m_AngleThreshold						{ 0_deg }
 	, m_bAutoDeconnectRemoveFromConnector	{ false }
 {
 }
 
-MovableTrack_Imp::~MovableTrack_Imp() noexcept
+MovableTrack_ImpBase::~MovableTrack_ImpBase() noexcept
 {
 }
 
-void MovableTrack_Imp::PropagateAbsoluteFrameToClients() noexcept
+void MovableTrack_ImpBase::AutoDeconnect( Length atDistance, Angle atAngle, bool bRemoveFromConnector )
 {
-	Track_Imp::PropagateAbsoluteFrameToClients();
-
-	if( m_bFramePropagationToBodyOnSetFrame && m_pBody )
-	{
-		Frame<Length,One> bodyFrame = GetFrame();
-		m_RelativePose.ToParent( bodyFrame );
-		m_pBody->SetFrame( bodyFrame );
-	}
-}
-
-Track::TrackType MovableTrack_Imp::GetTrackType() const noexcept{
-	return TrackType::movable;
-}
-
-std::shared_ptr<const MovableTrack> MovableTrack_Imp::GetMovableTrack() const noexcept{
-
-	return std::dynamic_pointer_cast<const MovableTrack>(This());
-}
-
-std::shared_ptr<MovableTrack> MovableTrack_Imp::GetMovableTrack() noexcept{
-	return std::dynamic_pointer_cast<MovableTrack>(This());
-}
-
-bool MovableTrack_Imp::IsValid() const noexcept
-{
-	if( !Track_Imp::IsValid() )
-		return false;
-
-	if( m_pBody )
-	{
-		Frame<Length,One> bodyFrame, relative = m_RelativePose;
-		m_pBody->GetFrame( bodyFrame );
-		bodyFrame.ToParent( relative );
-		return relative.Equals( GetFrame(), epsilon__length, epsilon__angle );
-	}
-
-	return true;
-}
-
-bool MovableTrack_Imp::Diagnose( std::ostream& os ) const noexcept
-{
-	if( !Track_Imp::Diagnose( os ) )
-		return false;
-
-	if( !m_pBody )
-	{
-		os << "MovableTrack_Imp::Diagnose: No body assigned." << std::endl;
-	}
-	else{
-		Frame<Length, One> bodyFrame, relative = m_RelativePose;
-		m_pBody->GetFrame( bodyFrame );
-		bodyFrame.ToParent( relative );
-		if( !relative.Equals( GetFrame(), epsilon__length, epsilon__angle ) )
-		{
-			os << "MovableTrack_Imp::Diagnose: Track frame does not match body frame + relative pose." << std::endl;
-			return false;
-		}
-	}
-
-	return true;
-}
-
-void MovableTrack_Imp::SetBody( std::shared_ptr<Body> pBody ) noexcept{
-	m_pBody = pBody;
-
-	if( m_pBody )
-	{
-		Frame<Length,One> bodyFrame;
-		m_pBody->GetFrame( bodyFrame );
-		m_RelativePose = GetFrame();
-		bodyFrame.FromParent( m_RelativePose );	
-	}
-}
-
-std::shared_ptr<Body> MovableTrack_Imp::GetBody() const noexcept{
-	return m_pBody;
-}
-
-void MovableTrack_Imp::UpdateTrackPose() noexcept
-{
-	if( m_pBody )
-	{
-		Frame<Length,One> bodyFrame, trackFrame = m_RelativePose;
-		m_pBody->GetFrame( bodyFrame );
-		bodyFrame.ToParent( trackFrame );
-		common::FlagBlocker fb{ m_bFramePropagationToBodyOnSetFrame };
-		SetFrame( trackFrame.OrthoNormalize() );
-	}
-}
-
-bool MovableTrack_Imp::IsMoving() const noexcept{
-	return m_pBody ? !m_pBody->IsSleeping() : false;
-}
-
-void MovableTrack_Imp::AutoDeconnect( Length atDistance, Angle atAngle, bool bRemoveFromConnector )
-{
-	if( !m_pBody )
+	if( !GetBody() )
 		throw std::logic_error{ "MovableTrack_Imp::AutoDeconnect: No body assigned to track." };
 
 	m_LengthThreshold = atDistance;
@@ -153,18 +56,18 @@ void MovableTrack_Imp::AutoDeconnect( Length atDistance, Angle atAngle, bool bRe
 	m_bAutoDeconnectRemoveFromConnector = bRemoveFromConnector;
 
 	if( m_LengthThreshold > 0_m || m_AngleThreshold > 0_deg )
-		m_pBody->JackOnSleep().InsertAtTail( &m_PlugToDeconnect );
+		GetBody()->JackOnSleep().InsertAtTail( &m_PlugToDeconnect );
 	else
 		m_PlugToDeconnect.Remove();
 }
 
-void MovableTrack_Imp::OnTryDeconnect() noexcept
+void MovableTrack_ImpBase::OnTryDeconnect() noexcept
 {
 	OnTryDeconnect( trax::EndType::north );
 	OnTryDeconnect( trax::EndType::south );
 }
 
-void MovableTrack_Imp::OnTryDeconnect( trax::EndType endType ) noexcept
+void MovableTrack_ImpBase::OnTryDeconnect( trax::EndType endType ) noexcept
 {
 	if( TrackEnd othersEnd = TransitionEnd( endType ); othersEnd.pTrack )
 	{
@@ -183,5 +86,33 @@ void MovableTrack_Imp::OnTryDeconnect( trax::EndType endType ) noexcept
 		}
 	}
 }
+///////////////////////////////////////
+Track::TrackType MovableTrack_Imp::GetTrackType() const noexcept{
+	return TrackType::movable;
+}
 
+std::shared_ptr<const MovableTrack> MovableTrack_Imp::GetMovableTrack() const noexcept{
+	return std::dynamic_pointer_cast<const MovableTrack>(This());
+}
+
+std::shared_ptr<MovableTrack> MovableTrack_Imp::GetMovableTrack() noexcept{
+	return std::dynamic_pointer_cast<MovableTrack>(This());
+}
+
+void MovableTrack_Imp::SetBody( std::shared_ptr<Body> pBody ) noexcept
+{
+	m_pSyncee = pBody;
+
+	ReadRelativePose();
+}
+
+std::shared_ptr<Body> MovableTrack_Imp::GetBody() const noexcept
+{
+	return m_pSyncee;
+}
+
+bool MovableTrack_Imp::IsMoving() const noexcept{
+	return m_pSyncee ? !m_pSyncee->IsSleeping() : false;
+}
+///////////////////////////////////////
 }

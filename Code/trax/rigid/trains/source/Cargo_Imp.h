@@ -58,7 +58,7 @@ namespace trax{
 
 
 	class MoveableCargo_Imp : public MoveableCargo,
-							 public Cargo_Imp{
+							  public Cargo_Imp{
 	public:
 		MoveableCargo_Imp( CargoType type ) noexcept;
 

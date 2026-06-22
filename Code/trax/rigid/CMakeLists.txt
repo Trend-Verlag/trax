@@ -1,11 +1,12 @@
 add_library(trax_rigid 
     STATIC
         "./source/Body_Imp.cpp"
+        "./source/CollidableTrack_Imp.cpp"
         "./source/Geom_Imp.cpp"
         "./source/Gestalt_Imp.cpp"
         "./source/Material_Imp.cpp"
         "./source/MovableTrack_Imp.cpp"
-        "./source/MovableSectionTrack_Imp.cpp"
+        "./source/RigidDynamicTrack_Imp.cpp"
         "./source/Scene_Imp.cpp"
         "./source/Shape_Imp.cpp"
         "./source/Simulator_Imp.cpp"
@@ -17,6 +18,7 @@ add_library(trax_rigid
 # Store public headers in a variable
 set(PUBLIC_HEADERS
     "./Body.h"
+    "./CollidableTrack.h"
     "./Geom.h"
     "./GeomType.h"
     "./Gestalt.h"
@@ -37,10 +39,12 @@ set(PUBLIC_HEADERS
 # Store private headers in a variable
 set(PRIVATE_HEADERS
     "./source/Body_Imp.h"
+    "./source/CollidableTrack_Imp.h"
+    "./source/FrameSync_Impl.h"
     "./source/Geom_Imp.h"
     "./source/Gestalt_Imp.h"
     "./source/MovableTrack_Imp.h"
-    "./source/MovableSectionTrack_Imp.h"
+    "./source/RigidDynamicTrack_Imp.h"
     "./source/Scene_Imp.h"
     "./source/Shape_Imp.h"
     "./source/Simulator_Imp.h"
