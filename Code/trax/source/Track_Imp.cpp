@@ -40,7 +40,7 @@
 
 #include <algorithm>
 #include <iostream>
-
+#include <iomanip>
 
 namespace trax{
 	using namespace spat;
@@ -245,6 +245,9 @@ bool Track_Imp::Diagnose( std::ostream& os ) const noexcept
 			<< ", T*N == " << F.T*F.N 
 			<< ", T*B == " << F.T*F.B 
 			<< ", N*B == " << F.N*F.B << std::endl;
+
+		os << "epsilon_length = " << std::setprecision(std::numeric_limits<Length>::max_digits10) << 2*std::numeric_limits<Length>::epsilon().Units() << std::endl;
+		os << "epsilon_angle = " << std::setprecision(std::numeric_limits<Angle>::max_digits10) << 2*std::numeric_limits<Angle>::epsilon().Units() << std::endl;
 		return false;
 	}
 	if( !GetAbsoluteFrame().IsOrthoNormal() ){

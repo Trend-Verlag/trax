@@ -102,23 +102,23 @@ namespace trax{
 		using Base::GetNext;
 		using Base::IsMember;
 
-		bool										IsValid		() const noexcept override;
+		bool IsValid() const noexcept override;
 
-		IDType										Add			( std::shared_ptr<TraxType> pTraxType ) override;
+		IDType Add( std::shared_ptr<TraxType> pTraxType ) override;
 
-		IDType										AddRelaxed	( std::shared_ptr<TraxType> pTraxType ) noexcept override;
+		IDType AddRelaxed( std::shared_ptr<TraxType> pTraxType ) noexcept override;
 
-		bool										Remove		( TraxType* pTraxType, bool zeroIDs = false ) override;
+		bool Remove( TraxType* pTraxType, bool zeroIDs = false ) override;
 
-		int											Take 		( typename Base::collection_type& collection ) override;
+		int Take( typename Base::collection_type& collection ) override;
 
-		void										Clear		() noexcept override;
+		void Clear() noexcept override;
 
-		int											Count		() const noexcept override;
+		int Count() const noexcept override;
 
-		typename Base::collection_type::iterator	begin		() noexcept override;
+		typename Base::collection_type::iterator begin() noexcept override;
 
-		typename Base::collection_type::iterator	end			() noexcept override;
+		typename Base::collection_type::iterator end() noexcept override;
 
 		typename Base::collection_type::const_iterator begin() const noexcept override;
 
@@ -128,37 +128,37 @@ namespace trax{
 
 		typename Base::collection_type::const_iterator cend() const noexcept override;
 
-		std::shared_ptr<TraxType>					GetFirst	() const noexcept override;
+		std::shared_ptr<TraxType> GetFirst() const noexcept override;
 
-		std::shared_ptr<TraxType>					GetNext		( const std::shared_ptr<TraxType>& pTraxType ) const override;
+		std::shared_ptr<TraxType> GetNext( const std::shared_ptr<TraxType>& pTraxType ) const override;
 
-		std::shared_ptr<TraxType>					GetLast		() const override;
+		std::shared_ptr<TraxType> GetLast() const override;
 
-		std::shared_ptr<TraxType>					GetPrevious	( const std::shared_ptr<TraxType>& pTraxType ) const override;
+		std::shared_ptr<TraxType> GetPrevious( const std::shared_ptr<TraxType>& pTraxType ) const override;
 
 		using Base::Get;
 
-		std::shared_ptr<TraxType>					Get			( IDType id ) const override;
+		std::shared_ptr<TraxType> Get( IDType id ) const override;
 
-		std::shared_ptr<TraxType>					Get			( const char* name ) const override;
+		std::shared_ptr<TraxType> Get( const char* name ) const override;
 
-		void										PushActive	( IDType id ) noexcept override;
+		void PushActive( IDType id ) noexcept override;
 
-		void										PopActive	() override;
+		void PopActive() override;
 
-		std::shared_ptr<TraxType>					GetActive	() const override;
+		std::shared_ptr<TraxType> GetActive() const override;
 
-		bool										IsMember	( const TraxType& item ) const noexcept override;
+		bool IsMember( const TraxType& item ) const noexcept override;
 
-		bool										IsMember	( IDType id  ) const noexcept override;
+		bool IsMember( IDType id  ) const noexcept override;
 
-		void										ShiftIDs	( int offset ) override;
+		void ShiftIDs( int offset ) override;
 
-		IDType										MaxID		() const noexcept override;
+		IDType MaxID() const noexcept override;
 
-		IDType										MinID		() const noexcept override;
+		IDType MinID() const noexcept override;
 
-
+		IDType PeekFree() const noexcept override;
 	protected:
 		void SetDecorator( Base* pDecorator ) noexcept override; // has to derive immediatley from the collection interface
 		Base* Decorator() const noexcept{ return m_pDecorator; }
@@ -462,6 +462,11 @@ inline IDType Container_Imp<TraxType, Base>::MinID() const noexcept{
 		return 0;
 
 	return m_Container.begin()->first;
+}
+
+template<class TraxType, class Base>
+inline IDType Container_Imp<TraxType, Base>::PeekFree() const noexcept{
+	return GetFree();
 }
 
 template<class TraxType, class Base>

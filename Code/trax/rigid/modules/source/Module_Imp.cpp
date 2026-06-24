@@ -282,11 +282,12 @@ bool Module_Imp::Execute( std::unique_ptr<cmnd::Command> Command )
 	{
 		Command->TimeStamp( m_SimulationSteps );
 		m_History.Push( Command->Clone() );
-		Command->Execute();
 
 		if( m_pLogbook )
-			m_pLogbook->Log( *Command ); // log after execution, so the command has access to the result.
-
+			m_pLogbook->Log( *Command ); // log before execution, so the pristine
+										 // values are logged and the command gets
+										 // logged, even if it fails to execute.
+		Command->Execute();
 		return true;
 	}
 

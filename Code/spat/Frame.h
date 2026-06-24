@@ -209,7 +209,7 @@ namespace spat{
 		/// \param epsilon_length Margin for deviation.
 		/// \param epsilon_angle Margin for deviation.
 		/// \returns true if the Frame forms an orthonormal frameset.
-		bool IsOrthoNormal( ValtypeT epsilon_length = 2*std::numeric_limits<ValtypeT>::epsilon(), ValtypeT epsilon_angle = 2*std::numeric_limits<ValtypeT>::epsilon() ) const noexcept;
+		bool IsOrthoNormal( ValtypeT epsilon_length = 10*std::numeric_limits<ValtypeT>::epsilon(), ValtypeT epsilon_angle = 10*std::numeric_limits<ValtypeT>::epsilon() ) const noexcept;
 
 
 		/// \name Transformations to parent frame.

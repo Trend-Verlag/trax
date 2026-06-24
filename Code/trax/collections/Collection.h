@@ -257,6 +257,12 @@ namespace trax{
 		virtual IDType MinID() const noexcept = 0;
 
 
+		/// \returns an ID that would be assigned to the very next element added to 
+		/// the collection. This id only is valid until additions or removals for
+		/// the collection are done.
+		virtual IDType PeekFree() const noexcept = 0;
+
+
 		virtual ~Collection() = default;
 		Collection( const Collection& ) = delete;
 		Collection( Collection&& ) = delete;
