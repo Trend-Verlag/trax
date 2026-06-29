@@ -52,3 +52,7 @@
 # CMake generated files
 CMakeFiles/
 CMakeCache.txt
+
+# Copilot narration queue (transient spoken-narration files)
+/.narration_queue/
+/.vs/

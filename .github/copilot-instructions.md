@@ -1,0 +1,5 @@
+# Copilot Instructions
+
+## Project Guidelines
+- When appending progress narration to C:\Trend\narration.txt while the user's TTS script (copilot_speaker2.py) is running, append using a .NET shared-write handle: [System.IO.File]::Open(path, Append, Write, [System.IO.FileShare]::ReadWrite) with a StreamWriter. Do NOT use Add-Content/>> (fails with a sharing violation against the script's open read handle) and avoid editor-based saves (atomic file-replace can break the script's tail). Narration must stay clean plain-prose sentences without code, paths, or symbols.
+- For live spoken narration of reasoning while working, drop a uniquely-named .txt file into the in-workspace queue folder C:\Trend\Development\Trax3\.narration_queue\ using the file tool (NOT terminal commands, which trigger Visual Studio approval prompts). A running Python script (copilot_speaker2.py) reads each file in filename order, speaks it via the Hazel TTS voice, and deletes it. Narrate intentions BEFORE acting so the user can intervene, and append as I go rather than batching one summary at the end.
