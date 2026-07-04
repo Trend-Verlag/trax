@@ -30,7 +30,7 @@ with normal discussion.
 
 ## Enforcement
 Instances of abusive, harassing, or otherwise unacceptable behavior 
-may be reported by contacting the project team at horstmann.marc@trendverlag.de. 
+may be reported by contacting the project team at horstmann@traxlibrary.dev. 
 All complaints will be reviewed and investigated and will result in a 
 response that is deemed necessary and appropriate to the circumstances. 
 The project team is obligated to maintain confidentiality with regard 
@@ -43,7 +43,7 @@ spaces when an individual is representing the project or its community
 
 ## Appeals
 If you feel you were wrongly accused of violating the Code of Conduct, 
-you can contact the project team at horstmann.marc@trendverlag.de to 
+you can contact the project team at horstmann@traxlibrary.dev to 
 appeal the decision.
 
 ## Attribution
