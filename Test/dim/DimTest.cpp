@@ -23,7 +23,7 @@
 //
 // 3. All copies of the Software must retain this license notice.
 //
-// For further information, please contact: horstmann.marc@trendverlag.de
+// For further information, please contact: horstmann@traxlibrary.dev
 
 #if defined( WITH_BOOST_TESTS )
 #define BOOST_TEST_MODULE TestsDim
