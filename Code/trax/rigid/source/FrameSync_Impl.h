@@ -33,6 +33,8 @@
 namespace trax{
 	using namespace dim;
 
+	/// \brief FrameSync_Impl is a helper class to synchronize the frame 
+	/// of a TypeToSync object with the frame of a Pose_Imp Base class.
 	template< class Base, class TypeToSync >
 	class FrameSync_Imp : public Base
 	{
@@ -75,10 +77,12 @@ namespace trax{
 		Base::PropagateAbsoluteFrameToClients();
 
 		if( m_bFramePropagationToSynceeOnSetFrame && m_pSyncee )
+		// Tt = Tb o Tr  ->  Tb = Tt o Tr^-1
 		{
-			spat::Frame<Length, One> synceeFrame = Base::GetFrame();
-			m_RelativePose.ToParent( synceeFrame );
-			m_pSyncee->SetFrame( synceeFrame );
+			spat::Transformation<One> Tr{ m_RelativePose };
+			spat::Transformation<One> Tt{ Base::GetFrame() };
+			spat::Frame<Length,One>   Fb{ Tt * Tr.Invert() };
+			m_pSyncee->SetFrame( Fb );
 		}
 	}
 
@@ -129,11 +133,11 @@ namespace trax{
 	{
 		if( m_pSyncee )
 		{
-			spat::Frame<Length,One> synceeFrame, relative = m_RelativePose;
+			spat::Frame<Length,One> synceeFrame, newTrackPose = m_RelativePose;
 			m_pSyncee->GetFrame( synceeFrame );
-			synceeFrame.ToParent( relative );
+			synceeFrame.ToParent( newTrackPose );
 			common::FlagBlocker fb{ m_bFramePropagationToSynceeOnSetFrame };
-			Base::SetFrame( synceeFrame );
+			Base::SetFrame( newTrackPose );
 		}
 	}
 
