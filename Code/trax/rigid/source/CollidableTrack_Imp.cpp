@@ -28,6 +28,18 @@
 
 namespace trax{
 
+Track::TrackType CollidableTrack_Imp::GetTrackType() const noexcept{
+	return TrackType::withGeoms;
+}
+
+std::shared_ptr<const CollidableTrack> CollidableTrack_Imp::GetCollidableTrack() const noexcept{
+	return std::dynamic_pointer_cast<const CollidableTrack>(This());
+}
+
+std::shared_ptr<CollidableTrack> CollidableTrack_Imp::GetCollidableTrack() noexcept{
+	return std::dynamic_pointer_cast<CollidableTrack>(This());
+}
+
 void CollidableTrack_Imp::SetShape( std::shared_ptr<Shape> pShape ) noexcept
 {
 	m_pSyncee = pShape;

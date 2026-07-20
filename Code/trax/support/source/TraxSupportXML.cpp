@@ -125,8 +125,11 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	ptTrack	<< track.GetTwist();
 
 	if( const SectionTrack* pSectionTrack = dynamic_cast<const SectionTrack*>(&track); pSectionTrack )
-		if( auto pSection = pSectionTrack->GetSection() )
-			ptTrack << *pSection;
+	{
+		for( int idx = 0; idx < pSectionTrack->CntSections(); ++idx )
+			if( std::shared_ptr<const Section> pSection = pSectionTrack->GetSection( idx ); pSection )
+				ptTrack << *pSection;
+	}
 
 	for( int idx = 0; idx < track.CountSensors(); ++idx )
 		ptTrack << *track.GetSensor( idx );

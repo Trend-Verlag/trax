@@ -75,6 +75,10 @@ namespace trax{
 
 		std::shared_ptr<TrackBuilder> This() noexcept override;
 
+		std::shared_ptr<const CollidableTrack> GetCollidableTrack() const noexcept override;
+
+		std::shared_ptr<CollidableTrack> GetCollidableTrack() noexcept override;
+
 		std::shared_ptr<const MovableTrack> GetMovableTrack() const noexcept override;
 
 		std::shared_ptr<MovableTrack> GetMovableTrack() noexcept override;

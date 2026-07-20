@@ -250,6 +250,7 @@
 namespace trax
 {
 	struct Body;
+	struct CollidableTrack;
 	struct Connector;
 	struct Curve;
 	struct Event;
@@ -358,6 +359,15 @@ namespace trax
 		///@}
 
 
+		/// \returns A shared pointer to the collidable track interface or nullptr, if none.
+		///@{
+		
+		virtual std::shared_ptr<const CollidableTrack> GetCollidableTrack() const noexcept = 0;
+
+		virtual std::shared_ptr<CollidableTrack> GetCollidableTrack() noexcept = 0;
+		///@}
+		
+
 		/// \returns A shared pointer to the movable track interface or nullptr, if none.
 		///@{
 		
@@ -365,6 +375,7 @@ namespace trax
 
 		virtual std::shared_ptr<MovableTrack> GetMovableTrack() noexcept = 0;
 		///@}
+
 
 		/// \returns A shared pointer to the parallel track interface or nullptr, if none.
 		///@{

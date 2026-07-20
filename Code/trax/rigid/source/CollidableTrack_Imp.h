@@ -45,6 +45,13 @@ namespace trax{
 	class CollidableTrack_Imp : public FrameSync_Imp<CollidableTrack_ImpBase,Shape>
 	{
 	public:
+		// Track:
+		TrackType GetTrackType() const noexcept override;
+
+		std::shared_ptr<const CollidableTrack> GetCollidableTrack() const noexcept override;
+
+		std::shared_ptr<CollidableTrack> GetCollidableTrack() noexcept override;
+
 
 		// Inherited via CollidableTrack:
 		void SetShape( std::shared_ptr<Shape> pShape ) noexcept override;

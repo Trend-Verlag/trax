@@ -126,6 +126,14 @@ std::shared_ptr<TrackBuilder> Track_Imp::This() noexcept
 	}
 }
 
+std::shared_ptr<const CollidableTrack> Track_Imp::GetCollidableTrack() const noexcept{
+	return nullptr;
+}
+
+std::shared_ptr<CollidableTrack> Track_Imp::GetCollidableTrack() noexcept{
+	return nullptr;
+}
+
 std::shared_ptr<const MovableTrack> Track_Imp::GetMovableTrack() const noexcept{
 	return nullptr;
 }
