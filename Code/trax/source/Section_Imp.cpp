@@ -607,14 +607,27 @@ void Section_Imp::Set( int id, const SectionPoint& pt, bool bGaugeLeft, bool bGa
 
 void Section_Imp::Shift( const spat::Vector2D<Length>& delta ) noexcept
 {
-	for( SectionPoint& point : m_SectionPoints )
-		point += delta;
+	if( delta != Null2D<Length> )
+	{
+		for( SectionPoint& point : m_SectionPoints )
+			point += delta;
+
+		m_SectionType = SpecialSections::custom;
+	}
 }
 
 void Section_Imp::Scale( One x_scale, One y_scale ){
-	for( auto piter = m_SectionPoints.begin(); 
-				piter != m_SectionPoints.end(); ++piter )
-		(*piter).Scale(x_scale,y_scale);
+	if( x_scale != 1_1 || y_scale != 1 )
+	{
+		for( auto piter = m_SectionPoints.begin(); 
+					piter != m_SectionPoints.end(); ++piter )
+			(*piter).Scale(x_scale,y_scale);
+
+		m_SectionType = SpecialSections::custom;
+
+		if( x_scale != y_scale )
+			CalculateNormals();
+	}
 }
 
 void Section_Imp::CalculateNormals() noexcept{

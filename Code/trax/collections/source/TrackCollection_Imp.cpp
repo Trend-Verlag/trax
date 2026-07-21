@@ -457,7 +457,7 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Connect(
 		}
 
 		std::cout	<< Verbosity::detailed 
-					<< "Coupled: "
+					<< "Connected tracks: "
 					<< " trackEnd=" << trackEnd 
 					<< " at " << trackAt
 					<< " otherEnd=" << (retval.first.pTrack ? retval.first.end : retval.second.end)
