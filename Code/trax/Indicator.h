@@ -34,6 +34,7 @@
 
 namespace trax{
 
+	struct Connector;
 	struct DoubleSlipSwitch;
 	struct Jack;
 	struct Plug;
@@ -259,13 +260,15 @@ namespace trax{
 	/// \param alignment The direction the indicator should use to point to the switches
 	/// outgoing tracks.
 	/// \throws std::logic_error if the switch is not valid.
-	void dclspc AlignTo( BinaryIndicator& indicator, Switch& toSwitch, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> );
+	void dclspc AlignTo( Indicator& indicator, Connector& toConnector, const spat::Position<Length> localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One>, bool bConnectPlugsNJacks = true );
+	
+	void dclspc AlignTo( BinaryIndicator& indicator, Switch& toSwitch, const spat::Position<Length> localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One>, bool bConnectPlugsNJacks = true );
 
-	void dclspc AlignTo( BinaryIndicator& indicator, SingleSlipSwitch& toSwitch, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> );
+	void dclspc AlignTo( BinaryIndicator& indicator, SingleSlipSwitch& toSwitch, const spat::Position<Length> localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One>, bool bConnectPlugsNJacks = true );
 
-	void dclspc AlignTo( BinaryIndicator& indicator, DoubleSlipSwitch& toSwitch, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> );
+	void dclspc AlignTo( BinaryIndicator& indicator, DoubleSlipSwitch& toSwitch, const spat::Position<Length> localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One>, bool bConnectPlugsNJacks = true );
 
-	void dclspc AlignTo( Indicator& indicator, ThreeWaySwitch& toSwitch, const spat::Position<Length>& localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One> );
+	void dclspc AlignTo( Indicator& indicator, ThreeWaySwitch& toSwitch, const spat::Position<Length> localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One>, bool bConnectPlugsNJacks = true );
 
 
 ///////////////////////////////////////

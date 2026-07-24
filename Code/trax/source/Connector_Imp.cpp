@@ -275,7 +275,7 @@ bool Connector_Imp::CheckSlot( int slot, Length e_distance, Angle e_kink, Angle 
 		try{
 			if( e_distance > 0_m ){
 				if( DistanceToConnected( *pTrack, m_Slots[slot].second ) > e_distance ){
-					std::clog << Verbosity::verbose << "Distance to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+					std::clog << Verbosity::detailed << "Distance to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
 						<< ", connected with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
 						<< " Distance: " << DistanceToConnected( *pTrack, m_Slots[slot].second ) << std::endl;
@@ -285,7 +285,7 @@ bool Connector_Imp::CheckSlot( int slot, Length e_distance, Angle e_kink, Angle 
 
 			if( e_kink > 0_deg ){
 				if( KinkToConnected( *pTrack, m_Slots[slot].second ) > e_kink ){
-					std::clog << Verbosity::verbose << "Kink to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+					std::clog << Verbosity::detailed << "Kink to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
 						<< ", connected with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
 						<< " Kink: " << _deg(KinkToConnected( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;
@@ -295,7 +295,7 @@ bool Connector_Imp::CheckSlot( int slot, Length e_distance, Angle e_kink, Angle 
 
 			if( e_twist > 0_deg ){
 				if( TwistToConnected( *pTrack, m_Slots[slot].second ) > e_twist ){
-					std::clog << Verbosity::verbose << "Twist to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
+					std::clog << Verbosity::detailed << "Twist to other end is too large! " << "Track end: (" << pTrack->ID() << "," << ToString(m_Slots[slot].second) << ")" 
 						<< ", connected with: (" << m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).pTrack->ID() << "," 
 						<< ToString(m_Slots[slot].first->TransitionEnd(m_Slots[slot].second).end) << ")."
 						<< " Twist: " << _deg(TwistToConnected( *pTrack, m_Slots[slot].second )) << " degree." << std::endl;

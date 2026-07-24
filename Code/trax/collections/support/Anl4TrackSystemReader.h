@@ -55,7 +55,7 @@ namespace trax{
 		dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, SingleSlipSwitch& switchObject, const TrackSystem& trackSystem );
 		dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, DoubleSlipSwitch& switchObject, const TrackSystem& trackSystem );
 
-		dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Indicator& indicator );
+		dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Indicator& indicator, const ConnectorCollection& connectorCollection );
 	//	dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, BinaryIndicator& binaryIndicator );
 
 		dclspc void ReadJack( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Jack& jack );

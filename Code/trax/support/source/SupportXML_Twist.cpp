@@ -114,6 +114,7 @@ namespace ptreesupport
 			}
 		}
 
+		std::clog << trax::Verbosity::detailed << "CreateTwist: No matching twist type found in property tree." << std::endl;
 		return nullptr;
 	}
 

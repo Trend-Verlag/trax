@@ -114,6 +114,7 @@ Allowed options");
 	}
 	catch( std::exception& e ) {
         std::cerr << trax::Verbosity::error << "EEPFileConverter: error: " << e.what() << std::endl;
+		std::cerr << trax::Verbosity::error << "Note: File paths can not contain white spaces." << std::endl;
         return 1;
     }
     catch( ... ) {

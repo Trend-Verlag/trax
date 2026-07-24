@@ -255,12 +255,36 @@ int SwitchSemaphore_Imp::CountPlugs() const noexcept{
 int SwitchSemaphore_Imp::CountJacks() const noexcept{
 	return 3;
 }
+
+void AlignTo( 
+	Indicator& indicator,
+	Connector& toConnector, 
+	const spat::Position<Length> localPosition, 
+	const spat::Vector<One>& alignment, 
+	bool bConnectPlugsNJacks )
+{
+	if( BinaryIndicator* pBinaryIndicator = dynamic_cast<BinaryIndicator*>(&indicator); pBinaryIndicator )
+	{
+		if( Switch* pSwitch = dynamic_cast<Switch*>(&toConnector); pSwitch )
+			AlignTo( *pBinaryIndicator, *pSwitch, localPosition, alignment, bConnectPlugsNJacks );
+		else if( SingleSlipSwitch* pSingleSlipSwitch = dynamic_cast<SingleSlipSwitch*>(&toConnector); pSingleSlipSwitch )
+			AlignTo( *pBinaryIndicator, *pSingleSlipSwitch, localPosition, alignment, bConnectPlugsNJacks );
+		else if( DoubleSlipSwitch* pDoubleSlipSwitch = dynamic_cast<DoubleSlipSwitch*>(&toConnector); pDoubleSlipSwitch )
+			AlignTo( *pBinaryIndicator, *pDoubleSlipSwitch, localPosition, alignment, bConnectPlugsNJacks );
+	}
+	else
+	{
+		if( ThreeWaySwitch* pThreeWaySwitch = dynamic_cast<ThreeWaySwitch*>(&toConnector); pThreeWaySwitch )
+			AlignTo( indicator, *pThreeWaySwitch, localPosition, alignment, bConnectPlugsNJacks );
+	}
+}
 ///////////////////////////////////////
 void AlignTo( 
 	BinaryIndicator& indicator, 
 	Switch& toSwitch,
-	const spat::Position<dim::Length>& localPosition, 
-	const spat::Vector<One>& alignment )
+	const spat::Position<dim::Length> localPosition, 
+	const spat::Vector<One>& alignment, 
+	bool bConnectPlugsNJacks )
 {
 	spat::Frame<dim::Length,dim::One> frame, PoseOne, PoseTwo;
 	toSwitch.Bifurcation().Transition( frame );
@@ -321,10 +345,13 @@ void AlignTo(
 	PoseTwo.OrthoNormalize();
 	indicator.LocalFrameForStatus( BinaryIndicator::Status::two, PoseTwo );
 
-	indicator.JackOnOne().InsertAndAppend( &toSwitch.PlugToGo().Make() );
-	indicator.JackOnTwo().InsertAndAppend( &toSwitch.PlugToBranch().Make() );
-	toSwitch.JackOnGo().InsertAndAppend( &indicator.PlugToOne() );
-	toSwitch.JackOnBranch().InsertAndAppend( &indicator.PlugToTwo() );
+	if( bConnectPlugsNJacks )
+	{
+		indicator.JackOnOne().InsertAndAppend( &toSwitch.PlugToGo().Make() );
+		indicator.JackOnTwo().InsertAndAppend( &toSwitch.PlugToBranch().Make() );
+		toSwitch.JackOnGo().InsertAndAppend( &indicator.PlugToOne() );
+		toSwitch.JackOnBranch().InsertAndAppend( &indicator.PlugToTwo() );
+	}
 	
 	indicator.RefTargetID( toSwitch.ID() );
 	indicator.Set( toSwitch.Get() == Switch::Status::go ? BinaryIndicator::Status::one : BinaryIndicator::Status::two, false );
@@ -333,8 +360,9 @@ void AlignTo(
 void AlignTo( 
 	BinaryIndicator& indicator, 
 	SingleSlipSwitch& toSwitch, 
-	const spat::Position<Length>& localPosition, 
-	const spat::Vector<One>& alignment )
+	const spat::Position<Length> localPosition, 
+	const spat::Vector<One>& alignment, 
+	bool bConnectPlugsNJacks )
 {
 	spat::Frame<dim::Length,dim::One> frame, poseOne, poseTwo;
 	toSwitch.GetCenter( frame );
@@ -354,10 +382,13 @@ void AlignTo(
 	indicator.GetFrame().FromParent( poseTwo );
 	indicator.LocalFrameForStatus( BinaryIndicator::Status::two, poseTwo );
 
-	indicator.JackOnOne().InsertAndAppend( &toSwitch.PlugTo( SingleSlipSwitch::Status::go ).Make() );
-	indicator.JackOnTwo().InsertAndAppend( &toSwitch.PlugTo( SingleSlipSwitch::Status::branch ).Make() );
-	toSwitch.JackOn( SingleSlipSwitch::Status::go ).InsertAndAppend( &indicator.PlugToOne() );
-	toSwitch.JackOn( SingleSlipSwitch::Status::branch ).InsertAndAppend( &indicator.PlugToTwo() );
+	if( bConnectPlugsNJacks )
+	{
+		indicator.JackOnOne().InsertAndAppend( &toSwitch.PlugTo( SingleSlipSwitch::Status::go ).Make() );
+		indicator.JackOnTwo().InsertAndAppend( &toSwitch.PlugTo( SingleSlipSwitch::Status::branch ).Make() );
+		toSwitch.JackOn( SingleSlipSwitch::Status::go ).InsertAndAppend( &indicator.PlugToOne() );
+		toSwitch.JackOn( SingleSlipSwitch::Status::branch ).InsertAndAppend( &indicator.PlugToTwo() );
+	}
 
 	indicator.RefTargetID( toSwitch.ID() );
 	indicator.Set( toSwitch.Get() == SingleSlipSwitch::Status::go ? BinaryIndicator::Status::one : BinaryIndicator::Status::two, false );
@@ -366,8 +397,9 @@ void AlignTo(
 void AlignTo( 
 	BinaryIndicator& indicator, 
 	DoubleSlipSwitch& toSwitch, 
-	const spat::Position<Length>& localPosition, 
-	const spat::Vector<One>& alignment )
+	const spat::Position<Length> localPosition, 
+	const spat::Vector<One>& alignment, 
+	bool bConnectPlugsNJacks )
 {
 	spat::Frame<dim::Length,dim::One> frame, poseOne, poseTwo;
 	toSwitch.GetCenter( frame );
@@ -387,10 +419,13 @@ void AlignTo(
 	indicator.GetFrame().FromParent( poseTwo );
 	indicator.LocalFrameForStatus( BinaryIndicator::Status::two, poseTwo );
 
-	indicator.JackOnOne().InsertAndAppend( &toSwitch.PlugTo( DoubleSlipSwitch::Status::go ).Make() );
-	indicator.JackOnTwo().InsertAndAppend( &toSwitch.PlugTo( DoubleSlipSwitch::Status::branch ).Make() );
-	toSwitch.JackOn( DoubleSlipSwitch::Status::go ).InsertAndAppend( &indicator.PlugToOne() );
-	toSwitch.JackOn( DoubleSlipSwitch::Status::branch ).InsertAndAppend( &indicator.PlugToTwo() );
+	if( bConnectPlugsNJacks )
+	{
+		indicator.JackOnOne().InsertAndAppend( &toSwitch.PlugTo( DoubleSlipSwitch::Status::go ).Make() );
+		indicator.JackOnTwo().InsertAndAppend( &toSwitch.PlugTo( DoubleSlipSwitch::Status::branch ).Make() );
+		toSwitch.JackOn( DoubleSlipSwitch::Status::go ).InsertAndAppend( &indicator.PlugToOne() );
+		toSwitch.JackOn( DoubleSlipSwitch::Status::branch ).InsertAndAppend( &indicator.PlugToTwo() );
+	}
 	
 	indicator.RefTargetID( toSwitch.ID() );
 	indicator.Set( toSwitch.Get() == DoubleSlipSwitch::Status::go ? BinaryIndicator::Status::one : BinaryIndicator::Status::two, false );
@@ -399,8 +434,9 @@ void AlignTo(
 void AlignTo( 
 	Indicator& indicator, 
 	ThreeWaySwitch& toSwitch, 
-	const spat::Position<Length>& localPosition, 
-	const spat::Vector<One>& alignment )
+	const spat::Position<Length> localPosition, 
+	const spat::Vector<One>& alignment, 
+	bool bConnectPlugsNJacks )
 {
 	spat::Frame<dim::Length,dim::One> frame, poseOne, poseTwo, poseThree;
 	toSwitch.Bifurcation().Transition( frame );
@@ -465,12 +501,15 @@ void AlignTo(
 			return;
 	}
 
-	indicator.JackOn( Indicator::Status::one ).InsertAndAppend( &toSwitch.PlugToGo().Make() );
-	indicator.JackOn( Indicator::Status::two ).InsertAndAppend( &toSwitch.PlugToBranch1().Make() );
-	indicator.JackOn( Indicator::Status::three ).InsertAndAppend( &toSwitch.PlugToBranch2().Make() );
-	toSwitch.JackOnGo().InsertAndAppend( &indicator.PlugTo( Indicator::Status::one ) );
-	toSwitch.JackOnBranch1().InsertAndAppend( &indicator.PlugTo( Indicator::Status::two ) );
-	toSwitch.JackOnBranch2().InsertAndAppend( &indicator.PlugTo( Indicator::Status::three ) );
+	if( bConnectPlugsNJacks )
+	{
+		indicator.JackOn( Indicator::Status::one ).InsertAndAppend( &toSwitch.PlugToGo().Make() );
+		indicator.JackOn( Indicator::Status::two ).InsertAndAppend( &toSwitch.PlugToBranch1().Make() );
+		indicator.JackOn( Indicator::Status::three ).InsertAndAppend( &toSwitch.PlugToBranch2().Make() );
+		toSwitch.JackOnGo().InsertAndAppend( &indicator.PlugTo( Indicator::Status::one ) );
+		toSwitch.JackOnBranch1().InsertAndAppend( &indicator.PlugTo( Indicator::Status::two ) );
+		toSwitch.JackOnBranch2().InsertAndAppend( &indicator.PlugTo( Indicator::Status::three ) );
+	}
 	
 	indicator.RefTargetID( toSwitch.ID() );
 	indicator.Set( toSwitch.Get() == Switch::Status::go ? BinaryIndicator::Status::one : BinaryIndicator::Status::two, false );
@@ -623,7 +662,7 @@ void SwitchSemaphore::LocalFrameForStatus( Status status, const spat::Frame<Leng
 	throw std::logic_error( "SwitchSemaphore::LocalFrameForStatus: Not yet implemented!" );
 }
 
-const spat::Frame<Length, One>& SwitchSemaphore::LocalFrameForStatus( Status status ) const
+const spat::Frame<Length,One>& SwitchSemaphore::LocalFrameForStatus( Status status ) const
 {
 	throw std::logic_error( "SwitchSemaphore::LocalFrameForStatus: Not yet implemented!" );
 }

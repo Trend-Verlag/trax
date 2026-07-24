@@ -494,14 +494,15 @@ void Read(
 void Read( 
 	const boost::property_tree::ptree& pt, 
 	SocketRegistry& socketRegistry, 
-	Indicator& indicator )
+	Indicator& indicator, 
+	const ConnectorCollection& connectorCollection )
 {
 	indicator.ID( pt.get( "<xmlattr>.id", IDType{0} ) );
 	indicator.RefTargetID( pt.get( "<xmlattr>.refid", IDType{0} ) );
 	indicator.Set( ToIndicatorStatus( pt.get( "<xmlattr>.status", ToString(Indicator::Status::unknown) )) );
 	AttributesToReferences( pt, indicator );
 	
-	Indicator::Status status = Indicator::Status::unknown;
+	int status = 0;
 	for( const auto& pair : pt )
 	{
 		if( pair.first == "Frame" )
@@ -509,12 +510,12 @@ void Read(
 			spat::Frame<Length,One> frame;
 			ReadFrame( pair.second, frame );
 
-			if( status == Indicator::Status::unknown )	
+			if( status == 0 )	
 				indicator.SetFrame( frame );
 			else
-				indicator.LocalFrameForStatus( status, frame );
+				indicator.LocalFrameForStatus( static_cast<Indicator::Status>(status), frame );
 
-			status = static_cast<Indicator::Status>(static_cast<int>(status) + 1);
+			++status;
 		}
 
 		else if( pair.first == "Plug" )
@@ -522,6 +523,18 @@ void Read(
 		
 		else if( pair.first == "Jack" )
 			ReadJack( pair.second, socketRegistry, indicator.JackOn( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+	}
+
+	if( status <= 1 )
+	// There was only one frame (that holds relative position) or no frame at all.
+	// Try to get it from narrow track:
+	{
+		std::clog << Verbosity::detailed << "trax: indicator:id=\"" << indicator.ID() << "\" has only one or no frame. Trying to get it from narrow track." << std::endl;
+
+		if( std::shared_ptr<Connector> pConnector = connectorCollection.Get( indicator.RefTargetID() ); pConnector )
+		{	
+			AlignTo( indicator, *pConnector, indicator.GetFrame().P, spat::Ez<One>, false );
+		}
 	}
 }
 //

@@ -910,6 +910,7 @@ static std::unique_ptr<Curve> CreateCurve( const boost::property_tree::ptree& pt
 		}
 	}
 
+	std::clog << trax::Verbosity::detailed << "CreateCurve: No matching curve type found in property tree." << std::endl;
 	return nullptr;
 }
 
