@@ -25,6 +25,7 @@
 #include "trax/collections/TrackSystem.h"
 
 #include "trax/Plug.h"
+#include "trax/SocketRegistry.h"
 
 namespace trax{
 namespace ptreesupport{
@@ -32,13 +33,6 @@ namespace ptreesupport{
 Anl3ModuleReader::Anl3ModuleReader( 
 	const char * pLocale )
 	: Anl3TrackSystemReader( pLocale )
-{
-}
-
-Anl3ModuleReader::Anl3ModuleReader( 
-	SocketRegistry& socketRegistry, 
-	const char* pLocale )
-	: Anl3TrackSystemReader( socketRegistry, pLocale )
 {
 }
 
@@ -68,7 +62,8 @@ std::unique_ptr<Module> Anl3ModuleReader::ReadModule(
 	else
 		throw std::runtime_error( "*.anl file has no version tag." );
 
-	if( std::unique_ptr<Module> pModule = Module::Make(); pModule ){
+	if( std::unique_ptr<Module> pModule = Module::Make(); pModule )
+	{
 		pModule->Attach( IndicatorCollection::Make() );
 		pModule->Attach( TimerCollection::Make() );
 		pModule->Attach( PulseCounterCollection::Make() );
@@ -87,7 +82,7 @@ std::unique_ptr<Module> Anl3ModuleReader::ReadModule(
 					if( pair.first == "Gleissystem" ){
 						std::vector<std::pair<Track::Connection,std::string>> local_connections;
 						if( std::shared_ptr<TrackSystem> pTempTrackSystem = TrackSystem::Make(); pTempTrackSystem ){
-							CreateTrackCollection( pair.second, *pTempTrackSystem, local_connections, *pModule->GetSignalCollection(), *pModule->GetIndicatorCollection(), *pModule->GetTimerCollection(), *pModule->GetPulseCounterCollection(), travelVelocities, maxSensorID );
+							CreateTrackCollection( pair.second, *pModule, *pTempTrackSystem, local_connections, *pModule->GetSignalCollection(), *pModule->GetIndicatorCollection(), *pModule->GetTimerCollection(), *pModule->GetPulseCounterCollection(), travelVelocities, maxSensorID );
 							if( std::shared_ptr<TrackCollection> pTrackCollection = TrackCollection::Make(); pTrackCollection ){
 								pModule->GetTrackSystem()->GetCollectionContainer()->Add( pTrackCollection );
 
@@ -122,7 +117,7 @@ std::unique_ptr<Module> Anl3ModuleReader::ReadModule(
 					//	pModule->Attach( EEPCreateBatch( pair.second, *pSimulator ) );
 
 					else if( pair.first == "Gebaeudesammlung" )
-						ReadGebaeudesammlung( pair.second, connections, kollektors, *pModule->GetTrackSystem(), *pModule->GetIndicatorCollection() );
+						ReadGebaeudesammlung( pair.second, *pModule, connections, kollektors, *pModule->GetTrackSystem(), *pModule->GetIndicatorCollection() );
 
 					else if( pair.first == "Kammerasammlung" )
 						pModule->Attach( ReadCameraCollection( pair.second ) );
@@ -252,7 +247,8 @@ void Anl3ModuleReader::ReadUserCamera(
 }
 
 void Anl3ModuleReader::ReadGebaeudesammlung(
-	const boost::property_tree::ptree& pt,
+	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry,
 	const std::vector<std::pair<Track::Connection,std::string>>& connections,
 	const std::vector<Kollektor>& kollektors,
 	const TrackSystem& trackSystem,
@@ -319,15 +315,15 @@ void Anl3ModuleReader::ReadGebaeudesammlung(
 						}
 
 						for( int i = 1; i <= 4; ++i ){
-							pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pDoubleSlipSwitch->PlugTo( DoubleSlipSwitchStatusFromEEP( i ) ).Unplugged( &m_SocketRegistry ) );
+							pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pDoubleSlipSwitch->PlugTo( DoubleSlipSwitchStatusFromEEP( i ) ).Unplugged( &socketRegistry ) );
 							pDoubleSlipSwitch->JackOn( DoubleSlipSwitchStatusFromEEP( i ) ).InsertAtTail( &pSwitchIndicator->PlugTo( static_cast<trax::Indicator::Status>(i) ) );
 						}
 
 						indicatorCollection.Add( pSwitchIndicator );
-						pSwitchIndicator->RegisterSockets( m_SocketRegistry );
+						pSwitchIndicator->RegisterSockets( socketRegistry );
 					}
 
-					pDoubleSlipSwitch->RegisterSockets( m_SocketRegistry );
+					pDoubleSlipSwitch->RegisterSockets( socketRegistry );
 					trackSystem.GetConnectorCollection()->Add( std::move(pDoubleSlipSwitch) );
 				}
 			}
@@ -380,15 +376,15 @@ void Anl3ModuleReader::ReadGebaeudesammlung(
 						}
 
 						for( int i = 2; i <= 4; ++i ){
-							pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pSingleSlipSwitch->PlugTo( SingleSlipSwitchStatusFromEEP( i ) ).Unplugged( &m_SocketRegistry ) );
+							pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pSingleSlipSwitch->PlugTo( SingleSlipSwitchStatusFromEEP( i ) ).Unplugged( &socketRegistry ) );
 							pSingleSlipSwitch->JackOn( SingleSlipSwitchStatusFromEEP( i ) ).InsertAtTail( &pSwitchIndicator->PlugTo( static_cast<trax::Indicator::Status>(i) ) );
 						}
 
 						indicatorCollection.Add( pSwitchIndicator );
-						pSwitchIndicator->RegisterSockets( m_SocketRegistry );
+						pSwitchIndicator->RegisterSockets( socketRegistry );
 					}
 
-					pSingleSlipSwitch->RegisterSockets( m_SocketRegistry );
+					pSingleSlipSwitch->RegisterSockets( socketRegistry );
 					trackSystem.GetConnectorCollection()->Add( std::move(pSingleSlipSwitch) );
 				}
 			}

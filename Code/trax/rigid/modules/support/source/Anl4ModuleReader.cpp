@@ -170,15 +170,6 @@ Anl4ModuleReader::Anl4ModuleReader(
 {
 }
 
-Anl4ModuleReader::Anl4ModuleReader( 
-	Scene& scene,
-	SocketRegistry& socketRegistry, 
-	const char* pLocale )
-	: Anl4TrackSystemReader{ socketRegistry, pLocale }
-	, m_Scene{ scene }
-{
-}
-
 std::unique_ptr<ModuleCollection> Anl4ModuleReader::ReadModuleCollection( const boost::property_tree::ptree& pt ) const
 {
 	if( auto iter = pt.find( "ModuleCollection" ); iter != pt.not_found() )
@@ -242,7 +233,7 @@ std::unique_ptr<Module> Anl4ModuleReader::ReadModule( const boost::property_tree
 			}
 
 			else if( pair.first == "TrackSystem" )
-				pModule->Attach( CreateTrackSystem( pair.second ) );
+				pModule->Attach( CreateTrackSystem( pair.second, *pModule ) );
 
 			//else if( pair.first == "Batch" && pSimulator )
 			//	pModule->Attach( CreateBatch( pair.second, *pModule ) );
@@ -251,20 +242,21 @@ std::unique_ptr<Module> Anl4ModuleReader::ReadModule( const boost::property_tree
 				pModule->Attach( CreateFleet( pair.second ) );
 
 			else if( pair.first == "SignalCollection" && pModule->GetTrackSystem() /*&& pModule->GetFleet()*/ )
-				pModule->Attach( CreateSignalCollection( pair.second, *pModule->GetTrackSystem()/*, *pModule->GetFleet()*/ ) );
+				pModule->Attach( CreateSignalCollection( pair.second, *pModule, *pModule->GetTrackSystem()/*, *pModule->GetFleet()*/ ) );
 
 			else if( pair.first == "IndicatorCollection" && pModule->GetTrackSystem() && pModule->GetTrackSystem()->GetConnectorCollection() && pModule->GetSignalCollection() )
 				pModule->Attach( CreateIndicatorCollection(
-					pair.second, 
+					pair.second,
+					*pModule,
 					*pModule->GetTrackSystem()->GetConnectorCollection(),
 					*pModule->GetSignalCollection()
 					) );
 
 			else if( pair.first == "PulseCounterCollection" )
-				pModule->Attach( CreatePulseCounterCollection( pair.second ) );
+				pModule->Attach( CreatePulseCounterCollection( pair.second, *pModule ) );
 
 			else if( pair.first == "TimerCollection" )
-				pModule->Attach( CreateTimerCollection( pair.second ) );
+				pModule->Attach( CreateTimerCollection( pair.second, *pModule ) );
 		}
 
 		return pModule;

@@ -42,15 +42,20 @@ std::unique_ptr<SocketRegistry> SocketRegistry::Make() noexcept{
 	}
 }
 ///////////////////////////////////////
+void SocketRegistry_Imp::ReservePlugIDs( IDType upToID )
+{
+	m_Plugs.reserve( upToID );
+}
+
 void SocketRegistry_Imp::RegisterPlug( Plug& plug ){
 	if( plug.ID() )
 		Connect(plug);
 	else{
-		m_Jacks.clear(); // no jacks can get connected if there are 
-						 // zero id plugs, which have to be assigned 
-						 // an id first. This can not be known by Jacks.
+		//m_Jacks.clear(); // no jacks can get connected if there are 
+		//				 // zero id plugs, which have to be assigned 
+		//				 // an id first. This can not be known by Jacks.
 
-		std::clog << Verbosity::verbose << "SocketRegistry_Imp::RegisterPlug: Plug with zero ID! The Plug gets assigned a unique id." << std::endl;
+		//std::clog << Verbosity::verbose << "SocketRegistry_Imp::RegisterPlug: Plug with zero ID! The Plug gets assigned a unique id." << std::endl;
 	}
 
 	m_Plugs.insert( &plug );
@@ -72,6 +77,17 @@ void SocketRegistry_Imp::UnRegisterPlug( const MultiPlug& plug )
 {
 	for( const Plug& clone : plug )
 		UnRegisterPlug( clone );
+}
+
+void SocketRegistry_Imp::UnregisterUnconnectedPlugs()
+{
+	for( auto iter = m_Plugs.begin(); iter != m_Plugs.end();  )
+	{
+		if( !iter->second->Plugged() )
+			iter = m_Plugs.erase( iter );
+		else
+			++iter;
+	}
 }
 
 Plug* SocketRegistry_Imp::GetPlug( IDType id ) const{
@@ -115,7 +131,7 @@ void SocketRegistry_Imp::RemoveJack( Jack& jack ) noexcept{
 	m_Jacks.erase( std::remove( m_Jacks.begin(), m_Jacks.end(), &jack ), m_Jacks.end() );
 }
 
-void SocketRegistry_Imp::Clear() noexcept
+void SocketRegistry_Imp::ClearRegistry() noexcept
 {
 	m_Plugs.clear();
 	m_Jacks.clear();

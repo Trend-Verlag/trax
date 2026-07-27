@@ -52,6 +52,10 @@ namespace trax{
 		static dclspc std::unique_ptr<SocketRegistry> Make() noexcept;
 
 
+		/// \brief Reserves plug IDs up to (and including) the supplied id.
+		virtual void ReservePlugIDs( IDType upToID ) = 0;
+
+
 		/// \brief Registers a Plug by assigning a unique ID() to it 
 		/// and making it available for Jacks to connect with.
 		/// 
@@ -77,7 +81,7 @@ namespace trax{
 
 
 		/// \brief Removes the supplied Plug from registration database.
-		/// \param plug Reference to Plug to unregister.
+		/// \param plug Reference to Plug to unregister. The plug will keep its id.
 		///@{
 
 		/// \brief Unregisters a single plug.
@@ -85,6 +89,9 @@ namespace trax{
 
 		/// \brief Unregisters all plugs of a multi-plug.
 		virtual void UnRegisterPlug( const MultiPlug& plug ) = 0;
+
+		///  \brief Removes all plugs from the registry that are not connected to a jack.
+		virtual void UnregisterUnconnectedPlugs() = 0;
 		///@}
 
 
@@ -115,7 +122,7 @@ namespace trax{
 
 
 		/// \brief Clears the registry.
-		virtual void Clear() = 0;
+		virtual void ClearRegistry() = 0;
 
 
 		virtual ~SocketRegistry() = default;

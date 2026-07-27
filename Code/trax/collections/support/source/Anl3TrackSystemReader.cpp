@@ -19,13 +19,14 @@
 #include "trax/collections/TrackCollection.h"
 #include "trax/collections/TrackCollectionContainer.h"
 
-#include "trax/SectionTrack.h"
 #include "trax/Indicator.h"
 #include "trax/Jack.h"
 #include "trax/LogicElements.h"
 #include "trax/Plug.h"
 #include "trax/Section.h"
+#include "trax/SectionTrack.h"
 #include "trax/Sensor.h"
+#include "trax/SocketRegistry.h"
 #include "trax/Timer.h"
 
 #include "common/support/CommonSupportXML.h"
@@ -46,14 +47,7 @@ Anl3TrackSystemReader::Anl3TrackSystemReader( const char* pLocale )
 {
 }
 
-Anl3TrackSystemReader::Anl3TrackSystemReader( 
-	SocketRegistry& socketRegistry, 
-	const char* pLocale )
-	: PTreeReader{ socketRegistry, pLocale }
-{
-}
-
-std::shared_ptr<TrackSystem> Anl3TrackSystemReader::ReadTrackSystem( const boost::property_tree::ptree& pt ) const
+std::shared_ptr<TrackSystem> Anl3TrackSystemReader::ReadTrackSystem( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const
 {
 	std::vector<std::pair<Track::Connection, std::string>> connections;
 	std::unique_ptr<SignalCollection> pSignalCollection= SignalCollection::Make();
@@ -64,6 +58,7 @@ std::shared_ptr<TrackSystem> Anl3TrackSystemReader::ReadTrackSystem( const boost
 	IDType maxSensorID = 0;
 
 	return CreateTrackSystem( pt, 
+		socketRegistry,
 		connections, 
 		*pSignalCollection, 
 		*pIndicatorCollection, 
@@ -75,6 +70,7 @@ std::shared_ptr<TrackSystem> Anl3TrackSystemReader::ReadTrackSystem( const boost
 
 std::shared_ptr<TrackSystem> Anl3TrackSystemReader::CreateTrackSystem( 
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	std::vector<std::pair<Track::Connection,std::string>>& connections,
 	SignalCollection& signalCollection,
 	IndicatorCollection& indicatorCollection, 
@@ -88,7 +84,9 @@ std::shared_ptr<TrackSystem> Anl3TrackSystemReader::CreateTrackSystem(
 		{
 			if( pairTrackSystem.first == "Gleissystem" )
 			{
-				CreateTrackCollection( pairTrackSystem.second, *pTrackSystem,
+				CreateTrackCollection( pairTrackSystem.second, 
+					socketRegistry,
+					*pTrackSystem,
 					connections, 
 					signalCollection, 
 					indicatorCollection, 
@@ -105,7 +103,8 @@ std::shared_ptr<TrackSystem> Anl3TrackSystemReader::CreateTrackSystem(
 	return nullptr;
 }
 
-void Anl3TrackSystemReader::CreateTrackCollection( const boost::property_tree::ptree& pt, 
+void Anl3TrackSystemReader::CreateTrackCollection( const boost::property_tree::ptree& pt,
+	SocketRegistry& socketRegistry, 
 	TrackSystem& trackSystem, 
 	std::vector<std::pair<Track::Connection, std::string>>& connections, 
 	SignalCollection& signalCollection, 
@@ -133,7 +132,7 @@ void Anl3TrackSystemReader::CreateTrackCollection( const boost::property_tree::p
 
 		for( const auto& pair : pt ){
 			if( pair.first == "Gleis" )
-				trackSystem.Add( CreateTrack( pair.second, *trackSystem.GetConnectorCollection(), signals, indicatorCollection, timerCollection, pulseCounterCollection, travelVelocities, maxSensorID ) );
+				trackSystem.Add( CreateTrack( pair.second, socketRegistry, *trackSystem.GetConnectorCollection(), signals, indicatorCollection, timerCollection, pulseCounterCollection, travelVelocities, maxSensorID ) );
 
 			if( pair.first == "Gleisverbindung" ){
 				try{
@@ -203,12 +202,12 @@ void Anl3TrackSystemReader::CreateTrackCollection( const boost::property_tree::p
 						}
 
 						for( int i = 1; i <= Switch::status_count; ++i ){
-							pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pSwitch->PlugTo( SwitchStatusFromEEP( i ) ).Unplugged( &m_SocketRegistry ) );
+							pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pSwitch->PlugTo( SwitchStatusFromEEP( i ) ).Unplugged( &socketRegistry ) );
 							pSwitch->JackOn( SwitchStatusFromEEP( i ) ).InsertAtTail( &pSwitchIndicator->PlugTo( static_cast<trax::Indicator::Status>(i) ) );
 						}
 
 						indicatorCollection.Add( pSwitchIndicator );
-						pSwitchIndicator->RegisterSockets( m_SocketRegistry );
+						pSwitchIndicator->RegisterSockets( socketRegistry );
 					}
 				}
 
@@ -243,12 +242,12 @@ void Anl3TrackSystemReader::CreateTrackCollection( const boost::property_tree::p
 						}
 
 						for( int i = 1; i <= ThreeWaySwitch::status_count; ++i ){
-							pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pThreeWaySwitch->PlugTo( ThreeWaySwitchStatusFromEEP( i ) ).Unplugged( &m_SocketRegistry ) );
+							pSwitchIndicator->JackOn( static_cast<trax::Indicator::Status>(i) ).InsertAtTail( &pThreeWaySwitch->PlugTo( ThreeWaySwitchStatusFromEEP( i ) ).Unplugged( &socketRegistry ) );
 							pThreeWaySwitch->JackOn( ThreeWaySwitchStatusFromEEP( i ) ).InsertAtTail( &pSwitchIndicator->PlugTo( static_cast<trax::Indicator::Status>(i) ) );
 						}
 
 						indicatorCollection.Add( pSwitchIndicator );
-						pSwitchIndicator->RegisterSockets( m_SocketRegistry );
+						pSwitchIndicator->RegisterSockets( socketRegistry );
 					}
 				}
 			}
@@ -263,6 +262,7 @@ void Anl3TrackSystemReader::CreateTrackCollection( const boost::property_tree::p
 
 std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack( 
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	ConnectorCollection& connectors,
 	std::vector<std::tuple<std::shared_ptr<Signal>, TrackBuilder*, Interval<Length>>>& signals,
 	IndicatorCollection& indicatorCollection,
@@ -304,7 +304,7 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 
 				pSwitch->NarrowTrack( pTrack, EndType::south );
 				pSwitch->Set( SwitchStatusFromEEP( pt.get( "<xmlattr>.weichenstellung", 0 ) ) );
-				pSwitch->RegisterSockets( m_SocketRegistry );
+				pSwitch->RegisterSockets( socketRegistry );
 
 				connectors.Add( pSwitch );
 			}
@@ -318,7 +318,7 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 
 				pSwitch->NarrowTrack( pTrack, EndType::south );
 				pSwitch->Set( ThreeWaySwitchStatusFromEEP( pt.get( "<xmlattr>.weichenstellung", 0 ) ) );
-				pSwitch->RegisterSockets( m_SocketRegistry );
+				pSwitch->RegisterSockets( socketRegistry );
 
 				connectors.Add( pSwitch );
 			}
@@ -530,7 +530,7 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 				//functionMap.push_back( 1 );
 				//functionMap.push_back( 2 );
 
-				if( std::shared_ptr<Signal> pSignal = CreateSignal( pair.second, indicatorCollection, trackRange, travelVelocities, functionMap, true, true ) ){				
+				if( std::shared_ptr<Signal> pSignal = CreateSignal( pair.second, socketRegistry, indicatorCollection, trackRange, travelVelocities, functionMap, true, true ) ){				
 					signals.push_back( std::make_tuple( pSignal, pTrack.get(), trackRange ) );
 					//pTrack->Attach( pSignal, trackRange ); // too early, not all the tracks are created yet.
 				}
@@ -611,6 +611,7 @@ std::pair<Track::Connection,std::string> Anl3TrackSystemReader::CreateTrackConne
 
 std::shared_ptr<Signal> Anl3TrackSystemReader::CreateSignal(
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	IndicatorCollection& indicatorCollection,
 	Interval<Length>& trackRange, 
 	std::map<IDType,Velocity>& travelVelocities,
@@ -721,7 +722,7 @@ std::shared_ptr<Signal> Anl3TrackSystemReader::CreateSignal(
 			}
 		}
 
-		pSignal->RegisterSockets( m_SocketRegistry ); //?
+		pSignal->RegisterSockets( socketRegistry ); //?
 
 		if( bCreateSignalSemaphore )
 		{
@@ -741,7 +742,7 @@ std::shared_ptr<Signal> Anl3TrackSystemReader::CreateSignal(
 
 				for( int i = 1; i < common::narrow_cast<int>(functionMap.size()); ++i ){
 					pSignalSemaphore->Set( static_cast<Indicator::Status>(i), false );
-					pSignalSemaphore->JackOn( static_cast<Indicator::Status>(i) ).InsertAtTail( &pSignal->PlugTo( SignalStatusFromEEP( i, *pSignal ) ).Unplugged( &m_SocketRegistry ) );
+					pSignalSemaphore->JackOn( static_cast<Indicator::Status>(i) ).InsertAtTail( &pSignal->PlugTo( SignalStatusFromEEP( i, *pSignal ) ).Unplugged( &socketRegistry ) );
 					pSignal->JackOn( SignalStatusFromEEP( i, *pSignal ) ).InsertAtTail( &pSignalSemaphore->PlugTo( static_cast<Indicator::Status>(i) ) );
 				}
 
@@ -755,7 +756,7 @@ std::shared_ptr<Signal> Anl3TrackSystemReader::CreateSignal(
 				}
 
 				indicatorCollection.Add( pSignalSemaphore );
-				pSignalSemaphore->RegisterSockets( m_SocketRegistry ); //?
+				pSignalSemaphore->RegisterSockets( socketRegistry ); //?
 			}
 		}
 
@@ -777,7 +778,7 @@ std::shared_ptr<Signal> Anl3TrackSystemReader::CreateSignal(
 
 				for( int i = 1; i < common::narrow_cast<int>(functionMap.size()); ++i ){
 					pSignalSemaphore->Set( static_cast<Indicator::Status>(i), false );
-					pSignalSemaphore->JackOn( static_cast<Indicator::Status>(i) ).InsertAtTail( &pSignal->PlugTo( SignalStatusFromEEP( i, *pSignal.get() ) ).Unplugged( &m_SocketRegistry ) );
+					pSignalSemaphore->JackOn( static_cast<Indicator::Status>(i) ).InsertAtTail( &pSignal->PlugTo( SignalStatusFromEEP( i, *pSignal.get() ) ).Unplugged( &socketRegistry ) );
 					pSignal->JackOn( SignalStatusFromEEP( i, *pSignal ) ).InsertAtTail( &pSignalSemaphore->PlugTo( static_cast<Indicator::Status>(i) ) );
 				}
 
@@ -791,7 +792,7 @@ std::shared_ptr<Signal> Anl3TrackSystemReader::CreateSignal(
 				}
 
 				indicatorCollection.Add( pSignalSemaphore );
-				pSignalSemaphore->RegisterSockets( m_SocketRegistry ); //?
+				pSignalSemaphore->RegisterSockets( socketRegistry ); //?
 			}
 		}
 
@@ -1072,7 +1073,8 @@ std::shared_ptr<trax::TrackSystem> ReadTrackSystemFromANL3(
 	{
 		if( pair.first == "sutrackp" )
 		{
-			return reader.ReadTrackSystem( pair.second );
+			if( std::unique_ptr<SocketRegistry> pSocketRegistry = SocketRegistry::Make(); pSocketRegistry )
+				return reader.ReadTrackSystem( pair.second, *pSocketRegistry );
 		}
 	}
 

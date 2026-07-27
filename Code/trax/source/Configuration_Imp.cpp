@@ -29,6 +29,7 @@
 namespace trax{
 
 std::ostream cnull{ nullptr };
+std::wostream cwnull{ nullptr };
 
 static Verbosity g_ReportVerbosity = Verbosity::normal;
 
@@ -81,6 +82,10 @@ Verbosity GetReportVerbosity() noexcept {
 
 std::ostream& operator<<( std::ostream& stream, Verbosity verbosity ){
     return (verbosity <= g_ReportVerbosity) ? stream : cnull;
+}
+
+std::wostream& operator<<( std::wostream& stream, Verbosity verbosity ){
+    return (verbosity <= g_ReportVerbosity) ? stream : cwnull;
 }
 
 void* dll_alloc( std::size_t n ){

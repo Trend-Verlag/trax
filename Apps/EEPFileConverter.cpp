@@ -12,9 +12,9 @@
 #include <filesystem>
 #include <iostream>
 
-std::string version{ "EEPFileConverter, Version: 1.12.0"};
+std::string version{ "EEPFileConverter, Version: 1.12.0" };
 
-int main( int argc, char* argv[] )
+int wmain( int argc, wchar_t* argv[] )
 {
 	try{
 		boost::program_options::options_description desc(
@@ -24,20 +24,21 @@ Allowed options");
 		desc.add_options()
 			("help,H", "Produces help message.")
 			("version,V", "Prints the version string.")
-			("input,I", boost::program_options::value<std::filesystem::path>(), "Input *.anl3 or *.anl4 file, obligatory.")
-			("output,O", boost::program_options::value<std::filesystem::path>(), "Output *.anl4 file, obligatory.")
+			("input,I",  boost::program_options::wvalue<std::wstring>(), "Input *.anl3 or *.anl4 file, obligatory.")
+			("output,O", boost::program_options::wvalue<std::wstring>(), "Output *.anl4 file, obligatory.")
 			("polygonal_chain,P", "Convert track curves to polygonal chains." )
-			("verbosity", boost::program_options::value<std::string>(), "Output verbosity. Options are: 'silent', 'error', 'normal' (the default), 'detailed', 'verbose'.")
+			("verbosity", boost::program_options::wvalue<std::wstring>(), "Output verbosity. Options are: 'silent', 'error', 'normal' (the default), 'detailed', 'verbose'.")
 			("quiet,Q", "Disables all output except errors.")
 			;
 
-        boost::program_options::positional_options_description p;
-        p.add("output", -1);
+		boost::program_options::positional_options_description p;
+		p.add("output", -1);
 
 		boost::program_options::variables_map vm;
-		boost::program_options::store(boost::program_options::command_line_parser(argc, argv).options(desc).positional(p).run(), vm );
+		boost::program_options::store(
+			boost::program_options::wcommand_line_parser(argc, argv).options(desc).positional(p).run(), vm );
 		boost::program_options::notify(vm);
-		
+
 		if( vm.count("version") ){
 			std::cout << version << std::endl;
 			return 0;
@@ -60,17 +61,17 @@ Allowed options");
 		}
 
 		if( vm.count("verbosity") ){
-			const auto& verbosity = vm["verbosity"].as<std::string>();
-			if( verbosity == "verbose" ){
+			const auto& verbosity = vm["verbosity"].as<std::wstring>();
+			if( verbosity == L"verbose" ){
 				trax::SetReportVerbosity( trax::Verbosity::verbose );
 			}
-			else if( verbosity == "detailed" ){
+			else if( verbosity == L"detailed" ){
 				trax::SetReportVerbosity( trax::Verbosity::detailed );
 			}
-			else if( verbosity == "error" ){
+			else if( verbosity == L"error" ){
 				trax::SetReportVerbosity( trax::Verbosity::error );
 			}
-			else if( verbosity == "quiet" ){
+			else if( verbosity == L"quiet" ){
 				trax::SetReportVerbosity( trax::Verbosity::silent );
 			}
 		}
@@ -79,10 +80,15 @@ Allowed options");
 			trax::SetReportVerbosity( trax::Verbosity::silent );
 		}
 
-		std::cout << trax::Verbosity::normal << "Input: " << vm["input"].as<std::filesystem::path>() << std::endl;
-		std::cout << trax::Verbosity::normal << "Output: " << vm["output"].as<std::filesystem::path>() << std::endl;
+		// On Windows std::wstring is the native path encoding, so construct the
+		// path directly - no quoting or code-page conversion involved.
+		const std::filesystem::path inputPath { vm["input"].as<std::wstring>() };
+		const std::filesystem::path outputPath{ vm["output"].as<std::wstring>() };
+				
+		std::wcout << trax::Verbosity::normal << L"Input: "  << inputPath  << std::endl;
+		std::wcout << trax::Verbosity::normal << L"Output: " << outputPath << std::endl;
 
-		if( std::unique_ptr<trax::ModuleCollection> pModuleCollection = trax::AnlReaderBase{}.ReadModuleCollection( vm["input"].as<std::filesystem::path>() ); 
+		if( std::unique_ptr<trax::ModuleCollection> pModuleCollection = trax::AnlReaderBase{}.ReadModuleCollection( inputPath );
 			pModuleCollection )
 		{
 			if( auto pModule = pModuleCollection->GetFirst() )
@@ -98,29 +104,28 @@ Allowed options");
 							}
 							catch( std::exception& e ){
 								std::cerr << trax::Verbosity::error  << "EEPFileConverter: Error: " << e.what() << std::endl;
-								std::cerr << trax::Verbosity::error  << "Could not convert track to polygonal chain.Track ID: " << track.ID() << std::endl;
+								std::cerr << trax::Verbosity::error  << "Could not convert track to polygonal chain. Track ID: " << track.ID() << std::endl;
 							}
 						}
 					}
 				}
 
-				trax::Write( *pModule, vm["output"].as<std::filesystem::path>() );
+				trax::Write( *pModule, outputPath );
 			}
 			else
-				std::cerr << trax::Verbosity::error  << "EEPFileConverter: No module found in file: " << vm["input"].as<std::filesystem::path>() << std::endl;
+				std::wcerr << trax::Verbosity::error  << L"EEPFileConverter: No module found in file: " << inputPath << std::endl;
 
-			std::cout << trax::Verbosity::normal << "EEPFileConverter: file " << vm["output"].as<std::filesystem::path>() << " successfully created." << std::endl;
+			std::wcout << trax::Verbosity::normal << L"EEPFileConverter: file " << outputPath << L" successfully created." << std::endl;
 		}
 	}
 	catch( std::exception& e ) {
-        std::cerr << trax::Verbosity::error << "EEPFileConverter: error: " << e.what() << std::endl;
-		std::cerr << trax::Verbosity::error << "Note: File paths can not contain white spaces." << std::endl;
-        return 1;
-    }
-    catch( ... ) {
-        std::cerr << trax::Verbosity::error << "EEPFileConverter: Exception of unknown type!" << std::endl;
-        return 1;
-    }
+		std::cerr << trax::Verbosity::error << "EEPFileConverter: error: " << e.what() << std::endl;
+		return 1;
+	}
+	catch( ... ) {
+		std::cerr << trax::Verbosity::error << "EEPFileConverter: Exception of unknown type!" << std::endl;
+		return 1;
+	}
 
 	return 0;
 }

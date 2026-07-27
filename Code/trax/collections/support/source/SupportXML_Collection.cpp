@@ -80,35 +80,14 @@ public:
 };
 ///////////////////////////////////////
 PTreeReader::PTreeReader( const char* pLocale )
-	: m_pSocketRegistry	{ SocketRegistry::Make() }
-	, m_pImpl			{ new PTreeReaderBaseImpl{} }
-	, m_pLocale			{ pLocale }
-	, m_SocketRegistry	{ *m_pSocketRegistry }
-{
-}
-
-PTreeReader::PTreeReader( SocketRegistry& socketRegistry, const char* pLocale )
 	: m_pImpl			{ new PTreeReaderBaseImpl{} }
 	, m_pLocale			{ pLocale }
-	, m_SocketRegistry	{ socketRegistry }
 {
 }
 
-//PTreeReader::PTreeReader( const PTreeReader& reader )
-//	: m_pImpl			{ new PTreeReaderBaseImpl{} }
-//	, m_pLocale			{ reader.m_pLocale }
-//	, m_pSocketRegistry	{ reader.m_pSocketRegistry ? SocketRegistry::Make() : nullptr }
-//	, m_SocketRegistry	{ reader.m_pSocketRegistry ? *m_pSocketRegistry : reader.m_pSocketRegistry }
-//{
-//	*m_pImpl = *reader.m_pImpl;
-//	m_SocketRegistry = reader.m_SocketRegistry;
-//}
-
 PTreeReader::PTreeReader( PTreeReader&& reader ) noexcept
-	: m_pSocketRegistry	{ std::move(reader.m_pSocketRegistry) }
-	, m_pImpl			{ reader.m_pImpl }
+	: m_pImpl			{ reader.m_pImpl }
 	, m_pLocale			{ reader.m_pLocale }
-	, m_SocketRegistry	{ reader.m_SocketRegistry }
 {
 	reader.m_pImpl = nullptr;
 	reader.m_pLocale = nullptr;

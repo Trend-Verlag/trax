@@ -33,12 +33,12 @@ namespace trax{
 		{
 		public:
 			dclspc Anl3TrackSystemReader( const char* pLocale = nullptr );
-			dclspc Anl3TrackSystemReader( SocketRegistry& socketRegistry, const char* pLocale = nullptr );
 
-			std::shared_ptr<TrackSystem> dclspc ReadTrackSystem( const boost::property_tree::ptree& pt ) const override;
+			std::shared_ptr<TrackSystem> dclspc ReadTrackSystem( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const override;
 			
 		protected:
 			virtual std::shared_ptr<TrackSystem> CreateTrackSystem( const boost::property_tree::ptree& pt, 
+				SocketRegistry& socketRegistry, 
 				std::vector<std::pair<Track::Connection,std::string>>& couplings, 
 				SignalCollection& signalCollection, 
 				IndicatorCollection& indicatorCollection, 
@@ -48,6 +48,7 @@ namespace trax{
 				IDType& maxSensorID ) const;
 
 			virtual void CreateTrackCollection( const boost::property_tree::ptree& pt, 
+				SocketRegistry& socketRegistry, 
 				TrackSystem& trackSystem,
 				std::vector<std::pair<Track::Connection,std::string>>& couplings, 
 				SignalCollection& signalCollection, 
@@ -66,13 +67,13 @@ namespace trax{
 			SingleSlipSwitch::Status SingleSlipSwitchStatusFromEEP( int weichenstellung ) const noexcept;
 			DoubleSlipSwitch::Status DoubleSlipSwitchStatusFromEEP( int weichenstellung ) const noexcept;
 		private:
-			std::shared_ptr<TrackBuilder> CreateTrack( const boost::property_tree::ptree& pt,
+			std::shared_ptr<TrackBuilder> CreateTrack( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 		
 				ConnectorCollection& connectors, std::vector<std::tuple<std::shared_ptr<Signal>,TrackBuilder*,common::Interval<Length>>>& signals, IndicatorCollection& indicatorCollection, TimerCollection& timerCollection, PulseCounterCollection& pulseCounterCollection, std::map<IDType,Velocity>& travelVelocities, IDType& maxSensorID ) const;
 
 			std::pair<Track::Connection,std::string> CreateTrackConnection( const boost::property_tree::ptree& pt, 
 				const TrackSystem& trackSystem ) const;
 
-			std::shared_ptr<Signal> CreateSignal( const boost::property_tree::ptree& pt, 
+			std::shared_ptr<Signal> CreateSignal( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				IndicatorCollection& indicatorCollection, common::Interval<Length>& trackRange, std::map<IDType,Velocity>& travelVelocities, std::vector<int>& functionMap, bool bCreateSignalSemaphore, bool bCreateVorsignalSemaphore ) const;
 			
 			std::unique_ptr<Sensor> CreateKontakt( const boost::property_tree::ptree& pt, 

@@ -64,6 +64,8 @@ namespace trax{
 
 	dclspc std::ostream& operator<<( std::ostream& stream, Verbosity verbosity );
 
+	dclspc std::wostream& operator<<( std::wostream& stream, Verbosity verbosity );
+
 
 	class ReportVerbosityGuard{
 		Verbosity m_PreviousVerbosity;

@@ -38,6 +38,7 @@ namespace trax{
 	class SocketRegistry_Imp : public virtual SocketRegistry
 	{
 	public:
+		void ReservePlugIDs( IDType upToID ) override;
 
 		void RegisterPlug( Plug& plug ) override;
 
@@ -47,6 +48,8 @@ namespace trax{
 
 		void UnRegisterPlug( const MultiPlug& plug ) override;
 
+		void UnregisterUnconnectedPlugs() override;
+
 		Plug* GetPlug( IDType id ) const override;
 
 		IDType MaxValidPlugID() const noexcept override;
@@ -55,7 +58,7 @@ namespace trax{
 
 		void RemoveJack( Jack& jack ) noexcept override;
 
-		void Clear() noexcept override;
+		void ClearRegistry() noexcept override;
 	private:
 
 		/// \brief Container for identified trax objects
@@ -68,7 +71,12 @@ namespace trax{
 			typedef typename std::map<key_type,T>::const_iterator const_iterator;
 
 			ContainerType m_Container;
+			IDType m_ReservedUpToID = 0;
 		public:
+			void reserve( IDType upToID ){
+				m_ReservedUpToID = upToID;
+			}
+
 			void insert( const mapped_type& pelement ){
 				if( pelement->ID() ){
 					if( !IsFree( pelement->ID() ) ){
@@ -90,6 +98,10 @@ namespace trax{
 				 auto iter = m_Container.find( key );
 				 if( iter != m_Container.end() )
 					 m_Container.erase(iter);
+			}
+
+			iterator erase( const_iterator pos ){
+				return m_Container.erase( pos );
 			}
 
 			void clear() noexcept{
@@ -125,15 +137,11 @@ namespace trax{
 			}
 
 			key_type GetFree() const{
-				key_type x = 1u;
-				for( auto citer = m_Container.begin();
-					citer != m_Container.end(); ++x, ++citer )
-				{
-					if( x == (*citer).first )
-						continue;
-
-					return x;
-				}
+				key_type x = m_ReservedUpToID + 1;		
+				for( auto it = m_Container.lower_bound( x ); 
+					 it != m_Container.end() && it->first == x; 
+					 ++it, ++x )
+				{}
 
 				return x;
 			}

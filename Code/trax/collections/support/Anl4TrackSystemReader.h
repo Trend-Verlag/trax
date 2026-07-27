@@ -67,89 +67,88 @@ namespace trax{
 		{
 		public:
 			Anl4TrackSystemReader( const char* pLocale = nullptr );
-			Anl4TrackSystemReader( SocketRegistry& socketRegistry, const char* pLocale = nullptr );
 
-			std::shared_ptr<TrackSystem> ReadTrackSystem( const boost::property_tree::ptree& pt ) const override;
+			std::shared_ptr<TrackSystem> ReadTrackSystem( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const override;
 
 		protected:
-			std::shared_ptr<TrackSystem> CreateTrackSystem( const boost::property_tree::ptree& pt ) const;
+			std::shared_ptr<TrackSystem> CreateTrackSystem( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const;
 			
-			std::shared_ptr<TrackCollection> CreateTrackCollection( const boost::property_tree::ptree& pts, 
+			std::shared_ptr<TrackCollection> CreateTrackCollection( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				std::vector<Track::Connection>& connections ) const;
 
-			std::shared_ptr<TrackBuilder> CreateTrack( const boost::property_tree::ptree& pt, 
+			std::shared_ptr<TrackBuilder> CreateTrack( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				std::vector<Track::Connection>& connections ) const;
 			
-			std::unique_ptr<ConnectorCollection> CreateConnectorCollection( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<ConnectorCollection> CreateConnectorCollection( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const TrackSystem& trackSystem ) const;
 
-			std::unique_ptr<Switch> CreateSwitch( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<Switch> CreateSwitch( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const TrackSystem& trackSystem ) const;
 	
-			std::unique_ptr<ThreeWaySwitch> CreateThreeWaySwitch( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<ThreeWaySwitch> CreateThreeWaySwitch( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const TrackSystem& trackSystem ) const;
 	
-			std::unique_ptr<SingleSlipSwitch> CreateSingleSlipSwitch( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<SingleSlipSwitch> CreateSingleSlipSwitch( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const TrackSystem& trackSystem ) const;
 	
-			std::unique_ptr<DoubleSlipSwitch> CreateDoubleSlipSwitch( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<DoubleSlipSwitch> CreateDoubleSlipSwitch( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const TrackSystem& trackSystem ) const;
 
 			std::unique_ptr<Location> CreateLocation( const boost::property_tree::ptree& pt, 
 				const TrackSystem& trackSystem ) const;
 
-			std::unique_ptr<IndicatorCollection> CreateIndicatorCollection( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<IndicatorCollection> CreateIndicatorCollection( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const ConnectorCollection& connectorCollection, const SignalCollection& signalCollection ) const;
 			
-			std::unique_ptr<BinaryIndicator> CreateSwitchSemaphore( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<BinaryIndicator> CreateSwitchSemaphore( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const ConnectorCollection& connectorCollection ) const;
 
-			std::unique_ptr<Indicator> CreateSwitchMultiSemaphore( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<Indicator> CreateSwitchMultiSemaphore( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const ConnectorCollection& connectorCollection ) const;
 
-			std::unique_ptr<Indicator> CreateVelocityControlSemaphore( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<Indicator> CreateVelocityControlSemaphore( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const SignalCollection& signalCollection ) const;
 
-			std::unique_ptr<Sensor> CreateSensor( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<Sensor> CreateSensor( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				TrackLocation& trackLocation ) const;
 
-			std::unique_ptr<VelocitySensor> CreateVelocitySensor( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<VelocitySensor> CreateVelocitySensor( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				TrackLocation& trackLocation ) const;
 
-			std::unique_ptr<WeighSensor> CreateWeighSensor( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<WeighSensor> CreateWeighSensor( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				TrackLocation& trackLocation ) const;
 
-			std::unique_ptr<IntervalSensor> CreateTractionSensor( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<IntervalSensor> CreateTractionSensor( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				TrackLocation& trackLocation ) const;
 
-			std::unique_ptr<SignalCollection> CreateSignalCollection( const boost::property_tree::ptree& pt, 
+			std::unique_ptr<SignalCollection> CreateSignalCollection( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const TrackSystem& trackSystem/*, const Fleet& fleet*/ ) const;
 			
-			std::shared_ptr<VelocityControl> CreateVelocityControl( const boost::property_tree::ptree& pt, 
+			std::shared_ptr<VelocityControl> CreateVelocityControl( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const TrackSystem& trackSystem ) const;
 
-			std::shared_ptr<JumpSite> CreateJumpSignal( const boost::property_tree::ptree& pt, 
+			std::shared_ptr<JumpSite> CreateJumpSignal( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, 
 				const TrackSystem& trackSystem/*, const Fleet& fleet*/ ) const;
 
 			std::unique_ptr<Section> CreateSection( const boost::property_tree::ptree& pt ) const;
 
-			std::unique_ptr<PulseCounterCollection> CreatePulseCounterCollection( const boost::property_tree::ptree& pt ) const;
+			std::unique_ptr<PulseCounterCollection> CreatePulseCounterCollection( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const;
 
-			std::unique_ptr<PulseCounter> CreatePulseCounter( const boost::property_tree::ptree& pt ) const;
+			std::unique_ptr<PulseCounter> CreatePulseCounter( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const;
 
-			std::unique_ptr<TimerCollection> CreateTimerCollection( const boost::property_tree::ptree& pt ) const;
+			std::unique_ptr<TimerCollection> CreateTimerCollection( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const;
 
-			std::unique_ptr<Timer> CreateTimer( const boost::property_tree::ptree& pt ) const;
+			std::unique_ptr<Timer> CreateTimer( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const;
 
 			/// \name Explicit XML Reading
 			///@{
 			void ReadJumpSignalTarget( const boost::property_tree::ptree& pt, std::shared_ptr<JumpSite> pSignal, const TrackSystem& trackSystem/*, const Fleet& fleet*/ ) const;
-			void ReadSensor( const boost::property_tree::ptree& pt, Sensor& sensor, TrackLocation& trackLocation ) const;
-			void ReadSignal( const boost::property_tree::ptree& pt, std::shared_ptr<Signal> pSignal, const TrackSystem& trackSystem ) const;
-			void ReadIndicator( const boost::property_tree::ptree& pt, Indicator& indicator, const ConnectorCollection& connectorCollection ) const;
-			void ReadJack( const boost::property_tree::ptree& pt, Jack& jack ) const;
-			void ReadPlug( const boost::property_tree::ptree& pt, Plug& plug ) const;
-			void ReadPlug( const boost::property_tree::ptree& pt, MultiPlug& plug ) const;
+			void ReadSensor( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Sensor& sensor, TrackLocation& trackLocation ) const;
+			void ReadSignal( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, std::shared_ptr<Signal> pSignal, const TrackSystem& trackSystem ) const;
+			void ReadIndicator( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Indicator& indicator, const ConnectorCollection& connectorCollection ) const;
+			void ReadJack( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Jack& jack ) const;
+			void ReadPlug( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Plug& plug ) const;
+			void ReadPlug( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, MultiPlug& plug ) const;
 			void ReadSection( const boost::property_tree::ptree& pt, trax::TrackBuilder& track ) const noexcept;
 			///@}
 		private:

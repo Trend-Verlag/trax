@@ -71,7 +71,6 @@ namespace trax{
 		class PTreeReader{
 		public:
 			dclspc PTreeReader( const char* pLocale = nullptr );
-			dclspc PTreeReader( SocketRegistry& socketRegistry, const char* pLocale = nullptr );
 			PTreeReader( const PTreeReader& ) = delete;
 			dclspc PTreeReader( PTreeReader&& ) noexcept;
 			dclspc virtual ~PTreeReader();
@@ -96,21 +95,17 @@ namespace trax{
 				return m_pLocale;
 			}
 
-			virtual std::shared_ptr<trax::TrackSystem> ReadTrackSystem( const boost::property_tree::ptree& pt ) const = 0;
+			virtual std::shared_ptr<trax::TrackSystem> ReadTrackSystem( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const = 0;
 		protected:
 			std::unique_ptr<Curve> dclspc CreateCurve( const boost::property_tree::ptree& pt ) const;
 
 			std::unique_ptr<RoadwayTwist> dclspc CreateTwist( const boost::property_tree::ptree& pt ) const;
 
 		private:
-			std::unique_ptr<SocketRegistry> m_pSocketRegistry;
 			class PTreeReaderBaseImpl* m_pImpl = nullptr;
 			const char* m_pLocale = nullptr;
 
 			std::unique_ptr<RoadwayTwist> CreateCombinedTwist( const boost::property_tree::ptree& pt ) const;
-		
-		protected:
-			SocketRegistry& m_SocketRegistry;
 		};
 
 

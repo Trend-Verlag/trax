@@ -607,21 +607,14 @@ Anl4TrackSystemReader::Anl4TrackSystemReader( const char* pLocale )
 {
 }
 
-Anl4TrackSystemReader::Anl4TrackSystemReader(
-	SocketRegistry& socketRegistry, 
-	const char* pLocale )
-	: PTreeReader{ socketRegistry, pLocale }
-{
-}
-
 std::shared_ptr<TrackSystem> Anl4TrackSystemReader::ReadTrackSystem(
-	const boost::property_tree::ptree& pt ) const
+	const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const
 {
-	return CreateTrackSystem( pt );
+	return CreateTrackSystem( pt, socketRegistry );
 }
 
 std::shared_ptr<TrackSystem> Anl4TrackSystemReader::CreateTrackSystem( 
-	const boost::property_tree::ptree& pt ) const
+	const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const
 {
 	if( std::shared_ptr<TrackSystem> pTrackSystem{ TrackSystem::Make( TrackCollectionContainer::Make() ) }; pTrackSystem )
 	{
@@ -633,11 +626,11 @@ std::shared_ptr<TrackSystem> Anl4TrackSystemReader::CreateTrackSystem(
 		{
 			if( pair.first == "TrackCollection" ){
 				if( auto pTrackCollectionContainer = pTrackSystem->GetCollectionContainer() )
-					pTrackCollectionContainer->Add( CreateTrackCollection( pair.second, couplings ) );
+					pTrackCollectionContainer->Add( CreateTrackCollection( pair.second, socketRegistry, couplings ) );
 			}
 
 			else if( pair.first == "ConnectorCollection" )
-				pTrackSystem->SetConnectorCollection( CreateConnectorCollection( pair.second, *pTrackSystem ) );
+				pTrackSystem->SetConnectorCollection( CreateConnectorCollection( pair.second, socketRegistry, *pTrackSystem ) );
 		}
 
 		// contract doublettes:
@@ -667,6 +660,7 @@ std::shared_ptr<TrackSystem> Anl4TrackSystemReader::CreateTrackSystem(
 
 std::shared_ptr<TrackCollection> Anl4TrackSystemReader::CreateTrackCollection( 
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	std::vector<Track::Connection>& couplings ) const
 {
 	if( std::unique_ptr<TrackCollection> pTrackCollection = TrackCollection::Make(); pTrackCollection )
@@ -683,7 +677,7 @@ std::shared_ptr<TrackCollection> Anl4TrackSystemReader::CreateTrackCollection(
 			}
 
 			else if( pair.first == "Track" )
-				pTrackCollection->Add( CreateTrack( pair.second, couplings ) );
+				pTrackCollection->Add( CreateTrack( pair.second, socketRegistry, couplings ) );
 		}
 
 		return pTrackCollection;
@@ -694,6 +688,7 @@ std::shared_ptr<TrackCollection> Anl4TrackSystemReader::CreateTrackCollection(
 
 std::shared_ptr<TrackBuilder> Anl4TrackSystemReader::CreateTrack(
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	std::vector<Track::Connection>& couplings ) const
 {
 	if( auto pTrack = MovableTrack::Make( TrackType( pt.get( "<xmlattr>.type", "standard" ) ) ); pTrack )
@@ -736,25 +731,25 @@ std::shared_ptr<TrackBuilder> Anl4TrackSystemReader::CreateTrack(
 
 			else if( pair.first == "Sensor" ){
 				TrackLocation location;
-				std::shared_ptr<Sensor> pSensor = CreateSensor( pair.second, location );
+				std::shared_ptr<Sensor> pSensor = CreateSensor( pair.second, socketRegistry, location );
 				pTrack->Attach( pSensor, location );
 			}
 
 			else if( pair.first == "VelocitySensor" ){
 				TrackLocation location;
-				std::shared_ptr<Sensor> pSensor = CreateVelocitySensor( pair.second, location );
+				std::shared_ptr<Sensor> pSensor = CreateVelocitySensor( pair.second, socketRegistry, location );
 				pTrack->Attach( pSensor, location );
 			}
 
 			else if( pair.first == "WeighSensor" ){
 				TrackLocation location;
-				std::shared_ptr<Sensor> pSensor = CreateWeighSensor( pair.second, location );
+				std::shared_ptr<Sensor> pSensor = CreateWeighSensor( pair.second, socketRegistry, location );
 				pTrack->Attach( pSensor, location );
 			}
 
 			else if( pair.first == "TractionSensor" ){
 				TrackLocation location;
-				std::shared_ptr<Sensor> pSensor = CreateTractionSensor( pair.second, location );
+				std::shared_ptr<Sensor> pSensor = CreateTractionSensor( pair.second, socketRegistry, location );
 				pTrack->Attach( pSensor, location );
 			}		
 		}
@@ -767,6 +762,7 @@ std::shared_ptr<TrackBuilder> Anl4TrackSystemReader::CreateTrack(
 
 std::unique_ptr<ConnectorCollection> Anl4TrackSystemReader::CreateConnectorCollection( 
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	const TrackSystem& trackSystem ) const
 {
 	if( std::unique_ptr<ConnectorCollection> pConnectorCollection = ConnectorCollection::Make(); pConnectorCollection )
@@ -774,16 +770,16 @@ std::unique_ptr<ConnectorCollection> Anl4TrackSystemReader::CreateConnectorColle
 		for( const auto& pair : pt )
 		{
 			if( pair.first == "Switch" )
-				pConnectorCollection->Add( CreateSwitch( pair.second, trackSystem ) );
+				pConnectorCollection->Add( CreateSwitch( pair.second, socketRegistry, trackSystem ) );
 
 			else if( pair.first == "ThreeWaySwitch" )
-				pConnectorCollection->Add( CreateThreeWaySwitch( pair.second, trackSystem ) );
+				pConnectorCollection->Add( CreateThreeWaySwitch( pair.second, socketRegistry, trackSystem ) );
 
 			else if( pair.first == "SingleSlipSwitch" )
-				pConnectorCollection->Add( CreateSingleSlipSwitch( pair.second, trackSystem ) );
+				pConnectorCollection->Add( CreateSingleSlipSwitch( pair.second, socketRegistry, trackSystem ) );
 
 			else if( pair.first == "DoubleSlipSwitch" )
-				pConnectorCollection->Add( CreateDoubleSlipSwitch( pair.second, trackSystem ) );
+				pConnectorCollection->Add( CreateDoubleSlipSwitch( pair.second, socketRegistry, trackSystem ) );
 		}
 		
 		return pConnectorCollection;
@@ -794,6 +790,7 @@ std::unique_ptr<ConnectorCollection> Anl4TrackSystemReader::CreateConnectorColle
 
 std::unique_ptr<Switch> Anl4TrackSystemReader::CreateSwitch( 
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	const TrackSystem& trackSystem ) const
 {
 	if( std::unique_ptr<Switch> pSwitch = Switch::Make(); pSwitch )
@@ -815,10 +812,10 @@ std::unique_ptr<Switch> Anl4TrackSystemReader::CreateSwitch(
 			}
 
 			else if( pair.first == "Plug" )
-				ReadPlug( pair.second, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadPlug( pair.second, socketRegistry, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 			else if( pair.first == "Jack" )
-				ReadJack( pair.second, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadJack( pair.second, socketRegistry, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 		}
 
         if( !pSwitch->Check(10_cm) )
@@ -831,7 +828,8 @@ std::unique_ptr<Switch> Anl4TrackSystemReader::CreateSwitch(
 }
 
 std::unique_ptr<ThreeWaySwitch> Anl4TrackSystemReader::CreateThreeWaySwitch(
-	const boost::property_tree::ptree& pt,
+	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry,
 	const TrackSystem& trackSystem ) const
 {
 	if( std::unique_ptr<ThreeWaySwitch> pSwitch = ThreeWaySwitch::Make(); pSwitch )
@@ -853,10 +851,10 @@ std::unique_ptr<ThreeWaySwitch> Anl4TrackSystemReader::CreateThreeWaySwitch(
 			}
 
 			else if( pair.first == "Plug" )
-				ReadPlug( pair.second, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadPlug( pair.second, socketRegistry, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 			else if( pair.first == "Jack" )
-				ReadJack( pair.second, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadJack( pair.second, socketRegistry, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 		}
 
         if( !pSwitch->Check(10_cm) )
@@ -870,6 +868,7 @@ std::unique_ptr<ThreeWaySwitch> Anl4TrackSystemReader::CreateThreeWaySwitch(
 
 std::unique_ptr<SingleSlipSwitch> Anl4TrackSystemReader::CreateSingleSlipSwitch(
 	const boost::property_tree::ptree& pt,
+	SocketRegistry& socketRegistry,
 	const TrackSystem& trackSystem ) const
 {
 	if( std::unique_ptr<SingleSlipSwitch> pSwitch = SingleSlipSwitch::Make(); pSwitch )
@@ -897,10 +896,10 @@ std::unique_ptr<SingleSlipSwitch> Anl4TrackSystemReader::CreateSingleSlipSwitch(
 			}
 
 			else if( pair.first == "Plug" )
-				ReadPlug( pair.second, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadPlug( pair.second, socketRegistry, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 			else if( pair.first == "Jack" )
-				ReadJack( pair.second, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadJack( pair.second, socketRegistry, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 		}
 
         if( !pSwitch->Check(10_cm) )
@@ -914,6 +913,7 @@ std::unique_ptr<SingleSlipSwitch> Anl4TrackSystemReader::CreateSingleSlipSwitch(
 
 std::unique_ptr<DoubleSlipSwitch> Anl4TrackSystemReader::CreateDoubleSlipSwitch(
 	const boost::property_tree::ptree& pt,
+	SocketRegistry& socketRegistry,
 	const TrackSystem& trackSystem ) const
 {
 	if( std::unique_ptr<DoubleSlipSwitch> pSwitch = DoubleSlipSwitch::Make(); pSwitch )
@@ -941,10 +941,10 @@ std::unique_ptr<DoubleSlipSwitch> Anl4TrackSystemReader::CreateDoubleSlipSwitch(
 			}
 
 			else if( pair.first == "Plug" )
-				ReadPlug( pair.second, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadPlug( pair.second, socketRegistry, pSwitch->PlugTo( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 			else if( pair.first == "Jack" )
-				ReadJack( pair.second, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadJack( pair.second, socketRegistry, pSwitch->JackOn( ConnectorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 		}
 
         if( !pSwitch->Check(10_cm) )
@@ -972,6 +972,7 @@ std::unique_ptr<Location> Anl4TrackSystemReader::CreateLocation(
 
 std::unique_ptr<IndicatorCollection> Anl4TrackSystemReader::CreateIndicatorCollection( 
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	const ConnectorCollection& connectorCollection,
 	const SignalCollection& signalCollection ) const
 {
@@ -981,13 +982,13 @@ std::unique_ptr<IndicatorCollection> Anl4TrackSystemReader::CreateIndicatorColle
 		for( const auto& pair : pt )
 		{
 			if( pair.first == "SwitchSemaphore" )
-				pIndicatorCollection->Add( CreateSwitchSemaphore( pair.second, connectorCollection ) );
+				pIndicatorCollection->Add( CreateSwitchSemaphore( pair.second, socketRegistry, connectorCollection ) );
 
 			if( pair.first == "SwitchMultiSemaphore" )
-				pIndicatorCollection->Add( CreateSwitchMultiSemaphore( pair.second, connectorCollection ) );
+				pIndicatorCollection->Add( CreateSwitchMultiSemaphore( pair.second, socketRegistry, connectorCollection ) );
 		
 			else if( pair.first == "VelocityControlSemaphore" )
-				pIndicatorCollection->Add( CreateVelocityControlSemaphore( pair.second, signalCollection ) );
+				pIndicatorCollection->Add( CreateVelocityControlSemaphore( pair.second, socketRegistry, signalCollection ) );
 		}
 
 		return pIndicatorCollection;
@@ -997,13 +998,14 @@ std::unique_ptr<IndicatorCollection> Anl4TrackSystemReader::CreateIndicatorColle
 }
 
 std::unique_ptr<BinaryIndicator> Anl4TrackSystemReader::CreateSwitchSemaphore( 
-	const boost::property_tree::ptree& pt,
+	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry,
 	const ConnectorCollection& connectorCollection ) const
 {
 	if( auto pSwitchSemaphore = BinaryIndicator::Make( Indicator::Type::switch_mono ); 
 		pSwitchSemaphore )
 	{
-		ReadIndicator( pt, *pSwitchSemaphore, connectorCollection );
+		ReadIndicator( pt, socketRegistry, *pSwitchSemaphore, connectorCollection );
 
 		return pSwitchSemaphore;
 	}
@@ -1013,11 +1015,12 @@ std::unique_ptr<BinaryIndicator> Anl4TrackSystemReader::CreateSwitchSemaphore(
 
 std::unique_ptr<Indicator> Anl4TrackSystemReader::CreateSwitchMultiSemaphore(
 	const boost::property_tree::ptree& pt,
+	SocketRegistry& socketRegistry,
 	const ConnectorCollection& connectorCollection ) const
 {
 	if( auto pSwitchMultiSemaphore = Indicator::Make( Indicator::Type::switch_multi ); pSwitchMultiSemaphore )
 	{
-		ReadIndicator( pt, *pSwitchMultiSemaphore, connectorCollection );
+		ReadIndicator( pt, socketRegistry, *pSwitchMultiSemaphore, connectorCollection );
 
 		return pSwitchMultiSemaphore;
 	}
@@ -1026,7 +1029,8 @@ std::unique_ptr<Indicator> Anl4TrackSystemReader::CreateSwitchMultiSemaphore(
 }
 
 std::unique_ptr<Indicator> Anl4TrackSystemReader::CreateVelocityControlSemaphore( 
-	const boost::property_tree::ptree& pt, 
+	const boost::property_tree::ptree& pt,
+	SocketRegistry& socketRegistry, 
 	const SignalCollection& signalCollection ) const
 {
 	if( std::unique_ptr<Indicator> pVelocityControlSemaphore = Indicator::Make( Indicator::Type::velocity_control ); 
@@ -1046,10 +1050,10 @@ std::unique_ptr<Indicator> Anl4TrackSystemReader::CreateVelocityControlSemaphore
 			}
 
 			else if( pair.first == "Plug" )
-				ReadPlug( pair.second, pVelocityControlSemaphore->PlugTo( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadPlug( pair.second, socketRegistry, pVelocityControlSemaphore->PlugTo( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 			else if( pair.first == "Jack" )
-				ReadJack( pair.second, pVelocityControlSemaphore->JackOn( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+				ReadJack( pair.second, socketRegistry, pVelocityControlSemaphore->JackOn( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 		}
 
 		pVelocityControlSemaphore->Set( ToIndicatorStatus( pt.get( "<xmlattr>.status", "none" ) ), false );
@@ -1069,11 +1073,12 @@ std::unique_ptr<Indicator> Anl4TrackSystemReader::CreateVelocityControlSemaphore
 
 std::unique_ptr<Sensor> Anl4TrackSystemReader::CreateSensor( 
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	TrackLocation& trackLocation ) const
 {
 	if( std::unique_ptr<Sensor> pSensor = Sensor::Make(); pSensor )
 	{
-		ReadSensor( pt, *pSensor, trackLocation );
+		ReadSensor( pt, socketRegistry, *pSensor, trackLocation );
 		return pSensor;
 	}
 
@@ -1082,11 +1087,12 @@ std::unique_ptr<Sensor> Anl4TrackSystemReader::CreateSensor(
 
 std::unique_ptr<VelocitySensor> Anl4TrackSystemReader::CreateVelocitySensor( 
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry,
 	TrackLocation& trackLocation ) const
 {
 	if( std::unique_ptr<VelocitySensor> pSensor = VelocitySensor::Make(); pSensor )
 	{
-		ReadSensor( pt, *pSensor, trackLocation );
+		ReadSensor( pt, socketRegistry, *pSensor, trackLocation );
 
 		pSensor->SetVelocity(
 			get( pt, "<xmlattr>.minVelocity", 0_mIs, _mIs ),
@@ -1101,11 +1107,12 @@ std::unique_ptr<VelocitySensor> Anl4TrackSystemReader::CreateVelocitySensor(
 
 std::unique_ptr<WeighSensor> Anl4TrackSystemReader::CreateWeighSensor(
 	const boost::property_tree::ptree& pt,
+	SocketRegistry& socketRegistry,
 	TrackLocation & trackLocation) const
 {
 	if( std::unique_ptr<WeighSensor> pSensor = WeighSensor::Make(); pSensor )
 	{
-		ReadSensor( pt, *pSensor, trackLocation );
+		ReadSensor( pt, socketRegistry, *pSensor, trackLocation );
 
 		pSensor->Weight(
 			get( pt, "<xmlattr>.minWeight", 0_t, _t ),
@@ -1120,7 +1127,8 @@ std::unique_ptr<WeighSensor> Anl4TrackSystemReader::CreateWeighSensor(
 }
 
 std::unique_ptr<IntervalSensor> Anl4TrackSystemReader::CreateTractionSensor(
-	const boost::property_tree::ptree& /*pt*/,
+	const boost::property_tree::ptree& /*pt*/, 
+	SocketRegistry& /*socketRegistry*/,
 	TrackLocation& /*trackLocation*/ ) const
 {
 	//if( auto pSensor = TractionSensor::Make() )
@@ -1140,6 +1148,7 @@ std::unique_ptr<IntervalSensor> Anl4TrackSystemReader::CreateTractionSensor(
 
 std::unique_ptr<SignalCollection> Anl4TrackSystemReader::CreateSignalCollection( 
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	const TrackSystem& trackSystem/*, 
 	const Fleet& fleet*/ ) const
 {
@@ -1148,10 +1157,10 @@ std::unique_ptr<SignalCollection> Anl4TrackSystemReader::CreateSignalCollection(
 		for( const auto& pair : pt )
 		{
 			if( pair.first == "VelocityControl" )
-				pSignalCollection->Add( CreateVelocityControl( pair.second, trackSystem ) );
+				pSignalCollection->Add( CreateVelocityControl( pair.second, socketRegistry, trackSystem ) );
 
 			else if( pair.first == "JumpSignal" )
-				pSignalCollection->Add( CreateJumpSignal( pair.second, trackSystem/*, fleet*/ ) );
+				pSignalCollection->Add( CreateJumpSignal( pair.second, socketRegistry, trackSystem/*, fleet*/ ) );
 		}
 
 		return pSignalCollection;
@@ -1162,6 +1171,7 @@ std::unique_ptr<SignalCollection> Anl4TrackSystemReader::CreateSignalCollection(
 
 std::shared_ptr<VelocityControl> Anl4TrackSystemReader::CreateVelocityControl( 
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	const TrackSystem& trackSystem ) const
 {
 	if( std::shared_ptr<VelocityControl> pSignal = VelocityControl::Make(); pSignal )
@@ -1181,7 +1191,7 @@ std::shared_ptr<VelocityControl> Anl4TrackSystemReader::CreateVelocityControl(
 		}
 
 		pSignal->StopDistance( get( pt, "<xmlattr>.stopDistance", 0_m, _m ) );
-		ReadSignal( pt, pSignal, trackSystem );
+		ReadSignal( pt, socketRegistry, pSignal, trackSystem );
 		return pSignal;
 	}
 
@@ -1190,6 +1200,7 @@ std::shared_ptr<VelocityControl> Anl4TrackSystemReader::CreateVelocityControl(
 
 std::shared_ptr<JumpSite> Anl4TrackSystemReader::CreateJumpSignal(
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	const TrackSystem& trackSystem/*, 
 	const Fleet& fleet*/ ) const
 {
@@ -1201,7 +1212,7 @@ std::shared_ptr<JumpSite> Anl4TrackSystemReader::CreateJumpSignal(
 				ReadJumpSignalTarget( pair.second, pSignal, trackSystem/*, fleet*/ );
 		}
 
-		ReadSignal( pt, pSignal, trackSystem );
+		ReadSignal( pt, socketRegistry, pSignal, trackSystem );
 		return pSignal;
 	}
 
@@ -1209,14 +1220,14 @@ std::shared_ptr<JumpSite> Anl4TrackSystemReader::CreateJumpSignal(
 }
 
 std::unique_ptr<PulseCounterCollection> Anl4TrackSystemReader::CreatePulseCounterCollection( 
-	const boost::property_tree::ptree& pt ) const
+	const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const
 {
 	if( std::unique_ptr<PulseCounterCollection> pPulseCounterCollection = PulseCounterCollection::Make(); pPulseCounterCollection )
 	{
 		for( const auto& pair : pt )
 		{
 			if( pair.first == "PulseCounter" )
-				pPulseCounterCollection->Add( CreatePulseCounter( pair.second ) );
+				pPulseCounterCollection->Add( CreatePulseCounter( pair.second, socketRegistry ) );
 		}
 
 		return pPulseCounterCollection;
@@ -1226,7 +1237,7 @@ std::unique_ptr<PulseCounterCollection> Anl4TrackSystemReader::CreatePulseCounte
 }
 
 std::unique_ptr<PulseCounter> Anl4TrackSystemReader::CreatePulseCounter( 
-	const boost::property_tree::ptree& pt ) const
+	const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const
 {
 	if( std::unique_ptr<PulseCounter> pPulseCounter = PulseCounter::Make(); pPulseCounter ){
 		pPulseCounter->ID( pt.get( "<xmlattr>.id", 0 ) );
@@ -1239,23 +1250,23 @@ std::unique_ptr<PulseCounter> Anl4TrackSystemReader::CreatePulseCounter(
 			if( pair.first == "Plug" ){
 				std::string name = pair.second.get( "<xmlattr>.name", "" );
 				if( name == "PlugToCountUp" )
-					ReadPlug( pair.second, pPulseCounter->PlugToCountUp() );
+					ReadPlug( pair.second, socketRegistry, pPulseCounter->PlugToCountUp() );
 				else if( name == "PlugToCountDown" )
-					ReadPlug( pair.second, pPulseCounter->PlugToCountDown() );
+					ReadPlug( pair.second, socketRegistry, pPulseCounter->PlugToCountDown() );
 				else if( name == "PlugToReset" )
-					ReadPlug( pair.second, pPulseCounter->PlugToReset() );
+					ReadPlug( pair.second, socketRegistry, pPulseCounter->PlugToReset() );
 			}
 
 			else if( pair.first == "Jack" ){
 				std::string name = pair.second.get( "<xmlattr>.name", "" );
 				if( name == "JackOnReachThreshold" )
-					ReadJack( pair.second, pPulseCounter->JackOnReachThreshold() );
+					ReadJack( pair.second, socketRegistry, pPulseCounter->JackOnReachThreshold() );
 				else if( name == "JackOnLeaveThreshold" )
-					ReadJack( pair.second, pPulseCounter->JackOnLeaveThreshold() );
+					ReadJack( pair.second, socketRegistry, pPulseCounter->JackOnLeaveThreshold() );
 				else if( name == "JackOnCountUp" )
-					ReadJack( pair.second, pPulseCounter->JackOnCountUp() );
+					ReadJack( pair.second, socketRegistry, pPulseCounter->JackOnCountUp() );
 				else if( name == "JackOnCountDown" )
-					ReadJack( pair.second, pPulseCounter->JackOnCountDown() );
+					ReadJack( pair.second, socketRegistry, pPulseCounter->JackOnCountDown() );
 			}
 		}
 
@@ -1266,14 +1277,14 @@ std::unique_ptr<PulseCounter> Anl4TrackSystemReader::CreatePulseCounter(
 }
 
 std::unique_ptr<TimerCollection> Anl4TrackSystemReader::CreateTimerCollection(
-	const boost::property_tree::ptree& pt ) const
+	const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const
 {
 	if( std::unique_ptr<TimerCollection> pTimerCollection = TimerCollection::Make(); pTimerCollection )
 	{
 		for( const auto& pair : pt )
 		{
 			if( pair.first == "Timer" )
-				pTimerCollection->Add( CreateTimer( pair.second ) );
+				pTimerCollection->Add( CreateTimer( pair.second, socketRegistry ) );
 		}
 
 		return pTimerCollection;
@@ -1283,7 +1294,7 @@ std::unique_ptr<TimerCollection> Anl4TrackSystemReader::CreateTimerCollection(
 }
 
 std::unique_ptr<Timer> Anl4TrackSystemReader::CreateTimer( 
-	const boost::property_tree::ptree& pt ) const
+	const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry ) const
 {
 	if( std::unique_ptr<Timer> pTimer = Timer::Make(); pTimer ){
 		pTimer->ID( pt.get( "<xmlattr>.id", 0 ) );
@@ -1299,23 +1310,23 @@ std::unique_ptr<Timer> Anl4TrackSystemReader::CreateTimer(
 			if( pair.first == "Plug" ){
 				std::string name = pair.second.get( "<xmlattr>.name", "" );
 				if( name == "PlugToStart" )
-					ReadPlug( pair.second, pTimer->PlugToStart() );
+					ReadPlug( pair.second, socketRegistry, pTimer->PlugToStart() );
 				else if( name == "PlugToReset" )
-					ReadPlug( pair.second, pTimer->PlugToReset() );
+					ReadPlug( pair.second, socketRegistry, pTimer->PlugToReset() );
 				else if( name == "PlugToPause" )
-					ReadPlug( pair.second, pTimer->PlugToPause() );
+					ReadPlug( pair.second, socketRegistry, pTimer->PlugToPause() );
 			}
 
 			else if( pair.first == "Jack" ){
 				std::string name = pair.second.get( "<xmlattr>.name", "" );
 				if( name == "JackOnTick" )
-					ReadJack( pair.second, pTimer->JackOnTick() );
+					ReadJack( pair.second, socketRegistry, pTimer->JackOnTick() );
 				else if( name == "JackOnStart" )
-					ReadJack( pair.second, pTimer->JackOnStart() );
+					ReadJack( pair.second, socketRegistry, pTimer->JackOnStart() );
 				else if( name == "JackOnReset" )
-					ReadJack( pair.second, pTimer->JackOnReset() );
+					ReadJack( pair.second, socketRegistry, pTimer->JackOnReset() );
 				else if( name == "JackOnPause" )
-					ReadJack( pair.second, pTimer->JackOnPause() );
+					ReadJack( pair.second, socketRegistry, pTimer->JackOnPause() );
 			}
 		}
 
@@ -1370,7 +1381,8 @@ void Anl4TrackSystemReader::ReadJumpSignalTarget(
 
 
 void Anl4TrackSystemReader::ReadSensor(
-	const boost::property_tree::ptree& pt,
+	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry,
 	Sensor& sensor,
 	TrackLocation& trackLocation ) const
 {
@@ -1386,12 +1398,13 @@ void Anl4TrackSystemReader::ReadSensor(
 			ReadTrackLocation( pair.second, trackLocation );
 
 		else if( pair.first == "Jack" )
-			ReadJack( pair.second, sensor.JackOnTrigger() );
+			ReadJack( pair.second, socketRegistry, sensor.JackOnTrigger() );
 	}
 }
 
 void Anl4TrackSystemReader::ReadSignal(
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry,
 	std::shared_ptr<Signal> pSignal,
 	const TrackSystem& trackSystem ) const
 {
@@ -1406,14 +1419,14 @@ void Anl4TrackSystemReader::ReadSignal(
 			ReadTrackRange( pair.second, trackRange );
 
 		else if( pair.first == "Plug" )
-			ReadPlug( pair.second, pSignal->PlugTo( SignalStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadPlug( pair.second, socketRegistry, pSignal->PlugTo( SignalStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 		else if( pair.first == "Jack" ){
 			std::string name = pair.second.get( "<xmlattr>.name", "" );
 			if( name.find( "ChangeTo" ) != std::string::npos )
-				ReadJack( pair.second, pSignal->JackOnChangeTo( SignalStatusFrom( name ) ) );
+				ReadJack( pair.second, socketRegistry, pSignal->JackOnChangeTo( SignalStatusFrom( name ) ) );
 			else
-				ReadJack( pair.second, pSignal->JackOn( SignalStatusFrom( name ) ) );
+				ReadJack( pair.second, socketRegistry, pSignal->JackOn( SignalStatusFrom( name ) ) );
 		}
 	}
 
@@ -1423,6 +1436,7 @@ void Anl4TrackSystemReader::ReadSignal(
 
 void Anl4TrackSystemReader::ReadIndicator( 
 	const boost::property_tree::ptree& pt, 
+	SocketRegistry& socketRegistry, 
 	Indicator& indicator, 
 	const ConnectorCollection& connectorCollection ) const
 {
@@ -1441,10 +1455,10 @@ void Anl4TrackSystemReader::ReadIndicator(
 		}
 
 		else if( pair.first == "Plug" )
-			ReadPlug( pair.second, indicator.PlugTo( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadPlug( pair.second, socketRegistry, indicator.PlugTo( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 
 		else if( pair.first == "Jack" )
-			ReadJack( pair.second, indicator.JackOn( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
+			ReadJack( pair.second, socketRegistry, indicator.JackOn( IndicatorStatusFrom( pair.second.get( "<xmlattr>.name", "" ) ) ) );
 	}
 
 	if( auto pConnector = connectorCollection.Get( target ) ){
@@ -1455,14 +1469,14 @@ void Anl4TrackSystemReader::ReadIndicator(
 	}
 }
 
-void Anl4TrackSystemReader::ReadJack( const boost::property_tree::ptree& pt, Jack& jack ) const{
+void Anl4TrackSystemReader::ReadJack( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Jack& jack ) const{
 	jack.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 	jack.ID( pt.get( "<xmlattr>.id", IDType{0} ) );
 	jack.RefPlugID( pt.get( "<xmlattr>.plugid", IDType{0} ) );
-	m_SocketRegistry.ConnectJack( jack );
+	socketRegistry.ConnectJack( jack );
 }
 
-void Anl4TrackSystemReader::ReadPlug( const boost::property_tree::ptree& pt, Plug& plug ) const{
+void Anl4TrackSystemReader::ReadPlug( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Plug& plug ) const{
 	plug.Reference( "name", pt.get( "<xmlattr>.name", "" ) );
 
 	if( pt.get( "<xmlattr>.plugid", IDType{} ) == IDType{} )
@@ -1470,16 +1484,16 @@ void Anl4TrackSystemReader::ReadPlug( const boost::property_tree::ptree& pt, Plu
 				  << pt.get<IDType>( "<xmlattr>.id", IDType{} ) << "\"" << std::endl;
 	plug.ID( pt.get( "<xmlattr>.plugid", pt.get( "<xmlattr>.id", IDType{} ) ) );
 
-	m_SocketRegistry.RegisterPlug( plug );
+	socketRegistry.RegisterPlug( plug );
 
 	for( const auto& pair : pt ){
 		if( pair.first == "Jack" )
-			ReadJack( pair.second, plug.JackOnPulse() );
+			ReadJack( pair.second, socketRegistry, plug.JackOnPulse() );
 	}
 }
 
-void Anl4TrackSystemReader::ReadPlug( const boost::property_tree::ptree& pt, MultiPlug& plug ) const{
-	ReadPlug( pt, plug.ID() ? plug.Make( nullptr ) : static_cast<Plug&>(plug) );
+void Anl4TrackSystemReader::ReadPlug( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, MultiPlug& plug ) const{
+	ReadPlug( pt, socketRegistry, plug.ID() ? plug.Make( nullptr ) : static_cast<Plug&>(plug) );
 }
 
 void Anl4TrackSystemReader::ReadSection( const boost::property_tree::ptree& pt, trax::TrackBuilder& track ) const noexcept
@@ -1537,13 +1551,16 @@ std::shared_ptr<trax::TrackSystem> ReadTrackSystemFromANL4(
 			for( const auto& pairModule : pair.second ){
 				if( pairModule.first == "Module" )
 				{
-					for( const auto& pairTrackSystem : pairModule.second ){
-						if( pairTrackSystem.first == "TrackSystem" )
-						{
-							if( ++Idx == atIdx )
-								return reader.ReadTrackSystem( pairTrackSystem.second );
-							else
-								break;
+					if( std::unique_ptr<SocketRegistry> pSocketRegistry = SocketRegistry::Make(); pSocketRegistry )
+					{
+						for( const auto& pairTrackSystem : pairModule.second ){
+							if( pairTrackSystem.first == "TrackSystem" )
+							{
+								if( ++Idx == atIdx )
+									return reader.ReadTrackSystem( pairTrackSystem.second, *pSocketRegistry );
+								else
+									break;
+							}
 						}
 					}
 				}
