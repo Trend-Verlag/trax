@@ -36,6 +36,7 @@
 
 #include "trax/support/TraxSupportStream.h"
 
+#include "trax/IDType.h"
 #include "trax/Indicator.h"
 #include "trax/Jack.h"
 #include "trax/Plug.h"
@@ -1553,11 +1554,19 @@ std::shared_ptr<trax::TrackSystem> ReadTrackSystemFromANL4(
 				{
 					if( std::unique_ptr<SocketRegistry> pSocketRegistry = SocketRegistry::Make(); pSocketRegistry )
 					{
+						pSocketRegistry->ReservePlugIDs( pairModule.second.get( "<xmlattr>.maxValidPlugID", trax::IDType{ 0 } ) );
+
 						for( const auto& pairTrackSystem : pairModule.second ){
 							if( pairTrackSystem.first == "TrackSystem" )
 							{
-								if( ++Idx == atIdx )
-									return reader.ReadTrackSystem( pairTrackSystem.second, *pSocketRegistry );
+								if( ++Idx == atIdx ){
+									if( std::shared_ptr<trax::TrackSystem> pTrackSystem = reader.ReadTrackSystem( pairTrackSystem.second, *pSocketRegistry ); pTrackSystem )
+									{
+										using trax::to_string;
+										pTrackSystem->Reference( "maxValidPlugID", to_string( pairModule.second.get( "<xmlattr>.maxValidPlugID", trax::IDType{ 0 } ) ) );
+										return pTrackSystem;
+									}
+								}
 								else
 									break;
 							}

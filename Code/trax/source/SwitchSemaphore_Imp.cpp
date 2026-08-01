@@ -497,7 +497,7 @@ void AlignTo(
 			indicator.LocalFrameForStatus( Indicator::Status::three, poseThree );
 			break;
 		default:
-			std::cerr << "UThreeWaySwitchComponent::ConnectIndicator: Unknown switch status." << std::endl;
+			std::cerr << "AlignTo: Unknown switch status." << std::endl;
 			return;
 	}
 

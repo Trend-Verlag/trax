@@ -27,14 +27,13 @@
 #pragma once
 
 #include "common/Helpers.h"
-#include "trax/Configuration.h"
+#include "trax/IDType.h"
 
 #include <string>
 #include <vector>
 
 namespace trax{
 
-	struct IDType;
 
 	/// \brief Interface for identifying objects by ID or 
 	/// reference values.
