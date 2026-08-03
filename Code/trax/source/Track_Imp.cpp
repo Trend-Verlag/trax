@@ -247,6 +247,7 @@ bool Track_Imp::Diagnose( std::ostream& os ) const noexcept
 	if( !GetFrame().IsOrthoNormal() ){
 		Frame<Length,One> F = GetFrame();
 		os << "Track ID " << ID() << " has a non orthonormal local frame"
+			<< std::setprecision(std::numeric_limits<One>::max_digits10)
 			<< ". |T| == " << F.T.Length()
 			<< ", |N| == " << F.N.Length()
 			<< ", |B| == " << F.B.Length()
@@ -254,8 +255,8 @@ bool Track_Imp::Diagnose( std::ostream& os ) const noexcept
 			<< ", T*B == " << F.T*F.B 
 			<< ", N*B == " << F.N*F.B << std::endl;
 
-		os << "epsilon_length = " << std::setprecision(std::numeric_limits<Length>::max_digits10) << 2*std::numeric_limits<Length>::epsilon().Units() << std::endl;
-		os << "epsilon_angle = " << std::setprecision(std::numeric_limits<Angle>::max_digits10) << 2*std::numeric_limits<Angle>::epsilon().Units() << std::endl;
+		os << "epsilon of vector lengthes = " << std::setprecision(std::numeric_limits<One>::max_digits10) << 100_1*std::numeric_limits<One>::epsilon().Units() << std::endl;
+		os << "epsilon of vector angles = " << std::setprecision(std::numeric_limits<Angle>::max_digits10) << 100_1*std::numeric_limits<Angle>::epsilon().Units() << std::endl;
 		return false;
 	}
 	if( !GetAbsoluteFrame().IsOrthoNormal() ){

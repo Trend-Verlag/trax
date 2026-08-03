@@ -42,19 +42,25 @@
 /// \brief Namespace of common utility classes and methods.
 namespace common{
 
-	///
+	
 	///	\brief This is usefull because it saves a temp.
 	///	\param val Value to be squared.
 	///	\returns the square of val.
-	/// \deprecated use std::pow(val,2) or pow<2>(val) instead
 	template<typename T> inline constexpr T Square( T val ) noexcept{
 		return val * val;
 	}
 
 	/// \returns val risen to the third power.
-	/// \deprecated use std::pow(val,3) or pow<3>(val) instead
 	template<typename T> inline constexpr T Cube( T val ) noexcept{
 		return val * val * val;
+	}
+
+	template<int Y, typename X> inline constexpr X Pow( X x ) noexcept{
+		X result{1};
+		for( int i = 0; i < Y; ++i )
+			result *= x;
+
+		return result;
 	}
 
 
@@ -84,11 +90,6 @@ namespace common{
 							  std::declval<typename pow_result<-Y,T>::type>());
 	};
 
-	/// \brief power function with templated integer exponent.
-	template<int Y, typename T>
-	inline constexpr auto pow(T val) noexcept -> typename pow_result<Y,T>::type {
-		return static_cast<typename pow_result<Y, T>::type>(std::pow(val, Y));
-	}
 
 	///	\brief Tests equality in the sense |a-b| < epsilon.
 	template<typename T> inline constexpr bool Equals( T a, T b, T epsilon ) noexcept{	

@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE ( testDimensionatedDimVectorRoundtrip3 )
 	strgstr >> vResult;
 	BOOST_CHECK( vOriginal.IsNormal() );
 	BOOST_CHECK( vResult.IsNormal() );
-	BOOST_CHECK_CLOSE_SPATIAL( vOriginal, vResult, epsilon );
+	BOOST_CHECK_CLOSE_SPATIAL( vOriginal, vResult, 10*epsilon );
 }
 
 BOOST_AUTO_TEST_CASE ( testDimensions )

@@ -651,10 +651,7 @@ std::ostream& _rad( std::ostream& ostr, Angle angle ){
 	else if( angle == -infinite )
 		ostr << "-inf";
 	else{
-		const int neededPrecision = static_cast<int>(std::ceil( -std::log10( epsilon ) ));
-		const auto precision = ostr.precision(neededPrecision); //Make Normalize() with epsilon work.
 		ostr << angle.Units();
-		ostr.precision( precision );
 	}
 
 	return ostr;

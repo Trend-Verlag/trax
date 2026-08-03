@@ -31,9 +31,6 @@
 
 #include "common/Helpers.h"
 
-namespace spat{
-	using common::pow;
-}
 #include "spat/Spatial.h"
 #include "common/NarrowCast.h"
 #include "BoostTestSpatialHelpers.h"
