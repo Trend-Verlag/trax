@@ -56,6 +56,8 @@ namespace trax{
 		std::shared_ptr<const Section> GetSection( int index = 0 ) const noexcept override;
 
 		int CntSections() const noexcept override;
+
+		void ClearSections() noexcept override;
 	private:
 		std::vector<std::shared_ptr<const Section>> m_Sections;
 	};

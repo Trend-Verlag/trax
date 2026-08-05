@@ -289,7 +289,6 @@ void AlignTo(
 	spat::Frame<dim::Length,dim::One> frame, PoseOne, PoseTwo;
 	toSwitch.Bifurcation().Transition( frame );
 	indicator.SetFrame( frame );
-	frame.TransportTo( localPosition );
 
 	if( toSwitch.IsHorizontal() )
 	{
@@ -297,6 +296,7 @@ void AlignTo(
 		{
 			if( toSwitch.BranchLeftOrRight() )
 			{
+				frame.TransportTo( localPosition );
 				frame.LookAt( alignment, -frame.N );
 				PoseOne = frame;
 				toSwitch.Bifurcation().Transition( frame );
@@ -306,16 +306,18 @@ void AlignTo(
 			}
 			else
 			{
+				frame.TransportTo( { localPosition.x, -localPosition.y, localPosition.z } );
 				frame.LookAt( alignment, frame.N );
 				PoseOne = frame;
 				toSwitch.Bifurcation().Transition( frame );
-				frame.TransportTo( localPosition );
+				frame.TransportTo( { localPosition.x, -localPosition.y, localPosition.z } );
 				frame.LookAt( alignment, -frame.N );
 				PoseTwo = frame;
 			}
 		}
 		else if( toSwitch.BranchLeftOrRight() )
 		{
+			frame.TransportTo( localPosition );
 			frame.LookAt( alignment, frame.T );
 			PoseOne = frame;
 			toSwitch.Bifurcation().Transition( frame );
@@ -325,10 +327,11 @@ void AlignTo(
 		}
 		else
 		{
+			frame.TransportTo( { localPosition.x, -localPosition.y, localPosition.z } );
 			frame.LookAt( alignment, frame.T );
 			PoseOne = frame;
 			toSwitch.Bifurcation().Transition( frame );
-			frame.TransportTo( localPosition );
+			frame.TransportTo( { localPosition.x, -localPosition.y, localPosition.z } );
 			frame.LookAt( alignment, -frame.N );
 			PoseTwo = frame;
 		}

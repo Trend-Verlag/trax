@@ -68,6 +68,10 @@ namespace trax{
 		virtual std::shared_ptr<const Section> DetachSection( int index = 0 ) noexcept = 0;
 
 
+		/// \brief Detaches all the Sections from the track.
+		virtual void ClearSections() noexcept = 0;
+
+
 		/// \param index Index of the section to set [0,CntSections()-1].
 		/// \returns A pointer to the attached Section or nullptr if none.
 		virtual std::shared_ptr<const Section> GetSection( int index = 0 ) const noexcept = 0;

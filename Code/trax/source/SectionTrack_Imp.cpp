@@ -120,5 +120,10 @@ std::shared_ptr<const Section> SectionTrack_Imp::GetSection( int index ) const n
 int SectionTrack_Imp::CntSections() const noexcept{
 	return m_Sections.size();
 }
+
+void SectionTrack_Imp::ClearSections() noexcept{
+	m_Sections.clear();
+	OnGeometryChanged();
+}
 ///////////////////////////////////////
 }
