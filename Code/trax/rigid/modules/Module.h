@@ -82,9 +82,19 @@ namespace trax{
 		virtual const char*	TypeName() const noexcept = 0;
 
 
-		/// \brief Checks whether the elements in this module are valid 
+		/// \brief Checks whether the finite elements in this module are valid.
+		/// 
+		/// A module qualifies valid if it has collections missing.
 		/// \returns true if all the elements are valid build.
 		virtual bool IsValid() const noexcept = 0;
+
+
+		/// \brief Checks whether the module is empty.
+		///
+		/// A module is empty if either no collections are attached or all 
+		/// attached collections are empty.
+		/// \returns true if the module is empty; false otherwise.
+		virtual bool IsEmpty() const noexcept = 0;
 
 
 		/// \brief Set frame of reference.

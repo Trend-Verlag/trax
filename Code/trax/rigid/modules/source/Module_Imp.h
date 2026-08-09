@@ -51,6 +51,8 @@ namespace trax{
 
 		bool IsValid() const noexcept override;
 
+		bool IsEmpty() const noexcept override;
+
 		void SetFrame( const spat::Frame<Length,One>& frame ) noexcept override;
 
 		const spat::Frame<Length,One>& GetFrame() const noexcept override;

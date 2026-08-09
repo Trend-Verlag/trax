@@ -126,6 +126,26 @@ bool Module_Imp::IsValid() const noexcept
 	return true;
 }
 
+bool Module_Imp::IsEmpty() const noexcept
+{
+	if( m_pTrackSystem && m_pTrackSystem->Count() > 0  )
+		return false;
+
+	if( m_pFleet && m_pFleet->Count() > 0 )
+		return false;
+
+	if( m_pSignalCollection && m_pSignalCollection->Count() > 0 )
+		return false;
+
+	if( m_pIndicatorCollection && m_pIndicatorCollection->Count() > 0 )
+		return false;
+
+	if( m_pCargoCollection && m_pCargoCollection->Count() > 0 )
+		return false;
+
+	return true;
+}
+
 void Module_Imp::SetFrame( const spat::Frame<Length,One>& frame ) noexcept{
 	assert( m_Frame.IsOrthoNormal() );
 	m_Frame = frame;
