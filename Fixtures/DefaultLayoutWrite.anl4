@@ -398,6 +398,7 @@
 				</TrackCollection>
 				<ConnectorCollection/>
 			</TrackSystem>
+			<CargoCollection/>
 			<Fleet>
 				<Train id="1" name="Train_1" type="Train" reference="/Script/railUnreal.Train" orientation="para">
 					<RollingStock id="1" name="BR_TRAXX147_Blueprint_C_1" type="BR_TRAXX147_Blueprint_C" reference="/Game/RollingStock/Locomotives/BR_Traxx147/BR_TRAXX147_Blueprint.BR_TRAXX147_Blueprint_C" orientation="anti">

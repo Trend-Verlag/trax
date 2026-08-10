@@ -14,6 +14,7 @@
 
 #include "trax/rigid/Gestalt.h"
 
+#include "trax/rigid/trains/Cargo.h"
 #include "trax/rigid/trains/Train.h"
 #include "trax/rigid/trains/RollingStock.h"
 #include "trax/rigid/trains/WheelFrame.h"
@@ -23,6 +24,24 @@
 
 namespace trax{
 namespace ptreesupport{
+
+boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Cargo& cargo )
+{
+	boost::property_tree::ptree ptCargo;
+
+	ptCargo.put( "<xmlattr>.id", cargo.ID() );
+	ReferencesToAttributes( ptCargo, cargo );
+
+	if( std::shared_ptr<Shape> pShape = cargo.GetShape(); pShape )
+	{
+		spat::Frame<Length,One> frame;
+		pShape->GetFrame( frame );
+		ptCargo << frame;
+	}
+
+	move_child( pt, cargo.TypeName(), ptCargo );
+	return pt;
+}
 
 static void WriteTrainContent( boost::property_tree::ptree& ptTrain, const Train& train )
 {

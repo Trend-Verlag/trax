@@ -19,6 +19,7 @@
 #include "trax/collections/PulseCounterCollection.h"
 #include "trax/collections/TimerCollection.h"
 #include "trax/rigid/trains/Train.h"
+#include "trax/rigid/trains/collections/CargoCollection.h"
 #include "trax/rigid/trains/collections/Fleet.h"
 
 #include "trax/rigid/trains/collections/support/TrainCollectionSupportXML.h"
@@ -87,8 +88,8 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	if( const auto pTrackSystem = _module.GetTrackSystem(); pTrackSystem )
 		ptModule << *pTrackSystem;
 
-	//if( const auto* pBatch = _module.GetBatch(); pBatch )
-	//	ptModule << *pBatch;
+	if( const auto pCargoCollection = _module.GetCargoCollection(); pCargoCollection )
+		ptModule << *pCargoCollection;
 
 	if( const auto pFleet = _module.GetFleet(); pFleet )
 		ptModule << *pFleet;

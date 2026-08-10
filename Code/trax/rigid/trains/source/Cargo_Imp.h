@@ -52,7 +52,7 @@ namespace trax{
 		CargoUserData* UserData() const noexcept override;
 	private:
 		CargoType m_Type;
-		std::shared_ptr<Shape> m_Shape;
+		std::shared_ptr<Shape> m_pShape;
 		CargoUserData* m_UserData;
 	};
 
@@ -68,9 +68,13 @@ namespace trax{
 
 		std::shared_ptr<Gestalt> GetGestalt() const noexcept override;
 
-	private:
-		std::shared_ptr<Gestalt> m_Gestalt;
 
+		// Cargo_Imp:
+		void SetShape( std::shared_ptr<Shape> pShape ) noexcept override;
+
+
+	private:
+		std::shared_ptr<Gestalt> m_pGestalt;
 	};
 
 }

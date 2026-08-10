@@ -23,6 +23,7 @@
 // For further information, please contact: horstmann@traxlibrary.dev
 
 #include "Cargo_Imp.h"
+#include "trax/rigid/Gestalt.h"
 
 namespace trax{
 ///////////////////////////////////////
@@ -43,11 +44,11 @@ CargoType Cargo_Imp::GetType() const{
 }
 
 void Cargo_Imp::SetShape( std::shared_ptr<Shape> pShape ) noexcept{
-	m_Shape = pShape;
+	m_pShape = pShape;
 }
 
 std::shared_ptr<Shape> Cargo_Imp::GetShape() const noexcept{
-	return m_Shape;
+	return m_pShape;
 }
 
 void Cargo_Imp::UserData( CargoUserData* pData ) noexcept{
@@ -70,12 +71,20 @@ const char* MoveableCargo_Imp::TypeName() const noexcept{
 	return "MoveableCargo";
 }
 
-void MoveableCargo_Imp::SetGestalt( std::shared_ptr<Gestalt> pGestalt ) noexcept{
-	m_Gestalt = pGestalt;
+void MoveableCargo_Imp::SetGestalt( std::shared_ptr<Gestalt> pGestalt ) noexcept
+{
+	Cargo_Imp::SetShape( std::dynamic_pointer_cast<Shape>(pGestalt) );
+	m_pGestalt = pGestalt;
 }
 
 std::shared_ptr<Gestalt> MoveableCargo_Imp::GetGestalt() const noexcept{
-	return m_Gestalt;
+	return m_pGestalt;
+}
+
+void MoveableCargo_Imp::SetShape( std::shared_ptr<Shape> pShape ) noexcept
+{
+	Cargo_Imp::SetShape( pShape );
+	m_pGestalt = std::dynamic_pointer_cast<Gestalt>( pShape );
 }
 ///////////////////////////////////////
 }

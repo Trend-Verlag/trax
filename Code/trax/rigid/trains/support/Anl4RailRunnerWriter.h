@@ -16,11 +16,13 @@
 
 namespace trax{
 	
+	struct Cargo;
 	struct RailRunner;
 
 	namespace ptreesupport{
 		/// \name Property Tree Streaming Support for Trax Classes
 		///@{
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Cargo& cargo );
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const RailRunner& railRunner );
 		///@}
 	} 
