@@ -34,7 +34,7 @@ namespace trax{
 
 	typedef ObjectID_Imp<Cargo> CargoBase;
 
-	class Cargo_Imp : public CargoBase
+	class Cargo_Imp : public virtual CargoBase
 	{
 	public:
 		Cargo_Imp( CargoType type ) noexcept;
@@ -56,6 +56,8 @@ namespace trax{
 		CargoUserData* m_UserData;
 	};
 
+#pragma warning( push )
+#pragma warning( disable : 4250 )   // 'dominance' - intended with virtual inheritance
 
 	class MoveableCargo_Imp : public MoveableCargo,
 							  public Cargo_Imp{
@@ -64,6 +66,8 @@ namespace trax{
 
 		const char*	TypeName() const noexcept override;
 
+
+		// MoveableCargo:
 		void SetGestalt( std::shared_ptr<Gestalt> pGestalt ) noexcept override;
 
 		std::shared_ptr<Gestalt> GetGestalt() const noexcept override;
@@ -72,9 +76,10 @@ namespace trax{
 		// Cargo_Imp:
 		void SetShape( std::shared_ptr<Shape> pShape ) noexcept override;
 
-
 	private:
 		std::shared_ptr<Gestalt> m_pGestalt;
 	};
+
+#pragma warning( pop )
 
 }
