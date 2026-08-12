@@ -263,6 +263,7 @@ namespace trax{
 	/// \throws std::logic_error if the switch is not valid.
 	///@{
 	
+	/// \brief Aligns the indicator's frames to a certain switch.
 	void dclspc AlignTo( Indicator& indicator, Connector& toConnector, const spat::Position<Length> localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One>, bool bConnectPlugsNJacks = true );
 	
 	void dclspc AlignTo( BinaryIndicator& indicator, Switch& toSwitch, const spat::Position<Length> localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One>, bool bConnectPlugsNJacks = true );
