@@ -312,7 +312,7 @@ namespace cmnd{
 		void TimeStamp( long time ) override;
 
 
-		/// \Sets the time stamp of the macro and the time steps of
+		/// \brief Sets the time stamp of the macro and the time steps of
 		/// the commands to the same value.
 		/// \param time time step to set to.
 		void SetAllTimeStamps( long time ) override;
@@ -393,20 +393,20 @@ namespace cmnd{
 
 		/// \name Construction
 		/// \param history
-		//@{
+		///@{
 		History() noexcept;
 		History( const History& history ) noexcept;
 		History( History&& history ) noexcept;
-		//@}
+		///@}
 
 		virtual ~History() noexcept;
 
 
 		/// \name Assignment
-		//@{
+		///@{
 		History& operator=( const History& history ) noexcept;
 		History& operator=( History&& history ) noexcept;
-		//@}
+		///@}
 
 
 		void Undo();

@@ -56,7 +56,6 @@ namespace trax{
 
 
 		/// \brief Called if the simulation is started.
-		/// \param scene The scene the simulation is started in.
 		/// \returns true if the simulated object wants to get
 		/// called back for Update, Pause, Resume and Stop.
 		virtual bool Start() = 0;

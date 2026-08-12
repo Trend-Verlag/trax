@@ -253,6 +253,7 @@ namespace trax{
 	};
 
 
+	/// \name AlignTo
 	/// \brief Aligns the indicator's frames to a certain switch.
 	/// \param indicator
 	/// \param toSwitch The switch to align to.
@@ -260,6 +261,8 @@ namespace trax{
 	/// \param alignment The direction the indicator should use to point to the switches
 	/// outgoing tracks.
 	/// \throws std::logic_error if the switch is not valid.
+	///@{
+	
 	void dclspc AlignTo( Indicator& indicator, Connector& toConnector, const spat::Position<Length> localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One>, bool bConnectPlugsNJacks = true );
 	
 	void dclspc AlignTo( BinaryIndicator& indicator, Switch& toSwitch, const spat::Position<Length> localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One>, bool bConnectPlugsNJacks = true );
@@ -269,7 +272,7 @@ namespace trax{
 	void dclspc AlignTo( BinaryIndicator& indicator, DoubleSlipSwitch& toSwitch, const spat::Position<Length> localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One>, bool bConnectPlugsNJacks = true );
 
 	void dclspc AlignTo( Indicator& indicator, ThreeWaySwitch& toSwitch, const spat::Position<Length> localPosition = { 0_m, -3_m, 0_m }, const spat::Vector<One>& alignment = spat::Ez<One>, bool bConnectPlugsNJacks = true );
-
+	///@}
 
 ///////////////////////////////////////
 inline Indicator::Status ToIndicatorStatus( const std::string& status ){

@@ -252,7 +252,7 @@ namespace trax{
 		/// carefully if you set bStopAtFirstTrack to false.
 		/// \param maxDistance Maximum distance along the outgoing tracks to look for comparison points.
 		/// If there is an open end that would define the maximum distance.
-		/// \threshold distances smaller then threshold are considered colocated.
+		/// \param threshold distances smaller then threshold are considered colocated.
 		virtual bool IsColocated( bool bStopAtFirstTrack = true, Length maxDistance = infinite__length, Length threshold = epsilon__length ) const = 0;
 
 
@@ -439,7 +439,7 @@ namespace trax{
 		/// carefully if you set bStopAtFirstTrack to false.
 		/// \param maxDistance Maximum distance along the outgoing tracks to look for comparison points.
 		/// If there is an open end that would define the maximum distance.
-		/// \threshold distances smaller then threshold are considered colocated.
+		/// \param threshold distances smaller then threshold are considered colocated.
 		virtual bool IsColocated( bool bStopAtFirstTrack = true, Length maxDistance = infinite__length, Length threshold = epsilon__length ) const = 0;
 
 
