@@ -59,18 +59,118 @@ target_compile_features(test_settings
 )
 
 # -------- Central Boost / Boost.Test configuration --------
-set(BOOST_MIN_VERSION 1.85)
 
-# Suppress “new Boost version” advisory
-set(Boost_NO_WARN_NEW_VERSIONS ON)
+set(BOOST_MIN_VERSION 1.85.0)
 
-# Honor BOOST_ROOT if user/export set (optional strictness)
-if(DEFINED ENV{BOOST_ROOT})
-    set(Boost_NO_SYSTEM_PATHS ON)
+# ------------------------------------------------------------------
+# Boost location
+#
+# BuildBoost.bat sets BOOST_ROOT to the Boost root directory.
+# Prefer the environment variable, but also allow CMake -DBoost_ROOT=...
+# ------------------------------------------------------------------
+
+if(DEFINED ENV{BOOST_ROOT} AND NOT DEFINED Boost_ROOT)
+    set(Boost_ROOT "$ENV{BOOST_ROOT}")
 endif()
 
-# Toggle shared vs static Boost.Test (default: shared)
-option(BOOST_TEST_SHARED "Link Boost.Test as shared (DLL) library" ON)
+if(NOT Boost_ROOT)
+    message(FATAL_ERROR
+        "Boost_ROOT is not set.\n"
+        "Please set BOOST_ROOT to the Boost installation directory."
+    )
+endif()
+
+get_filename_component(Boost_ROOT "${Boost_ROOT}" ABSOLUTE)
+
+message(STATUS "Boost root: ${Boost_ROOT}")
+
+# ------------------------------------------------------------------
+# Find the Boost compiler tag from the libraries actually built.
+#
+# BuildBoost.bat uses:
+#
+#     b2 toolset=msvc ...
+#
+# Therefore the actual MSVC version is determined by Boost.Build.
+#
+# Examples:
+#
+#     boost_unit_test_framework-vc143-mt-x64-1_91.lib
+#     boost_unit_test_framework-vc145-mt-x64-1_91.lib
+#
+# We deliberately do NOT hard-code vc143/vc145/etc.
+# ------------------------------------------------------------------
+
+set(BOOST_STAGE_LIB_DIR "${Boost_ROOT}/stage/lib")
+
+if(NOT EXISTS "${BOOST_STAGE_LIB_DIR}")
+    message(FATAL_ERROR
+        "Boost stage/lib directory was not found:\n"
+        "  ${BOOST_STAGE_LIB_DIR}\n"
+        "Please build Boost using BuildBoost.bat."
+    )
+endif()
+
+file(GLOB BOOST_TEST_LIBRARIES
+    "${BOOST_STAGE_LIB_DIR}/boost_unit_test_framework-vc*-mt-x64-*.lib"
+)
+
+if(NOT BOOST_TEST_LIBRARIES)
+    message(FATAL_ERROR
+        "Could not find Boost.Test libraries in:\n"
+        "  ${BOOST_STAGE_LIB_DIR}\n"
+        "Expected a file such as:\n"
+        "  boost_unit_test_framework-vc145-mt-x64-1_91.lib"
+    )
+endif()
+
+# Extract the MSVC compiler tag from the first matching library.
+#
+# Example:
+#   boost_unit_test_framework-vc145-mt-x64-1_91.lib
+#
+# produces:
+#   Boost_COMPILER = -vc145
+#
+foreach(BOOST_TEST_LIBRARY ${BOOST_TEST_LIBRARIES})
+
+    get_filename_component(
+        BOOST_TEST_LIBRARY_NAME
+        "${BOOST_TEST_LIBRARY}"
+        NAME
+    )
+
+    if(BOOST_TEST_LIBRARY_NAME MATCHES
+       "^boost_unit_test_framework-(vc[0-9]+)-")
+        set(Boost_COMPILER "-${CMAKE_MATCH_1}")
+        break()
+    endif()
+
+endforeach()
+
+if(NOT Boost_COMPILER)
+    message(FATAL_ERROR
+        "Could not determine the MSVC compiler tag from Boost.Test libraries."
+    )
+endif()
+
+message(STATUS "Boost compiler tag: ${Boost_COMPILER}")
+
+# ------------------------------------------------------------------
+# Boost configuration
+# ------------------------------------------------------------------
+
+set(Boost_NO_WARN_NEW_VERSIONS ON)
+
+# We have explicitly identified the Boost installation.
+set(Boost_NO_SYSTEM_PATHS ON)
+
+# Toggle shared vs static Boost.Test.
+option(
+    BOOST_TEST_SHARED
+    "Link Boost.Test as shared (DLL) library"
+    ON
+)
 
 if(BOOST_TEST_SHARED)
     set(Boost_USE_STATIC_LIBS OFF)
@@ -78,40 +178,86 @@ else()
     set(Boost_USE_STATIC_LIBS ON)
 endif()
 
-# Find Boost once (add components here as project grows)
-cmake_policy(SET CMP0167 OLD)
-find_package(Boost ${BOOST_MIN_VERSION} REQUIRED COMPONENTS unit_test_framework)
+# ------------------------------------------------------------------
+# Find Boost
+# ------------------------------------------------------------------
 
+cmake_policy(SET CMP0167 OLD)
+
+find_package(
+    Boost ${BOOST_MIN_VERSION}
+    REQUIRED
+    COMPONENTS unit_test_framework
+)
+
+message(STATUS "Boost version: ${Boost_VERSION}")
+message(STATUS "Boost include directory: ${Boost_INCLUDE_DIRS}")
+message(STATUS "Boost library directory: ${Boost_LIBRARY_DIRS}")
+message(STATUS "Boost.Test library: ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}")
+
+# ------------------------------------------------------------------
 # Interface helper target all test executables can link
+# ------------------------------------------------------------------
+
 add_library(boost_test_support INTERFACE)
 
-target_link_libraries(boost_test_support INTERFACE Boost::unit_test_framework)
+target_link_libraries(
+    boost_test_support
+    INTERFACE
+        Boost::unit_test_framework
+)
 
-# Common compile defs for all tests
+# ------------------------------------------------------------------
+# Common compile definitions for all tests
+# ------------------------------------------------------------------
+
 if(BOOST_TEST_SHARED)
-    target_compile_definitions(boost_test_support INTERFACE
-        BOOST_TEST_DYN_LINK
-        BOOST_TEST_NO_LIB
-        WITH_BOOST_TESTS
+
+    target_compile_definitions(
+        boost_test_support
+        INTERFACE
+            BOOST_TEST_DYN_LINK
+            BOOST_TEST_NO_LIB
+            WITH_BOOST_TESTS
     )
+
 else()
-    target_compile_definitions(boost_test_support INTERFACE
-        BOOST_TEST_NO_LIB
-        WITH_BOOST_TESTS
+
+    target_compile_definitions(
+        boost_test_support
+        INTERFACE
+            BOOST_TEST_NO_LIB
+            WITH_BOOST_TESTS
     )
+
 endif()
 
+# ------------------------------------------------------------------
 # Helper function to configure a Boost.Test executable
-function(configure_boost_test_exe target)
-    target_link_libraries(${target} PRIVATE boost_test_support)
+# ------------------------------------------------------------------
 
-    # Add Boost DLL path for MSVC F5 if using shared libs
-    if(MSVC AND BOOST_TEST_SHARED AND DEFINED ENV{BOOST_ROOT})
-        set_target_properties(${target} PROPERTIES
-            VS_DEBUGGER_ENVIRONMENT "PATH=%PATH%;$<SHELL_PATH:$ENV{BOOST_ROOT}/stage/lib>"
+function(configure_boost_test_exe target)
+
+    target_link_libraries(
+        ${target}
+        PRIVATE
+            boost_test_support
+    )
+
+    # Add Boost DLL path for MSVC F5 if using shared libs.
+    if(MSVC AND BOOST_TEST_SHARED)
+
+        set_target_properties(
+            ${target}
+            PROPERTIES
+                VS_DEBUGGER_ENVIRONMENT
+                "PATH=%PATH%;$<SHELL_PATH:${BOOST_STAGE_LIB_DIR}>"
         )
+
     endif()
+
 endfunction()
+
 # -------- End central Boost config --------
 
 

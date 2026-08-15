@@ -7,61 +7,71 @@
 #include "trax/rigid/modules/support/AnlWriter.h"
 #include "trax/collections/TrackSystem.h"
 
-#include <boost/program_options.hpp>
-
+#include "appframe/CommandLine.h"
 #include <filesystem>
 #include <iostream>
 
-std::string version{ "EEPFileConverter, Version: 1.12.0" };
+std::string version{ "EEPFileConverter, Version: 1.13.0" };
+
+namespace
+{
+	void PrintUsage()
+	{
+		std::cout << version << std::endl;
+		std::cout <<
+"EEPFileConverter is a tool to convert EEP layout files.\n\n"
+"Usage: EEPFileConverter [options] <output>\n\n"
+"Allowed options:\n"
+"  -H, --help              Produces help message.\n"
+"  -V, --version           Prints the version string.\n"
+"  -I, --input <file>      Input *.anl3 or *.anl4 file, obligatory.\n"
+"  -O, --output <file>     Output *.anl4 file, obligatory.\n"
+"  -P, --polygonal_chain   Convert track curves to polygonal chains.\n"
+"      --verbosity <level> Output verbosity. Options are: 'silent', 'error',\n"
+"                          'normal' (the default), 'detailed', 'verbose'.\n"
+"  -Q, --quiet             Disables all output except errors.\n"
+			<< std::endl;
+	}
+}
 
 int wmain( int argc, wchar_t* argv[] )
 {
 	try{
-		boost::program_options::options_description desc(
-"EEPFileConverter is a tool to convert EEP layout files.\n \n \
-Usage: EEPFileConverter [options]\n \n \
-Allowed options");
-		desc.add_options()
-			("help,H", "Produces help message.")
-			("version,V", "Prints the version string.")
-			("input,I",  boost::program_options::wvalue<std::wstring>(), "Input *.anl3 or *.anl4 file, obligatory.")
-			("output,O", boost::program_options::wvalue<std::wstring>(), "Output *.anl4 file, obligatory.")
-			("polygonal_chain,P", "Convert track curves to polygonal chains." )
-			("verbosity", boost::program_options::wvalue<std::wstring>(), "Output verbosity. Options are: 'silent', 'error', 'normal' (the default), 'detailed', 'verbose'.")
-			("quiet,Q", "Disables all output except errors.")
-			;
+		appframe::WCommandLine cmd( argc, argv );
 
-		boost::program_options::positional_options_description p;
-		p.add("output", -1);
-
-		boost::program_options::variables_map vm;
-		boost::program_options::store(
-			boost::program_options::wcommand_line_parser(argc, argv).options(desc).positional(p).run(), vm );
-		boost::program_options::notify(vm);
-
-		if( vm.count("version") ){
+		if( cmd.Has( L"version" ) || cmd.Has( L"V" ) ){
 			std::cout << version << std::endl;
 			return 0;
 		}
 
-		if( vm.count("help") ){
-			std::cout << version << std::endl;
-			std::cout << desc << std::endl;
+		if( cmd.Has( L"help" ) || cmd.Has( L"H" ) ){
+			PrintUsage();
 			return 0;
 		}
 
-		if( vm.count("input") == 0 ){
+		// Accept both the long and short option spellings.
+		const bool hasInput =
+			cmd.HasValue( L"input" ) || cmd.HasValue( L"I" );
+
+		// The output may be given as an option or as the first positional
+		// argument (matching the previous Boost positional behaviour).
+		const bool hasOutputOption =
+			cmd.HasValue( L"output" ) || cmd.HasValue( L"O" );
+		const bool hasOutput =
+			hasOutputOption || cmd.PositionalCount() > 0;
+
+		if( !hasInput ){
 			std::cerr << "EEPFileConverter: Input file is missing! Use --help for usage manual." << std::endl;
 			return 0;
 		}
 
-		if( vm.count("output") == 0 ){
+		if( !hasOutput ){
 			std::cerr << "EEPFileConverter: Output file is missing! Use --help for usage manual." << std::endl;
 			return 0;
 		}
 
-		if( vm.count("verbosity") ){
-			const auto& verbosity = vm["verbosity"].as<std::wstring>();
+		if( cmd.HasValue( L"verbosity" ) ){
+			const std::wstring verbosity = cmd.Get( L"verbosity" );
 			if( verbosity == L"verbose" ){
 				trax::SetReportVerbosity( trax::Verbosity::verbose );
 			}
@@ -71,20 +81,28 @@ Allowed options");
 			else if( verbosity == L"error" ){
 				trax::SetReportVerbosity( trax::Verbosity::error );
 			}
-			else if( verbosity == L"quiet" ){
+			else if( verbosity == L"silent" || verbosity == L"quiet" ){
 				trax::SetReportVerbosity( trax::Verbosity::silent );
 			}
 		}
 
-		if( vm.count("quiet") ){
+		if( cmd.Has( L"quiet" ) || cmd.Has( L"Q" ) ){
 			trax::SetReportVerbosity( trax::Verbosity::silent );
 		}
 
 		// On Windows std::wstring is the native path encoding, so construct the
 		// path directly - no quoting or code-page conversion involved.
-		const std::filesystem::path inputPath { vm["input"].as<std::wstring>() };
-		const std::filesystem::path outputPath{ vm["output"].as<std::wstring>() };
-				
+		const std::wstring inputValue =
+			cmd.HasValue( L"input" ) ? cmd.Get( L"input" ) : cmd.Get( L"I" );
+
+		const std::wstring outputValue =
+			hasOutputOption
+				? ( cmd.HasValue( L"output" ) ? cmd.Get( L"output" ) : cmd.Get( L"O" ) )
+				: cmd.Positional( 0 );
+
+		const std::filesystem::path inputPath { inputValue };
+		const std::filesystem::path outputPath{ outputValue };
+
 		std::wcout << trax::Verbosity::normal << L"Input: "  << inputPath  << std::endl;
 		std::wcout << trax::Verbosity::normal << L"Output: " << outputPath << std::endl;
 
@@ -93,7 +111,7 @@ Allowed options");
 		{
 			if( auto pModule = pModuleCollection->GetFirst() )
 			{
-				if( vm.count( "polygonal_chain") ){
+				if( cmd.Has( L"polygonal_chain" ) || cmd.Has( L"P" ) ){
 					if( auto pTrackSystem = pModule->GetTrackSystem() ){
 						for( auto& track : *pTrackSystem ){
 							try{

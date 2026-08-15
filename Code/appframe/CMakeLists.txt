@@ -9,6 +9,7 @@ target_sources(appframe
         "AppFrame.h"
         "AppFrameCommands.h"
         "Command.h"
+        "CommandLine.h"
 )
 
 target_compile_definitions(appframe PUBLIC APPFRAME_STATIC_LIBRARY)
