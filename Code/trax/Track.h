@@ -857,6 +857,16 @@ namespace trax
 	dclspc Length DistanceOf( const Track::cTrackEnd& trackEndA, const Track::cTrackEnd& trackEndB );
 
 
+	/// \returns the angle of the tangents between two track ends.
+	/// \throws std::invalid_argument if any of the track ends is invalid.
+	dclspc Angle KinkOf( const Track::cTrackEnd& trackEndA, const Track::cTrackEnd& trackEndB );
+
+
+	/// \returns the angle of the binormals between two track ends.
+	/// \throws std::invalid_argument if any of the track ends is invalid.
+	dclspc Angle TwistOf( const Track::cTrackEnd& trackEndA, const Track::cTrackEnd& trackEndB );
+
+
 	/// \returns The 3D distance of the connected track, if any. 
 	/// \throws std::invalid_argument if any of the track ends is invalid.
 	/// \throws std::logic_error if the track end is not connected.

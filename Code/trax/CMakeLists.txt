@@ -51,6 +51,7 @@ set(PUBLIC_HEADERS
         "./Curve_Imp.h"
         "./End.h"
         "./Event.h"
+        "./Exceptions.h"
         "./Identified.h"
         "./IDType.h"
         "./ImplementationHelper.h"

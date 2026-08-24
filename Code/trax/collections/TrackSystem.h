@@ -183,10 +183,7 @@ namespace trax{
 	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> dclspc FindTrackEnds( const TrackSystem& system, const spat::Sphere<Length>& area, bool sort = false );
 
 
-	/// @name FindTrackLoc Find Track Locations
-	/// \brief Finds all tracks that run trough an area or got hit by a ray.
-	/// @{
-
+	/// \brief Finds all tracks that run through an area.
 	/// \param system Track system with tracks to evaluate.
 	/// \param area Spherical area to detect tracks in.
 	/// \param sort If true the list gets sorted by distance to the center of the area (closest first). 
@@ -194,11 +191,13 @@ namespace trax{
 	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackSystem& system, const spat::Sphere<Length>& area, bool sort = false );
 	
 
+	/// \brief Finds a track that runs through an area.
 	/// \param system Track system with tracks to evaluate.
 	/// \param area Spherical area to detect tracks in.
 	Location dclspc FindTrackLocation( const TrackSystem& system, const spat::Sphere<Length>& area );
 	
 
+	/// \brief Finds all tracks that got hit by a ray.
 	/// \param system Track system with tracks to evaluate.
 	/// \param ray A line starting at ray.P and running in the ray.T direction ad infinitum.
 	/// \param gauge If this is > 0_m it is used as the width of a ribbon to hit, also defined 
@@ -208,7 +207,6 @@ namespace trax{
 	/// \return A list with track Locations as well as their distance from the ray's starting 
 	/// point.
 	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackSystem& system, const spat::VectorBundle<Length,One>& ray, Length gauge = 0_m, bool sort = false );
-	/// @}
 	
 
 	/// \brief Searches open track ends inside an area around a given track end and connects to 
@@ -229,27 +227,43 @@ namespace trax{
 	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc Connect( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
 
 
-	/// \brief Searches open track ends inside an area around a given track end and connects 
-	/// and snaps to the closest.
+	/// \brief Connects and snaps a track.
 	/// 
-	/// The method will snap only once (if coupling targets on both ends were found).
+	/// Searches open track ends inside an area around a given track end and connects 
+	/// and snaps to the closest; then connects the other end of the snapped track if another 
+	/// track end was found inside the limits. The method will snap only once if coupling 
+	/// targets on both ends were found.
 	/// \param system The track system to search track ends in.
 	/// \param trackEnd The track end to connect; use Track::EndType::both for both.
 	/// \param maxDistance A threshold for the distance to search track ends around the to be 
 	/// connected end.
 	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
-	/// \throws std::invalid_argument If the end type is not recocnised.
+	/// \throws std::invalid_argument If the end type is not recognized.
 	/// \throws std::runtime_error If snapping failed (e.g. due to invalid track).
-	/// @{
-	/// 
 	/// \return The other track ends, the track was connected to, pair.first for front and 
 	/// pair.second for back end; or { nullptr, EndType::none } if no suitable track 
 	/// end was found.
 	std::pair<Track::TrackEnd,Track::TrackEnd> dclspc ConnectAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
 
-	/// \return A Connector if needed since a track end already was connected (first). 
-	std::shared_ptr<Connector> dclspc ConnectAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Track::TrackEnd toTrackEnd, Length maxDistance = 1_m, Angle maxKink = pi );
-	/// @}
+
+	/// \brief Connects and snaps a track.
+	/// 
+	/// Connects two given track ends and snaps the first track to the second;
+	/// then connects the other end of the snapped track if another track end was found 
+	/// inside the limits. The method will snap only once if coupling targets on 
+	/// both ends were found.
+	/// \param system The track system to search track ends in.
+	/// \param trackEnd The track end to connect.
+	/// \param toTrackEnd The track end to connect to.
+	/// \param maxDistance A threshold for the distance to search track ends around the to be 
+	/// connected end.
+	/// \param maxKink A threshold for the maximum allowed kink angle in T and B respectively.
+	/// \throws std::invalid_argument If a end type is not recognized.
+	/// \throws std::invalid_argument If both ends belong to the same track.
+	/// \throws std::invalid_argument If trackEnd is already member of a connector.
+	/// \throws std::runtime_error If snapping failed (e.g. due to invalid track).
+	/// \return A pair of Connectors if one or both of the track ends already were connected.
+	std::pair<std::shared_ptr<Connector>,std::shared_ptr<Connector>> dclspc ConnectAndSnap( const TrackSystem& system, Track::TrackEnd trackEnd, Track::TrackEnd toTrackEnd, Length maxDistance = 1_m, Angle maxKink = pi/2 );
 
 
 	/// \brief A decorator for TrackSystems.

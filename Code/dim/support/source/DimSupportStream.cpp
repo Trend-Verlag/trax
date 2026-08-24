@@ -123,8 +123,8 @@ StreamInPower DefaultStreamInPower = _kW;
 		if( code.empty() )
 			return std::make_pair(0.f,"");
 
-		if( !std::isalnum( code.back() ) )
-		// might have taken a separator with it...
+		while( !code.empty() && !std::isalnum( code.back() ) )
+		// might have taken one or more separators with it...
 		{
 			istr.putback( code.back() );
 			code.pop_back();
@@ -155,8 +155,8 @@ StreamInPower DefaultStreamInPower = _kW;
 		if( code.empty() )
 			return std::make_pair(0.f,"");
 
-		if( !std::isalnum( code.back() ) )
-		// might have taken a separator with it...
+		while( !code.empty() && !std::isalnum( code.back() ) )
+		// might have taken one or more separators with it...
 		{
 			istr.putback( code.back() );
 			code.pop_back();

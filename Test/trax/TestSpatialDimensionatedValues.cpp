@@ -99,6 +99,17 @@ BOOST_AUTO_TEST_CASE ( testDimensionatedPositionStreaming )
 	BOOST_CHECK_EQUAL( positionOriginal, positionCopy );
 }
 
+BOOST_AUTO_TEST_CASE ( testDimensionatedPositionStreamingMissingWhitespaces )
+{
+	std::stringstream stream;
+	Position<Length> positionOriginal{ 0_m, 200_m, 1_m }, positionCopy;
+	
+	stream << "Position(0m, 200m, 1m), Position(0deg, 0deg, 0deg) )";
+	stream >> positionCopy;
+
+	BOOST_CHECK_EQUAL( positionOriginal, positionCopy );
+}
+
 BOOST_AUTO_TEST_CASE ( testDimensionatedVectorStreaming1 )
 {
 	std::istringstream stream{ "Vector( 0, 0, 1 )" };

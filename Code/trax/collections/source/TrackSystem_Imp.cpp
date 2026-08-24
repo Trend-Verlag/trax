@@ -26,6 +26,7 @@
 
 #include "TrackSystem_Imp.h"
 
+#include "trax/Exceptions.h"
 #include "trax/Sensor.h"
 #include "trax/Switch.h"
 #include "trax/collections/TrackCollection.h"
@@ -662,91 +663,229 @@ std::pair<Track::TrackEnd,Track::TrackEnd> ConnectAndSnap(
 	return CoupledTo;
 }
 
-std::shared_ptr<Connector> ConnectAndSnap( 
+std::shared_ptr<Connector> ConnectConnectorAware( 
 	const TrackSystem& system, 
-	const Track::TrackEnd trackEnd, 
-	const Track::TrackEnd toTrackEnd, 
-	const Length maxDistance, 
-	Angle maxKink )
+	Track::TrackEnd trackEnd, 
+	Track::TrackEnd toTrackEnd )
 {
-	if( trackEnd.pTrack != toTrackEnd.pTrack && 
-		!trackEnd.pTrack->GetConnector( trackEnd.end ) )	
+	if( trackEnd.pTrack == toTrackEnd.pTrack )
+		throw std::invalid_argument( "ConnectConnectorAware: Cannot connect a track to itself!" );
+
+	if( !IsConcreteEnd( trackEnd ) )
+		throw std::invalid_argument( "ConnectConnectorAware: trackEnd is not a concrete end!" );
+
+	if( !IsConcreteEnd( toTrackEnd ) )
+		throw std::invalid_argument( "ConnectConnectorAware: toTrackEnd is not a concrete end!" );
+
+	if(	IsConnected( trackEnd ) )
+		throw std::invalid_argument( "ConnectConnectorAware: trackEnd is already connected!" );
+
+	if(	trackEnd.pTrack->GetConnector( trackEnd.end ) )
+		throw std::invalid_argument( "ConnectConnectorAware: trackEnd is already a member of a connector!" );
+
+	Track::TrackEnd wasConnected = toTrackEnd.pTrack->TransitionEnd( toTrackEnd.end );
+	Connector* pConnector = toTrackEnd.pTrack->GetConnector( toTrackEnd.end );
+	Switch* pSwitch = dynamic_cast<Switch*>(pConnector);
+
+	if( pConnector && (!pSwitch || pSwitch->NarrowTrack().first != toTrackEnd.pTrack ) )
+		// We have no option for these for now.
+		throw NotImplemented{ "ConnectConnectorAware: Building four-way switch or slip switches!" };
+
+	Connect( trackEnd, toTrackEnd );
+
+	if( Connected( trackEnd, toTrackEnd ) )
 	{
-		Track::TrackEnd wasConnected = toTrackEnd.pTrack->TransitionEnd( toTrackEnd.end );
-		Connector* pConnector = toTrackEnd.pTrack->GetConnector( toTrackEnd.end );
-		Switch* pSwitch = dynamic_cast<Switch*>(pConnector);
-
-		if( pConnector && (!pSwitch || pSwitch->NarrowTrack().first != toTrackEnd.pTrack ) )
-			// We have no option for these for now.
-			return nullptr; 
-
-		Connect( trackEnd, toTrackEnd );
-
-		if( Connected( trackEnd, toTrackEnd ) &&
-			Snap( trackEnd, toTrackEnd ) )
+		if( pConnector )
 		{
-			// Track needs to get connected on opposite end if applicable:
+			if( pSwitch )
 			{
-				const Track::TrackEnd otherTrackEnd = !trackEnd;
-
-				if( IsConnected( otherTrackEnd ) &&
-					DistanceToConnected( otherTrackEnd ) > maxDistance )
+				if( std::shared_ptr<ThreeWaySwitch> pThreeWaySwitch = ThreeWaySwitch::Make(); pThreeWaySwitch )
 				{
-					trackEnd.pTrack->This()->Disconnect( otherTrackEnd.end );
-				}
+					pThreeWaySwitch->NarrowTrack( pSwitch->ClearNarrowTrack() );
+					pThreeWaySwitch->StraightTrack( pSwitch->ClearStraightTrack() );
+					pThreeWaySwitch->DivergedTrack1( pSwitch->ClearDivergedTrack() );
+					pThreeWaySwitch->DivergedTrack2( trackEnd );
+					pThreeWaySwitch->Normalize();
 
-				Connect( system, otherTrackEnd, maxDistance, maxKink );
-			}
+					system.GetConnectorCollection()->Add( pThreeWaySwitch );
+					system.GetConnectorCollection()->Remove( pSwitch );
 
-			if( pConnector )
-			{
-				if( pSwitch )
-				{
-					if( std::shared_ptr<ThreeWaySwitch> pThreeWaySwitch = ThreeWaySwitch::Make(); pThreeWaySwitch )
-					{
-						pThreeWaySwitch->NarrowTrack( pSwitch->ClearNarrowTrack() );
-						pThreeWaySwitch->StraightTrack( pSwitch->ClearStraightTrack() );
-						pThreeWaySwitch->DivergedTrack1( pSwitch->ClearDivergedTrack() );
-						pThreeWaySwitch->DivergedTrack2( trackEnd );
-
-						if( pThreeWaySwitch->Check( maxDistance, maxKink ) )
-						{
-							pThreeWaySwitch->Normalize();
-							system.GetConnectorCollection()->Add( pThreeWaySwitch );
-							system.GetConnectorCollection()->Remove( pSwitch );
-							return pThreeWaySwitch;
-						}
-						else
-						{
-							std::cerr << trax::Verbosity::error << "ConnectAndSnap: Created three way switch is not valid!" << std::endl;
-						}
-					}
+					return pThreeWaySwitch;
 				}
 			}
-			else if( wasConnected.pTrack && wasConnected.pTrack != trackEnd.pTrack )
-			// Creating a switch if applicable:
+		}
+		else if( wasConnected.pTrack && wasConnected.pTrack != trackEnd.pTrack )
+		// Creating a switch if applicable:
+		{
+			if( std::shared_ptr<Switch> pNewSwitch = Switch::Make(); pNewSwitch )
 			{
-				if( std::shared_ptr<Switch> pNewSwitch = Switch::Make(); pNewSwitch )
-				{
-					pNewSwitch->NarrowTrack( toTrackEnd );
-					pNewSwitch->StraightTrack( wasConnected );
-					pNewSwitch->DivergedTrack( trackEnd );
-					if( pNewSwitch->Check( maxDistance, maxKink ) )
-					{
-						pNewSwitch->Normalize();
-						system.GetConnectorCollection()->Add( pNewSwitch );
-						return pNewSwitch;
-					}
-					else
-					{
-						std::cerr << trax::Verbosity::error << "ConnectAndSnap: Created switch is not valid!" << std::endl;
-					}
-				}
+				pNewSwitch->NarrowTrack( toTrackEnd );
+				pNewSwitch->StraightTrack( wasConnected );
+				pNewSwitch->DivergedTrack( trackEnd );
+				pNewSwitch->Normalize();
+
+				system.GetConnectorCollection()->Add( pNewSwitch );
+
+				return pNewSwitch;
 			}
 		}
 	}
 
 	return nullptr;
 }
+
+std::shared_ptr<Connector> ConnectConnectorAware( 
+	const TrackSystem& system, 
+	Track::TrackEnd trackEnd, 
+	const Length maxDistance, 
+	Angle maxKink )
+{
+	if( !IsConcreteEnd( trackEnd ) )
+		throw std::invalid_argument( "ConnectConnectorAware: trackEnd is not a concrete end!" );
+
+	if( IsConnected( trackEnd ) )
+		throw std::invalid_argument( "ConnectConnectorAware: trackEnd is already connected!" );
+
+	if(	trackEnd.pTrack->GetConnector( trackEnd.end ) )
+		throw std::invalid_argument( "ConnectConnectorAware: trackEnd is already a member of a connector!" );
+
+	spat::Sphere<Length> area{ spat::Origin3D<Length>, maxDistance };
+	trackEnd.pTrack->Transition( trackEnd.pTrack->ParameterFrom( trackEnd.end ), area.c );
+	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> trackEnds = FindTrackEnds( 
+		system, area, true );
+
+	for( const auto& trackEndTuple : trackEnds )
+	{
+		if( std::get<0>( trackEndTuple ) == trackEnd.pTrack )
+			continue;
+
+		Track::TrackEnd toTrackEnd{ std::get<0>( trackEndTuple ), std::get<1>( trackEndTuple ) };
+		if( std::get<2>( trackEndTuple ) <= maxDistance &&
+			KinkOf( trackEnd, toTrackEnd ) <= maxKink )
+		{
+			return ConnectConnectorAware( system, trackEnd, toTrackEnd );
+		}
+	}
+
+	return nullptr;
+}
+
+std::pair<std::shared_ptr<Connector>,std::shared_ptr<Connector>> ConnectAndSnap( 
+	const TrackSystem& system, 
+	const Track::TrackEnd trackEnd, 
+	const Track::TrackEnd toTrackEnd, 
+	const Length maxDistance, 
+	Angle maxKink )
+{
+	std::pair<std::shared_ptr<Connector>,std::shared_ptr<Connector>> retval;
+	retval.first = ConnectConnectorAware( system, trackEnd, toTrackEnd );
+
+	if( Connected( trackEnd, toTrackEnd ) &&
+		Snap( trackEnd, toTrackEnd ) )
+	{
+		// Track needs to get connected on opposite end if applicable:		
+		const Track::TrackEnd otherTrackEnd = !trackEnd;
+
+		if( IsConnected( otherTrackEnd ) &&
+			DistanceToConnected( otherTrackEnd ) > maxDistance )
+		{
+			trackEnd.pTrack->This()->Disconnect( otherTrackEnd.end );
+		}
+
+		retval.second = ConnectConnectorAware( system, otherTrackEnd, maxDistance, maxKink );		
+	}
+
+	return retval;
+}
+/*
+std::pair<std::shared_ptr<Connector>,std::shared_ptr<Connector>> ConnectAndSnapOld( 
+	const TrackSystem& system, 
+	const Track::TrackEnd trackEnd, 
+	const Track::TrackEnd toTrackEnd, 
+	const Length maxDistance, 
+	Angle maxKink )
+{
+	if( trackEnd.pTrack == toTrackEnd.pTrack )
+		throw std::invalid_argument( "ConnectAndSnap: Cannot connect a track to itself!" );
+
+	if(	trackEnd.pTrack->GetConnector( trackEnd.end ) )
+		throw std::invalid_argument( "ConnectAndSnap: trackEnd is already a member of a connector!" );
+
+	Track::TrackEnd wasConnected = toTrackEnd.pTrack->TransitionEnd( toTrackEnd.end );
+	Connector* pConnector = toTrackEnd.pTrack->GetConnector( toTrackEnd.end );
+	Switch* pSwitch = dynamic_cast<Switch*>(pConnector);
+
+	if( pConnector && (!pSwitch || pSwitch->NarrowTrack().first != toTrackEnd.pTrack ) )
+		// We have no option for these for now.
+		throw NotImplemented{ "ConnectAndSnap: Building four-way switch or slip switches!" };
+
+	Connect( trackEnd, toTrackEnd );
+
+	if( Connected( trackEnd, toTrackEnd ) &&
+		Snap( trackEnd, toTrackEnd ) )
+	{
+		// Track needs to get connected on opposite end if applicable:
+		{
+			const Track::TrackEnd otherTrackEnd = !trackEnd;
+
+			if( IsConnected( otherTrackEnd ) &&
+				DistanceToConnected( otherTrackEnd ) > maxDistance )
+			{
+				trackEnd.pTrack->This()->Disconnect( otherTrackEnd.end );
+			}
+
+			Connect( system, otherTrackEnd, maxDistance, maxKink );
+		}
+
+		if( pConnector )
+		{
+			if( pSwitch )
+			{
+				if( std::shared_ptr<ThreeWaySwitch> pThreeWaySwitch = ThreeWaySwitch::Make(); pThreeWaySwitch )
+				{
+					pThreeWaySwitch->NarrowTrack( pSwitch->ClearNarrowTrack() );
+					pThreeWaySwitch->StraightTrack( pSwitch->ClearStraightTrack() );
+					pThreeWaySwitch->DivergedTrack1( pSwitch->ClearDivergedTrack() );
+					pThreeWaySwitch->DivergedTrack2( trackEnd );
+
+					if( pThreeWaySwitch->Check( maxDistance, maxKink ) )
+					{
+						pThreeWaySwitch->Normalize();
+						system.GetConnectorCollection()->Add( pThreeWaySwitch );
+						system.GetConnectorCollection()->Remove( pSwitch );
+						return std::make_pair(pThreeWaySwitch, nullptr);
+					}
+					else
+					{
+						std::cerr << trax::Verbosity::error << "ConnectAndSnap: Created three way switch is not valid!" << std::endl;
+					}
+				}
+			}
+		}
+		else if( wasConnected.pTrack && wasConnected.pTrack != trackEnd.pTrack )
+		// Creating a switch if applicable:
+		{
+			if( std::shared_ptr<Switch> pNewSwitch = Switch::Make(); pNewSwitch )
+			{
+				pNewSwitch->NarrowTrack( toTrackEnd );
+				pNewSwitch->StraightTrack( wasConnected );
+				pNewSwitch->DivergedTrack( trackEnd );
+				if( pNewSwitch->Check( maxDistance, maxKink ) )
+				{
+					pNewSwitch->Normalize();
+					system.GetConnectorCollection()->Add( pNewSwitch );
+					return std::make_pair(pNewSwitch, nullptr);
+				}
+				else
+				{
+					std::cerr << trax::Verbosity::error << "ConnectAndSnap: Created switch is not valid!" << std::endl;
+				}
+			}
+		}
+	}
+
+	return std::make_pair(nullptr, nullptr);
+}
+*/
 ///////////////////////////////////////
 }

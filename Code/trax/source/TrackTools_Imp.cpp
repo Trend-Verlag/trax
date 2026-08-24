@@ -309,14 +309,44 @@ Length DistanceOf(
 	const Track::cTrackEnd& trackEndB )
 {
 	if( !IsValid(trackEndA) )
-		throw std::invalid_argument( "CalculateGapSize: trackEndA has no valid track!" );
+		throw std::invalid_argument( "DistanceOf: trackEndA has no valid track!" );
 	if( !IsValid(trackEndB) )
-		throw std::invalid_argument( "CalculateGapSize: trackEndB has no valid track!" );
+		throw std::invalid_argument( "DistanceOf: trackEndB has no valid track!" );
 
 	Position<Length> posTheOne, posTheOther;
-	trackEndA.pTrack->Transition( trackEndA.end == EndType::north ? 0_m : trackEndA.pTrack->GetLength(), posTheOne );
-	trackEndB.pTrack->Transition( trackEndB.end == EndType::north ? 0_m : trackEndB.pTrack->GetLength(), posTheOther );
+	trackEndA.pTrack->Transition( trackEndA.pTrack->ParameterFrom( trackEndA.end ), posTheOne );
+	trackEndB.pTrack->Transition( trackEndB.pTrack->ParameterFrom( trackEndB.end ), posTheOther );
 	return (posTheOther - posTheOne).Length();
+}
+
+Angle KinkOf( const Track::cTrackEnd & trackEndA, const Track::cTrackEnd & trackEndB )
+{
+	if( !IsValid(trackEndA) )
+		throw std::invalid_argument( "KinkOf: trackEndA has no valid track!" );
+	if( !IsValid(trackEndB) )
+		throw std::invalid_argument( "KinkOf: trackEndB has no valid track!" );
+
+	Vector<One> tTheOne, tTheOther;
+	trackEndA.pTrack->Transition( trackEndA.pTrack->ParameterFrom( trackEndA.end ), tTheOne );
+	trackEndB.pTrack->Transition( trackEndB.pTrack->ParameterFrom( trackEndB.end ), tTheOther );
+
+	if( trackEndA.end == trackEndB.end )
+		tTheOther *= -1;	// The tangent of the other track end is pointing in the opposite direction.
+
+	return atan2( ( tTheOne % tTheOther ).Length(), tTheOne * tTheOther );
+}
+
+Angle TwistOf( const Track::cTrackEnd & trackEndA, const Track::cTrackEnd & trackEndB )
+{
+	if( !IsValid(trackEndA) )
+		throw std::invalid_argument( "KinkOf: trackEndA has no valid track!" );
+	if( !IsValid(trackEndB) )
+		throw std::invalid_argument( "KinkOf: trackEndB has no valid track!" );
+
+	Frame<Length, One> bTheOne, bTheOther;
+	trackEndA.pTrack->Transition( trackEndA.pTrack->ParameterFrom( trackEndA.end ), bTheOne );
+	trackEndB.pTrack->Transition( trackEndB.pTrack->ParameterFrom( trackEndB.end ), bTheOther );
+	return atan2( ( bTheOne.B % bTheOther.B ).Length(), bTheOne.B * bTheOther.B );
 }
 
 Length DistanceToConnected( const Track& track, EndType atEnd )
