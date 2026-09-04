@@ -48,14 +48,14 @@ BOOST_AUTO_TEST_CASE( assignment )
 	tl2 = tl1;
 	BOOST_CHECK_EQUAL( tl1, tl2 );
 
-	TrackLocationRef tlr1{ 30_m, true, 1 };
-	TrackLocationRef tlr2{ 40_m, false, 2 };
+	TrackSystemLocation tlr1{ 1, 30_m, true };
+	TrackSystemLocation tlr2{ 2, 40_m, false };
 	tlr2 = tlr1;
 	BOOST_CHECK_EQUAL( tlr1, tlr2 );
 	tlr1.refid = 7;
 	BOOST_CHECK_NE( tlr1, tlr2 );
 
-	tlr1 = TrackLocationRef{ tl1 };
+	tlr1 = TrackSystemLocation{ tl1 };
 	BOOST_CHECK_EQUAL( tlr1.location, tl1 );
 
 	tl2 = tlr2.location;

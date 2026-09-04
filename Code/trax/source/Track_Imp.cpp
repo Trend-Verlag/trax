@@ -717,7 +717,7 @@ bool Track_Imp::IsReserved( Interval<Length> range, IDType forID ) const noexcep
 	return false;
 }
 
-std::vector<Track::Overlap> Track_Imp::Overlaps( IDType withID ) const
+common::Span<const Track::Overlap> Track_Imp::Overlaps( IDType withID ) const
 {
 	std::vector<Track::Overlap> overlaps;
 
@@ -738,12 +738,12 @@ std::vector<Track::Overlap> Track_Imp::Overlaps( IDType withID ) const
 				common::FlagBlocker block{m_LoopBraker};
 
 				if( TrackEnd lastTrack = TransitionEnd( EndType::north ); lastTrack.pTrack ){
-					std::vector<Track::Overlap> overlapsLast = lastTrack.pTrack->Overlaps( withID );
+					common::Span<const Track::Overlap> overlapsLast = lastTrack.pTrack->Overlaps( withID );
 					overlaps.insert( overlaps.end(), overlapsLast.begin(), overlapsLast.end() );
 				}
 
 				if( TrackEnd nextTrack = TransitionEnd( EndType::south ); nextTrack.pTrack ){
-					std::vector<Track::Overlap> overlapsNext = nextTrack.pTrack->Overlaps( withID );
+					common::Span<const Track::Overlap> overlapsNext = nextTrack.pTrack->Overlaps( withID );
 					overlaps.insert( overlaps.end(), overlapsNext.begin(), overlapsNext.end() );
 				}
 			}
@@ -753,7 +753,9 @@ std::vector<Track::Overlap> Track_Imp::Overlaps( IDType withID ) const
 		overlaps.erase( std::unique( overlaps.begin(), overlaps.end() ), overlaps.end() );
 	}
 	
-	return overlaps;
+	static thread_local std::vector<Track::Overlap> t_overlapBuffer;
+	t_overlapBuffer = std::move( overlaps );
+	return { t_overlapBuffer.data(), t_overlapBuffer.size() };
 }
 
 void Track_Imp::Connect( 

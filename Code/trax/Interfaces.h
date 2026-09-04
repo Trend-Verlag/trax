@@ -110,7 +110,7 @@ namespace trax{
 	class  TrackJointFeederMotorModel;
 	struct TrackJointLimits;
 	struct TrackLocation;
-	struct TrackLocationRef;
+	struct TrackSystemLocation;
 	class TrackPainter;
 	struct TrackRange;
 	struct TractionForceCharacteristic;

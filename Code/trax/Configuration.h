@@ -83,6 +83,8 @@ namespace trax{
 	dclspc void* dll_alloc( std::size_t n );
 	dclspc void dll_free( void* p ) noexcept;
 
+	// Internal class to ensure that new and delete are always called from the same module.
+	// Don't use directly.
 	struct DllHeap {
 		void* operator new  (std::size_t n)     { return dll_alloc(n); }
 		void  operator delete(void* p) noexcept { dll_free(p); }

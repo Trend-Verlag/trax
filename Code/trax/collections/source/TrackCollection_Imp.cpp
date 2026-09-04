@@ -74,6 +74,16 @@ void TrackCollection_Imp::SetParent( TrackSystem* pParent ){
 	m_pParent = pParent;
 }
 
+bool TrackCollection_Imp::IsConnected( Track::End trackEnd ) const noexcept
+{
+	if( std::shared_ptr<TrackBuilder> pTrack = Get( trackEnd.id ); pTrack )
+	{
+		return pTrack->IsConnected( trackEnd.type );
+	}
+
+	return false;
+}
+
 const char* TrackCollection_Imp::TypeName() const noexcept{
 	return "TrackCollection";
 }
@@ -140,12 +150,13 @@ void TrackCollection_Imp::DoClear() noexcept {
 	}
 }
 ///////////////////////////////////////
-std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> FindTrackEnds( 
+common::Span<const std::pair<Track::End,Length>> FindTrackEnds( 
 	const TrackCollection& collection, 
 	const spat::Sphere<Length>& area, 
 	bool sort )
 {
-	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> retval;
+	static thread_local std::vector<std::pair<Track::End,Length>> retval;
+	retval.clear();
 
 	for( const TrackBuilder& track : collection ){
 		if( track.IsValid() ){
@@ -153,27 +164,28 @@ std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> FindTrackE
 		
 			track.Transition( 0_m, trackEndPos );
 			if( area.Includes(trackEndPos) )
-				retval.push_back( { std::const_pointer_cast<TrackBuilder>(track.This()), EndType::north, (trackEndPos-area.c).Length() } );
+				retval.push_back( { { track.ID(), EndType::north }, (trackEndPos-area.c).Length() } );
 
 			track.Transition( track.GetLength(), trackEndPos );
 			if( area.Includes(trackEndPos) )
-				retval.push_back( { std::const_pointer_cast<TrackBuilder>(track.This()), EndType::south, (trackEndPos-area.c).Length() } );
+				retval.push_back( { { track.ID(), EndType::south }, (trackEndPos-area.c).Length() } );
 		}
 	}
 
 	if( sort )
 		std::sort( retval.begin(), retval.end(), 
-			[]( const std::tuple<std::shared_ptr<const TrackBuilder>,EndType,Length>& a, const std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& b ) -> bool { return std::get<2>(a) < std::get<2>(b); } );
+			[]( const std::pair<Track::End,Length>& a, const std::pair<Track::End,Length>& b ) -> bool { return a.second < b.second; } );
 
-	return retval;
+	return common::MakeConstSpan( retval );
 }
 
-std::vector<std::pair<Location, Length>> FindTrackLocations(
+common::Span<const std::pair<TrackSystemLocation,Length>> FindTrackLocations(
 	const TrackCollection& collection, 
 	const Sphere<Length>& area, 
 	bool sort )
 {
-	std::vector<std::pair<Location, Length>> locations;
+	static thread_local std::vector<std::pair<TrackSystemLocation, Length>> locations;
+	locations.clear();
 
 	for( const auto& track : collection ){
 		Sphere<Length> boundingSphere;
@@ -188,25 +200,26 @@ std::vector<std::pair<Location, Length>> FindTrackLocations(
 				Length distance = (p - area.Center()).Length();
 
 				if( distance < area.Radius() )
-					locations.push_back( std::make_pair( Location{ track.This(), TrackLocation{ s } }, distance ) );
+					locations.push_back( std::make_pair( TrackSystemLocation{ track.ID(), TrackLocation{ s } }, distance ) );
 			}
 		}
 	}
 
 	if( sort )
 		std::sort( locations.begin(), locations.end(), 
-			[]( const std::pair<Location, Length>& a, const std::pair<Location, Length>& b ) -> bool { return a.second < b.second; } );
+			[]( const std::pair<TrackSystemLocation,Length>& a, const std::pair<TrackSystemLocation, Length>& b ) -> bool { return a.second < b.second; } );
 
-	return locations;
+	return common::MakeConstSpan( locations );
 }
 
-std::vector<std::pair<Location,Length>> FindTrackLocations(
+common::Span<const std::pair<TrackSystemLocation,Length>> FindTrackLocations(
 	const TrackCollection& collection,
 	const spat::VectorBundle<Length,One>& ray,
 	Length gauge,
 	bool sort )
 {
-	std::vector<std::pair<Location, Length>> locations;
+	static thread_local std::vector<std::pair<TrackSystemLocation, Length>> locations;
+	locations.clear();
 
 	if( gauge > 0_m )
 	{
@@ -226,17 +239,17 @@ std::vector<std::pair<Location,Length>> FindTrackLocations(
 					const Vector<Length> D = (F.P - ray.P) - ((F.P - ray.P)*ray.T)*ray.T;
 
 					if( D.Length() < gauge/2 )
-						locations.push_back( std::make_pair( Location{ track.This(), TrackLocation{ s } }, D.Length() ) );
+						locations.push_back( std::make_pair( TrackSystemLocation{ track.ID(), TrackLocation{ s } }, D.Length() ) );
 				}
 			}
 		}
 
 		if( sort )
 			std::sort( locations.begin(), locations.end(), 
-				[]( const std::pair<Location, Length>& a, const std::pair<Location, Length>& b ) -> bool { return a.second < b.second; } );
+				[]( const std::pair<TrackSystemLocation, Length>& a, const std::pair<TrackSystemLocation, Length>& b ) -> bool { return a.second < b.second; } );
 	}
 
-	return locations;
+	return common::MakeConstSpan( locations );
 }
 
 std::pair<std::shared_ptr<TrackBuilder>,EndType> Snap(
@@ -274,12 +287,12 @@ std::pair<std::shared_ptr<TrackBuilder>,EndType> Snap(
 	trackEnd.pTrack->Transition( s, trackEndPosition );
 	const spat::Sphere<trax::Length> searchArea{ trackEndPosition, maxDistance };
 
-	auto TrackEnds = trax::FindTrackEnds( collection, searchArea, true );
+	std::vector<std::pair<Track::End,Length>> TrackEnds = FindTrackEnds( collection, searchArea, true ).to_vector();
 	TrackEnds.erase( 
 		std::remove_if( 
 			TrackEnds.begin(), 
 			TrackEnds.end(), 
-			[&trackEnd]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept { return std::get<0>(tuple) == trackEnd.pTrack; }
+			[&trackEnd]( std::pair<Track::End,Length>& pair ) noexcept { return pair.first.id == trackEnd.pTrack->ID(); }
 		), 
 		TrackEnds.end() 
 	);
@@ -289,15 +302,14 @@ std::pair<std::shared_ptr<TrackBuilder>,EndType> Snap(
 			std::remove_if( 
 				TrackEnds.begin(), 
 				TrackEnds.end(), 
-				[]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept { return std::get<0>(tuple)->IsConnected( std::get<1>(tuple) ); }
+				[&collection]( std::pair<Track::End,Length>& pair ) noexcept { return collection.IsConnected( pair.first ); }
 			), 
 			TrackEnds.end() 
 		);
 		
 	if( !TrackEnds.empty() )
 	{
-		std::pair<std::shared_ptr<TrackBuilder>,EndType> retval{ std::get<0>(TrackEnds.front()), std::get<1>(TrackEnds.front()) };
-
+		std::pair<std::shared_ptr<TrackBuilder>,EndType> retval{ collection.Get( TrackEnds.front().first.id ), TrackEnds.front().first.type };
 		spat::Frame<Length,One> alignTo;
 		const Length s2 = (retval.second == EndType::north) ? 0_m : retval.first->GetLength();
 		retval.first->Transition( s2, alignTo );
@@ -351,12 +363,12 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Connect(
 	trackEnd.pTrack->Transition( s, trackEndFrame );
 	const spat::Sphere<Length> searchArea{ trackEndFrame.P, maxDistance };
 
-	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> TrackEnds = FindTrackEnds( collection, searchArea, true );
+	std::vector<std::pair<Track::End,Length>> TrackEnds = FindTrackEnds( collection, searchArea, true ).to_vector();
 	TrackEnds.erase( 
 		std::remove_if( 
 			TrackEnds.begin(), 
 			TrackEnds.end(), 
-			[&trackEnd]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept { return std::get<0>(tuple) == trackEnd.pTrack; }
+			[&trackEnd]( std::pair<Track::End,Length>& pair ) noexcept { return pair.first.id == trackEnd.pTrack->ID(); }
 		), 
 		TrackEnds.end() 
 	);
@@ -365,12 +377,12 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Connect(
 		std::remove_if( 
 			TrackEnds.begin(), 
 			TrackEnds.end(), 
-			[&trackEnd,maxKink,&trackEndFrame]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept 
+			[&trackEnd,maxKink,&trackEndFrame,&collection]( std::pair<Track::End,Length>& pair ) noexcept 
 			{ 
-				const Track& otherTrack = *std::get<0>( tuple );
+				const Track& otherTrack = *collection.Get( pair.first.id );
 				spat::Frame<Length,One> otherFrame;
-				otherTrack.Transition( std::get<EndType>(tuple) == EndType::north ? 0_m : otherTrack.GetLength(), otherFrame );
-				if( trackEnd.end == std::get<EndType>(tuple) )
+				otherTrack.Transition( pair.first.type == EndType::north ? 0_m : otherTrack.GetLength(), otherFrame );
+				if( trackEnd.end == pair.first.type )
 				// if front and front or end and end hit, the T's are antiparallel
 				{
 					otherFrame.T *= -1_1;
@@ -387,7 +399,7 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Connect(
 								<< " angleT=" << angleT
 								<< " maxKink=" << maxKink 
 								<< " trackEnd=" << trackEnd
-								<< " otherEnd=" << Track::End{ otherTrack.ID(), std::get<EndType>( tuple ) }
+								<< " otherEnd=" << Track::End{ otherTrack.ID(), pair.first.type }
 								<< std::endl;
 				}
 
@@ -398,7 +410,7 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Connect(
 								<< " angleB=" << angleB
 								<< " maxKink=" << maxKink 
 								<< " trackEnd=" << trackEnd
-								<< " otherEnd=" << Track::End{ otherTrack.ID(), std::get<EndType>( tuple ) }
+								<< " otherEnd=" << Track::End{ otherTrack.ID(), pair.first.type }
 								<< std::endl;
 				}
 
@@ -412,15 +424,15 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Connect(
 		std::remove_if( 
 			TrackEnds.begin(), 
 			TrackEnds.end(), 
-			[trackEnd]( std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& tuple ) noexcept 
+			[trackEnd,&collection]( std::pair<Track::End,Length>& pair ) noexcept 
 			{ 
-				bool bCoupled = std::get<0>(tuple)->IsConnected( std::get<1>(tuple) );
+				bool bCoupled = collection.IsConnected( pair.first );
 
 				if( bCoupled ){
 					std::clog	<< Verbosity::detailed 
 								<< "Connecting rejected due to existing connection: "
 								<< " trackEnd=" << trackEnd
-								<< " otherEnd=" << Track::End{ std::get<0>( tuple )->ID(), std::get<1>( tuple ) }
+								<< " otherEnd=" << pair.first
 								<< std::endl;
 				}
 		
@@ -434,12 +446,12 @@ std::pair<Track::TrackEnd,Track::TrackEnd> Connect(
 	{
 		std::pair<TrackBuilder::TrackEnd,TrackBuilder::TrackEnd> retval;
 		if( trackEnd.end == EndType::north ){
-			retval.first = { std::get<0>(TrackEnds.front()), std::get<1>(TrackEnds.front()) };
+			retval.first = { collection.Get( TrackEnds.front().first.id ), TrackEnds.front().first.type };
 			Connect( trackEnd, retval.first );
 		}
 		else
 		{
-			retval.second = {std::get<0>(TrackEnds.front()), std::get<1>(TrackEnds.front()) };
+			retval.second = { collection.Get( TrackEnds.front().first.id ), TrackEnds.front().first.type };
 			Connect( trackEnd, retval.second );
 		}
 

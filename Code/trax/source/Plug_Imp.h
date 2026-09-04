@@ -52,6 +52,8 @@ namespace trax{
 			: ParentPlugType{ parent, pPulseFunction, value }
 		{}
 
+		virtual ~MultiPlug_Imp() = default;
+
 		const char*	TypeName() const noexcept override{
 			return "MultiPlug";
 		}
@@ -250,6 +252,8 @@ namespace trax{
 			:	Plug_Imp(target),
 				m_Target(target)
 		{}
+
+		virtual ~Toggle_Pug() = default;
 
 		Toggle_Pug& operator=( const Toggle_Pug& ) = delete; // no assignment
 

@@ -98,31 +98,36 @@ namespace trax{
 
 
 	/// \brief A track location, referencing the track by id.
-	struct TrackLocationRef
+	struct TrackSystemLocation
 	{
-		TrackLocation	location;	///< location on track.
 		IDType			refid;		///< ID of track.
+		TrackLocation	location;	///< location on track.
 
 
 		/// \name Construction
 		/// \param tl TrackLocation to construct from
 		///@{
-		TrackLocationRef() noexcept = default;
-		explicit TrackLocationRef( const TrackLocation& tl ) noexcept
-			: location{tl} 
+		TrackSystemLocation() noexcept = default;
+		explicit TrackSystemLocation( const TrackLocation& tl ) noexcept
+			: refid		{0}
+			, location	{tl}
 		{}
-		TrackLocationRef( Length param, bool orient, IDType id ) noexcept
-			: location{ param, orient },
-			refid{id}
+		TrackSystemLocation( IDType id, const TrackLocation& tl ) noexcept
+			: refid		{id}
+			, location	{tl}
+		{}
+		TrackSystemLocation( IDType id, Length param, bool orient ) noexcept
+			: refid		{id}
+			, location	{ param, orient }
 		{}
 		///@}
 
 
-		bool operator==( const TrackLocationRef& tlr ) const noexcept{
+		bool operator==( const TrackSystemLocation& tlr ) const noexcept{
 			return location == tlr.location && refid == tlr.refid;
 		}
 
-		bool operator!=( const TrackLocationRef& tlr ) const noexcept{
+		bool operator!=( const TrackSystemLocation& tlr ) const noexcept{
 			return !operator==( tlr );
 		}
 	};

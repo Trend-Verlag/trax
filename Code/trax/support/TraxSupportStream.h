@@ -63,7 +63,7 @@ namespace trax{
 
 	inline std::ostream& operator<<( std::ostream& ost, const TrackLocation& location );
 
-	inline std::ostream& operator<<( std::ostream& ost, const TrackLocationRef& location );
+	inline std::ostream& operator<<( std::ostream& ost, const TrackSystemLocation& location );
 
 	inline std::ostream& operator<<( std::ostream& ost, const TrackRange& range );
 
@@ -162,7 +162,7 @@ namespace trax{
 
 	inline std::ostream& operator<<( std::ostream& ost, const Location& location )
 	{
-		TrackLocationRef tlr;
+		TrackSystemLocation tlr;
 		location.Get( tlr );
 		ost << tlr;
 		return ost;
@@ -173,8 +173,8 @@ namespace trax{
 		return ost;
 	}
 
-	inline std::ostream& operator << ( std::ostream& ost, const TrackLocationRef& location ){
-		ost << "TrackLocationRef( " << location.refid << ", " << location.location << " )";
+	inline std::ostream& operator << ( std::ostream& ost, const TrackSystemLocation& location ){
+		ost << "TrackSystemLocation( " << location.refid << ", " << location.location << " )";
 		return ost;
 	}
 

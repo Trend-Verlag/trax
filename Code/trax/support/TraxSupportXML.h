@@ -47,7 +47,7 @@ namespace trax{
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackBuilder& track );
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Location& location );
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackLocation& tlr );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackLocationRef& tlr );
+		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackSystemLocation& tlr );
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackRange& tr );
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Sensor& sensor );
 		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Section& section );
@@ -151,7 +151,7 @@ namespace trax{
 		dclspc void ReadTrackEnd( const boost::property_tree::ptree& pt, Track::End& trackend );
 
 		dclspc void ReadTrackLocation( const boost::property_tree::ptree& pt, TrackLocation& trackLocation ) noexcept;
-		dclspc void ReadTrackLocationRef( const boost::property_tree::ptree& pt, TrackLocationRef& trackLocationRef ) noexcept;
+		dclspc void ReadTrackLocationRef( const boost::property_tree::ptree& pt, TrackSystemLocation& trackLocationRef ) noexcept;
 		dclspc void ReadTrackRange( const boost::property_tree::ptree& pt, TrackRange& trackRange ) noexcept;
 
 		dclspc void Read( const boost::property_tree::ptree& pt, Cubic::Data& curve );

@@ -189,8 +189,8 @@ namespace trax
 		dclspc void Get( TrackLocation& tl ) const noexcept;
 
 
-		/// \brief Gets the TrackLocationRef - data of this track location.
-		dclspc void Get( TrackLocationRef& tlr ) const noexcept;
+		/// \brief Gets the TrackSystemLocation - data of this track location.
+		dclspc void Get( TrackSystemLocation& tlr ) const noexcept;
 
 
 		/// \name Transition
@@ -333,7 +333,7 @@ namespace trax
 		/// \brief Finds overlapping areas for reservations.
 		/// \throws std::logic_error if the location is not on track.
 		/// \throws std::exception if the overlaps could not get collected.
-		dclspc std::vector<Track::Overlap> Overlaps( IDType forID ) const;
+		dclspc common::Span<const Track::Overlap> Overlaps( IDType forID ) const;
 		///@}
 
 

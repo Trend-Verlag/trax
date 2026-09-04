@@ -40,7 +40,7 @@ namespace spat{
 
 namespace trax{
 
-	class Location;
+	struct TrackSystemLocation;
 
 	/// \brief Collection to hold a set of Track objects.
 	struct TrackCollection :	Collection<TrackCollection,TrackBuilder>,
@@ -62,7 +62,15 @@ namespace trax{
 		///	\brief Gets the frame of references for this TrackCollection 
 		/// relative to the Module.
 		virtual const spat::Frame<Length,One>& GetFrame() const noexcept = 0;
+
+
+		/// \brief Checks if a track end from this collection is connected to another track.
+		/// \param trackEnd The track end to check. Must be a track end from this collection.
+		/// \return True if the track end is connected to another track, false otherwise.
+		virtual bool IsConnected( Track::End trackEnd ) const noexcept = 0;
 	};
+
+
 
 
 	/// \brief Finds all track ends in the area.
@@ -71,18 +79,18 @@ namespace trax{
 	/// \param area Spherical area to detect track ends in.
 	/// \param sort If true the list gets sorted by distance to the center of the area (closest first). 
 	/// \return A list with track ends as well as their distance from the area center. If both track ends are inside the area, the track will be listed twice.
-	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> dclspc FindTrackEnds( const TrackCollection& collection, const spat::Sphere<Length>& area, bool sort = false );
+	common::Span<const std::pair<Track::End,Length>> dclspc FindTrackEnds( const TrackCollection& collection, const spat::Sphere<Length>& area, bool sort = false );
 
 
 	/// @name FindTrackLoc Find Track Locations
-	/// \brief Finds all tracks that run trough an area or got hit by a ray.
+	/// \brief Finds all tracks that run through an area or got hit by a ray.
 	/// @{
 	
 	/// \param collection Track collection with tracks to evaluate.
 	/// \param area Spherical area to detect tracks in.
 	/// \param sort If true the list gets sorted by distance to the center of the area (closest first). 
 	/// \return A list with track Locations as well as their distance from the area center.
-	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackCollection& collection, const spat::Sphere<Length>& area, bool sort = false );
+	common::Span<const std::pair<TrackSystemLocation,Length>> dclspc FindTrackLocations( const TrackCollection& collection, const spat::Sphere<Length>& area, bool sort = false );
 	
 
 	/// \param collection Track collection with tracks to evaluate.
@@ -90,7 +98,7 @@ namespace trax{
 	/// \param gauge If this is > 0_m it is used as the width of a ribbon to hit, also defined by the track's up direction. 
 	/// \param sort If true the list gets sorted by distance to ray.P (closest first). 
 	/// \return A list with track Locations as well as their distance from the ray's starting point.
-	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackCollection& collection, const spat::VectorBundle<Length,One>& ray, Length gauge, bool sort = false );
+	common::Span<const std::pair<TrackSystemLocation,Length>> dclspc FindTrackLocations( const TrackCollection& collection, const spat::VectorBundle<Length,One>& ray, Length gauge, bool sort = false );
 	/// @}
 
 
@@ -143,4 +151,7 @@ namespace trax{
 			return m_pComponent->GetFrame();
 		}
 	};
+
+	static_assert( std::is_trivially_copyable_v<std::pair<Track::End,Length>>, "Cross-DLL element must be trivially copyable" );
+	static_assert( std::is_standard_layout_v<std::pair<Track::End,Length>>, "Cross-DLL element must be standard-layout" );
 }

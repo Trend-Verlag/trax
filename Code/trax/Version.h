@@ -32,8 +32,8 @@
 #include <iostream>
 
 constexpr int TRAX_VERSION_MAJOR = 3;
-constexpr int TRAX_VERSION_MINOR = 11;
-constexpr int TRAX_VERSION_PATCH = 2;
+constexpr int TRAX_VERSION_MINOR = 12;
+constexpr int TRAX_VERSION_PATCH = 0;
 
 namespace trax{
 	
@@ -60,12 +60,13 @@ namespace trax{
 		dclspc static int SizeOfReal() noexcept;
 
 		/// \brief Gives some descriptionary text about the library.
-		///
-		/// Use this also to check wether the standard library runtime is
-		/// linked via dll. If the destructor of the std::string crashes this 
-		/// is not he case.
 		/// \returns A description of the library.
 		dclspc static const char* LongDescription() noexcept;
+
+		/// Returns a long integer that describes the ABI of the library. This 
+		/// is used to check if the library was compiled with the same toolset 
+		/// and settings as the client code.
+		dclspc static long AbiTag() noexcept;
 	private:
 		static bool bNeedsInit;
 		static std::string readable;
@@ -99,11 +100,32 @@ namespace trax{
 		return true;
 	}
 
+	inline constexpr long TraxAbiTag() noexcept {
+		long tag = 0;
+		#if defined(_MSC_VER)
+			tag = tag * 100000 + _MSC_VER;
+		#endif
+		#if defined(_ITERATOR_DEBUG_LEVEL)
+			tag = tag * 10 + _ITERATOR_DEBUG_LEVEL;
+		#endif
+		#if defined(_DLL)                 // /MD (1) vs /MT (0)
+			tag = tag * 10 + 1;
+		#else
+			tag = tag * 10 + 0;
+		#endif
+			return tag;
+	}
+	constexpr long TRAX_ABI_TAG = TraxAbiTag();
+
+
 	inline bool CheckRuntime(){
-		std::string longDescription = Version::LongDescription();
+		if( TRAX_ABI_TAG != Version::AbiTag() ){   // AbiTag() = TraxAbiTag() compiled into the DLL
+			std::cerr << Verbosity::error << "Trax runtime/ABI mismatch: client(" << TRAX_ABI_TAG
+			          << ") != dll(" << Version::AbiTag() << "). "
+			          << "Match toolset, Debug/Release (_ITERATOR_DEBUG_LEVEL) and /MD vs /MT." << std::endl;
+			return false;
+		}
 		return true;
-		// if this crashes, a wrong vcruntime is selected. Try static library or make the calling
-		// process use dll version, too.
 	}
 };
 

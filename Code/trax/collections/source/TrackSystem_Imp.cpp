@@ -347,8 +347,10 @@ Length TrackSystem_Imp::CalculateGapSize( const Track::End& theOne, const Track:
 		Track::cTrackEnd{ Get( theOther.id ), theOther.type } );
 }
 
-std::vector<Track::End> TrackSystem_Imp::GetUnconnectedIn( const Sphere<Length>& area ) const{
-	std::vector<Track::End> ends;
+common::Span<const Track::End> TrackSystem_Imp::GetUnconnectedIn( const Sphere<Length>& area ) const{
+	static thread_local std::vector<Track::End> ends;
+	ends.clear();
+
 	Position<Length> trackEndPos;
 	for( const auto& track : *this ){
 		if( !track.IsConnected( EndType::north ) ){
@@ -364,7 +366,7 @@ std::vector<Track::End> TrackSystem_Imp::GetUnconnectedIn( const Sphere<Length>&
 		}
 	}
 
-	return ends;
+	return { ends.data(), ends.size() };
 }
 
 void TrackSystem_Imp::Connection( Track::Connection& coupling ) const{
@@ -522,81 +524,87 @@ void TrackSystem_Imp::DoClear(){
 		m_pConnectorCollection->Clear();
 }
 ///////////////////////////////////////
-std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> FindTrackEnds( 
+common::Span<const std::pair<Track::End,Length>> FindTrackEnds( 
 	const TrackSystem& system, 
 	const spat::Sphere<Length>& area, 
 	bool sort )
 {
-	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> retval;
+	std::vector<std::pair<Track::End,Length>> collector;
 
 	if( auto pCollectionContainer = system.GetCollectionContainer() ){
 		for( const auto& trackCollection : *pCollectionContainer ){
 			auto moreTracks = FindTrackEnds( trackCollection, area );
-			retval.insert( retval.end(), moreTracks.begin(), moreTracks.end() );
+			collector.insert( collector.end(), moreTracks.begin(), moreTracks.end() );
 		}
 	}
 
 	if( sort )
-		std::sort( retval.begin(), retval.end(), 
-			[]( const std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& a, const std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>& b ){ return std::get<2>(a) < std::get<2>(b); } );
+		std::sort( collector.begin(), collector.end(), 
+			[]( const std::pair<Track::End,Length>& a, const std::pair<Track::End,Length>& b ){ return a.second < b.second; } );
 
-	return retval; 
+	static thread_local std::vector<std::pair<Track::End, Length>> retval;
+	retval = std::move(collector);
+	return { retval.data(), retval.size() };
 }
 
-std::vector<std::pair<Location,Length>> FindTrackLocations( 
+common::Span<const std::pair<TrackSystemLocation,Length>> FindTrackLocations( 
 	const TrackSystem& system, 
 	const spat::Sphere<Length>& area, 
 	bool sort )
 {
-	std::vector<std::pair<Location,Length>> locations;
+	std::vector<std::pair<TrackSystemLocation,Length>> collector;
 
 	if( auto pCollectionContainer = system.GetCollectionContainer() ){
 		for( const auto& trackCollection : *pCollectionContainer ){
 			auto moreTracks = FindTrackLocations( trackCollection, area );
-			locations.insert( locations.end(), moreTracks.begin(), moreTracks.end() );
+			collector.insert( collector.end(), moreTracks.begin(), moreTracks.end() );
 		}
 	}
 
 	if( sort )
-		std::sort( locations.begin(), locations.end(), 
-			[]( const std::pair<Location, Length>& a, const std::pair<Location, Length>& b ){ return a.second < b.second; } );
+		std::sort( collector.begin(), collector.end(), 
+			[]( const std::pair<TrackSystemLocation, Length>& a, const std::pair<TrackSystemLocation, Length>& b ){ return a.second < b.second; } );
 
-	return locations;
+	static thread_local std::vector<std::pair<TrackSystemLocation,Length>> retval;
+	retval = std::move(collector);
+	return { retval.data(), retval.size() };
 }
 
 Location FindTrackLocation( const TrackSystem& system, const spat::Sphere<Length>& area )
 {
-	std::vector<std::pair<Location,dim::Length>> Locations = FindTrackLocations( 
+	common::Span<const std::pair<TrackSystemLocation,dim::Length>> Locations = FindTrackLocations( 
 		system, 
 		area, 
 		true );
 
-	if( Locations.size() )
-		return Locations.front().first;
+	if( Locations.size )
+		return { system.Get( Locations.front().first.refid ), Locations.front().first.location };
 
 	return {};
 }
 
-std::vector<std::pair<Location,Length>>dclspc FindTrackLocations(
+common::Span<const std::pair<TrackSystemLocation,Length>> FindTrackLocations(
 	const TrackSystem & system,
 	const spat::VectorBundle<Length,One>& ray,
 	Length gauge,
 	bool sort )
 {
-	std::vector<std::pair<Location,Length>> locations;
+	std::vector<std::pair<TrackSystemLocation,Length>> collector;
 
 	if( auto pCollectionContainer = system.GetCollectionContainer() ){
 		for( const auto& trackCollection : *pCollectionContainer ){
 			auto moreTracks = FindTrackLocations( trackCollection, ray, gauge );
-			locations.insert( locations.end(), moreTracks.begin(), moreTracks.end() );
+			collector.insert( collector.end(), moreTracks.begin(), moreTracks.end() );
 		}
 	}
 
 	if( sort )
-		std::sort( locations.begin(), locations.end(), 
-			[]( const std::pair<Location, Length>& a, const std::pair<Location, Length>& b ){ return a.second < b.second; } );
+		std::sort( collector.begin(), collector.end(), 
+			[]( const std::pair<TrackSystemLocation, Length>& a, const std::pair<TrackSystemLocation, Length>& b ){ return a.second < b.second; } );
 
-	return locations;
+	static thread_local std::vector<std::pair<TrackSystemLocation,Length>> retval;
+	retval = std::move(collector);
+	return { retval.data(), retval.size() };
 }
 
 std::pair<Track::TrackEnd,Track::TrackEnd> Connect( 
@@ -751,16 +759,16 @@ std::shared_ptr<Connector> ConnectConnectorAware(
 
 	spat::Sphere<Length> area{ spat::Origin3D<Length>, maxDistance };
 	trackEnd.pTrack->Transition( trackEnd.pTrack->ParameterFrom( trackEnd.end ), area.c );
-	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> trackEnds = FindTrackEnds( 
+	common::Span<const std::pair<Track::End,Length>> trackEnds = FindTrackEnds( 
 		system, area, true );
 
-	for( const auto& trackEndTuple : trackEnds )
+	for( const auto& trackEndPair : trackEnds )
 	{
-		if( std::get<0>( trackEndTuple ) == trackEnd.pTrack )
+		if( trackEndPair.first.id == trackEnd.pTrack->ID() )
 			continue;
 
-		Track::TrackEnd toTrackEnd{ std::get<0>( trackEndTuple ), std::get<1>( trackEndTuple ) };
-		if( std::get<2>( trackEndTuple ) <= maxDistance &&
+		Track::TrackEnd toTrackEnd{ system.Get( trackEndPair.first.id ), trackEndPair.first.type };
+		if( trackEndPair.second <= maxDistance &&
 			KinkOf( trackEnd, toTrackEnd ) <= maxKink )
 		{
 			return ConnectConnectorAware( system, trackEnd, toTrackEnd );
@@ -797,95 +805,5 @@ std::pair<std::shared_ptr<Connector>,std::shared_ptr<Connector>> ConnectAndSnap(
 
 	return retval;
 }
-/*
-std::pair<std::shared_ptr<Connector>,std::shared_ptr<Connector>> ConnectAndSnapOld( 
-	const TrackSystem& system, 
-	const Track::TrackEnd trackEnd, 
-	const Track::TrackEnd toTrackEnd, 
-	const Length maxDistance, 
-	Angle maxKink )
-{
-	if( trackEnd.pTrack == toTrackEnd.pTrack )
-		throw std::invalid_argument( "ConnectAndSnap: Cannot connect a track to itself!" );
-
-	if(	trackEnd.pTrack->GetConnector( trackEnd.end ) )
-		throw std::invalid_argument( "ConnectAndSnap: trackEnd is already a member of a connector!" );
-
-	Track::TrackEnd wasConnected = toTrackEnd.pTrack->TransitionEnd( toTrackEnd.end );
-	Connector* pConnector = toTrackEnd.pTrack->GetConnector( toTrackEnd.end );
-	Switch* pSwitch = dynamic_cast<Switch*>(pConnector);
-
-	if( pConnector && (!pSwitch || pSwitch->NarrowTrack().first != toTrackEnd.pTrack ) )
-		// We have no option for these for now.
-		throw NotImplemented{ "ConnectAndSnap: Building four-way switch or slip switches!" };
-
-	Connect( trackEnd, toTrackEnd );
-
-	if( Connected( trackEnd, toTrackEnd ) &&
-		Snap( trackEnd, toTrackEnd ) )
-	{
-		// Track needs to get connected on opposite end if applicable:
-		{
-			const Track::TrackEnd otherTrackEnd = !trackEnd;
-
-			if( IsConnected( otherTrackEnd ) &&
-				DistanceToConnected( otherTrackEnd ) > maxDistance )
-			{
-				trackEnd.pTrack->This()->Disconnect( otherTrackEnd.end );
-			}
-
-			Connect( system, otherTrackEnd, maxDistance, maxKink );
-		}
-
-		if( pConnector )
-		{
-			if( pSwitch )
-			{
-				if( std::shared_ptr<ThreeWaySwitch> pThreeWaySwitch = ThreeWaySwitch::Make(); pThreeWaySwitch )
-				{
-					pThreeWaySwitch->NarrowTrack( pSwitch->ClearNarrowTrack() );
-					pThreeWaySwitch->StraightTrack( pSwitch->ClearStraightTrack() );
-					pThreeWaySwitch->DivergedTrack1( pSwitch->ClearDivergedTrack() );
-					pThreeWaySwitch->DivergedTrack2( trackEnd );
-
-					if( pThreeWaySwitch->Check( maxDistance, maxKink ) )
-					{
-						pThreeWaySwitch->Normalize();
-						system.GetConnectorCollection()->Add( pThreeWaySwitch );
-						system.GetConnectorCollection()->Remove( pSwitch );
-						return std::make_pair(pThreeWaySwitch, nullptr);
-					}
-					else
-					{
-						std::cerr << trax::Verbosity::error << "ConnectAndSnap: Created three way switch is not valid!" << std::endl;
-					}
-				}
-			}
-		}
-		else if( wasConnected.pTrack && wasConnected.pTrack != trackEnd.pTrack )
-		// Creating a switch if applicable:
-		{
-			if( std::shared_ptr<Switch> pNewSwitch = Switch::Make(); pNewSwitch )
-			{
-				pNewSwitch->NarrowTrack( toTrackEnd );
-				pNewSwitch->StraightTrack( wasConnected );
-				pNewSwitch->DivergedTrack( trackEnd );
-				if( pNewSwitch->Check( maxDistance, maxKink ) )
-				{
-					pNewSwitch->Normalize();
-					system.GetConnectorCollection()->Add( pNewSwitch );
-					return std::make_pair(pNewSwitch, nullptr);
-				}
-				else
-				{
-					std::cerr << trax::Verbosity::error << "ConnectAndSnap: Created switch is not valid!" << std::endl;
-				}
-			}
-		}
-	}
-
-	return std::make_pair(nullptr, nullptr);
-}
-*/
 ///////////////////////////////////////
 }

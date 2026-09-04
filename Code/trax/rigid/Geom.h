@@ -322,9 +322,9 @@ namespace trax{
 
 	struct GeomMesh : virtual Geom{
 
-		virtual bool Create( const std::vector<spat::Position<Length>>& points ) = 0;
+		virtual bool Create( const common::Span<const spat::Position<Length>>& points ) = 0;
 
-		virtual bool Create( const std::vector<spat::Position<Length>>& points, const std::vector<int>& indices ) = 0;
+		virtual bool Create( const common::Span<const spat::Position<Length>>& points, const common::Span<const int>& indices ) = 0;
 
 
 	};

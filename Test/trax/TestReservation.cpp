@@ -206,7 +206,7 @@ BOOST_FIXTURE_TEST_CASE( reserveOverlapping, TrackFixture ){
 	m_pTrack->Reserve( {40_m,80_m}, 2 );
 
 	auto overlaps = m_pTrack->Overlaps( 1 );
-	BOOST_REQUIRE_EQUAL( overlaps.size(), 1u );
+	BOOST_REQUIRE_EQUAL( overlaps.size, 1u );
 	BOOST_CHECK_EQUAL( overlaps.front().withID, 2 );
 	BOOST_CHECK( !overlaps.front().forNear );
 	BOOST_CHECK( overlaps.front().forFar );
@@ -215,7 +215,7 @@ BOOST_FIXTURE_TEST_CASE( reserveOverlapping, TrackFixture ){
 
 	m_pTrack->Reserve( {80_m,40_m}, 3 );
 	overlaps = m_pTrack->Overlaps( 1 );
-	BOOST_REQUIRE_EQUAL( overlaps.size(), 2u );
+	BOOST_REQUIRE_EQUAL( overlaps.size, 2u );
 	BOOST_CHECK_EQUAL( overlaps[0].withID, 2 );
 	BOOST_CHECK( !overlaps[0].forNear );
 	BOOST_CHECK( overlaps[0].forFar );
@@ -236,7 +236,7 @@ BOOST_FIXTURE_TEST_CASE( reserveOverlapOnConnectedTrack, TrackCircle )
 	m_pTrack2->Reserve( {-m_pTrack1->GetLength()/2,m_pTrack2->GetLength()/2}, 2 );
 
 	auto overlaps = m_pTrack2->Overlaps( 2 );
-	BOOST_CHECK_EQUAL( overlaps.size(), 1u );
+	BOOST_CHECK_EQUAL( overlaps.size, 1u );
 	BOOST_CHECK_EQUAL( overlaps[0].forID, 2 );
 	BOOST_CHECK_EQUAL( overlaps[0].withID, 1 );
 
@@ -254,7 +254,7 @@ BOOST_FIXTURE_TEST_CASE( reserveOverlapWithSeveralReservationsOnDifferentTrack, 
 	m_pTrack4->Reserve( {m_pTrack4->GetLength()/4,3*m_pTrack4->GetLength()/4}, 4 );
 
 	auto overlaps = m_pTrack1->Overlaps( 1 );
-	BOOST_CHECK_EQUAL( overlaps.size(), 3u );
+	BOOST_CHECK_EQUAL( overlaps.size, 3u );
 }
 
 BOOST_FIXTURE_TEST_CASE( reserveLocation1, TrackAndLocation ){
@@ -263,7 +263,7 @@ BOOST_FIXTURE_TEST_CASE( reserveLocation1, TrackAndLocation ){
 	m_LocationOnTrack.Reserve( {-20_m,-9_m}, 2 );
 	m_LocationOnTrack.Flip();
 	auto overlaps = m_LocationOnTrack.Overlaps(1);
-	BOOST_REQUIRE_EQUAL( overlaps.size(), 1u );
+	BOOST_REQUIRE_EQUAL( overlaps.size, 1u );
 	BOOST_CHECK_EQUAL( overlaps[0].withID, 2 );
 	BOOST_CHECK( !overlaps[0].forNear );
 	BOOST_CHECK( overlaps[0].forFar );
@@ -271,7 +271,7 @@ BOOST_FIXTURE_TEST_CASE( reserveLocation1, TrackAndLocation ){
 	BOOST_CHECK( overlaps[0].withFar );
 
 	overlaps = m_LocationOnTrack.Overlaps(2);
-	BOOST_REQUIRE_EQUAL( overlaps.size(), 1u );
+	BOOST_REQUIRE_EQUAL( overlaps.size, 1u );
 	BOOST_CHECK_EQUAL( overlaps[0].withID, 1 );
 	BOOST_CHECK( !overlaps[0].forNear );
 	BOOST_CHECK( overlaps[0].forFar );
@@ -285,7 +285,7 @@ BOOST_FIXTURE_TEST_CASE( reserveLocation2, TrackAndLocation ){
 	m_LocationOnTrack.Flip();
 	m_LocationOnTrack.Reserve( {-10_m,10_m}, 2 );
 	auto overlaps = m_LocationOnTrack.Overlaps(1);
-	BOOST_REQUIRE_EQUAL( overlaps.size(), 1u );
+	BOOST_REQUIRE_EQUAL( overlaps.size, 1u );
 	BOOST_CHECK_EQUAL( overlaps[0].withID, 2 );
 	BOOST_CHECK( !overlaps[0].forNear );
 	BOOST_CHECK( overlaps[0].forFar );
@@ -293,7 +293,7 @@ BOOST_FIXTURE_TEST_CASE( reserveLocation2, TrackAndLocation ){
 	BOOST_CHECK( overlaps[0].withFar );
 
 	overlaps = m_LocationOnTrack.Overlaps(2);
-	BOOST_REQUIRE_EQUAL( overlaps.size(), 1u );
+	BOOST_REQUIRE_EQUAL( overlaps.size, 1u );
 	BOOST_CHECK_EQUAL( overlaps[0].withID, 1 );
 	BOOST_CHECK( !overlaps[0].forNear );
 	BOOST_CHECK( overlaps[0].forFar );

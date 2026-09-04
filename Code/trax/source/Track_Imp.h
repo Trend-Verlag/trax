@@ -168,7 +168,7 @@ namespace trax{
 
 		bool IsReserved( common::Interval<Length> inRange, IDType forID = anyID ) const noexcept override;
 
-		std::vector<Overlap> Overlaps( IDType withID ) const override;
+		common::Span<const Overlap> Overlaps( IDType withID ) const override;
 
 		void UserData( TrackUserData* pData ) noexcept override{
 			m_pData = pData;

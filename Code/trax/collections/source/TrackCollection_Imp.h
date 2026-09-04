@@ -51,6 +51,8 @@ namespace trax{
 
 //		TrackSystem* GetParent() const noexcept;
 
+		bool IsConnected( Track::End trackEnd ) const noexcept override;
+
 
 		const char* TypeName() const noexcept override;
 

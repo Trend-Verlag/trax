@@ -206,9 +206,9 @@ namespace trax{
 
 		Volume GetVolume() const noexcept override;
 
-		bool Create( const std::vector<Position<Length>>& points ) override;
+		bool Create( const common::Span<const Position<Length>>& points ) override;
 
-		bool Create( const std::vector<Position<Length>>& points, const std::vector<int>& indices ) override;
+		bool Create( const common::Span<const Position<Length>>& points, const common::Span<const int>& indices ) override;
 
 
 		const physx::PxGeometry& Geometry() const noexcept override{
@@ -219,8 +219,8 @@ namespace trax{
 		physx::PxConvexMeshGeometry m_ConvexMesGeometry;
 		mutable Volume				m_Volume;
 
-		bool CookConvexMesh( const std::vector<Position<Length>>& points );
-		bool CookConvexMesh( const std::vector<Position<Length>>& points, const std::vector<int>& indices );
+		bool CookConvexMesh( const common::Span<const Position<Length>>& points );
+		bool CookConvexMesh( const common::Span<const Position<Length>>& points, const common::Span<const int>& indices );
 		static float CalculateVolume( physx::PxConvexMesh& fromConvexMesh ) noexcept;
 	};
 
@@ -240,9 +240,9 @@ namespace trax{
 
 		Volume GetVolume() const noexcept override;
 
-		bool Create( const std::vector<Position<Length>>& points ) override;
+		bool Create( const common::Span<const Position<Length>>& points ) override;
 
-		bool Create( const std::vector<Position<Length>>& points, const std::vector<int>& indices ) override;
+		bool Create( const common::Span<const Position<Length>>& points, const common::Span<const int>& indices ) override;
 
 
 		const physx::PxGeometry& Geometry() const noexcept override{
@@ -252,8 +252,8 @@ namespace trax{
 		const PhysX_Scene&				m_Scene;
 		physx::PxTriangleMeshGeometry	m_TriangleMeshGeometry;
 
-		bool CookTriangleMeshStream( const std::vector<Position<Length>>& points, const std::vector<int>& indices );
-		bool CookTriangleMesh( const std::vector<Position<Length>>& points, const std::vector<int>& indices );
+		bool CookTriangleMeshStream( const common::Span<const Position<Length>>& points, const common::Span<const int>& indices );
+		bool CookTriangleMesh( const common::Span<const Position<Length>>& points, const common::Span<const int>& indices );
 	};
 
 }

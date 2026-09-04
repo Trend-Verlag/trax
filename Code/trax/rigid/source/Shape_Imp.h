@@ -50,7 +50,7 @@ namespace trax{
 
 		int Attach( std::unique_ptr<Geom> pGeom ) override;
 
-		int Attach( std::vector<std::unique_ptr<Geom>>& geoms ) noexcept override;
+		int Attach( common::Span<std::unique_ptr<Geom>> geoms ) noexcept override;
 
 		std::unique_ptr<Geom> Remove( int idx ) override;
 

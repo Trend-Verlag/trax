@@ -120,8 +120,8 @@ void Location::Get( TrackLocation& tl ) const noexcept{
 	tl = m_TLocation;
 }
 
-void Location::Get( TrackLocationRef& tlr ) const noexcept{
-	tlr = TrackLocationRef{ m_TLocation };
+void Location::Get( TrackSystemLocation& tlr ) const noexcept{
+	tlr = TrackSystemLocation{ m_TLocation };
 	tlr.refid = m_pTrack ? m_pTrack->ID() : IDType{0u};
 }
 
@@ -388,7 +388,7 @@ void Location::DeleteReservation( IDType forID ) const{
 		throw std::logic_error( "Track doesn't support reservation." );
 }
 
-std::vector<Track::Overlap> Location::Overlaps(IDType forID) const{
+common::Span<const Track::Overlap> Location::Overlaps(IDType forID) const{
 	if( !m_pTrack )
 		throw std::logic_error( "Tried to reserve with uninitialized Location" );
 

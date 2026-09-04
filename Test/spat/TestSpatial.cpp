@@ -185,7 +185,7 @@ BOOST_AUTO_TEST_CASE( mass_rotate )
 {
 	std::vector<Vector<Real>> vec( 100, Vector<Real>(1,0,1) );
 
-	Rotate( vec, Vector<Real>( 0, 0, pi/2 ) );
+	Rotate( common::MakeSpan( vec ), Vector<Real>( 0, 0, pi/2 ) );
 
 	BOOST_CHECK( vec[50].Equals( Vector<Real>( 0, 1, 1 ), 0.00001f ) );
 }

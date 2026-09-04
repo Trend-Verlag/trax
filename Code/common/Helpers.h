@@ -499,12 +499,40 @@ namespace common{
 
 	template<typename T>
 	struct Span {
-		T const* data;
+		T* data;
 		std::size_t size;
 
 		// Make it range-for compatible:
-		T const* begin() const noexcept { return data; }
-		T const* end()   const noexcept { return data + size; }
+		T* begin() const noexcept { return data; }
+		T* end()   const noexcept { return data + size; }
+
+		T& front() const noexcept { return *data; }
+		T& back() const noexcept { return *( data + size - 1 ); }
+
+		bool empty() const noexcept { return size == 0; }
+
+		constexpr T& operator[]( std::size_t idx ) const noexcept { return data[idx]; }
+		T& at( std::size_t idx ) const {
+			if( idx >= size )
+				throw std::out_of_range( "Span index out of range" );
+			return data[idx];
+		}
+
+		inline std::vector<std::remove_const_t<T>> to_vector() const {
+			return { begin(), end() };
+		}
 	};
 
+	// Non-owning view over an lvalue vector. Deleted for rvalues to kill dangling.
+	template<typename T>
+	Span<T> MakeSpan( std::vector<T>& v ) noexcept { return { v.data(), v.size() }; }
+
+	template<typename T>
+	Span<T> MakeSpan( std::vector<T>&& ) = delete;   // prevents Span over a temporary
+
+	template<typename T>
+	Span<const T> MakeConstSpan( const std::vector<T>& v ) noexcept { return { v.data(), v.size() }; }
+
+	template<typename T>
+	Span<const T> MakeConstSpan( std::vector<T>&& ) = delete;
 }

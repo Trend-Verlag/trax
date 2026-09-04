@@ -32,9 +32,9 @@
 
 namespace trax{
 
-	class Enevt_Imp : public Event{
+	class Event_Imp : public Event{
 	public:
-
+		virtual ~Event_Imp() = default;
 	};
 
 

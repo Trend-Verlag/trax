@@ -30,7 +30,6 @@
 
 #include <cassert>
 #include <cmath>
-#include <vector>
 
 
 namespace spat{
@@ -282,7 +281,7 @@ namespace spat{
 	void Rotate( Vector<Valtype>* pVec, unsigned int nVec, const Vector<Valtype>& r ) noexcept;
 
 	template<typename Valtype>
-    void Rotate( std::vector<Vector<Valtype>>& vec, const Vector<Valtype>& r ) noexcept;
+    void Rotate( common::Span<Vector<Valtype>> vec, const Vector<Valtype>& r ) noexcept;
 	///@}
 
 
@@ -733,7 +732,7 @@ void Rotate( Vector<Valtype>* pVec, unsigned int nVec, const Vector<Valtype>& ro
 }
 
 template<typename Valtype>
-void Rotate( std::vector<Vector<Valtype>>& vec, const Vector<Valtype>& r ) noexcept{
+void Rotate( common::Span<Vector<Valtype>> vec, const Vector<Valtype>& r ) noexcept{
 	Vector<Valtype> nr{r};
 	Valtype angle = nr.Normalize();
 

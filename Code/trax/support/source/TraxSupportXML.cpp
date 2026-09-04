@@ -139,7 +139,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 }
 
 boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Location& location ){
-	TrackLocationRef tlr;
+	TrackSystemLocation tlr;
 	location.Get( tlr );
 	pt << tlr;
 	return pt;
@@ -155,7 +155,7 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 	return pt;
 }
 
-boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackLocationRef& tlr ){
+boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const TrackSystemLocation& tlr ){
 	boost::property_tree::ptree ptTrackLocationRef;
 
 	ptTrackLocationRef.put( "<xmlattr>.refid", tlr.refid );
@@ -1059,7 +1059,7 @@ void ReadTrackLocation( const boost::property_tree::ptree& pt, TrackLocation& tr
 	trackLocation.orientation	= pt.get( "<xmlattr>.orientation", "para" ) == "anti" ? Orientation::Value::anti : Orientation::Value::para;
 }
 
-void ReadTrackLocationRef( const boost::property_tree::ptree& pt, TrackLocationRef& trackLocationRef ) noexcept{
+void ReadTrackLocationRef( const boost::property_tree::ptree& pt, TrackSystemLocation& trackLocationRef ) noexcept{
 	ReadTrackLocation( pt, trackLocationRef.location );
 	trackLocationRef.refid = pt.get( "<xmlattr>.refid", IDType{0} );
 }

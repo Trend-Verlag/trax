@@ -111,7 +111,7 @@ namespace trax{
 			const Wheelset& /*wheelset*/ ) noexcept {}
 
 		virtual bool TrackLocation(			
-			const TrackLocationRef& /*trackLocation*/ ) noexcept(false) { return true; }
+			const TrackSystemLocation& /*trackLocation*/ ) noexcept(false) { return true; }
 
 		virtual void Anchor(			
 			const spat::Frame<dim::Length,dim::One>& /*anchor*/ ) noexcept {}
@@ -140,7 +140,7 @@ namespace trax{
 		}
 
 		virtual void TrackLocation(			
-			const TrackLocationRef& /*trackLocation*/ ) noexcept(false) {}
+			const TrackSystemLocation& /*trackLocation*/ ) noexcept(false) {}
 
 		virtual RollingStockParser* AxisArrangementStart( 
 			const std::string& /*name*/,

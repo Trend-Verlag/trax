@@ -78,7 +78,7 @@ namespace trax
 
 	/// \brief A RoadwayTwist is used to define the actual rotating angle
 	/// around the tangent at a curve to get the correct alignment to the lane.
-	struct RoadwayTwist{
+	struct RoadwayTwist : virtual protected DllHeap{
 
 		enum class TwistType : char{
 			Unknown = -2,

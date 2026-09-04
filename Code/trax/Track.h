@@ -623,7 +623,7 @@ namespace trax
 		/// any reservation, but will deliver overlaps for different reservations
 		/// even with the same id.
 		/// \throws std::exception if the overlaps could not get collected.
-		virtual std::vector<Overlap> Overlaps( IDType forID ) const = 0;
+		virtual common::Span<const Overlap> Overlaps( IDType forID ) const = 0;
 		///@}
 
 
@@ -1303,13 +1303,9 @@ namespace trax
 	///@{
 	
 	/// \brief Creates a new track from a template track.
-	//std::shared_ptr<TrackBuilder> dclspc CopyTrack( const TrackBuilder& originalTrack, const Factory& factory, bool cloneCurve = false );
-
 	std::shared_ptr<TrackBuilder> dclspc CopyTrack( const TrackBuilder& originalTrack, TrackBuilder& copyTrack, bool cloneCurve = false );
 
 	std::shared_ptr<TrackBuilder> dclspc CopyTrack( const TrackBuilder& originalTrack, bool cloneCurve = false );
-
-	//std::shared_ptr<TrackBuilder> dclspc CopyTrack( const TrackBuilder& originalTrack, const Factory& factory, common::Interval<Length> copyRange, bool cloneCurve = false );
 
 	std::shared_ptr<TrackBuilder> dclspc CopyTrack( const TrackBuilder& originalTrack, TrackBuilder& copyTrack, common::Interval<Length> copyRange, bool cloneCurve = false );
 
@@ -1328,13 +1324,8 @@ namespace trax
 	/// all the tracks share the original curve.
 	/// \param factory Factory to be used to create the new tracks.
 	/// \returns a list with newly created consecutive tracks.
-	///@{
-	
-	//std::vector<std::shared_ptr<TrackBuilder>> dclspc SplitTrack( const TrackBuilder& track, const Factory& factory, int numPieces = 2, bool cloneCurve = false );
-	
+	///@{	
 	std::vector<std::shared_ptr<TrackBuilder>> dclspc SplitTrack( const TrackBuilder& track, int numPieces = 2, bool cloneCurve = false );
-
-	//std::vector<std::shared_ptr<TrackBuilder>> dclspc SplitTrack( const TrackBuilder& track, const Factory& factory, Length atParameter, bool cloneCurve = false );
 	
 	std::vector<std::shared_ptr<TrackBuilder>> dclspc SplitTrack( const TrackBuilder& track, Length atParameter, bool cloneCurve = false );
 	///@}

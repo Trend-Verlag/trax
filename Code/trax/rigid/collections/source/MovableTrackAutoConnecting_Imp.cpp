@@ -87,9 +87,9 @@ void MovableTrackAutoConnecting_Imp::Update( const TrackSystem& trackSystem ){
 			}
 	
 			if( !IsConnected( EndType::north ) ){
-				std::vector<Track::End> ends = trackSystem.GetUnconnectedIn( Sphere<Length>{posFront,m_AutoConnectingDistance} );
+				common::Span<const Track::End> ends = trackSystem.GetUnconnectedIn( Sphere<Length>{posFront,m_AutoConnectingDistance} );
 				assert( !ends.empty() );
-				if( ends.size() > 1 )
+				if( ends.size > 1 )
 					for( const Track::End foundEnd : ends )
 						if( foundEnd.id != ID() ){
 							trackSystem.Connect( Track::Connection{ {ID(),EndType::north}, foundEnd } );
@@ -99,9 +99,9 @@ void MovableTrackAutoConnecting_Imp::Update( const TrackSystem& trackSystem ){
 			}
 
 			if( !IsConnected( EndType::south ) ){
-				std::vector<Track::End> ends = trackSystem.GetUnconnectedIn( Sphere<Length>{posEnd,m_AutoConnectingDistance} );
+				common::Span<const Track::End> ends = trackSystem.GetUnconnectedIn( Sphere<Length>{posEnd,m_AutoConnectingDistance} );
 				assert( !ends.empty() );
-				if( ends.size() > 1 )
+				if( ends.size > 1 )
 					for( const Track::End foundEnd : ends )
 						if( foundEnd.id != ID() ){
 							trackSystem.Connect( Track::Connection{ {ID(),EndType::south}, foundEnd } );

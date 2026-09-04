@@ -47,6 +47,17 @@ BOOST_AUTO_TEST_SUITE(Fixture_tests)
 BOOST_FIXTURE_TEST_CASE( TraxFixture_test, TrackFixture )
 {
 	BOOST_CHECK( m_pTrack );
+
+	BOOST_CHECK( !(std::is_trivially_copyable<std::pair<Location,Length>>::value) );
+	BOOST_CHECK( !(std::is_standard_layout<std::pair<Location,Length>>::value) );
+	BOOST_CHECK( !(std::is_trivially_copyable<std::pair<std::shared_ptr<TrackBuilder>,EndType>>::value) );
+	BOOST_CHECK( (std::is_standard_layout<std::pair<std::shared_ptr<TrackBuilder>,EndType>>::value) );
+
+	BOOST_CHECK( (std::is_trivially_copyable<IDType>::value) );
+	BOOST_CHECK( (std::is_standard_layout<IDType>::value) );
+	BOOST_CHECK( (std::is_trivially_copyable<std::pair<IDType,EndType>>::value) );
+	BOOST_CHECK( (std::is_standard_layout<std::pair<IDType,EndType>>::value) );
+
 }
 
 BOOST_FIXTURE_TEST_CASE( TrackCircle_test, TrackCircle )

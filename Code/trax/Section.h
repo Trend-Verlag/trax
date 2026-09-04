@@ -42,7 +42,7 @@ namespace trax{
 	///
 	/// Section specifies a vertical section through a track to define its 
 	/// profile. Special sections are available for commonly used track profiles.
-	struct Section{
+	struct Section : DllHeap{
 
 		/// \brief Name for the object type that implements this interface. 
 		virtual const char*	TypeName() const noexcept = 0;
@@ -196,9 +196,6 @@ namespace trax{
 		/// \brief Calculates the texture coordinate t from positions of the points automatically.
 		virtual void CalculateTextureCoordinates() = 0;
 
-
-		void* operator new  (std::size_t n)     { return dll_alloc(n); }
-		void  operator delete(void* p) noexcept { dll_free(p); }
 
 		virtual ~Section() = default;
 		Section( const Section& ) = delete;

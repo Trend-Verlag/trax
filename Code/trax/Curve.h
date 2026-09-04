@@ -195,7 +195,7 @@ namespace trax
 	/// positive value.
 	/// A concrete curve has to get initialized by a create method and will not 
 	/// return usefull results until after calling the create method.
-	struct Curve{
+	struct Curve : virtual protected DllHeap{
 
 		/// \brief Curve type identification values.
 		enum class CurveType{

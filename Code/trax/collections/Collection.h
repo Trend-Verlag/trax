@@ -17,7 +17,7 @@
 namespace trax{
 
 	template<class Collection_Type,class Value_Type>
-	struct Collection : virtual DllHeap{
+	struct Collection : virtual protected DllHeap{
 
 		/// \name Type information for decorator implementation
 		///@{

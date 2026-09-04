@@ -112,22 +112,17 @@ int Shape_ImpBase::Attach( std::unique_ptr<Geom> pGeom ){
 	return -1;
 }
 
-int Shape_ImpBase::Attach( std::vector<std::unique_ptr<Geom>>& geoms ) noexcept
+int Shape_ImpBase::Attach( const common::Span<std::unique_ptr<Geom>> geoms ) noexcept
 {
 	int idx = Count();
 
-	while( geoms.size() )
+	for( auto& pGeom : geoms )
 	{
 		try{
-			Attach( std::move( geoms.front() ) );
-			geoms.erase( geoms.begin() );
+			Attach( std::move( pGeom ) );
 		}
-		catch( const std::exception& e ){	
-			std::cerr << "Can not attach a geom to shape: " << (GetName() ? GetName() : "unknown") << ". Exception: " << e.what() << std::endl;
-
-			// rollback:
-			while( Count() > idx + 1 )
-				geoms.insert( geoms.begin(), Remove( Count() - 1 ) );
+		catch( const std::exception& e ){
+			std::cerr << Verbosity::normal << "Can not attach a geom to shape: " << ( GetName() ? GetName() : "unknown" ) << ". Exception: " << e.what() << std::endl;
 		}
 	}
 

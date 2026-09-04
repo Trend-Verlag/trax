@@ -31,7 +31,7 @@ namespace trax{
 ///////////////////////////////////////
 std::unique_ptr<Event> Event::Make() noexcept{
 	try{
-		return std::make_unique<Enevt_Imp>();
+		return std::make_unique<Event_Imp>();
 	}
 	catch( ... ){
 		return nullptr;

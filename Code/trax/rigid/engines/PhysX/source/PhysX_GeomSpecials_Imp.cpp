@@ -569,8 +569,8 @@ Volume PhysX_ConvexMesh::GetVolume() const noexcept
 	return m_Volume;
 }
 
-bool PhysX_ConvexMesh::Create( const std::vector<Position<Length>>& points ){
-	if( points.size() > 2 ){
+bool PhysX_ConvexMesh::Create( const common::Span<const Position<Length>>& points ){
+	if( points.size > 2 ){
 		if( CookConvexMesh( points ) ){
 			AdjustShapeGeometry();
 			return true;
@@ -580,9 +580,9 @@ bool PhysX_ConvexMesh::Create( const std::vector<Position<Length>>& points ){
 	return false;
 }
 
-bool PhysX_ConvexMesh::Create( const std::vector<Position<Length>>& points, const std::vector<int>& indices ){
-	if( points.size() > 2 ){
-		if( indices.size() > 2 ){
+bool PhysX_ConvexMesh::Create( const common::Span<const Position<Length>>& points, const common::Span<const int>& indices ){
+	if( points.size > 2 ){
+		if( indices.size > 2 ){
 			if( CookConvexMesh( points, indices ) ){
 				AdjustShapeGeometry();
 				return true;
@@ -596,12 +596,12 @@ bool PhysX_ConvexMesh::Create( const std::vector<Position<Length>>& points, cons
 }
 
 bool PhysX_ConvexMesh::CookConvexMesh( 
-	const std::vector<Position<Length>>& points )
+	const common::Span<const Position<Length>>& points )
 {
 	physx::PxConvexMeshDesc convexDesc;
-	convexDesc.points.count     = narrow_cast<physx::PxU32>(points.size());
+	convexDesc.points.count     = narrow_cast<physx::PxU32>(points.size);
 	convexDesc.points.stride    = sizeof(Position<Length>);
-	convexDesc.points.data      = points.data();
+	convexDesc.points.data      = points.data;
 	convexDesc.flags            = physx::PxConvexFlag::eCOMPUTE_CONVEX;
 	//convexDesc.vertexLimit    = points.size();
 
@@ -620,12 +620,12 @@ bool PhysX_ConvexMesh::CookConvexMesh(
 }
 
 bool PhysX_ConvexMesh::CookConvexMesh( 
-	const std::vector<Position<Length>>& points, 
-	const std::vector<int>& indices )
+	const common::Span<const Position<Length>>& points, 
+	const common::Span<const int>& indices )
 	// not behaving very well in this state ....
 {
 	std::vector<physx::PxHullPolygon> hullPolygons;
-	hullPolygons.resize( indices.size() / 3u );
+	hullPolygons.resize( indices.size / 3u );
 	for( size_t i = 0; i < hullPolygons.size(); ++i )
 	{
 		hullPolygons[i].mIndexBase = common::narrow_cast<physx::PxU16>(i*3u);
@@ -644,15 +644,15 @@ bool PhysX_ConvexMesh::CookConvexMesh(
 	}
 
 	physx::PxConvexMeshDesc convexDesc;
-	convexDesc.points.count     = common::narrow_cast<physx::PxU32>(points.size());
+	convexDesc.points.count     = common::narrow_cast<physx::PxU32>(points.size);
 	convexDesc.points.stride    = sizeof(Position<Length>);
-	convexDesc.points.data      = points.data();
+	convexDesc.points.data      = points.data;
 	convexDesc.polygons.count   = common::narrow_cast<physx::PxU32>(hullPolygons.size());
 	convexDesc.polygons.stride  = sizeof(physx::PxHullPolygon);
 	convexDesc.polygons.data    = hullPolygons.data();
-	convexDesc.indices.count    = common::narrow_cast<physx::PxU32>(indices.size());
+	convexDesc.indices.count    = common::narrow_cast<physx::PxU32>(indices.size);
 	convexDesc.indices.stride   = sizeof(int);
-	convexDesc.indices.data     = indices.data();
+	convexDesc.indices.data     = indices.data;
 	convexDesc.flags            = physx::PxConvexFlags{};
 
 	physx::PxDefaultMemoryOutputStream buf;
@@ -732,30 +732,30 @@ Volume PhysX_TriangleMesh::GetVolume() const noexcept
 	return 0_m3;
 }
 
-bool PhysX_TriangleMesh::Create( const std::vector<Position<Length>>& /*points*/ ){
+bool PhysX_TriangleMesh::Create( const common::Span<const Position<Length>>& /*points*/ ){
 	throw std::runtime_error( "Invalid call!" );
 }
 
-bool PhysX_TriangleMesh::Create( const std::vector<Position<Length>>& points,const std::vector<int>& indices )
+bool PhysX_TriangleMesh::Create( const common::Span<const Position<Length>>& points,const common::Span<const int>& indices )
 {
 	assert( indices.size() % 3 == 0 );
 
-	if( points.size() > 2 && indices.size() > 2 )
+	if( points.size > 2 && indices.size > 2 )
 		return CookTriangleMeshStream( points, indices );
 
 	return false;
 }
 
-bool PhysX_TriangleMesh::CookTriangleMeshStream( const std::vector<Position<Length>>& points, const std::vector<int>& indices )
+bool PhysX_TriangleMesh::CookTriangleMeshStream( const common::Span<const Position<Length>>& points, const common::Span<const int>& indices )
 {
 	physx::PxTriangleMeshDesc meshDesc;
-	meshDesc.points.count           = common::narrow_cast<physx::PxU32>(points.size());
+	meshDesc.points.count           = common::narrow_cast<physx::PxU32>(points.size);
 	meshDesc.points.stride          = sizeof(Position<Length>);
-	meshDesc.points.data            = points.data();
+	meshDesc.points.data            = points.data;
 
-	meshDesc.triangles.count        = common::narrow_cast<physx::PxU32>(indices.size()) / 3;
+	meshDesc.triangles.count        = common::narrow_cast<physx::PxU32>(indices.size) / 3;
 	meshDesc.triangles.stride       = 3*sizeof(int);
-	meshDesc.triangles.data         = indices.data();
+	meshDesc.triangles.data         = indices.data;
 
 	physx::PxDefaultMemoryOutputStream writeBuffer;
 #if (PX_PHYSICS_VERSION_MAJOR < 5)
@@ -771,7 +771,7 @@ bool PhysX_TriangleMesh::CookTriangleMeshStream( const std::vector<Position<Leng
 	return true;
 }
 
-bool PhysX_TriangleMesh::CookTriangleMesh( const std::vector<Position<Length>>& points, const std::vector<int>& indices ){
+bool PhysX_TriangleMesh::CookTriangleMesh( const common::Span<const Position<Length>>& points, const common::Span<const int>& indices ){
 	physx::PxTolerancesScale scale;
 	physx::PxCookingParams params{scale};
 	// disable mesh cleaning - perform mesh validation on development configurations
@@ -783,13 +783,13 @@ bool PhysX_TriangleMesh::CookTriangleMesh( const std::vector<Position<Length>>& 
 	params.midphaseDesc.mBVH33Desc.meshCookingHint = physx::PxMeshCookingHint::eCOOKING_PERFORMANCE;
 
 	physx::PxTriangleMeshDesc meshDesc;
-	meshDesc.points.count           = common::narrow_cast<physx::PxU32>(points.size());
+	meshDesc.points.count           = common::narrow_cast<physx::PxU32>(points.size);
 	meshDesc.points.stride          = sizeof(Position<Length>);
-	meshDesc.points.data            = points.data();
+	meshDesc.points.data            = points.data;
 
-	meshDesc.triangles.count        = common::narrow_cast<physx::PxU32>(indices.size()) / 3;
+	meshDesc.triangles.count        = common::narrow_cast<physx::PxU32>(indices.size) / 3;
 	meshDesc.triangles.stride       = 3*sizeof(int);
-	meshDesc.triangles.data         = indices.data();
+	meshDesc.triangles.data         = indices.data;
 
 
 #if (PX_PHYSICS_VERSION_MAJOR < 5)

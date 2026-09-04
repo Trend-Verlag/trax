@@ -57,9 +57,9 @@ namespace trax
 
 		int Attach( std::unique_ptr<Geom> pGeom, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) override;
 		
-		int Attach( std::vector<std::pair<std::unique_ptr<Geom>,Mass>>& geoms ) noexcept override;
+		int Attach( common::Span<std::pair<std::unique_ptr<Geom>,Mass>> geoms ) noexcept override;
 
-		int Attach( std::vector<std::unique_ptr<Geom>>& geoms, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) override;
+		int Attach( common::Span<std::unique_ptr<Geom>> geoms, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) override;
 
 	protected:
 		virtual void AddMassProperties( Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) noexcept = 0;

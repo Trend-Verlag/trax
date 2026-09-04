@@ -108,7 +108,7 @@ void StaticTrack_Imp::CreateShape() noexcept
 			if( GetSection() ){
 				painter.Paint( *this, *GetSection() );
 
-				if( pGeomMesh->Create( points, indices ) ){
+				if( pGeomMesh->Create( {points.data(), points.size()}, {indices.data(), indices.size()} ) ){
 					pGeomMesh->SetMaterial( m_Material );
 					pGeomMesh->TypeFilter( Geom::fTrack );
 					m_pShape->Attach( std::move(pGeomMesh) );

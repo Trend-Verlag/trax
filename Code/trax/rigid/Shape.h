@@ -85,12 +85,14 @@ namespace trax{
 		virtual int Attach( std::unique_ptr<Geom> pGeom ) = 0;
 
 		/// \param geoms A list of Geoms to be attached to the Shape. Will
-		/// be empty after the call if successful, untouched if not.
-		/// \returns The zero based index of the first Geom attached; the 
+		/// be empty (geoms moved) after the call.
+		/// 
+		/// If an error occures by attaching a geom it will be omitted. Correct
+		/// execution over all geoms can be detected using the Count() function.
+		/// \returns The zero based index of the first Geom attached, -1 if none; the 
 		/// consecutive geoms will be assigned indexes from that in increasing 
-		/// order. There will be all geoms attached or none, in which case -1 is
-		/// returned. nullptr gets ignored.
-		virtual int Attach( std::vector<std::unique_ptr<Geom>>& geoms ) noexcept = 0;
+		/// order.
+		virtual int Attach( common::Span<std::unique_ptr<Geom>> geoms ) noexcept = 0;
 		///@}
 
 

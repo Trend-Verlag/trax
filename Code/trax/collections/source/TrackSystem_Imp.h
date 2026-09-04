@@ -103,7 +103,7 @@ namespace trax{
 
 		Length CalculateGapSize( const Track::End& theOne, const Track::End& theOther ) const override;
 
-		std::vector<Track::End> GetUnconnectedIn( const Sphere<Length>& area ) const override;
+		common::Span<const Track::End> GetUnconnectedIn( const Sphere<Length>& area ) const override;
 
 		void Connection( Track::Connection& connection ) const override;
 

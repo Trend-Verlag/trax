@@ -112,4 +112,9 @@ This is not implemented yet, for now it is 1, but this will change in the future
 		We tend to call the units that trax actually uses \'units\'.";
 }
 
+long Version::AbiTag() noexcept
+{
+	return TraxAbiTag();
+}
+
 }

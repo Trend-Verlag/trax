@@ -962,7 +962,7 @@ std::unique_ptr<Location> Anl4TrackSystemReader::CreateLocation(
 	const TrackSystem& trackSystem ) const
 {
 	if( std::unique_ptr<Location> pLocation = std::make_unique<Location>(); pLocation ){
-		TrackLocationRef trackLocation;
+		TrackSystemLocation trackLocation;
 		ReadTrackLocationRef( pt, trackLocation );
 		pLocation->PutOn( trackSystem.Get( trackLocation.refid ), trackLocation.location );
 		return pLocation;

@@ -153,35 +153,17 @@ int Gestalt_Imp::Attach(
 	return idx;
 }
 
-int Gestalt_Imp::Attach( std::vector<std::pair<std::unique_ptr<Geom>,Mass>>& geoms ) noexcept
+int Gestalt_Imp::Attach( const common::Span<std::pair<std::unique_ptr<Geom>,Mass>> geoms ) noexcept
 {
 	int idx = Count();
 
-	Mass mass = Mass();
-	spat::Frame<Length, One> massLocalPose = CenterOfMassLocalPose();
-	spat::Vector<MomentOfInertia> principalMoments = PrincipalMomentsOfInertia();
-	std::vector<Mass> addedMasses;
-
-	while( geoms.size() )
+	for( auto& geom : geoms )
 	{
 		try{
-			Attach( std::move( geoms.front().first ), geoms.front().second );
-			addedMasses.push_back( geoms.front().second );
-			geoms.erase( geoms.begin() );
+			Attach( std::move( geom.first ), geom.second );
 		}
 		catch( const std::exception& e ){	
 			std::cerr << "Can not attach a geom to gestalt: " << (GetName() ? GetName() : "unknown") << ". Exception: " << e.what() << std::endl;
-
-			// rollback:
-			while( Count() > idx + 1 ){
-				geoms.insert( geoms.begin(), std::make_pair( Remove( Count() - 1 ), addedMasses.back() ) );
-				addedMasses.pop_back();
-			}
-
-			// restore mass properties:
-			SetMass( mass );
-			CenterOfMassLocalPose( massLocalPose );
-			PrincipalMomentsOfInertia( principalMoments );
 		}
 	}
 
@@ -189,7 +171,7 @@ int Gestalt_Imp::Attach( std::vector<std::pair<std::unique_ptr<Geom>,Mass>>& geo
 }
 
 int Gestalt_Imp::Attach(
-	std::vector<std::unique_ptr<Geom>>& geoms, 
+	const common::Span<std::unique_ptr<Geom>> geoms, 
 	Mass mass, 
 	const spat::Frame<Length,One>& massLocalPose, 
 	const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor )

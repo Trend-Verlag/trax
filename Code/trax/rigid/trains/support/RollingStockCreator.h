@@ -106,7 +106,7 @@ namespace trax{
 			const trax::Wheelset& wheelset ) noexcept override;
 
 		bool TrackLocation(			
-			const TrackLocationRef& trackLocation ) noexcept(false) override;
+			const TrackSystemLocation& trackLocation ) noexcept(false) override;
 
 		void Anchor(			
 			const spat::Frame<dim::Length,dim::One>& anchor ) noexcept override;

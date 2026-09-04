@@ -141,11 +141,10 @@ namespace trax
 		/// \param inertiaTensor The inertia tensor for the mass local to 
 		/// massLocalPose.
 		/// \param geoms A vector of Geoms or Geom/Mass pairs to be attached to 
-		/// the Body.Will be empty after the call if successful, untouched if not.
+		/// the Body.Will be empty after the call.
 		/// \returns The zero based index of the Geom that was attached first; the 
 		/// consecutive geoms will be assigned indexes from that in increasing 
-		/// order. There will be all geoms attached or none, in which case -1 is
-		/// returned. nullptr gets ignored.
+		/// order. If nothing is attached -1 is returned.
 		/// \throws std::invalid_argument if a pGeom is not of positive volume
 		/// or the mass is <= 0_kg or invalid otherwise.
 		/// \throws std::runtime_error if pGeom could not be attached due to 
@@ -157,9 +156,9 @@ namespace trax
 
 		virtual int Attach( std::unique_ptr<Geom> pGeom, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) = 0;
 		
-		virtual int Attach( std::vector<std::pair<std::unique_ptr<Geom>,Mass>>& geoms ) noexcept = 0;
+		virtual int Attach( common::Span<std::pair<std::unique_ptr<Geom>,Mass>> geoms ) noexcept = 0;
 
-		virtual int Attach( std::vector<std::unique_ptr<Geom>>& geoms, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) = 0;
+		virtual int Attach( common::Span<std::unique_ptr<Geom>> geoms, Mass mass, const spat::Frame<Length,One>& massLocalPose, const spat::SquareMatrix<MomentOfInertia,3>& inertiaTensor ) = 0;
 		///@}
 
 

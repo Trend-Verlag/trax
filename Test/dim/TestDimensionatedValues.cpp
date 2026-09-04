@@ -85,6 +85,17 @@ BOOST_AUTO_TEST_CASE( test_pod )
 	BOOST_CHECK(std::is_standard_layout<Torque>::value);
 	BOOST_CHECK(std::is_standard_layout<Energy>::value);
 	BOOST_CHECK(std::is_standard_layout<Power>::value);
+
+
+	BOOST_CHECK( (std::is_trivially_copyable<std::pair<int,Mass>>::value) );
+	BOOST_CHECK( (std::is_standard_layout<std::pair<int,Mass>>::value) );
+	BOOST_CHECK( !(std::is_trivially_copyable<std::tuple<int,Length,Mass>>::value) );
+	BOOST_CHECK( !(std::is_standard_layout<std::tuple<int,Length,Mass>>::value) );
+	BOOST_CHECK( !(std::is_trivially_copyable<std::tuple<int,int,int>>::value) );
+	BOOST_CHECK( !(std::is_standard_layout<std::tuple<int,int,int>>::value) );
+
+
+
 }
 
 BOOST_AUTO_TEST_CASE( streamValues )

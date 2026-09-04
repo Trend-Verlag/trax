@@ -35,7 +35,7 @@
 
 namespace trax{
 
-	struct TrackLocationRef;
+	struct TrackSystemLocation;
 	struct TrackSystem;
 
 	struct TrackSystemParser : virtual Parser{

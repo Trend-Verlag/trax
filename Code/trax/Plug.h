@@ -328,6 +328,8 @@ namespace trax{
 
 		/// \brief Releases all the clone plugs.
 		virtual void Clear() = 0;
+
+		virtual ~MultiPlug() = default;
 	protected:
 		using Plug::Release;
 	};	
@@ -342,7 +344,7 @@ namespace trax{
 		dclspc Plug_Imp(PlugEnumerator& parent);
 		dclspc Plug_Imp(PlugEnumerator& parent, Plug_Imp&& plug);
 
-		dclspc ~Plug_Imp() noexcept;	// TODO: if the user defines his own Plug_Imp derived Plug
+		dclspc virtual ~Plug_Imp() noexcept;	// TODO: if the user defines his own Plug_Imp derived Plug
 										// and assigns a string by Reference() without using Reference 
 										// again to delete it, the destructor will crash on trying to
 										// delete the string in a different module.

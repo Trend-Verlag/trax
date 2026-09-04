@@ -169,7 +169,7 @@ bool ParseCargoAxisArrangement( const boost::property_tree::ptree& pt, RollingSt
 //			}
 //
 //			else if( pair.first == "TrackLocation" ){
-//				TrackLocationRef trackLocation;
+//				TrackSystemLocation trackLocation;
 //				ReadTrackLocationRef( pair.second, trackLocation );
 //				if( !callback.TrackLocation( trackLocation ) )
 //					return false;
@@ -566,7 +566,7 @@ void ParseTrain( const boost::property_tree::ptree& pt, TrainParser& callback )
 				ParseDisplayName( pair.second, callback );
 
 			else if( pair.first == "TrackLocation" ){
-				TrackLocationRef trackLocation;
+				TrackSystemLocation trackLocation;
 				ReadTrackLocationRef( pair.second, trackLocation );
 				callback.TrackLocation( trackLocation );
 			}

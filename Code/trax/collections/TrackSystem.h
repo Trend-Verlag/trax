@@ -141,7 +141,7 @@ namespace trax{
 
 
 		/// \brief Searches for a free, unconnected track end in the area.
-		virtual std::vector<Track::End> GetUnconnectedIn( const spat::Sphere<Length>& area ) const = 0;
+		virtual common::Span<const Track::End> GetUnconnectedIn( const spat::Sphere<Length>& area ) const = 0;
 
 
 		/// \brief Completes the coupling.
@@ -180,7 +180,7 @@ namespace trax{
 	/// \param area Spherical area to detect track ends in.
 	/// \param sort If true the list gets sorted by distance to the center of the area (closest first). 
 	/// \return A list with track ends as well as their distance from the area center. If both track ends are inside the area, the track will be listed twice.
-	std::vector<std::tuple<std::shared_ptr<TrackBuilder>,EndType,Length>> dclspc FindTrackEnds( const TrackSystem& system, const spat::Sphere<Length>& area, bool sort = false );
+	common::Span<const std::pair<Track::End,Length>> dclspc FindTrackEnds( const TrackSystem& system, const spat::Sphere<Length>& area, bool sort = false );
 
 
 	/// \brief Finds all tracks that run through an area.
@@ -188,7 +188,7 @@ namespace trax{
 	/// \param area Spherical area to detect tracks in.
 	/// \param sort If true the list gets sorted by distance to the center of the area (closest first). 
 	/// \return A list with track Locations as well as their distance from the area center.	
-	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackSystem& system, const spat::Sphere<Length>& area, bool sort = false );
+	common::Span<const std::pair<TrackSystemLocation,Length>> dclspc FindTrackLocations( const TrackSystem& system, const spat::Sphere<Length>& area, bool sort = false );
 	
 
 	/// \brief Finds a track that runs through an area.
@@ -206,7 +206,7 @@ namespace trax{
 	/// \param sort If true the list gets sorted by distance to ray.P (closest first). 
 	/// \return A list with track Locations as well as their distance from the ray's starting 
 	/// point.
-	std::vector<std::pair<Location,Length>> dclspc FindTrackLocations( const TrackSystem& system, const spat::VectorBundle<Length,One>& ray, Length gauge = 0_m, bool sort = false );
+	common::Span<const std::pair<TrackSystemLocation,Length>> dclspc FindTrackLocations( const TrackSystem& system, const spat::VectorBundle<Length,One>& ray, Length gauge = 0_m, bool sort = false );
 	
 
 	/// \brief Searches open track ends inside an area around a given track end and connects to 
@@ -353,7 +353,7 @@ namespace trax{
 			return m_pComponent->CalculateGapSize( theOne, theOther );
 		}
 
-		std::vector<Track::End> GetUnconnectedIn( const spat::Sphere<Length>& area ) const override{
+		common::Span<const Track::End> GetUnconnectedIn( const spat::Sphere<Length>& area ) const override{
 			return m_pComponent->GetUnconnectedIn( area );
 		}
 
