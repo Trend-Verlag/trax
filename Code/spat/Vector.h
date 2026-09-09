@@ -124,6 +124,10 @@ namespace spat{
 		constexpr bool Is( specials s ) const noexcept;
 
 
+		/// \brief Returns the dimension of greatest extent of the vector.
+		constexpr specials Largest() const noexcept;
+
+
 		/// \brief Calculates the length of the vector
 		/// \return Length of vector.
 		constexpr Valtype Length() const noexcept;
@@ -155,7 +159,7 @@ namespace spat{
 
 
 		/// \returns true if the length of the vectr is 1 within the limits of epsilon.
-		constexpr inline bool IsNormal( Valtype epsilon_length = 10*std::numeric_limits<Valtype>::epsilon() ) const noexcept;
+		constexpr bool IsNormal( Valtype _epsilon_length = 10*std::numeric_limits<Valtype>::epsilon() ) const noexcept;
 
 
 		///	\brief Rotate this vector around unit vector r with angle in radiants.
@@ -442,6 +446,14 @@ constexpr bool Vector<Valtype>::Is( specials s ) const noexcept{
 	}
 
 	return false;
+}
+
+template<typename Valtype>
+inline constexpr typename Vector<Valtype>::specials spat::Vector<Valtype>::Largest() const noexcept
+{
+	if( dx >= dy && dx >= dz )
+		return specials::ex;
+	return dy >= dz ? specials::ey : specials::ez;
 }
 
 template<typename Valtype> constexpr

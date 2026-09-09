@@ -39,6 +39,19 @@ boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, cons
 		ptCargo << frame;
 	}
 
+	if( const MoveableCargo* pMovableCargo = dynamic_cast<const MoveableCargo*>(&cargo); pMovableCargo )
+	{
+		if( std::shared_ptr<Gestalt> pGestalt = pMovableCargo->GetGestalt(); pGestalt )
+		{
+			spat::Vector<Velocity> velocity;
+			pGestalt->GetLinearVelocity( velocity );
+			ptCargo << velocity;
+			spat::Vector<AngularVelocity> angularVelocity;
+			pGestalt->GetAngularVelocity( angularVelocity );
+			ptCargo << angularVelocity;
+		}
+	}
+
 	move_child( pt, cargo.TypeName(), ptCargo );
 	return pt;
 }
