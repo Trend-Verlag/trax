@@ -369,7 +369,6 @@ void PhysX_Cylinder_Imp::CookConvexMesh(){
 PhysX_HeightField::PhysX_HeightField( const PhysX_Scene& scene )
 	: PhysX_GeomBase_Imp	{ scene.EngineMetersPerUnit() }
 	, m_Scene				{ scene }
-	, m_pHeightFieldActor	{ nullptr }
 {
 	PhysX_HeightField::SetFrame( Identity<Length,One> );
 }
@@ -413,94 +412,71 @@ Volume PhysX_HeightField::GetVolume() const noexcept
 
 bool PhysX_HeightField::Create( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale )
 {
-	m_pHeightFieldActor = m_Scene.Simulator().Physics().createRigidDynamic(physx::PxTransform{physx::PxIdentity});
-	if( m_pHeightFieldActor )
+	const int nSamples = nRows*nCols;
+	std::unique_ptr<physx::PxHeightFieldSample[]> hfsamples( new physx::PxHeightFieldSample[nSamples] );
+	for( int i = 0; i < nSamples; ++i )
 	{
-		m_pHeightFieldActor->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
+		hfsamples[i].height = pSamples[i];
+		//hfsamples[i].materialIndex0 = physx::PxBitAndByte(1); //physx::PxHeightFieldMaterial::eHOLE;
+		//hfsamples[i].materialIndex1 = physx::PxBitAndByte(1);
+		hfsamples[i].materialIndex0 = (pbHoles[i] && pbHoles[i+nCols] && pbHoles[i+1 + nCols]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
+		hfsamples[i].materialIndex1 = (pbHoles[i] && pbHoles[i+1] && pbHoles[i+1 + nCols]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
+		hfsamples[i].materialIndex0 = hfsamples[i].materialIndex1;
+		hfsamples[i].setTessFlag();
+	}	
 
-		const int nSamples = nRows*nCols;
-		std::unique_ptr<physx::PxHeightFieldSample[]> hfsamples( new physx::PxHeightFieldSample[nSamples] );
-		for( int i = 0; i < nSamples; ++i )
-		{
-			hfsamples[i].height = pSamples[i];
-			//hfsamples[i].materialIndex0 = physx::PxBitAndByte(1); //physx::PxHeightFieldMaterial::eHOLE;
-			//hfsamples[i].materialIndex1 = physx::PxBitAndByte(1);
-			hfsamples[i].materialIndex0 = (pbHoles[i] && pbHoles[i+nCols] && pbHoles[i+1 + nCols]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
-			hfsamples[i].materialIndex1 = (pbHoles[i] && pbHoles[i+1] && pbHoles[i+1 + nCols]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
-			hfsamples[i].materialIndex0 = hfsamples[i].materialIndex1;
-			hfsamples[i].setTessFlag();
-		}	
-
-		physx::PxHeightFieldDesc hfDesc;
-		hfDesc.format             = physx::PxHeightFieldFormat::eS16_TM;
-		hfDesc.nbRows             = nRows;
-		hfDesc.nbColumns          = nCols;
+	physx::PxHeightFieldDesc hfDesc;
+	hfDesc.format             = physx::PxHeightFieldFormat::eS16_TM;
+	hfDesc.nbRows             = nRows;
+	hfDesc.nbColumns          = nCols;
 //		hfDesc.thickness		  = -1 * units_per_meter;
-		//hfDesc.convexEdgeThreshold= 3;
-		//hfDesc.flags				= physx::PxHeightFieldFlag::eNO_BOUNDARY_EDGES;
-		hfDesc.samples.data       = hfsamples.get();
-		hfDesc.samples.stride     = sizeof(physx::PxHeightFieldSample);
+	//hfDesc.convexEdgeThreshold= 3;
+	//hfDesc.flags				= physx::PxHeightFieldFlag::eNO_BOUNDARY_EDGES;
+	hfDesc.samples.data       = hfsamples.get();
+	hfDesc.samples.stride     = sizeof(physx::PxHeightFieldSample);
 
 #if (PX_PHYSICS_VERSION_MAJOR < 5)
-		physx::PxHeightField* pHeightField = m_Scene.Simulator().Cooking().createHeightField( hfDesc, m_Scene.Simulator().Physics().getPhysicsInsertionCallback() );
+	physx::PxHeightField* pHeightField = m_Scene.Simulator().Cooking().createHeightField( hfDesc, m_Scene.Simulator().Physics().getPhysicsInsertionCallback() );
 #else
-		physx::PxHeightField* pHeightField = PxCreateHeightField( hfDesc, m_Scene.Simulator().Physics().getPhysicsInsertionCallback() );
-		//physx::PxHeightField* pHeightField = Scene( *m_pSimulator).getPhysics().createHeightField(hfDesc);
+	physx::PxHeightField* pHeightField = PxCreateHeightField( hfDesc, m_Scene.Simulator().Physics().getPhysicsInsertionCallback() );
+	//physx::PxHeightField* pHeightField = Scene( *m_pSimulator).getPhysics().createHeightField(hfDesc);
 #endif
 
-		m_HeightFieldGeometry = physx::PxHeightFieldGeometry(pHeightField, physx::PxMeshGeometryFlags(), static_cast<physx::PxReal>(vertScale), static_cast<physx::PxReal>(horzScale), static_cast<physx::PxReal>(horzScale) );
+	m_HeightFieldGeometry = physx::PxHeightFieldGeometry(pHeightField, physx::PxMeshGeometryFlags(), static_cast<physx::PxReal>(vertScale), static_cast<physx::PxReal>(horzScale), static_cast<physx::PxReal>(horzScale) );
 		
-		m_Scene.Scene().addActor(*m_pHeightFieldActor);
-
-		OnAttach( *m_pHeightFieldActor );
-
-		return true;
-	}
-
-	return false;
+	return true;
 }
 
-bool PhysX_HeightField::CreateEEPStyle( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale ){
-	m_pHeightFieldActor = m_Scene.Simulator().Physics().createRigidDynamic(physx::PxTransform{physx::PxIdentity});
-	if( m_pHeightFieldActor )
-	{	
-		m_pHeightFieldActor->setRigidBodyFlag( physx::PxRigidBodyFlag::eKINEMATIC, true);
-
-		const int nSamples = nRows*nCols;
-		std::unique_ptr<physx::PxHeightFieldSample[]> hfsamples( new physx::PxHeightFieldSample[nSamples] );
-		for( int i = 0; i < nSamples; ++i )
-		{
-			hfsamples[i].height = pSamples[i];
-			hfsamples[i].materialIndex0 = hfsamples[i].materialIndex1 
-				= (pbHoles[i] && pbHoles[i+1] && pbHoles[i+1 + nCols]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
-			hfsamples[i].setTessFlag();
-		}
-
-		physx::PxHeightFieldDesc hfDesc;
-		hfDesc.format             = physx::PxHeightFieldFormat::eS16_TM;
-		hfDesc.nbRows             = nRows;
-		hfDesc.nbColumns          = nCols;
-//		hfDesc.thickness		  = -1 * units_per_meter;
-		hfDesc.samples.data       = hfsamples.get();
-		hfDesc.samples.stride     = sizeof(physx::PxHeightFieldSample);
-
-#if (PX_PHYSICS_VERSION_MAJOR < 5)
-		physx::PxHeightField* pHeightField = m_Scene.Simulator().Cooking().createHeightField( hfDesc, m_Scene.Simulator().Physics().getPhysicsInsertionCallback() );
-#else
-		physx::PxHeightField* pHeightField = PxCreateHeightField( hfDesc, m_Scene.Simulator().Physics().getPhysicsInsertionCallback() );
-		//physx::PxHeightField* pHeightField = Scene( *m_pSimulator).getPhysics().createHeightField(hfDesc);
-#endif
-
-		m_HeightFieldGeometry = physx::PxHeightFieldGeometry(pHeightField, physx::PxMeshGeometryFlags(), static_cast<physx::PxReal>(vertScale), static_cast<physx::PxReal>(horzScale), static_cast<physx::PxReal>(horzScale) );
-		
-		m_Scene.Scene().addActor(*m_pHeightFieldActor);
-
-		OnAttach( *m_pHeightFieldActor );
-
-		return true;
+bool PhysX_HeightField::CreateEEPStyle( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale )
+{
+	const int nSamples = nRows*nCols;
+	std::unique_ptr<physx::PxHeightFieldSample[]> hfsamples( new physx::PxHeightFieldSample[nSamples] );
+	for( int i = 0; i < nSamples; ++i )
+	{
+		hfsamples[i].height = pSamples[i];
+		hfsamples[i].materialIndex0 = hfsamples[i].materialIndex1 
+			= (pbHoles[i] && pbHoles[i+1] && pbHoles[i+1 + nCols]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
+		hfsamples[i].setTessFlag();
 	}
 
-	return false;
+	physx::PxHeightFieldDesc hfDesc;
+	hfDesc.format             = physx::PxHeightFieldFormat::eS16_TM;
+	hfDesc.nbRows             = nRows;
+	hfDesc.nbColumns          = nCols;
+//		hfDesc.thickness		  = -1 * units_per_meter;
+	hfDesc.samples.data       = hfsamples.get();
+	hfDesc.samples.stride     = sizeof(physx::PxHeightFieldSample);
+
+#if (PX_PHYSICS_VERSION_MAJOR < 5)
+	physx::PxHeightField* pHeightField = m_Scene.Simulator().Cooking().createHeightField( hfDesc, m_Scene.Simulator().Physics().getPhysicsInsertionCallback() );
+#else
+	physx::PxHeightField* pHeightField = PxCreateHeightField( hfDesc, m_Scene.Simulator().Physics().getPhysicsInsertionCallback() );
+	//physx::PxHeightField* pHeightField = Scene( *m_pSimulator).getPhysics().createHeightField(hfDesc);
+#endif
+
+	m_HeightFieldGeometry = physx::PxHeightFieldGeometry(pHeightField, physx::PxMeshGeometryFlags(), static_cast<physx::PxReal>(vertScale), static_cast<physx::PxReal>(horzScale), static_cast<physx::PxReal>(horzScale) );
+		
+	return true;
 }
 
 Length PhysX_HeightField::Height( const Position2D<Length>& parameter ) const{

@@ -104,11 +104,11 @@ bool PhysX_Scene::IsValid( bool /*bSilent*/ ) const noexcept
 }
 
 void PhysX_Scene::Up( const Vector<One>& up ){
-	Gravity( Normalize( Gravity() ).first * up );
+	Gravity( Normalize( Gravity() ).first * -up );
 }
 
 Vector<One> PhysX_Scene::Up() const{
-	return Normalize( VecFrom<Acceleration>( Scene().getGravity() ) ).second;
+	return -Normalize( VecFrom<Acceleration>( Scene().getGravity() ) ).second;
 }
 
 void PhysX_Scene::Gravity( const spat::Vector<Acceleration>& gravityAccelerarion ){

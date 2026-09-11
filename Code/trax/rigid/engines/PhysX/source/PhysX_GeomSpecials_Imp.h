@@ -183,7 +183,6 @@ namespace trax{
 		}
 	private:
 		const PhysX_Scene&				m_Scene;
-		physx::PxRigidDynamic*			m_pHeightFieldActor;
 		physx::PxHeightFieldGeometry	m_HeightFieldGeometry;
 		Frame<Length,One>				m_Frame;
 	};

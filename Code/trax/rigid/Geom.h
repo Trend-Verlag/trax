@@ -298,8 +298,8 @@ namespace trax{
 		/// \param pbHoles Array with the hole information. Length must be at least nRows*nCols.
 		/// \param nRows Number of rows in the heightfield.
 		/// \param nCols Number of columns in the heightfield.
-		/// \param vertScale Vertical scale factor.
-		/// \param horzScale Horizontal scale factor.
+		/// \param vertScale Vertical scale factor. pSamples[x] * vertScale * meters_per_unit will be the height in meters.
+		/// \param horzScale Horizontal scale factor. 1 * horzScale * meters_per_unit will be the grid distance in meters.
 		virtual bool Create( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale ) = 0;
 
 
