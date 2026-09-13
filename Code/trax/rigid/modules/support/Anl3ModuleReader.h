@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "trax/collections/support/Anl3TrackSystemReader.h"
+#include "Anl3TrackSystemReader.h"
 
 namespace trax{
 

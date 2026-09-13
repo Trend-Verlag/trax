@@ -1,28 +1,22 @@
 add_library(trax_trains_support 
     STATIC
-        "./source/Anl4RailRunnerWriter.cpp"
         "./source/FixturesTrain.cpp"
-        "./source/RailRunnerParser_Imp.cpp"
         "./source/RollingStockCreator.cpp"
         "./source/RollingStockFileReader.cpp"
-        "./source/SupportXML_Train.cpp"
         "./source/TrainCreator.cpp"
         "./source/TrainFileReader.cpp"
 )
 
 set(PUBLIC_HEADERS
-    "./Anl4RailRunnerWriter.h"
     "./FixturesTrain.h"
     "./RailRunnerParser.h"
     "./RollingStockCreator.h"
     "./RollingStockFileReader.h"
-    "./SupportXML.h"
     "./TrainCreator.h"
     "./TrainFileReader.h"
 )
 
 set(PRIVATE_HEADERS
-    "./source/RailRunnerParser_Imp.h"
 )
 
 target_sources(trax_trains_support
@@ -38,7 +32,6 @@ source_group("Private Headers" FILES ${PRIVATE_HEADERS})
 
 target_link_libraries(trax_trains_support
     PUBLIC
-        trax_rigid_support
         trax_trains
 )
 

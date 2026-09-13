@@ -138,7 +138,9 @@ target_compile_definitions(trax_core
 target_link_libraries(trax_core
     PUBLIC
         dim
+        dim_support
         spat
+        spat_support
 )
 
 # ---------- Boost (header-only math/tools) ----------

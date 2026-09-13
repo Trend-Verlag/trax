@@ -1,10 +1,8 @@
 add_library(trax_rigid_support 
     STATIC
-        "./source/RigidSupportXML.cpp"
 )
 
 set(PUBLIC_HEADERS
-    "./RigidSupportXML.h"
 )
 
 target_sources(trax_rigid_support

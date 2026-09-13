@@ -714,7 +714,7 @@ bool PhysX_TriangleMesh::Create( const common::Span<const Position<Length>>& /*p
 
 bool PhysX_TriangleMesh::Create( const common::Span<const Position<Length>>& points,const common::Span<const int>& indices )
 {
-	assert( indices.size() % 3 == 0 );
+	assert( indices.size % 3 == 0 );
 
 	if( points.size > 2 && indices.size > 2 )
 		return CookTriangleMeshStream( points, indices );

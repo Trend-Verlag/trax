@@ -38,10 +38,8 @@ target_link_libraries(ALL_TESTS
         appframe
         trax_core_support
         trax_core_collections_support
-        trax_rigid_support
         trax_rigid_physx
         trax_modules_support
-        trax_trains_collections_support
         trax_trains_collections
  )
 

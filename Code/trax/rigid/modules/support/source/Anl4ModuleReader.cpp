@@ -11,7 +11,7 @@
 
 
 #include "trax/rigid/modules/support/Anl4ModuleReader.h"
-#include "trax/rigid/trains/collections/support/TrainCollectionSupportXML.h"
+#include "../TrainCollectionSupportXML.h"
 #include "spat/support/SpatSupportXML.h"
 
 #include "trax/rigid/Gestalt.h"

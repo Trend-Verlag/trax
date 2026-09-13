@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "trax/collections/support/Anl4TrackSystemReader.h"
+#include "Anl4TrackSystemReader.h"
 
 #include "trax/Orientation.h"
 

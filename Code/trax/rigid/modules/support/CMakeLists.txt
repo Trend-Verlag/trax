@@ -1,24 +1,66 @@
 add_library(trax_modules_support 
     STATIC
         "./source/Anl3ModuleReader.cpp"
+        "./source/Anl3TrackSystemReader.cpp"
         "./source/Anl4ModuleReader.cpp"
         "./source/Anl4ModuleWriter.cpp"
+        "./source/Anl4RailRunnerWriter.cpp"
+        "./source/Anl4TrackSystemReader.cpp"
+        "./source/Anl4TrackSystemWriter.cpp"
         "./source/AnlReader.cpp"
         "./source/AnlWriter.cpp"
+        "./source/curves/SupportXML_Arc.cpp"
+        "./source/curves/SupportXML_ArcP.cpp"
+        "./source/curves/SupportXML_Clothoid.cpp"
+        "./source/curves/SupportXML_Cubic.cpp"
+        "./source/curves/SupportXML_Curve.cpp"
+        "./source/curves/SupportXML_EEPCurve.cpp"
+        "./source/curves/SupportXML_Helix.cpp"
+        "./source/curves/SupportXML_HelixP.cpp"
+        "./source/curves/SupportXML_Line.cpp"
+        "./source/curves/SupportXML_LineP.cpp"
+        "./source/curves/SupportXML_PolygonalChain.cpp"
+        "./source/curves/SupportXML_Rotator.cpp"
+        "./source/curves/SupportXML_SampledCurve.cpp"
+        "./source/curves/SupportXML_Spline.cpp"
+        "./source/ModuleCollectionXMLWriter_Imp.cpp"
         "./source/ModuleCommands_Imp.cpp"
+        "./source/RailRunnerParser_Imp.cpp"
+        "./source/RigidSupportXML.cpp"
+        "./source/SupportXML_Collection.cpp"
+        "./source/SupportXML_Twist.cpp"
+        "./source/SupportXML_Train.cpp"
+        "./source/TrackSystemParser_Imp.cpp"
+        "./source/TrackSystemReader.cpp"
+        "./source/TrainCollectionSupportXML.cpp"
+        "./source/TraxSupportXML.cpp"
 )
 
 set(PUBLIC_HEADERS
     "./Anl3ModuleReader.h"
+    "./Anl3TrackSystemReader.h"
     "./Anl4ModuleReader.h"
     "./Anl4ModuleWriter.h"
+    "./Anl4RailRunnerWriter.h"
+    "./Anl4TrackSystemReader.h"
+    "./Anl4TrackSystemWriter.h"
     "./AnlReader.h"
     "./AnlWriter.h"
+    "./CollectionSupportWriteXML.h"
+    "./CollectionSupportXML.h"
+    "./ModuleCollectionXMLWriter.h"
     "./ModuleCommands.h"
+    "./RigidSupportXML.h"
+    "./SupportXML.h"
+    "./TrackSystemReader.h"
+    "./TrainCollectionSupportXML.h"
+    "./TraxSupportXML.h"
 )
 
 set(PRIVATE_HEADERS
-    "./ModuleCommands_Imp.h"
+    "./source/ModuleCommands_Imp.h"
+    "./source/RailRunnerParser_Imp.h"
+    "./source/TrackSystemParser_Imp.h"
 )
 
 target_sources(trax_modules_support
@@ -32,8 +74,8 @@ source_group("Private Headers" FILES ${PRIVATE_HEADERS})
 
 target_link_libraries(trax_modules_support
      PUBLIC
-        trax_trains_collections_support
         trax_modules
+        trax_trains_support
         appframe
 )
 

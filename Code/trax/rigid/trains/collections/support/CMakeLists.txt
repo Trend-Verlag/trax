@@ -1,10 +1,8 @@
 add_library(trax_trains_collections_support 
-    STATIC
-        "./source/TrainCollectionSupportXML.cpp"
+    STATIC     
  )
 
 set(PUBLIC_HEADERS
-    "./TrainCollectionSupportXML.h"
 )
 
 set(PRIVATE_HEADERS

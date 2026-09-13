@@ -22,11 +22,11 @@
 #include "trax/rigid/trains/collections/CargoCollection.h"
 #include "trax/rigid/trains/collections/Fleet.h"
 
-#include "trax/rigid/trains/collections/support/TrainCollectionSupportXML.h"
-#include "trax/rigid/trains/support/Anl4RailRunnerWriter.h"
-#include "trax/collections/support/Anl4TrackSystemWriter.h"
+#include "../TrainCollectionSupportXML.h"
+#include "../Anl4RailRunnerWriter.h"
+#include "../Anl4TrackSystemWriter.h"
 
-#include "trax/collections/support/CollectionSupportWriteXML.h"
+#include "../CollectionSupportWriteXML.h"
 
 #if defined(_MSC_VER)
 #	pragma warning(push)

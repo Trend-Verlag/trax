@@ -14,7 +14,7 @@
 #include "../Anl4ModuleWriter.h"
 
 #include "trax/rigid/modules/ModuleCollection.h"
-#include "trax/collections/support/CollectionSupportWriteXML.h"
+#include "../CollectionSupportWriteXML.h"
 
 #if defined(_MSC_VER)
 #	pragma warning(push)
