@@ -188,6 +188,16 @@ bool PhysX_Body_ImpBase::IsSimulationEnabled() const noexcept{
 	return !Actor().getActorFlags().isSet( physx::PxActorFlag::eDISABLE_SIMULATION );
 }
 
+void PhysX_Body_ImpBase::Freeze( bool freeze ) noexcept{
+	SceneLockWrite lock{ Actor().getScene() };
+	Actor().setRigidBodyFlag( physx::PxRigidBodyFlag::eKINEMATIC, freeze );
+}
+
+bool PhysX_Body_ImpBase::IsFrozen() const noexcept{
+	SceneLockRead lock{ Actor().getScene() };
+	return Actor().getRigidBodyFlags().isSet( physx::PxRigidBodyFlag::eKINEMATIC );
+}
+
 void PhysX_Body_ImpBase::SetSendSleepNotifies( bool bNotify ){
 	Actor().setActorFlag( physx::PxActorFlag::eSEND_SLEEP_NOTIFIES, bNotify );
 }

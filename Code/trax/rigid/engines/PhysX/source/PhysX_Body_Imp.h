@@ -94,6 +94,10 @@ namespace trax
 		
 		bool IsSimulationEnabled() const noexcept override;
 
+		void Freeze( bool freeze = true ) noexcept override;
+
+		bool IsFrozen() const noexcept override;
+
 
 		inline physx::PxRigidDynamic& Actor() const noexcept{
 			return m_Actor;

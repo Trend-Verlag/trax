@@ -249,7 +249,6 @@
 
 namespace trax
 {
-	struct Body;
 	struct CollidableTrack;
 	struct Connector;
 	struct Curve;
@@ -393,10 +392,6 @@ namespace trax
 
 		virtual std::shared_ptr<SectionTrack> GetSectionTrack() noexcept = 0;
 		///@}
-
-
-		/// \returns Returns the body a track is assigned to or nullptr.
-	//	virtual std::shared_ptr<Body> GetBody() const noexcept = 0;
 
 
 		/// Tests wether a valid curve and twist are attached.

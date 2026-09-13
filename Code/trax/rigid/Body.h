@@ -191,6 +191,19 @@ namespace trax{
 		virtual bool IsSimulationEnabled() const noexcept = 0;
 
 
+		/// \brief Enables or disables frozen state of this body.
+		/// 
+		/// If frozen the body will behave like a static body, so moving
+		/// bodies collide with it, but it will not move or react to forces.
+		/// \param freeze If true the body will get set to frozen stat; false 
+		/// will make it dynamic again.
+		virtual void Freeze( bool freeze = true ) noexcept = 0;
+
+
+		/// \returns true if the body is frozen, false if not.
+		virtual bool IsFrozen() const noexcept = 0;
+
+
 		/// \brief Gets a Jack that pulses its Plug if the Body falls to sleep. 
 		virtual Jack& JackOnSleep() noexcept = 0;
 
