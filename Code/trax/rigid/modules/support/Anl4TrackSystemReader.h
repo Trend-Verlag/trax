@@ -38,16 +38,7 @@ namespace trax{
 
 		/// \name Property Tree Streaming Support for Trax Classes
 		///@{
-		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, TrackSystem& trackSystem );
-		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, TrackCollection& trackCollection );
-		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, ConnectorCollection& connectorCollection );
-		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, Switch& switchObject );
-		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, ThreeWaySwitch& threeWaySwitch );
-		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, SingleSlipSwitch& singleSlipSwitch );
-		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, DoubleSlipSwitch& doubleSlipSwitch );
-		dclspc const boost::property_tree::ptree& operator >> ( const boost::property_tree::ptree& pt, IndicatorCollection& indicatorCollection );
 		///@}
-
 
 		dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, ConnectorCollection& connectorCollection, const TrackSystem& trackSystem );
 		dclspc void Read( const boost::property_tree::ptree& pt, SocketRegistry& socketRegistry, Switch& switchObject, const TrackSystem& trackSystem );

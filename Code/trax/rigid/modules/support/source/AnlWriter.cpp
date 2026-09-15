@@ -11,10 +11,9 @@
 //								Peter Gabriel
 
 #include "../AnlWriter.h"
-#include "../Anl4ModuleWriter.h"
+#include "../XMLStreamOut.h"
 
 #include "trax/rigid/modules/ModuleCollection.h"
-#include "../CollectionSupportWriteXML.h"
 
 #if defined(_MSC_VER)
 #	pragma warning(push)

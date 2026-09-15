@@ -4,9 +4,7 @@ add_library(trax_modules_support
         "./source/Anl3TrackSystemReader.cpp"
         "./source/Anl4ModuleReader.cpp"
         "./source/Anl4ModuleWriter.cpp"
-        "./source/Anl4RailRunnerWriter.cpp"
         "./source/Anl4TrackSystemReader.cpp"
-        "./source/Anl4TrackSystemWriter.cpp"
         "./source/AnlReader.cpp"
         "./source/AnlWriter.cpp"
         "./source/curves/SupportXML_Arc.cpp"
@@ -23,7 +21,6 @@ add_library(trax_modules_support
         "./source/curves/SupportXML_Rotator.cpp"
         "./source/curves/SupportXML_SampledCurve.cpp"
         "./source/curves/SupportXML_Spline.cpp"
-        "./source/ModuleCollectionXMLWriter_Imp.cpp"
         "./source/ModuleCommands_Imp.cpp"
         "./source/RailRunnerParser_Imp.cpp"
         "./source/RigidSupportXML.cpp"
@@ -34,6 +31,8 @@ add_library(trax_modules_support
         "./source/TrackSystemReader.cpp"
         "./source/TrainCollectionSupportXML.cpp"
         "./source/TraxSupportXML.cpp"
+        "./source/XMLStreamIn.cpp"
+        "./source/XMLStreamOut.cpp"
 )
 
 set(PUBLIC_HEADERS
@@ -41,20 +40,18 @@ set(PUBLIC_HEADERS
     "./Anl3TrackSystemReader.h"
     "./Anl4ModuleReader.h"
     "./Anl4ModuleWriter.h"
-    "./Anl4RailRunnerWriter.h"
     "./Anl4TrackSystemReader.h"
-    "./Anl4TrackSystemWriter.h"
     "./AnlReader.h"
     "./AnlWriter.h"
-    "./CollectionSupportWriteXML.h"
     "./CollectionSupportXML.h"
-    "./ModuleCollectionXMLWriter.h"
     "./ModuleCommands.h"
     "./RigidSupportXML.h"
     "./SupportXML.h"
     "./TrackSystemReader.h"
     "./TrainCollectionSupportXML.h"
     "./TraxSupportXML.h"
+    "./XMLStreamIn.h"
+    "./XMLStreamOut.h"
 )
 
 set(PRIVATE_HEADERS

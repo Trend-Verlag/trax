@@ -13,6 +13,7 @@
 #include "trax/rigid/modules/support/Anl4ModuleReader.h"
 #include "../TrainCollectionSupportXML.h"
 #include "spat/support/SpatSupportXML.h"
+#include "trax/rigid/modules/support/XMLStreamIn.h"
 
 #include "trax/rigid/Gestalt.h"
 #include "trax/rigid/modules/Camera.h"

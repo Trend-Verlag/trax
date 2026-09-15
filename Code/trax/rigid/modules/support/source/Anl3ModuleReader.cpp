@@ -9,6 +9,7 @@
 //								Peter Gabriel
 
 #include "../Anl3ModuleReader.h"
+#include "../XMLStreamIn.h"
 
 #include "trax/rigid/modules/Camera.h"
 #include "trax/rigid/modules/ModuleCollection.h"

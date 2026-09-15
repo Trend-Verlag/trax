@@ -31,6 +31,7 @@
 
 #include "common/support/CommonSupportXML.h"
 #include "spat/support/SpatSupportXML.h"
+#include "trax/rigid/modules/support/XMLStreamIn.h"
 
 #include <iostream>
 

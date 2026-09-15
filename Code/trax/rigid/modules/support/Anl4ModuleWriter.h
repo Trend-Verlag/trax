@@ -13,7 +13,7 @@
 #pragma once
 
 #include "trax/Configuration.h"
-#include <boost/property_tree/ptree.hpp>
+
 #include <filesystem>
 
 namespace trax{
@@ -25,14 +25,4 @@ namespace trax{
 
 	void dclspc WriteModuleCollection( const ModuleCollection& moduleCollection, const std::filesystem::path& anl4FilePath );
 
-	namespace ptreesupport{
-		/// \name Property Tree Streaming Support for Trax Classes
-		///@{
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const ModuleCollection& moduleCollection );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Module& module );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const CameraCollection& cameraCollection );
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Camera& camera );
-		///@}
-
-	} // namespace ptreesupport
 } // namespace trax

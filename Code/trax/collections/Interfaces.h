@@ -30,6 +30,8 @@
 
 namespace trax{
 
+	template<typename,typename>
+	struct Collection;
 	struct ConnectorCollection;
 	struct IndicatorCollection;
 	struct PulseCounterCollection;

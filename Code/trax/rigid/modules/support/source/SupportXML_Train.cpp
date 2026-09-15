@@ -28,6 +28,7 @@
 
 
 #include "../SupportXML.h"
+#include "../XMLStreamIn.h"
 
 #include "trax/rigid/Gestalt.h"
 #include "trax/rigid/trains/WheelFrame.h"

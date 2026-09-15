@@ -37,7 +37,6 @@ namespace trax{
 
 	namespace ptreesupport{
 
-		dclspc boost::property_tree::ptree& operator << ( boost::property_tree::ptree& pt, const Fleet& fleet );
 
 		/// \name Property Tree Streaming Support for Trax Classes
 		///@{

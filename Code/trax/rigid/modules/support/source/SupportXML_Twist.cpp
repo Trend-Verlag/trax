@@ -25,6 +25,8 @@
 // For further information, please contact: horstmann@traxlibrary.dev
 
 #include "../TraxSupportXML.h"
+#include "../XMLStreamIn.h"
+
 #include "spat/support/SpatSupportXML.h"
 #include "dim/support/DimSupportXML.h"
 
@@ -117,80 +119,6 @@ namespace ptreesupport
 		std::clog << trax::Verbosity::detailed << "CreateTwist: No matching twist type found in property tree." << std::endl;
 		return nullptr;
 	}
-
-	const boost::property_tree::ptree& trax::ptreesupport::operator>>( const boost::property_tree::ptree& pt, ConstantTwist& constantTwist )
-	{
-		constantTwist.TwistValue( pt.get( "<xmlattr>.angle", 0_rad ) );
-		return pt;
-	}
-
-	const boost::property_tree::ptree& trax::ptreesupport::operator>>( const boost::property_tree::ptree& pt, LinearTwist& linearTwist )
-	{
-		linearTwist.From( pt.get( "<xmlattr>.startangle", 0_rad ) );
-		linearTwist.To( pt.get( "<xmlattr>.endangle", 0_rad ) );
-		return pt;
-	}
-
-	const boost::property_tree::ptree& trax::ptreesupport::operator>>( const boost::property_tree::ptree& pt, PiecewiseTwist& piecewiseTwist )
-	{
-		PiecewiseTwist::Data data;
-
-		for( const auto& pair : pt )
-		{
-			if( pair.first == "TwistAngle" )
-				data.push_back( std::make_pair( 
-					get( pair.second, "<xmlattr>.s", 0_m, _m ),
-					pair.second.get( "<xmlattr>.value", 0_rad ) ) );
-		}
-		piecewiseTwist.Create( data );
-
-		return pt;
-	}
-
-	const boost::property_tree::ptree& trax::ptreesupport::operator>>( const boost::property_tree::ptree& pt, DirectionalTwist& directionalTwist )
-	{
-		directionalTwist.Freeze( pt.get( "<xmlattr>.bFrozen", false ) );
-
-		for( const auto& pair : pt )
-		{
-			if( pair.first == "Vector" ){
-				spat::Vector<One> attractor;
-				ReadVector( pair.second, attractor );
-				directionalTwist.Attractor( attractor );
-			}
-		}
-
-		return pt;
-	}
-
-	const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree& pt, PiecewiseDirectionalTwist& piecewiseDirectionalTwist )
-	{
-
-		return pt;
-	}
-
-	const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree& pt, CombinedTwist& combinedTwist )
-	{
-		std::vector<std::unique_ptr<RoadwayTwist>> twists;
-		twists.reserve(2);
-
-		for( const auto& pair : pt )
-		{
-			if( pair.first == "Twist" )
-			{
-				twists.push_back( CreateTwist( pair.second ) );
-			}
-		}
-
-		if( twists.size() > 0 && twists.at(0) )
-			combinedTwist.AttachTwist1( std::move(twists.at(0)) );
-
-		if( twists.size() > 1 && twists.at(1) )
-			combinedTwist.AttachTwist2( std::move(twists.at(1)) );
-
-		return pt;
-	}
-
 
 	std::unique_ptr<RoadwayTwist> CreateConstantTwist( const boost::property_tree::ptree& pt ){
 		if( auto pConstantTwist = ConstantTwist::Make() ){
