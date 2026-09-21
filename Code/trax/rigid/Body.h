@@ -204,6 +204,14 @@ namespace trax{
 		virtual bool IsFrozen() const noexcept = 0;
 
 
+		/// \brief Enables or disables gravity for this Body.
+		virtual void EnableGravity( bool enable = true ) noexcept = 0;
+
+
+		/// \returns true if gravity is enabled for this Body; false if disabled.
+		virtual bool IsGravityEnabled() const noexcept = 0;
+
+
 		/// \brief Gets a Jack that pulses its Plug if the Body falls to sleep. 
 		virtual Jack& JackOnSleep() noexcept = 0;
 

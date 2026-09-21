@@ -198,6 +198,16 @@ bool PhysX_Body_ImpBase::IsFrozen() const noexcept{
 	return Actor().getRigidBodyFlags().isSet( physx::PxRigidBodyFlag::eKINEMATIC );
 }
 
+void PhysX_Body_ImpBase::EnableGravity( bool enable ) noexcept{
+	SceneLockWrite lock{ Actor().getScene() };
+	Actor().setActorFlag( physx::PxActorFlag::eDISABLE_GRAVITY, !enable );
+}
+
+bool PhysX_Body_ImpBase::IsGravityEnabled() const noexcept{
+	SceneLockRead lock{ Actor().getScene() };
+	return !Actor().getActorFlags().isSet( physx::PxActorFlag::eDISABLE_GRAVITY );
+}
+
 void PhysX_Body_ImpBase::SetSendSleepNotifies( bool bNotify ){
 	Actor().setActorFlag( physx::PxActorFlag::eSEND_SLEEP_NOTIFIES, bNotify );
 }

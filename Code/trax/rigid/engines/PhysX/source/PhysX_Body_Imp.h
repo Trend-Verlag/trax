@@ -98,6 +98,10 @@ namespace trax
 
 		bool IsFrozen() const noexcept override;
 
+		void EnableGravity( bool enable = true ) noexcept override;
+
+		bool IsGravityEnabled() const noexcept override;
+
 
 		inline physx::PxRigidDynamic& Actor() const noexcept{
 			return m_Actor;
