@@ -11,6 +11,7 @@ add_library(trax_rigid
         "./source/Shape_Imp.cpp"
         "./source/Simulator_Imp.cpp"
         "./source/StaticTrack_Imp.cpp"
+        "./source/Terrain_Imp.cpp"
         "./source/TrackJointFeeder_Imp.cpp"
         "./source/TractionForceCharacteristic_Imp.cpp"
 )
@@ -29,6 +30,7 @@ set(PUBLIC_HEADERS
     "./Shape.h"
     "./Simulator.h"
     "./StaticTrack.h"
+    "./Terrain.h"
     "./TrackJoint.h"
     "./TrackJointFeeder.h"
     "./TrackJointLimits.h"
@@ -49,6 +51,7 @@ set(PRIVATE_HEADERS
     "./source/Shape_Imp.h"
     "./source/Simulator_Imp.h"
     "./source/StaticTrack_Imp.h"
+    "./source/Terrain_Imp.h"
     "./source/TractionForceCharacteristic_Imp.h"
 )
 

@@ -31,6 +31,9 @@
 
 //#define BOOST_MATH_INSTRUMENT
 #include <boost/math/tools/roots.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/lu.hpp>
 
 namespace common{
 	template<typename> struct Interval;
@@ -75,4 +78,56 @@ namespace trax{
 	}
 	///@}
 
+    namespace ublas = boost::numeric::ublas;
+
+    // Solve a general N-dimensional nonlinear system F(x) = 0.
+    //   F      : function mapping a length-N vector to a length-N residual vector
+    //   guess  : initial estimate (also receives the result)
+    //   tol    : convergence tolerance on ||F(x)||
+    //   maxIt  : maximum Newton iterations
+    // Returns true on convergence, false otherwise (singular Jacobian / no convergence).
+    template<typename Valtype>
+    inline bool NewtonSolve(
+        const std::function<ublas::vector<Valtype>(const ublas::vector<Valtype>&)>& F,
+        ublas::vector<Valtype>& guess,
+        Valtype tol   = Valtype{1e-10},
+        std::size_t maxIt = 100)
+    {
+        const std::size_t n = guess.size();
+        const Valtype h = Valtype{1e-7}; // finite-difference step for the Jacobian
+
+        for (std::size_t it = 0; it < maxIt; ++it)
+        {
+            ublas::vector<Valtype> f = F(guess);
+
+            // Check convergence: ||f||_2
+            if (ublas::norm_2(f) < tol)
+                return true;
+
+            // Build Jacobian J via forward finite differences
+            ublas::matrix<double> J(n, n);
+            for (std::size_t j = 0; j < n; ++j)
+            {
+                ublas::vector<Valtype> xp = guess;
+                xp(j) += h;
+                ublas::vector<Valtype> fp = F(xp);
+                for (std::size_t i = 0; i < n; ++i)
+                    J(i, j) = (fp(i) - f(i)) / h;
+            }
+
+            // Solve J * dx = f  (LU factorization, in place)
+            ublas::permutation_matrix<std::size_t> pm(n);
+            if (ublas::lu_factorize(J, pm) != 0)
+                return false; // singular Jacobian
+
+            ublas::vector<Valtype> dx = f;
+            ublas::lu_substitute(J, pm, dx);
+
+            // Newton update: x <- x - dx
+            guess -= dx;
+        }
+
+        // Final tolerance check after the loop
+        return ublas::norm_2(F(guess)) < tol;
+    }
 }

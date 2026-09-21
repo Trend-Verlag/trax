@@ -126,4 +126,37 @@ void SectionTrack_Imp::ClearSections() noexcept{
 	OnGeometryChanged();
 }
 ///////////////////////////////////////
+spat::Box<Length> BoundingBox( const SectionTrack& track, common::Interval<Length> range )
+{
+	Length s = range.Near();	
+	spat::Position<Length> position;
+	track.Transition( s, position );
+	spat::Box<Length> box{ BoundingBox( static_cast<const Track&>(track), range ) };
+
+	while( const Length ds = Segment_Checked( track, s, epsilon__length, { 1_m, +infinite__length } ) )
+	{
+		track.Transition( s += ds, position );
+		if( !range.Touches( s ) )
+			break;
+
+		box.Expand( position );
+	}
+
+	for( int i = 0; i < track.CntSections(); ++i )
+	{
+		if( const std::shared_ptr<const Section> pSection = track.GetSection( i ); pSection )
+		{
+			const spat::Rect<Length> clearance = pSection->Clearance();
+
+			Length d = std::max( abs(clearance.Left()), abs(clearance.Right()) );
+			d = std::max( d, abs(clearance.Bottom()) );
+			d = std::max( d, abs(clearance.Top()) );
+
+			box.Inflate( d, d, d );
+		}
+	}
+
+	return box;
+}
+///////////////////////////////////////
 }

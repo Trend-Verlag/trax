@@ -65,6 +65,7 @@ namespace spat{
 		explicit	Box( const Vector<Valtype>& cuboid ) noexcept;
 					Box( Valtype xnear, Valtype ynear, Valtype znear, Valtype xfar, Valtype yfar, Valtype zfar ) noexcept;
 					Box( const Position<Valtype>& nearCorner, const Position<Valtype>& farCorner ) noexcept;
+					Box( common::Interval<Valtype> x, common::Interval<Valtype> y, common::Interval<Valtype> z ) noexcept;
 		///@}
 
 
@@ -297,6 +298,13 @@ Box<Valtype>::Box( const Position<Valtype>& nearCorner, const Position<Valtype>&
 	:	m_WidthX{nearCorner.x,farCorner.x},
 		m_WidthY{nearCorner.y,farCorner.y},
 		m_WidthZ{nearCorner.z,farCorner.z}
+{}
+
+template<typename Valtype>
+inline spat::Box<Valtype>::Box( common::Interval<Valtype> x, common::Interval<Valtype> y, common::Interval<Valtype> z ) noexcept
+	:	m_WidthX{x},
+		m_WidthY{y},
+		m_WidthZ{z}
 {}
 
 template<typename Valtype> inline

@@ -123,30 +123,4 @@ void StaticTrack_Imp::CreateShape() noexcept
 	}
 }
 ///////////////////////////////////////
-spat::Box<Length> GetBoxFor( const TrackBuilder& track, const Section* pSection )
-{
-	Length s = 0_m;	
-	Position<Length> position;
-	track.Transition( s, position );
-	spat::Box<Length> box{ position, position };
-
-	while( const Length ds = Segment_Checked( track, s, epsilon__length, { 1_m, +infinite__length } ) )
-	{
-		track.Transition( s += ds, position );
-		box.Expand( position );
-	}
-
-	if( pSection ){
-		const Rect<Length> clearance = pSection->Clearance();
-
-		Length d = std::max( abs(clearance.Left()), abs(clearance.Right()) );
-		d = std::max( d, abs(clearance.Bottom()) );
-		d = std::max( d, abs(clearance.Top()) );
-
-		box.Inflate( d, d, d );
-	}
- 
-	return box;
-}
-///////////////////////////////////////
 }

@@ -241,7 +241,6 @@
 #include "RoadwayTwist.h"
 
 #include "common/Interval.h"
-#include "spat/Box.h"
 #include "spat/Frame.h"
 #include "spat/Vector2D.h"
 #include "spat/VectorBundle.h"
@@ -822,6 +821,32 @@ namespace trax
 
 	/// \returns the tracks end closest to the given point in space.
 	dclspc EndType ClosestEnd( const spat::Position<Length>& toPoint, const Track& onTrack );
+	///@}
+
+
+	/// \brief Returns the intersection of a track's ribbon with a ray in space.
+	/// 
+	/// The Ribbon(s,t) = F.P(s) + t * F.N(s); // the ribbon
+	/// The Ray(u) = R.P + u * R.N;  // the ray
+	/// 
+	/// The function finds the solution for the equation Ribbon(s,t) - Ray(u) = F(s,t,u) == 0.
+	/// The intersection point would be Ray(u).
+	/// \param track The track whose ribbon is to be intersected.
+	/// \param ofRay The ray to intersect with the track's ribbon.
+	/// \param initialGuess A value of (s,t,u) that might be close to the desired solution.
+	/// \returns The intersection coordinates (s,t,u) of the track's ribbon with the ray. If there 
+	/// is no solution s will be < 0.
+	dclspc spat::Position<Length> Ramp( const Track& track, const spat::VectorBundle<Length,One>& ofRay, const spat::Position<Length>& initialGuess );
+
+
+	/// \defgroup Group_BoundingBox Track's Bounding Box
+	///@{
+
+	/// \brief Returns the bounding box of a track.
+	dclspc spat::Box<Length> BoundingBox( const Track& track );
+
+	/// \brief Returns the bounding box of a track's range.
+	dclspc spat::Box<Length> BoundingBox( const Track& track, common::Interval<Length> range );
 	///@}
 
 

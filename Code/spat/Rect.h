@@ -58,6 +58,7 @@ namespace spat{
 		explicit	Rect( const Vector2D<Valtype>& diagonal ) noexcept;
 					Rect( const Position2D<Valtype>& lefttop, const Position2D<Valtype>& rightbottom ) noexcept;
 					Rect( Valtype left, Valtype top, Valtype right, Valtype bottom ) noexcept;
+					Rect( common::Interval<Valtype> x, common::Interval<Valtype> y ) noexcept;
 		///@}
 
 
@@ -253,6 +254,12 @@ template<typename Valtype> inline
 Rect<Valtype>::Rect( Valtype left, Valtype top, Valtype right, Valtype bottom ) noexcept
 	:	m_Width	{left,right},
 		m_Height{top,bottom}
+{}
+
+template<typename Valtype>
+inline spat::Rect<Valtype>::Rect( common::Interval<Valtype> x, common::Interval<Valtype> y ) noexcept
+	:	m_Width	{x},
+		m_Height{y}
 {}
 
 template<typename Valtype> inline

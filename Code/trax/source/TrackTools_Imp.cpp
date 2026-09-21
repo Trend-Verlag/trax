@@ -25,7 +25,7 @@
 // For further information, please contact: horstmann@traxlibrary.dev
 
 #include "trax/UnitsHelper.h"
-#include "trax/Track.h"
+#include "trax/SectionTrack.h"
 
 #include <iostream>
 
@@ -272,6 +272,61 @@ EndType ClosestEnd( const spat::Position<Length>& toPoint, const Track& onTrack 
 	Length dN = ( N - toPoint ).Length();
 	Length dS = ( S - toPoint ).Length();
 	return dN <= dS ? EndType::north : EndType::south;
+}
+
+spat::Position<Length> Ramp( const Track& track, const spat::VectorBundle<Length,One>& R, const spat::Position<Length>& initialGuess )
+{
+    auto F = [&track,&R]( const trax::ublas::vector<double>& x )
+	{
+		spat::Frame<Length,One> F;
+		track.Transition( _m( meters_per_unit * x(0) ), F );
+		spat::Vector<Length> P = F.P + _m( meters_per_unit * x(1) ) * F.N - R.P - _m( meters_per_unit * x(2) ) * R.T;
+
+        trax::ublas::vector<double> r(3);
+        r(0) = P.dx.Units(); // f0
+        r(1) = P.dy.Units(); // f1
+        r(2) = P.dz.Units(); // f2
+        return r;
+    };
+
+    trax::ublas::vector<double> x{3};
+    x(0) = initialGuess.x.Units(); 
+	x(1) = initialGuess.y.Units(); 
+	x(2) = initialGuess.z.Units(); // initial guess
+
+    if( trax::NewtonSolve<double>(F,x) )
+        return { _m( meters_per_unit * x(0) ), _m( meters_per_unit * x(1) ), _m( meters_per_unit * x(2) ) };
+
+	return { -1_m, 0_m, 0_m };
+}
+
+spat::Box<Length> BoundingBox( const Track& track ){
+	return BoundingBox( track, track.Range() );
+}
+
+spat::Box<Length> BoundingBox( const Track& track, common::Interval<Length> range )
+{
+	if( !track.IsValid() )
+		throw std::invalid_argument{ "BoundingBox: track is not valid." };
+
+	if( !track.Range().Includes( range ) )
+		throw std::invalid_argument{ "BoundingBox: range does not intersect with track's range." };
+
+	Length s = range.Near();	
+	spat::Position<Length> position;
+	track.Transition( s, position );
+	spat::Box<Length> box{ position, position };
+
+	while( const Length ds = Segment_Checked( track, s, epsilon__length, { 1_m, +infinite__length } ) )
+	{
+		track.Transition( s += ds, position );
+		if( !range.Touches( s ) )
+			break;
+
+		box.Expand( position );
+	}
+
+	return box;
 }
 
 void Connect(  

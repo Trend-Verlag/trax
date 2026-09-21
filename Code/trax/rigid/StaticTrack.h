@@ -54,14 +54,5 @@ namespace trax{
 	};
 
 
-	/// \brief Get an axis aligned box that completely contains the track.
-	/// 
-	/// It is guaranteed that the section points are contained in the box as well
-	/// as every position returned by the Track::Transition() methods.
-	/// 
-	/// \param track Track to calculate a box for.
-	/// \param pSection Optional section to calculate the box for. If nullptr, the box will be calculated for the center line..
-	/// \return An axis aligned box containing the track.
-	dclspc spat::Box<Length> GetBoxFor( const TrackBuilder& track, const Section* pSection = nullptr );
 
 } // namespace trax
