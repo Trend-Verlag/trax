@@ -23,7 +23,8 @@
 // For further information, please contact: horstmann@traxlibrary.dev
 
 #include "ModuleCollection_Imp.h"
-#include "../Module.h"
+#include "trax/rigid/modules/Module.h"
+#include "trax/rigid/Terrain.h"
 
 namespace trax{
 
@@ -38,6 +39,7 @@ std::unique_ptr<ModuleCollection> ModuleCollection::Make() noexcept
 }
 
 ModuleCollection_Imp::ModuleCollection_Imp()
+	: m_pTerrain{ Terrain::Make() }
 {
 }
 
@@ -48,6 +50,16 @@ const char* ModuleCollection_Imp::TypeName() const noexcept{
 bool ModuleCollection_Imp::IsValid() const noexcept
 {
 	return IsValid_Imp( m_Container );
+}
+
+void ModuleCollection_Imp::Attach( std::shared_ptr<Terrain> pTerrain ) noexcept
+{
+	m_pTerrain = pTerrain;
+}
+
+std::shared_ptr<Terrain> ModuleCollection_Imp::GetTerrain() const noexcept
+{
+	return m_pTerrain;
 }
 
 }

@@ -30,12 +30,13 @@
 
 #include "trax/Configuration.h"
 #include "trax/Units.h"
-//#include "GeomType.h"
+#include "HeightField.h"
 
 #include "spat/Frame.h"
 #include "spat/Box.h"
 #include "spat/Position2D.h"
 #include "spat/Matrix.h"
+#include "spat/Rect.h"
 
 #include <memory>
 #include <vector>
@@ -287,36 +288,24 @@ namespace trax{
 	};
 
 
-	struct GeomHeightField : virtual Geom{
-
-		/// \brief Creates a heightfield from data
-		///
-		/// The quads are tesselated as [i],[i+nCols+1],[i+1] and [i],[i+nCols],[i+nCols+1].
-		/// If all three adjacent samples of a triangle have the cooresponding hole information flag set to true,
-		/// the triangle would not be created as a collision shape.
-		/// \param pSamples Array with the elevation data of the sample points. Length must be at least nRows*nCols.
-		/// \param pbHoles Array with the hole information. Length must be at least nRows*nCols.
-		/// \param nRows Number of rows in the heightfield.
-		/// \param nCols Number of columns in the heightfield.
-		/// \param vertScale Vertical scale factor. pSamples[x] * vertScale * meters_per_unit will be the height in meters.
-		/// \param horzScale Horizontal scale factor. 1 * horzScale * meters_per_unit will be the grid distance in meters.
-		virtual bool Create( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale ) = 0;
-
+	struct GeomHeightField :	virtual Geom, 
+								HeightField
+	{
 
 		/// \brief creates a heightfield from data in the EEP style.
 		///
 		/// There will only be quads erased, no single triangles. A quad is erased if its topleft, topright and bottomright
 		/// sample show the hole flag.
-		virtual bool CreateEEPStyle( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale ) = 0;
+		//virtual bool CreateEEPStyle( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale ) = 0;
 
 
-		virtual Length Height( const spat::Position2D<Length>& parameter ) const = 0;
+		//virtual Length Height( const spat::Position2D<Length>& parameter ) const = 0;
 
 
-		virtual void Get( const spat::Position2D<Length>& parameter, spat::Position<Length>& pos ) const= 0;
+		//virtual void Get( const spat::Position2D<Length>& parameter, spat::Position<Length>& pos ) const= 0;
 
 
-		virtual void Get( const spat::Position2D<Length>& parameter, spat::Frame<Length,One>& frame ) const = 0;
+		//virtual void Get( const spat::Position2D<Length>& parameter, spat::Frame<Length,One>& frame ) const = 0;
 	};
 
 

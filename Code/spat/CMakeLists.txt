@@ -1,6 +1,7 @@
 add_library(spat 
     INTERFACE
         Box.h
+        Circle.h
         Frame.h
         Matrix.h
         Position.h

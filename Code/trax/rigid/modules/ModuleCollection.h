@@ -33,6 +33,7 @@
 namespace trax{
 
 	struct Module;
+	struct Terrain;
 
 	/// \brief A collection of modules.
 	///
@@ -41,5 +42,16 @@ namespace trax{
 	{
 		/// \brief Makes a standard ModuleCollection object.
 		static dclspc std::unique_ptr<ModuleCollection> Make() noexcept;
+
+
+		/// \brief Attaches a Terrain to this Module.
+		/// \param pTerrain Pointer to object to attach or nullptr to remove.
+		virtual void Attach( std::shared_ptr<Terrain> pTerrain ) noexcept = 0;
+
+
+		/// \returns A pointer to the attached Terrain.
+		virtual std::shared_ptr<Terrain> GetTerrain() const noexcept = 0;
+
+
 	};
 }

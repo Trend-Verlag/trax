@@ -88,7 +88,7 @@ namespace trax{
 	/// as every position returned by the Track::Transition() methods.
 	/// 
 	/// \param track Track to calculate a box for.
-	/// \param pSection Optional section to calculate the box for. If nullptr, the box will be calculated for the center line..
+	/// \param range Range along the track to calculate the box for.
 	/// \return An axis aligned box containing the track.
 	dclspc spat::Box<Length> BoundingBox( const SectionTrack& track, common::Interval<Length> range );
 

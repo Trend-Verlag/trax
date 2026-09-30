@@ -168,15 +168,32 @@ namespace trax{
 
 		Volume GetVolume() const noexcept override;
 
-		bool Create( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale ) override;
+		bool Create( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale ) override;
 
-		bool CreateEEPStyle( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale ) override;
+		bool Create( const Length* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale ) override;
 
-		Length Height( const Position2D<Length>& parameter ) const override;
+		bool Create( const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale ) override;
 
-		void Get( const Position2D<Length>& parameter, Position<Length>& pos ) const override;
+		bool CreateEEPStyle( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale ); // override;
 
-		void Get( const Position2D<Length>& parameter, Frame<Length,One>& frame ) const override;
+		spat::Vector2D<int> GetRasterExtent() const noexcept override;
+
+		spat::Vector2D<Length> GetRasterScale() const noexcept override;
+
+		Length GetHeight( const spat::Position2D<int>& atRasterPoint ) const override;
+
+		Length GetHeight( const spat::Position2D<Length>& atPoint ) const override;
+
+		common::Interval<Length> HeightRange() const noexcept override;
+
+		void SetHeight( const spat::Position2D<int>& atRasterPoint, Length height ) override;
+
+		void SetHeight( const spat::Rect<int>& atRasterPoints, Length height ) override;
+
+		bool IsHole( const spat::Position2D<int>& atRasterPoint ) const override;
+
+		void SetHole( const spat::Position2D<int>& atRasterPoint, bool hole ) override;
+
 
 		const physx::PxGeometry& Geometry() const noexcept override{
 			return m_HeightFieldGeometry;

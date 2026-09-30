@@ -28,28 +28,45 @@
 
 
 #include "trax/rigid/Terrain.h"
-#include "Shape_Imp.h"
 
 #include "spat/Vector2D.h"
+#include "spat/Matrix.h"
 
 
 namespace trax{
 
-	class Terrain_Imp : public Terrain,
-						public virtual Shape_ImpBase
+	class Terrain_Imp : public Terrain
 	{
 	public:
 		Terrain_Imp();
 
 		const char*	TypeName() const noexcept override;
 
-		bool Create( const spat::Rect<Length>& rect, Length rasterSize, int patchSize = 16 ) override;
+		void Create( const spat::Rect<int>& tileRange ) override;
+
+		void SetFrame( const spat::Frame<Length, One>& frame ) override;
+
+		const spat::Frame<Length,One>& GetFrame() const noexcept override;
+
+		void Attach( std::unique_ptr<HeightField> pTile, const spat::Position2D<int>& tileCoordinates ) override;
+
+		std::unique_ptr<HeightField> Detach( const spat::Position2D<int>& atTileCoordinates ) noexcept override;
 
 		void Clear() noexcept override;
 
-		spat::Rect<Length> SetHeight( const spat::Position2D<Length>& parameter, Length height ) override;
+
+		std::unique_ptr<HeightField> SetHeight( const spat::Position<Length>& parameter, Length radius ) override;
+
+		std::unique_ptr<HeightField> SetHeight( const spat::Position2D<Length>& parameter, Length height ) override;
+
+		std::unique_ptr<HeightField> SetHeight( const spat::Rect<Length>& area, Length height ) override;
+
+		std::unique_ptr<HeightField> SetHeight( const spat::Circle<Length>& area, Length height ) override;
+
+		std::unique_ptr<HeightField> SetHeight( const HeightField& area, const spat::Position2D<int>& position ) override;
 
 		Length GetHeight( const spat::Position2D<Length>& parameter ) const override;
+
 
 		spat::Rect<Length> PunchHole( const spat::Position2D<Length>& parameter, Length radius ) override;
 
@@ -57,34 +74,33 @@ namespace trax{
 
 		spat::Rect<Length> Solidify( const spat::Rect<Length>& inRect ) override;
 
-
 		bool IsSolid( const spat::Rect<Length>& inRect ) noexcept override;
+
+
+		Length GetTileExtent() const noexcept override;
 
 		spat::Rect<Length> Range() const noexcept override;
 
 		common::Interval<Length> HeightRange() const noexcept override;
 
-		spat::Rect<Length> BuildRamp( const SectionTrack& forTrack ) override;
-
-		spat::Rect<Length> PunchTunnel( const SectionTrack& forTrack ) override;
 
 		void Transition( const spat::Position2D<Length>& parameter, spat::Position<Length>& position ) const override;
 
 		void Transition( const spat::Position2D<Length>& parameter, spat::VectorBundle2<Length,One>& bundle ) const override;
 
 		void Transition( const spat::Position2D<Length>& parameter, spat::Frame<Length,One>& frame ) const override;
-
 	private:
-		spat::Rect<Length> m_Range;
-		spat::Vector2D<int> m_Size;
-		Length m_RasterSize;
-		int m_PatchSize;
+		spat::Frame<Length,One> m_Frame;
+		spat::Rect<int> m_TileRange;
+		std::vector<std::unique_ptr<HeightField>> m_HeightFields;
+		Length m_TileExtent;
 
-
-
-
-
-
+		inline std::unique_ptr<HeightField>& At( const spat::Position2D<int>& tileCoordinates ) noexcept{
+			return m_HeightFields.at( tileCoordinates.y * m_TileRange.Width() + tileCoordinates.x );
+		}
+		inline const std::unique_ptr<HeightField>& At( const spat::Position2D<int>& tileCoordinates ) const noexcept{
+			return m_HeightFields.at( tileCoordinates.y * m_TileRange.Width() + tileCoordinates.x );
+		}
 	};
 
 }

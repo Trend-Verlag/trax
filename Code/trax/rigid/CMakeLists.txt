@@ -23,6 +23,7 @@ set(PUBLIC_HEADERS
     "./Geom.h"
     "./GeomType.h"
     "./Gestalt.h"
+    "./HeightField.h"
     "./Joint.h"
     "./Material.h"
     "./MovableTrack.h"

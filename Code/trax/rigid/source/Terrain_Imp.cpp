@@ -27,99 +27,218 @@
 
 #include "Terrain_Imp.h"
 
+#include "trax/rigid/HeightField.h"
+#include "trax/Track.h"
+
 
 namespace trax{
+
+	using namespace spat;
+
 ///////////////////////////////////////
-std::shared_ptr<Terrain> trax::Terrain::Make() noexcept
+std::unique_ptr<Terrain> trax::Terrain::Make() noexcept
 {
-	return std::shared_ptr<Terrain>();
+	try{
+		return std::make_unique<Terrain_Imp>();
+	}
+	catch( const std::bad_alloc& ){
+		return nullptr;
+	}
 }
 ///////////////////////////////////////
 Terrain_Imp::Terrain_Imp()
-{}
-
-const char * Terrain_Imp::TypeName() const noexcept
+	: m_Frame		{ Identity<Length, One> }
+	, m_TileRange	{ 10, 10 }
+	, m_HeightFields{ static_cast<size_t>(m_TileRange.Width() + 1) * static_cast<size_t>(m_TileRange.Height() + 1) }
+	, m_TileExtent	{ -1_m }
 {
-	return nullptr;
 }
 
-bool Terrain_Imp::Create( const spat::Rect<Length>& rect, Length rasterSize, int patchSize )
+const char* Terrain_Imp::TypeName() const noexcept
+{
+	return "Terrain";
+}
+
+void Terrain_Imp::Create( const Rect<int>& tileRange )
 {
 	Clear();
+	m_TileRange = tileRange;
+	m_HeightFields.resize( ( m_TileRange.Width() + 1 ) * ( m_TileRange.Height() + 1 ) );
+}
 
+void Terrain_Imp::SetFrame( const Frame<Length, One>&frame )
+{
+	if( !frame.IsOrthoNormal() )
+		throw std::invalid_argument( "frame must be orthonormal" );
 
+	m_Frame = frame;
+}
 
+const spat::Frame<Length,One>& Terrain_Imp::GetFrame() const noexcept{
+	return m_Frame;
+}
 
+void Terrain_Imp::Attach( std::unique_ptr<HeightField> pTile, const Position2D<int>& tileCoordinates )
+{
+	if( !pTile )
+		throw std::invalid_argument( "pTile must not be nullptr" );
+	if( !m_TileRange.Touches( tileCoordinates ) )
+		throw std::out_of_range( "tileCoordinates is out of range" );
+	if( pTile->GetRasterExtent().dx != pTile->GetRasterExtent().dy )
+		throw std::invalid_argument( "pTile must have a square raster extent" );
 
+	if( m_TileExtent < 0_m ){
+		m_TileExtent = pTile->GetRasterScale().dx * pTile->GetRasterExtent().dx;
+	}
+	else if( abs(m_TileExtent - pTile->GetRasterScale().dx * pTile->GetRasterExtent().dx) > epsilon__length )
+		throw std::invalid_argument( "pTile must have the same extent as the other tiles" );
 
+	At( tileCoordinates ) = std::move( pTile );
+}
 
+std::unique_ptr<HeightField> Terrain_Imp::Detach( const Position2D<int>& atTileCoordinates ) noexcept
+{
+	if( !m_TileRange.Touches( atTileCoordinates ) )
+		return nullptr;
 
-
-
-
-	return false;
+	return std::move( At( atTileCoordinates ) );
 }
 
 void Terrain_Imp::Clear() noexcept
-{}
-
-spat::Rect<Length> Terrain_Imp::SetHeight( const spat::Position2D<Length>& parameter, Length height )
 {
-	return spat::Rect<Length>();
+	for( auto& pHeightField : m_HeightFields )
+		pHeightField.reset();
+
+	m_TileExtent = -1_m;
 }
 
-Length Terrain_Imp::GetHeight( const spat::Position2D<Length>& parameter ) const
+std::unique_ptr<HeightField> Terrain_Imp::SetHeight( const spat::Position<Length>& parameter, Length radius )
 {
-	return Length();
+	return std::unique_ptr<HeightField>();
 }
 
-spat::Rect<Length> Terrain_Imp::PunchHole( const spat::Position2D<Length>& parameter, Length radius )
+std::unique_ptr<HeightField> Terrain_Imp::SetHeight( const Position2D<Length>& parameter, Length height )
 {
-	return spat::Rect<Length>();
+	TileSpacePosition tileSpacePosition = TerrainSpaceToTileSpace( *this, parameter );
+
+	if( const std::unique_ptr<HeightField>& pHeightField = At( tileSpacePosition.tileCoordinates ); pHeightField )
+	{
+		Length rasterScale = pHeightField->GetRasterScale().dx;
+		const int left = static_cast<int>( std::floor( tileSpacePosition.tileSpaceParameter.x / rasterScale ) );
+		const int bottom = static_cast<int>( std::floor( tileSpacePosition.tileSpaceParameter.y / rasterScale ) );
+		const Rect<int> RasterArea{
+			left, 
+			bottom + 1,
+			left + 1,
+			bottom };
+
+		pHeightField->SetHeight( RasterArea, height );
+	}
+
+	return nullptr;
 }
 
-spat::Rect<Length> Terrain_Imp::PunchHole( const spat::Rect<Length>& inRect )
+std::unique_ptr<HeightField> Terrain_Imp::SetHeight( const Rect<Length>& area, Length height )
 {
-	return spat::Rect<Length>();
+	throw std::logic_error( "not implemented" );
 }
 
-spat::Rect<Length> Terrain_Imp::Solidify( const spat::Rect<Length>& inRect )
+std::unique_ptr<HeightField> Terrain_Imp::SetHeight( const spat::Circle<Length>& area, Length height )
 {
-	return spat::Rect<Length>();
+	return std::unique_ptr<HeightField>();
 }
 
-bool Terrain_Imp::IsSolid( const spat::Rect<Length>& inRect ) noexcept
+std::unique_ptr<HeightField> Terrain_Imp::SetHeight( const HeightField & area, const spat::Position2D<int>& position )
+{
+	return std::unique_ptr<HeightField>();
+}
+
+Length Terrain_Imp::GetHeight( const Position2D<Length>& parameter ) const
+{
+	TileSpacePosition tileSpacePosition = TerrainSpaceToTileSpace( *this, parameter );
+
+	if( const std::unique_ptr<HeightField>& pHeightField = At( tileSpacePosition.tileCoordinates ); pHeightField )
+		return pHeightField->GetHeight( tileSpacePosition.tileSpaceParameter );
+
+	return 0_m;
+}
+
+Rect<Length> Terrain_Imp::PunchHole( const Position2D<Length>& parameter, Length radius )
+{
+	return Rect<Length>();
+}
+
+Rect<Length> Terrain_Imp::PunchHole( const Rect<Length>& inRect )
+{
+	return Rect<Length>();
+}
+
+Rect<Length> Terrain_Imp::Solidify( const Rect<Length>& inRect )
+{
+	return Rect<Length>();
+}
+
+bool Terrain_Imp::IsSolid( const Rect<Length>& inRect ) noexcept
 {
 	return false;
 }
 
-spat::Rect<Length> Terrain_Imp::Range() const noexcept
-{
-	return spat::Rect<Length>();
+Length Terrain_Imp::GetTileExtent() const noexcept{
+	return m_TileExtent;
+}
+
+Rect<Length> Terrain_Imp::Range() const noexcept{
+	return m_TileExtent * m_TileRange;
 }
 
 common::Interval<Length> Terrain_Imp::HeightRange() const noexcept
 {
-	return common::Interval<Length>();
+	common::Interval<Length> heightRange{ +infinite__length, -infinite__length };
+
+	for( auto& pHeightField : m_HeightFields )
+	{
+		if( pHeightField )
+			heightRange.Union( pHeightField->HeightRange() );
+	}
+
+	return heightRange;
 }
 
-spat::Rect<Length> Terrain_Imp::BuildRamp( const SectionTrack & forTrack )
+void Terrain_Imp::Transition( const Position2D<Length>& parameter, Position<Length>& position ) const
 {
-	return spat::Rect<Length>();
+	throw std::logic_error( "not implemented" );
 }
 
-spat::Rect<Length> Terrain_Imp::PunchTunnel( const SectionTrack & forTrack )
+void Terrain_Imp::Transition( const Position2D<Length>&parameter, VectorBundle2<Length, One>&bundle ) const
 {
-	return spat::Rect<Length>();
+	throw std::logic_error( "not implemented" );
 }
 
-void Terrain_Imp::Transition( const spat::Position2D<Length>& parameter, spat::Position<Length>& position ) const
-{}
+void Terrain_Imp::Transition( const Position2D<Length>&parameter, Frame<Length, One>&frame ) const
+{
+	throw std::logic_error( "not implemented" );
+}
+///////////////////////////////////////
+Rect<Length> BuildRamp( Terrain& atTerrain, const Track& forTrack, Length width, common::Interval<Length> forTrackRange )
+{
+	const Length ds = 1_m;
+	Rect<Length> invalArea{ +infinite__length, -infinite__length };
+	forTrackRange.Intersection( forTrack.Range() );
 
-void Terrain_Imp::Transition( const spat::Position2D<Length>&parameter, spat::VectorBundle2<Length, One>&bundle ) const
-{}
+	for( Length s = forTrackRange.Near(); s <= forTrackRange.Far(); s += ds )
+	{
+		Position<Length> P;
+		forTrack.Transition( s, P );
+		atTerrain.GetFrame().FromParent( P );
+		//invalArea.Expand( atTerrain.SetHeight( P, ds ) );
+	}
 
-void Terrain_Imp::Transition( const spat::Position2D<Length>&parameter, spat::Frame<Length, One>&frame ) const
-{}
+	return invalArea;
+}
+
+Rect<Length> PunchTunnel( Terrain& atTerrain, const SectionTrack & forTrack )
+{
+	throw std::logic_error( "not implemented" );
+}
 ///////////////////////////////////////
 }

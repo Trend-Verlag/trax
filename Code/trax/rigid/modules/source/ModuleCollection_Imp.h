@@ -44,6 +44,14 @@ namespace trax{
 		const char* TypeName() const noexcept override;
 
 		bool IsValid() const noexcept override;
+
+
+		void Attach( std::shared_ptr<Terrain> pTerrain ) noexcept override;
+
+		std::shared_ptr<Terrain> GetTerrain() const noexcept override;
+
+	private:
+		std::shared_ptr<Terrain> m_pTerrain;
 	};
 
 }

@@ -58,7 +58,7 @@ namespace spat{
 		explicit	Rect( const Vector2D<Valtype>& diagonal ) noexcept;
 					Rect( const Position2D<Valtype>& lefttop, const Position2D<Valtype>& rightbottom ) noexcept;
 					Rect( Valtype left, Valtype top, Valtype right, Valtype bottom ) noexcept;
-					Rect( common::Interval<Valtype> x, common::Interval<Valtype> y ) noexcept;
+//					Rect( common::Interval<Valtype> x, common::Interval<Valtype> y ) noexcept;
 		///@}
 
 
@@ -130,6 +130,10 @@ namespace spat{
 		/// \brief	Is non zero area?
 		bool IsArea() const noexcept;
 
+	
+		///< \brief Is width and height equal within epsilon?
+		bool IsSquare( Valtype epsilon = Valtype{ 0 } ) const noexcept;
+
 
 		/// \brief Calculates the union of the two rects.
 		Rect& Union( const Rect& r1, const Rect& r2 ) noexcept;
@@ -167,6 +171,18 @@ namespace spat{
 		bool Includes( const Position2D<Valtype>& pt ) const noexcept;
 
 
+		/// \returns True if the point lays inside the rect. 
+		///
+		/// All edges are inside the rect.
+		bool Touches( Valtype x, Valtype y ) const noexcept;
+
+
+		/// \returns True if the point lays inside the rect. 
+		///
+		/// All edges are inside the rect.
+		bool Touches( const Position2D<Valtype>& pt ) const noexcept;
+
+
 		/// \brief Expands the rect so that it touches (being included or laying on border) the point.
 		///
 		/// If the point is allready included in the rect, no changes are made.
@@ -179,6 +195,10 @@ namespace spat{
 		/// If the point is allready included in the rect, no changes are made.
 		/// If val becomes m_Far Includes() will not return the value as beeing included.
 		Rect& Expand( const Position2D<Valtype>& pt ) noexcept;
+
+
+		/// \brief Expands the rect so that it touches (being included or laying on border) the rect.
+		Rect& Expand( const Rect<Valtype>& rect ) noexcept;
 
 
 		/// \brief Moves the edges to the outside of the rect, thereyby inflating it.
@@ -212,6 +232,12 @@ namespace spat{
 	void			operator+=( Rect<Valtype>& r1, const Rect<Valtype>& r2 ) noexcept;
 	template<typename Valtype>
 	Rect<Valtype>	operator+( const Rect<Valtype>& r1, const Rect<Valtype>& r2 ) noexcept;
+	template<typename Valtype,typename Valtype2>
+	Rect<Valtype>&	operator*=( Rect<Valtype>& r, Valtype2 value ) noexcept;
+	template<typename Valtype,typename Valtype2>
+	auto			operator*( const Rect<Valtype>& r, Valtype2 value ) noexcept -> Rect<decltype(Valtype{}*Valtype2{})>;
+	template <typename Valtype, typename Valtype2>
+	auto			operator*( Valtype2 value, const Rect<Valtype>& r ) noexcept -> Rect<decltype( Valtype{}*Valtype2{} ) > ;
 	template<typename Valtype> constexpr 
 	bool operator==( const Rect<Valtype>& r1, const Rect<Valtype>& r2 ) noexcept;
 	template<typename Valtype> constexpr 
@@ -256,11 +282,11 @@ Rect<Valtype>::Rect( Valtype left, Valtype top, Valtype right, Valtype bottom ) 
 		m_Height{top,bottom}
 {}
 
-template<typename Valtype>
-inline spat::Rect<Valtype>::Rect( common::Interval<Valtype> x, common::Interval<Valtype> y ) noexcept
-	:	m_Width	{x},
-		m_Height{y}
-{}
+//template<typename Valtype>
+//inline spat::Rect<Valtype>::Rect( common::Interval<Valtype> x, common::Interval<Valtype> y ) noexcept
+//	:	m_Width	{x},
+//		m_Height{y}
+//{}
 
 template<typename Valtype> inline
 Rect<Valtype>& Rect<Valtype>::Init() noexcept{
@@ -383,6 +409,11 @@ bool Rect<Valtype>::IsArea() const noexcept{
 }
 
 template<typename Valtype> inline
+bool Rect<Valtype>::IsSquare( Valtype epsilon ) const noexcept{
+	return abs( Width() - Height() ) <= epsilon;
+}
+
+template<typename Valtype> inline
 Rect<Valtype>& Rect<Valtype>::Union( 
 		const Rect<Valtype>& r1, const Rect<Valtype>& r2 ) noexcept
 {
@@ -427,6 +458,16 @@ bool Rect<Valtype>::Includes( const Position2D<Valtype>& pt ) const noexcept{
 }
 
 template<typename Valtype> inline
+bool Rect<Valtype>::Touches( Valtype x, Valtype y ) const noexcept{
+	return m_Width.Touches( x ) && m_Height.Touches( y );
+}
+
+template<typename Valtype> inline
+bool Rect<Valtype>::Touches( const Position2D<Valtype>& pt ) const noexcept{
+	return Touches( pt.x, pt.y );
+}
+
+template<typename Valtype> inline
 Rect<Valtype>& Rect<Valtype>::Expand( Valtype x, Valtype y ) noexcept{
 	m_Width.Expand( x );
 	m_Height.Expand( y );
@@ -436,6 +477,13 @@ Rect<Valtype>& Rect<Valtype>::Expand( Valtype x, Valtype y ) noexcept{
 template<typename Valtype> inline
 Rect<Valtype>& Rect<Valtype>::Expand( const Position2D<Valtype>& pt ) noexcept{
 	return Expand( pt.x, pt.y );
+}
+
+template<typename Valtype> inline 
+Rect<Valtype>& Rect<Valtype>::Expand( const Rect<Valtype>& rect ) noexcept{
+	Expand( rect.LeftBottom() );
+	Expand( rect.RightTop() );
+	return *this;
 }
 
 template<typename Valtype> inline
@@ -472,6 +520,26 @@ Rect<Valtype> operator+( const Rect<Valtype>& r1, const Rect<Valtype>& r2 ) noex
 	Rect<Valtype> retval;
 	retval.Union( r1, r2 );
 	return retval;
+}
+
+template<typename Valtype, typename Valtype2> inline 
+Rect<Valtype>& operator*=( Rect<Valtype>& r, Valtype2 value ) noexcept{
+	r.m_Width *= value;
+	r.m_Height *= value;
+	return r;
+}
+
+template<typename Valtype, typename Valtype2> inline 
+auto operator*( const Rect<Valtype>& r, Valtype2 value ) noexcept -> Rect<decltype( Valtype{}* Valtype2{} )>{
+	return Rect<decltype( Valtype{} * Valtype2{} )>{
+		r.m_Width * value,
+		r.m_Height * value,
+	};
+}
+
+template<typename Valtype, typename Valtype2> inline 
+auto operator*( Valtype2 value, const Rect<Valtype>& r ) noexcept -> Rect<decltype( Valtype{}* Valtype2{} )>{
+	return r * value;
 }
 
 template<typename Valtype> inline

@@ -410,25 +410,25 @@ Volume PhysX_HeightField::GetVolume() const noexcept
 	return 0_m3;
 }
 
-bool PhysX_HeightField::Create( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale )
+bool PhysX_HeightField::Create( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale )
 {
-	const int nSamples = nRows*nCols;
+	const int nSamples = rasterExtent.dx * rasterExtent.dy;
 	std::unique_ptr<physx::PxHeightFieldSample[]> hfsamples( new physx::PxHeightFieldSample[nSamples] );
 	for( int i = 0; i < nSamples; ++i )
 	{
 		hfsamples[i].height = pSamples[i];
 		//hfsamples[i].materialIndex0 = physx::PxBitAndByte(1); //physx::PxHeightFieldMaterial::eHOLE;
 		//hfsamples[i].materialIndex1 = physx::PxBitAndByte(1);
-		hfsamples[i].materialIndex0 = (pbHoles[i] && pbHoles[i+nCols] && pbHoles[i+1 + nCols]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
-		hfsamples[i].materialIndex1 = (pbHoles[i] && pbHoles[i+1] && pbHoles[i+1 + nCols]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
+		hfsamples[i].materialIndex0 = (pbHoles[i] && pbHoles[i+rasterExtent.dx] && pbHoles[i+1 + rasterExtent.dx]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
+		hfsamples[i].materialIndex1 = (pbHoles[i] && pbHoles[i+1] && pbHoles[i+1 + rasterExtent.dx]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
 		hfsamples[i].materialIndex0 = hfsamples[i].materialIndex1;
 		hfsamples[i].setTessFlag();
 	}	
 
 	physx::PxHeightFieldDesc hfDesc;
 	hfDesc.format             = physx::PxHeightFieldFormat::eS16_TM;
-	hfDesc.nbRows             = nRows;
-	hfDesc.nbColumns          = nCols;
+	hfDesc.nbRows             = rasterExtent.dy;
+	hfDesc.nbColumns          = rasterExtent.dx;
 //		hfDesc.thickness		  = -1 * units_per_meter;
 	//hfDesc.convexEdgeThreshold= 3;
 	//hfDesc.flags				= physx::PxHeightFieldFlag::eNO_BOUNDARY_EDGES;
@@ -442,27 +442,42 @@ bool PhysX_HeightField::Create( const short* pSamples, const bool* pbHoles, int 
 	//physx::PxHeightField* pHeightField = Scene( *m_pSimulator).getPhysics().createHeightField(hfDesc);
 #endif
 
-	m_HeightFieldGeometry = physx::PxHeightFieldGeometry(pHeightField, physx::PxMeshGeometryFlags(), static_cast<physx::PxReal>(vertScale), static_cast<physx::PxReal>(horzScale), static_cast<physx::PxReal>(horzScale) );
+	m_HeightFieldGeometry = physx::PxHeightFieldGeometry(
+		pHeightField, 
+		physx::PxMeshGeometryFlags(), 
+		static_cast<physx::PxReal>(_m(heightScale)/m_EngineMetersPerUnit), 
+		static_cast<physx::PxReal>(_m(rasterScale.dx)/m_EngineMetersPerUnit), 
+		static_cast<physx::PxReal>(_m(rasterScale.dy)/m_EngineMetersPerUnit) );
 		
 	return true;
 }
 
-bool PhysX_HeightField::CreateEEPStyle( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale )
+bool PhysX_HeightField::Create( const Length * pSamples, const bool * pbHoles, const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale )
 {
-	const int nSamples = nRows*nCols;
+	return false;
+}
+
+bool PhysX_HeightField::Create( const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale )
+{
+	return false;
+}
+
+bool PhysX_HeightField::CreateEEPStyle( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale )
+{
+	const int nSamples = rasterExtent.dx * rasterExtent.dy;
 	std::unique_ptr<physx::PxHeightFieldSample[]> hfsamples( new physx::PxHeightFieldSample[nSamples] );
 	for( int i = 0; i < nSamples; ++i )
 	{
 		hfsamples[i].height = pSamples[i];
 		hfsamples[i].materialIndex0 = hfsamples[i].materialIndex1 
-			= (pbHoles[i] && pbHoles[i+1] && pbHoles[i+1 + nCols]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
+			= (pbHoles[i] && pbHoles[i+1] && pbHoles[i+1 + rasterExtent.dx]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
 		hfsamples[i].setTessFlag();
 	}
 
 	physx::PxHeightFieldDesc hfDesc;
 	hfDesc.format             = physx::PxHeightFieldFormat::eS16_TM;
-	hfDesc.nbRows             = nRows;
-	hfDesc.nbColumns          = nCols;
+	hfDesc.nbRows             = rasterExtent.dy;
+	hfDesc.nbColumns          = rasterExtent.dx;
 //		hfDesc.thickness		  = -1 * units_per_meter;
 	hfDesc.samples.data       = hfsamples.get();
 	hfDesc.samples.stride     = sizeof(physx::PxHeightFieldSample);
@@ -474,30 +489,89 @@ bool PhysX_HeightField::CreateEEPStyle( const short* pSamples, const bool* pbHol
 	//physx::PxHeightField* pHeightField = Scene( *m_pSimulator).getPhysics().createHeightField(hfDesc);
 #endif
 
-	m_HeightFieldGeometry = physx::PxHeightFieldGeometry(pHeightField, physx::PxMeshGeometryFlags(), static_cast<physx::PxReal>(vertScale), static_cast<physx::PxReal>(horzScale), static_cast<physx::PxReal>(horzScale) );
+	m_HeightFieldGeometry = physx::PxHeightFieldGeometry(
+		pHeightField, 
+		physx::PxMeshGeometryFlags(), 
+		static_cast<physx::PxReal>(_m(heightScale)/m_EngineMetersPerUnit), 
+		static_cast<physx::PxReal>(_m(rasterScale.dx)/m_EngineMetersPerUnit), 
+		static_cast<physx::PxReal>(_m(rasterScale.dy)/m_EngineMetersPerUnit) );
 		
 	return true;
 }
 
-Length PhysX_HeightField::Height( const Position2D<Length>& parameter ) const{
-	if( m_HeightFieldGeometry.heightField )
-		return Length{ m_HeightFieldGeometry.heightScale * m_HeightFieldGeometry.heightField->getHeight(
-			static_cast<physx::PxReal>(_m(parameter.x)/m_EngineMetersPerUnit) / m_HeightFieldGeometry.rowScale, 
-			m_HeightFieldGeometry.heightField->getNbColumns() - static_cast<physx::PxReal>(_m(parameter.y)/m_EngineMetersPerUnit) / m_HeightFieldGeometry.columnScale - 2) };
-
-	return 0_m;
+spat::Vector2D<int> PhysX_HeightField::GetRasterExtent() const noexcept
+{
+	assert( m_HeightFieldGeometry.heightField );
+	return { static_cast<int>( m_HeightFieldGeometry.heightField->getNbColumns() ), static_cast<int>( m_HeightFieldGeometry.heightField->getNbRows() ) };
 }
 
-void PhysX_HeightField::Get( const Position2D<Length>& parameter, Position<Length>& pos ) const{
-	pos.x = parameter.x;
-	pos.y = parameter.y;
-	pos.z = Height( parameter );
+spat::Vector2D<Length> PhysX_HeightField::GetRasterScale() const noexcept
+{
+	return { static_cast<Length>( m_HeightFieldGeometry.rowScale ), static_cast<Length>( m_HeightFieldGeometry.columnScale ) };
 }
 
-void PhysX_HeightField::Get( const Position2D<Length>& /*parameter*/, Frame<Length,One>& /*frame*/ ) const{
-	assert( !"Not implemented yet!" );
-	//getTriangleNormal(PxTriangleID triangleIndex)
+Length PhysX_HeightField::GetHeight( const spat::Position2D<int>& atRasterPoint ) const
+{
+	assert( m_HeightFieldGeometry.heightField );
+	assert( atRasterPoint.dx >= 0 && atRasterPoint.dx < m_HeightFieldGeometry.heightField->getNbColumns() );
+	assert( atRasterPoint.dy >= 0 && atRasterPoint.dy < m_HeightFieldGeometry.heightField->getNbRows() );
+
+	physx::PxI16 height = m_HeightFieldGeometry.heightField->getSample(
+		atRasterPoint.y,
+		atRasterPoint.x ).height;
+
+	return _m( m_HeightFieldGeometry.heightScale * height * m_EngineMetersPerUnit );
 }
+
+Length PhysX_HeightField::GetHeight( const spat::Position2D<Length>& atPoint ) const
+{
+	assert( m_HeightFieldGeometry.heightField );
+
+	physx::PxReal height = m_HeightFieldGeometry.heightField->getHeight(
+		_m(atPoint.y)/m_EngineMetersPerUnit / m_HeightFieldGeometry.rowScale,
+		_m(atPoint.x)/m_EngineMetersPerUnit / m_HeightFieldGeometry.columnScale );
+
+	return _m( m_HeightFieldGeometry.heightScale * height * m_EngineMetersPerUnit );
+}
+
+common::Interval<Length> PhysX_HeightField::HeightRange() const noexcept
+{
+	return common::Interval<Length>();
+}
+
+void PhysX_HeightField::SetHeight( const spat::Position2D<int>& atRasterPoint, Length height )
+{}
+
+void PhysX_HeightField::SetHeight( const spat::Rect<int>&atRasterPoints, Length height )
+{}
+
+bool PhysX_HeightField::IsHole( const spat::Position2D<int>&atRasterPoint ) const
+{
+	return false;
+}
+
+void PhysX_HeightField::SetHole( const spat::Position2D<int>& atRasterPoint, bool hole )
+{}
+//
+//Length PhysX_HeightField::Height( const Position2D<Length>& parameter ) const{
+	//if( m_HeightFieldGeometry.heightField )
+	//	return Length{ m_HeightFieldGeometry.heightScale * m_HeightFieldGeometry.heightField->getHeight(
+	//		static_cast<physx::PxReal>(_m(parameter.x)/m_EngineMetersPerUnit) / m_HeightFieldGeometry.rowScale, 
+	//		m_HeightFieldGeometry.heightField->getNbColumns() - static_cast<physx::PxReal>(_m(parameter.y)/m_EngineMetersPerUnit) / m_HeightFieldGeometry.columnScale - 2) };
+
+	//return 0_m;
+//}
+//
+//void PhysX_HeightField::Get( const Position2D<Length>& parameter, Position<Length>& pos ) const{
+//	pos.x = parameter.x;
+//	pos.y = parameter.y;
+//	pos.z = Height( parameter );
+//}
+//
+//void PhysX_HeightField::Get( const Position2D<Length>& /*parameter*/, Frame<Length,One>& /*frame*/ ) const{
+//	assert( !"Not implemented yet!" );
+//	//getTriangleNormal(PxTriangleID triangleIndex)
+//}
 ///////////////////////////////////////
 PhysX_ConvexMesh::PhysX_ConvexMesh( const PhysX_Scene& scene )
 	: PhysX_GeomBase_Imp	{ scene.EngineMetersPerUnit() }

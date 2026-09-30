@@ -62,6 +62,8 @@ namespace spat{
 		explicit constexpr Position2D( const Position<Valtype>& pos ) noexcept;
 		template<typename Valtype2>
 		explicit		   Position2D( const Valtype2* pVal ) noexcept;
+		template<typename Valtype2>
+		explicit		   Position2D( const Position2D<Valtype2>& pos ) noexcept;
 		///@}
 
 		/// \name Assignment
@@ -184,8 +186,15 @@ inline constexpr Position2D<Valtype>::Position2D( const Position<Valtype>& pos )
 template<typename Valtype>
 template<typename Valtype2>
 inline Position2D<Valtype>::Position2D( const Valtype2* pVal ) noexcept
-	:	x{Valtype{pVal[0]}}, 
-		y{Valtype{pVal[1]}} 
+	: x{Valtype{static_cast<Valtype>(pVal[0])}}
+	, y{Valtype{static_cast<Valtype>(pVal[1])}} 
+{}
+
+template<typename Valtype>
+template<typename Valtype2>
+inline spat::Position2D<Valtype>::Position2D( const Position2D<Valtype2>&pos ) noexcept
+	: x{Valtype{static_cast<Valtype>(pos.x)}}
+	, y{Valtype{static_cast<Valtype>(pos.y)}}
 {}
 
 template<typename Valtype>

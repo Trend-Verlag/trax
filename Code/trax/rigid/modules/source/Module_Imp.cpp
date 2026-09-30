@@ -40,7 +40,12 @@ namespace trax{
 
 std::unique_ptr<Module> Module::Make( bool bCreateCollections ) noexcept
 {
-	return std::make_unique<Module_Imp>( bCreateCollections );
+	try{
+		return std::make_unique<Module_Imp>( bCreateCollections );
+	}
+	catch( const std::bad_alloc& ){
+		return nullptr;
+	}
 }
 
 Module_Imp::Module_Imp( bool bCreateCollections ) noexcept
