@@ -34,7 +34,10 @@ namespace cmnd{
 	public:
 		CommandRuntimeException();
 
+		static const char* SayMyName() { return "Throw"; }
+
 		void Execute() override;
+		virtual const char* Name() const override;
 		std::unique_ptr<Command> Clone() const override;
 
 	private:	

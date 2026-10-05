@@ -773,12 +773,19 @@ GeomType PhysX_TriangleMesh::GetGeomType() const noexcept{
 
 spat::Box<Length> PhysX_TriangleMesh::GetExtent() const noexcept
 {
-	return spat::Box<Length>();
+	if( m_TriangleMeshGeometry.triangleMesh )
+	{
+		const physx::PxBounds3 bounds = m_TriangleMeshGeometry.triangleMesh->getLocalBounds();
+		return spat::Box<Length>{
+			PosFrom<Length>( bounds.minimum ),
+				PosFrom<Length>( bounds.maximum ) };
+	}
+
+	return {};
 }
 
 Volume PhysX_TriangleMesh::GetVolume() const noexcept
 {
-	std::cout << Verbosity::verbose << "PhysX_TriangleMesh::GetVolume(): Not implemented yet!" << std::endl;
 	return 0_m3;
 }
 

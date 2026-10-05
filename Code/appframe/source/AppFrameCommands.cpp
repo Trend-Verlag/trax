@@ -38,6 +38,11 @@ void CommandRuntimeException::Execute()
 	throw std::runtime_error{ "This is a deliberately thrown exception!" };
 }
 
+const char* CommandRuntimeException::Name() const
+{
+    return SayMyName();
+}
+
 std::unique_ptr<Command> CommandRuntimeException::Clone() const
 {
     return std::make_unique<CommandRuntimeException>( *this );
