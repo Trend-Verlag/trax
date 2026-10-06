@@ -222,11 +222,13 @@ namespace trax{
 		/// These commands get queued so a command gets executed after all 
 		/// the commands that were supplied before it. A time stamp on the
 		/// command will get ignored.
-		virtual bool Process( std::unique_ptr<cmnd::Command> Command ) = 0;
+		/// \param pCommand The command to process.
+		virtual bool Process( std::unique_ptr<cmnd::Command> pCommand ) = 0;
 
 
 		/// \brief Supply a command for immediate execution.
-		virtual bool Execute( std::unique_ptr<cmnd::Command> Command ) = 0;
+		/// \param pCommand The command to execute.
+		virtual bool Execute( std::unique_ptr<cmnd::Command> pCommand ) = 0;
 
 
 		/// \brief Start replay mode and replay the commands from the given macro. 

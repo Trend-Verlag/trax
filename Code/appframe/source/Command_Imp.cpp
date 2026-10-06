@@ -61,6 +61,14 @@ bool Command::IsFrozen() const noexcept{
 	return m_bFrozen;
 }
 
+void Command::Silence( bool bSilent ) noexcept{
+	m_bSilent = bSilent;
+}
+
+bool Command::IsSilent() const noexcept{
+	return m_bSilent;
+}
+
 void* Command::dll_alloc( std::size_t n ){
 	return std::malloc(n);
 }

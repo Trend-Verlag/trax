@@ -124,6 +124,14 @@ namespace cmnd{
 		bool IsFrozen() const noexcept;
 
 
+		/// \brief Sets the command to be silent and not logged.
+		virtual void Silence( bool bSilent = true ) noexcept;
+
+
+		/// \returns true if the command is silent and should not be logged.
+		bool IsSilent() const noexcept;
+
+
 		/// \brief Make a copy of this command. 
 		virtual std::unique_ptr<Command> Clone() const = 0;
 
@@ -210,7 +218,8 @@ namespace cmnd{
 		static void dll_free( void* p ) noexcept;
 	private:
 		long	m_TimeStamp;
-		bool	m_bFrozen;
+		bool	m_bFrozen = false;
+		bool	m_bSilent = false;
 	};
 
 
@@ -821,6 +830,9 @@ inline std::unique_ptr<Macro> History::Macro() const noexcept{
 }
 ///////////////////////////////////////
 inline void OutStreamLog::Log( const Command& command ){
+	if( command.IsSilent() )
+		return; 
+
 	if( const Macro* pMacro = Macro::Cast( &command ) )
 		pMacro->Log( *this );
 	else

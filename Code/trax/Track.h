@@ -836,7 +836,7 @@ namespace trax
 	/// \param initialGuess A value of (s,t,u) that might be close to the desired solution.
 	/// \returns The intersection coordinates (s,t,u) of the track's ribbon with the ray. If there 
 	/// is no solution s will be < 0.
-	dclspc spat::Position<Length> Ramp( const Track& track, const spat::VectorBundle<Length,One>& ofRay, const spat::Position<Length>& initialGuess );
+//	dclspc spat::Position<Length> Ramp( const Track& track, const spat::VectorBundle<Length,One>& ofRay, const spat::Position<Length>& initialGuess );
 
 
 	/// \defgroup Group_BoundingBox Track's Bounding Box

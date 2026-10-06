@@ -104,9 +104,9 @@ namespace trax{
 		// Command processing:
 		void SetLogbook( cmnd::Logbook* pLogbook ) override;
 
-		bool Process( std::unique_ptr<cmnd::Command> Command ) override;
+		bool Process( std::unique_ptr<cmnd::Command> pCommand ) override;
 
-		bool Execute( std::unique_ptr<cmnd::Command> Command ) override;
+		bool Execute( std::unique_ptr<cmnd::Command> pCommand ) override;
 
 		bool Replay( std::unique_ptr<cmnd::Macro> pMacro ) override;
 
