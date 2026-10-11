@@ -91,7 +91,7 @@ namespace trax
 
 		std::unique_ptr<GeomSphere> CreateGeomSphere() const override;
 
-		std::unique_ptr<GeomHeightField> CreateGeomHeightField() const override;
+		std::unique_ptr<HeightField> CreateHeightField() const override;
 
 		std::unique_ptr<GeomMesh> CreateGeomConvexMesh() const override;
 

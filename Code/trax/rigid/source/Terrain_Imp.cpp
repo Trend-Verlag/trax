@@ -88,9 +88,9 @@ void Terrain_Imp::Attach( std::unique_ptr<HeightField> pTile, const Position2D<i
 		throw std::invalid_argument( "pTile must have a square raster extent" );
 
 	if( m_TileExtent < 0_m ){
-		m_TileExtent = pTile->GetRasterScale().dx * pTile->GetRasterExtent().dx;
+		m_TileExtent = pTile->GetRasterScale() * pTile->GetRasterExtent().dx;
 	}
-	else if( abs(m_TileExtent - pTile->GetRasterScale().dx * pTile->GetRasterExtent().dx) > epsilon__length )
+	else if( abs(m_TileExtent - pTile->GetRasterScale() * pTile->GetRasterExtent().dx) > epsilon__length )
 		throw std::invalid_argument( "pTile must have the same extent as the other tiles" );
 
 	At( tileCoordinates ) = std::move( pTile );
@@ -123,7 +123,7 @@ std::unique_ptr<HeightField> Terrain_Imp::SetHeight( const Position2D<Length>& p
 
 	if( const std::unique_ptr<HeightField>& pHeightField = At( tileSpacePosition.tileCoordinates ); pHeightField )
 	{
-		Length rasterScale = pHeightField->GetRasterScale().dx;
+		const Length rasterScale = pHeightField->GetRasterScale();
 		const int left = static_cast<int>( std::floor( tileSpacePosition.tileSpaceParameter.x / rasterScale ) );
 		const int bottom = static_cast<int>( std::floor( tileSpacePosition.tileSpaceParameter.y / rasterScale ) );
 		const Rect<int> RasterArea{
@@ -158,7 +158,7 @@ Length Terrain_Imp::GetHeight( const Position2D<Length>& parameter ) const
 	TileSpacePosition tileSpacePosition = TerrainSpaceToTileSpace( *this, parameter );
 
 	if( const std::unique_ptr<HeightField>& pHeightField = At( tileSpacePosition.tileCoordinates ); pHeightField )
-		return pHeightField->GetHeight( tileSpacePosition.tileSpaceParameter );
+		return pHeightField->GetHeight( spat::Position<Length>{ tileSpacePosition.tileSpaceParameter } );
 
 	return 0_m;
 }

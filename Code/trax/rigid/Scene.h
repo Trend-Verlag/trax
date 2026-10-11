@@ -46,9 +46,9 @@ namespace trax{
 	struct GeomCylinder;
 	struct GeomCapsule;
 	struct GeomSphere;
-	struct GeomHeightField;
 	struct GeomMesh;
 	struct Gestalt;
+	struct HeightField;
 	struct HingeJoint;
 	struct Shape;
 	struct Simulated;
@@ -209,7 +209,7 @@ namespace trax{
 
 		virtual std::unique_ptr<GeomSphere> CreateGeomSphere() const = 0;
 
-		virtual std::unique_ptr<GeomHeightField> CreateGeomHeightField() const = 0;
+		virtual std::unique_ptr<HeightField> CreateHeightField() const = 0;
 
 		virtual std::unique_ptr<GeomMesh> CreateGeomConvexMesh() const = 0;
 

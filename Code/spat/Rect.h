@@ -123,8 +123,8 @@ namespace spat{
 		auto Area() const noexcept -> decltype(Valtype{}*Valtype{});
 
 
-		/// \returns The length of the diagonal.
-		Valtype Diagonal() const noexcept;
+		/// \returns The diagonal from LeftBottom() to RightTop().
+		Vector2D<Valtype> Diagonal() const noexcept;
 
 
 		/// \brief	Is non zero area?
@@ -160,15 +160,22 @@ namespace spat{
 		/// \returns True if the point lays inside the rect. 
 		///
 		/// The left and top edges are inside the rect; the right 
-		/// and bottom edges are not
+		/// and bottom edges are not.
 		bool Includes( Valtype x, Valtype y ) const noexcept;
 
 
 		/// \returns True if the point lays inside the rect. 
 		///
 		/// The left and top edges are inside the rect; the right 
-		/// and bottom edges are not
+		/// and bottom edges are not.
 		bool Includes( const Position2D<Valtype>& pt ) const noexcept;
+
+
+		/// \returns True if the rect completely lays inside the rect. 
+		///
+		/// The left and top edges are inside the rect; the right 
+		/// and bottom edges are not.
+		bool Includes( const Rect<Valtype>& rect ) const noexcept;
 
 
 		/// \returns True if the point lays inside the rect. 
@@ -181,6 +188,12 @@ namespace spat{
 		///
 		/// All edges are inside the rect.
 		bool Touches( const Position2D<Valtype>& pt ) const noexcept;
+
+
+		/// \returns True if the point lays inside the rect. 
+		///
+		/// All edges are inside the rect.
+		bool Touches( const Rect<Valtype>& rect ) const noexcept;
 
 
 		/// \brief Expands the rect so that it touches (being included or laying on border) the point.
@@ -399,8 +412,8 @@ auto Rect<Valtype>::Area() const noexcept -> decltype(Valtype{}*Valtype{}){
 }
 
 template<typename Valtype> inline
-Valtype Rect<Valtype>::Diagonal() const noexcept{
-	return sqrt( Square(Width()) + Square(Height()) );
+Vector2D<Valtype> Rect<Valtype>::Diagonal() const noexcept{
+	return RightTop() - LeftBottom();
 }
 
 template<typename Valtype> inline

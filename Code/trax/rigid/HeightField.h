@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "trax/Configuration.h"
+#include "trax/rigid/Geom.h"
 
 #include "dim/DimensionedValues.h"
 #include "spat/Rect.h"
@@ -35,11 +35,15 @@
 
 namespace trax{
 
-	using namespace dim;
+//	using namespace dim;
 
 	/// \brief A HeightField is a 2D surface in 3D space that can be used for collision detection.
 	///
-	struct HeightField{
+	struct HeightField : virtual Geom{
+
+		/// \brief Makes a memory HeightField object.
+		static dclspc std::unique_ptr<HeightField> Make() noexcept;
+
 
 		/// \name Construction
 		/// 
@@ -54,24 +58,26 @@ namespace trax{
 		/// \param heightScale Vertical scale factor. pSamples[x] * heightScale * meters_per_unit will be the height in meters.
 		/// @{
 		
-		virtual bool Create( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale ) = 0;
+		virtual bool Create( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale ) = 0;
 		
-		virtual bool Create( const Length* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale ) = 0;
+		virtual bool Create( const Length* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, Length rasterScale ) = 0;
 
-		virtual bool Create( const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale ) = 0;
+		virtual bool Create( const spat::Vector2D<int>& rasterExtent, const Length rasterScale ) = 0;
 		/// @}
 
 
 		virtual spat::Vector2D<int> GetRasterExtent() const noexcept = 0;
 
-		virtual spat::Vector2D<Length> GetRasterScale() const noexcept = 0;
+		virtual Length GetRasterScale() const noexcept = 0;
 
 
 		virtual Length GetHeight( const spat::Position2D<int>& atRasterPoint ) const = 0;
 
-		virtual Length GetHeight( const spat::Position2D<Length>& atPoint ) const = 0;
+		virtual Length GetHeight( const spat::Position<Length>& atShapeLocalPoint ) const noexcept = 0;
 
 		virtual common::Interval<Length> HeightRange() const noexcept = 0;
+
+		virtual common::Interval<Length> HeightRange( const spat::Rect<int>& inRect ) const = 0;
 
 		virtual void SetHeight( const spat::Position2D<int>& atRasterPoint, Length height ) = 0;
 

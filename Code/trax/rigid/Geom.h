@@ -30,7 +30,6 @@
 
 #include "trax/Configuration.h"
 #include "trax/Units.h"
-#include "HeightField.h"
 
 #include "spat/Frame.h"
 #include "spat/Box.h"
@@ -47,8 +46,7 @@ namespace trax{
 	enum class GeomType : char;
 
 	/// \brief A Geom is used for collision detection. It differs from a Shape in that it
-	/// defines the most simple elements of a shape. A Shape is a collection of Geoms and
-	/// itself a Geom.
+	/// defines the most simple elements of a shape. A Shape is a collection of Geoms.
 	struct Geom{
 
 		/// \returns the name for the object type that implements this interface. 
@@ -288,25 +286,25 @@ namespace trax{
 	};
 
 
-	struct GeomHeightField :	virtual Geom, 
-								HeightField
-	{
+	//struct GeomHeightField :	virtual Geom, 
+	//							HeightField
+	//{
 
-		/// \brief creates a heightfield from data in the EEP style.
-		///
-		/// There will only be quads erased, no single triangles. A quad is erased if its topleft, topright and bottomright
-		/// sample show the hole flag.
-		//virtual bool CreateEEPStyle( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale ) = 0;
-
-
-		//virtual Length Height( const spat::Position2D<Length>& parameter ) const = 0;
+	//	/// \brief creates a heightfield from data in the EEP style.
+	//	///
+	//	/// There will only be quads erased, no single triangles. A quad is erased if its topleft, topright and bottomright
+	//	/// sample show the hole flag.
+	//	//virtual bool CreateEEPStyle( const short* pSamples, const bool* pbHoles, int nRows, int nCols, Real vertScale, Real horzScale ) = 0;
 
 
-		//virtual void Get( const spat::Position2D<Length>& parameter, spat::Position<Length>& pos ) const= 0;
+	//	//virtual Length Height( const spat::Position2D<Length>& parameter ) const = 0;
 
 
-		//virtual void Get( const spat::Position2D<Length>& parameter, spat::Frame<Length,One>& frame ) const = 0;
-	};
+	//	//virtual void Get( const spat::Position2D<Length>& parameter, spat::Position<Length>& pos ) const= 0;
+
+
+	//	//virtual void Get( const spat::Position2D<Length>& parameter, spat::Frame<Length,One>& frame ) const = 0;
+	//};
 
 
 	struct GeomMesh : virtual Geom{

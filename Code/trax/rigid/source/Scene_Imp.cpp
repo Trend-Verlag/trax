@@ -29,6 +29,7 @@
 
 #include "../Gestalt.h"
 #include "../GeomType.h"
+#include "../HeightField.h"
 #include "trax/Simulated.h"
 
 #include <iostream>
@@ -240,7 +241,7 @@ std::unique_ptr<Geom> Scene_Imp::CreateGeom( GeomType type ) const
 	case GeomType::sphere:
 		return CreateGeomSphere();
 	case GeomType::heightField:
-		return CreateGeomHeightField();
+		return CreateHeightField();
 	case GeomType::convexMesh:
 		return CreateGeomConvexMesh();
 	case GeomType::triangleMesh:

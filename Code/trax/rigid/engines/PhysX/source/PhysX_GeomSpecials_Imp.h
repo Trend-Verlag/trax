@@ -10,6 +10,7 @@
 #pragma once
 
 #include "PhysX_GeomBase_Imp.h"
+#include "trax/rigid/HeightField.h"
 
 namespace trax{
 
@@ -149,7 +150,7 @@ namespace trax{
 	};
 
 
-	class PhysX_HeightField :	public GeomHeightField,
+	class PhysX_HeightField :	public HeightField,
 								public PhysX_GeomBase_Imp{
 	public:
 		PhysX_HeightField( const PhysX_Scene& scene );
@@ -168,23 +169,25 @@ namespace trax{
 
 		Volume GetVolume() const noexcept override;
 
-		bool Create( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale ) override;
+		bool Create( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale ) override;
 
-		bool Create( const Length* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale ) override;
+		bool Create( const Length* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, Length rasterScale ) override;
 
-		bool Create( const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale ) override;
+		bool Create( const spat::Vector2D<int>& rasterExtent, Length rasterScale ) override;
 
-		bool CreateEEPStyle( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, const spat::Vector2D<Length>& rasterScale, Length heightScale ); // override;
+		bool CreateEEPStyle( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale ); // override;
 
 		spat::Vector2D<int> GetRasterExtent() const noexcept override;
 
-		spat::Vector2D<Length> GetRasterScale() const noexcept override;
+		Length GetRasterScale() const noexcept override;
 
 		Length GetHeight( const spat::Position2D<int>& atRasterPoint ) const override;
 
-		Length GetHeight( const spat::Position2D<Length>& atPoint ) const override;
+		Length GetHeight( const spat::Position<Length>& atPoint ) const noexcept override;
 
 		common::Interval<Length> HeightRange() const noexcept override;
+
+		common::Interval<Length> HeightRange( const spat::Rect<int>& inRect ) const override;
 
 		void SetHeight( const spat::Position2D<int>& atRasterPoint, Length height ) override;
 

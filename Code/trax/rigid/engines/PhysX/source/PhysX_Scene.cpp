@@ -155,7 +155,7 @@ std::unique_ptr<GeomSphere> PhysX_Scene::CreateGeomSphere() const{
 	return std::make_unique<PhysX_Sphere_Imp>( m_EngineMetersPerUnit );
 }
 
-std::unique_ptr<GeomHeightField> PhysX_Scene::CreateGeomHeightField() const{
+std::unique_ptr<HeightField> PhysX_Scene::CreateHeightField() const{
 	return std::make_unique<PhysX_HeightField>( *this );
 }
 
