@@ -169,13 +169,13 @@ namespace trax{
 
 		Volume GetVolume() const noexcept override;
 
-		bool Create( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale ) override;
+		bool Create( common::Span<const short> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale ) override;
 
-		bool Create( const Length* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, Length rasterScale ) override;
+		bool Create( common::Span<const Length> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterExtent, Length rasterScale ) override;
 
 		bool Create( const spat::Vector2D<int>& rasterExtent, Length rasterScale ) override;
 
-		bool CreateEEPStyle( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale ); // override;
+		bool CreateEEPStyle( common::Span<const short> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale ); // override;
 
 		spat::Vector2D<int> GetRasterExtent() const noexcept override;
 

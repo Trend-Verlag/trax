@@ -410,17 +410,17 @@ Volume PhysX_HeightField::GetVolume() const noexcept
 	return 0_m3;
 }
 
-bool PhysX_HeightField::Create( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale )
+bool PhysX_HeightField::Create( common::Span<const short> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale )
 {
 	const int nSamples = rasterExtent.dx * rasterExtent.dy;
 	std::unique_ptr<physx::PxHeightFieldSample[]> hfsamples( new physx::PxHeightFieldSample[nSamples] );
 	for( int i = 0; i < nSamples; ++i )
 	{
-		hfsamples[i].height = pSamples[i];
+		hfsamples[i].height = samples[i];
 		//hfsamples[i].materialIndex0 = physx::PxBitAndByte(1); //physx::PxHeightFieldMaterial::eHOLE;
 		//hfsamples[i].materialIndex1 = physx::PxBitAndByte(1);
-		hfsamples[i].materialIndex0 = (pbHoles[i] && pbHoles[i+rasterExtent.dx] && pbHoles[i+1 + rasterExtent.dx]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
-		hfsamples[i].materialIndex1 = (pbHoles[i] && pbHoles[i+1] && pbHoles[i+1 + rasterExtent.dx]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
+		hfsamples[i].materialIndex0 = (holes[i] && holes[i+rasterExtent.dx] && holes[i+1 + rasterExtent.dx]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
+		hfsamples[i].materialIndex1 = (holes[i] && holes[i+1] && holes[i+1 + rasterExtent.dx]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
 		hfsamples[i].materialIndex0 = hfsamples[i].materialIndex1;
 		hfsamples[i].setTessFlag();
 	}	
@@ -452,7 +452,7 @@ bool PhysX_HeightField::Create( const short* pSamples, const bool* pbHoles, cons
 	return true;
 }
 
-bool PhysX_HeightField::Create( const Length* pSamples, const bool * pbHoles, const spat::Vector2D<int>& rasterExtent, Length rasterScale )
+bool PhysX_HeightField::Create( common::Span<const Length> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterExtent, Length rasterScale )
 {
 	return false;
 }
@@ -462,15 +462,15 @@ bool PhysX_HeightField::Create( const spat::Vector2D<int>& rasterExtent, Length 
 	return false;
 }
 
-bool PhysX_HeightField::CreateEEPStyle( const short* pSamples, const bool* pbHoles, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale )
+bool PhysX_HeightField::CreateEEPStyle( common::Span<const short> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale )
 {
 	const int nSamples = rasterExtent.dx * rasterExtent.dy;
 	std::unique_ptr<physx::PxHeightFieldSample[]> hfsamples( new physx::PxHeightFieldSample[nSamples] );
 	for( int i = 0; i < nSamples; ++i )
 	{
-		hfsamples[i].height = pSamples[i];
+		hfsamples[i].height = samples[i];
 		hfsamples[i].materialIndex0 = hfsamples[i].materialIndex1 
-			= (pbHoles[i] && pbHoles[i+1] && pbHoles[i+1 + rasterExtent.dx]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
+			= (holes[i] && holes[i+1] && holes[i+1 + rasterExtent.dx]) ? physx::PxHeightFieldMaterial::eHOLE : physx::PxBitAndByte( 1 );
 		hfsamples[i].setTessFlag();
 	}
 

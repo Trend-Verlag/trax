@@ -95,8 +95,8 @@ bool HeightField_Imp::IsOverlapping( const Geom& other ) const noexcept{
 }
 
 bool HeightField_Imp::Create( 
-	const short* pSamples, 
-	const bool* pbHoles, 
+	common::Span<const short> samples, 
+	common::Span<const bool> holes, 
 	const Vector2D<int>& rasterExtent, 
 	Length rasterScale, 
 	Length heightScale )
@@ -104,7 +104,7 @@ bool HeightField_Imp::Create(
 	throw std::runtime_error( "HeightField_Imp::Create(): not implemented yet" );
 }
 
-bool HeightField_Imp::Create( const Length* pSamples, const bool* pbHoles, const Vector2D<int>& rasterExtent, Length rasterScale )
+bool HeightField_Imp::Create( common::Span<const Length> samples, common::Span<const bool> holes, const Vector2D<int>& rasterExtent, Length rasterScale )
 {
 	throw std::runtime_error( "HeightField_Imp::Create(): not implemented yet" );
 }

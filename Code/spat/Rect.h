@@ -52,27 +52,17 @@ namespace spat{
 		/// \param right
 		/// \param bottom
 		///@{		
-					Rect() noexcept = default;			///< Does not initialize the members.
-					Rect( Valtype width, Valtype height ) noexcept;
-					Rect( const common::Interval<Valtype>& width, const common::Interval<Valtype>& height ) noexcept;
-		explicit	Rect( const Vector2D<Valtype>& diagonal ) noexcept;
-					Rect( const Position2D<Valtype>& lefttop, const Position2D<Valtype>& rightbottom ) noexcept;
-					Rect( Valtype left, Valtype top, Valtype right, Valtype bottom ) noexcept;
-//					Rect( common::Interval<Valtype> x, common::Interval<Valtype> y ) noexcept;
+		Rect() noexcept = default;			///< Does not initialize the members.
+		Rect( Valtype width, Valtype height ) noexcept;
+		Rect( const common::Interval<Valtype>& width, const common::Interval<Valtype>& height ) noexcept;
+		Rect( const Position2D<Valtype>& leftbottom, const Position2D<Valtype>& righttop ) noexcept;
+		Rect( Valtype left, Valtype bottom, Valtype right, Valtype top ) noexcept;
 		///@}
 
 
 		/// \name Initialisation
 		/// \brief Initializes the interval to origin.
-		/// \param left Left edge of the Rect.
-		/// \param top Right edge of the Rect.
-		/// \param width Width of the Rect.
-		/// \param height Height of the Rect.
-		///@{
 		Rect& Init() noexcept;
-
-		Rect& Init( Valtype left, Valtype top, Valtype width, Valtype height ) noexcept;
-		///@}
 
 
 		/// \brief	is bottom <= top and left <= right
@@ -87,27 +77,27 @@ namespace spat{
 		Valtype Left() const noexcept;
 
 
-		/// \returns The top value of this rect.
-		Valtype Top() const noexcept;
+		/// \returns The bottom value of this rect.
+		Valtype Bottom() const noexcept;
 
 
 		/// \returns The right value of this rect.
 		Valtype Right() const noexcept;
 
 
-		/// \returns The bottom value of this rect.
-		Valtype Bottom() const noexcept;
+		/// \returns The top value of this rect.
+		Valtype Top() const noexcept;
 
 
-		Rect& Left( Valtype val ) noexcept;	///< \brief Sets left edge of this rect.
-		Rect& Top( Valtype val ) noexcept;	///< \brief Sets top edge of this rect.
-		Rect& Right( Valtype val ) noexcept;	///< \brief Sets right edge of this rect.
+		Rect& Left( Valtype val ) noexcept;		///< \brief Sets left edge of this rect.
 		Rect& Bottom( Valtype val ) noexcept;	///< \brief Sets bottom edge of this rect.
+		Rect& Right( Valtype val ) noexcept;	///< \brief Sets right edge of this rect.
+		Rect& Top( Valtype val ) noexcept;		///< \brief Sets top edge of this rect.
 
-		Position2D<Valtype> LeftTop		() const noexcept;	///< \returns LeftTop of this rect.
 		Position2D<Valtype> LeftBottom	() const noexcept;	///< \returns LeftBottom of this rect.
 		Position2D<Valtype> RightBottom	() const noexcept;	///< \returns RightBottom of this rect.
 		Position2D<Valtype> RightTop	() const noexcept;	///< \returns RightTop of this rect.
+		Position2D<Valtype> LeftTop		() const noexcept;	///< \returns LeftTop of this rect.
 		Position2D<Valtype>	Center		() const noexcept;	///< \returns Center of this rect.
 
 
@@ -278,40 +268,21 @@ Rect<Valtype>::Rect( const common::Interval<Valtype>& width, const common::Inter
 {}
 
 template<typename Valtype> inline 
-Rect<Valtype>::Rect( const Vector2D<Valtype>& diagonal ) noexcept
-	:	m_Width	{-diagonal.dx/2,diagonal.dx/2},
-		m_Height{-diagonal.dy/2,diagonal.dy/2}
+Rect<Valtype>::Rect( const Position2D<Valtype>& leftbottom, const Position2D<Valtype>& righttop ) noexcept
+	:	m_Width	{leftbottom.x,righttop.x},
+		m_Height{leftbottom.y,righttop.y}
 {}
 
 template<typename Valtype> inline 
-Rect<Valtype>::Rect( const Position2D<Valtype>& lefttop, const Position2D<Valtype>& rightbottom ) noexcept
-	:	m_Width	{lefttop.x,rightbottom.x},
-		m_Height{lefttop.y,rightbottom.y}
-{}
-
-template<typename Valtype> inline 
-Rect<Valtype>::Rect( Valtype left, Valtype top, Valtype right, Valtype bottom ) noexcept
+Rect<Valtype>::Rect( Valtype left, Valtype bottom, Valtype right, Valtype top ) noexcept
 	:	m_Width	{left,right},
-		m_Height{top,bottom}
+		m_Height{bottom,top}
 {}
-
-//template<typename Valtype>
-//inline spat::Rect<Valtype>::Rect( common::Interval<Valtype> x, common::Interval<Valtype> y ) noexcept
-//	:	m_Width	{x},
-//		m_Height{y}
-//{}
 
 template<typename Valtype> inline
 Rect<Valtype>& Rect<Valtype>::Init() noexcept{
 	m_Width.Init();
 	m_Height.Init();
-	return *this;
-}
-
-template<typename Valtype> inline
-Rect<Valtype>& Rect<Valtype>::Init( Valtype left, Valtype top, Valtype width, Valtype height ) noexcept{
-	m_Width.Init( left, width );
-	m_Height.Init( top, height );
 	return *this;
 }
 
@@ -333,7 +304,7 @@ Valtype Rect<Valtype>::Left() const noexcept{
 }
 
 template<typename Valtype> inline 
-Valtype Rect<Valtype>::Top() const noexcept{
+Valtype Rect<Valtype>::Bottom() const noexcept{
 	return m_Height.m_Near;
 }
 
@@ -343,7 +314,7 @@ Valtype Rect<Valtype>::Right() const noexcept{
 }
 
 template<typename Valtype> inline 
-Valtype Rect<Valtype>::Bottom() const noexcept{
+Valtype Rect<Valtype>::Top() const noexcept{
 	return m_Height.m_Far;
 }
 
@@ -354,7 +325,7 @@ Rect<Valtype>& Rect<Valtype>::Left( Valtype val ) noexcept{
 }
 
 template<typename Valtype> inline 
-Rect<Valtype>& Rect<Valtype>::Top( Valtype val ) noexcept{
+Rect<Valtype>& Rect<Valtype>::Bottom( Valtype val ) noexcept{
 	m_Height.Near(val);
 	return *this;
 }
@@ -366,14 +337,9 @@ Rect<Valtype>& Rect<Valtype>::Right( Valtype val ) noexcept{
 }
 
 template<typename Valtype> inline 
-Rect<Valtype>& Rect<Valtype>::Bottom( Valtype val ) noexcept{
+Rect<Valtype>& Rect<Valtype>::Top( Valtype val ) noexcept{
 	m_Height.Far(val);
 	return *this;
-}
-
-template<typename Valtype> inline 
-Position2D<Valtype> Rect<Valtype>::LeftTop() const noexcept{
-	return { m_Width.Near(), m_Height.Near() };
 }
 
 template<typename Valtype> inline 
@@ -389,6 +355,11 @@ Position2D<Valtype> Rect<Valtype>::RightBottom() const noexcept{
 template<typename Valtype> inline 
 Position2D<Valtype> Rect<Valtype>::RightTop	() const noexcept{
 	return { m_Width.Far(), m_Height.Near() };
+}
+
+template<typename Valtype> inline 
+Position2D<Valtype> Rect<Valtype>::LeftTop() const noexcept{
+	return { m_Width.Near(), m_Height.Near() };
 }
 
 template<typename Valtype> inline 

@@ -128,9 +128,9 @@ std::unique_ptr<HeightField> Terrain_Imp::SetHeight( const Position2D<Length>& p
 		const int bottom = static_cast<int>( std::floor( tileSpacePosition.tileSpaceParameter.y / rasterScale ) );
 		const Rect<int> RasterArea{
 			left, 
-			bottom + 1,
+			bottom,
 			left + 1,
-			bottom };
+			bottom + 1 };
 
 		pHeightField->SetHeight( RasterArea, height );
 	}
