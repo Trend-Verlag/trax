@@ -62,8 +62,9 @@ namespace trax{
 		/// \brief Gets a height value of the heightfield.
 		/// \param atParentLocalPoint The point in the heightfield's parent coordinate system to get the 
 		/// projected height for.
-		/// \returns the height at the given point in the heightfield's parent coordinate system.
-		inline Length operator()( const spat::Position<Length>& heightFieldPoint ) const{
+		/// \returns the height at the given point in the heightfield's parent coordinate system or 0_m 
+		/// if the point is outside the heightfield's extent.
+		inline Length operator()( const spat::Position<Length>& heightFieldPoint ) const noexcept{
 			return GetHeight( heightFieldPoint );
 		}
 
@@ -107,7 +108,8 @@ namespace trax{
 		/// \brief Gets a height value of the heightfield.
 		/// \param atParentLocalPoint The point in the heightfield's parent coordinate system to get the 
 		/// projected height for.
-		/// \returns the height at the given point in the heightfield's parent coordinate system.
+		/// \returns the height at the given point in the heightfield's parent coordinate system. Returns 0_m
+		/// if the point is outside the heightfield's extent.
 		virtual Length GetHeight( const spat::Position<Length>& atParentLocalPoint ) const noexcept = 0;
 
 
@@ -124,12 +126,14 @@ namespace trax{
 		/// \brief Sets a height value of the heightfield.
 		/// \param atRasterPoint The raster point in the heightfield to set the height for.
 		/// \param height The height to set at the raster point.
+		/// \throws std::out_of_range if atRasterPoint is outside the raster extent of the heightfield.
 		virtual void SetHeight( const spat::Position2D<int>& atRasterPoint, Length height ) = 0;
 
 
 		/// \brief Sets the height values of the heightfield.
 		/// \param atRasterArea The area in raster space to set the height for. The edges are inclusive.
 		/// \param height The height to set in the raster area.
+		/// \throws std::out_of_range if atRasterArea is outside the raster extent of the heightfield.
 		virtual void SetHeight( const spat::Rect<int>& atRasterArea, Length height ) = 0;
 
 
@@ -138,43 +142,15 @@ namespace trax{
 		/// A created triangle with all three adjacent sample points being holes will not be 
 		/// created as a collision shape.
 		/// \param atRasterPoint The raster point in the heightfield to check.
+		/// \throws std::out_of_range if atRasterArea is outside the raster extent of the heightfield.
 		/// \return True if the raster point is a hole, false otherwise.
 		virtual bool IsHole( const spat::Position2D<int>& atRasterPoint ) const = 0;
 
 
 		/// \brief Sets a raster point in the heightfield as a hole or not.
+		/// \throws std::out_of_range if atRasterArea is outside the raster extent of the heightfield.
 		/// \param atRasterPoint The raster point in the heightfield to set.
 		/// \param bHole True to set the raster point as a hole, false otherwise.
 		virtual void SetHole( const spat::Position2D<int>& atRasterPoint, bool bHole ) = 0;
 	};
-
-//	inline spat::Position2D<Length> RasterSpaceToHeightFieldSpace( const HeightField& forHeightField, const spat::Position2D<int> rasterPoint );
-//	inline spat::Position2D<int> HeightFieldSpaceToRasterSpace( const HeightField& forHeightField, const spat::Position2D<Length> heightFieldPoint );
-//	inline spat::Rect<Length> RasterSpaceToHeightFieldSpace( const HeightField& forHeightField, const spat::Rect<int> rasterPoint );
-//	inline spat::Rect<int> HeightFieldSpaceToRasterSpace( const HeightField& forHeightField, const spat::Rect<Length> heightFieldPoint );
-//
-//
-/////////////////////////////////////////
-//inline spat::Position2D<Length> RasterSpaceToHeightFieldSpace( const HeightField& forHeightField, const spat::Position2D<int> rasterPoint ){
-//	return forHeightField.GetRasterScale().dx * spat::Position2D<One>{ rasterPoint };
-//}
-//
-//inline spat::Position2D<int> HeightFieldSpaceToRasterSpace( const HeightField& forHeightField, const spat::Position2D<Length> heightFieldPoint ){
-//	return spat::Position2D<int>{ heightFieldPoint / forHeightField.GetRasterScale() };
-//}
-//
-//inline spat::Rect<Length> RasterSpaceToHeightFieldSpace( const HeightField& forHeightField, const spat::Rect<int> rasterPoint ){
-//	return spat::Rect<Length>{
-//		forHeightField.GetRasterScale() * spat::Position2D<One>{ rasterPoint.LeftTop() },
-//		forHeightField.GetRasterScale() * spat::Position2D<One>{ rasterPoint.RightBottom() }
-//	};
-//}
-//
-//inline spat::Rect<int> HeightFieldSpaceToRasterSpace( const HeightField& forHeightField, const spat::Rect<Length> heightFieldPoint ){
-//	return spat::Rect<int>{
-//		spat::Position2D<int>{ heightFieldPoint.LeftTop() / forHeightField.GetRasterScale() },
-//		spat::Position2D<int>{ heightFieldPoint.RightBottom() / forHeightField.GetRasterScale() }
-//	}; 
-//}
-///////////////////////////////////////
 }
