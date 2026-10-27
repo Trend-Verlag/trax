@@ -119,7 +119,7 @@ BOOST_AUTO_TEST_CASE( testBodyExcentricPlacement )
 	std::unique_ptr<Scene> pScene = Scene::Make( *pSimulator );
 	BOOST_REQUIRE( pScene );
 
-	Box<Length> box{ 1_m, 1_m, 1_m, 2_m, 2_m, 2_m };
+	Box<Length> box{ { 1_m, 1_m, 1_m }, { 2_m, 2_m, 2_m } };
 	Mass mass = 2_t;
 	auto pGestalt = pScene->CreateGestalt( box, mass );
 	BOOST_CHECK( pGestalt );

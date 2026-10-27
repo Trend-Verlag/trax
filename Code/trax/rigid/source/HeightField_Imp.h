@@ -33,6 +33,9 @@
 
 namespace trax{
 
+#pragma warning( push )
+#pragma warning( disable : 4250 )   // 'dominance' - intended with virtual inheritance
+
 	class HeightField_Imp : public HeightField
 						  , public Geom_Imp
 	{
@@ -60,11 +63,15 @@ namespace trax{
 
 
 		// HeightField:
-		bool Create( common::Span<const short> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale ) override;
+		bool Create( common::Span<const short> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterRect, Length rasterScale, Length heightScale ) override;
 		
-		bool Create( common::Span<const Length> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterExtent, Length rasterScale ) override;
+		bool Create( common::Span<const Length> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterRect, Length rasterScale ) override;
 
-		bool Create( const spat::Vector2D<int>& rasterExtent, const Length rasterScale ) override;
+		bool Create( const spat::Vector2D<int>& rasterRect, const Length rasterScale ) override;
+
+		void Clear() noexcept override;
+
+		void Take( HeightField& fromHeightField ) override;
 
 		spat::Vector2D<int> GetRasterExtent() const noexcept override;
 
@@ -92,15 +99,19 @@ namespace trax{
 		struct Data{
 			Data();
 
-			std::vector<Length> m_Samples;
-			std::vector<bool> m_Holes;
-			spat::Rect<int> m_RasterExtent;
+			struct Sample{
+				Length height;
+				bool bHole;
+			};
+			std::vector<Sample> m_Samples;
+			spat::Rect<int> m_RasterExtent;// the raster area of the heightfield in cell space
+			spat::Rect<int> m_RasterRect;  // the raster area of the heightfield in raster space
 			Length m_RasterScale;
 
 			spat::Box<Length> GetExtent() const noexcept;
-			void Create( const spat::Vector2D<int>& rasterExtent, const Length rasterScale );
+			void Create( const spat::Vector2D<int>& rasterRect, const Length rasterScale ) noexcept;
 			inline Length GetHeight( const spat::Position2D<int>& atRasterPoint ) const noexcept{
-				return m_Samples[ atRasterPoint.y * m_RasterExtent.Width() + atRasterPoint.x ];
+				return m_Samples[ atRasterPoint.y * m_RasterRect.Width() + atRasterPoint.x ].height;
 			}
 			Length GetHeight(const spat::Position<Length>& atLocalPoint ) const noexcept;
 			common::Interval<Length> HeightRange( const spat::Rect<int>& inRect ) const;
@@ -108,7 +119,11 @@ namespace trax{
 
 		std::shared_ptr<Data> m_pData;
 
+		static bool IsValidData( size_t nSamples, size_t nHoles, const spat::Vector2D<int>& rasterRect, Length rasterScale ) noexcept;
+
 		HeightField_Imp( std::shared_ptr<Data> pData );
 	};
+
+#pragma warning( pop )
 
 }

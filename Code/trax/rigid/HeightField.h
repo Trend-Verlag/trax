@@ -53,9 +53,10 @@ namespace trax{
 		/// \brief Gets a height value of the heightfield.
 		/// \param atRasterPoint The raster point in the heightfield to get or set the height for.
 		/// \throws std::out_of_range if atRasterPoint is outside the raster extent of the heightfield.
+		/// \throws std::runtime_error if the heightfield has not been created.
 		/// \returns the height at the given point.
-		inline Length operator()( const spat::Position2D<int>& rasterPoint ) const{
-			return GetHeight( rasterPoint );
+		inline Length operator()( const spat::Position2D<int>& atRasterPoint ) const{
+			return GetHeight( atRasterPoint );
 		}
 
 
@@ -64,8 +65,8 @@ namespace trax{
 		/// projected height for.
 		/// \returns the height at the given point in the heightfield's parent coordinate system or 0_m 
 		/// if the point is outside the heightfield's extent.
-		inline Length operator()( const spat::Position<Length>& heightFieldPoint ) const noexcept{
-			return GetHeight( heightFieldPoint );
+		inline Length operator()( const spat::Position<Length>& atParentLocalPoint ) const noexcept{
+			return GetHeight( atParentLocalPoint );
 		}
 
 
@@ -77,24 +78,52 @@ namespace trax{
 		/// the triangle would not be created as a collision shape.
 		/// \param samples Array with the elevation data of the sample points; size must be at least nRows*nCols.
 		/// \param holes Array with the hole information; size must be at least nRows*nCols.
-		/// \param rasterExtent Number of columns (dx) and rows (dy) of cells in the heightfield.
+		/// \param rasterRect Number of columns (dx) and rows (dy) of sample points in the heightfield.
 		/// \param rasterScale Horizontal scale factor. The width and height of each cell.
 		/// \param heightScale Vertical scale factor. samples[x] * heightScale will be the height of a sample x.
+		/// \throws std::bad_alloc if memory allocation fails.
+		/// \returns true if the heightfield was successfully created, false otherwise.
 		/// @{
 		
-		virtual bool Create( common::Span<const short> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale ) = 0;
+		virtual bool Create( common::Span<const short> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterRect, Length rasterScale, Length heightScale ) = 0;
 		
-		virtual bool Create( common::Span<const Length> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterExtent, Length rasterScale ) = 0;
+		virtual bool Create( common::Span<const Length> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterRect, Length rasterScale ) = 0;
 
-		virtual bool Create( const spat::Vector2D<int>& rasterExtent, const Length rasterScale ) = 0;
+		virtual bool Create( const spat::Vector2D<int>& rasterRect, const Length rasterScale ) = 0;
 		/// @}
 
 
+		/// \brief Clears (uncreates) the heightfield.
+		///
+		/// If the heightfield has not been created, this function does nothing.
+		/// If the heightfield was an instance it ceases to be so, but leaves
+		/// the other instances of the heightfield intact.
+		virtual void Clear() noexcept = 0;
+
+
+		/// \brief Moves all data from another heightfield to this heightfield.
+		/// 
+		/// If the heightfield has not been created, this function does nothing.
+		/// If the heightfield was an instance it ceases to be so, but leaves
+		/// the other instances of the heightfield intact.
+		/// If fromHeightField was an instance, this becomes an instance of the 
+		/// same heightfield.
+		/// \param fromHeightField The heightfield to move data from. fromHeightField
+		/// becomes 'uncreated' after this call.
+		virtual void Take( HeightField& fromHeightField ) = 0;
+
+
 		/// \brief Gets the raster extent of the heightfield.
+		/// 
+		/// Raster extent is the number of columns (dx) and rows (dy) of cells in the heightfield;
+		/// it is one smaller than the rester rect of sample points.
 		virtual spat::Vector2D<int> GetRasterExtent() const noexcept = 0;
 
 
 		/// \brief Gets the distance between raster points of the heightfield.
+		///
+		/// GetRasterScale() * GetRasterExtent() will be the width and length of the 
+		/// height field.
 		virtual Length GetRasterScale() const noexcept = 0;
 
 
@@ -113,13 +142,15 @@ namespace trax{
 		virtual Length GetHeight( const spat::Position<Length>& atParentLocalPoint ) const noexcept = 0;
 
 
-		/// \return The minimum and maximum height values in the total heightfield.
+		/// \return The minimum and maximum height values in the total heightfield. If the
+		/// heightfield has not been created returns {+infinite__length,-infinite__length}.
 		virtual common::Interval<Length> HeightRange() const noexcept = 0;
 
 
 		/// \brief Gets the range of height values in a given area of the heightfield.
 		/// \throws std::out_of_range if atRasterArea is outside the raster extent of the heightfield.
-		/// \return The minimum and maximum height values in the atRasterArea, edges inclusive.
+		/// \return The minimum and maximum height values in the atRasterArea, edges inclusive. If the
+		/// heightfield has not been created returns {+infinite__length,-infinite__length}.
 		virtual common::Interval<Length> HeightRange( const spat::Rect<int>& atRasterArea ) const = 0;
 
 
@@ -148,9 +179,9 @@ namespace trax{
 
 
 		/// \brief Sets a raster point in the heightfield as a hole or not.
-		/// \throws std::out_of_range if atRasterArea is outside the raster extent of the heightfield.
 		/// \param atRasterPoint The raster point in the heightfield to set.
 		/// \param bHole True to set the raster point as a hole, false otherwise.
+		/// \throws std::out_of_range if atRasterArea is outside the raster extent of the heightfield.
 		virtual void SetHole( const spat::Position2D<int>& atRasterPoint, bool bHole ) = 0;
 	};
 }

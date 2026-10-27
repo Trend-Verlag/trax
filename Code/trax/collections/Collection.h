@@ -120,7 +120,7 @@ namespace trax{
 		/// \brief Adds an element to the container and returns its index in the container. Does not throw.
 		///
 		/// While the Collection::Add will throw an exception if an element
-		/// carries an id wich is already occupied, this method will supply the 
+		/// carries an id which is already occupied, this method will supply the 
 		/// element with a free one. This might lead to other ids becoming occupied without
 		/// explicitely requested.
 		virtual IDType AddRelaxed( std::shared_ptr<Value_Type> pTraxType ) noexcept = 0;

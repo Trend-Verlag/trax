@@ -1251,7 +1251,7 @@ BOOST_AUTO_TEST_CASE( splineShortenZero ){
 	auto pCurve = Spline::Make();
 	common::Interval<Length> length = pCurve->Create( controlPoints );
 
-	common::Interval<Length> newInterval{ length.Center() };
+	common::Interval<Length> newInterval{ length.Center(), length.Center() };
 	auto length2 = pCurve->Shorten( newInterval );
 
 	BOOST_CHECK_EQUAL( length2, length );

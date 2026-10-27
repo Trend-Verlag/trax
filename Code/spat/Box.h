@@ -27,11 +27,10 @@
 #pragma once
 
 #include "common/Interval.h"
-
+#include "spat/Position.h"
 
 namespace spat{
 
-	template<typename> struct Position;
 	template<typename> struct Sphere;
 	template<typename> struct Vector;
 
@@ -60,12 +59,11 @@ namespace spat{
 		/// \param nearCorner
 		/// \param farCorner
 		///@{
-					Box() noexcept = default;				///< Does not initialize the members.
-					Box( Valtype xext, Valtype yext, Valtype zext ) noexcept;
-		explicit	Box( const Vector<Valtype>& cuboid ) noexcept;
-					Box( Valtype xnear, Valtype ynear, Valtype znear, Valtype xfar, Valtype yfar, Valtype zfar ) noexcept;
-					Box( const Position<Valtype>& nearCorner, const Position<Valtype>& farCorner ) noexcept;
-					Box( common::Interval<Valtype> x, common::Interval<Valtype> y, common::Interval<Valtype> z ) noexcept;
+		Box() noexcept = default;				///< Does not initialize the members.
+		Box( Valtype xext, Valtype yext, Valtype zext ) noexcept;
+		Box( const Position<Valtype>& nearCorner, const Position<Valtype>& farCorner ) noexcept;
+		Box( common::Interval<Valtype> x, common::Interval<Valtype> y, common::Interval<Valtype> z ) noexcept;
+		explicit Box( const Vector<Valtype>& diagonal ) noexcept; ///< \brief Constructs a box with near corner at origin and far corner at diagonal.
 		///@}
 
 
@@ -279,20 +277,6 @@ Box<Valtype>::Box( Valtype xext, Valtype yext, Valtype zext ) noexcept
 		m_WidthZ{-zext/2,zext/2}
 {}
 
-template<typename Valtype> inline 
-Box<Valtype>::Box( const Vector<Valtype>& diagonal ) noexcept
-	:	m_WidthX{-diagonal.dx/2,diagonal.dx/2},
-		m_WidthY{-diagonal.dy/2,diagonal.dy/2},
-		m_WidthZ{-diagonal.dz/2,diagonal.dz/2}
-{}
-
-template<typename Valtype> inline 
-Box<Valtype>::Box( Valtype xnear, Valtype ynear, Valtype znear, Valtype xfar, Valtype yfar, Valtype zfar ) noexcept
-	:	m_WidthX{xnear,xfar},
-		m_WidthY{ynear,yfar},
-		m_WidthZ{znear,zfar}
-{}
-
 template<typename Valtype> inline
 Box<Valtype>::Box( const Position<Valtype>& nearCorner, const Position<Valtype>& farCorner ) noexcept
 	:	m_WidthX{nearCorner.x,farCorner.x},
@@ -305,6 +289,11 @@ inline spat::Box<Valtype>::Box( common::Interval<Valtype> x, common::Interval<Va
 	:	m_WidthX{x},
 		m_WidthY{y},
 		m_WidthZ{z}
+{}
+
+template<typename Valtype> inline 
+Box<Valtype>::Box( const Vector<Valtype>& diagonal ) noexcept
+	: Box{ Origin3D<Valtype>, Origin3D<Valtype> + diagonal }
 {}
 
 template<typename Valtype> inline

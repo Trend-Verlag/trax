@@ -727,6 +727,11 @@ namespace dim{
 	constexpr Value<Dimension<L,M,T>> ldexp( Value<Dimension<L,M,T>> x, int exp ){
 		return Value<Dimension<L,M,T>>{ std::ldexp(x.Units(),exp) };
 	}
+
+	inline Value<Dimension<0, 0, 0>> frac( Value<Dimension<0, 0, 0>> x ) noexcept{
+		Real dummy;
+		return Value<Dimension<0, 0, 0>>{ std::modf( x.Units(), &dummy ) };
+	}
 	///@}
 
 	inline namespace literals{

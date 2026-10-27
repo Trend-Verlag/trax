@@ -168,59 +168,62 @@ namespace spat{
 	template<typename Valtype> constexpr
 	Position<Valtype> operator+( const Position<Valtype>&, const Position<Valtype>& ) = delete;
 	template<typename Valtype> constexpr
-	Position<Valtype> operator+( const Position<Valtype>& p, const Vector<Valtype>& v ) noexcept;
-	template<typename Valtype> constexpr
 	Position<Valtype> operator+( const Vector<Valtype>&, const Position<Valtype>& ) = delete;
+	template<typename Valtype> constexpr
+	Position<Valtype> operator+( const Position<Valtype>& ) = delete;
 	template<typename Valtype>
 	Position<Valtype>& operator+=( Position<Valtype>&, const Position<Valtype>& ) = delete;
 	template<typename Valtype>
-	Position<Valtype>& operator+=( Position<Valtype>& p, const Vector<Valtype>& v ) noexcept;
-	template<typename Valtype>
 	Vector<Valtype>& operator+=( Vector<Valtype>&, const Position<Valtype>& ) = delete;
 	template<typename Valtype> constexpr
-	Position<Valtype> operator+( const Position<Valtype>& ) = delete;
-	template<typename Valtype> constexpr
-	Vector<Valtype> operator-( const Position<Valtype>& p1, const Position<Valtype>& p2 ) noexcept;
-	template<typename Valtype> constexpr
-	Position<Valtype> operator-( const Position<Valtype>& p, const Vector<Valtype>& v ) noexcept;
+	Position<Valtype> operator+( const Position<Valtype>& p, const Vector<Valtype>& v ) noexcept;
+	template<typename Valtype>
+	Position<Valtype>& operator+=( Position<Valtype>& p, const Vector<Valtype>& v ) noexcept;
+
 	template<typename Valtype> constexpr
 	Position<Valtype> operator-( const Vector<Valtype>&, const Position<Valtype>& ) = delete;
 	template<typename Valtype>
 	Position<Valtype>& operator-=( Position<Valtype>&, const Position<Valtype>& ) = delete;
-	template<typename Valtype>
-	Position<Valtype>& operator-=( Position<Valtype>& p, const Vector<Valtype>& v ) noexcept;
 	template<typename Valtype> constexpr
 	Position<Valtype> operator-( const Position<Valtype>& ) = delete;
 	template<typename Valtype> constexpr
-	Position<Valtype> operator*( const Position<Valtype>& , const Position<Valtype>& ) = delete;
+	Vector<Valtype> operator-( const Position<Valtype>& p1, const Position<Valtype>& p2 ) noexcept;
 	template<typename Valtype> constexpr
-	auto operator*( Valtype f, const Position<Valtype>& p ) noexcept -> Position<decltype(Valtype{}*Valtype{})>;
-	template<typename Valtype> constexpr
-	auto operator*( const Position<Valtype>& p, Valtype f ) noexcept -> Position<decltype(Valtype{}*Valtype{})>;
+	Position<Valtype> operator-( const Position<Valtype>& p, const Vector<Valtype>& v ) noexcept;
+	template<typename Valtype>
+	Position<Valtype>& operator-=( Position<Valtype>& p, const Vector<Valtype>& v ) noexcept;
+
+	template<typename Valtype> 
+	Valtype& operator*=( Valtype&, const Position<Valtype>& ) = delete;
+	template<typename Valtype,typename Valtype2> constexpr
+	auto operator*( const Position<Valtype>&, const Position<Valtype2>& ) = delete;
 	template<typename Valtype,typename Valtype2> constexpr
 	auto operator*( Valtype f, const Position<Valtype2>& p ) noexcept -> Position<decltype(Valtype{}*Valtype2{})>;
 	template<typename Valtype,typename Valtype2> constexpr
 	auto operator*( const Position<Valtype>& p, Valtype2 f ) noexcept -> Position<decltype(Valtype{}*Valtype2{})>;
 	template<typename Valtype,typename Valtype2> 
 	Position<Valtype>& operator*=( Position<Valtype>& p, Valtype2 f ) noexcept;
-	template<typename Valtype> 
-	Valtype& operator*=( Valtype&, const Position<Valtype>& ) = delete;
+
 	template<typename Valtype> constexpr
 	Position<Valtype> operator%( const Position<Valtype>& , const Position<Valtype>& ) = delete;
 	template<typename Valtype>
 	Position<Valtype>& operator%=( const Position<Valtype>& , const Position<Valtype>& ) = delete;
-	template<typename Valtype> constexpr
-	Valtype operator/( const Position<Valtype>& , const Position<Valtype>& ) = delete;
+
+	template<typename Valtype,typename Valtype2> constexpr
+	auto operator/( const Position<Valtype>& , const Position<Valtype2>& ) = delete;
+	template<typename Valtype,typename Valtype2> constexpr
+	auto operator/( Valtype f, const Position<Valtype2>& p ) = delete;
 	template<typename Valtype,typename Valtype2> constexpr
 	auto operator/( const Position<Valtype>& p, Valtype2 f ) noexcept -> Position<decltype(Valtype{}/Valtype2{})>;
-	template<typename Valtype> constexpr
-	Position<Valtype> operator/( Valtype f, const Position<Valtype>& p ) = delete;
 	template<typename Valtype,typename Valtype2>
 	Position<Valtype>& operator/=( Position<Valtype>& p, Valtype2 f ) noexcept;
+
 	template<typename Valtype> constexpr
 	bool operator==( const Position<Valtype>& p1, const Position<Valtype>& p2 ) noexcept;
 	template<typename Valtype> constexpr
 	bool operator!=( const Position<Valtype>& p1, const Position<Valtype>& p2 ) noexcept;
+	template<typename Valtype> constexpr
+	bool operator<( const Position<Valtype>&p1, const Position<Valtype>&p2 ) noexcept;
 	///@}
 
 
@@ -397,20 +400,8 @@ inline Position<Valtype>& operator-=( Position<Valtype>& p, const Vector<Valtype
 	return p;
 }
 
-template<typename Valtype> constexpr
-inline auto operator*( Valtype f, const Position<Valtype>& p ) noexcept -> Position<decltype(Valtype{}*Valtype{})>{
-	return { p.x * f, 
-			 p.y * f, 
-			 p.z * f };	
-}
-template<typename Valtype> constexpr
-inline auto operator*( const Position<Valtype>& p, Valtype f ) noexcept -> Position<decltype(Valtype{}*Valtype{})>{
-	return f * p;
-}
-
 template<typename Valtype,typename Valtype2> constexpr
 inline auto operator*( Valtype f, const Position<Valtype2>& p ) noexcept -> Position<decltype(Valtype{}*Valtype2{})>{
-	static_assert( !std::is_integral<Valtype>::value, "Possible data loss on integral values, proper implementation provided for int only!" );
 	return { p.x * f, 
 			 p.y * f, 
 			 p.z * f };	
@@ -418,68 +409,29 @@ inline auto operator*( Valtype f, const Position<Valtype2>& p ) noexcept -> Posi
 
 template<typename Valtype,typename Valtype2> constexpr
 inline auto operator*( const Position<Valtype>& p, Valtype2 f ) noexcept -> Position<decltype(Valtype{}*Valtype2{})>{
-	static_assert( !std::is_integral<Valtype>::value, "Possible data loss on integral values, proper implementation provided for int only!" );
 	return f * p;
-}
-
-template<typename Valtype> constexpr
-inline Position<int> operator*( const Position<int>& p, Valtype f ) noexcept{
-	return { static_cast<int>(static_cast<Valtype>(p.x) * f), 
-			 static_cast<int>(static_cast<Valtype>(p.y) * f), 
-			 static_cast<int>(static_cast<Valtype>(p.z) * f) };
-}
-
-template<typename Valtype> constexpr
-inline Position<int> operator*( Valtype f, const Position<int>& p ) noexcept{
-	return p * f;
 }
 
 template<typename Valtype,typename Valtype2>
 inline Position<Valtype>& operator*=( Position<Valtype>& p, Valtype2 f ) noexcept{
-	static_assert( !std::is_integral<Valtype>::value, "Possible data loss on integral values, proper implementation provided for int only!" );
 	p.x *= f;
 	p.y *= f;
 	p.z *= f;
 	return p;
 }
 
-template<typename Valtype>
-inline Position<int>& operator*=( Position<int>& p, Valtype f ) noexcept{
-	p.x = static_cast<int>(static_cast<Valtype>(p.x) * f);
-	p.y = static_cast<int>(static_cast<Valtype>(p.y) * f);
-	p.z = static_cast<int>(static_cast<Valtype>(p.z) * f);
-	return p;
-}
-
 template<typename Valtype,typename Valtype2> constexpr
 inline auto operator/( const Position<Valtype>& p, Valtype2 f ) noexcept -> Position<decltype(Valtype{}/Valtype2{})>{
-	static_assert( !std::is_integral<Valtype>::value, "Possible data loss on integral values, proper implementation provided for int only!" );
 	return { p.x / f,
 			 p.y / f,
 			 p.z / f };
 }
 
-template<typename Valtype> constexpr
-inline Position<int> operator/( const Position<int>& p, Valtype f ) noexcept{
-	return { static_cast<int>(static_cast<Valtype>(p.x) / f),
-			 static_cast<int>(static_cast<Valtype>(p.y) / f),
-			 static_cast<int>(static_cast<Valtype>(p.z) / f) };
-}
-
 template<typename Valtype,typename Valtype2>
 inline Position<Valtype>& operator/=( Position<Valtype>& p, Valtype2 f ) noexcept{
-	static_assert( !std::is_integral<Valtype>::value, "Possible data loss on integral values, proper implementation provided for int only!" );
 	p.x /= f;
 	p.y /= f;
 	p.z /= f;
-	return p;
-}
-
-template<typename Valtype> constexpr
-inline Position<int>& operator/=( Position<int>& p, Valtype f ) noexcept{
-	p.x = static_cast<int>(static_cast<Valtype>(p.x) / f);
-	p.y = static_cast<int>(static_cast<Valtype>(p.y) / f);
-	p.z = static_cast<int>(static_cast<Valtype>(p.z) / f);
 	return p;
 }
 
@@ -491,6 +443,11 @@ inline bool operator==( const Position<Valtype>& p1, const Position<Valtype>& p2
 template<typename Valtype> constexpr
 inline bool operator!=( const Position<Valtype>& p1, const Position<Valtype>& p2 ) noexcept{
 	return !(p1 == p2);
+}
+
+template<typename Valtype> constexpr
+bool operator<( const Position<Valtype>&p1, const Position<Valtype>&p2 ) noexcept{
+	return ( p1.x < p2.x || ( p1.x == p2.x && ( p1.y < p2.y || ( p1.y == p2.y && p1.z < p2.z ) ) ) );
 }
 
 } // namespace spat

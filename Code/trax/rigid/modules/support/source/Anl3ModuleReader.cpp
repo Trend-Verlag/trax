@@ -14,7 +14,7 @@
 #include "trax/rigid/modules/Camera.h"
 #include "trax/rigid/modules/ModuleCollection.h"
 #include "trax/rigid/modules/Module.h"
-
+#include "trax/rigid/modules/support/XMLStreamIn.h"
 
 #include "trax/collections/ConnectorCollection.h"
 #include "trax/collections/IndicatorCollection.h"
@@ -140,22 +140,15 @@ std::unique_ptr<Module> Anl3ModuleReader::ReadModule(
 					// ...	
 
 					else if( pair.first == "Schandlaft" ){
+						ptreesupport::AttributesToReferences( pair.second, *pModule );
 						pModule->SetVolume( { 
-							_cm(pair.second.get( "<xmlattr>.posX", 0.0f )),
+							{ _cm(pair.second.get( "<xmlattr>.posX", 0.0f )),
 							_cm(pair.second.get( "<xmlattr>.posY", 0.0f )),
-							_cm(pair.second.get( "<xmlattr>.h_min", 0.0f )),
-							_cm((pair.second.get( "<xmlattr>.posX", 0.0f ) + pair.second.get( "<xmlattr>.extX", 0.0f ) / pair.second.get( "<xmlattr>.dichte", 1.0f ))),
+							_cm(pair.second.get( "<xmlattr>.h_min", 0.0f )) },
+							{ _cm((pair.second.get( "<xmlattr>.posX", 0.0f ) + pair.second.get( "<xmlattr>.extX", 0.0f ) / pair.second.get( "<xmlattr>.dichte", 1.0f ))),
 							_cm((pair.second.get( "<xmlattr>.posY", 0.0f ) + pair.second.get( "<xmlattr>.extY", 0.0f ) / pair.second.get( "<xmlattr>.dichte", 1.0f ))), 
-							_cm(pair.second.get( "<xmlattr>.h_max", 0.0f )) 
+							_cm(pair.second.get( "<xmlattr>.h_max", 0.0f )) } 
 						} );
-
-						//if( auto pTerrain = EEPCreateTerrain( pair.second, *pSimulator ) ){
-						//	const auto iter = pt.find( "Weather" );
-						//	if( iter != pt.not_found() )
-						//		ReadEEPWeather( iter->second, *pTerrain );
-
-						//	pModule->Attach( std::move(pTerrain) );
-						//}
 					}
 				}
 

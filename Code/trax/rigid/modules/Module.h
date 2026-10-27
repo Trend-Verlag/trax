@@ -48,6 +48,7 @@ namespace trax{
 	struct CameraCollection;
 	struct CargoCollection;
 	struct Fleet;
+	struct HeightField;
 	struct IndicatorCollection;
 	struct PulseCounterCollection;
 	struct Scene;
@@ -148,16 +149,16 @@ namespace trax{
 		virtual std::shared_ptr<SignalCollection> GetSignalCollection() const noexcept = 0;
 
 
-		/// \brief Attaches an IndicatorCollection to the track system.
+		/// \brief Attaches an IndicatorCollection to the module.
 		/// \param pIndicatorCollection Pointer to object to attach or nullptr to remove.
 		virtual void Attach( std::shared_ptr<IndicatorCollection> pIndicatorCollection ) noexcept = 0;
 
 
-		/// \returns A pointer to the IndicatorCollection attached to this TrackSystem.
+		/// \returns A pointer to the IndicatorCollection attached to this module.
 		virtual std::shared_ptr<IndicatorCollection> GetIndicatorCollection() const noexcept = 0;
 
 		
-		/// \brief Attaches an CargoCollection to the track system.
+		/// \brief Attaches an CargoCollection to the module.
 		/// \param pCargoCollection Pointer to object to attach or nullptr to remove.
 		virtual void Attach( std::shared_ptr<CargoCollection> pCargoCollection ) noexcept = 0;
 
@@ -184,13 +185,23 @@ namespace trax{
 		virtual std::shared_ptr<PulseCounterCollection> GetPulseCounterCollection() const noexcept = 0;
 
 
-		/// \brief Attaches an CameraCollection to the track system.
+		/// \brief Attaches an CameraCollection to the module.
 		/// \param pCameraCollection Pointer to object to attach or nullptr to remove.
 		virtual void Attach( std::shared_ptr<CameraCollection> pCameraCollection ) noexcept = 0;
 
 
-		/// \returns A pointer to the attached Batch.
+		/// \returns A pointer to the attached CameraCollection.
 		virtual std::shared_ptr<CameraCollection> GetCameraCollection() const noexcept = 0;
+
+
+		/// \brief Attaches a HeightField to the module.
+		/// \param pHeightField Pointer to object to attach or nullptr to remove.
+		virtual void Attach( std::shared_ptr<HeightField> pHeightField ) noexcept = 0;
+
+
+		/// \returns A pointer to the attached HeightField.
+		virtual std::shared_ptr<HeightField> GetHeightField() const noexcept = 0;
+
 
 
 		/// \brief Moves all objects from all the collections to this module.

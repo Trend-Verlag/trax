@@ -112,15 +112,15 @@ BOOST_AUTO_TEST_CASE( positionIntegerValuesDividedByFraction )
 	Real f = 0.5f;
 	p1 /= f;
 	BOOST_CHECK_EQUAL( p1, p2 );
-	Position<int> p3 = p1 / f;
-	Position<int> p4{ 4, 8, 12 };
+	Position<Real> p3 = p1 / f;
+	Position<Real> p4{ 4, 8, 12 };
 	BOOST_CHECK_EQUAL( p3, p4 );
 
 	Position2D<int> p2D1{ 1, 2 }, p2D2{ 2, 4 };
 	p2D1 /= f;
 	BOOST_CHECK_EQUAL( p2D1, p2D2 );
-	Position2D<int> p2D3 = p2D1 / f;
-	Position2D<int> p2D4{ 4, 8 };
+	Position2D<Real> p2D3 = p2D1 / f;
+	Position2D<Real> p2D4{ 4, 8 };
 	BOOST_CHECK_EQUAL( p2D3, p2D4 );
 }
 
@@ -130,15 +130,15 @@ BOOST_AUTO_TEST_CASE( positionIntegerValuesMultipliedByFraction )
 	Real f = 0.5f;
 	p1 *= f;
 	BOOST_CHECK_EQUAL( p1, p2 );
-	Position<int> p3 = p1 * f;
-	Position<int> p4{ 1, 2, 3 };
+	Position<Real> p3 = p1 * f;
+	Position<Real> p4{ 1, 2, 3 };
 	BOOST_CHECK_EQUAL( p3, p4 );
 
 	Position2D<int> p2D1{ 4, 8 }, p2D2{ 2, 4 };
 	p2D1 *= f;
 	BOOST_CHECK_EQUAL( p2D1, p2D2 );
-	Position2D<int> p2D3 = p2D1 * f;
-	Position2D<int> p2D4{ 1, 2 };
+	Position2D<Real> p2D3 = p2D1 * f;
+	Position2D<Real> p2D4{ 1, 2 };
 	BOOST_CHECK_EQUAL( p2D3, p2D4 );
 }
 

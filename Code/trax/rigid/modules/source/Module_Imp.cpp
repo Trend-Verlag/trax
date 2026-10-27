@@ -28,9 +28,10 @@
 #include "trax/collections/PulseCounterCollection.h"
 #include "trax/collections/SignalCollection.h"
 #include "trax/collections/TimerCollection.h"
-#include "trax/rigid/Scene.h"
 #include "trax/rigid/collections/source/TrackSystemMovable_Imp.h"
+#include "trax/rigid/HeightField.h"
 #include "trax/rigid/modules/Camera.h"
+#include "trax/rigid/Scene.h"
 #include "trax/rigid/trains/collections/CargoCollection.h"
 #include "trax/rigid/trains/collections/Fleet.h"
 
@@ -233,6 +234,14 @@ std::shared_ptr<CameraCollection> Module_Imp::GetCameraCollection() const noexce
 	return m_pCameraCollection;
 }
 
+void Module_Imp::Attach( std::shared_ptr<HeightField> pHeightField ) noexcept{
+	m_pHeightField = pHeightField;
+}
+
+std::shared_ptr<HeightField> Module_Imp::GetHeightField() const noexcept{
+	return m_pHeightField;
+}
+
 void Module_Imp::Take( Module& fromModule )
 {
 	if( m_pTrackSystem && fromModule.GetTrackSystem() )
@@ -251,6 +260,8 @@ void Module_Imp::Take( Module& fromModule )
 		m_pPulseCounterCollection->Take( *fromModule.GetPulseCounterCollection() );
 	if( m_pCameraCollection && fromModule.GetCameraCollection() )
 		m_pCameraCollection->Take( *fromModule.GetCameraCollection() );
+	if( m_pHeightField && fromModule.GetHeightField() )
+		m_pHeightField->Take( *fromModule.GetHeightField() );
 }
 
 void Module_Imp::Clear() noexcept
@@ -263,6 +274,7 @@ void Module_Imp::Clear() noexcept
 	m_pTimerCollection.reset();
 	m_pPulseCounterCollection.reset();
 	m_pCameraCollection.reset();
+	m_pHeightField.reset();
 }
 
 void Module_Imp::ClearCollections()
@@ -283,6 +295,8 @@ void Module_Imp::ClearCollections()
 		m_pPulseCounterCollection->Clear();
 	if( m_pCameraCollection )
 		m_pCameraCollection->Clear();
+	if( m_pHeightField )
+		m_pHeightField->Clear();
 }
 
 void Module_Imp::SetLogbook( cmnd::Logbook* pLogbook )

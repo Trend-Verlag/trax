@@ -499,6 +499,22 @@ bool PhysX_HeightField::CreateEEPStyle( common::Span<const short> samples, commo
 	return true;
 }
 
+void PhysX_HeightField::Clear() noexcept
+{
+	if( m_HeightFieldGeometry.heightField )
+		m_HeightFieldGeometry.heightField->release();
+
+	m_HeightFieldGeometry = physx::PxHeightFieldGeometry{};
+}
+
+void PhysX_HeightField::Take( HeightField& fromHeightField )
+{
+	PhysX_HeightField& fromPhysXHeightField = static_cast<PhysX_HeightField&>( fromHeightField );
+	m_HeightFieldGeometry = fromPhysXHeightField.m_HeightFieldGeometry;
+	fromPhysXHeightField.m_HeightFieldGeometry = physx::PxHeightFieldGeometry{};
+	m_Frame = fromPhysXHeightField.m_Frame;
+}
+
 spat::Vector2D<int> PhysX_HeightField::GetRasterExtent() const noexcept
 {
 	assert( m_HeightFieldGeometry.heightField );
@@ -513,8 +529,8 @@ Length PhysX_HeightField::GetRasterScale() const noexcept
 Length PhysX_HeightField::GetHeight( const spat::Position2D<int>& atRasterPoint ) const
 {
 	assert( m_HeightFieldGeometry.heightField );
-	assert( atRasterPoint.dx >= 0 && atRasterPoint.dx < m_HeightFieldGeometry.heightField->getNbColumns() );
-	assert( atRasterPoint.dy >= 0 && atRasterPoint.dy < m_HeightFieldGeometry.heightField->getNbRows() );
+	assert( atRasterPoint.x >= 0 && atRasterPoint.x < m_HeightFieldGeometry.heightField->getNbColumns() );
+	assert( atRasterPoint.y >= 0 && atRasterPoint.y < m_HeightFieldGeometry.heightField->getNbRows() );
 
 	physx::PxI16 height = m_HeightFieldGeometry.heightField->getSample(
 		atRasterPoint.y,
@@ -537,7 +553,7 @@ Length PhysX_HeightField::GetHeight( const spat::Position<Length>& atPoint ) con
 common::Interval<Length> PhysX_HeightField::HeightRange() const noexcept
 {
 	assert( m_HeightFieldGeometry.heightField );
-	return HeightRange( spat::Rect<int>{ 0, 0, static_cast<int>( m_HeightFieldGeometry.heightField->getNbColumns() - 1 ), static_cast<int>( m_HeightFieldGeometry.heightField->getNbRows() - 1 ) } );
+	return HeightRange( spat::Rect<int>{ Position2D<int>{ 0, 0 }, Position2D<int>{ static_cast<int>( m_HeightFieldGeometry.heightField->getNbColumns() - 1 ), static_cast<int>( m_HeightFieldGeometry.heightField->getNbRows() - 1 ) } } );
 }
 
 common::Interval<Length> PhysX_HeightField::HeightRange( const spat::Rect<int>& inRect ) const

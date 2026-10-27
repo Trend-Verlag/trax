@@ -177,6 +177,10 @@ namespace trax{
 
 		bool CreateEEPStyle( common::Span<const short> samples, common::Span<const bool> holes, const spat::Vector2D<int>& rasterExtent, Length rasterScale, Length heightScale ); // override;
 
+		void Clear() noexcept override;
+
+		void Take( HeightField& fromHeightField ) override;
+
 		spat::Vector2D<int> GetRasterExtent() const noexcept override;
 
 		Length GetRasterScale() const noexcept override;

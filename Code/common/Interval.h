@@ -50,8 +50,8 @@ namespace common{
 		/// \param farval lower value of interval
 		///@{		
 				 constexpr Interval() noexcept = default;			///< Does not initialize the members.
-		explicit constexpr Interval( Valtype val ) noexcept;
 				 constexpr Interval( Valtype nearval, Valtype farval ) noexcept;
+		explicit constexpr Interval( Valtype val ) noexcept;
 		explicit constexpr Interval( const std::pair<Valtype,Valtype>& pair ) noexcept;
 		template<typename Valtype2>
 		explicit constexpr Interval( const Interval<Valtype2>& interval ) noexcept;
@@ -316,28 +316,28 @@ namespace common{
 ///////////////////////////////////////
 //inlines:
 template<typename Valtype> inline constexpr
-Interval<Valtype>::Interval( Valtype val ) noexcept
-	:	m_Near{val},
-		m_Far{val}
+Interval<Valtype>::Interval( Valtype nearval, Valtype farval ) noexcept
+	: m_Near{ nearval }
+	, m_Far	{ farval }
 {}
 
 template<typename Valtype> inline constexpr
-Interval<Valtype>::Interval( Valtype nearval, Valtype farval ) noexcept
-	:	m_Near{nearval},
-		m_Far{farval}
+Interval<Valtype>::Interval( Valtype val ) noexcept
+	: m_Near{ Valtype{0} }
+	, m_Far { val }
 {}
 
 template<typename Valtype> inline constexpr 
 Interval<Valtype>::Interval( const std::pair<Valtype,Valtype>& pair ) noexcept
-	:	m_Near{pair.first},
-		m_Far{pair.second}
+	: m_Near{ pair.first }
+	, m_Far	{ pair.second }
 {}
 
 template<typename Valtype>
 template<typename Valtype2> inline constexpr
 Interval<Valtype>::Interval( const Interval<Valtype2>& interval ) noexcept
-	:	m_Near{interval.m_Near},
-		m_Far{interval.m_Far}
+	: m_Near{ interval.m_Near }
+	, m_Far	{ interval.m_Far }
 {}
 
 template<typename Valtype> inline
@@ -507,19 +507,10 @@ Valtype Interval<Valtype>::Wrap( Valtype& val ) const noexcept{
 
 template<typename Valtype> inline 
 Interval<Valtype>& Interval<Valtype>::Expand( Valtype val ) noexcept{
-	if( Normal() ){
-		if( m_Near > val )
-			m_Near = val;
-		if( m_Far < val )
-			m_Far = val;
-	}
-	else{
-		if( m_Near < val )
-			m_Near = val;
-		if( m_Far > val )
-			m_Far = val;
-	}
-
+	if( m_Near > val )
+		m_Near = val;
+	if( m_Far < val )
+		m_Far = val;
 	return *this;
 }
 

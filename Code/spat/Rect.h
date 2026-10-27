@@ -27,13 +27,11 @@
 #pragma once
 
 #include "common/Interval.h"
-
+#include "spat/Position2D.h"
 
 namespace spat{
 
-	template<typename> struct Position2D;
 	template<typename> struct Vector2D;
-
 
 	/// \brief Axis aligned rectangle.
 	template<typename Valtype> 
@@ -56,7 +54,7 @@ namespace spat{
 		Rect( Valtype width, Valtype height ) noexcept;
 		Rect( const common::Interval<Valtype>& width, const common::Interval<Valtype>& height ) noexcept;
 		Rect( const Position2D<Valtype>& leftbottom, const Position2D<Valtype>& righttop ) noexcept;
-		Rect( Valtype left, Valtype bottom, Valtype right, Valtype top ) noexcept;
+		explicit Rect( const Vector2D<Valtype>& diagonal ) noexcept; ///< \brief Constructs a rect with leftbottom at origin and righttop at diagonal.
 		///@}
 
 
@@ -180,12 +178,6 @@ namespace spat{
 		bool Touches( const Position2D<Valtype>& pt ) const noexcept;
 
 
-		/// \returns True if the point lays inside the rect. 
-		///
-		/// All edges are inside the rect.
-		bool Touches( const Rect<Valtype>& rect ) const noexcept;
-
-
 		/// \brief Expands the rect so that it touches (being included or laying on border) the point.
 		///
 		/// If the point is allready included in the rect, no changes are made.
@@ -274,9 +266,8 @@ Rect<Valtype>::Rect( const Position2D<Valtype>& leftbottom, const Position2D<Val
 {}
 
 template<typename Valtype> inline 
-Rect<Valtype>::Rect( Valtype left, Valtype bottom, Valtype right, Valtype top ) noexcept
-	:	m_Width	{left,right},
-		m_Height{bottom,top}
+Rect<Valtype>::Rect( const Vector2D<Valtype>& diagonal ) noexcept
+	: Rect{ Origin2D<Valtype>, Origin2D<Valtype> + diagonal }
 {}
 
 template<typename Valtype> inline
@@ -344,22 +335,22 @@ Rect<Valtype>& Rect<Valtype>::Top( Valtype val ) noexcept{
 
 template<typename Valtype> inline 
 Position2D<Valtype> Rect<Valtype>::LeftBottom() const noexcept{
-	return { m_Width.Near(), m_Height.Far() };
+	return { m_Width.Near(), m_Height.Near() };
 }
 
 template<typename Valtype> inline 
 Position2D<Valtype> Rect<Valtype>::RightBottom() const noexcept{
-	return { m_Width.Far(), m_Height.Far() };
-}
-
-template<typename Valtype> inline 
-Position2D<Valtype> Rect<Valtype>::RightTop	() const noexcept{
 	return { m_Width.Far(), m_Height.Near() };
 }
 
 template<typename Valtype> inline 
+Position2D<Valtype> Rect<Valtype>::RightTop	() const noexcept{
+	return { m_Width.Far(), m_Height.Far() };
+}
+
+template<typename Valtype> inline 
 Position2D<Valtype> Rect<Valtype>::LeftTop() const noexcept{
-	return { m_Width.Near(), m_Height.Near() };
+	return { m_Width.Near(), m_Height.Far() };
 }
 
 template<typename Valtype> inline 
@@ -439,6 +430,11 @@ bool Rect<Valtype>::Includes( Valtype x, Valtype y ) const noexcept{
 template<typename Valtype> inline
 bool Rect<Valtype>::Includes( const Position2D<Valtype>& pt ) const noexcept{
 	return Includes( pt.x, pt.y );
+}
+
+template<typename Valtype> inline
+bool Rect<Valtype>::Includes( const Rect<Valtype>& rect ) const noexcept{
+	return m_Width.Includes( rect.m_Width ) && m_Height.Includes( rect.m_Height );
 }
 
 template<typename Valtype> inline

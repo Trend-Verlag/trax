@@ -555,8 +555,7 @@ Interval<One> Section_Imp::TextureExtent() const{
 	if( m_SectionPoints.size() < 2 )
 		throw std::logic_error( "Profile not created yet!" );
 
-	Interval<One> extent{ m_SectionPoints.front().t };
-
+	Interval<One> extent{ +infinite__one, -infinite__one };
 	for( const auto& sectionPoint : m_SectionPoints )
 		extent.Expand( sectionPoint.t );
 

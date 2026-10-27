@@ -124,11 +124,11 @@ BOOST_FIXTURE_TEST_CASE( reservePartlyOutsideTrackReenterFromOtherEndWithGap, Tr
 */
 BOOST_FIXTURE_TEST_CASE( reserveMarginal, TrackFixture ){
 	m_pTrack->Reserve( {40_m,50_m}, 1 );
-	m_pTrack->DeleteReservation( Interval<Length>{ 40_m }, 1 );
+	m_pTrack->DeleteReservation( Interval<Length>{ 40_m, 40_m }, 1 );
 	BOOST_CHECK( !m_pTrack->IsReserved( {0_m,m_pTrack->GetLength()}, 1) );
 
 	m_pTrack->Reserve( {40_m,50_m}, 1 );
-	m_pTrack->DeleteReservation( Interval<Length>{ 50_m }, 1 );
+	m_pTrack->DeleteReservation( Interval<Length>{ 50_m, 50_m }, 1 );
 	BOOST_CHECK( m_pTrack->IsReserved( {0_m,m_pTrack->GetLength()}, 1) );
 }
 
@@ -158,7 +158,7 @@ BOOST_FIXTURE_TEST_CASE( reserveMarginalOutsideTrackRangeConnected, TrackCircle 
 	BOOST_CHECK( !m_pTrack2->IsReserved( {0_m,m_pTrack2->GetLength()}, 1) );
 	BOOST_CHECK( m_pTrack4->IsReserved( {0_m,m_pTrack4->GetLength()}, 1) );
 
-	m_pTrack4->DeleteReservation( Interval<Length>{ m_pTrack4->GetLength() }, 1 );
+	m_pTrack4->DeleteReservation( Interval<Length>{ m_pTrack4->GetLength(), m_pTrack4->GetLength() }, 1 );
 	BOOST_CHECK( !m_pTrack1->IsReserved( {0_m,m_pTrack1->GetLength()}, 1) );
 	BOOST_CHECK( !m_pTrack2->IsReserved( {0_m,m_pTrack2->GetLength()}, 1) );
 	BOOST_CHECK( !m_pTrack4->IsReserved( {0_m,m_pTrack4->GetLength()}, 1) );

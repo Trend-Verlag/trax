@@ -535,4 +535,10 @@ namespace common{
 
 	template<typename T>
 	Span<const T> MakeConstSpan( std::vector<T>&& ) = delete;
+
+	// std::vector<bool> is bit-packed: no data(), no bool*. Span<bool> cannot view it.
+	Span<bool> MakeSpan( std::vector<bool>& ) = delete;
+	Span<bool> MakeSpan( std::vector<bool>&& ) = delete;
+	Span<const bool> MakeConstSpan( const std::vector<bool>& ) = delete;
+	Span<const bool> MakeConstSpan( std::vector<bool>&& ) = delete;
 }

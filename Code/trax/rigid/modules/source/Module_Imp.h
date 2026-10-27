@@ -82,17 +82,21 @@ namespace trax{
 
 		std::shared_ptr<CargoCollection> GetCargoCollection() const noexcept override;
 
-		void Attach( std::shared_ptr<TimerCollection> pTimerCollection ) noexcept;
+		void Attach( std::shared_ptr<TimerCollection> pTimerCollection ) noexcept override;
 
-		std::shared_ptr<TimerCollection> GetTimerCollection() const noexcept;
+		std::shared_ptr<TimerCollection> GetTimerCollection() const noexcept override;
 
-		void Attach( std::shared_ptr<PulseCounterCollection> pPulseCounterCollection ) noexcept;
+		void Attach( std::shared_ptr<PulseCounterCollection> pPulseCounterCollection ) noexcept override;
 		
-		std::shared_ptr<PulseCounterCollection> GetPulseCounterCollection() const noexcept;
+		std::shared_ptr<PulseCounterCollection> GetPulseCounterCollection() const noexcept override;
 
-		void Attach( std::shared_ptr<CameraCollection> pCameraCollection ) noexcept;
+		void Attach( std::shared_ptr<CameraCollection> pCameraCollection ) noexcept override;
 
-		std::shared_ptr<CameraCollection> GetCameraCollection() const noexcept;
+		std::shared_ptr<CameraCollection> GetCameraCollection() const noexcept override;
+
+		void Attach( std::shared_ptr<HeightField> pHeightField ) noexcept override;
+
+		std::shared_ptr<HeightField> GetHeightField() const noexcept override;
 
 		void Take( Module& fromModule ) override;
 
@@ -168,6 +172,7 @@ namespace trax{
 		std::shared_ptr<TimerCollection>		m_pTimerCollection;
 		std::shared_ptr<PulseCounterCollection> m_pPulseCounterCollection;
 		std::shared_ptr<CameraCollection>		m_pCameraCollection;
+		std::shared_ptr<HeightField>			m_pHeightField;
 
 		void DoReplay();
 

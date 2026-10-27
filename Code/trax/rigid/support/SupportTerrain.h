@@ -34,9 +34,8 @@
 
 namespace trax{
 
-
 	struct HeightField;
 
-	bool dclspc LoadFromEEPHeightFieldFile( HeightField& heightField, std::filesystem::path fullPath, Length resolution );
+	bool dclspc LoadFromEEPHeightFieldFile( HeightField& heightField, const std::filesystem::path& fullPath, Length resolution );
 
 }

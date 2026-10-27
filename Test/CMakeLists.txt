@@ -23,6 +23,7 @@ add_executable(ALL_TESTS
     "./trax/rigid/modules/TestReadWrite.cpp"
     "./trax/rigid/TestBody.cpp"
     "./trax/rigid/TestDynamicTrack.cpp"
+    "./trax/rigid/TestHeightField.cpp"
     "./trax/rigid/TestStaticTrack.cpp"
     "./trax/rigid/TestTractionForceCharacteristic.cpp"
     "./trax/rigid/trains/TestFleet.cpp"
@@ -39,6 +40,7 @@ target_link_libraries(ALL_TESTS
         trax_core_support
         trax_core_collections_support
         trax_rigid_physx
+        trax_rigid_support
         trax_modules_support
         trax_trains_collections
  )
