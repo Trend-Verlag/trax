@@ -44,8 +44,8 @@ std::shared_ptr<SectionTrack> SectionTrack::Make() noexcept
 	return nullptr;
 }
 ///////////////////////////////////////
-Track::TrackType SectionTrack_Imp::GetTrackType() const noexcept{
-	return TrackType::withGeoms;
+TrackType SectionTrack_Imp::GetTrackType() const noexcept{
+	return TrackType::section;
 }
 
 std::shared_ptr<const SectionTrack> SectionTrack_Imp::GetSectionTrack() const noexcept

@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "Track.h"
+#include "Configuration.h"
 
 namespace common{
 	/// \private

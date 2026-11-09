@@ -23,11 +23,12 @@ add_library(trax_core
         "./source/SwitchSemaphore_Imp.cpp"
         "./source/Switch_Imp.cpp"
         "./source/Timer_Imp.cpp"
-        "./source/TrackCreators_Imp.cpp"
+        "./source/Track_Imp.cpp"
         "./source/Track_Make_Imp.cpp"
+        "./source/TrackCreators_Imp.cpp"
         "./source/TrackPainter.cpp"
         "./source/TrackTools_Imp.cpp"
-        "./source/Track_Imp.cpp"
+        "./source/TrackType_Imp.cpp"
         "./source/Version_Imp.cpp"
         "./source/curves/ArcP_Imp.cpp"
         "./source/curves/Arc_Imp.cpp"
@@ -44,6 +45,7 @@ add_library(trax_core
 )
 
 set(PUBLIC_HEADERS
+        "./Clock.h"
         "./Configuration.h"
         "./Connector.h"
         "./ConnectorType.h"
@@ -77,6 +79,7 @@ set(PUBLIC_HEADERS
         "./Switch.h"
         "./Timer.h"
         "./Track.h"
+        "./TrackType.h"
         "./TrackData.h"
         "./TrackLocation.h"
         "./TrackPainter.h"

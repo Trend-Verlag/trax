@@ -38,9 +38,9 @@ std::shared_ptr<TrackBuilder> TrackBuilder::Make( TrackType type ) noexcept
 			return nullptr;
 		case TrackType::standard:
 			return std::make_shared<Track_Imp>();
-		case TrackType::withGeoms:
+		case TrackType::section:
 			return std::make_shared<SectionTrack_Imp>();
-		case TrackType::parallel:
+		case TrackType::parallelizable:
 			return std::make_shared<ParallelizableTrack_Imp>();
 		default:
 			std::cerr << "TrackBuilder::Make(): Unsupported track type requested: " << ToString(type) << ". Try more specific Make() method." << std::endl;

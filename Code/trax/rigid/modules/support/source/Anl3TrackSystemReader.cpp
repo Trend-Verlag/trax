@@ -24,13 +24,13 @@
 #include "trax/LogicElements.h"
 #include "trax/Plug.h"
 #include "trax/Section.h"
-#include "trax/SectionTrack.h"
 #include "trax/Sensor.h"
 #include "trax/SocketRegistry.h"
 #include "trax/Timer.h"
 
 #include "common/support/CommonSupportXML.h"
 #include "spat/support/SpatSupportXML.h"
+#include "trax/rigid/CollidableTrack.h"
 #include "trax/rigid/modules/support/XMLStreamIn.h"
 
 #include <iostream>
@@ -272,7 +272,7 @@ std::shared_ptr<TrackBuilder> Anl3TrackSystemReader::CreateTrack(
 	std::map<IDType,Velocity>& travelVelocities, 
 	IDType& maxSensorID ) const
 {
-	if( std::shared_ptr<SectionTrack> pTrack = SectionTrack::Make(); pTrack )
+	if( std::shared_ptr<CollidableTrack> pTrack = CollidableTrack::Make(); pTrack )
 	{
 		pTrack->ID( pt.get( "<xmlattr>.GleisID", 0 ) );
 		pTrack->Reference( "name", pt.get( "<xmlattr>.name", "Track_" + to_string(pTrack->ID()) ) );

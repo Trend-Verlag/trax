@@ -30,7 +30,6 @@
 #include "CollectionSupportXML.h"
 
 #include "trax/collections/Interfaces.h"
-#include "trax/Track.h"
 
 namespace trax{
 

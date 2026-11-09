@@ -239,6 +239,7 @@
 #include "Identified.h"
 #include "Orientation.h"
 #include "RoadwayTwist.h"
+#include "TrackType.h"
 
 #include "common/Interval.h"
 #include "spat/Frame.h"
@@ -276,18 +277,6 @@ namespace trax
 		/// \returns the name for the object type that implements this interface. 
 		virtual const char*	TypeName() const noexcept = 0;
 
-		enum class TrackType : char{
-			unknown = -1,
-			none  = 0,
-			standard,
-			section,
-			withGeoms,
-			movable,
-			movable_withGeoms,
-			movable_autoconnecting,
-			parallel
-		};
-
 		virtual TrackType GetTrackType() const noexcept = 0;
 
 
@@ -299,6 +288,7 @@ namespace trax
 				return { pTrack, !end };
 			}
    		};
+
 
 		struct cTrackEnd {
 			std::shared_ptr<const Track> pTrack;
@@ -631,14 +621,6 @@ namespace trax
 		virtual TrackUserData* UserData() const noexcept = 0;
 	};
 
-	/// \brief Converts a TrackType to readable string.
-	dclspc const char* ToString( Track::TrackType type );
-
-	/// \brief Finds TrackType for string.
-	dclspc Track::TrackType TrackType( const char* type ) noexcept;
-
-	inline Track::TrackType TrackType( const std::string& type ) noexcept;
-
 
 	/// \brief Tests for equality.
 	inline bool operator==( const Track::End& theone, const Track::End& theother ) noexcept;
@@ -659,10 +641,6 @@ namespace trax
 	inline bool operator==( const Track::Overlap& a, const Track::Overlap& b ) noexcept;
 
 	inline bool operator<( const Track::Overlap& a, const Track::Overlap& b ) noexcept;
-
-
-	/// \brief Makes a string from the status
-	dclspc const char* ToString( EndType end );
 
 
 	/// \defgroup Group_Segments Track's Segments
@@ -1459,10 +1437,6 @@ inline Track::End::End( const std::pair<std::shared_ptr<TrackBuilder>,EndType>& 
 	: id	{ trackEnd.first ? trackEnd.first->ID() : IDType{0u} }
 	, type	{ trackEnd.second }
 {}
-
-inline Track::TrackType TrackType( const std::string& type ) noexcept{
-	return TrackType( type.c_str() );
-}
 
 inline bool operator==( const Track::End& theone, const Track::End& theother ) noexcept{
 	return theone.id == theother.id && theone.type == theother.type;

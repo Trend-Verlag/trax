@@ -35,6 +35,8 @@ namespace trax{
 	struct Shape;
 	struct Scene;
 
+	/// \brief A static track is a track that internally creates a shape 
+	/// and attaches it to the scene.
 	struct StaticTrack : virtual SectionTrack{
 
 		/// \brief Makes a StaticTrack object.

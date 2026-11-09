@@ -91,11 +91,11 @@ std::shared_ptr<TrackSystem> TrackSystem::Make(
 void TrackSystem_Imp::SetWeakPointerToSelf( std::weak_ptr<TrackSystem_Imp> pThis ) noexcept{
 	m_pThis = pThis;
 }
-
-void TrackSystem_Imp::SetAbsoluteFrame( const Frame<Length,One>& frame ) noexcept{
-	if( auto pCollectionContainer = decorator_cast<TrackCollectionContainer_Imp*>(m_pTrackCollectionContainer.get()) )
-		pCollectionContainer->SetAbsoluteFrame( frame );
-}
+//
+//void TrackSystem_Imp::SetAbsoluteFrame( const Frame<Length,One>& frame ) noexcept{
+//	if( auto pCollectionContainer = decorator_cast<TrackCollectionContainer_Imp*>(m_pTrackCollectionContainer.get()) )
+//		pCollectionContainer->SetAbsoluteFrame( frame );
+//}
 
 const char*	TrackSystem_Imp::TypeName() const noexcept{
 	return "TrackSystem";

@@ -267,8 +267,6 @@ namespace trax{
 
 
 		// EEPCurve:
-	//	common::Interval<Length> Create( const spat::Frame<Length,One>& start, const spat::Position<Length>& end ) override;
-
 		common::Interval<Length> Create( const Data& data ) override;
 
 		const Data& GetData() const noexcept override;

@@ -49,9 +49,36 @@ namespace trax{
 	/// The TrackSystem maintains TrackCollection objects that are used to group 
 	/// and locate tracks inside of a TrackSystem. A track will deliver module 
 	/// relative coordinates with its Transition() methods, taking into account
-	/// the TrackCollection's frame of reference.
+	/// the TrackCollection's frame of reference it belongs to.
 	/// 
 	/// Tracks can only get added if valid. \see Track::IsValid().
+	/// A frame is understood as to be relative to its parent in the following
+	/// transformation hierarchy (classes in braces do not apply a transformation):
+	/// \verbatim
+	///
+	///	  (ModuleSet)
+	///       |
+	///		  |
+	///		Module ___________________________________________________________________
+	///       |                                    |                                 |
+	///  (TrackSystem)                          (Fleet)                          (Simulator)
+	///	      |                                    |
+	/// (TrackCollectionContainer)                 |      
+	///       |                                 (Train)       
+	///   TrackCollection						   |_______________
+	///       |                                    |               | 
+	///       |                             (RollingStock)       (Train)                  
+	///       |                                    |         
+	///     Track                                Bogie                      
+	///       |                                    |                   
+	///    (Curve)                             ChildBogie                    
+	///                                                                
+	///
+	/// \endverbatim
+	/// \remarks A track will deliver module relative coordinates with its Transition() methods.
+	/// \remarks If several Modules carry different frames, they ought to be simulated by different 
+	/// Simulators (in separate worlds), the coordinates have to get transformed by the module's
+	/// frame to get a common world coordinate system, e.g for rendering.
 	struct TrackSystem :	Collection<TrackSystem,TrackBuilder>,
 							Simulated,
 							Identified<TrackSystem>
@@ -77,17 +104,30 @@ namespace trax{
 		// TrackCollections:
 
 		/// \brief Creates a TrackCollection with the supplied id.
+		/// 
+		/// The method will do nothing, if there already is an existing TrackCollection with 
+		/// the same id. If a new TrackCollection actually is created it gets set as active 
+		/// collection.
 		/// \param id id for the new TrackCollection or 0 if one should be made automatically.
-		/// \returns id of the new TrackCollection.
+		/// \returns id If successful, the method returns the id of the newly created (or 
+		/// already existing) collection. If the collection could not be created, the method 
+		/// returns 0.
 		virtual	IDType CreateCollection( IDType id = 0 ) = 0;
 
 
 		/// \brief Removes the TrackCollection with the specified id.
+		/// 
+		/// The tracks previously in this collection end up being member of no collection.
+		/// If the collection was active no active collection is set for the TrackSystem.
 		/// \param id of the TrackCollection to remove.
 		virtual	void RemoveCollection( IDType id ) = 0;
 
 
 		/// \brief Sets the frame of reference for a TrackCollection.
+		///
+		/// This method will change the output of the Transition() methods of all tracks in 
+		/// the TrackCollection. To move or rotate all tracks in a TrackCollection, GetCollectionFrame(),
+		/// move or rotate it and SetCollectionFrame() again.
 		virtual void SetCollectionFrame( IDType id, const spat::Frame<Length,One>& frame ) = 0;
 
 

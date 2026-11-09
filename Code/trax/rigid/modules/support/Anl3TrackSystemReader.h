@@ -13,7 +13,6 @@
 
 #include "trax/Signal.h"
 #include "trax/Switch.h"
-#include "trax/Track.h"
 
 #include <map>
 

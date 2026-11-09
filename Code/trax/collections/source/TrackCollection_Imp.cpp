@@ -84,6 +84,15 @@ bool TrackCollection_Imp::IsConnected( Track::End trackEnd ) const noexcept
 	return false;
 }
 
+void TrackCollection_Imp::SetFrame( const spat::Frame<Length,One>& frame ) noexcept{
+	m_Frame = frame;
+	SetTracksAbsoluteFrames( GetFrame() );
+}
+
+const spat::Frame<Length, One>& TrackCollection_Imp::GetFrame() const noexcept{
+	return m_Frame;	
+}
+
 const char* TrackCollection_Imp::TypeName() const noexcept{
 	return "TrackCollection";
 }
@@ -94,27 +103,11 @@ bool TrackCollection_Imp::IsValid() const noexcept
 }
 
 IDType TrackCollection_Imp::Add( std::shared_ptr<TrackBuilder> pTrack ){
-	if( IDType retval = TrackCollection_Base::Add( pTrack ) )
-	{
-		if( auto pTrack_Imp = dynamic_cast<Track_Imp*>(pTrack.get()) )
-			pTrack_Imp->SetAbsoluteFrame( GetAbsoluteFrame() * GetFrame() );
-
-		return retval;
-	}
-
-	return 0;
+	return TrackCollection_Base::Add( pTrack );
 }
 
 bool TrackCollection_Imp::Remove( TrackBuilder* pTrack, bool zeroIDs ){
-	if( TrackCollection_Base::Remove( pTrack, zeroIDs ) )
-	{
-		if( auto pTrack_Imp = dynamic_cast<Track_Imp*>(pTrack) )
-			pTrack_Imp->SetAbsoluteFrame( Identity<Length,One> );
-
-		return true;
-	}
-
-	return false;
+	return TrackCollection_Base::Remove( pTrack, zeroIDs );
 }
 
 void TrackCollection_Imp::Clear() noexcept {
@@ -123,14 +116,9 @@ void TrackCollection_Imp::Clear() noexcept {
 	TrackCollection_Base::Clear();
 }
 
-void TrackCollection_Imp::PropagateAbsoluteFrameToClients() noexcept{
-	TrackCollection_Base::PropagateAbsoluteFrameToClients();
-	SetTracksAbsoluteFrames( GetAbsoluteFrame() * GetFrame() );
-}
-
 void TrackCollection_Imp::SetTrackAbsoluteFrame( TrackBuilder* pTrack, const Frame<Length,One>& frame ) const noexcept{
 	if( Track_Imp* pImp = dynamic_cast<Track_Imp*>( pTrack ) )
-		pImp->SetAbsoluteFrame(frame);
+		pImp->SetAbsoluteFrame( frame );
 }
 
 void TrackCollection_Imp::SetTracksAbsoluteFrames( const Frame<Length,One>& frame ) const noexcept{
@@ -141,13 +129,8 @@ void TrackCollection_Imp::SetTracksAbsoluteFrames( const Frame<Length,One>& fram
 	});
 }
 
-void TrackCollection_Imp::DoClear() noexcept {
+void TrackCollection_Imp::DoClear() noexcept{
 	SetFrame( Identity<Length,One> );
-
-	for( TrackBuilder& track : *this ){
-		if( auto pTrack_Imp = dynamic_cast<Track_Imp*>(&track) )
-			pTrack_Imp->SetAbsoluteFrame( Identity<Length,One> );
-	}
 }
 ///////////////////////////////////////
 common::Span<const std::pair<Track::End,Length>> FindTrackEnds( 

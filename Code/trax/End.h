@@ -6,7 +6,7 @@
 //								Peter Gabriel
 // 
 // 
-// Copyright (c) 2025 Trend Redaktions- und Verlagsgesellschaft mbH
+// Copyright (c) 2026 Trend Redaktions- und Verlagsgesellschaft mbH
 // Copyright (c) 2019 Marc-Michael Horstmann
 //
 // Permission is hereby granted to any person obtaining a copy of this software 
@@ -50,7 +50,6 @@ namespace trax{
 
 	/// \brief Makes a string from the end.
 	dclspc const char* ToString( EndType end );
-
 
 	/// \brief Makes an end value from a string.
 	/// \throws std::invalid_argument if the string was not recognized.

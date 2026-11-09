@@ -26,6 +26,7 @@
 
 #include "Signal_Imp.h"
 #include "trax/Location.h"
+#include "trax/Track.h"
 
 namespace trax{
 ///////////////////////////////////////

@@ -42,7 +42,6 @@
 /// 
 
 #include "Identified.h"
-#include "Track.h"
 #include "Location.h"
 
 namespace trax{
@@ -50,6 +49,7 @@ namespace trax{
 	struct Jack;
 	struct MultiPlug;
 	struct SocketRegistry;
+	struct TrackBuilder;
 
 
 	/// \brief A Signal is positioned along a track and is submitted to a Train

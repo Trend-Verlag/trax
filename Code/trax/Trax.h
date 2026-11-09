@@ -92,6 +92,7 @@ namespace trax{
 #include "Switch.h"
 #include "Timer.h"
 #include "Track.h"
+#include "TrackType.h"
 #include "TrackData.h"
 #include "TrackLocation.h"
 #include "TrackPainter.h"

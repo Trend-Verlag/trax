@@ -105,7 +105,7 @@ const char* Track_Imp::TypeName() const noexcept{
 	return ToString( GetTrackType() );
 }
 
-Track::TrackType Track_Imp::GetTrackType() const noexcept{
+TrackType Track_Imp::GetTrackType() const noexcept{
 	return TrackType::standard;
 }
 
@@ -1358,49 +1358,6 @@ Track* Track_Imp::Transform( Interval<Length>& range, EndType& toTrackAtEnd ) co
 	return nullptr;
 }
 ///////////////////////////////////////
-const char* ToString( Track::TrackType type ){
-	switch( type ){
-	case Track::TrackType::unknown:
-		return "unknown";
-	case Track::TrackType::none:
-		return "none";
-	case Track::TrackType::standard:
-		return "standard";
-	case Track::TrackType::withGeoms:
-		return "withGeoms";
-	case Track::TrackType::movable:
-		return "movable";
-	case Track::TrackType::movable_withGeoms:
-		return "movable_withGeoms";
-	case Track::TrackType::movable_autoconnecting:
-		return "movable_autoconnecting";
-	case Track::TrackType::parallel:
-		return "parallel";
-	default:
-		assert( !"Unknown Track type!" );
-		return "unknown";
-	}
-}
-
-Track::TrackType TrackType( const char* type ) noexcept{
-	if( std::strcmp( type, "standard" ) == 0 )
-		return Track::TrackType::standard;
-	else if( std::strcmp( type, "withGeoms" ) == 0 )
-		return Track::TrackType::withGeoms;
-	else if( std::strcmp( type, "movable" ) == 0 )
-		return Track::TrackType::movable;
-	else if( std::strcmp( type, "movable_withGeoms" ) == 0 )
-		return Track::TrackType::movable_withGeoms;
-	else if( std::strcmp( type, "movable_autoconnecting" ) == 0 )
-		return Track::TrackType::movable_autoconnecting;
-	else if( std::strcmp( type, "parallel" ) == 0 )
-		return Track::TrackType::parallel;
-	else if( std::strcmp( type, "none" ) == 0 )
-		return Track::TrackType::none;
-	else
-		return Track::TrackType::unknown;
-}
-
 static inline Length Calculate_ds( const Track& track, Length s, Length e, bool ignoreCuvesTorsion ){
 	const AnglePerLength sqrtk2t2 = sqrt( pow<2>(track.Curvature(s)) + pow<2>( ignoreCuvesTorsion ? track.GetTwistD1(s) : track.Torsion(s) ) );
 	return (sqrtk2t2 > 0_1Im ? sqrt(e / sqrtk2t2) : +infinite__length);

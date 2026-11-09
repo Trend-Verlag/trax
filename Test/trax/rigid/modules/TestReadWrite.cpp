@@ -2,6 +2,7 @@
 // Copyright (c) 2020 - 2024 Trend Verlag;
 //
 
+#if defined( WITH_BOOST_TESTS )
 
 #include <boost/test/unit_test.hpp>
 
@@ -106,3 +107,4 @@ BOOST_FIXTURE_TEST_CASE( RoundtripTest_Serializing, TrainFixture )
 
 BOOST_AUTO_TEST_SUITE_END() //Module_tests
 BOOST_AUTO_TEST_SUITE_END() //trax_tests
+#endif // WITH_BOOST_TESTS

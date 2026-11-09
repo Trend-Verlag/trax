@@ -108,7 +108,7 @@ const boost::property_tree::ptree& operator>>( const boost::property_tree::ptree
 
 		else if( pair.first == "Track" )
 		{
-			if( std::shared_ptr<TrackBuilder> pTrack = MovableTrack::Make( TrackType( pair.second.get( "<xmlattr>.type", "standard" ) ) ); pTrack )
+			if( std::shared_ptr<TrackBuilder> pTrack = MovableTrack::Make( ToTrackType( pair.second.get( "<xmlattr>.type", "standard" ) ) ); pTrack )
 			{
 				pair.second >> *pTrack;
 				trackCollection.Add( std::move( pTrack ) );

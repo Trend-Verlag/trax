@@ -339,6 +339,38 @@ BOOST_AUTO_TEST_CASE( frame_orthonormalize )
 	BOOST_CHECK( startFrame.IsOrthoNormal() );
 }
 
+BOOST_AUTO_TEST_CASE( frame_orthonormalize_keep_righthanded )
+{
+	Frame<Real> startFrame{ Origin3D<Real>, Ex<Real>, Ey<Real>, Ez<Real> };
+	Frame<Real> orthoFrame = startFrame;
+	orthoFrame.OrthoNormalize();
+	BOOST_CHECK_CLOSE_SPATIAL2( orthoFrame, startFrame, 0, 0 );
+}
+
+BOOST_AUTO_TEST_CASE( frame_orthonormalize_keep_lefthanded1 )
+{
+	Frame<Real> startFrame{ Origin3D<Real>, -Ex<Real>, Ey<Real>, Ez<Real> };
+	Frame<Real> orthoFrame = startFrame;
+	orthoFrame.OrthoNormalize( orthoFrame.IsRightHanded() );
+	BOOST_CHECK_CLOSE_SPATIAL2( orthoFrame, startFrame, 0, 0 );
+}
+
+BOOST_AUTO_TEST_CASE( frame_orthonormalize_keep_lefthanded2 )
+{
+	Frame<Real> startFrame{ Origin3D<Real>, Ex<Real>, -Ey<Real>, Ez<Real> };
+	Frame<Real> orthoFrame = startFrame;
+	orthoFrame.OrthoNormalize( orthoFrame.IsRightHanded() );
+	BOOST_CHECK_CLOSE_SPATIAL2( orthoFrame, startFrame, 0, 0 );
+}
+
+BOOST_AUTO_TEST_CASE( frame_orthonormalize_keep_lefthanded3 )
+{
+	Frame<Real> startFrame{ Origin3D<Real>, Ex<Real>, Ey<Real>, -Ez<Real> };
+	Frame<Real> orthoFrame = startFrame;
+	orthoFrame.OrthoNormalize( orthoFrame.IsRightHanded() );
+	BOOST_CHECK_CLOSE_SPATIAL2( orthoFrame, startFrame, 0, 0 );
+}
+
 BOOST_AUTO_TEST_CASE( frame_lookat )
 {
 	Frame<Real> frame, reference;

@@ -255,12 +255,15 @@ namespace trax{
 		virtual bool IsReplaying() const noexcept = 0;
 
 
-		/// <summary>
 		/// \brief Stop replay mode and discard any commands that are still 
 		/// in the replay queue.
 		virtual void StopReplay() noexcept = 0;
 		virtual bool Undo() = 0;
 		virtual bool Redo() = 0;
+
+
+		/// \returns the number of simulation steps that have been completed.
+		virtual long SimulationSteps() const noexcept = 0;
 
 
 		/// \brief A Jack that triggers a pulse when the command system 

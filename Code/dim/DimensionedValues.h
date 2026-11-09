@@ -780,6 +780,14 @@ namespace dim{
 			return Value<Dimension<0,0,-1>>{ static_cast<Real>(value) / units_per_second };
 		}
 
+		constexpr Value<Dimension<0,0,-1>> operator""_Hz( const unsigned long long int value ){
+			return Value<Dimension<0,0,-1>>{ static_cast<Real>(value) / units_per_second };
+		}
+
+		constexpr Value<Dimension<0,0,-1>> operator""_Hz( const long double value ){
+			return Value<Dimension<0,0,-1>>{ static_cast<Real>(value) / units_per_second };
+		}
+
 		constexpr Value<Dimension<1,0,0>> operator""_mm( const unsigned long long int value ){
 			return Value<Dimension<1,0,0>>{ static_cast<Real>(value) * units_per_meter / 1000 };
 		}

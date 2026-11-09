@@ -382,6 +382,10 @@ bool Module_Imp::Redo()
 	return false;
 }
 
+long Module_Imp::SimulationSteps() const noexcept{
+	return m_SimulationSteps;
+}
+
 void Module_Imp::Registered( Scene& scene ) noexcept
 {
 	if( m_pTrackSystem )

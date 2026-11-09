@@ -28,8 +28,18 @@
 
 namespace trax{
 
-Track::TrackType CollidableTrack_Imp::GetTrackType() const noexcept{
-	return TrackType::withGeoms;
+std::shared_ptr<CollidableTrack> CollidableTrack::Make() noexcept
+{
+	try{
+		return std::make_shared<CollidableTrack_Imp>();
+	}
+	catch( const std::bad_alloc& ){
+		return nullptr;
+	}
+}
+
+TrackType CollidableTrack_Imp::GetTrackType() const noexcept{
+	return TrackType::collidable;
 }
 
 std::shared_ptr<const CollidableTrack> CollidableTrack_Imp::GetCollidableTrack() const noexcept{

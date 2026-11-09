@@ -87,7 +87,7 @@ void MovableTrack_ImpBase::OnTryDeconnect( trax::EndType endType ) noexcept
 	}
 }
 ///////////////////////////////////////
-Track::TrackType MovableTrack_Imp::GetTrackType() const noexcept{
+TrackType MovableTrack_Imp::GetTrackType() const noexcept{
 	return TrackType::movable;
 }
 

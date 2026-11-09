@@ -33,8 +33,13 @@ namespace trax{
 
 	struct Shape;
 
+
+	/// \brief A collidable track is a track that can be attached to a shape.
 	struct CollidableTrack : virtual SectionTrack
 	{
+		/// \brief Makes a CollidableTrack object.
+		static dclspc std::shared_ptr<CollidableTrack> Make() noexcept;
+
 
 		/// \brief Sets a shape the track is attached to (if any).
 		///

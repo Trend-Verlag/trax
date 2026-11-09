@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_SUITE(TestDynamicTrack)
 
 BOOST_AUTO_TEST_CASE( testCreation )
 {
-	std::shared_ptr<TrackBuilder> pTrack = MovableTrack::Make( Track::TrackType::movable_withGeoms );
+	std::shared_ptr<TrackBuilder> pTrack = MovableTrack::Make( TrackType::dynamic_track );
 	BOOST_REQUIRE( pTrack );
 
 	BOOST_CHECK( pTrack->GetMovableTrack() );

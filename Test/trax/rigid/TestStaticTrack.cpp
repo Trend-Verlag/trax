@@ -91,11 +91,11 @@ BOOST_FIXTURE_TEST_CASE( CollectionFrameShift_Test3, TrackSystemFixture )
 
 	m_pTrackSystem->Add(pTrack1);
 	IDType id = m_pTrackSystem->CreateCollection();
+	m_pTrackSystem->Add(pTrack2);
 	Frame<Length, One> frame, frame1, frame2;
 	frame.Init();
 	frame.TransportTan(100_m);
 	m_pTrackSystem->SetCollectionFrame(id, frame);
-	m_pTrackSystem->Add(pTrack2);
 
 	pTrack1->Transition(10_m, frame1);
 	pTrack2->Transition(10_m, frame2);

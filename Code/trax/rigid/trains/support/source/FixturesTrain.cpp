@@ -144,17 +144,11 @@ void MultiTrackSystemFixture::BuildFixture( int nTrackCollections )
 	for( int i = 0; i < nTrackCollections; ++i )
 	{
 		trax::IDType id = m_pTrackSystem->CreateCollection();
-		m_pTrackSystem->SetCollectionFrame( id, frame );
 
 		std::shared_ptr<trax::StaticTrack>	pTrack1 = trax::StaticTrack::Make(*m_pScene);
 		std::shared_ptr<trax::StaticTrack>	pTrack2 = trax::StaticTrack::Make(*m_pScene);
 		std::shared_ptr<trax::StaticTrack>	pTrack3 = trax::StaticTrack::Make(*m_pScene);
 		std::shared_ptr<trax::StaticTrack>	pTrack4 = trax::StaticTrack::Make(*m_pScene);
-
-		//std::shared_ptr<TrackBuilder>	pTrack1 = TrackBuilder::Make();
-		//std::shared_ptr<TrackBuilder>	pTrack2 = TrackBuilder::Make();
-		//std::shared_ptr<TrackBuilder>	pTrack3 = TrackBuilder::Make();
-		//std::shared_ptr<TrackBuilder>	pTrack4 = TrackBuilder::Make();
 
 		pTrack1->Attach( pSection );
 		pTrack1->Attach( pArc1, {0_m,R*dim::pi/2} );
@@ -181,6 +175,8 @@ void MultiTrackSystemFixture::BuildFixture( int nTrackCollections )
 		m_pTrackSystem->Add( pTrack2 );
 		m_pTrackSystem->Add( pTrack3 );
 		m_pTrackSystem->Add( pTrack4 );
+
+		m_pTrackSystem->SetCollectionFrame( id, frame );
 
 		if( (i+1) % length ){
 			frame.TransportTan( D );

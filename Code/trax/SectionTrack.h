@@ -92,4 +92,7 @@ namespace trax{
 	/// \return An axis aligned box containing the track.
 	dclspc spat::Box<Length> BoundingBox( const SectionTrack& track, common::Interval<Length> range );
 
+
+	dclspc void CopySections( const SectionTrack& src, SectionTrack& dst );
+
 }

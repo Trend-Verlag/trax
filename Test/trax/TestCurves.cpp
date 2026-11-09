@@ -1435,104 +1435,23 @@ BOOST_AUTO_TEST_CASE( ParallelCubicApproximation )
 
 	Length s = pParallel->Range().Near();
 	const Length ds = 1_m;
-
 	while( s < pParallel->Range().Far() ){
 		Frame<Length,One> frame;
 		pParallel->Transition( s, frame );
 		BOOST_CHECK_CLOSE_SPATIAL( frame.B, Up, epsilon__angle );
 		s += ds;
 	}
+
+	s = pTrack->Range().Near();
+	while( s < pTrack->Range().Far() ){
+		Frame<Length,One> frame;
+		pTrack->Transition( s, frame );
+		BOOST_CHECK_CLOSE_SPATIAL( frame.B, Up, epsilon__angle );
+		s += ds;
+	}
 }
 
 BOOST_AUTO_TEST_SUITE_END() //CurvePolygonChain
-BOOST_AUTO_TEST_SUITE(CurveEEPCurve)
-/*
-BOOST_FIXTURE_TEST_CASE( eepCurveEndpointCreation1, TraxFixtureBase<trax::Factory::EngineTypes::Standard> ){
-	auto pCurve = m_Factory.CreateEEPCurve();
-	spat::Frame<Length,One> start{ {0_m,0_m,0_m}, {0,1,0}, {-1,0,0}, {0,0,1} };
-	spat::Position<Length> end{-10_m,10_m,0_m};
-
-	Length length = 10_m * trax::pi/2;
-	BOOST_CHECK_CLOSE_DIMENSION( pCurve->Create( start, end ).Far(), length, trax::epsilon__length / length * 100 );
-
-	spat::Position<Length> endCreated;
-	pCurve->Transition( 10_m * trax::pi/2, endCreated );
-	BOOST_CHECK(end.Equals(endCreated, trax::epsilon__length));
-
-	spat::Frame<Length,One> startCreated;
-	pCurve->Transition( 0_m, startCreated );
-	BOOST_CHECK(start.P.Equals(startCreated.P, trax::epsilon__length));
-}
-
-BOOST_FIXTURE_TEST_CASE( eepCurveEndpointCreation2, TraxFixtureBase<trax::Factory::EngineTypes::Standard> ){
-	auto pCurve = m_Factory.CreateEEPCurve();
-	spat::Frame<Length,One> start{ {0_m,0_m,0_m}, {1,0,0}, {0,1,0}, {0,0,1} };
-	spat::Position<Length> end{10_m,10_m,0_m};
-
-	Length length = 10_m * trax::pi/2;
-	BOOST_CHECK_CLOSE_DIMENSION( pCurve->Create( start, end ).Far(), length, trax::epsilon__length / length * 100 );
-
-	spat::Position<Length> endCreated;
-	pCurve->Transition( 10_m * trax::pi/2, endCreated );
-	BOOST_CHECK(end.Equals(endCreated, trax::epsilon__length));
-
-	spat::Frame<Length,One> startCreated;
-	pCurve->Transition( 0_m, startCreated );
-	BOOST_CHECK(start.P.Equals(startCreated.P, trax::epsilon__length));
-}
-
-BOOST_FIXTURE_TEST_CASE( eepCurveEndpointCreation3, TraxFixtureBase<trax::Factory::EngineTypes::Standard> ){
-	auto pCurve = m_Factory.CreateEEPCurve();
-	spat::Frame<Length,One> start{ {0_m,0_m,0_m}, {0,-1,0}, {1,0,0}, {0,0,1} };
-	spat::Position<Length> end{10_m,-10_m,0_m};
-
-	Length length = 10_m * trax::pi/2;
-	BOOST_CHECK_CLOSE_DIMENSION( pCurve->Create( start, end ).Far(), length, trax::epsilon__length / length * 100 );
-
-	spat::Position<Length> endCreated;
-	pCurve->Transition( 10_m * trax::pi/2, endCreated );
-	BOOST_CHECK(end.Equals(endCreated, trax::epsilon__length));
-
-	spat::Frame<Length,One> startCreated;
-	pCurve->Transition( 0_m, startCreated );
-	BOOST_CHECK(start.P.Equals(startCreated.P, trax::epsilon__length));
-}
-
-BOOST_FIXTURE_TEST_CASE( eepCurveEndpointCreation4, TraxFixtureBase<trax::Factory::EngineTypes::Standard> ){
-	auto pCurve = m_Factory.CreateEEPCurve();
-	spat::Frame<Length,One> start{ {0_m,0_m,0_m}, {-1,0,0}, {0,-1,0}, {0,0,1} };
-	spat::Position<Length> end{-10_m,-10_m,0_m};
-
-	Length length = 10_m * trax::pi/2;
-	BOOST_CHECK_CLOSE_DIMENSION( pCurve->Create( start, end ).Far(), length, trax::epsilon__length / length * 100 );
-
-	spat::Position<Length> endCreated;
-	pCurve->Transition( 10_m * trax::pi/2, endCreated );
-	BOOST_CHECK(end.Equals(endCreated, trax::epsilon__length));
-
-	spat::Frame<Length,One> startCreated;
-	pCurve->Transition( 0_m, startCreated );
-	BOOST_CHECK(start.P.Equals(startCreated.P, trax::epsilon__length));
-}
-
-BOOST_FIXTURE_TEST_CASE( eepCurveEndpointCreation5, TraxFixtureBase<trax::Factory::EngineTypes::Standard> ){
-	auto pCurve = m_Factory.CreateEEPCurve();
-	spat::Frame<Length,One> start{ {0_m,0_m,5_m}, {1,0,0}, {0,1,0}, {0,0,1} };
-	spat::Position<Length> end{10_m,10_m,0_m};
-
-	Length length = 16.48_m;
-	BOOST_CHECK_CLOSE_DIMENSION( pCurve->Create( start, end ).Far(), length, trax::epsilon__length / length * 100 );
-
-	spat::Position<Length> endCreated;
-	pCurve->Transition( 10_m * trax::pi/2, endCreated );
-	BOOST_CHECK(end.Equals(endCreated, 100 * trax::epsilon__length)); // quite inaccurate...
-
-	spat::Frame<Length,One> startCreated;
-	pCurve->Transition( 0_m, startCreated );
-	BOOST_CHECK(start.P.Equals(startCreated.P, trax::epsilon__length));
-}
-*/
-BOOST_AUTO_TEST_SUITE_END() // CurveEEPCurve
 BOOST_AUTO_TEST_SUITE(CurveCreation)
 
 BOOST_AUTO_TEST_CASE( CreateCurveStartPositionFixedStartTangentInPlane ){

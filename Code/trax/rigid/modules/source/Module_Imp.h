@@ -124,6 +124,7 @@ namespace trax{
 
 		bool Redo() override;
 
+		long SimulationSteps() const noexcept override;
 
 
 		// Simulated:

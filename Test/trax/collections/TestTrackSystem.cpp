@@ -60,11 +60,11 @@ BOOST_FIXTURE_TEST_CASE( CollectionFrameShift_Test, TrackSystemFixture )
 
 	m_pTrackSystem->Add( pTrack1 );
 	IDType id = m_pTrackSystem->CreateCollection();
+	m_pTrackSystem->Add( pTrack2 );
 	Frame<Length,One> frame, frame1, frame2;
 	frame.Init();
 	frame.TransportTan( 100_m );
 	m_pTrackSystem->SetCollectionFrame( id, frame );
-	m_pTrackSystem->Add( pTrack2 );
 
 	pTrack1->Transition( 10_m, frame1 );
 	pTrack2->Transition( 10_m, frame2 );
@@ -141,8 +141,8 @@ BOOST_FIXTURE_TEST_CASE( FoR_TrackTrackCollection1_Test, TrackAndTrackSystem )
 	m_LocationOnTrack.Transition( LocBefore );
 
 	m_pTrack->SetFrame( m_FrameA );
-	m_pTrackSystem->SetCollectionFrame( 1, m_FrameB );
 	m_pTrackSystem->Add( m_pTrack );
+	m_pTrackSystem->SetCollectionFrame( 1, m_FrameB );
 
 	Frame<Length,One> LocAfter;
 	m_LocationOnTrack.Transition( LocAfter );
@@ -157,8 +157,8 @@ BOOST_FIXTURE_TEST_CASE( FoR_TrackTrackCollection2_Test, TrackAndTrackSystem )
 	Frame<Length,One> LocBefore;
 	m_LocationOnTrack.Transition( LocBefore );
 
-	m_pTrackSystem->SetCollectionFrame( 1, m_FrameB );
 	m_pTrackSystem->Add( m_pTrack );
+	m_pTrackSystem->SetCollectionFrame( 1, m_FrameB );
 	m_pTrack->SetFrame( m_FrameA );
 
 	Frame<Length,One> LocAfter;
@@ -225,9 +225,9 @@ BOOST_FIXTURE_TEST_CASE( FoR_TrackTrackCollection6_Test, TrackAndTrackSystem )
 	Frame<Length,One> LocBefore;
 	m_LocationOnTrack.Transition( LocBefore );
 
-	m_pTrackSystem->SetCollectionFrame( 1, m_FrameB );
 	m_pTrack->SetFrame( m_FrameA );
 	m_pTrackSystem->Add( m_pTrack );
+	m_pTrackSystem->SetCollectionFrame( 1, m_FrameB );
 
 	Frame<Length,One> LocAfter;
 	m_LocationOnTrack.Transition( LocAfter );

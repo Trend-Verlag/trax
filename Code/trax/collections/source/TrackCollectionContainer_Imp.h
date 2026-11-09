@@ -48,7 +48,7 @@ namespace trax{
 
 		bool IsValid() const noexcept override;
 
-		void SetAbsoluteFrame( const spat::Frame<Length,One>& frame ) noexcept;
+	//	void SetAbsoluteFrame( const spat::Frame<Length,One>& frame ) noexcept;
 
 		IDType Add( std::shared_ptr<TrackCollection> pTrackCollection ) override;
 
@@ -59,7 +59,7 @@ namespace trax{
 		spat::Frame<Length,One>	m_AbsoluteFrame;
 		TrackSystem*			m_pParent;
 
-		void SetCollectionsAbsoluteFrame( const spat::Frame<Length,One>& frame ) noexcept;
+	//	void SetCollectionsAbsoluteFrame( const spat::Frame<Length,One>& frame ) noexcept;
 
 		IDType DoAdd( std::shared_ptr<TrackCollection> pTrackCollection );
 	};

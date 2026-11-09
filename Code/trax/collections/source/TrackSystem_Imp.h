@@ -54,7 +54,7 @@ namespace trax{
 		/// to know about the use count structure.
 		void SetWeakPointerToSelf( std::weak_ptr<TrackSystem_Imp> pThis ) noexcept;
 
-		void SetAbsoluteFrame( const Frame<Length,One>& frame ) noexcept;
+//		void SetAbsoluteFrame( const Frame<Length,One>& frame ) noexcept;
 
 
 		// Collection:

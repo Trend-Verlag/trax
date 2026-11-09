@@ -202,14 +202,21 @@ namespace spat{
 
 
 		/// \brief Normalizes the vectors preserving the direction of T as is. It then
-		/// adjusts Nor and Bin in a way to form an orthogonal frame.
-		Frame& OrthoNormalize() noexcept;
+		/// adjusts Nor and Bin in a way to form an orthogonal frame. To keep handedness
+		/// call Frame.OrthoNormalize( Frame.IsRightHanded() );
+		Frame& OrthoNormalize( bool bRightHanded = true ) noexcept;
 
 
 		/// \param epsilon_length Margin for deviation of vector length.
 		/// \param epsilon_angle Margin for deviation vector angles.
 		/// \returns true if the Frame forms an orthonormal frameset.
 		bool IsOrthoNormal( ValtypeT epsilon_length = 100*std::numeric_limits<ValtypeT>::epsilon(), ValtypeT epsilon_angle = 100*std::numeric_limits<ValtypeT>::epsilon() ) const noexcept;
+
+
+		bool IsRightHanded() const noexcept;
+
+
+		bool IsLeftHanded() const noexcept;
 
 
 		/// \name Transformations to parent frame.
@@ -762,7 +769,8 @@ inline Frame<Valtype,ValtypeT>& Frame<Valtype,ValtypeT>::Normalize() noexcept{
 }
 
 template<typename Valtype,typename ValtypeT>
-inline Frame<Valtype,ValtypeT>& Frame<Valtype,ValtypeT>::OrthoNormalize() noexcept{
+inline Frame<Valtype,ValtypeT>& Frame<Valtype,ValtypeT>::OrthoNormalize( bool bRightHanded ) noexcept
+{
 	if ( T.Is(Vector<ValtypeT>::specials::null) )
 	{
 		T.dx = ValtypeT{1};
@@ -785,13 +793,13 @@ inline Frame<Valtype,ValtypeT>& Frame<Valtype,ValtypeT>::OrthoNormalize() noexce
 		else
 		{
 			B.Normalize();
-			N = B % T;
+			N = bRightHanded ? B % T : T % B;
 			return *this;
 		}
 	}
 
 	N.Normalize();
-	B = T % N;
+	B = bRightHanded ? T % N : N % T;
 	return *this;
 }
 
@@ -803,6 +811,18 @@ inline bool Frame<Valtype,ValtypeT>::IsOrthoNormal( ValtypeT _epsilon_length, Va
 			abs(T*N) <= ValtypeT{1} * _epsilon_angle &&
 			abs(T*B) <= ValtypeT{1} * _epsilon_angle &&
 			abs(N*B) <= ValtypeT{1} * _epsilon_angle;
+}
+
+template<typename Valtype, typename ValtypeT>
+inline bool spat::Frame<Valtype, ValtypeT>::IsRightHanded() const noexcept
+{
+	return B * (T % N) > ValtypeT{0};
+}
+
+template<typename Valtype, typename ValtypeT>
+inline bool spat::Frame<Valtype, ValtypeT>::IsLeftHanded() const noexcept
+{
+	return B * (T % N) < ValtypeT{0};
 }
 
 template<typename Valtype,typename ValtypeT>

@@ -55,7 +55,7 @@ namespace trax{
 		/// 
 		/// The tracks added to this collection will give Module relative
 		/// coordinates on transition, so this frame is included in the
-		/// calculations.
+		/// calculations by setting it as their absolute frame.
 		virtual void SetFrame( const spat::Frame<Length,One>& frame ) noexcept = 0;
 
 

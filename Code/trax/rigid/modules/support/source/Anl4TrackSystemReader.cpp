@@ -452,7 +452,7 @@ std::shared_ptr<TrackBuilder> Anl4TrackSystemReader::CreateTrack(
 	SocketRegistry& socketRegistry, 
 	std::vector<Track::Connection>& couplings ) const
 {
-	if( auto pTrack = MovableTrack::Make( TrackType( pt.get( "<xmlattr>.type", "standard" ) ) ); pTrack )
+	if( auto pTrack = MovableTrack::Make( ToTrackType( pt.get( "<xmlattr>.type", "standard" ) ) ); pTrack )
 	{
 		pTrack->ID( pt.get( "<xmlattr>.id", 0 ) );
 		pTrack->Reference( "name", pt.get( "<xmlattr>.name", "Track" + to_string(pTrack->ID()) ) );

@@ -75,12 +75,12 @@ void TrackCollectionContainer_Imp::SetParent( TrackSystem* pParent ){
 TrackSystem* TrackCollectionContainer_Imp::GetParent() const noexcept{
 	return m_pParent;
 }
-
-void TrackCollectionContainer_Imp::SetAbsoluteFrame( const Frame<Length,One>& frame ) noexcept{
-	m_AbsoluteFrame = frame;
-
-	SetCollectionsAbsoluteFrame(m_AbsoluteFrame);
-}
+//
+//void TrackCollectionContainer_Imp::SetAbsoluteFrame( const Frame<Length,One>& frame ) noexcept{
+//	m_AbsoluteFrame = frame;
+//
+//	SetCollectionsAbsoluteFrame(m_AbsoluteFrame);
+//}
 
 const char* TrackCollectionContainer_Imp::TypeName() const noexcept{
 	return "TrackCollectionContainer";
@@ -99,7 +99,7 @@ bool TrackCollectionContainer_Imp::Remove( TrackCollection* pTrackCollection, bo
 	{
 		if( auto pTrackCollection_Imp = dynamic_cast<TrackCollection_Imp*>( pTrackCollection ) ){
 			pTrackCollection_Imp->SetParent( nullptr );
-			pTrackCollection_Imp->SetAbsoluteFrame( Identity<Length,One> );
+		//	pTrackCollection_Imp->SetAbsoluteFrame( Identity<Length,One> );
 		}
 
 		return true;
@@ -109,25 +109,25 @@ bool TrackCollectionContainer_Imp::Remove( TrackCollection* pTrackCollection, bo
 }
 		
 void TrackCollectionContainer_Imp::Clear() noexcept {
-	SetCollectionsAbsoluteFrame( Identity<Length,One> );
+//	SetCollectionsAbsoluteFrame( Identity<Length,One> );
 
 	TrackCollectionContainer_Base::Clear();
 }
 
-void TrackCollectionContainer_Imp::SetCollectionsAbsoluteFrame( const Frame<Length,One>& frame ) noexcept{
-	std::for_each( m_Container.begin(), m_Container.end(),
-		[&frame]( const std::pair<IDType,std::shared_ptr<TrackCollection>>& pair ) noexcept
-	{
-		if( auto pTrackCollection_Imp = decorator_cast<TrackCollection_Imp*>( pair.second.get() ) )
-			pTrackCollection_Imp->SetAbsoluteFrame(frame);
-	});
-}
+//void TrackCollectionContainer_Imp::SetCollectionsAbsoluteFrame( const Frame<Length,One>& frame ) noexcept{
+//	std::for_each( m_Container.begin(), m_Container.end(),
+//		[&frame]( const std::pair<IDType,std::shared_ptr<TrackCollection>>& pair ) noexcept
+//	{
+//		if( auto pTrackCollection_Imp = decorator_cast<TrackCollection_Imp*>( pair.second.get() ) )
+//			pTrackCollection_Imp->SetAbsoluteFrame(frame);
+//	});
+//}
 
 IDType TrackCollectionContainer_Imp::DoAdd( std::shared_ptr<TrackCollection> pTrackCollection ){
 	if( IDType retval = TrackCollectionContainer_Base::Add( pTrackCollection ) )
 	{
 		if( auto pTrackCollection_Imp = decorator_cast<TrackCollection_Imp*>( pTrackCollection.get() ) ){
-			pTrackCollection_Imp->SetAbsoluteFrame(m_AbsoluteFrame);
+//			pTrackCollection_Imp->SetAbsoluteFrame(m_AbsoluteFrame);
 			pTrackCollection_Imp->SetParent( GetParent() );
 		}
 

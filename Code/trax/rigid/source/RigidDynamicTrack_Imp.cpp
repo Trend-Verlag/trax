@@ -43,30 +43,62 @@ std::shared_ptr<TrackBuilder> MovableTrack::Make( TrackType type ) noexcept
 			return std::make_shared<Track_Imp>();
 		case TrackType::section:
 			return std::make_shared<SectionTrack_Imp>();
-		case TrackType::withGeoms:
+		case TrackType::collidable:
 			return std::make_shared<CollidableTrack_Imp>();
-		//case TrackType::parallel:
-		//	return std::make_shared<ParallelizableTrack_Imp>();
 		case TrackType::movable:
 			return std::make_shared<MovableTrack_Imp>();
-		case TrackType::movable_withGeoms:
+		case TrackType::dynamic_track:
 			return std::make_shared<DynamicTrack_Imp>();
+		case TrackType::movable_autoconnecting:
+		case TrackType::parallelizable:
+		//	return std::make_shared<ParallelizableTrack_Imp>();
 		default:
 			std::cerr << "MovableTrack::Make(): Unsupported track type requested: " << ToString(type) << ". Try more specific Make() method." << std::endl;
-			return nullptr;
 		}
 	}
 	catch( const std::bad_alloc& ){
-		return nullptr;
+		std::cerr << "MovableTrack::Make(): Memory allocation failed for track type: " << ToString( type ) << std::endl;
 	}
+
+	return nullptr;
+}
+
+std::shared_ptr<TrackBuilder> MovableTrack::Make( const TrackBuilder& clone, TrackType type ) noexcept
+{
+	if( std::shared_ptr<TrackBuilder> pTrack = MovableTrack::Make( type ); pTrack )
+	{
+		// Clone the existing track's properties into the new track
+		pTrack->ID( clone.ID() );
+		pTrack->CopyReferences( clone );
+		pTrack->UserData( clone.UserData() );
+		pTrack->SetFrame( clone.GetFrame() );
+
+		pTrack->Attach( clone.GetCurve() );
+		pTrack->Attach( clone.GetTwist().Clone() );
+
+		if( const SectionTrack* pSectionCloneTrack = dynamic_cast<const SectionTrack*>(&clone); pSectionCloneTrack )
+		{
+			if( std::shared_ptr<SectionTrack> pSectionTrack = std::dynamic_pointer_cast<SectionTrack>(pTrack); pSectionTrack )
+			{
+				for( int idx = 0; idx < pSectionCloneTrack->CntSections(); ++idx )
+				{
+					pSectionTrack->Attach( pSectionCloneTrack->GetSection(idx) );
+				}
+			}
+		}
+
+		return pTrack;
+	}
+
+	return nullptr;
 }
 ///////////////////////////////////////
 void DynamicTrack_Imp::PropagateAbsoluteFrameToClients() noexcept{
 	MovableTrack_Imp::PropagateAbsoluteFrameToClients();
 }
 
-Track::TrackType DynamicTrack_Imp::GetTrackType() const noexcept{
-	return Track::TrackType::movable_withGeoms;
+TrackType DynamicTrack_Imp::GetTrackType() const noexcept{
+	return TrackType::dynamic_track;
 }
 
 bool DynamicTrack_Imp::IsValid() const noexcept{

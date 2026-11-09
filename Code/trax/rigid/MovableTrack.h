@@ -39,6 +39,9 @@ namespace trax{
 		/// \brief Makes a MovableTrack object.
 		static dclspc std::shared_ptr<TrackBuilder> Make( TrackType type = TrackType::movable ) noexcept;
 
+		/// \brief Makes a MovableTrack object by cloning an existing Track.
+		static dclspc std::shared_ptr<TrackBuilder> Make( const TrackBuilder& clone, TrackType type = TrackType::movable ) noexcept;
+
 
 		/// \brief Sets a body the track is attached to (if any).
 		///

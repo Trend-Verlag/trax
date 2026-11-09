@@ -75,6 +75,13 @@ namespace trax{
 		}
 
 
+		template<class TypeFrom> inline
+		void CopyReferences( const Identified<TypeFrom>& from ){
+			for( const char* name : from.ReferenceNames() )
+				Reference( name, from.Reference( name ) );
+		}
+
+
 		/// \brief Returns a pointer to the empty string that is used to return empty references. 
 		/// 
 		/// This allows to compare empty references by pointer comparison.
@@ -147,4 +154,7 @@ namespace trax{
 		Identified& operator=( Identified&& ) = default;
 	};
 
+
+///////////////////////////////////////
+///////////////////////////////////////
 }

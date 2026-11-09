@@ -35,7 +35,7 @@ namespace trax{
 
 	struct TrackSystem;
 
-	typedef Pose_Imp<ObjectID_Imp<Container_Imp<TrackBuilder,TrackCollection>>> TrackCollection_Base;
+	typedef ObjectID_Imp<Container_Imp<TrackBuilder,TrackCollection>> TrackCollection_Base;
 
 	class TrackCollection_Imp : public TrackCollection_Base{
 	public:
@@ -53,7 +53,13 @@ namespace trax{
 
 		bool IsConnected( Track::End trackEnd ) const noexcept override;
 
+		// TrackCollection:
+		void SetFrame( const spat::Frame<Length,One>& frame ) noexcept override;
 
+		const spat::Frame<Length,One>& GetFrame() const noexcept override;
+
+
+		// Collection:
 		const char* TypeName() const noexcept override;
 
 		bool	IsValid	() const noexcept override;
@@ -64,9 +70,8 @@ namespace trax{
 		
 		void	Clear	() noexcept override;
 	private:
+		spat::Frame<Length,One> m_Frame;
 		TrackSystem* m_pParent;
-
-		void PropagateAbsoluteFrameToClients() noexcept override;
 
 		void SetTrackAbsoluteFrame( TrackBuilder* pTrack, const Frame<Length,One>& frame ) const noexcept;
 

@@ -29,6 +29,7 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include "trax/Clock.h"
 #include "trax/rigid/trains/support/FixturesTrain.h"
 
 #include "trax/support/TraxSupportStream.h"
@@ -454,15 +455,13 @@ BOOST_FIXTURE_TEST_CASE( testMultipleTrainsRunning, MultiTrackSystemFixture )
 
 		std::cout << "Simulating " << cntSystems*20 << " WheelFrames, " << cntSystems*20 << " Hinges, " << cntSystems*9 << " couplings." << std::endl;
 
-		Time simulationTime = 40_s;
-
-		const auto start = std::chrono::steady_clock::now();
+		const Time simulationTime = 40_s;
+		trax::Clock clock;
 		m_pScene->Loop( simulationTime );
-		const auto end = std::chrono::steady_clock::now();
+		const Time duration = clock.Stop();
 
-		const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
-		std::cout << "Duration of simulation: " << duration << "ms; simulates ";
-		std::cout << simulationTime / _ms(duration);
+		std::cout << "Duration of simulation: " << duration << " simulates ";
+		std::cout << simulationTime / duration;
 		std::cout << " times faster than real world time." << std::endl;
 		m_pScene->DumpTasksTo( std::cout );
 

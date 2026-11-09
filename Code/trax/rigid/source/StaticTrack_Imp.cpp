@@ -52,8 +52,8 @@ StaticTrack_Imp::StaticTrack_Imp( const Scene& scene )
 {
 }
 
-Track::TrackType StaticTrack_Imp::GetTrackType() const noexcept{
-	return TrackType::withGeoms;
+TrackType StaticTrack_Imp::GetTrackType() const noexcept{
+	return TrackType::static_track;
 }
 
 bool StaticTrack_Imp::IsValid() const noexcept
